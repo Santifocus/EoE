@@ -15,6 +15,7 @@ namespace EoE.Information
 		[HideInInspector] public float DamageNumberLifeTime = 1;
 		[HideInInspector] public bool ShowRegenNumbers = true;
 		[HideInInspector] public float DamageNumberFlySpeed = 1;
+		[HideInInspector] public float DamageNumberRandomMovementPower = 1;
 		[HideInInspector] public Gradient PhysicalDamageColors = new Gradient();
 		[HideInInspector] public Gradient MagicalDamageColors = new Gradient();
 		[HideInInspector] public Gradient HealColors = new Gradient();
@@ -70,7 +71,9 @@ namespace EoE.Information
 				FloatField(new GUIContent("Damage Number Lifetime", "After a damage number spawned, how long until it disapears? (In Seconds)"), ref settings.DamageNumberLifeTime);
 				BoolField(new GUIContent("Show Regen Numbers"), ref settings.ShowRegenNumbers);
 				FloatField(new GUIContent("Damage Number Fly Speed"), ref settings.DamageNumberFlySpeed);
+				FloatField(new GUIContent("Damage Number Random Movement Power", "Damage numbers will get a pseudo random velocity added and multiplied by this number."), ref settings.DamageNumberRandomMovementPower);
 
+				GUILayout.Space(4);
 				GradientField(new GUIContent("Physical Damage Colors"), ref settings.PhysicalDamageColors);
 				GradientField(new GUIContent("Magical Damage Color"), ref settings.MagicalDamageColors);
 				GradientField(new GUIContent("Heal Colors"), ref settings.HealColors);

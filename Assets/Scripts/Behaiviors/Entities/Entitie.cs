@@ -8,8 +8,8 @@ namespace EoE.Entities
 {
 	public abstract class Entitie : MonoBehaviour
 	{
-		[SerializeField] private Rigidbody body;
-		[SerializeField] private Collider coll;
+		[SerializeField] private Rigidbody body = default;
+		[SerializeField] private Collider coll = default;
 		public abstract EntitieSettings SelfSettings { get; }
 		private float currentHealth;
 

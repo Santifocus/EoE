@@ -6,8 +6,6 @@ namespace EoE.Controlls
 {
 	public static class PlayerControlls
 	{
-		public delegate void ScreenResolutionUpdate();
-		public static ScreenResolutionUpdate UpdateScreenRes;
 	}
 	public class PlayerInput
 	{

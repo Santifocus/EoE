@@ -18,7 +18,7 @@ namespace EoE.Entities
 		private IEnumerator testDamage()
 		{
 			yield return new WaitForSeconds(2);
-			ChangeHealth(new InflictionInfo(this, CauseType.Physical, ElementType.None, transform.position + Vector3.right/2, 15, false));
+			ChangeHealth(new InflictionInfo(this, CauseType.Physical, ElementType.None, transform.position + Vector3.right/2, 205, false));
 			//StartCoroutine(testDamage());
 		}
 	}

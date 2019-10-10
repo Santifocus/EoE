@@ -9,7 +9,6 @@ namespace EoE.Information
 {
 	public class ObjectSettings : ScriptableObject
 	{
-		public string ObjectName = "";
 #if UNITY_EDITOR
 		[CustomEditor(typeof(ObjectSettings)), CanEditMultipleObjects]
 		protected class ObjectSettingEditor : Editor
