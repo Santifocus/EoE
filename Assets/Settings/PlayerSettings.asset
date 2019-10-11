@@ -9,15 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65287b7479b42fe4d84bc49cd47f2a3f, type: 3}
-  m_Name: yes
+  m_Script: {fileID: 11500000, guid: c07e3d0dcb2672346a494c20b6afef0f, type: 3}
+  m_Name: PlayerSettings
   m_EditorClassIdentifier: 
-  ObjectName: Cooli
   EntitieMass: 1
   MassCenter: {x: 0, y: 0, z: 0}
-  entitieElement: 0
+  EntitieElement: 0
   Health: 25
   DoRegen: 1
   HealthRegen: 3
   MoveSpeed: 1
   MoveAcceleration: 1
+  Endurance: 0
+  CameraToPlayerDistance: 10
+  CameraAnchorOffset: {x: 0, y: 2, z: 0}
+  CameraRotationPower: {x: 120, y: 120}
+  CameraRotationSpeed: 4
+  CameraVerticalAngleClamps: {x: -5, y: 50}

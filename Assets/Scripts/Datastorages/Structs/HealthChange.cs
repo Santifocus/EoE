@@ -42,7 +42,7 @@ namespace EoE.Information
 			{
 				finalDamage = basis.baseDamageAmount;
 				if(basis.cause != CauseType.Heal)
-					finalDamage *= GameController.CurrentGameSettings.GetEffectiveness(basis.element, receiver.SelfSettings.entitieElement) ;
+					finalDamage *= GameController.CurrentGameSettings.GetEffectiveness(basis.element, receiver.SelfSettings.EntitieElement) ;
 
 				if (basis.causeKnockback)
 				{

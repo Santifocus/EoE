@@ -6,6 +6,7 @@ namespace EoE.Utils
 {
 	public static class BaseUtils
 	{
+		public static readonly float RootOfTwo = Mathf.Sqrt(2);
 		public static bool ChancePercent(float chance) => Chance01(chance / 100);
 		public static bool Chance01(float chance)
 		{

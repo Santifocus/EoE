@@ -10,6 +10,7 @@ namespace EoE.Information
 	public class GameSettings : ScriptableObject
 	{
 		[HideInInspector] public float SecondsPerEntititeRegen;
+		[HideInInspector] public AnimationCurve TurnSpeedCurve = new AnimationCurve();
 
 		//Damage Numbers
 		[HideInInspector] public float DamageNumberLifeTime = 1;
@@ -62,11 +63,12 @@ namespace EoE.Information
 			{
 				GameSettings settings = target as GameSettings;
 
-				GUILayout.Label("Basic Settings", EditorStyles.boldLabel);
+				Header("Basic Settings");
 				FloatField(new GUIContent("Seconds Per Entitie Regen", "How many seconds for each regeneration cyle? This will not change the amount of healing only the frequency. (In Seconds)"), ref settings.SecondsPerEntititeRegen);
+				AnimationCurveField(new GUIContent("Turn Speed Multiplaction", "How much speed does a Entitie have when it is fully turning vs. walking straight. 0 In the curve means the Entitie walks straight, 1 means when it is currently facing the opposite direction of where it wants to go."), ref settings.TurnSpeedCurve);
 
 				GUILayout.Space(8);
-				GUILayout.Label("Damage Number Settings", EditorStyles.boldLabel);
+				Header("Damage Number Settings");
 				GUILayout.Space(4);
 				FloatField(new GUIContent("Damage Number Lifetime", "After a damage number spawned, how long until it disapears? (In Seconds)"), ref settings.DamageNumberLifeTime);
 				BoolField(new GUIContent("Show Regen Numbers"), ref settings.ShowRegenNumbers);
@@ -79,7 +81,7 @@ namespace EoE.Information
 				GradientField(new GUIContent("Heal Colors"), ref settings.HealColors);
 
 				GUILayout.Space(8);
-				GUILayout.Label("Element Effectiveness Settings");
+				Header("Element Effectiveness Settings");
 				//Effectiveness matrix
 				int elementCount = System.Enum.GetNames(typeof(ElementType)).Length;
 
@@ -124,6 +126,13 @@ namespace EoE.Information
 				}
 			}
 
+			protected void Header(string content) => Header(new GUIContent(content));
+			protected void Header(GUIContent content)
+			{
+				GUILayout.Space(8);
+				GUILayout.Label(content, EditorStyles.boldLabel);
+				GUILayout.Space(4);
+			}
 			protected bool FloatField(string content, ref float curValue) => FloatField(new GUIContent(content), ref curValue);
 			protected bool FloatField(GUIContent content, ref float curValue)
 			{
@@ -176,6 +185,18 @@ namespace EoE.Information
 			protected bool GradientField(GUIContent content, ref Gradient curValue)
 			{
 				Gradient newValue = EditorGUILayout.GradientField(content, curValue);
+				if (newValue != curValue)
+				{
+					isDirty = true;
+					curValue = newValue;
+					return true;
+				}
+				return false;
+			}
+			protected bool AnimationCurveField(string content, ref AnimationCurve curValue) => AnimationCurveField(new GUIContent(content), ref curValue);
+			protected bool AnimationCurveField(GUIContent content, ref AnimationCurve curValue)
+			{
+				AnimationCurve newValue = EditorGUILayout.CurveField(content, curValue);
 				if (newValue != curValue)
 				{
 					isDirty = true;

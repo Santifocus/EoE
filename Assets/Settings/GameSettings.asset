@@ -15,8 +15,8 @@ MonoBehaviour:
   SecondsPerEntititeRegen: 0.5
   DamageNumberLifeTime: 1
   ShowRegenNumbers: 1
-  DamageNumberFlySpeed: 1.5
-  DamageNumberRandomMovementPower: 0.5
+  DamageNumberFlySpeed: 1
+  DamageNumberRandomMovementPower: 0.125
   PhysicalDamageColors:
     serializedVersion: 2
     key0: {r: 0.735849, g: 0.735849, b: 0.735849, a: 1}

@@ -8,15 +8,17 @@ namespace EoE.Entities
 {
 	public abstract class Entitie : MonoBehaviour
 	{
-		[SerializeField] private Rigidbody body = default;
-		[SerializeField] private Collider coll = default;
+		[SerializeField] protected Rigidbody body = default;
+		[SerializeField] protected Collider coll = default;
 		public abstract EntitieSettings SelfSettings { get; }
-		private float currentHealth;
-
 		private float regenTimer = 0;
+		private float currentHealth;
+		private float currentAcceleration;
+
 		private void Start()
 		{
 			currentHealth = SelfSettings.Health;
+			currentAcceleration = SelfSettings.BaseAcceleration;
 			EntitieStart();
 		}
 		protected virtual void EntitieStart(){}
@@ -25,7 +27,30 @@ namespace EoE.Entities
 		{
 			Regen();
 		}
-
+		protected float UpdateAcceleration(bool accelerate, float factor = 1)
+		{
+			if (accelerate)
+			{
+				if(currentAcceleration < 1)
+				{
+					if (SelfSettings.MoveAcceleration > 0)
+						currentAcceleration = Mathf.Min(1, currentAcceleration + Time.deltaTime / SelfSettings.MoveAcceleration * factor);
+					else
+						currentAcceleration = 1;
+				}
+			}
+			else //decelerate
+			{
+				if (currentAcceleration > SelfSettings.BaseAcceleration)
+				{
+					if (SelfSettings.NoMoveDeceleration > 0)
+						currentAcceleration = Mathf.Max(SelfSettings.BaseAcceleration, currentAcceleration - Time.deltaTime / SelfSettings.NoMoveDeceleration * factor);
+					else
+						currentAcceleration = SelfSettings.NoMoveDeceleration;
+				}
+			}
+			return currentAcceleration;
+		}
 		protected virtual void Regen()
 		{
 			regenTimer += Time.deltaTime;

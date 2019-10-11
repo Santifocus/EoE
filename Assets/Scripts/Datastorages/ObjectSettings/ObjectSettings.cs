@@ -10,7 +10,7 @@ namespace EoE.Information
 	public class ObjectSettings : ScriptableObject
 	{
 #if UNITY_EDITOR
-		[CustomEditor(typeof(ObjectSettings)), CanEditMultipleObjects]
+		[CustomEditor(typeof(ObjectSettings), true), CanEditMultipleObjects]
 		protected class ObjectSettingEditor : Editor
 		{
 			private bool isDirty = false;
@@ -26,6 +26,13 @@ namespace EoE.Information
 			}
 			protected virtual void CustomInspector() { }
 
+			protected void Header(string content) => Header(new GUIContent(content));
+			protected void Header(GUIContent content)
+			{
+				GUILayout.Space(8);
+				GUILayout.Label(content, EditorStyles.boldLabel);
+				GUILayout.Space(4);
+			}
 			protected bool FloatField(string content, ref float curValue) => FloatField(new GUIContent(content), ref curValue);
 			protected bool FloatField(GUIContent content, ref float curValue)
 			{
@@ -54,6 +61,18 @@ namespace EoE.Information
 			protected bool BoolField(GUIContent content, ref bool curValue)
 			{
 				bool newValue = EditorGUILayout.Toggle(content, curValue);
+				if (newValue != curValue)
+				{
+					isDirty = true;
+					curValue = newValue;
+					return true;
+				}
+				return false;
+			}
+			protected bool Vector2Field(string content, ref Vector2 curValue) => Vector2Field(new GUIContent(content), ref curValue);
+			protected bool Vector2Field(GUIContent content, ref Vector2 curValue)
+			{
+				Vector2 newValue = EditorGUILayout.Vector2Field(content, curValue);
 				if (newValue != curValue)
 				{
 					isDirty = true;
