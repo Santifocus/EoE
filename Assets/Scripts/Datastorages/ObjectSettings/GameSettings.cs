@@ -12,6 +12,9 @@ namespace EoE.Information
 		[HideInInspector] public float SecondsPerEntititeRegen;
 		[HideInInspector] public AnimationCurve TurnSpeedCurve = new AnimationCurve();
 
+		[HideInInspector] public float WhenFallingExtraVelocity = 0.5f;
+		[HideInInspector] public AnimationCurve FallDamageCurve = new AnimationCurve();
+
 		//Damage Numbers
 		[HideInInspector] public float DamageNumberLifeTime = 1;
 		[HideInInspector] public bool ShowRegenNumbers = true;
@@ -66,6 +69,9 @@ namespace EoE.Information
 				Header("Basic Settings");
 				FloatField(new GUIContent("Seconds Per Entitie Regen", "How many seconds for each regeneration cyle? This will not change the amount of healing only the frequency. (In Seconds)"), ref settings.SecondsPerEntititeRegen);
 				AnimationCurveField(new GUIContent("Turn Speed Multiplaction", "How much speed does a Entitie have when it is fully turning vs. walking straight. 0 In the curve means the Entitie walks straight, 1 means when it is currently facing the opposite direction of where it wants to go."), ref settings.TurnSpeedCurve);
+				GUILayout.Space(4);
+				FloatField(new GUIContent("WhenFallingExtraVelocity", "When Entities fall then how much velocity (multiplicative) should be added to the normal gravity?"), ref settings.WhenFallingExtraVelocity);
+				AnimationCurveField(new GUIContent("Fall Damage curve", "When en Entitie hits the ground how much damage should it receive based on velocity. X-Axis == FallVelocity, Y-Axis == Damage"), ref settings.FallDamageCurve);
 
 				GUILayout.Space(8);
 				Header("Damage Number Settings");
@@ -184,8 +190,14 @@ namespace EoE.Information
 			protected bool GradientField(string content, ref Gradient curValue) => GradientField(new GUIContent(content), ref curValue);
 			protected bool GradientField(GUIContent content, ref Gradient curValue)
 			{
-				Gradient newValue = EditorGUILayout.GradientField(content, curValue);
-				if (newValue != curValue)
+				//Create a copy so we can compare them afterwards
+				Gradient newValue = new Gradient();
+				newValue.colorKeys = curValue.colorKeys;
+				newValue.alphaKeys = curValue.alphaKeys;
+
+				newValue = EditorGUILayout.GradientField(content, newValue);
+
+				if (!newValue.Equals(curValue))
 				{
 					isDirty = true;
 					curValue = newValue;
@@ -196,8 +208,11 @@ namespace EoE.Information
 			protected bool AnimationCurveField(string content, ref AnimationCurve curValue) => AnimationCurveField(new GUIContent(content), ref curValue);
 			protected bool AnimationCurveField(GUIContent content, ref AnimationCurve curValue)
 			{
-				AnimationCurve newValue = EditorGUILayout.CurveField(content, curValue);
-				if (newValue != curValue)
+				//Create a copy so we can compare them afterwards
+				AnimationCurve newValue = new AnimationCurve(curValue.keys);
+				newValue = EditorGUILayout.CurveField(content, newValue);
+
+				if (!newValue.Equals(curValue))
 				{
 					isDirty = true;
 					curValue = newValue;

@@ -25,7 +25,7 @@ namespace EoE
 		private Gradient changeGradient;
 		private Vector3 velocity;
 
-		public void BeginDisplay(Vector3 velocity, Gradient changeGradient, float damageAmount, bool wasCritcal)
+		public void BeginDisplay(Vector3 velocity, Gradient changeGradient, string displayedText, bool wasCritcal)
 		{
 			if (!PerlinNoiseScrollSetup)
 				SetupPerlinNoiseScroll();
@@ -35,7 +35,7 @@ namespace EoE
 
 			Color curColor = GetCurrentColor(0);
 
-			display.text = (Mathf.Round(damageAmount * 100) / 100).ToString();
+			display.text = displayedText;
 			display.color = curColor;
 			display.ForceMeshUpdate();
 
@@ -45,7 +45,7 @@ namespace EoE
 			{
 				critIcon.color = curColor;
 				critIcon.gameObject.SetActive(true);
-				critIcon.transform.localPosition = new Vector3(display.textBounds.extents.x + 0.1f, 0, 0);
+				critIcon.transform.localPosition = new Vector3(display.textBounds.extents.x + 0.25f, 0, 0);
 			}
 			else
 			{
@@ -100,7 +100,7 @@ namespace EoE
 			critIcon.color = curColor;
 
 			transform.position += velocity * Time.deltaTime;
-
+			transform.localEulerAngles = new Vector2(PlayerCameraController.CurRotation.y, PlayerCameraController.CurRotation.x);
 			if (lifePoint > 1)
 				ReturnToPool();
 		}

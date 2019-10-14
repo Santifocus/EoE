@@ -30,7 +30,22 @@ namespace EoE
 		{
 			DamageNumber newDamageNumber = damageNumberPool.GetPoolObject();
 			newDamageNumber.transform.position = startPosition;
-			newDamageNumber.BeginDisplay(numberVelocity, colors, damage, wasCrit);
+			string displayedNumber = (Mathf.Round(damage * 100) / 100).ToString();
+			newDamageNumber.BeginDisplay(numberVelocity, colors, displayedNumber, wasCrit);
 		}
+
+		public void DisplayInfoText(Vector3 startPosition, Gradient colors, Vector3 numberVelocity, string text)
+		{
+			DamageNumber newDamageNumber = damageNumberPool.GetPoolObject();
+			newDamageNumber.transform.position = startPosition;
+			newDamageNumber.BeginDisplay(numberVelocity, colors, text, false);
+		}
+
+	#if UNITY_EDITOR
+		private void OnApplicationQuit()
+		{
+
+		}
+	#endif
 	}
 }

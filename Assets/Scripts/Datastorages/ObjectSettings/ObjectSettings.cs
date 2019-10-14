@@ -21,7 +21,7 @@ namespace EoE.Information
 				if (isDirty)
 				{
 					isDirty = false;
-					EditorUtility.SetDirty(this);
+					EditorUtility.SetDirty(target);
 				}
 			}
 			protected virtual void CustomInspector() { }
@@ -86,6 +86,51 @@ namespace EoE.Information
 			{
 				Vector3 newValue = EditorGUILayout.Vector3Field(content, curValue);
 				if (newValue != curValue)
+				{
+					isDirty = true;
+					curValue = newValue;
+					return true;
+				}
+				return false;
+			}
+			protected bool ColorField(string content, ref Color curValue) => ColorField(new GUIContent(content), ref curValue);
+			protected bool ColorField(GUIContent content, ref Color curValue)
+			{
+				Color newValue = EditorGUILayout.ColorField(content, curValue);
+				if (newValue != curValue)
+				{
+					isDirty = true;
+					curValue = newValue;
+					return true;
+				}
+				return false;
+			}
+			protected bool GradientField(string content, ref Gradient curValue) => GradientField(new GUIContent(content), ref curValue);
+			protected bool GradientField(GUIContent content, ref Gradient curValue)
+			{
+				//Create a copy so we can compare them afterwards
+				Gradient newValue = new Gradient();
+				newValue.colorKeys = curValue.colorKeys;
+				newValue.alphaKeys = curValue.alphaKeys;
+
+				newValue = EditorGUILayout.GradientField(content, newValue);
+
+				if (!newValue.Equals(curValue))
+				{
+					isDirty = true;
+					curValue = newValue;
+					return true;
+				}
+				return false;
+			}
+			protected bool AnimationCurveField(string content, ref AnimationCurve curValue) => AnimationCurveField(new GUIContent(content), ref curValue);
+			protected bool AnimationCurveField(GUIContent content, ref AnimationCurve curValue)
+			{
+				//Create a copy so we can compare them afterwards
+				AnimationCurve newValue = new AnimationCurve(curValue.keys);
+				newValue = EditorGUILayout.CurveField(content, newValue);
+
+				if (!newValue.Equals(curValue))
 				{
 					isDirty = true;
 					curValue = newValue;

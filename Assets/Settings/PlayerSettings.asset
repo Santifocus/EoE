@@ -15,14 +15,92 @@ MonoBehaviour:
   EntitieMass: 1
   MassCenter: {x: 0, y: 0, z: 0}
   EntitieElement: 0
-  Health: 25
-  DoRegen: 1
-  HealthRegen: 3
-  MoveSpeed: 1
+  Health: 100
+  DoHealthRegen: 1
+  HealthRegen: 5
+  HealthRegenInCombatFactor: 0.5
+  Endurance: 100
+  DoEnduranceRegen: 1
+  EnduranceRegen: 4
+  EnduranceRegenInCombatFactor: 0.5
+  Mana: 50
+  DoManaRegen: 1
+  ManaRegen: 4
+  ManaRegenInCombatFactor: 0.5
+  WalkSpeed: 7
+  RunSpeedMultiplicator: 1.5
+  JumpPower: {x: 0, y: 9, z: 0}
+  TurnSpeed: 0.35
   MoveAcceleration: 1
-  Endurance: 0
+  NoMoveDeceleration: 1
+  JumpEnduranceCost: 0
+  RunEnduranceCost: 0
   CameraToPlayerDistance: 10
   CameraAnchorOffset: {x: 0, y: 2, z: 0}
   CameraRotationPower: {x: 120, y: 120}
   CameraRotationSpeed: 4
   CameraVerticalAngleClamps: {x: -5, y: 50}
+  EnduranceBars: 4
+  EndurancePerBar: 25
+  StatTextUpdateSpeed: 0.5
+  HealthTextColors:
+    serializedVersion: 2
+    key0: {r: 1, g: 0, b: 0, a: 1}
+    key1: {r: 1, g: 0.70534384, b: 0.0047169924, a: 1}
+    key2: {r: 0.034243107, g: 1, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 16384
+    ctime2: 52428
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_NumColorKeys: 3
+    m_NumAlphaKeys: 2
+  ManaTextColors:
+    serializedVersion: 2
+    key0: {r: 1, g: 0, b: 0, a: 1}
+    key1: {r: 1, g: 1, b: 0, a: 1}
+    key2: {r: 0, g: 1, b: 1, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 16384
+    ctime2: 52428
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_NumColorKeys: 3
+    m_NumAlphaKeys: 2
+  ReserveEnduranceBarColor: {r: 0.65, g: 0.325, b: 0, a: 1}
+  ActiveEnduranceBarColor: {r: 1, g: 0.5, b: 0, a: 1}
+  ReloadingEnduranceBarColor: {r: 0.4, g: 0.4, b: 0.4, a: 0.8}

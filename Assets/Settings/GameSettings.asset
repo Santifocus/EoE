@@ -13,6 +13,73 @@ MonoBehaviour:
   m_Name: GameSettings
   m_EditorClassIdentifier: 
   SecondsPerEntititeRegen: 0.5
+  TurnSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.3
+      inSlope: 1.0769231
+      outSlope: 1.0769231
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.65
+      value: 1
+      inSlope: 1.0769231
+      outSlope: 0
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  WhenFallingExtraVelocity: 1
+  FallDamageCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 25
+      value: 0
+      inSlope: -0
+      outSlope: 0.90371317
+      tangentMode: 5
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.020194843
+    - serializedVersion: 3
+      time: 100
+      value: 400
+      inSlope: 8.603745
+      outSlope: 8.603745
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.028296605
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   DamageNumberLifeTime: 1
   ShowRegenNumbers: 1
   DamageNumberFlySpeed: 1
@@ -20,7 +87,7 @@ MonoBehaviour:
   PhysicalDamageColors:
     serializedVersion: 2
     key0: {r: 0.735849, g: 0.735849, b: 0.735849, a: 1}
-    key1: {r: 0.8584906, g: 0.43329477, b: 0.43329477, a: 0}
+    key1: {r: 1, g: 0.08018869, b: 0.08018869, a: 0}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
@@ -49,7 +116,7 @@ MonoBehaviour:
   MagicalDamageColors:
     serializedVersion: 2
     key0: {r: 0.735849, g: 0.735849, b: 0.735849, a: 1}
-    key1: {r: 0.3063813, g: 0.54837245, b: 0.8018868, a: 0}
+    key1: {r: 0.19032574, g: 0.5191053, b: 0.8584906, a: 0}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
@@ -78,7 +145,7 @@ MonoBehaviour:
   HealColors:
     serializedVersion: 2
     key0: {r: 0.735849, g: 0.735849, b: 0.735849, a: 1}
-    key1: {r: 0.33922213, g: 0.9339623, b: 0.46027687, a: 0}
+    key1: {r: 0.17354932, g: 0.9433962, b: 0.32649896, a: 0}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}

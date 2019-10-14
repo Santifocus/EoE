@@ -13,35 +13,79 @@ namespace EoE.Entities
 		private static Player instance;
 		public static Player Instance => instance;
 		public override EntitieSettings SelfSettings => selfSettings;
+		public static PlayerSettings PlayerSettings => instance.selfSettings;
 		[SerializeField] private PlayerSettings selfSettings = default;
+		[SerializeField] private TMPro.TextMeshProUGUI debugText = default;
 
+		private List<EnduranceBar> enduranceBars;
+		private int totalEnduranceBars;
+		private int reservedEnduranceBars;
+		private float usableEndurance;
+		private float lockedEndurance;
 
-		private float currentEndurance;
+		private bool recentlyUsedEndurance;
 
 		protected override void EntitieStart()
 		{
-			currentEndurance = selfSettings.Endurance;
 			instance = this;
+			SetupEndurance();
 		}
 
-		private void Update()
+		private void SetupEndurance()
 		{
+			totalEnduranceBars = PlayerSettings.EnduranceBars;
+			usableEndurance = PlayerSettings.EndurancePerBar;
+
+			enduranceBars = new List<EnduranceBar>(totalEnduranceBars);
+			for(int i = 0; i < totalEnduranceBars; i++)
+			{
+				enduranceBars.Add(new EnduranceBar(PlayerSettings.EndurancePerBar));
+			}
+		}
+
+		protected override void EntitieUpdate()
+		{
+			EnduranceRegen();
 			Movement();
 			CameraControl();
 			Attack();
 		}
 
+		public void EnduranceRegen()
+		{
+
+		}
+
 		private void Movement()
+		{
+			JumpControl();
+			Walk();
+		}
+		private void JumpControl()
+		{
+			if (PlayerControlls.Buttons.Jump.Down && curStates.IsGrounded)
+			{
+				Jump();
+			}
+		}
+		private void Walk()
 		{
 			//1.0.: Where is the player Pointing the Joystick at
 			Vector3 controllDirection = PlayerControlls.GetPlayerMove();
 
+			bool moving = controllDirection != Vector3.zero;
+			curStates.IsMoving = moving;
 			//1.1.:If there is no input, stop here
-			if (controllDirection == Vector3.zero)
+			if (!moving)
 			{
-				UpdateAcceleration(false);
+				float curAcceleration = UpdateAcceleration();
+				if (curAcceleration == 0)
+				{
+					animationControl.SetBool("Walking", false);
+				}
 				return;
 			}
+			animationControl.SetBool("Walking", true);
 
 			//1.2.: How fast does the player actually want to walk? (1,1) Would be greater then 1 * MoveSpeed => we map it back to 1
 			float intendedMoveSpeed = Mathf.Min(1, controllDirection.magnitude);
@@ -54,14 +98,10 @@ namespace EoE.Entities
 			controllDirection.x = newX;
 			controllDirection.z = newZ;
 
-			//3.: Now we know where the player wants to walk, but if the model is not aligned yet
-			//we need to interpolate between the targeted direction and the current direction
-			float turningFactor = GameController.CurrentGameSettings.TurnSpeedCurve.Evaluate(1 - ((transform.forward - controllDirection).magnitude / 2));
-			float fraction = Mathf.Min(1, Time.deltaTime / SelfSettings.TurnSpeed);
-			transform.forward = ((1 - fraction) * transform.forward + fraction * controllDirection).normalized;
-
-			body.velocity = transform.forward * intendedMoveSpeed * SelfSettings.MoveSpeed * turningFactor * UpdateAcceleration(true, intendedMoveSpeed);
+			TurnTo(controllDirection);
+			UpdateAcceleration(intendedMoveSpeed);
 		}
+
 		private void CameraControl()
 		{
 			Vector2 newMoveDistance = PlayerControlls.CameraMove() * Time.deltaTime;
@@ -72,6 +112,17 @@ namespace EoE.Entities
 		private void Attack()
 		{
 
+		}
+
+		private struct EnduranceBar
+		{
+			public bool lockedBar;
+			public float fillAmount;
+			public EnduranceBar(float fillAmount)
+			{
+				lockedBar = false;
+				this.fillAmount = fillAmount;
+			}
 		}
 	}
 }
