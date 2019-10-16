@@ -50,6 +50,7 @@ namespace EoE.Entities
 			curHealth = SelfSettings.Health;
 			curEndurance = SelfSettings.Endurance;
 			curMana = SelfSettings.Mana;
+			curWalkSpeed = SelfSettings.WalkSpeed;
 
 			curAcceleration = 0;
 			regenTimer = 0;
@@ -133,17 +134,25 @@ namespace EoE.Entities
 		{
 			bool moving = curStates.IsMoving;
 
+			//If the Entitie doesnt move intentionally but is in run mode, then stop the run mode
 			if (!moving && curStates.IsRunning)
 				curStates.IsRunning = false;
 
-			float baseTargetSpeed = curWalkSpeed * (curStates.IsRunning ? SelfSettings.RunSpeedMultiplicator : 1);
-			float targetSpeed = baseTargetSpeed * curAcceleration;
+			float baseTargetSpeed = curWalkSpeed * (curStates.IsRunning ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
+			Vector3 targetVelocity = baseTargetSpeed  * transform.forward;
 			float curSpeed = new Vector2(body.velocity.x, body.velocity.z).magnitude;
 
-			if(curSpeed < baseTargetSpeed)
-			{
+			body.velocity = new Vector3(	Mathf.Lerp(	body.velocity.x, 
+														targetVelocity.x, 
+														Time.deltaTime / Mathf.Max(curSpeed, 1) * baseTargetSpeed * GameController.CurrentGameSettings.EntitieVelocityLerpSpeed),
+											body.velocity.y,
+											Mathf.Lerp(
+												body.velocity.z, 
+												targetVelocity.z, 
+												Time.deltaTime / Mathf.Max(curSpeed, 1) * baseTargetSpeed * GameController.CurrentGameSettings.EntitieVelocityLerpSpeed));
 
-			}
+			Player asPlayer = this as Player;
+			asPlayer.debugText.text = "TargetSpeed: " + baseTargetSpeed + ", CurSpeed: " + (Mathf.Round(curSpeed * 100)/100).ToString() + ", TargetVelocity: " + targetVelocity.ToString();
 		}
 		protected void Jump()
 		{
@@ -189,11 +198,9 @@ namespace EoE.Entities
 
 			//Check for falldamage
 			float velDif = body.velocity.y - lastFallVelocity;
-			if(velDif > 0 && jumpGroundCooldown <= 0) //We stopped falling for a certain amount
+			if(velDif > 0 && jumpGroundCooldown <= 0) //We stopped falling for a certain amount, and we didnt change velocity because we just jumped
 			{
-				float damageAmount = GameController.CurrentGameSettings.FallDamageCurve.Evaluate(velDif);
-				if(damageAmount > 0)
-					ChangeHealth(new InflictionInfo(this, CauseType.Physical, ElementType.None, transform.position + SelfSettings.MassCenter, damageAmount, false));
+				Landed(velDif);
 			}
 			lastFallVelocity = body.velocity.y;
 
@@ -225,6 +232,15 @@ namespace EoE.Entities
 			}
 
 			return Physics.CheckCapsule(middle  - offset, middle + offset, cColl.radius, ConstantCollector.TERRAIN_LAYER);
+		}
+		private void Landed(float velDif)
+		{
+			float damageAmount = GameController.CurrentGameSettings.FallDamageCurve.Evaluate(velDif);
+			if(damageAmount > 0)
+				ChangeHealth(new InflictionInfo(this, CauseType.Physical, ElementType.None, transform.position + SelfSettings.MassCenter, damageAmount, false));
+
+			float curSpeed = new Vector2(body.velocity.x, body.velocity.z).magnitude;
+			curAcceleration = Mathf.Clamp01(curAcceleration - velDif / Mathf.Max(curSpeed, 1) * GameController.CurrentGameSettings.GroundHitVelocityLoss);
 		}
 		protected virtual void Regen()
 		{
@@ -353,7 +369,7 @@ namespace EoE.Entities
 				get => ((state | 16) == state);
 				set
 				{
-					state = (byte)(state & BlockingReset);
+					state = (byte)(state & CombatReset);
 					if (value)
 					{
 						state |= 16;

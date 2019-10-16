@@ -15,7 +15,7 @@ namespace EoE.Entities
 		public override EntitieSettings SelfSettings => selfSettings;
 		public static PlayerSettings PlayerSettings => instance.selfSettings;
 		[SerializeField] private PlayerSettings selfSettings = default;
-		[SerializeField] private TMPro.TextMeshProUGUI debugText = default;
+		public TMPro.TextMeshProUGUI debugText = default;
 
 		private List<EnduranceBar> enduranceBars;
 		private int totalEnduranceBars;
@@ -75,7 +75,7 @@ namespace EoE.Entities
 
 			bool moving = controllDirection != Vector3.zero;
 			curStates.IsMoving = moving;
-			//1.1.:If there is no input, stop here
+			//1.1.: If there is no input, stop here
 			if (!moving)
 			{
 				float curAcceleration = UpdateAcceleration();
@@ -99,7 +99,7 @@ namespace EoE.Entities
 			controllDirection.z = newZ;
 
 			TurnTo(controllDirection);
-			UpdateAcceleration(intendedMoveSpeed);
+			UpdateAcceleration(intendedMoveSpeed * GameController.CurrentGameSettings.TurnSpeedCurve.Evaluate(1 - (transform.forward - controllDirection).magnitude / 2));
 		}
 
 		private void CameraControl()
