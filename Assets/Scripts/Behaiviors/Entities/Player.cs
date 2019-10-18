@@ -15,7 +15,9 @@ namespace EoE.Entities
 		public override EntitieSettings SelfSettings => selfSettings;
 		public static PlayerSettings PlayerSettings => instance.selfSettings;
 		[SerializeField] private PlayerSettings selfSettings = default;
+		[SerializeField] private Transform playerHead = default;
 		public TMPro.TextMeshProUGUI debugText = default;
+
 
 		private List<EnduranceBar> enduranceBars;
 		private int totalEnduranceBars;
@@ -24,6 +26,7 @@ namespace EoE.Entities
 		private float lockedEndurance;
 
 		private bool recentlyUsedEndurance;
+		private Vector3 cameraDirection;
 
 		protected override void EntitieStart()
 		{
@@ -46,10 +49,11 @@ namespace EoE.Entities
 		protected override void EntitieUpdate()
 		{
 			EnduranceRegen();
-			Movement();
 			CameraControl();
+			Movement();
 			Attack();
 		}
+
 
 		public void EnduranceRegen()
 		{
@@ -91,10 +95,9 @@ namespace EoE.Entities
 			float intendedMoveSpeed = Mathf.Min(1, controllDirection.magnitude);
 
 			//2.: Rotate the controlled direction based on where the camera is facing
-			float camXDir = Mathf.Sin((-PlayerCameraController.CurRotation.x) * Mathf.Deg2Rad);
-			float camZDir = Mathf.Cos((-PlayerCameraController.CurRotation.x) * Mathf.Deg2Rad);
-			float newX = (controllDirection.x * camZDir) - (controllDirection.z * camXDir);
-			float newZ = (controllDirection.z * camZDir) + (controllDirection.x * camXDir);
+			cameraDirection = new Vector3(Mathf.Sin((-PlayerCameraController.CurRotation.x) * Mathf.Deg2Rad), 0, Mathf.Cos((-PlayerCameraController.CurRotation.x) * Mathf.Deg2Rad));
+			float newX = (controllDirection.x * cameraDirection.z) - (controllDirection.z * cameraDirection.x);
+			float newZ = (controllDirection.z * cameraDirection.z) + (controllDirection.x * cameraDirection.x);
 			controllDirection.x = newX;
 			controllDirection.z = newZ;
 
@@ -107,6 +110,7 @@ namespace EoE.Entities
 			Vector2 newMoveDistance = PlayerControlls.CameraMove() * Time.deltaTime;
 			newMoveDistance = new Vector2(newMoveDistance.x * selfSettings.CameraRotationPower.x, newMoveDistance.y * selfSettings.CameraRotationPower.y);
 			PlayerCameraController.ToRotate += newMoveDistance;
+
 		}
 
 		private void Attack()

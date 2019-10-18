@@ -150,9 +150,6 @@ namespace EoE.Entities
 												body.velocity.z, 
 												targetVelocity.z, 
 												Time.deltaTime / Mathf.Max(curSpeed, 1) * baseTargetSpeed * GameController.CurrentGameSettings.EntitieVelocityLerpSpeed));
-
-			Player asPlayer = this as Player;
-			asPlayer.debugText.text = "TargetSpeed: " + baseTargetSpeed + ", CurSpeed: " + (Mathf.Round(curSpeed * 100)/100).ToString() + ", TargetVelocity: " + targetVelocity.ToString();
 		}
 		protected void Jump()
 		{
