@@ -8,19 +8,35 @@ namespace EoE.Weapons
 	[CustomEditor(typeof(AttackStyle), true), CanEditMultipleObjects]
 	public class AttackStyleEditor : Editor
 	{
-		private const string ENABLED_TOOLTIP = "Disabled == This attack will never be executed";
-		private const float HORIZONTAL_SCROLL_PER_DEPTH = 20;
+		[MenuItem("EoE/New Attack Style")]
+		public static void CreateAttackStyle()
+		{
+			AttackStyle asset = CreateInstance<AttackStyle>();
 
-		private static bool[] foldoutStates = new bool[8];
-		private int drawnAttacks = 0;
-		private bool isDirty;
-		private int innerDepth;
+			AssetDatabase.CreateAsset(asset, "Assets/Settings/Weapons/AttackStyles/New Attack Style.asset");
+			AssetDatabase.SaveAssets();
+			EditorUtility.FocusProjectWindow();
+
+			Selection.activeObject = asset;
+			Debug.Log("Created: 'New Attack Style' at: Assets/Settings/Weapons/AttackStyles/...");
+		}
+
+		private const string ATTACK_COMBO_DELAY_DISCR = "What is the max delay (In Seconds) before the attack combo will be canceled? (Time begins after animation of previous attack ended)";
+		private bool atLeastOneIncompleteCombo;
+
+		private int drawnAttacksCombos;
+		private static bool[] foldOutStates;
+
+		private int innerDrawnAttacks;
+		private List<bool> innerFoldoutStates;
+
+		private List<string> failedCombos;
 
 		public override void OnInspectorGUI()
 		{
 			AttackStyle t = target as AttackStyle;
 			CustomInspector(t);
-			if (isDirty)
+			if (EoEEditor.isDirty)
 			{
 				EditorUtility.SetDirty(t);
 			}
@@ -28,189 +44,214 @@ namespace EoE.Weapons
 
 		private void CustomInspector(AttackStyle target)
 		{
-			if (foldoutStates == null)
-				foldoutStates = new bool[8];
-			drawnAttacks = 0;
+			if (foldOutStates == null)
+				foldOutStates = new bool[8];
+			if (innerFoldoutStates == null)
+			{
+				int? innerFoldouts =	target.standAttack?.attacks?.Length +
+										target.jumpAttack?.attacks?.Length +
+										target.sprintAttack.attacks?.Length +
+										target.jumpSprintAttack.attacks?.Length +
+										target.standHeavyAttack.attacks?.Length +
+										target.jumpHeavyAttack.attacks?.Length +
+										target.sprintHeavyAttack.attacks?.Length +
+										target.jumpSprintHeavyAttack.attacks?.Length;
 
-			Header("Normal Attacks");
-			CreateAttackInput(new GUIContent("Stand Attack", "Start this attack when: Standing and attacking."), ref target.standAttack, true);
-			CreateAttackInput(new GUIContent("Jump Attack", "Start this attack when: In Air and attacking."), ref target.jumpAttack, true);
-			CreateAttackInput(new GUIContent("Sprint Attack", "Start this attack when: Running and attacking."), ref target.sprintAttack, true);
-			CreateAttackInput(new GUIContent("Sprint Jump Attack", "Start this attack when: In Air, Running and attacking."), ref target.jumpSprintAttack, true);
+				innerFoldoutStates = new List<bool>(innerFoldouts.HasValue ? innerFoldouts.Value : 8);
+				for (int i = 0; i < (innerFoldouts.HasValue ? innerFoldouts.Value : 0); i++)
+				{
+					innerFoldoutStates.Add(false);
+				}
+			}
 
-			Header("Heavy Attacks");
-			CreateAttackInput(new GUIContent("Heavy Stand Attack", "Start this attack when: Standing and Heavy-attacking."), ref target.standHeavyAttack, true);
-			CreateAttackInput(new GUIContent("Heavy Jump Attack", "Start this attack when: In Air and Heavy-attacking."), ref target.jumpHeavyAttack, true);
-			CreateAttackInput(new GUIContent("Heavy Sprint Attack", "Start this attack when: Running and Heavy-attacking."), ref target.sprintHeavyAttack, true);
-			CreateAttackInput(new GUIContent("Heavy Sprint Jump Attack", "Start this attack when: In Air, Running and Heavy-attacking."), ref target.jumpSprintHeavyAttack, true);
+			atLeastOneIncompleteCombo = false;
+			drawnAttacksCombos = 0;
+			innerDrawnAttacks = 0;
+			failedCombos = new List<string>();
+
+			EoEEditor.Header("Normal Attacks");
+			CreateAttackInput(new GUIContent("Stand Attack", "Start this attack when: Standing and attacking."), ref target.standAttack);
+			CreateAttackInput(new GUIContent("Jump Attack", "Start this attack when: In Air and attacking."), ref target.jumpAttack);
+			CreateAttackInput(new GUIContent("Sprint Attack", "Start this attack when: Running and attacking."), ref target.sprintAttack);
+			CreateAttackInput(new GUIContent("Sprint Jump Attack", "Start this attack when: In Air, Running and attacking."), ref target.jumpSprintAttack);
+
+			EoEEditor.Header("Heavy Attacks");
+			CreateAttackInput(new GUIContent("Heavy Stand Attack", "Start this attack when: Standing and Heavy-attacking."), ref target.standHeavyAttack);
+			CreateAttackInput(new GUIContent("Heavy Jump Attack", "Start this attack when: In Air and Heavy-attacking."), ref target.jumpHeavyAttack);
+			CreateAttackInput(new GUIContent("Heavy Sprint Attack", "Start this attack when: Running and Heavy-attacking."), ref target.sprintHeavyAttack);
+			CreateAttackInput(new GUIContent("Heavy Sprint Jump Attack", "Start this attack when: In Air, Running and Heavy-attacking."), ref target.jumpSprintHeavyAttack);
+
+			if (atLeastOneIncompleteCombo)
+			{
+				GUILayout.Space(10);
+				if (failedCombos.Count == 1)
+				{
+					EditorGUILayout.HelpBox(failedCombos[0] + " is a Attack-combo, but has a disabled attack, this is not prohibited.", MessageType.Error);
+				}
+				else
+				{
+					string sources = "";
+					for (int i = 0; i < failedCombos.Count; i++)
+					{
+						if (i < failedCombos.Count - 1)
+						{
+							sources += failedCombos[i] + ((i < failedCombos.Count - 2)?", ":" ");
+						}
+						else //i == failedCombos.Count - 1
+						{
+							sources += "and " + failedCombos[i];
+						}
+					}
+					EditorGUILayout.HelpBox(sources + " are Attack-combos, but have a disabled attack, this is not prohibited.", MessageType.Error);
+				}
+			}
 		}
-		protected void Header(string content) => Header(new GUIContent(content));
-		protected void Header(GUIContent content)
-		{
-			GUILayout.Space(8);
-			GUILayout.Label(content, EditorStyles.boldLabel);
-			GUILayout.Space(4);
-		}
 
-		private void CreateAttackInput(GUIContent content, ref Attack curVal, bool topLevel)
+		private void CreateAttackInput(GUIContent content, ref AttackCombo curVal)
 		{
 			if (curVal == null)
+				curVal = new AttackCombo();
+			if (curVal.attacks == null)
 			{
-				curVal = new Attack();
+				curVal.attacks = new Attack[1];
+				curVal.delays = new float[0];
+
+				if (innerFoldoutStates.Count < innerDrawnAttacks)
+					innerFoldoutStates.Add(false);
+				else
+					innerFoldoutStates.Insert(innerDrawnAttacks, false);
 			}
 
-			if (topLevel)
-				innerDepth = 1;
+			foldOutStates[drawnAttacksCombos] = EditorGUILayout.BeginFoldoutHeaderGroup(foldOutStates[drawnAttacksCombos], content);
+			if (foldOutStates[drawnAttacksCombos])
+			{
+				int curArraySize = curVal.attacks.Length;
+				for (int i = 0; i < curArraySize; i++)
+				{
+					AttackField(i == 0 ? "Start Attack" : i +". Combo", ref curVal.attacks[i], 1);
+					if(i < curVal.attacks.Length - 1)
+					{
+						GUILayout.Space(8);
+						EoEEditor.FloatField(new GUIContent("Max Delay to " + (i + 1) + ". combo.", ATTACK_COMBO_DELAY_DISCR), ref curVal.delays[i]);
+						GUILayout.Space(8);
+					}
+				}
+				EditorGUILayout.BeginHorizontal();
+				if (curArraySize < 1 || GUILayout.Button("+"))
+				{
+					int newArraySize = curArraySize + 1;
+					Attack[] newAttackArray = new Attack[newArraySize];
+					float[] newDelayArray = new float[newArraySize - 1];
+
+					if (innerFoldoutStates.Count < innerDrawnAttacks + newArraySize)
+						innerFoldoutStates.Add(false);
+					else
+						innerFoldoutStates.Insert(innerDrawnAttacks + curArraySize, false);
+
+					for (int i = 0; i < curArraySize; i++)
+					{
+						newAttackArray[i] = curVal.attacks[i];
+					}
+					curVal.attacks = newAttackArray;
+
+					for (int i = 0; i < curArraySize - 1; i++)
+					{
+						newDelayArray[i] = curVal.delays[i];
+					}
+					curVal.delays = newDelayArray;
+				}
+
+				EditorGUI.BeginDisabledGroup(curArraySize <= 1);
+				if (GUILayout.Button("-"))
+				{
+					int newArraySize = curArraySize - 1;
+					Attack[] newAttackArray = new Attack[newArraySize];
+					float[] newDelayArray = new float[newArraySize - 1];
+
+					innerFoldoutStates.RemoveAt(innerDrawnAttacks + newArraySize);
+
+					for (int i = 0; i < newArraySize; i++)
+					{
+						newAttackArray[i] = curVal.attacks[i];
+					}
+					curVal.attacks = newAttackArray;
+
+					for (int i = 0; i < newArraySize - 1; i++)
+					{
+						newDelayArray[i] = curVal.delays[i];
+					}
+					curVal.delays = newDelayArray;
+				}
+				EditorGUI.EndDisabledGroup();
+				EditorGUILayout.EndHorizontal();
+
+				GUILayout.Space(15);
+			}
 			else
-				innerDepth++;
+				innerDrawnAttacks += curVal.attacks.Length;
+			
+			EditorGUILayout.EndFoldoutHeaderGroup();
+			drawnAttacksCombos++;
 
-			if (topLevel)
+			//Check if attack combo is breaking any rules
+			if (curVal.attacks.Length > 1)
 			{
-				GUILayout.BeginHorizontal();
+				for(int i = 0; i < curVal.attacks.Length; i++)
 				{
-					GUILayout.Space(innerDepth * HORIZONTAL_SCROLL_PER_DEPTH);
-					foldoutStates[drawnAttacks] = EditorGUILayout.Foldout(foldoutStates[drawnAttacks], content, true);
-				}
-				GUILayout.EndHorizontal();
-			}
-
-			if (!topLevel || foldoutStates[drawnAttacks])
-			{
-				GUILayout.BeginHorizontal();
-				{
-					GUILayout.Space(innerDepth * HORIZONTAL_SCROLL_PER_DEPTH);
-					BoolField(new GUIContent("Enabled", ENABLED_TOOLTIP), ref curVal.enabled);
-				}
-				GUILayout.EndHorizontal();
-
-				if (curVal.enabled)
-				{
-					GUILayout.BeginHorizontal();
+					if (curVal.attacks[i] != null && !curVal.attacks[i].enabled)
 					{
-						GUILayout.Space(innerDepth * HORIZONTAL_SCROLL_PER_DEPTH);
-						AttackAnimation newAttackAnimationEnum = (AttackAnimation)EditorGUILayout.EnumPopup("Animation", curVal.animation);
-
-						if (newAttackAnimationEnum != curVal.animation)
-						{
-							isDirty = true;
-							curVal.animation = newAttackAnimationEnum;
-						}
-					}
-					GUILayout.EndHorizontal();
-
-
-					AttackInfoField("Info", ref curVal.info);
-
-					GUILayout.Space(8);
-					GUILayout.BeginHorizontal();
-					{
-						GUILayout.Space(innerDepth * HORIZONTAL_SCROLL_PER_DEPTH);
-						GUILayout.Label("Combo: " + innerDepth, EditorStyles.boldLabel);
-					}
-					GUILayout.EndHorizontal();
-					GUILayout.Space(4);
-
-					GUILayout.BeginHorizontal();
-					{
-						GUILayout.Space(innerDepth * HORIZONTAL_SCROLL_PER_DEPTH);
-						BoolField("Has Combo", ref curVal.hasCombo);
-					}
-					GUILayout.EndHorizontal();
-
-					if (curVal.hasCombo)
-					{
-						GUILayout.BeginHorizontal();
-						{
-							GUILayout.Space(innerDepth * HORIZONTAL_SCROLL_PER_DEPTH);
-							FloatField(new GUIContent("Combo max Delay", "After animation of the last attack has finished how many Seconds at max can the combo be delayed"), ref curVal.comboMaxDelay);
-						}
-						GUILayout.EndHorizontal();
-
-						GUIContent newContent = new GUIContent(innerDepth == 1 ? (content.text + " C.1") : content.text.Replace("C." + (innerDepth - 1), "C." + innerDepth), content.tooltip);
-						CreateAttackInput(newContent, ref curVal.nextCombo, false);
+						failedCombos.Add(content.text);
+						atLeastOneIncompleteCombo = true;
+						break;
 					}
 				}
 			}
-
-			if(topLevel)
-				drawnAttacks++;
 		}
-		protected bool AttackInfoField(string content, ref AttackInfo curValue) => AttackInfoField(new GUIContent(content), ref curValue);
-		protected bool AttackInfoField(GUIContent content, ref AttackInfo curValue)
-		{
+		private bool AttackField(string content, ref Attack curValue, int offSet = 0) => AttackField(new GUIContent(content), ref curValue, offSet);
+		private bool AttackField(GUIContent content, ref Attack curValue, int offSet = 0)
+		{	
+			if (curValue == null)
+				curValue = new Attack();
+
 			bool changed = false;
-			GUILayout.BeginHorizontal();
-			{
-				GUILayout.Space(innerDepth * HORIZONTAL_SCROLL_PER_DEPTH);
-				changed |= FloatField(new GUIContent("Damage Mutliplier", "Multiplies the base damage of the weapon by this amount."), ref curValue.damageMutliplier);
-			}
-			GUILayout.EndHorizontal();
+			bool state = innerFoldoutStates[innerDrawnAttacks];
+			EoEEditor.Foldout(content, ref state, offSet);
+			innerFoldoutStates[innerDrawnAttacks] = state;
 
-			GUILayout.BeginHorizontal();
+			if (innerFoldoutStates[innerDrawnAttacks])
 			{
-				GUILayout.Space(innerDepth * HORIZONTAL_SCROLL_PER_DEPTH);
-				changed |= FloatField(new GUIContent("Endurance Multiplier", "Multiplies the base endurance usage of the weapon by this amount."), ref curValue.enduranceMultiplier);
-			}
-			GUILayout.EndHorizontal();
+				EoEEditor.BoolField(new GUIContent("Enabled", "If disabled this Attack can NEVER be executed."), ref curValue.enabled, offSet);
+				if (curValue.enabled)
+				{
+					System.Enum anim = curValue.animation;
+					bool enumChange = EoEEditor.EnumField(new GUIContent("Animation", "The animation that should be started when this attack is executed."), ref anim, offSet + 1);
+					if (enumChange)
+					{
+						curValue.animation = (AttackAnimation)anim;
+						changed = true;
+					}
 
-			GUILayout.BeginHorizontal();
-			{
-				GUILayout.Space(innerDepth * HORIZONTAL_SCROLL_PER_DEPTH);
-				changed |= FloatField(new GUIContent("Knockback Mutliplier", "Multiplies the base knockback of the weapon by this amount."), ref curValue.knockbackMutliplier);
+					changed |= AttackInfoField(new GUIContent("Attack Info","Settings for this attack / combo-part."), ref curValue.info, offSet + 1);
+				}
 			}
-			GUILayout.EndHorizontal();
-
-			GUILayout.BeginHorizontal();
-			{
-				GUILayout.Space(innerDepth * HORIZONTAL_SCROLL_PER_DEPTH);
-				changed |= BoolField(new GUIContent("Penetrate Entities", "When enabled the weapon can go througth Entities, if not it will stop the animation after hitting one Entitie."), ref curValue.penetrateEntities);
-			}
-			GUILayout.EndHorizontal();
-
-			GUILayout.BeginHorizontal();
-			{
-				GUILayout.Space(innerDepth * HORIZONTAL_SCROLL_PER_DEPTH);
-				changed |= BoolField(new GUIContent("Penetrate Terrain", "When enabled the weapon can go througth Walls/Terrain, if not it will stop the animation after hitting one Wall/Terrain."), ref curValue.penetrateTerrain);
-			}
-			GUILayout.EndHorizontal();
-
+			innerDrawnAttacks++;
 			return changed;
 		}
-		protected bool FloatField(string content, ref float curValue) => FloatField(new GUIContent(content), ref curValue);
-		protected bool FloatField(GUIContent content, ref float curValue)
+		
+		protected bool AttackInfoField(string content, ref AttackInfo curValue, int offSet = 0) => AttackInfoField(new GUIContent(content), ref curValue, offSet);
+		protected bool AttackInfoField(GUIContent content, ref AttackInfo curValue, int offSet = 0)
 		{
-			float newValue = EditorGUILayout.FloatField(content, curValue);
-			if (newValue != curValue)
-			{
-				isDirty = true;
-				curValue = newValue;
-				return true;
-			}
-			return false;
-		}
-		protected bool IntField(string content, ref int curValue) => IntField(new GUIContent(content), ref curValue);
-		protected bool IntField(GUIContent content, ref int curValue)
-		{
-			int newValue = EditorGUILayout.IntField(content, curValue);
-			if (newValue != curValue)
-			{
-				isDirty = true;
-				curValue = newValue;
-				return true;
-			}
-			return false;
-		}
-		protected bool BoolField(string content, ref bool curValue) => BoolField(new GUIContent(content), ref curValue);
-		protected bool BoolField(GUIContent content, ref bool curValue)
-		{
-			bool newValue = EditorGUILayout.Toggle(content, curValue);
-			if (newValue != curValue)
-			{
-				isDirty = true;
-				curValue = newValue;
-				return true;
-			}
-			return false;
+			bool changed = false;
+			changed |= EoEEditor.FloatField(new GUIContent("Damage Mutliplier", "Multiplies the base damage of the weapon by this amount."), ref curValue.damageMutliplier, offSet);
+
+			changed |= EoEEditor.FloatField(new GUIContent("Endurance Multiplier", "Multiplies the base endurance usage of the weapon by this amount."), ref curValue.enduranceMultiplier, offSet);
+
+			changed |= EoEEditor.FloatField(new GUIContent("Knockback Mutliplier", "Multiplies the base knockback of the weapon by this amount."), ref curValue.knockbackMutliplier, offSet);
+
+			changed |= EoEEditor.BoolField(new GUIContent("Penetrate Entities", "When enabled the weapon can go througth Entities, if not it will stop the animation after hitting one Entitie."), ref curValue.penetrateEntities, offSet);
+
+			changed |= EoEEditor.BoolField(new GUIContent("Penetrate Terrain", "When enabled the weapon can go througth Walls/Terrain, if not it will stop the animation after hitting one Wall/Terrain."), ref curValue.penetrateTerrain, offSet);
+			return changed;
 		}
 	}
 }

@@ -7,29 +7,30 @@ namespace EoE.Weapons
 	public enum AttackAnimation { Stab, ToRightSlash, ToLeftSlash, TopDownSlash, Uppercut }
 	public class AttackStyle : ScriptableObject
 	{
-		public Attack standAttack;
-		public Attack jumpAttack;
-		public Attack sprintAttack;
-		public Attack jumpSprintAttack;
+		public AttackCombo standAttack;
+		public AttackCombo jumpAttack;
+		public AttackCombo sprintAttack;
+		public AttackCombo jumpSprintAttack;
 
-		public Attack standHeavyAttack;
-		public Attack jumpHeavyAttack;
-		public Attack sprintHeavyAttack;
-		public Attack jumpSprintHeavyAttack;
+		public AttackCombo standHeavyAttack;
+		public AttackCombo jumpHeavyAttack;
+		public AttackCombo sprintHeavyAttack;
+		public AttackCombo jumpSprintHeavyAttack;
+	}
+
+	[System.Serializable]
+	public class AttackCombo
+	{
+		public Attack[] attacks;
+		public float[] delays;
 	}
 
 	[System.Serializable]
 	public class Attack
 	{
-		public bool enabled;
+		public bool enabled = false;
 		public AttackAnimation animation;
-		public AttackInfo info;
-
-		[Space(15)]
-		[Header("Combo")]
-		public bool hasCombo;
-		public float comboMaxDelay;
-		public Attack nextCombo = null;
+		public AttackInfo info = new AttackInfo(1, 1, 1, false, false);
 	}
 
 	[System.Serializable]
@@ -40,5 +41,13 @@ namespace EoE.Weapons
 		public float knockbackMutliplier;
 		public bool penetrateEntities;
 		public bool penetrateTerrain;
+		public AttackInfo(float damageMutliplier, float enduranceMultiplier, float knockbackMutliplier, bool penetrateEntities, bool penetrateTerrain)
+		{
+			this.damageMutliplier = damageMutliplier;
+			this.enduranceMultiplier = enduranceMultiplier;
+			this.knockbackMutliplier = knockbackMutliplier;
+			this.penetrateEntities = penetrateEntities;
+			this.penetrateTerrain = penetrateTerrain;
+		}
 	}
 }
