@@ -15,9 +15,11 @@ namespace EoE.Information
 		//Endurance Settings
 		public int EnduranceBars = 4;
 		public float EndurancePerBar = 25;
+		public float EnduranceRegenDelayAfterUse = 3;
 
 		//UI
 		public float StatTextUpdateSpeed = 1;
+		public float EnduranceBarLerpSpeed = 5;
 		public Gradient HealthTextColors = new Gradient();
 		public Gradient ManaTextColors = new Gradient();
 

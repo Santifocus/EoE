@@ -73,6 +73,7 @@ namespace EoE.Controlls
 			private const KeyCode WEAPON_MAGIC_SWAP =		KeyCode.Joystick1Button5;
 			private const KeyCode BACK =					KeyCode.Joystick1Button6;
 			private const KeyCode PAUSE =					KeyCode.Joystick1Button7;
+			private const KeyCode RUN =					KeyCode.Joystick1Button8;
 
 			public static ButtonInput Jump =				new ButtonInput("A", JUMP);
 			public static ButtonInput Dodge =				new ButtonInput("B", DODGE);
@@ -82,6 +83,7 @@ namespace EoE.Controlls
 			public static ButtonInput WeaponMagicSwap =		new ButtonInput("RB", WEAPON_MAGIC_SWAP);
 			public static ButtonInput Back =				new ButtonInput("Back", BACK);
 			public static ButtonInput Pause =				new ButtonInput("Pause", PAUSE);
+			public static ButtonInput Run =					new ButtonInput("Run", RUN);
 
 			public class ButtonInput
 			{

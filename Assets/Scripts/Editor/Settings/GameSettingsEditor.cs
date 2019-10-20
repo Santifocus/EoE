@@ -26,8 +26,6 @@ namespace EoE.Information
 			Header("Basic Settings");
 			FloatField(new GUIContent("Seconds Per Entitie Regen", "How many seconds for each regeneration cyle? This will not change the amount of healing only the frequency. (In Seconds)"), ref settings.SecondsPerEntititeRegen);
 			AnimationCurveField(new GUIContent("Turn Speed Multiplaction", "How much speed does a Entitie have when it is fully turning vs. walking straight. 0 In the curve means the Entitie walks straight, 1 means when it is currently facing the opposite direction of where it wants to go."), ref settings.TurnSpeedCurve);
-			FloatField(new GUIContent("Entitie Velocity Lerp Speed", "When changing Velocity of an Entitie the former velocity will be gradually turned into the new velocity, the higher this value the faster that happens."), ref settings.EntitieVelocityLerpSpeed);
-
 			GUILayout.Space(4);
 			FloatField(new GUIContent("When Falling Extra Velocity", "When Entities fall then how much velocity (multiplicative) should be added to the normal gravity?"), ref settings.WhenFallingExtraVelocity);
 			AnimationCurveField(new GUIContent("Fall Damage curve", "When en Entitie hits the ground how much damage should it receive based on velocity. X-Axis == FallVelocity, Y-Axis == Damage"), ref settings.FallDamageCurve);

@@ -5,17 +5,46 @@ using UnityEngine;
 namespace EoE.Weapons
 {
 	public enum AttackAnimation { Stab, ToRightSlash, ToLeftSlash, TopDownSlash, Uppercut }
+	public enum AnimationCancelCondition { Ignore = 0, True = 1, False = 2}
 	public class AttackStyle : ScriptableObject
 	{
+		public AttackCombo this[int index]
+		{
+			get
+			{
+				switch (index)
+				{
+					case 0:
+						return standAttack;
+					case 1:
+						return sprintAttack;
+					case 2:
+						return jumpAttack;
+					case 3:
+						return sprintJumpAttack;
+					case 4:
+						return standHeavyAttack;
+					case 5:
+						return sprintHeavyAttack;
+					case 6:
+						return jumpHeavyAttack;
+					case 7:
+						return sprintJumpHeavyAttack;
+				}
+				//Index out of bounds
+				return null;
+			}
+		}
+
 		public AttackCombo standAttack;
-		public AttackCombo jumpAttack;
 		public AttackCombo sprintAttack;
-		public AttackCombo jumpSprintAttack;
+		public AttackCombo jumpAttack;
+		public AttackCombo sprintJumpAttack;
 
 		public AttackCombo standHeavyAttack;
-		public AttackCombo jumpHeavyAttack;
 		public AttackCombo sprintHeavyAttack;
-		public AttackCombo jumpSprintHeavyAttack;
+		public AttackCombo jumpHeavyAttack;
+		public AttackCombo sprintJumpHeavyAttack;
 	}
 
 	[System.Serializable]
@@ -29,8 +58,8 @@ namespace EoE.Weapons
 	public class Attack
 	{
 		public bool enabled = false;
-		public AttackAnimation animation;
-		public AttackInfo info = new AttackInfo(1, 1, 1, false, false);
+		public AttackInfo info = new AttackInfo(1, 1, 1, 1);
+		public AttackAnimationInfo animationInfo;
 	}
 
 	[System.Serializable]
@@ -39,15 +68,29 @@ namespace EoE.Weapons
 		public float damageMutliplier;
 		public float enduranceMultiplier;
 		public float knockbackMutliplier;
-		public bool penetrateEntities;
-		public bool penetrateTerrain;
-		public AttackInfo(float damageMutliplier, float enduranceMultiplier, float knockbackMutliplier, bool penetrateEntities, bool penetrateTerrain)
+		public float critChanceMultiplier;
+
+		public AttackInfo(float damageMutliplier, float enduranceMultiplier, float knockbackMutliplier, float critChanceMultiplier)
 		{
 			this.damageMutliplier = damageMutliplier;
 			this.enduranceMultiplier = enduranceMultiplier;
 			this.knockbackMutliplier = knockbackMutliplier;
-			this.penetrateEntities = penetrateEntities;
-			this.penetrateTerrain = penetrateTerrain;
+			this.critChanceMultiplier = critChanceMultiplier;
 		}
+	}
+	
+	[System.Serializable]
+	public struct AttackAnimationInfo
+	{
+		public AttackAnimation animation;
+
+		public bool haltAnimationTillCancel;
+
+		public bool bothStates;
+		public AnimationCancelCondition cancelWhenOnGround;
+		public AnimationCancelCondition cancelWhenSprinting;
+
+		public bool penetrateEntities;
+		public bool penetrateTerrain;
 	}
 }

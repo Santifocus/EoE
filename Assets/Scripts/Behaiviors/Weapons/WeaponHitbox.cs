@@ -7,27 +7,32 @@ namespace EoE.Weapons
 {
 	public class WeaponHitbox : MonoBehaviour
 	{
-		[SerializeField] private TrailRenderer trail;
+		public TrailRenderer trail;
 
 		private WeaponController controller;
 		private bool curActive;
+		private Collider coll;
 		public bool Active { get => curActive; set => ChangeWeaponState(value); }
 		public void Setup(WeaponController controller)
 		{
 			this.controller = controller;
-			trail.enabled = false;
-			gameObject.layer = ConstantCollector.WEAPON_LAYER;
-			GetComponent<Collider>().isTrigger = true;
+			if (trail)
+				trail.enabled = false;
+			coll = GetComponent<Collider>();
+			coll.enabled = false;
 		}
 
 		private void ChangeWeaponState(bool state)
 		{
+			coll.enabled = state;
 			curActive = state;
-			trail.enabled = state;
+			if(trail)
+				trail.enabled = state;
 		}
-		private void OnTriggerEnter(Collider coll)
+
+		private void OnTriggerEnter(Collider other)
 		{
-			controller.HitObject(coll.gameObject);
+			controller.HitObject(coll.bounds.center, other.gameObject);
 		}
 	}
 }

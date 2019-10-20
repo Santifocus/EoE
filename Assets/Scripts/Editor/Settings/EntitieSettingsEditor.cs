@@ -30,7 +30,18 @@ namespace EoE.Information
 			}
 			//Endurance
 			GUILayout.Space(5);
-			EoEEditor.FloatField(new GUIContent("Endurance", "Attacks and movement use up endurance. When a Entitie is out of endurance he enters into a weakness state."), ref settings.Endurance);
+			if (!(settings is PlayerSettings))
+			{
+				EoEEditor.FloatField(new GUIContent("Endurance", "Attacks and movement use up endurance. When a Entitie is out of endurance he enters into a weakness state."), ref settings.Endurance);
+			}
+			else
+			{
+				if (settings.Endurance != 0)
+				{
+					EoEEditor.isDirty = true;
+					settings.Endurance = 0;
+				}
+			}
 			EoEEditor.BoolField(new GUIContent("Do Endurance Regen", "Should this Entitie Regen over time?"), ref settings.DoEnduranceRegen);
 			if (settings.DoEnduranceRegen)
 			{

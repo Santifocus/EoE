@@ -16,6 +16,7 @@ namespace EoE.Entities
 		[SerializeField] protected Rigidbody body = default;
 		[SerializeField] protected Collider coll = default;
 		[Header("Animation")]
+		[SerializeField] protected Transform modelTransform = default;
 		[SerializeField] protected Animator animationControl = default;
 		public abstract EntitieSettings SelfSettings { get; }
 
@@ -123,12 +124,11 @@ namespace EoE.Entities
 		}
 		protected float TurnTo(Vector3 turnDirection)
 		{
-			float directionDistance = (transform.forward - turnDirection).magnitude;
-			float turningFactor = GameController.CurrentGameSettings.TurnSpeedCurve.Evaluate(1 - (directionDistance / 2));
-			float fraction = Mathf.Min(1, Time.deltaTime / SelfSettings.TurnSpeed) * Mathf.Max(1, directionDistance);
-			transform.forward = ((1 - fraction) * transform.forward + fraction * turnDirection).normalized;
+			float directionDistance = (modelTransform.forward - turnDirection).magnitude;
+			float fraction = Mathf.Min(1, Time.deltaTime / SelfSettings.TurnSpeed * Mathf.Max(1, directionDistance * directionDistance));
+			modelTransform.forward = ((1 - fraction) * modelTransform.forward + fraction * turnDirection).normalized;
 
-			return turningFactor;
+			return GameController.CurrentGameSettings.TurnSpeedCurve.Evaluate(1 - (directionDistance / 2));
 		}
 		private void UpdateMovementSpeed()
 		{
@@ -138,18 +138,25 @@ namespace EoE.Entities
 			if (!moving && curStates.IsRunning)
 				curStates.IsRunning = false;
 
+			//We find out in which direction the Entitie should move according to its movement
 			float baseTargetSpeed = curWalkSpeed * (curStates.IsRunning ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
-			Vector3 targetVelocity = baseTargetSpeed  * transform.forward;
-			float curSpeed = new Vector2(body.velocity.x, body.velocity.z).magnitude;
+			Vector3 targetVelocity = baseTargetSpeed  * modelTransform.forward;
 
-			body.velocity = new Vector3(	Mathf.Lerp(	body.velocity.x, 
-														targetVelocity.x, 
-														Time.deltaTime / Mathf.Max(curSpeed, 1) * baseTargetSpeed * GameController.CurrentGameSettings.EntitieVelocityLerpSpeed),
-											body.velocity.y,
-											Mathf.Lerp(
-												body.velocity.z, 
-												targetVelocity.z, 
-												Time.deltaTime / Mathf.Max(curSpeed, 1) * baseTargetSpeed * GameController.CurrentGameSettings.EntitieVelocityLerpSpeed));
+			//And find out how fast it is currently moving
+			Vector2 curVelocity = new Vector2(body.velocity.x, body.velocity.z);
+			float curSpeed = curVelocity.magnitude;
+
+			//Now we want to interpolate based on targetSpeed/curSPeed fraction
+			float interpolatePoint = 0;
+			if (baseTargetSpeed > curSpeed)
+				interpolatePoint = 1;
+			else
+				interpolatePoint = (baseTargetSpeed / Mathf.Max(0.000001f, curSpeed)) * Time.deltaTime;
+
+			float newXVel = curVelocity.x + (targetVelocity.x - curVelocity.x) * Mathf.Clamp01(interpolatePoint); 
+			float newZVel = curVelocity.y + (targetVelocity.z - curVelocity.y) * Mathf.Clamp01(interpolatePoint);
+
+			body.velocity = new Vector3(newXVel, body.velocity.y, newZVel);
 		}
 		protected void Jump()
 		{
@@ -234,7 +241,7 @@ namespace EoE.Entities
 		{
 			float damageAmount = GameController.CurrentGameSettings.FallDamageCurve.Evaluate(velDif);
 			if(damageAmount > 0)
-				ChangeHealth(new InflictionInfo(this, CauseType.Physical, ElementType.None, transform.position + SelfSettings.MassCenter, damageAmount, false));
+				ChangeHealth(new InflictionInfo(this, CauseType.Physical, ElementType.None, transform.position + SelfSettings.MassCenter, Vector3.up, damageAmount, false));
 
 			float curSpeed = new Vector2(body.velocity.x, body.velocity.z).magnitude;
 			curAcceleration = Mathf.Clamp01(curAcceleration - velDif / Mathf.Max(curSpeed, 1) * GameController.CurrentGameSettings.GroundHitVelocityLoss);
@@ -251,7 +258,7 @@ namespace EoE.Entities
 					float regenAmount = SelfSettings.HealthRegen * GameController.CurrentGameSettings.SecondsPerEntititeRegen * (inCombat ? SelfSettings.HealthRegenInCombatFactor : 1);
 					if (regenAmount > 0)
 					{
-						InflictionInfo basis = new InflictionInfo(this, CauseType.Heal, ElementType.None, transform.position + SelfSettings.MassCenter, -regenAmount, false);
+						InflictionInfo basis = new InflictionInfo(this, CauseType.Heal, ElementType.None, transform.position + SelfSettings.MassCenter, Vector3.up, -regenAmount, false);
 						InflictionInfo.InflictionResult regenResult = new InflictionInfo.InflictionResult(basis, this, true, true);
 
 						curHealth = Mathf.Min(SelfSettings.Health, curHealth - regenResult.finalDamage);

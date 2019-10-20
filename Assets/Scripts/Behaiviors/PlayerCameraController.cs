@@ -8,7 +8,7 @@ namespace EoE
 {
 	public class PlayerCameraController : MonoBehaviour
 	{
-		private const float CAMERA_ROTATE_KILL_THRESHOLD = 1;
+		private const float CAMERA_ROTATE_KILL_THRESHOLD = 0.001f;
 
 		private static PlayerCameraController instance;
 		public static PlayerCameraController Instance => instance;

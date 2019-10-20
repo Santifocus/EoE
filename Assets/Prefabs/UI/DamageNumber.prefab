@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3242695842233029216}
   - component: {fileID: 1429804890111632430}
-  m_Layer: 11
+  m_Layer: 12
   m_Name: Critical
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 3366314781594916033}
   - component: {fileID: 3963402441496939028}
   - component: {fileID: 1268224188625229632}
-  m_Layer: 11
+  m_Layer: 12
   m_Name: DamageNumber
   m_TagString: Untagged
   m_Icon: {fileID: 0}

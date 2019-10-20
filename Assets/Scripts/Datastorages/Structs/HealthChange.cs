@@ -14,18 +14,20 @@ namespace EoE.Information
 		private readonly ElementType element;
 
 		private readonly Vector3 impactPosition;
+		private readonly Vector3 impactDirection;
 		private readonly float baseDamageAmount;
 		private readonly bool wasCritical;
 
 		private readonly bool causeKnockback;
 		private readonly float knockbackAmount;
 
-		public InflictionInfo(Entitie attacker, CauseType cause, ElementType element, Vector3 impactPosition, float baseDamageAmount, bool wasCritical, bool causeKnockback = false, float knockbackAmount = 0)
+		public InflictionInfo(Entitie attacker, CauseType cause, ElementType element, Vector3 impactPosition, Vector3 impactDirection, float baseDamageAmount, bool wasCritical, bool causeKnockback = false, float knockbackAmount = 0)
 		{
 			this.attacker = attacker;
 			this.cause = cause;
 			this.element = element;
 			this.impactPosition = impactPosition;
+			this.impactDirection = impactDirection;
 			this.baseDamageAmount = baseDamageAmount;
 			this.causeKnockback = causeKnockback;
 			this.knockbackAmount = knockbackAmount;
@@ -46,7 +48,7 @@ namespace EoE.Information
 
 				if (basis.causeKnockback)
 				{
-					forceDirection = ((receiver.SelfSettings.MassCenter + receiver.transform.position) - basis.impactPosition).normalized;
+					forceDirection = basis.impactDirection;
 					causedKnockback = forceDirection * basis.knockbackAmount / receiver.SelfSettings.EntitieMass;
 				}
 				else

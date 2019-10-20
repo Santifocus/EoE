@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: Sword
   m_EditorClassIdentifier: 
   Name: Sword
-  weaponAttackStyle: {fileID: 11400000, guid: c84b24611fd569e4a8df30b20c99b55e, type: 2}
-  weaponPrefab: {fileID: 0}
+  weaponAttackStyle: {fileID: 11400000, guid: 4219a793078923b4d8b60425a98febc2, type: 2}
+  weaponPrefab: {fileID: 4196563737272899717, guid: 18284dacf122148419232919f51c45c2,
+    type: 3}
+  element: 0
   baseAttackDamage: 20
   baseEnduranceDrain: 10
+  baseKnockbackAmount: 5
+  baseCritChance: 0.2

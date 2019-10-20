@@ -8,7 +8,6 @@ namespace EoE.Information
 	{
 		public float SecondsPerEntititeRegen;
 		public AnimationCurve TurnSpeedCurve = new AnimationCurve();
-		public float EntitieVelocityLerpSpeed = 4;
 
 		public float WhenFallingExtraVelocity = 0.5f;
 		public AnimationCurve FallDamageCurve = new AnimationCurve();

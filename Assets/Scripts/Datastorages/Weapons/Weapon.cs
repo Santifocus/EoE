@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using EoE.Information;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,7 +10,10 @@ namespace EoE.Weapons
 		public string Name;
 		public AttackStyle weaponAttackStyle;
 		public WeaponController weaponPrefab;
+		public ElementType element;
 		public float baseAttackDamage;
 		public float baseEnduranceDrain;
+		public float baseKnockbackAmount;
+		public float baseCritChance;
 	}
 }

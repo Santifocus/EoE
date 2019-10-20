@@ -23,9 +23,11 @@ namespace EoE.Information
 			EoEEditor.Header("Endurance Settings");
 			EoEEditor.IntField(new GUIContent("Endurance Bars", "How many endurance reserve bars does the player have?"), ref settings.EnduranceBars);
 			EoEEditor.FloatField(new GUIContent("Endurance per Bar", "How much endurance points are stored per small bar. The player endurance can be calculated by multiplying this value times 'EnduranceBars'"), ref settings.EndurancePerBar);
+			EoEEditor.FloatField(new GUIContent("Endurance Regen Delay After Use", "After the player used Endurance how long will there be a cooldown for the main endurance bar to regenerate. (In Seconds), (Small bars always regenerate)"), ref settings.EnduranceRegenDelayAfterUse);
 
 			EoEEditor.Header("HUD Settings");
 			EoEEditor.FloatField(new GUIContent("Stat Text Update Speed", "How fast should the Stat text display update its number? Depending on the current difference between actuall health and displayed health the update speed increases."), ref settings.StatTextUpdateSpeed);
+			EoEEditor.FloatField(new GUIContent("Endurance Bar Lerp Speed", "How fast should the endurance bar(s) lerp to the actuall Endurance amount. (In 1/X Seconds)"), ref settings.EnduranceBarLerpSpeed);
 			EoEEditor.GradientField(new GUIContent("Health Text Colors", "Gradient Start == No Health, Gradient End == Full Health"), ref settings.HealthTextColors);
 			EoEEditor.GradientField(new GUIContent("Mana Text Colors", "Gradient Start == No Mana, Gradient End == Full Mana"), ref settings.ManaTextColors);
 

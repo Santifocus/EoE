@@ -8,7 +8,7 @@ namespace EoE.Weapons
 	[CustomEditor(typeof(AttackStyle), true), CanEditMultipleObjects]
 	public class AttackStyleEditor : Editor
 	{
-		[MenuItem("EoE/New Attack Style")]
+		[MenuItem("EoE/Weapons/New Attack Style")]
 		public static void CreateAttackStyle()
 		{
 			AttackStyle asset = CreateInstance<AttackStyle>();
@@ -32,6 +32,9 @@ namespace EoE.Weapons
 
 		private List<string> failedCombos;
 
+		private bool illegalAndOrAnimationConditions;
+		private bool illegalAnimationHaltCondition;
+
 		public override void OnInspectorGUI()
 		{
 			AttackStyle t = target as AttackStyle;
@@ -49,13 +52,13 @@ namespace EoE.Weapons
 			if (innerFoldoutStates == null)
 			{
 				int? innerFoldouts =	target.standAttack?.attacks?.Length +
-										target.jumpAttack?.attacks?.Length +
 										target.sprintAttack.attacks?.Length +
-										target.jumpSprintAttack.attacks?.Length +
+										target.jumpAttack?.attacks?.Length +
+										target.sprintJumpAttack.attacks?.Length +
 										target.standHeavyAttack.attacks?.Length +
-										target.jumpHeavyAttack.attacks?.Length +
 										target.sprintHeavyAttack.attacks?.Length +
-										target.jumpSprintHeavyAttack.attacks?.Length;
+										target.jumpHeavyAttack.attacks?.Length +
+										target.sprintJumpHeavyAttack.attacks?.Length;
 
 				innerFoldoutStates = new List<bool>(innerFoldouts.HasValue ? innerFoldouts.Value : 8);
 				for (int i = 0; i < (innerFoldouts.HasValue ? innerFoldouts.Value : 0); i++)
@@ -68,18 +71,22 @@ namespace EoE.Weapons
 			drawnAttacksCombos = 0;
 			innerDrawnAttacks = 0;
 			failedCombos = new List<string>();
+			illegalAnimationHaltCondition = false;
+			illegalAndOrAnimationConditions = false;
+
+			EditorGUILayout.HelpBox("It is recommended to read the tooltips of settings. (Hover over Setting name)", MessageType.None);
 
 			EoEEditor.Header("Normal Attacks");
 			CreateAttackInput(new GUIContent("Stand Attack", "Start this attack when: Standing and attacking."), ref target.standAttack);
-			CreateAttackInput(new GUIContent("Jump Attack", "Start this attack when: In Air and attacking."), ref target.jumpAttack);
 			CreateAttackInput(new GUIContent("Sprint Attack", "Start this attack when: Running and attacking."), ref target.sprintAttack);
-			CreateAttackInput(new GUIContent("Sprint Jump Attack", "Start this attack when: In Air, Running and attacking."), ref target.jumpSprintAttack);
+			CreateAttackInput(new GUIContent("Jump Attack", "Start this attack when: In Air and attacking."), ref target.jumpAttack);
+			CreateAttackInput(new GUIContent("Sprint Jump Attack", "Start this attack when: In Air, Running and attacking."), ref target.sprintJumpAttack);
 
 			EoEEditor.Header("Heavy Attacks");
 			CreateAttackInput(new GUIContent("Heavy Stand Attack", "Start this attack when: Standing and Heavy-attacking."), ref target.standHeavyAttack);
-			CreateAttackInput(new GUIContent("Heavy Jump Attack", "Start this attack when: In Air and Heavy-attacking."), ref target.jumpHeavyAttack);
 			CreateAttackInput(new GUIContent("Heavy Sprint Attack", "Start this attack when: Running and Heavy-attacking."), ref target.sprintHeavyAttack);
-			CreateAttackInput(new GUIContent("Heavy Sprint Jump Attack", "Start this attack when: In Air, Running and Heavy-attacking."), ref target.jumpSprintHeavyAttack);
+			CreateAttackInput(new GUIContent("Heavy Jump Attack", "Start this attack when: In Air and Heavy-attacking."), ref target.jumpHeavyAttack);
+			CreateAttackInput(new GUIContent("Heavy Sprint Jump Attack", "Start this attack when: In Air, Running and Heavy-attacking."), ref target.sprintJumpHeavyAttack);
 
 			if (atLeastOneIncompleteCombo)
 			{
@@ -104,6 +111,14 @@ namespace EoE.Weapons
 					}
 					EditorGUILayout.HelpBox(sources + " are Attack-combos, but have a disabled attack, this is not prohibited.", MessageType.Error);
 				}
+			}
+			if (illegalAnimationHaltCondition)
+			{
+				EditorGUILayout.HelpBox("If 'Halt Animation Till Cancel' is enabled then there MUST be a condition under which the animation can be canceled!", MessageType.Error);
+			}
+			if (illegalAndOrAnimationConditions)
+			{
+				EditorGUILayout.HelpBox("Cannot have a AND condition if one or both required state(s) = IGNORE", MessageType.Error);
 			}
 		}
 
@@ -220,37 +235,77 @@ namespace EoE.Weapons
 
 			if (innerFoldoutStates[innerDrawnAttacks])
 			{
-				EoEEditor.BoolField(new GUIContent("Enabled", "If disabled this Attack can NEVER be executed."), ref curValue.enabled, offSet);
+				EoEEditor.BoolField(new GUIContent("Enabled", "If disabled this Attack will NEVER be executed."), ref curValue.enabled, offSet);
 				if (curValue.enabled)
 				{
-					System.Enum anim = curValue.animation;
-					bool enumChange = EoEEditor.EnumField(new GUIContent("Animation", "The animation that should be started when this attack is executed."), ref anim, offSet + 1);
-					if (enumChange)
-					{
-						curValue.animation = (AttackAnimation)anim;
-						changed = true;
-					}
 
-					changed |= AttackInfoField(new GUIContent("Attack Info","Settings for this attack / combo-part."), ref curValue.info, offSet + 1);
+					changed |= AttackInfoField(new GUIContent("Attack Stats", "Settings for this attack / combo-part."), ref curValue.info, offSet + 1);
+					changed |= AttackAnimationField(new GUIContent("Animation Conditions", "Under which conditions should this attack be canceled / Continued."), ref curValue.animationInfo, offSet + 1);
 				}
 			}
 			innerDrawnAttacks++;
 			return changed;
 		}
-		
+
 		protected bool AttackInfoField(string content, ref AttackInfo curValue, int offSet = 0) => AttackInfoField(new GUIContent(content), ref curValue, offSet);
 		protected bool AttackInfoField(GUIContent content, ref AttackInfo curValue, int offSet = 0)
 		{
 			bool changed = false;
+			EoEEditor.Header(content, offSet);
+
 			changed |= EoEEditor.FloatField(new GUIContent("Damage Mutliplier", "Multiplies the base damage of the weapon by this amount."), ref curValue.damageMutliplier, offSet);
-
 			changed |= EoEEditor.FloatField(new GUIContent("Endurance Multiplier", "Multiplies the base endurance usage of the weapon by this amount."), ref curValue.enduranceMultiplier, offSet);
-
 			changed |= EoEEditor.FloatField(new GUIContent("Knockback Mutliplier", "Multiplies the base knockback of the weapon by this amount."), ref curValue.knockbackMutliplier, offSet);
+			return changed;
+		}
+		private enum AndOr { AND, OR }
+		protected bool AttackAnimationField(string content, ref AttackAnimationInfo curValue, int offSet = 0) => AttackAnimationField(new GUIContent(content), ref curValue, offSet);
+		protected bool AttackAnimationField(GUIContent content, ref AttackAnimationInfo curValue, int offSet = 0)
+		{
+			bool changed = false;
+			EoEEditor.Header(content, offSet);
+
+			System.Enum anim = curValue.animation;
+			bool enumChange = EoEEditor.EnumField(new GUIContent("Animation", "The animation that should be started when this attack is executed."), ref anim, offSet);
+			if (enumChange)
+			{
+				curValue.animation = (AttackAnimation)anim;
+				changed = true;
+			}
+
+			changed |= EoEEditor.BoolField(new GUIContent("Halt Animation Till Cancel", "If enabled the animation will not be stopped untill a canceling condition is met. Use with caution!"), ref curValue.haltAnimationTillCancel, offSet);
+
+			System.Enum cancelOnSprint = curValue.cancelWhenSprinting;
+			enumChange = EoEEditor.EnumField(new GUIContent("Cancel When Sprinting = ", "If the players Sprinting state equals to this, the animation will be canceled. (Ignore = either state wont cancel)"), ref cancelOnSprint, offSet);
+			if (enumChange)
+			{
+				curValue.cancelWhenSprinting = (AnimationCancelCondition)cancelOnSprint;
+				changed = true;
+			}
+
+			System.Enum andOrState = curValue.bothStates ? AndOr.AND : AndOr.OR;
+			enumChange = EoEEditor.EnumField(new GUIContent(" ", "Combine Sprint and Jump conditions logically to only cancel if both are met or either. AND = Sprinting AND Jumping condition must be met. OR = If either is met."), ref andOrState, offSet);
+			if (enumChange)
+			{
+				curValue.bothStates = (AndOr)andOrState == AndOr.AND;
+				changed = true;
+			}
+
+			System.Enum cancelOnGround = curValue.cancelWhenOnGround;
+			enumChange = EoEEditor.EnumField(new GUIContent("Cancel When On ground = ", "If the players OnGround state equals to this, the animation will be canceled. (Ignore = either state wont cancel)"), ref cancelOnGround, offSet);
+			if (enumChange)
+			{
+				curValue.cancelWhenOnGround = (AnimationCancelCondition)cancelOnGround;
+				changed = true;
+			}
 
 			changed |= EoEEditor.BoolField(new GUIContent("Penetrate Entities", "When enabled the weapon can go througth Entities, if not it will stop the animation after hitting one Entitie."), ref curValue.penetrateEntities, offSet);
-
 			changed |= EoEEditor.BoolField(new GUIContent("Penetrate Terrain", "When enabled the weapon can go througth Walls/Terrain, if not it will stop the animation after hitting one Wall/Terrain."), ref curValue.penetrateTerrain, offSet);
+
+			illegalAnimationHaltCondition |= (curValue.haltAnimationTillCancel && curValue.cancelWhenSprinting == AnimationCancelCondition.Ignore && curValue.cancelWhenOnGround == AnimationCancelCondition.Ignore && curValue.penetrateEntities && curValue.penetrateTerrain);
+
+			illegalAndOrAnimationConditions |= curValue.bothStates && (curValue.cancelWhenSprinting == AnimationCancelCondition.Ignore || curValue.cancelWhenOnGround == AnimationCancelCondition.Ignore);
+
 			return changed;
 		}
 	}
