@@ -16,8 +16,9 @@ MonoBehaviour:
   weaponAttackStyle: {fileID: 11400000, guid: 4219a793078923b4d8b60425a98febc2, type: 2}
   weaponPrefab: {fileID: 4196563737272899717, guid: 18284dacf122148419232919f51c45c2,
     type: 3}
+  weaponHandleOffset: {x: 0, y: 0, z: 0.95}
   element: 0
   baseAttackDamage: 20
   baseEnduranceDrain: 10
-  baseKnockbackAmount: 5
+  baseKnockbackAmount: 3
   baseCritChance: 0.2

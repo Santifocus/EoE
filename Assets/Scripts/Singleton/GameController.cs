@@ -26,18 +26,20 @@ namespace EoE
 			instance = this;
 		}
 
-		public void CreateDamageNumber(Vector3 startPosition, Gradient colors, Vector3 numberVelocity, float damage, bool wasCrit)
+		public void CreateDamageNumber(Vector3 startPosition, Gradient colors, Vector3 numberVelocity, float damage, bool wasCrit, float overrideScale = 1)
 		{
 			DamageNumber newDamageNumber = damageNumberPool.GetPoolObject();
 			newDamageNumber.transform.position = startPosition;
+			newDamageNumber.transform.localScale = Vector3.one * overrideScale;
 			string displayedNumber = (Mathf.Round(damage * 100) / 100).ToString();
 			newDamageNumber.BeginDisplay(numberVelocity, colors, displayedNumber, wasCrit);
 		}
 
-		public void DisplayInfoText(Vector3 startPosition, Gradient colors, Vector3 numberVelocity, string text)
+		public void DisplayInfoText(Vector3 startPosition, Gradient colors, Vector3 numberVelocity, string text, float overrideScale = 1)
 		{
 			DamageNumber newDamageNumber = damageNumberPool.GetPoolObject();
 			newDamageNumber.transform.position = startPosition;
+			newDamageNumber.transform.localScale = Vector3.one * overrideScale;
 			newDamageNumber.BeginDisplay(numberVelocity, colors, text, false);
 		}
 

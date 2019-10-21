@@ -10,6 +10,7 @@ namespace EoE.Weapons
 		public string Name;
 		public AttackStyle weaponAttackStyle;
 		public WeaponController weaponPrefab;
+		public Vector3 weaponHandleOffset;
 		public ElementType element;
 		public float baseAttackDamage;
 		public float baseEnduranceDrain;

@@ -20,8 +20,8 @@ namespace EoE.Entities
 		[SerializeField] protected Animator animationControl = default;
 		public abstract EntitieSettings SelfSettings { get; }
 
-		private enum ColliderType : byte { Box, Sphere, Capsule }
-		private ColliderType selfColliderType;
+		protected enum ColliderType : byte { Box, Sphere, Capsule }
+		protected ColliderType selfColliderType;
 
 		//Stats
 		public float CurHealth => curHealth;
@@ -31,8 +31,8 @@ namespace EoE.Entities
 		public float CurMana => curMana;
 		protected float curMana;
 
-		private float curWalkSpeed;
-		private float curAcceleration;
+		protected float curWalkSpeed;
+		protected float curAcceleration;
 
 		private float regenTimer;
 		protected EntitieState curStates;
@@ -40,7 +40,11 @@ namespace EoE.Entities
 		private float jumpGroundCooldown;
 		private float lastFallVelocity;
 
-		protected void Start()
+		//Other
+		protected Vector3 actuallWorldPosition => SelfSettings.MassCenter + transform.position;
+		protected float lowestPos => coll.bounds.center.y - coll.bounds.extents.y;
+
+		protected virtual void Start()
 		{
 			ResetStats();
 			GetColliderType();
@@ -87,7 +91,7 @@ namespace EoE.Entities
 		}
 		protected virtual void EntitieStart(){}
 
-		protected void Update()
+		protected virtual void Update()
 		{
 			Regen();
 			UpdateMovementSpeed();
@@ -96,8 +100,10 @@ namespace EoE.Entities
 		protected void FixedUpdate()
 		{
 			IsGroundedTest();
+			EntitieFixedUpdate();
 		}
 		protected virtual void EntitieUpdate() { }
+		protected virtual void EntitieFixedUpdate() { }
 		protected float UpdateAcceleration(float intendedFactor = 1)
 		{
 			if (curStates.IsMoving)
@@ -122,13 +128,13 @@ namespace EoE.Entities
 			}
 			return curAcceleration;
 		}
-		protected float TurnTo(Vector3 turnDirection)
+		protected (float, float) TurnTo(Vector3 turnDirection)
 		{
 			float directionDistance = (modelTransform.forward - turnDirection).magnitude;
 			float fraction = Mathf.Min(1, Time.deltaTime / SelfSettings.TurnSpeed * Mathf.Max(1, directionDistance * directionDistance));
 			modelTransform.forward = ((1 - fraction) * modelTransform.forward + fraction * turnDirection).normalized;
 
-			return GameController.CurrentGameSettings.TurnSpeedCurve.Evaluate(1 - (directionDistance / 2));
+			return (GameController.CurrentGameSettings.TurnSpeedCurve.Evaluate(1 - (directionDistance / 2)), directionDistance);
 		}
 		private void UpdateMovementSpeed()
 		{
@@ -142,16 +148,18 @@ namespace EoE.Entities
 			float baseTargetSpeed = curWalkSpeed * (curStates.IsRunning ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
 			Vector3 targetVelocity = baseTargetSpeed  * modelTransform.forward;
 
+			float compareSpeed = curWalkSpeed * (curStates.IsRunning ? SelfSettings.RunSpeedMultiplicator : 1) / Mathf.Max(0.000001f, SelfSettings.NoMoveDeceleration);
+
 			//And find out how fast it is currently moving
 			Vector2 curVelocity = new Vector2(body.velocity.x, body.velocity.z);
 			float curSpeed = curVelocity.magnitude;
 
 			//Now we want to interpolate based on targetSpeed/curSPeed fraction
 			float interpolatePoint = 0;
-			if (baseTargetSpeed > curSpeed)
+			if (compareSpeed > curSpeed)
 				interpolatePoint = 1;
 			else
-				interpolatePoint = (baseTargetSpeed / Mathf.Max(0.000001f, curSpeed)) * Time.deltaTime;
+				interpolatePoint = (compareSpeed / Mathf.Max(0.000001f, curSpeed)) * Time.deltaTime;
 
 			float newXVel = curVelocity.x + (targetVelocity.x - curVelocity.x) * Mathf.Clamp01(interpolatePoint); 
 			float newZVel = curVelocity.y + (targetVelocity.z - curVelocity.y) * Mathf.Clamp01(interpolatePoint);
@@ -166,6 +174,7 @@ namespace EoE.Entities
 
 			body.velocity += addedForce;
 			jumpGroundCooldown = JUMP_GROUND_COOLDOWN;
+			curStates.IsGrounded = false;
 
 			animationControl.SetTrigger("JumpStart");
 		}
@@ -210,6 +219,7 @@ namespace EoE.Entities
 
 			//Velocity control when falling
 			bool falling = !curStates.IsGrounded && (body.velocity.y < IS_FALLING_THRESHOLD || (this is Player && (curStates.IsFalling || !Controlls.PlayerControlls.Buttons.Jump.Active)));
+
 			curStates.IsFalling = falling;
 			animationControl.SetBool("IsFalling", falling);
 			if (falling)
@@ -241,7 +251,7 @@ namespace EoE.Entities
 		{
 			float damageAmount = GameController.CurrentGameSettings.FallDamageCurve.Evaluate(velDif);
 			if(damageAmount > 0)
-				ChangeHealth(new InflictionInfo(this, CauseType.Physical, ElementType.None, transform.position + SelfSettings.MassCenter, Vector3.up, damageAmount, false));
+				ChangeHealth(new InflictionInfo(this, CauseType.Physical, ElementType.None, actuallWorldPosition, Vector3.up, damageAmount, false));
 
 			float curSpeed = new Vector2(body.velocity.x, body.velocity.z).magnitude;
 			curAcceleration = Mathf.Clamp01(curAcceleration - velDif / Mathf.Max(curSpeed, 1) * GameController.CurrentGameSettings.GroundHitVelocityLoss);
@@ -258,7 +268,7 @@ namespace EoE.Entities
 					float regenAmount = SelfSettings.HealthRegen * GameController.CurrentGameSettings.SecondsPerEntititeRegen * (inCombat ? SelfSettings.HealthRegenInCombatFactor : 1);
 					if (regenAmount > 0)
 					{
-						InflictionInfo basis = new InflictionInfo(this, CauseType.Heal, ElementType.None, transform.position + SelfSettings.MassCenter, Vector3.up, -regenAmount, false);
+						InflictionInfo basis = new InflictionInfo(this, CauseType.Heal, ElementType.None, actuallWorldPosition, Vector3.up, -regenAmount, false);
 						InflictionInfo.InflictionResult regenResult = new InflictionInfo.InflictionResult(basis, this, true, true);
 
 						curHealth = Mathf.Min(SelfSettings.Health, curHealth - regenResult.finalDamage);
@@ -284,6 +294,9 @@ namespace EoE.Entities
 
 		public void ChangeHealth(InflictionInfo causedDamage)
 		{
+			if (causedDamage.attacker != null && causedDamage.attacker != this)
+				curStates.IsInCombat = true;
+
 			InflictionInfo.InflictionResult damageResult = new InflictionInfo.InflictionResult(causedDamage, this, true);
 
 			curHealth -= damageResult.finalDamage;

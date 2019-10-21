@@ -44,11 +44,11 @@ namespace EoE.Entities
 
 		private Dictionary<AttackAnimation, (float, float)> animationDelayLookup = new Dictionary<AttackAnimation, (float, float)>()
 		{
-			{ AttackAnimation.Stab, (0.533f,0) },
-			{ AttackAnimation.ToLeftSlash, (0.533f,0) },
-			{ AttackAnimation.TopDownSlash, (0.533f,0) },
+			{ AttackAnimation.Stab, (0.4f, 0.05f) },
+			{ AttackAnimation.ToLeftSlash, (0.533f, 0) },
+			{ AttackAnimation.TopDownSlash, (0.533f, 0) },
 			{ AttackAnimation.ToRightSlash, (0.533f, 0.22f) },
-			{ AttackAnimation.Uppercut, (0.533f,0) },
+			{ AttackAnimation.Uppercut, (0.533f, 0) },
 		};
 
 		protected override void EntitieStart()
@@ -58,15 +58,31 @@ namespace EoE.Entities
 			SetupEndurance();
 		}
 
+		protected override void EntitieFixedUpdate()
+		{
+			PositionHeldWeapon();
+		}
+
+		protected void PositionHeldWeapon()
+		{
+			Vector3 worldOffset =		equipedWeapon.weaponHandleOffset.x * rightHand.right + 
+										equipedWeapon.weaponHandleOffset.y * rightHand.up + 
+										equipedWeapon.weaponHandleOffset.z * rightHand.forward;
+			heldWeapon.transform.position = rightHand.position + worldOffset;
+			heldWeapon.transform.rotation = rightHand.rotation;
+		}
+
 		private void UpdateWeapon(Weapon newWeapon)
 		{
-			equipedWeapon = newWeapon;
 			if (heldWeapon)
+			{
 				Destroy(heldWeapon);
+			}
+			equipedWeapon = newWeapon;
 
 			if(equipedWeapon != null)
 			{
-				heldWeapon = Instantiate(equipedWeapon.weaponPrefab, rightHand);
+				heldWeapon = Instantiate(equipedWeapon.weaponPrefab);
 				heldWeapon.Setup();
 			}
 		}
@@ -77,6 +93,7 @@ namespace EoE.Entities
 			CameraControl();
 			Movement();
 			AttackControl();
+			PositionHeldWeapon();
 		}
 
 		private void SetupEndurance()
@@ -238,7 +255,7 @@ namespace EoE.Entities
 			controllDirection.x = newX;
 			controllDirection.z = newZ;
 
-			float turnFactor = TurnTo(controllDirection);
+			float turnFactor = TurnTo(controllDirection).Item1;
 			UpdateAcceleration(intendedMoveSpeed * turnFactor);
 		}
 

@@ -32,18 +32,19 @@ MonoBehaviour:
   JumpPower: {x: 0, y: 10, z: 0}
   TurnSpeed: 0.5
   MoveAcceleration: 0.5
-  NoMoveDeceleration: 0
-  JumpEnduranceCost: 8
-  RunEnduranceCost: 5
+  NoMoveDeceleration: 0.1
+  JumpEnduranceCost: 4
+  RunEnduranceCost: 3
   CameraToPlayerDistance: 7
   CameraAnchorOffset: {x: 0, y: 1.6, z: 0}
   CameraRotationPower: {x: 200, y: 75}
-  CameraRotationSpeed: 15
+  CameraRotationSpeed: 10
   CameraVerticalAngleClamps: {x: -10, y: 50}
   EnduranceBars: 4
   EndurancePerBar: 25
   EnduranceRegenDelayAfterUse: 3
   StatTextUpdateSpeed: 0.5
+  EnduranceBarLerpSpeed: 5
   HealthTextColors:
     serializedVersion: 2
     key0: {r: 1, g: 0, b: 0, a: 1}
@@ -102,6 +103,6 @@ MonoBehaviour:
     m_Mode: 0
     m_NumColorKeys: 3
     m_NumAlphaKeys: 2
-  ReserveEnduranceBarColor: {r: 0.65, g: 0.325, b: 0, a: 1}
+  ReserveEnduranceBarColor: {r: 0.5188679, g: 0.26310518, b: 0.007342457, a: 1}
   ActiveEnduranceBarColor: {r: 1, g: 0.5, b: 0, a: 1}
   ReloadingEnduranceBarColor: {r: 0.4, g: 0.4, b: 0.4, a: 0.8}

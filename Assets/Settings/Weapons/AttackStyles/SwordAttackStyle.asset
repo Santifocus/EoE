@@ -28,7 +28,22 @@ MonoBehaviour:
         cancelWhenSprinting: 0
         penetrateEntities: 0
         penetrateTerrain: 0
-    delays: []
+    - enabled: 1
+      info:
+        damageMutliplier: 1.5
+        enduranceMultiplier: 1
+        knockbackMutliplier: 3
+        critChanceMultiplier: 1
+      animationInfo:
+        animation: 0
+        haltAnimationTillCancel: 0
+        bothStates: 0
+        cancelWhenOnGround: 0
+        cancelWhenSprinting: 0
+        penetrateEntities: 1
+        penetrateTerrain: 0
+    delays:
+    - 0.5
   sprintAttack:
     attacks:
     - enabled: 1

@@ -12,6 +12,7 @@ namespace EoE.Information
 		public float WhenFallingExtraVelocity = 0.5f;
 		public AnimationCurve FallDamageCurve = new AnimationCurve();
 		public float GroundHitVelocityLoss = 0.5f;
+		public float EnemyWanderingUrgency = 0.5f;
 
 		//Damage Numbers
 		public float DamageNumberLifeTime = 1;
@@ -21,6 +22,7 @@ namespace EoE.Information
 		public Gradient PhysicalDamageColors = new Gradient();
 		public Gradient MagicalDamageColors = new Gradient();
 		public Gradient HealColors = new Gradient();
+		public Gradient StandardTextColor = new Gradient();
 
 		public ElementEffectivenessRow[] EffectivenessMatrix;
 
