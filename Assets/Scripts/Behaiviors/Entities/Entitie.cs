@@ -148,7 +148,7 @@ namespace EoE.Entities
 			float baseTargetSpeed = curWalkSpeed * (curStates.IsRunning ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
 			Vector3 targetVelocity = baseTargetSpeed  * modelTransform.forward;
 
-			float compareSpeed = curWalkSpeed * (curStates.IsRunning ? SelfSettings.RunSpeedMultiplicator : 1) / Mathf.Max(0.000001f, SelfSettings.NoMoveDeceleration);
+			float compareSpeed = curWalkSpeed * (curStates.IsRunning ? SelfSettings.RunSpeedMultiplicator : 1) / Mathf.Max(0.0001f, SelfSettings.NoMoveDeceleration);
 
 			//And find out how fast it is currently moving
 			Vector2 curVelocity = new Vector2(body.velocity.x, body.velocity.z);
@@ -159,7 +159,7 @@ namespace EoE.Entities
 			if (compareSpeed > curSpeed)
 				interpolatePoint = 1;
 			else
-				interpolatePoint = (compareSpeed / Mathf.Max(0.000001f, curSpeed)) * Time.deltaTime;
+				interpolatePoint = (compareSpeed / Mathf.Max(0.0001f, curSpeed)) * Time.deltaTime;
 
 			float newXVel = curVelocity.x + (targetVelocity.x - curVelocity.x) * Mathf.Clamp01(interpolatePoint); 
 			float newZVel = curVelocity.y + (targetVelocity.z - curVelocity.y) * Mathf.Clamp01(interpolatePoint);

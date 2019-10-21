@@ -188,10 +188,6 @@ namespace EoE.Entities
 		}
 		private bool IsStuck()
 		{
-			float intendedSpeed = curWalkSpeed * (curStates.IsRunning ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
-			intendedSpeed *= intendedSpeed;
-			float actuallSpeed = body.velocity.sqrMagnitude;
-
 			if (!CouldStand(0.01f))
 				stuckSince += Time.deltaTime;
 			else if(stuckSince > 0)
