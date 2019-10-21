@@ -41,8 +41,8 @@ namespace EoE.Entities
 		private float lastFallVelocity;
 
 		//Other
-		protected Vector3 actuallWorldPosition => SelfSettings.MassCenter + transform.position;
-		protected float lowestPos => coll.bounds.center.y - coll.bounds.extents.y;
+		public Vector3 actuallWorldPosition => SelfSettings.MassCenter + transform.position;
+		public float lowestPos => coll.bounds.center.y - coll.bounds.extents.y;
 
 		protected virtual void Start()
 		{

@@ -5,18 +5,20 @@ using UnityEngine;
 
 public class GenerateWorld : MonoBehaviour
 {
-	[SerializeField] private MeshRenderer planeMesh = default;
+	[SerializeField] private List<MeshRenderer> planeMeshes;
 	[SerializeField] private int textureSize = default;
 	[SerializeField] private int octaves = 3;
 	[SerializeField] private float noiseZoom = 50;
+	[SerializeField] private Gradient coloring;
 	private Texture2D generatedTexture;
 
 	private void OnEnable()
 	{
-		GenerateNoise();
+		for(int i = 0; i < planeMeshes.Count; i++)
+			GenerateNoise(planeMeshes[i]);
 	}
 
-	private void GenerateNoise()
+	private void GenerateNoise(MeshRenderer planeMesh)
 	{
 		generatedTexture = new Texture2D(textureSize, textureSize);
 		float xOff = (Random.value - 0.5f) * 200;
@@ -43,7 +45,7 @@ public class GenerateWorld : MonoBehaviour
 					point += Mathf.PerlinNoise(x / (noiseZoom * octaveMutliplier[i]) + xOff, y / (noiseZoom * octaveMutliplier[i]) + yOff) * octaveMutliplier[i];
 				}
 				point *= totalMultiplier;
-				generatedTexture.SetPixel(x, y, new Color(point, point, point, 1));
+				generatedTexture.SetPixel(x, y, coloring.Evaluate(point));
 			}
 		}
 		generatedTexture.Apply();
