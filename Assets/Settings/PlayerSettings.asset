@@ -18,23 +18,17 @@ MonoBehaviour:
   Health: 100
   DoHealthRegen: 1
   HealthRegen: 5
-  HealthRegenInCombatFactor: 0.5
-  Endurance: 0
-  DoEnduranceRegen: 1
-  EnduranceRegen: 4
-  EnduranceRegenInCombatFactor: 0.5
+  HealthRegenInCombatMultiplier: 0.5
   Mana: 50
   DoManaRegen: 1
   ManaRegen: 4
-  ManaRegenInCombatFactor: 0.5
+  ManaRegenInCombatMultiplier: 0.5
   WalkSpeed: 8
   RunSpeedMultiplicator: 1.25
   JumpPower: {x: 0, y: 10, z: 0}
-  TurnSpeed: 0.5
+  TurnSpeed: 0.25
   MoveAcceleration: 0.5
-  NoMoveDeceleration: 0.1
-  JumpEnduranceCost: 4
-  RunEnduranceCost: 3
+  NoMoveDeceleration: 0.25
   CameraToPlayerDistance: 7
   CameraAnchorOffset: {x: 0, y: 1.6, z: 0}
   CameraRotationPower: {x: 200, y: 75}
@@ -42,7 +36,12 @@ MonoBehaviour:
   CameraVerticalAngleClamps: {x: -50, y: 50}
   EnduranceBars: 4
   EndurancePerBar: 25
+  EnduranceRegen: 4
+  LockedEnduranceRegenMutliplier: 0.5
+  EnduranceRegenInCombat: 0.5
   EnduranceRegenDelayAfterUse: 3
+  JumpEnduranceCost: 4
+  RunEnduranceCost: 3
   StatTextUpdateSpeed: 0.5
   EnduranceBarLerpSpeed: 5
   HealthTextColors:

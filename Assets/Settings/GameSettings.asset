@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 438e09642880d794aa53e804b27dbce9, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
-  SecondsPerEntititeRegen: 0.5
   TurnSpeedCurve:
     serializedVersion: 2
     m_Curve:
@@ -80,7 +79,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  EnemyWanderingUrgency: 0.5
   GroundHitVelocityLoss: 0.15
+  CombatCooldown: 3
+  SecondsPerEntititeRegen: 0.5
   DamageNumberLifeTime: 1
   ShowRegenNumbers: 1
   DamageNumberFlySpeed: 1

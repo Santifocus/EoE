@@ -70,7 +70,6 @@ namespace EoE
 			float zForce = (Mathf.PerlinNoise(PerlinNoiseScrollZ.x, PerlinNoiseScrollZ.y) - 0.5f) * 2;
 			Vector3 outer = new Vector3(xForce, yForce, zForce).normalized * GameController.CurrentGameSettings.DamageNumberRandomMovementPower;
 
-			Debug.DrawLine(transform.position, transform.position + outer * 10, Color.red, 7);
 			return outer;
 			//Local functions
 			void UpdateNoiseMarching()

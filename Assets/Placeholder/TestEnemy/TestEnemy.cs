@@ -7,10 +7,13 @@ namespace EoE.Entities
 {
 	public class TestEnemy : Enemy
 	{
-		public override EnemySettings enemySettings => settings;
+		//Inspector variables
 		public EnemySettings settings;
 
-		protected override void CombatBehavior()
+		//Getter Helpers
+		public override EnemySettings enemySettings => settings;
+
+		protected override void CombatBehavior(float distance)
 		{
 			curStates.IsMoving = false;
 			UpdateAcceleration();

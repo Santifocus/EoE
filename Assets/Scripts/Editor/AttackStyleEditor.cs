@@ -143,7 +143,9 @@ namespace EoE.Weapons
 				int curArraySize = curVal.attacks.Length;
 				for (int i = 0; i < curArraySize; i++)
 				{
-					AttackField(i == 0 ? "Start Attack" : i +". Combo", ref curVal.attacks[i], 1);
+					AttackField(curArraySize == 1 ? "Attack" : (i == 0 ? "Start Attack" : i + ". Combo"), ref curVal.attacks[i], 1);
+
+					EoEEditor.LineBreak();
 					if(i < curVal.attacks.Length - 1)
 					{
 						GUILayout.Space(8);
@@ -151,6 +153,7 @@ namespace EoE.Weapons
 						GUILayout.Space(8);
 					}
 				}
+				GUILayout.Space(5);
 				EditorGUILayout.BeginHorizontal();
 				if (curArraySize < 1 || GUILayout.Button("+"))
 				{
@@ -241,6 +244,7 @@ namespace EoE.Weapons
 
 					changed |= AttackInfoField(new GUIContent("Attack Stats", "Settings for this attack / combo-part."), ref curValue.info, offSet + 1);
 					changed |= AttackAnimationField(new GUIContent("Animation Conditions", "Under which conditions should this attack be canceled / Continued."), ref curValue.animationInfo, offSet + 1);
+					changed |= AttackVelocityEffectField(new GUIContent("Attack Velocity Effect", "When this attack is used what forces should be applied to the user?"), ref curValue.velocityEffect, offSet + 1);
 				}
 			}
 			innerDrawnAttacks++;
@@ -306,6 +310,55 @@ namespace EoE.Weapons
 
 			illegalAndOrAnimationConditions |= curValue.bothStates && (curValue.cancelWhenSprinting == AnimationCancelCondition.Ignore || curValue.cancelWhenOnGround == AnimationCancelCondition.Ignore);
 
+			return changed;
+		}
+
+		protected bool AttackVelocityEffectField(string content, ref AttackVelocityEffect curValue, int offSet = 0) => AttackVelocityEffectField(new GUIContent(content), ref curValue, offSet);
+		protected bool AttackVelocityEffectField(GUIContent content, ref AttackVelocityEffect curValue, int offSet = 0)
+		{
+			bool changed = false;
+
+			EoEEditor.Header(content, offSet);
+
+			System.Enum intent = curValue.velocityIntent;
+			bool enumChanged = EoEEditor.EnumField(new GUIContent("Velocity Effect", "When this attack is executed: Off == No effect;  Add == Velocity of user + the given values; Set == Velocity of user will be set to the given values."), ref intent, offSet);
+			if (enumChanged)
+			{
+				changed = true;
+				curValue.velocityIntent = (AttackVelocityIntent)intent;
+			}
+
+			bool fullyOff = curValue.velocityIntent == AttackVelocityIntent.Off;
+			EditorGUI.BeginDisabledGroup(fullyOff);
+			changed |= EoEEditor.BoolField(new GUIContent("Ignore Vertical Velocity", "When enabled then this Velocity-Effect wont affect the vertical velocity."), ref curValue.ignoreVerticalVelocity, offSet);
+			changed |= EoEEditor.BoolField(new GUIContent("Apply Force on Animation Charge End", "When enabled the delay to when the force will be applied is set by the animation itself. (For example Stab has a set delay of 0.15 seconds)"), ref curValue.applyForceAfterAnimationCharge, offSet);
+			if(!fullyOff)
+				EditorGUI.BeginDisabledGroup(curValue.applyForceAfterAnimationCharge);
+			changed |= EoEEditor.FloatField(new GUIContent("Apply Force Delay", "Custom time of when to apply the calculated forces. (Wont work if the delay is longer then the animation itself!)"), ref curValue.applyForceDelay, offSet);
+			if (!fullyOff)
+				EditorGUI.EndDisabledGroup();
+
+			changed |= VelocityDirectionField(new GUIContent("Right Effect", "When used: with which force should the user be pushed to the right? (Negative value == Left)"), ref curValue.useRightValue, ref curValue.rightValue, fullyOff, offSet);
+			changed |= VelocityDirectionField(new GUIContent("Up Effect", "When used: with which force should the user be pushed upwards? (Negative value == downwards)"), ref curValue.useUpValue, ref curValue.upValue, fullyOff, offSet);
+			changed |= VelocityDirectionField(new GUIContent("Forward Effect", "When used: with which force should the user be pushed forward? (Negative value == back)"), ref curValue.useForwardValue, ref curValue.forwardValue, fullyOff, offSet);
+
+			EditorGUI.EndDisabledGroup();
+
+			return changed;
+		}
+		private bool VelocityDirectionField(GUIContent content, ref bool curState, ref float curValue, bool fullyOff, int offSet = 0)
+		{
+			EditorGUILayout.BeginHorizontal();
+			bool changed = EoEEditor.BoolField(new GUIContent("", content.tooltip), ref curState, offSet);
+
+			GUILayout.FlexibleSpace();
+			if(!fullyOff)
+				EditorGUI.BeginDisabledGroup(!curState);
+			changed |= EoEEditor.FloatField(content, ref curValue);
+			if (!fullyOff)
+				EditorGUI.EndDisabledGroup();
+
+			EditorGUILayout.EndHorizontal();
 			return changed;
 		}
 	}

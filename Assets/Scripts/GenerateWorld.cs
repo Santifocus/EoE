@@ -1,15 +1,15 @@
-﻿using EoE.Utils;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GenerateWorld : MonoBehaviour
 {
-	[SerializeField] private List<MeshRenderer> planeMeshes;
-	[SerializeField] private int textureSize = default;
-	[SerializeField] private int octaves = 3;
-	[SerializeField] private float noiseZoom = 50;
-	[SerializeField] private Gradient coloring;
+	//TODO: Remove Script, meant as placeholder
+	[SerializeField] private List<MeshRenderer> planeMeshes		= default;
+	[SerializeField] private int textureSize					= default;
+	[SerializeField] private int octaves						= 3;
+	[SerializeField] private float noiseZoom					= 50;
+	[SerializeField] private Gradient coloring					= default;
 	private Texture2D generatedTexture;
 
 	private void OnEnable()

@@ -7,37 +7,42 @@ namespace EoE.Entities
 {
 	public abstract class Enemy : Entitie
 	{
-		private const float REACHED_WANDERPOINT_THRESHOLD = 0.05f;
-		private const float REACHED_LOOKAROUND_THRESHOLD = 0.05f;
-		private const float STUCK_THRESHOLD = 0.25f;
+		#region Fields
+		//Constants
+		private const float REACHED_WANDERPOINT_THRESHOLD	= 0.5f;
+		private const float REACHED_LOOKAROUND_THRESHOLD	= 0.05f;
+		private const float STUCK_THRESHOLD					= 0.25f;
+		private const float FORWARD_CAN_STAND_DISTANCE		= 0.25f;
 
-		private const float FORWARD_CAN_STAND_DISTANCE = 0.5f;
+		//Enemy States
+		protected bool cantReachPlayer;
+		protected float stuckSince;
+		protected float wanderWait;
+		protected float lookAroundWait;
+		protected float chaseInterestAmount;
+		protected float lostVisualsOnPlayerLookaroundTimer;
 
-		public override EntitieSettings SelfSettings => enemySettings;
-		public abstract EnemySettings enemySettings { get; }
-
-		private float stuckSince;
-		private bool cantReachPlayer;
-
-		private Vector3 lastConfirmedPlayerPos;
+		//Chasing
+		protected bool chasingPlayer;
+		protected Vector3 lastConfirmedPlayerPos;
 		protected Vector3 chaseDirection;
-		private bool chasingPlayer;
-		private float chaseInterestAmount;
 
 		//Wandering
-		private Vector3 originalSpawnPosition;
-		private Vector2 wanderPosition;
-		private Vector3 wanderDirection;
-		private float wanderWait;
-		private bool reachedWanderPoint;
+		protected bool reachedWanderPoint;
+		protected Vector3 originalSpawnPosition;
+		protected Vector2 wanderPosition;
+		protected Vector3 wanderDirection;
 
 		//Look around
-		private bool reachedLookAroundDir;
-		private float lookAroundWait;
-		private float lostVisualsOnPlayerLookaroundTimer;
-		private Vector3 lookAroundTargetDir;
+		protected bool reachedLookAroundDir;
+		protected Vector3 lookAroundTargetDir;
 
+		//Getter Helpers
 		protected Player player => Player.Instance;
+		public override EntitieSettings SelfSettings => enemySettings;
+		public abstract EnemySettings enemySettings { get; }
+		#endregion
+		#region Basic Monobehaivior
 		protected override void Start()
 		{
 			base.Start();
@@ -45,15 +50,19 @@ namespace EoE.Entities
 			GetNewWanderPosition();
 			GetNewLookDirection();
 		}
-		protected override void EntitieUpdate()
+		protected override void Update()
 		{
-			base.EntitieUpdate();
+			base.Update();
+			DecideOnBehavior();
+		}
+		private void DecideOnBehavior()
+		{
 			if (curStates.IsInCombat && !cantReachPlayer)
 			{
 				ChasePlayer();
 			}
-			else 
-			{ 
+			else
+			{
 				SearchForPlayer();
 				if (!chasingPlayer)
 				{
@@ -80,6 +89,8 @@ namespace EoE.Entities
 				}
 			}
 		}
+		#endregion
+		#region Idle Behaivior
 		private void SearchForPlayer()
 		{
 			float sqrDistance = (player.transform.position - transform.position).sqrMagnitude;
@@ -105,6 +116,7 @@ namespace EoE.Entities
 				lastConfirmedPlayerPos = player.transform.position;
 			}
 		}
+		#region LookAround
 		private void LookAround()
 		{
 			curStates.IsMoving = false;
@@ -133,6 +145,8 @@ namespace EoE.Entities
 			lookAroundTargetDir = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle));
 			reachedLookAroundDir = false;
 		}
+		#endregion
+		#region WanderAround
 		private void WanderAround()
 		{
 			curStates.IsMoving = !reachedWanderPoint;
@@ -155,12 +169,11 @@ namespace EoE.Entities
 
 				if (IsStuck())
 				{
-					if (curEndurance >= enemySettings.JumpEnduranceCost && CanJumpUp())
+					if (CanJumpUp())
 					{
 						if (curStates.IsGrounded)
 						{
 							stuckSince = 0;
-							curEndurance -= enemySettings.JumpEnduranceCost;
 							Jump();
 						}
 					}
@@ -186,9 +199,11 @@ namespace EoE.Entities
 			wanderPosition = new Vector2(target.x, target.z);
 			reachedWanderPoint = false;
 		}
+		#endregion
+		#region Resolve Issues
 		private bool IsStuck()
 		{
-			if (!CouldStand(0.01f))
+			if (CheckBoxAtHeight(0.05f))
 				stuckSince += Time.deltaTime;
 			else if(stuckSince > 0)
 				stuckSince = 0;
@@ -197,17 +212,18 @@ namespace EoE.Entities
 		}
 		private bool CanJumpUp()
 		{
-			if (curEndurance < enemySettings.JumpEnduranceCost)
-				return false;
 			float maxJump = ((enemySettings.JumpPower.y * enemySettings.JumpPower.y) / (-2 * Physics.gravity.y)) * 0.9f;
-			return CouldStand(maxJump + lowestPos);
+			return !CheckBoxAtHeight(maxJump + lowestPos);
 		}
-		private bool CouldStand(float verticalPos)
+		private bool CheckBoxAtHeight(float verticalPos)
 		{
 			Vector3 testPos = coll.bounds.center + new Vector3(0, verticalPos, 0) + coll.transform.forward * FORWARD_CAN_STAND_DISTANCE;
-			return !Physics.CheckBox(testPos, coll.bounds.extents, transform.rotation, ConstantCollector.TERRAIN_LAYER);
+			return Physics.CheckBox(testPos, coll.bounds.extents, transform.rotation, ConstantCollector.TERRAIN_LAYER);
 		}
-		protected virtual void ChasePlayer()
+		#endregion
+		#endregion
+		#region Aggresive Behavior
+		private void ChasePlayer()
 		{
 			float distance = (player.transform.position - transform.position).magnitude;
 			Vector3 playerDir = (player.transform.position - transform.position)/ distance;
@@ -221,11 +237,10 @@ namespace EoE.Entities
 
 				if (IsStuck())
 				{
-					if (curEndurance >= enemySettings.JumpEnduranceCost && CanJumpUp())
+					if (CanJumpUp())
 					{
 						if (curStates.IsGrounded)
 						{
-							curEndurance -= enemySettings.JumpEnduranceCost;
 							Jump();
 							stuckSince = 0;
 						}
@@ -243,9 +258,10 @@ namespace EoE.Entities
 			}
 			else
 			{
-				CombatBehavior();
+				CombatBehavior(distance);
 			}
 		}
-		protected abstract void CombatBehavior();
+		protected abstract void CombatBehavior(float distance);
+		#endregion
 	}
 }

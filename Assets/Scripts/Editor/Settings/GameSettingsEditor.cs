@@ -21,16 +21,37 @@ namespace EoE.Information
 		}
 		private void CustomInspector()
 		{
+
+			EntitieVelocityArea();
+			BasicBehaiviorArea();
+			DamageNumberSettingsArea();
+			OtherSettingsArea();
+			EffectivenessMatrixArea();
+		}
+
+		private void EntitieVelocityArea()
+		{
 			GameSettings settings = target as GameSettings;
 
-			EoEEditor.Header("Basic Settings");
-			EoEEditor.FloatField(new GUIContent("Seconds Per Entitie Regen", "How many seconds for each regeneration cyle? This will not change the amount of healing only the frequency. (In Seconds)"), ref settings.SecondsPerEntititeRegen);
+			EoEEditor.Header("Entitie Velocity Settings");
 			EoEEditor.AnimationCurveField(new GUIContent("Turn Speed Multiplaction", "How much speed does a Entitie have when it is fully turning vs. walking straight. 0 In the curve means the Entitie walks straight, 1 means when it is currently facing the opposite direction of where it wants to go."), ref settings.TurnSpeedCurve);
-			GUILayout.Space(4);
 			EoEEditor.FloatField(new GUIContent("When Falling Extra Velocity", "When Entities fall then how much velocity (multiplicative) should be added to the normal gravity?"), ref settings.WhenFallingExtraVelocity);
 			EoEEditor.AnimationCurveField(new GUIContent("Fall Damage curve", "When en Entitie hits the ground how much damage should it receive based on velocity. X-Axis == FallVelocity, Y-Axis == Damage"), ref settings.FallDamageCurve);
 			EoEEditor.FloatField(new GUIContent("Ground Hit Velocity Loss", "When an Entitie hits the ground "), ref settings.GroundHitVelocityLoss);
+		}
+
+		private void BasicBehaiviorArea()
+		{
+			GameSettings settings = target as GameSettings;
+
+			EoEEditor.Header("Basic Behaivior Settings");
 			EoEEditor.FloatField(new GUIContent("Enemy Wandering Urgency", "When a enemy wanders around, at how much of the max speed should the entitie try to reach the wandering point? (0 == None, 0.5 == Half, 1 == Max)"), ref settings.EnemyWanderingUrgency);
+			EoEEditor.FloatField(new GUIContent("Combat Cooldown", "After a Entitie encounters an Enemy how long does a Entitie have to be out of combat before it will be counted as 'Out of Combat'?"), ref settings.CombatCooldown);
+		}
+
+		private void DamageNumberSettingsArea()
+		{
+			GameSettings settings = target as GameSettings;
 
 			EoEEditor.Header("Damage Number Settings");
 			EoEEditor.FloatField(new GUIContent("Damage Number Lifetime", "After a damage number spawned, how long until it disapears? (In Seconds)"), ref settings.DamageNumberLifeTime);
@@ -43,6 +64,20 @@ namespace EoE.Information
 			EoEEditor.GradientField(new GUIContent("Magical Damage Color"), ref settings.MagicalDamageColors);
 			EoEEditor.GradientField(new GUIContent("Heal Colors"), ref settings.HealColors);
 			EoEEditor.GradientField(new GUIContent("Standard Text Color"), ref settings.StandardTextColor);
+		}
+
+		private void OtherSettingsArea()
+		{
+			GameSettings settings = target as GameSettings;
+
+			EoEEditor.Header("Other Settings");
+			EoEEditor.FloatField(new GUIContent("Seconds Per Entitie Regen", "How many seconds for each regeneration cyle? This will not change the amount of healing only the frequency. (In Seconds)"), ref settings.SecondsPerEntititeRegen);
+			EoEEditor.FloatField(new GUIContent("Crit Damage Multiplier", "If a ability / attack was counted as criticall for much should the damage be multiplied?"), ref settings.CritDamageMultiplier);
+		}
+
+		private void EffectivenessMatrixArea()
+		{
+			GameSettings settings = target as GameSettings;
 
 			EoEEditor.Header("Element Effectiveness Settings");
 			//Effectiveness matrix

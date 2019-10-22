@@ -6,23 +6,31 @@ namespace EoE.Information
 {
 	public class GameSettings : ScriptableObject
 	{
-		public float SecondsPerEntititeRegen;
-		public AnimationCurve TurnSpeedCurve = new AnimationCurve();
+		//Entitie Velocity
+		public AnimationCurve TurnSpeedCurve			= new AnimationCurve();
+		public float WhenFallingExtraVelocity			= 0.5f;
+		public AnimationCurve FallDamageCurve			= new AnimationCurve();
+		public float GroundHitVelocityLoss				= 0.5f;
 
-		public float WhenFallingExtraVelocity = 0.5f;
-		public AnimationCurve FallDamageCurve = new AnimationCurve();
-		public float GroundHitVelocityLoss = 0.5f;
-		public float EnemyWanderingUrgency = 0.5f;
+		//Behaiviors
+		public float CombatCooldown						= 3;
+		public float EnemyWanderingUrgency				= 0.5f;
+
+		//Visuals
+		public float SecondsPerEntititeRegen			= 0.5f;
 
 		//Damage Numbers
-		public float DamageNumberLifeTime = 1;
-		public bool ShowRegenNumbers = true;
-		public float DamageNumberFlySpeed = 1;
-		public float DamageNumberRandomMovementPower = 1;
-		public Gradient PhysicalDamageColors = new Gradient();
-		public Gradient MagicalDamageColors = new Gradient();
-		public Gradient HealColors = new Gradient();
-		public Gradient StandardTextColor = new Gradient();
+		public float DamageNumberLifeTime				= 1;
+		public bool ShowRegenNumbers					= true;
+		public float DamageNumberFlySpeed				= 1;
+		public float DamageNumberRandomMovementPower	= 1;
+		public Gradient PhysicalDamageColors			= new Gradient();
+		public Gradient MagicalDamageColors				= new Gradient();
+		public Gradient HealColors						= new Gradient();
+		public Gradient StandardTextColor				= new Gradient();
+
+		//Other
+		public float CritDamageMultiplier				= 2;
 
 		public ElementEffectivenessRow[] EffectivenessMatrix;
 

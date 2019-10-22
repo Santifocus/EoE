@@ -9,19 +9,21 @@ namespace EoE.Entities
 {
 	public abstract class Entitie : MonoBehaviour
 	{
-		private static readonly Vector3 GroundTestOffset = new Vector3(0, -0.15f, 0);
-		private const float JUMP_GROUND_COOLDOWN = 0.2f;
-		private const float IS_FALLING_THRESHOLD = -1;
+		#region Fields
+		//Constants
+		private const float GROUND_TEST_WIDHT_MUL				= 0.95f;
+		private const float JUMP_GROUND_COOLDOWN				= 0.2f;
+		private const float IS_FALLING_THRESHOLD				= -1;
+		private const float LANDED_VELOCITY_THRESHOLD			= 0.5f;
+		private static readonly Vector3 GroundTestOffset		= new Vector3(0, -0.05f, 0);
 
-		[SerializeField] protected Rigidbody body = default;
-		[SerializeField] protected Collider coll = default;
-		[Header("Animation")]
-		[SerializeField] protected Transform modelTransform = default;
-		[SerializeField] protected Animator animationControl = default;
-		public abstract EntitieSettings SelfSettings { get; }
+		public static List<Entitie> AllEntities = new List<Entitie>();
 
-		protected enum ColliderType : byte { Box, Sphere, Capsule }
-		protected ColliderType selfColliderType;
+		//Inspector variables
+		[SerializeField] protected Rigidbody body				= default;
+		[SerializeField] protected Collider coll				= default;
+		[SerializeField] protected Animator animationControl	= default;
+		[SerializeField] protected Transform modelTransform		= default;
 
 		//Stats
 		public float CurHealth => curHealth;
@@ -32,20 +34,33 @@ namespace EoE.Entities
 		protected float curMana;
 
 		protected float curWalkSpeed;
-		protected float curAcceleration;
 
+		//Entitie states
+		public EntitieState curStates;
 		private float regenTimer;
-		protected EntitieState curStates;
+		private float combatEndCooldown;
 
+		//Velocity Control
+		protected float curAcceleration;
 		private float jumpGroundCooldown;
 		private float lastFallVelocity;
 
-		//Other
+		protected Vector3 curMoveForce;
+		protected Vector3 curJumpForce;
+		protected Vector3 curExtraForce;
+
+		//Getter Helpers
+		protected enum ColliderType : byte { Box, Sphere, Capsule }
+		public abstract EntitieSettings SelfSettings { get; }
+		protected ColliderType selfColliderType;
 		public Vector3 actuallWorldPosition => SelfSettings.MassCenter + transform.position;
 		public float lowestPos => coll.bounds.center.y - coll.bounds.extents.y;
-
+		public Vector3 curVelocity => curMoveForce + curJumpForce + curExtraForce;
+		#endregion
+		#region Basic Monobehaivior
 		protected virtual void Start()
 		{
+			AllEntities.Add(this);
 			ResetStats();
 			GetColliderType();
 			EntitieStart();
@@ -53,7 +68,6 @@ namespace EoE.Entities
 		private void ResetStats()
 		{
 			curHealth = SelfSettings.Health;
-			curEndurance = SelfSettings.Endurance;
 			curMana = SelfSettings.Mana;
 			curWalkSpeed = SelfSettings.WalkSpeed;
 
@@ -90,20 +104,25 @@ namespace EoE.Entities
 			}
 		}
 		protected virtual void EntitieStart(){}
-
 		protected virtual void Update()
 		{
 			Regen();
 			UpdateMovementSpeed();
+			EntitieStateControl();
+
 			EntitieUpdate();
 		}
 		protected void FixedUpdate()
 		{
 			IsGroundedTest();
+			UpdateJumpForce();
+
 			EntitieFixedUpdate();
 		}
 		protected virtual void EntitieUpdate() { }
 		protected virtual void EntitieFixedUpdate() { }
+		#endregion
+		#region Movement
 		protected float UpdateAcceleration(float intendedFactor = 1)
 		{
 			if (curStates.IsMoving)
@@ -139,45 +158,65 @@ namespace EoE.Entities
 		private void UpdateMovementSpeed()
 		{
 			bool moving = curStates.IsMoving;
+			bool running = curStates.IsRunning;
 
 			//If the Entitie doesnt move intentionally but is in run mode, then stop the run mode
 			if (!moving && curStates.IsRunning)
 				curStates.IsRunning = false;
 
+			//Update animation states
+			animationControl.SetBool("Walking", curAcceleration > 0 && !running);
+			animationControl.SetBool("Running", curAcceleration > 0 &&	running);
+
 			//We find out in which direction the Entitie should move according to its movement
 			float baseTargetSpeed = curWalkSpeed * (curStates.IsRunning ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
-			Vector3 targetVelocity = baseTargetSpeed  * modelTransform.forward;
+			curMoveForce = baseTargetSpeed * modelTransform.forward;
 
-			float compareSpeed = curWalkSpeed * (curStates.IsRunning ? SelfSettings.RunSpeedMultiplicator : 1) / Mathf.Max(0.0001f, SelfSettings.NoMoveDeceleration);
+			//Lerp knockback / other forces to zero based on the entities deceleration stat
+			curExtraForce = Vector3.Lerp(curExtraForce, Vector3.zero, Time.deltaTime / Mathf.Max(0.0001f, SelfSettings.NoMoveDeceleration));
 
-			//And find out how fast it is currently moving
-			Vector2 curVelocity = new Vector2(body.velocity.x, body.velocity.z);
-			float curSpeed = curVelocity.magnitude;
-
-			//Now we want to interpolate based on targetSpeed/curSPeed fraction
-			float interpolatePoint = 0;
-			if (compareSpeed > curSpeed)
-				interpolatePoint = 1;
+			//now combine those forces as the current speed
+			body.velocity = curVelocity;
+		}
+		private void UpdateJumpForce()
+		{
+			//If we are grounded we can just zero the velocity
+			if (curStates.IsGrounded)
+			{
+				if (curJumpForce.y < 0)
+					curJumpForce = Vector3.zero;
+			}
 			else
-				interpolatePoint = (compareSpeed / Mathf.Max(0.0001f, curSpeed)) * Time.deltaTime;
+			{
+				//Add gravity
+				curJumpForce += Physics.gravity * Time.fixedDeltaTime;
+			}
 
-			float newXVel = curVelocity.x + (targetVelocity.x - curVelocity.x) * Mathf.Clamp01(interpolatePoint); 
-			float newZVel = curVelocity.y + (targetVelocity.z - curVelocity.y) * Mathf.Clamp01(interpolatePoint);
+			//Find out wether the entitie is falling
+			bool playerWantsToFall = this is Player && (curStates.IsFalling || !Controlls.PlayerControlls.Buttons.Jump.Active);
+			bool falling = !curStates.IsGrounded && jumpGroundCooldown <= 0 && (body.velocity.y < IS_FALLING_THRESHOLD || playerWantsToFall);
 
-			body.velocity = new Vector3(newXVel, body.velocity.y, newZVel);
+			//If so: start the animation and add extra velocity for a better looking fallcurve
+			curStates.IsFalling = falling;
+			animationControl.SetBool("IsFalling", falling);
+			if (falling)
+			{
+				curJumpForce += GameController.CurrentGameSettings.WhenFallingExtraVelocity * Physics.gravity * Time.fixedDeltaTime;
+			}
 		}
 		protected void Jump()
 		{
-			Vector3 addedForce = new Vector3(0, SelfSettings.JumpPower.y, 0);
-			addedForce += SelfSettings.JumpPower.x * transform.right;
-			addedForce += SelfSettings.JumpPower.z * transform.forward;
+			curJumpForce = new Vector3(0, Mathf.Max(SelfSettings.JumpPower.y, curJumpForce.y), 0);
+			curExtraForce += SelfSettings.JumpPower.x * transform.right;
+			curExtraForce += SelfSettings.JumpPower.z * transform.forward;
 
-			body.velocity += addedForce;
 			jumpGroundCooldown = JUMP_GROUND_COOLDOWN;
 			curStates.IsGrounded = false;
 
 			animationControl.SetTrigger("JumpStart");
 		}
+		#endregion
+		#region Ground Contact
 		private void IsGroundedTest()
 		{
 			if (jumpGroundCooldown > 0)
@@ -192,70 +231,53 @@ namespace EoE.Entities
 					case ColliderType.Box:
 						{
 							BoxCollider bColl = coll as BoxCollider;
-							curStates.IsGrounded = Physics.CheckBox(bColl.center + transform.position + GroundTestOffset, new Vector3(bColl.bounds.extents.x * 0.95f, bColl.bounds.extents.y, bColl.bounds.extents.z * 0.95f), transform.rotation, ConstantCollector.TERRAIN_LAYER);
+							Vector3 boxCenter = coll.bounds.center;
+							boxCenter.y = lowestPos + GroundTestOffset.y + 0.01f; //A little bit of clipping into the original bounding box
+
+							curStates.IsGrounded = Physics.CheckBox(boxCenter, new Vector3(bColl.bounds.extents.x * GROUND_TEST_WIDHT_MUL, -GroundTestOffset.y, bColl.bounds.extents.z * GROUND_TEST_WIDHT_MUL), coll.transform.rotation, ConstantCollector.TERRAIN_LAYER);
 							break;
 						}
 					case ColliderType.Capsule:
 						{
-							curStates.IsGrounded = CapsuleGroundTest();
+							CapsuleCollider cColl = coll as CapsuleCollider;
+							Vector3 extraOffset = new Vector3(0, -cColl.radius * (1 - GROUND_TEST_WIDHT_MUL), 0);
+							Vector3 spherePos = coll.bounds.center - new Vector3(0, cColl.height/2 * coll.transform.lossyScale.y - cColl.radius, 0) + GroundTestOffset + extraOffset;
+
+							curStates.IsGrounded = Physics.CheckSphere(spherePos, cColl.radius * GROUND_TEST_WIDHT_MUL, ConstantCollector.TERRAIN_LAYER);
 							break;
 						}
 					case ColliderType.Sphere:
 						{
 							SphereCollider sColl = coll as SphereCollider;
-							curStates.IsGrounded = Physics.CheckSphere(transform.position + sColl.center + GroundTestOffset, sColl.radius, ConstantCollector.TERRAIN_LAYER);
+							Vector3 extraOffset = new Vector3(0, -sColl.radius * GROUND_TEST_WIDHT_MUL, 0);
+							curStates.IsGrounded = Physics.CheckSphere(coll.bounds.center + GroundTestOffset + extraOffset, sColl.radius * GROUND_TEST_WIDHT_MUL, ConstantCollector.TERRAIN_LAYER);
 							break;
 						}
 				}
 			}
 
-			//Check for falldamage
-			float velDif = body.velocity.y - lastFallVelocity;
-			if(velDif > 0 && jumpGroundCooldown <= 0) //We stopped falling for a certain amount, and we didnt change velocity because we just jumped
+			//Check if we landed
+			float velDif = curVelocity.y - lastFallVelocity;
+			if (velDif > LANDED_VELOCITY_THRESHOLD
+				&& jumpGroundCooldown <= 0) //We stopped falling for a certain amount, and we didnt change velocity because we just jumped
 			{
 				Landed(velDif);
 			}
-			lastFallVelocity = body.velocity.y;
-
-			//Velocity control when falling
-			bool falling = !curStates.IsGrounded && (body.velocity.y < IS_FALLING_THRESHOLD || (this is Player && (curStates.IsFalling || !Controlls.PlayerControlls.Buttons.Jump.Active)));
-
-			curStates.IsFalling = falling;
-			animationControl.SetBool("IsFalling", falling);
-			if (falling)
-			{
-				body.velocity += GameController.CurrentGameSettings.WhenFallingExtraVelocity * Physics.gravity * Time.fixedDeltaTime;
-			}
-		}
-		private bool CapsuleGroundTest()
-		{
-			CapsuleCollider cColl = coll as CapsuleCollider;
-			Vector3 middle = cColl.center + transform.position + GroundTestOffset;
-			Vector3 offset = Vector3.zero;
-			switch (cColl.direction)
-			{
-				case 0: //X
-					offset.x = cColl.height / 2;
-					break;
-				case 1: //Y
-					offset.y = cColl.height / 2;
-					break;
-				case 2: //Z
-					offset.z = cColl.height / 2;
-					break;
-			}
-
-			return Physics.CheckCapsule(middle  - offset, middle + offset, cColl.radius, ConstantCollector.TERRAIN_LAYER);
+			lastFallVelocity = curVelocity.y;
 		}
 		private void Landed(float velDif)
 		{
+			//Check if there is any fall damage to give
 			float damageAmount = GameController.CurrentGameSettings.FallDamageCurve.Evaluate(velDif);
-			if(damageAmount > 0)
+			if (damageAmount > 0)
 				ChangeHealth(new InflictionInfo(this, CauseType.Physical, ElementType.None, actuallWorldPosition, Vector3.up, damageAmount, false));
 
+			//Decrease the x/z velocity of the Entitie because it landed
 			float curSpeed = new Vector2(body.velocity.x, body.velocity.z).magnitude;
 			curAcceleration = Mathf.Clamp01(curAcceleration - velDif / Mathf.Max(curSpeed, 1) * GameController.CurrentGameSettings.GroundHitVelocityLoss);
 		}
+		#endregion
+		#region State Control
 		protected virtual void Regen()
 		{
 			regenTimer += Time.deltaTime;
@@ -265,7 +287,7 @@ namespace EoE.Entities
 				regenTimer -= GameController.CurrentGameSettings.SecondsPerEntititeRegen;
 				if (SelfSettings.DoHealthRegen && curHealth < SelfSettings.Health)
 				{
-					float regenAmount = SelfSettings.HealthRegen * GameController.CurrentGameSettings.SecondsPerEntititeRegen * (inCombat ? SelfSettings.HealthRegenInCombatFactor : 1);
+					float regenAmount = SelfSettings.HealthRegen * GameController.CurrentGameSettings.SecondsPerEntititeRegen * (inCombat ? SelfSettings.HealthRegenInCombatMultiplier : 1);
 					if (regenAmount > 0)
 					{
 						InflictionInfo basis = new InflictionInfo(this, CauseType.Heal, ElementType.None, actuallWorldPosition, Vector3.up, -regenAmount, false);
@@ -275,32 +297,35 @@ namespace EoE.Entities
 					}
 				}
 
-				if(!(this is Player))
-				{
-					if (SelfSettings.DoEnduranceRegen && curEndurance < SelfSettings.Endurance)
-					{
-						float regenAmount = SelfSettings.EnduranceRegen * GameController.CurrentGameSettings.SecondsPerEntititeRegen * (inCombat ? SelfSettings.EnduranceRegen : 1);
-						curEndurance = Mathf.Min(SelfSettings.Endurance, curEndurance + SelfSettings.EnduranceRegen * GameController.CurrentGameSettings.SecondsPerEntititeRegen);
-					}
-				}
-
 				if (SelfSettings.DoManaRegen && curMana < SelfSettings.Mana)
 				{
-					float regenAmount = SelfSettings.ManaRegen * GameController.CurrentGameSettings.SecondsPerEntititeRegen * (inCombat ? SelfSettings.ManaRegenInCombatFactor : 1);
+					float regenAmount = SelfSettings.ManaRegen * GameController.CurrentGameSettings.SecondsPerEntititeRegen * (inCombat ? SelfSettings.ManaRegenInCombatMultiplier : 1);
 					curMana = Mathf.Min(SelfSettings.Mana, curMana + regenAmount);
 				}
+			}
+		}
+
+		private void EntitieStateControl()
+		{
+			if(combatEndCooldown > 0)
+			{
+				combatEndCooldown -= Time.deltaTime;
+				if (combatEndCooldown <= 0)
+					curStates.IsInCombat = false;
 			}
 		}
 
 		public void ChangeHealth(InflictionInfo causedDamage)
 		{
 			if (causedDamage.attacker != null && causedDamage.attacker != this)
-				curStates.IsInCombat = true;
-
+			{
+				StartCombat();
+				causedDamage.attacker.StartCombat();
+			}
 			InflictionInfo.InflictionResult damageResult = new InflictionInfo.InflictionResult(causedDamage, this, true);
 
 			curHealth -= damageResult.finalDamage;
-			body.velocity += damageResult.causedKnockback;
+			curExtraForce += damageResult.causedKnockback;
 			curHealth = Mathf.Min(SelfSettings.Health, curHealth);
 
 			if(curHealth <= 0)
@@ -317,94 +342,16 @@ namespace EoE.Entities
 			}
 		}
 
+		protected void StartCombat()
+		{
+			curStates.IsInCombat = true;
+			combatEndCooldown = GameController.CurrentGameSettings.CombatCooldown;
+		}
 		protected virtual void Death()
 		{
+			AllEntities.Remove(this);
 			Destroy(gameObject);
 		}
-
-		public struct EntitieState
-		{
-			private byte state;
-
-			private const byte GroundedReset = 254;
-			private const byte MovingReset = 253;
-			private const byte RunningReset = 251;
-			private const byte BlockingReset = 247;
-			private const byte CombatReset = 239;
-			private const byte FallingReset = 223;
-
-			public bool IsGrounded
-			{
-				get => ((state | 1) == state);
-				set
-				{
-					state = (byte)(state & GroundedReset);
-					if (value)
-					{
-						state |= 1;
-					}
-				}
-			}
-			public bool IsMoving
-			{
-				get => ((state | 2) == state);
-				set
-				{
-					state = (byte)(state & MovingReset);
-					if (value)
-					{
-						state |= 2;
-					}
-				}
-			}
-			public bool IsRunning
-			{
-				get => ((state | 4) == state);
-				set
-				{
-					state = (byte)(state & RunningReset);
-					if (value)
-					{
-						state |= 4;
-					}
-				}
-			}
-			public bool IsBlocking
-			{
-				get => ((state | 8) == state);
-				set
-				{
-					state = (byte)(state & BlockingReset);
-					if (value)
-					{
-						state |= 8;
-					}
-				}
-			}
-			public bool IsInCombat
-			{
-				get => ((state | 16) == state);
-				set
-				{
-					state = (byte)(state & CombatReset);
-					if (value)
-					{
-						state |= 16;
-					}
-				}
-			}
-			public bool IsFalling
-			{
-				get => ((state | 32) == state);
-				set
-				{
-					state = (byte)(state & FallingReset);
-					if (value)
-					{
-						state |= 32;
-					}
-				}
-			}
-		}
+#endregion
 	}
 }

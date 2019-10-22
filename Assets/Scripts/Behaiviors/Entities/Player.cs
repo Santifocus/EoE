@@ -1,78 +1,86 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using EoE.Events;
 using EoE.Information;
 using EoE.Controlls;
-using EoE.Utils;
 using EoE.Weapons;
 
 namespace EoE.Entities
 {
 	public class Player : Entitie
 	{
-		private static Player instance;
-		public static Player Instance => instance;
-		public override EntitieSettings SelfSettings => selfSettings;
-		public static PlayerSettings PlayerSettings => instance.selfSettings;
+		#region Fields
+		//Inspector variables
+		[Space(10)]
 		[SerializeField] private PlayerSettings selfSettings = default;
+		[SerializeField] private Transform rightHand = default;
+		[SerializeField] private Weapon equipedWeapon = default;
 		public TMPro.TextMeshProUGUI debugText = default;
 
-		private enum GetEnduranceType : byte { NotAvailable = 0, Available = 1, AvailableWithNewBar = 2 }
+		//Endurance
+		[HideInInspector] public bool recentlyUsedEndurance;
 		[HideInInspector] public List<float> enduranceContainers;
 		[HideInInspector] public int totalEnduranceContainers;
 		[HideInInspector] public int activeEnduranceContainerIndex;
 		[HideInInspector] public float lockedEndurance;
-
-		[HideInInspector] public bool recentlyUsedEndurance;
 		private float usedEnduranceCooldown;
-		private Vector3 cameraDirection;
 
+		#region Physical Attack
 		//Attack
-		public Weapon PlayerWeapon { get => equipedWeapon; set => UpdateWeapon(value); }
-		[SerializeField] private Transform rightHand;
-		[SerializeField] private Weapon equipedWeapon;
+		public Weapon PlayerWeapon { get => equipedWeapon; set => ChangeWeapon(value); }
 		[HideInInspector] public Attack activeAttack;
 		private WeaponController heldWeapon;
-		public enum AttackState : short { NormalStand = 0, NormalSprint = 1, NormalJump = 2, NormalSprintJump = 3, HeavyStand = 4, HeavySprint = 5, HeavyJump = 6, HeavySprintJump = 7 }
 		private AttackState lastAttackType;
 		private bool isCurrentlyAttacking;
 		private bool canceledAnimation;
 
+		//Combos
 		private float? comboTimer;
 		private int comboIndex;
 
+		//Attack animations
 		private Dictionary<AttackAnimation, (float, float)> animationDelayLookup = new Dictionary<AttackAnimation, (float, float)>()
 		{
-			{ AttackAnimation.Stab, (0.4f, 0.05f) },
+			{ AttackAnimation.Stab, (0.4f, 0.15f) },
 			{ AttackAnimation.ToLeftSlash, (0.533f, 0) },
 			{ AttackAnimation.TopDownSlash, (0.533f, 0) },
 			{ AttackAnimation.ToRightSlash, (0.533f, 0.22f) },
 			{ AttackAnimation.Uppercut, (0.533f, 0) },
 		};
+		#endregion
 
+		//Getter Helpers
+		private enum GetEnduranceType : byte { NotAvailable = 0, Available = 1, AvailableWithNewBar = 2 }
+		public enum AttackState : short { NormalStand = 0, NormalSprint = 1, NormalJump = 2, NormalSprintJump = 3, HeavyStand = 4, HeavySprint = 5, HeavyJump = 6, HeavySprintJump = 7 }
+		private static Player instance;
+		public static Player Instance => instance;
+		public override EntitieSettings SelfSettings => selfSettings;
+		public static PlayerSettings PlayerSettings => instance.selfSettings;
+
+		#endregion
+		#region Basic Monobehaivior
 		protected override void EntitieStart()
 		{
 			instance = this;
-			UpdateWeapon(equipedWeapon);
+			ChangeWeapon(equipedWeapon);
 			SetupEndurance();
 		}
-
+		protected override void EntitieUpdate()
+		{
+			debugText.text = curMoveForce + ", " + curJumpForce + ", " + curExtraForce;
+			EnduranceRegen();
+			CameraControl();
+			Movement();
+			AttackControl();
+			PositionHeldWeapon();
+		}
 		protected override void EntitieFixedUpdate()
 		{
 			PositionHeldWeapon();
 		}
-
-		protected void PositionHeldWeapon()
-		{
-			Vector3 worldOffset =		equipedWeapon.weaponHandleOffset.x * rightHand.right + 
-										equipedWeapon.weaponHandleOffset.y * rightHand.up + 
-										equipedWeapon.weaponHandleOffset.z * rightHand.forward;
-			heldWeapon.transform.position = rightHand.position + worldOffset;
-			heldWeapon.transform.rotation = rightHand.rotation;
-		}
-
-		private void UpdateWeapon(Weapon newWeapon)
+		#endregion
+		#region Setups
+		private void ChangeWeapon(Weapon newWeapon)
 		{
 			if (heldWeapon)
 			{
@@ -86,16 +94,6 @@ namespace EoE.Entities
 				heldWeapon.Setup();
 			}
 		}
-
-		protected override void EntitieUpdate()
-		{
-			EnduranceRegen();
-			CameraControl();
-			Movement();
-			AttackControl();
-			PositionHeldWeapon();
-		}
-
 		private void SetupEndurance()
 		{
 			activeEnduranceContainerIndex = PlayerSettings.EnduranceBars - 1;
@@ -107,6 +105,16 @@ namespace EoE.Entities
 				enduranceContainers.Add(PlayerSettings.EndurancePerBar);
 			}
 		}
+		protected void PositionHeldWeapon()
+		{
+			Vector3 worldOffset =		equipedWeapon.weaponHandleOffset.x * rightHand.right + 
+										equipedWeapon.weaponHandleOffset.y * rightHand.up + 
+										equipedWeapon.weaponHandleOffset.z * rightHand.forward;
+			heldWeapon.transform.position = rightHand.position + worldOffset;
+			heldWeapon.transform.rotation = rightHand.rotation;
+		}
+		#endregion
+		#region Endurance Control
 		private GetEnduranceType CanAffordEnduranceCost(float cost)
 		{
 			if (enduranceContainers[activeEnduranceContainerIndex] >= cost)
@@ -163,7 +171,11 @@ namespace EoE.Entities
 
 			if(activeEnduranceContainerIndex < totalEnduranceContainers - 1)
 			{
-				lockedEndurance += Time.deltaTime * PlayerSettings.EnduranceRegen * (curStates.IsInCombat ? PlayerSettings.EnduranceRegenInCombatFactor : 1);
+				float perSecond =	PlayerSettings.EnduranceRegen *
+									PlayerSettings.LockedEnduranceRegenMutliplier * 
+									(curStates.IsInCombat ? PlayerSettings.EnduranceRegenInCombat : 1);
+
+				lockedEndurance += Time.deltaTime * perSecond;
 
 				if (lockedEndurance >= PlayerSettings.EndurancePerBar)
 				{
@@ -183,16 +195,17 @@ namespace EoE.Entities
 
 			if (!recentlyUsedEndurance && enduranceContainers[activeEnduranceContainerIndex] < PlayerSettings.EndurancePerBar)
 			{
-				enduranceContainers[activeEnduranceContainerIndex] += Time.deltaTime * PlayerSettings.EnduranceRegen * (curStates.IsInCombat ? PlayerSettings.EnduranceRegenInCombatFactor : 1);
+				enduranceContainers[activeEnduranceContainerIndex] += Time.deltaTime * PlayerSettings.EnduranceRegen * (curStates.IsInCombat ? PlayerSettings.EnduranceRegenInCombat : 1);
 				if (enduranceContainers[activeEnduranceContainerIndex] > PlayerSettings.EndurancePerBar)
 					enduranceContainers[activeEnduranceContainerIndex] = PlayerSettings.EndurancePerBar;
 			}
 		}
-
+		#endregion
+		#region Movement
 		private void Movement()
 		{
 			JumpControl();
-			Walk();
+			PlayerMoveControl();
 		}
 		private void JumpControl()
 		{
@@ -206,7 +219,7 @@ namespace EoE.Entities
 				}
 			}
 		}
-		private void Walk()
+		private void PlayerMoveControl()
 		{
 			//1.0.: Where is the player Pointing the Joystick at
 			Vector3 controllDirection = PlayerControlls.GetPlayerMove();
@@ -216,12 +229,7 @@ namespace EoE.Entities
 			//1.1.: If there is no input, stop here
 			if (!moving)
 			{
-				float curAcceleration = UpdateAcceleration();
-				if (curAcceleration == 0)
-				{
-					animationControl.SetBool("Walking", false);
-					animationControl.SetBool("Running", false);
-				}
+				UpdateAcceleration();
 				return;
 			}
 
@@ -241,15 +249,11 @@ namespace EoE.Entities
 				running = true;
 			}
 
-			//Set animations
-			animationControl.SetBool("Walking", !running);
-			animationControl.SetBool("Running", running);
-
 			//1.2.: How fast does the player actually want to walk? (1,1) Would be greater then 1 * MoveSpeed => we map it back to 1
 			float intendedMoveSpeed = Mathf.Min(1, controllDirection.magnitude) * (running ? PlayerSettings.RunSpeedMultiplicator : 1);
 
 			//2.: Rotate the controlled direction based on where the camera is facing
-			cameraDirection = new Vector3(Mathf.Sin((-PlayerCameraController.CurRotation.x) * Mathf.Deg2Rad), 0, Mathf.Cos((-PlayerCameraController.CurRotation.x) * Mathf.Deg2Rad));
+			Vector3 cameraDirection = new Vector3(Mathf.Sin((-PlayerCameraController.CurRotation.x) * Mathf.Deg2Rad), 0, Mathf.Cos((-PlayerCameraController.CurRotation.x) * Mathf.Deg2Rad));
 			float newX = (controllDirection.x * cameraDirection.z) - (controllDirection.z * cameraDirection.x);
 			float newZ = (controllDirection.z * cameraDirection.z) + (controllDirection.x * cameraDirection.x);
 			controllDirection.x = newX;
@@ -265,7 +269,8 @@ namespace EoE.Entities
 			newMoveDistance = new Vector2(newMoveDistance.x * selfSettings.CameraRotationPower.x, newMoveDistance.y * selfSettings.CameraRotationPower.y) * Time.deltaTime;
 			PlayerCameraController.ToRotate += newMoveDistance;
 		}
-
+		#endregion
+		#region Physical Attack Control
 		private void AttackControl()
 		{
 			if (comboTimer.HasValue)
@@ -288,7 +293,6 @@ namespace EoE.Entities
 
 			StartCoroutine(BeginAttack((AttackState)state));
 		}
-
 		public void CancelAttackAnimation()
 		{
 			if (isCurrentlyAttacking)
@@ -310,8 +314,20 @@ namespace EoE.Entities
 				animationControl.SetBool("Attack", true);
 				animationControl.SetTrigger(anim.ToString());
 
+				bool applyForceAfterCustomDelay = !targetAttack.velocityEffect.applyForceAfterAnimationCharge;
+				float forceApplyDelay = applyForceAfterCustomDelay ? targetAttack.velocityEffect.applyForceDelay : 0;
+
 				if (chargeDelay == 0)
+				{
+					if(!applyForceAfterCustomDelay)
+						ApplyAttackForces();
 					heldWeapon.Active = true;
+				}
+
+				if(applyForceAfterCustomDelay && forceApplyDelay == 0)
+				{
+					ApplyAttackForces();
+				}
 
 				while (animTime > 0 || activeAttack.animationInfo.haltAnimationTillCancel)
 				{
@@ -323,7 +339,20 @@ namespace EoE.Entities
 						chargeDelay -= Time.deltaTime;
 
 						if (chargeDelay <= 0)
+						{
+							if (targetAttack.velocityEffect.applyForceAfterAnimationCharge)
+								ApplyAttackForces();
 							heldWeapon.Active = true;
+						}
+					}
+
+					if(applyForceAfterCustomDelay && forceApplyDelay > 0)
+					{
+						forceApplyDelay -= Time.deltaTime;
+						if(forceApplyDelay <= 0)
+						{
+							ApplyAttackForces();
+						}
 					}
 
 					if (canceledAnimation || CheckForCancelCondition())
@@ -390,5 +419,61 @@ namespace EoE.Entities
 
 			return (sprintStateAchieved && groundStateAchieved) || (!activeAttack.animationInfo.bothStates && sprintStateAchieved);
 		}
+		private void ApplyAttackForces()
+		{
+			AttackVelocityEffect effect = activeAttack.velocityEffect;
+
+			if (effect.velocityIntent == AttackVelocityIntent.Off)
+				return;
+			Vector3 velocity = Vector3.zero;
+
+			if (effect.useRightValue)
+			{
+				velocity += effect.rightValue * modelTransform.right;
+			}
+			if (effect.useUpValue)
+			{
+				velocity += effect.upValue * modelTransform.up;
+			}
+			if (effect.useForwardValue)
+			{
+				velocity += effect.forwardValue * modelTransform.forward;
+			}
+
+			if (effect.velocityIntent == AttackVelocityIntent.Set)
+			{
+				curAcceleration = 0;
+				curMoveForce = Vector3.zero;
+
+				if (effect.ignoreVerticalVelocity)
+				{
+					curExtraForce = new Vector3(velocity.x, curExtraForce.y, velocity.z);
+					curJumpForce = new Vector3(0, curJumpForce.y, 0);
+				}
+				else
+				{
+					curExtraForce = new Vector3(velocity.x, 0, velocity.z);
+					curJumpForce = new Vector3(0, velocity.y, 0);
+				}
+			}
+			else
+			{
+				curAcceleration = 0;
+				curMoveForce = Vector3.zero;
+
+				if (effect.ignoreVerticalVelocity)
+				{
+					curExtraForce += new Vector3(velocity.x, 0, velocity.z);
+				}
+				else
+				{
+					curExtraForce += new Vector3(velocity.x, 0, velocity.z);
+					curJumpForce += new Vector3(0, velocity.y, 0);
+				}
+			}
+
+			body.velocity = curVelocity;
+		}
+		#endregion
 	}
 }

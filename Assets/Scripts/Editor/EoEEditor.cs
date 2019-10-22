@@ -7,6 +7,7 @@ namespace EoE
 {
 	public class EoEEditor
 	{
+		private const string LINE_BREAK = "_________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________";
 		private const float STANDARD_OFFSET = 20;
 		public static bool isDirty;
 		public static void Header(string content, int offSet = 0) => Header(new GUIContent(content), offSet);
@@ -18,6 +19,13 @@ namespace EoE
 			GUILayout.Label(content, EditorStyles.boldLabel);
 			EditorGUILayout.EndHorizontal();
 			GUILayout.Space(4);
+		}
+		public static void LineBreak()
+		{
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(-2 * STANDARD_OFFSET);
+			EditorGUILayout.LabelField(LINE_BREAK);
+			EditorGUILayout.EndHorizontal();
 		}
 		public static bool FloatField(string content, ref float curValue, int offSet = 0) => FloatField(new GUIContent(content), ref curValue, offSet);
 		public static bool FloatField(GUIContent content, ref float curValue, int offSet = 0)

@@ -28,5 +28,15 @@ namespace EoE.Utils
 			iterations--;
 			return iterations == 0 ? value : Polarize01(value, iterations);
 		}
+		public static bool DecreaseCooldown(ref float cooldown)
+		{
+			cooldown -= Time.deltaTime;
+			return cooldown <= 0;
+		}
+		public static bool DecreaseFixedCooldown(ref float cooldown)
+		{
+			cooldown -= Time.fixedDeltaTime;
+			return cooldown <= 0;
+		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using EoE.Entities;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ namespace EoE.Weapons
 {
 	public enum AttackAnimation { Stab, ToRightSlash, ToLeftSlash, TopDownSlash, Uppercut }
 	public enum AnimationCancelCondition { Ignore = 0, True = 1, False = 2}
+	public enum AttackVelocityIntent { Off = 0, Add = 1, Set = 2}
 	public class AttackStyle : ScriptableObject
 	{
 		public AttackCombo this[int index]
@@ -60,6 +62,7 @@ namespace EoE.Weapons
 		public bool enabled = false;
 		public AttackInfo info = new AttackInfo(1, 1, 1, 1);
 		public AttackAnimationInfo animationInfo;
+		public AttackVelocityEffect velocityEffect;
 	}
 
 	[System.Serializable]
@@ -92,5 +95,24 @@ namespace EoE.Weapons
 
 		public bool penetrateEntities;
 		public bool penetrateTerrain;
+	}
+
+	[System.Serializable]
+	public struct AttackVelocityEffect
+	{
+		public AttackVelocityIntent velocityIntent;
+		public bool ignoreVerticalVelocity;
+
+		public bool applyForceAfterAnimationCharge;
+		public float applyForceDelay;
+
+		public bool useRightValue;
+		public float rightValue;
+
+		public bool useUpValue;
+		public float upValue;
+
+		public bool useForwardValue;
+		public float forwardValue;
 	}
 }

@@ -28,6 +28,17 @@ MonoBehaviour:
         cancelWhenSprinting: 0
         penetrateEntities: 0
         penetrateTerrain: 0
+      velocityEffect:
+        velocityIntent: 2
+        ignoreVerticalVelocity: 1
+        applyForceAfterAnimationCharge: 0
+        applyForceDelay: 0
+        useRightValue: 1
+        rightValue: 0
+        useUpValue: 1
+        upValue: 0
+        useForwardValue: 1
+        forwardValue: 0
     - enabled: 1
       info:
         damageMutliplier: 1.5
@@ -42,8 +53,19 @@ MonoBehaviour:
         cancelWhenSprinting: 0
         penetrateEntities: 1
         penetrateTerrain: 0
+      velocityEffect:
+        velocityIntent: 1
+        ignoreVerticalVelocity: 0
+        applyForceAfterAnimationCharge: 1
+        applyForceDelay: 0
+        useRightValue: 1
+        rightValue: 0
+        useUpValue: 1
+        upValue: 5
+        useForwardValue: 1
+        forwardValue: 15
     delays:
-    - 0.5
+    - 0.75
   sprintAttack:
     attacks:
     - enabled: 1
@@ -60,6 +82,17 @@ MonoBehaviour:
         cancelWhenSprinting: 0
         penetrateEntities: 0
         penetrateTerrain: 0
+      velocityEffect:
+        velocityIntent: 0
+        ignoreVerticalVelocity: 0
+        applyForceAfterAnimationCharge: 0
+        applyForceDelay: 0
+        useRightValue: 0
+        rightValue: 0
+        useUpValue: 0
+        upValue: 0
+        useForwardValue: 0
+        forwardValue: 0
     delays: []
   jumpAttack:
     attacks:
@@ -77,6 +110,17 @@ MonoBehaviour:
         cancelWhenSprinting: 0
         penetrateEntities: 1
         penetrateTerrain: 1
+      velocityEffect:
+        velocityIntent: 0
+        ignoreVerticalVelocity: 0
+        applyForceAfterAnimationCharge: 0
+        applyForceDelay: 0
+        useRightValue: 0
+        rightValue: 0
+        useUpValue: 0
+        upValue: 0
+        useForwardValue: 0
+        forwardValue: 0
     delays: []
   sprintJumpAttack:
     attacks:
@@ -94,6 +138,17 @@ MonoBehaviour:
         cancelWhenSprinting: 0
         penetrateEntities: 0
         penetrateTerrain: 0
+      velocityEffect:
+        velocityIntent: 0
+        ignoreVerticalVelocity: 0
+        applyForceAfterAnimationCharge: 0
+        applyForceDelay: 0
+        useRightValue: 0
+        rightValue: 0
+        useUpValue: 0
+        upValue: 0
+        useForwardValue: 0
+        forwardValue: 0
     delays: []
   standHeavyAttack:
     attacks:
@@ -111,6 +166,17 @@ MonoBehaviour:
         cancelWhenSprinting: 0
         penetrateEntities: 0
         penetrateTerrain: 0
+      velocityEffect:
+        velocityIntent: 0
+        ignoreVerticalVelocity: 0
+        applyForceAfterAnimationCharge: 0
+        applyForceDelay: 0
+        useRightValue: 0
+        rightValue: 0
+        useUpValue: 0
+        upValue: 0
+        useForwardValue: 0
+        forwardValue: 0
     delays: []
   sprintHeavyAttack:
     attacks:
@@ -128,6 +194,17 @@ MonoBehaviour:
         cancelWhenSprinting: 0
         penetrateEntities: 0
         penetrateTerrain: 0
+      velocityEffect:
+        velocityIntent: 0
+        ignoreVerticalVelocity: 0
+        applyForceAfterAnimationCharge: 0
+        applyForceDelay: 0
+        useRightValue: 0
+        rightValue: 0
+        useUpValue: 0
+        upValue: 0
+        useForwardValue: 0
+        forwardValue: 0
     delays: []
   jumpHeavyAttack:
     attacks:
@@ -145,6 +222,17 @@ MonoBehaviour:
         cancelWhenSprinting: 0
         penetrateEntities: 0
         penetrateTerrain: 0
+      velocityEffect:
+        velocityIntent: 0
+        ignoreVerticalVelocity: 0
+        applyForceAfterAnimationCharge: 0
+        applyForceDelay: 0
+        useRightValue: 0
+        rightValue: 0
+        useUpValue: 0
+        upValue: 0
+        useForwardValue: 0
+        forwardValue: 0
     delays: []
   sprintJumpHeavyAttack:
     attacks:
@@ -162,4 +250,15 @@ MonoBehaviour:
         cancelWhenSprinting: 0
         penetrateEntities: 0
         penetrateTerrain: 0
+      velocityEffect:
+        velocityIntent: 0
+        ignoreVerticalVelocity: 0
+        applyForceAfterAnimationCharge: 0
+        applyForceDelay: 0
+        useRightValue: 0
+        rightValue: 0
+        useUpValue: 0
+        upValue: 0
+        useForwardValue: 0
+        forwardValue: 0
     delays: []

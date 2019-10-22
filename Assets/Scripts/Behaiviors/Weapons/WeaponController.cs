@@ -22,7 +22,8 @@ namespace EoE.Weapons
 		}
 		private void ChangeWeaponState(bool state)
 		{
-			if(state)
+			//Only reset the hit list when necessary
+			if (state)
 				hits = new List<GameObject>();
 
 			curActive = state;
@@ -38,7 +39,9 @@ namespace EoE.Weapons
 				if (hits[i] == hit)
 					return;
 			}
+
 			hits.Add(hit);
+
 			if (hit.layer == ConstantCollector.TERRAIN_LAYER)
 			{
 				if(!Player.Instance.activeAttack.animationInfo.penetrateTerrain)
@@ -52,10 +55,10 @@ namespace EoE.Weapons
 			if (hitEntitie is Player)
 				return;
 
+			bool wasCrit = BaseUtils.Chance01(Player.Instance.PlayerWeapon.baseCritChance * Player.Instance.activeAttack.info.critChanceMultiplier);
 			float damageAmount = Player.Instance.PlayerWeapon.baseAttackDamage * Player.Instance.activeAttack.info.damageMutliplier;
 			float knockBackAmount = Player.Instance.PlayerWeapon.baseKnockbackAmount * Player.Instance.activeAttack.info.knockbackMutliplier;
-			bool wasCrit = BaseUtils.Chance01(Player.Instance.PlayerWeapon.baseCritChance * Player.Instance.activeAttack.info.critChanceMultiplier);
-			Vector3 impactDirection = (Player.Instance.transform.position - hitEntitie.actuallWorldPosition).normalized;
+			Vector3 impactDirection = (hitEntitie.actuallWorldPosition - Player.Instance.transform.position).normalized;
 
 			hitEntitie.ChangeHealth(new Information.InflictionInfo(Player.Instance, Information.CauseType.Physical, Player.Instance.PlayerWeapon.element, hitPos, impactDirection, damageAmount, wasCrit, knockBackAmount != 0, knockBackAmount));
 
