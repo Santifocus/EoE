@@ -18,7 +18,7 @@ MonoBehaviour:
   Health: 100
   DoHealthRegen: 1
   HealthRegen: 5
-  HealthRegenInCombatMultiplier: 0.5
+  HealthRegenInCombatMultiplier: 0.6
   Mana: 50
   DoManaRegen: 1
   ManaRegen: 4

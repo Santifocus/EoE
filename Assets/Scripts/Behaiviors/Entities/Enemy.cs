@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using EoE.Information;
+using EoE.Utils;
 using UnityEngine;
 
 namespace EoE.Entities
@@ -83,7 +84,7 @@ namespace EoE.Entities
 					if (chaseInterestAmount <= 0)
 					{
 						lostVisualsOnPlayerLookaroundTimer = enemySettings.LookAroundAfterLostPlayerTime;
-						GameController.Instance.DisplayInfoText(transform.position, GameController.CurrentGameSettings.StandardTextColor, Vector3.up, "?", 2);
+						EffectUtils.DisplayInfoText(transform.position, GameController.CurrentGameSettings.StandardTextColor, Vector3.up, "?", 2);
 						chasingPlayer = false;
 					}
 				}
@@ -108,7 +109,7 @@ namespace EoE.Entities
 			if(angleToPlayer < (chasingPlayer ? enemySettings.FoundPlayerSightAngle : enemySettings.SightAngle))
 			{
 				if(!chasingPlayer)
-					GameController.Instance.DisplayInfoText(transform.position, GameController.CurrentGameSettings.StandardTextColor, Vector3.up, "!", 2);
+					EffectUtils.DisplayInfoText(transform.position, GameController.CurrentGameSettings.StandardTextColor, Vector3.up, "!", 2);
 
 				chasingPlayer = true;
 				cantReachPlayer = true;
@@ -251,7 +252,7 @@ namespace EoE.Entities
 						chaseInterestAmount = 0;
 						stuckSince = 0;
 						lostVisualsOnPlayerLookaroundTimer = enemySettings.LookAroundAfterLostPlayerTime;
-						GameController.Instance.DisplayInfoText(transform.position, GameController.CurrentGameSettings.StandardTextColor, Vector3.up, "...", 1.5f);
+						EffectUtils.DisplayInfoText(transform.position, GameController.CurrentGameSettings.StandardTextColor, Vector3.up, "...", 1.5f);
 						chasingPlayer = false;
 					}
 				}

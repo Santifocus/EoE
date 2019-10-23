@@ -17,6 +17,7 @@ namespace EoE
 		public static Camera PlayerCamera => PlayerCamera;
 
 		[SerializeField] private Camera playerCamera = default;
+		[SerializeField] private Camera screenCapturerCamera = default;
 
 		private PlayerSettings playerSettigns => Player.Instance.SelfSettings as PlayerSettings;
 
@@ -34,9 +35,13 @@ namespace EoE
 
 			float camDist = GetCameraDistance();
 			if(camDist > playerCamera.transform.localPosition.z)
-				playerCamera.transform.localPosition = new Vector3(0, 0, camDist);
+			{
+				playerCamera.transform.localPosition = screenCapturerCamera.transform.localPosition = new Vector3(0, 0, camDist);
+			}
 			else
-				playerCamera.transform.localPosition = new Vector3(0, 0, Mathf.Lerp(playerCamera.transform.localPosition.z, camDist, Time.deltaTime * 3));
+			{
+				playerCamera.transform.localPosition = screenCapturerCamera.transform.localPosition = new Vector3(0, 0, Mathf.Lerp(playerCamera.transform.localPosition.z, camDist, Time.deltaTime * 3));
+			}
 		}
 
 		private float GetCameraDistance()

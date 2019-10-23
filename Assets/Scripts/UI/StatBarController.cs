@@ -12,6 +12,7 @@ namespace EoE.UI
 		[SerializeField] private DisplayedStat displayedStat = default;
 		[SerializeField] private TextMeshProUGUI statText = default;
 		private int displayedStatAmount;
+		private int displayedMaxStatAmount;
 		private float nextStatPointUpdate;
 		private bool playerDead;
 		private void Start()
@@ -34,7 +35,8 @@ namespace EoE.UI
 			if (playerDead)
 				return;
 
-			int playerCurrentStatAmount = displayedStat == DisplayedStat.Health ? (int)Player.Instance.CurHealth : (int)Player.Instance.CurMana;
+			int playerCurrentStatAmount = displayedStat == DisplayedStat.Health ? (int)Player.Instance.curHealth : (int)Player.Instance.curMana;
+			int playerMaxStatAmount = displayedStat == DisplayedStat.Health ? (int)Player.Instance.curMaxHealth : (int)Player.Instance.curMaxMana;
 
 			if (displayedStatAmount != playerCurrentStatAmount)
 			{
@@ -52,18 +54,23 @@ namespace EoE.UI
 					UpdateStatText();
 				}
 			}
+			else if(playerMaxStatAmount != displayedMaxStatAmount)
+			{
+				displayedMaxStatAmount = playerMaxStatAmount;
+				UpdateStatText();
+			}
 		}
 
 		private void UpdateStatText()
 		{
-			string totalStatPoints = displayedStat == DisplayedStat.Health ? ((int)Player.PlayerSettings.Health).ToString() : ((int)Player.PlayerSettings.Mana).ToString();
+			string totalStatPoints = displayedStat == DisplayedStat.Health ? ((int)Player.Instance.curMaxHealth).ToString() : ((int)Player.Instance.curMaxMana).ToString();
 			string curDisplayedStatPoints = displayedStatAmount.ToString();
 			int missingNumbers = totalStatPoints.Length - curDisplayedStatPoints.Length;
 			for (int i = 0; i < missingNumbers; i++)
 				curDisplayedStatPoints = "0" + curDisplayedStatPoints;
 
 			statText.text = curDisplayedStatPoints + " / " + totalStatPoints;
-			statText.color = displayedStat == DisplayedStat.Health ? Player.PlayerSettings.HealthTextColors.Evaluate((float)displayedStatAmount / Player.PlayerSettings.Health) : Player.PlayerSettings.ManaTextColors.Evaluate((float)displayedStatAmount / Player.PlayerSettings.Mana);
+			statText.color = displayedStat == DisplayedStat.Health ? Player.PlayerSettings.HealthTextColors.Evaluate((float)displayedStatAmount / Player.Instance.curMaxHealth) : Player.PlayerSettings.ManaTextColors.Evaluate((float)displayedStatAmount / Player.Instance.curMaxMana);
 		}
 	}
 }

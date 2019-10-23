@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace EoE.Information
 {
-	public enum CauseType { Physical, Magic, Heal }
+	public enum CauseType { Physical, Magic, Heal, DOT }
 	public enum ElementType { None = 0, Fire = 1, Earth = 2, Water = 3, Electro = 4, Light = 5 }
 	public struct InflictionInfo
 	{
@@ -71,12 +71,15 @@ namespace EoE.Information
 						case CauseType.Heal:
 							colors = GameController.CurrentGameSettings.HealColors;
 							break;
+						case CauseType.DOT:
+							colors = GameController.CurrentGameSettings.PhysicalDamageColors;
+							break;
 						default:
 							colors = null;
 							break;
 					}
 
-					GameController.Instance.CreateDamageNumber(basis.impactPosition, colors, forceDirection * GameController.CurrentGameSettings.DamageNumberFlySpeed, Mathf.Abs(finalDamage), basis.wasCritical);
+					Utils.EffectUtils.CreateDamageNumber(basis.impactPosition, colors, forceDirection * GameController.CurrentGameSettings.DamageNumberFlySpeed, Mathf.Abs(finalDamage), basis.wasCritical);
 				}
 			}
 		}

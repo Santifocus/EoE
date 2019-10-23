@@ -26,16 +26,18 @@ namespace EoE.Entities
 		[SerializeField] protected Transform modelTransform		= default;
 
 		//Stats
-		public float CurHealth => curHealth;
-		protected float curHealth;
-		public float CurEndurance => curEndurance;
-		protected float curEndurance;
-		public float CurMana => curMana;
-		protected float curMana;
-
-		protected float curWalkSpeed;
+		public float curMaxHealth { get; protected set; }
+		public float curHealth { get; protected set; }
+		public float curMaxMana { get; protected set; }
+		public float curMana { get; protected set; }
+		public float curWalkSpeed { get; protected set; }
+		public float curJumpPower { get; protected set; }
+		public float physicalDamageMultiplier { get; protected set; }
+		public float magicalDamageMultiplier { get; protected set; }
 
 		//Entitie states
+		private List<BuffInstance> nonPermanentBuffs;
+		private List<BuffInstance> permanentBuffs;
 		public EntitieState curStates;
 		private float regenTimer;
 		private float combatEndCooldown;
@@ -67,13 +69,17 @@ namespace EoE.Entities
 		}
 		private void ResetStats()
 		{
-			curHealth = SelfSettings.Health;
-			curMana = SelfSettings.Mana;
+			curMaxHealth = curHealth = SelfSettings.Health;
+			curMaxMana = curMana = SelfSettings.Mana;
 			curWalkSpeed = SelfSettings.WalkSpeed;
+			curJumpPower = 1;
+			physicalDamageMultiplier = 1;
+			magicalDamageMultiplier = 1;
 
-			curAcceleration = 0;
-			regenTimer = 0;
 			curStates = new EntitieState();
+
+			nonPermanentBuffs = new List<BuffInstance>();
+			permanentBuffs = new List<BuffInstance>();
 		}
 		private void GetColliderType()
 		{
@@ -206,9 +212,9 @@ namespace EoE.Entities
 		}
 		protected void Jump()
 		{
-			curJumpForce = new Vector3(0, Mathf.Max(SelfSettings.JumpPower.y, curJumpForce.y), 0);
-			curExtraForce += SelfSettings.JumpPower.x * transform.right;
-			curExtraForce += SelfSettings.JumpPower.z * transform.forward;
+			curJumpForce = new Vector3(0, Mathf.Max(SelfSettings.JumpPower.y, curJumpForce.y) * curJumpPower, 0);
+			curExtraForce += SelfSettings.JumpPower.x * transform.right * curJumpPower;
+			curExtraForce += SelfSettings.JumpPower.z * transform.forward * curJumpPower;
 
 			jumpGroundCooldown = JUMP_GROUND_COOLDOWN;
 			curStates.IsGrounded = false;
@@ -285,7 +291,7 @@ namespace EoE.Entities
 			{
 				bool inCombat = curStates.IsInCombat;
 				regenTimer -= GameController.CurrentGameSettings.SecondsPerEntititeRegen;
-				if (SelfSettings.DoHealthRegen && curHealth < SelfSettings.Health)
+				if (SelfSettings.DoHealthRegen && curHealth < curMaxHealth)
 				{
 					float regenAmount = SelfSettings.HealthRegen * GameController.CurrentGameSettings.SecondsPerEntititeRegen * (inCombat ? SelfSettings.HealthRegenInCombatMultiplier : 1);
 					if (regenAmount > 0)
@@ -293,14 +299,14 @@ namespace EoE.Entities
 						InflictionInfo basis = new InflictionInfo(this, CauseType.Heal, ElementType.None, actuallWorldPosition, Vector3.up, -regenAmount, false);
 						InflictionInfo.InflictionResult regenResult = new InflictionInfo.InflictionResult(basis, this, true, true);
 
-						curHealth = Mathf.Min(SelfSettings.Health, curHealth - regenResult.finalDamage);
+						curHealth = Mathf.Min(curMaxHealth, curHealth - regenResult.finalDamage);
 					}
 				}
 
-				if (SelfSettings.DoManaRegen && curMana < SelfSettings.Mana)
+				if (SelfSettings.DoManaRegen && curMana < curMaxMana)
 				{
 					float regenAmount = SelfSettings.ManaRegen * GameController.CurrentGameSettings.SecondsPerEntititeRegen * (inCombat ? SelfSettings.ManaRegenInCombatMultiplier : 1);
-					curMana = Mathf.Min(SelfSettings.Mana, curMana + regenAmount);
+					curMana = Mathf.Min(curMaxMana, curMana + regenAmount);
 				}
 			}
 		}
@@ -313,7 +319,161 @@ namespace EoE.Entities
 				if (combatEndCooldown <= 0)
 					curStates.IsInCombat = false;
 			}
+			BuffUpdate();
 		}
+		#region BuffControl
+		private void BuffUpdate()
+		{
+			bool requiresRecalculate = false;
+			for(int i = 0; i < nonPermanentBuffs.Count; i++)
+			{
+				nonPermanentBuffs[i].RemainingTime -= Time.deltaTime;
+				for(int j = 0; j < nonPermanentBuffs[i].DOTCooldowns.Length; j++)
+				{
+					nonPermanentBuffs[i].DOTCooldowns[j] -= Time.deltaTime;
+					if(nonPermanentBuffs[i].DOTCooldowns[j] <= 0)
+					{
+						float cd = nonPermanentBuffs[i].Base.DOTs[j].DelayPerActivation;
+						nonPermanentBuffs[i].DOTCooldowns[j] += cd;
+						ChangeHealth(new InflictionInfo(nonPermanentBuffs[i].Applier, CauseType.DOT, nonPermanentBuffs[i].Base.DOTs[j].Element, actuallWorldPosition, Vector3.up, cd * nonPermanentBuffs[i].Base.DOTs[j].BaseDamage, false));
+					}
+				}
+				if (nonPermanentBuffs[i].RemainingTime <= 0)
+				{
+					requiresRecalculate = true;
+					RemoveBuff(i, false);
+					i--;
+				}
+			}
+			PermanentBuffsControl();
+			if (requiresRecalculate)
+				RecalculateBuffs();
+		}
+		public void ApplyBuff(Buff buff, Entitie applier)
+		{
+			BuffInstance newBuff = new BuffInstance(buff, applier);
+			for(int i = 0; i < buff.Effects.Length; i++)
+			{
+				float change = 0;
+
+				switch (buff.Effects[i].targetStat)
+				{
+					case TargetStat.Health:
+						{
+							change = buff.Effects[i].Percent ? (buff.Effects[i].Amount / 100) * curMaxHealth : buff.Effects[i].Amount;
+							change = Mathf.Max(-(curMaxHealth - 1), change);
+							curMaxHealth += change;
+							curHealth = Mathf.Min(curMaxHealth, curHealth);
+							break;
+						}
+					case TargetStat.Mana:
+						{
+							change = buff.Effects[i].Percent ? (buff.Effects[i].Amount / 100) * curMaxMana : buff.Effects[i].Amount;
+							change = Mathf.Max(-(curMaxMana), change);
+							curMaxMana += change;
+							curMana = Mathf.Min(curMaxMana, curMana);
+							break;
+						}
+					case TargetStat.MoveSpeed:
+						{
+							change = buff.Effects[i].Percent ? (buff.Effects[i].Amount / 100) * curWalkSpeed : buff.Effects[i].Amount;
+							curWalkSpeed += change;
+							break;
+						}
+					case TargetStat.JumpHeight:
+						{
+							change = buff.Effects[i].Percent ? (buff.Effects[i].Amount / 100) * curJumpPower : buff.Effects[i].Amount;
+							curJumpPower += change;
+							break;
+						}
+					case TargetStat.PhysicalDamage:
+						{
+							change = buff.Effects[i].Percent ? (buff.Effects[i].Amount / 100) * physicalDamageMultiplier : buff.Effects[i].Amount;
+							change = Mathf.Max(-physicalDamageMultiplier, change);
+							physicalDamageMultiplier += change;
+							break;
+						}
+					case TargetStat.MagicalDamage:
+						{
+							change = buff.Effects[i].Percent ? (buff.Effects[i].Amount / 100) * magicalDamageMultiplier : buff.Effects[i].Amount;
+							change = Mathf.Max(-magicalDamageMultiplier, change);
+							magicalDamageMultiplier += change;
+							break;
+						}
+				}
+
+				newBuff.FlatChanges[i] = change;
+			}
+
+			if (buff.Permanent)
+				permanentBuffs.Add(newBuff);
+			else
+				nonPermanentBuffs.Add(newBuff);
+		}
+		private void RemoveBuff(int index, bool fromPermanent)
+		{
+			BuffInstance targetBuff = fromPermanent ? permanentBuffs[index] : nonPermanentBuffs[index];
+
+			for (int i = 0; i < targetBuff.Base.Effects.Length; i++)
+			{
+				float change = targetBuff.FlatChanges[i];
+
+				switch (targetBuff.Base.Effects[i].targetStat)
+				{
+					case TargetStat.Health:
+						{
+							curMaxHealth -= change;
+							if (curHealth > curMaxHealth)
+								curHealth = curMaxHealth;
+							break;
+						}
+					case TargetStat.Mana:
+						{
+							curMaxMana -= change;
+							if (curMana > curMaxMana)
+								curMana = curMaxMana;
+							break;
+						}
+					case TargetStat.MoveSpeed:
+						{
+							curWalkSpeed -= change;
+							break;
+						}
+					case TargetStat.JumpHeight:
+						{
+							curJumpPower -= change;
+							break;
+						}
+					case TargetStat.PhysicalDamage:
+						{
+							physicalDamageMultiplier -= change;
+							break;
+						}
+					case TargetStat.MagicalDamage:
+						{
+							magicalDamageMultiplier -= change;
+							break;
+						}
+				}
+			}
+
+			if (fromPermanent)
+				permanentBuffs.RemoveAt(index);
+			else
+				nonPermanentBuffs.RemoveAt(index);
+
+			if (fromPermanent)
+				RecalculateBuffs();
+		}
+		private void RecalculateBuffs()
+		{
+
+		}
+		private void PermanentBuffsControl()
+		{
+
+		}
+		#endregion
 
 		public void ChangeHealth(InflictionInfo causedDamage)
 		{
@@ -326,7 +486,7 @@ namespace EoE.Entities
 
 			curHealth -= damageResult.finalDamage;
 			curExtraForce += damageResult.causedKnockback;
-			curHealth = Mathf.Min(SelfSettings.Health, curHealth);
+			curHealth = Mathf.Min(curMaxHealth, curHealth);
 
 			if(curHealth <= 0)
 			{

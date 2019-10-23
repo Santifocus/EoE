@@ -18,6 +18,8 @@ namespace EoE.Information
 
 		//Visuals
 		public float SecondsPerEntititeRegen			= 0.5f;
+		public ParticleSystem HitEntitieParticles		= null;
+		public ParticleSystem HitTerrainParticles		= null;
 
 		//Damage Numbers
 		public float DamageNumberLifeTime				= 1;

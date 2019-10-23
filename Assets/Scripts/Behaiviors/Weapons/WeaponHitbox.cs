@@ -18,6 +18,8 @@ namespace EoE.Weapons
 			this.controller = controller;
 			if (trail)
 				trail.enabled = false;
+			if(GetComponents<Collider>().Length > 1)
+				Debug.LogError("Cannot attach more than one collider to a single weapon hitbox!");
 			coll = GetComponent<Collider>();
 			coll.enabled = false;
 		}

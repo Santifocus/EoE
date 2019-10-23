@@ -4,6 +4,7 @@ using UnityEngine;
 using EoE.Information;
 using EoE.Controlls;
 using EoE.Weapons;
+using EoE.Utils;
 
 namespace EoE.Entities
 {
@@ -61,13 +62,56 @@ namespace EoE.Entities
 		#region Basic Monobehaivior
 		protected override void EntitieStart()
 		{
+			Buff a = new Buff()
+			{
+				BuffTime = 0,
+				Effects = new Effect[]
+				{
+					new Effect()
+					{
+						targetStat = TargetStat.Health,
+						Percent = false,
+						Amount = 10,
+					},
+					new Effect()
+					{
+						targetStat = TargetStat.Mana,
+						Percent = true,
+						Amount = 60,
+					},
+				},
+				DOTs = new DOT[0],
+				Permanent = true
+			};
+			ApplyBuff(a, this);
+			Buff b = new Buff()
+			{
+				BuffTime = 5,
+				Effects = new Effect[]
+				{
+					new Effect()
+					{
+						targetStat = TargetStat.Health,
+						Percent = false,
+						Amount = 10,
+					},
+					new Effect()
+					{
+						targetStat = TargetStat.Mana,
+						Percent = true,
+						Amount = -60,
+					},
+				},
+				DOTs = new DOT[0],
+				Permanent = false
+			};
+			ApplyBuff(b, this);
 			instance = this;
 			ChangeWeapon(equipedWeapon);
 			SetupEndurance();
 		}
 		protected override void EntitieUpdate()
 		{
-			debugText.text = curMoveForce + ", " + curJumpForce + ", " + curExtraForce;
 			EnduranceRegen();
 			CameraControl();
 			Movement();
