@@ -296,13 +296,18 @@ namespace EoE.Entities
 					healthBar.gameObject.SetActive(true);
 
 				healthBar.Value = curHealth / curMaxHealth;
-				healthBar.Position = PlayerCameraController.PlayerCamera.WorldToScreenPoint(new Vector3(coll.bounds.center.x, highestPos, coll.bounds.center.z));
+				healthBar.Position = PlayerCameraController.PlayerCamera.WorldToScreenPoint(new Vector3(coll.bounds.center.x, highestPos, coll.bounds.center.z)) + new Vector3(0,healthBar.Height);
 			}
 			else
 			{
 				if (healthBar.gameObject.activeInHierarchy)
 					healthBar.gameObject.SetActive(false);
 			}
+		}
+		protected override void Death()
+		{
+			Destroy(healthBar.gameObject);
+			base.Death();
 		}
 		#endregion
 	}

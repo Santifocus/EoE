@@ -12,6 +12,7 @@ namespace EoE.UI
 		public float Value { get; set; }
 		private Vector3 pos;
 		public Vector3 Position { get => pos; set => SetPosition(value); }
+		public float Height => sliderImage.rectTransform.rect.height;
 		private float displayedValue;
 
 		private void Start()

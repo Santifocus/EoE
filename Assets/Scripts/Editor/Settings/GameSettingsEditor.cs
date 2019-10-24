@@ -9,13 +9,12 @@ namespace EoE.Information
 	[CustomEditor(typeof(GameSettings)), CanEditMultipleObjects]
 	public class GameSettingsEditor : Editor
 	{
-		private bool isDirty = false;
 		public override void OnInspectorGUI()
 		{
 			CustomInspector();
-			if (isDirty)
+			if (EoEEditor.isDirty)
 			{
-				isDirty = false;
+				EoEEditor.isDirty = false;
 				EditorUtility.SetDirty(target);
 			}
 		}
@@ -118,7 +117,7 @@ namespace EoE.Information
 				{
 					settings.EffectivenessMatrix[y] = new GameSettings.ElementEffectivenessRow();
 				}
-				isDirty = true;
+				EoEEditor.isDirty = true;
 			}
 
 			///Draw the effectiveness matrix
@@ -149,7 +148,7 @@ namespace EoE.Information
 					if (newVal != settings.EffectivenessMatrix[x][y])
 					{
 						settings.EffectivenessMatrix[x][y] = newVal;
-						isDirty = true;
+						EoEEditor.isDirty = true;
 					}
 
 					if (y == 0)
