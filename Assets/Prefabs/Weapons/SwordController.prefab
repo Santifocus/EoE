@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8049748948004881917}
   - component: {fileID: 4196563737272899717}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SwordController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 3099203484363175593}
   - component: {fileID: 3099203484363175575}
   - component: {fileID: 3099203484363175574}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SwordBlade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 3099203484884278853}
   - component: {fileID: 3099203484884278851}
   - component: {fileID: 3099203484884278850}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: HandleFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -213,7 +213,7 @@ GameObject:
   - component: {fileID: 3099203485406594521}
   - component: {fileID: 3099203485406594503}
   - component: {fileID: 3099203485406594502}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -288,7 +288,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3099203485555101738}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SwordModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}

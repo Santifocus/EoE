@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using EoE.UI;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,9 +18,11 @@ namespace EoE.Information
 		public float EnemyWanderingUrgency				= 0.5f;
 
 		//Visuals
-		public float SecondsPerEntititeRegen			= 0.5f;
 		public ParticleSystem HitEntitieParticles		= null;
 		public ParticleSystem HitTerrainParticles		= null;
+
+		public EnemyHealthBar EnemyHealthBarPrefab		= null;
+		public float EnemeyHealthBarLerpSpeed			= 4;
 
 		//Damage Numbers
 		public float DamageNumberLifeTime				= 1;
@@ -33,7 +36,9 @@ namespace EoE.Information
 
 		//Other
 		public float CritDamageMultiplier				= 2;
+		public float SecondsPerEntititeRegen			= 0.5f;
 
+		//Effectiveness Matrix
 		public ElementEffectivenessRow[] EffectivenessMatrix;
 
 		public float GetEffectiveness(ElementType inflicter, ElementType receiver)

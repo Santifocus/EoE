@@ -13,6 +13,9 @@ namespace EoE
 		public static GameSettings CurrentGameSettings => instance.gameSettings;
 
 		[SerializeField] private GameSettings gameSettings = default;
+		public Transform bgCanvas = default;
+		public Transform mainCanvas = default;
+		public Transform enemyHealthBarStorage = default;
 
 		private void Start()
 		{
@@ -22,12 +25,5 @@ namespace EoE
 			}
 			instance = this;
 		}
-
-	#if UNITY_EDITOR
-		private void OnApplicationQuit()
-		{
-
-		}
-	#endif
 	}
 }

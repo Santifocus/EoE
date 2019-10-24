@@ -13,7 +13,7 @@ namespace EoE.Controlls
 		private const string CAMERA_MOVE_Y =				"CameraMoveVertical";
 		private const string CAMERA_MOVE_Z =				"CameraMoveSide";
 		
-		private const string AIM_BLOCK =					"AimAndBlock";
+		private const string INTERACT_BLOCK =				"InteractAndBlock";
 
 		private const string ITEM_SWAP =					"ItemSwap";
 		private const string MAGIC_SWAP =					"MagicSwap";
@@ -34,9 +34,9 @@ namespace EoE.Controlls
 			return axes;
 		}
 		
-		public static (bool, bool) AimingOrBlocking()
+		public static (bool, bool) InteractingOrBlocking()
 		{
-			float point = Input.GetAxis(AIM_BLOCK);
+			float point = Input.GetAxis(INTERACT_BLOCK);
 			return (point < -INPUT_ACCEPTANCE_THRESHOLD, point > INPUT_ACCEPTANCE_THRESHOLD);
 		}
 

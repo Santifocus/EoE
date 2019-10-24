@@ -352,5 +352,11 @@ namespace EoE.Utils
 			newDamageNumber.transform.localScale = Vector3.one * overrideScale;
 			newDamageNumber.BeginDisplay(numberVelocity, colors, text, false);
 		}
+#if UNITY_EDITOR
+		private void OnApplicationQuit()
+		{
+			ResetBlurEffect();
+		}
+#endif
 	}
 }

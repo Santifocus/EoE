@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using EoE.Information;
 using EoE.Utils;
+using EoE.Events;
+using EoE.UI;
 using UnityEngine;
 
 namespace EoE.Entities
@@ -38,6 +40,9 @@ namespace EoE.Entities
 		protected bool reachedLookAroundDir;
 		protected Vector3 lookAroundTargetDir;
 
+		//Other
+		private EnemyHealthBar healthBar;
+
 		//Getter Helpers
 		protected Player player => Player.Instance;
 		public override EntitieSettings SelfSettings => enemySettings;
@@ -50,21 +55,31 @@ namespace EoE.Entities
 			originalSpawnPosition = actuallWorldPosition;
 			GetNewWanderPosition();
 			GetNewLookDirection();
+			EventManager.PlayerDiedEvent += PlayerDied;
+
+			healthBar = Instantiate(GameController.CurrentGameSettings.EnemyHealthBarPrefab, GameController.Instance.enemyHealthBarStorage);
+			UpdateHealthBar();
+		}
+		private void PlayerDied(Entitie killer)
+		{
+			curStates.IsInCombat = false;
+			chasingPlayer = false;
 		}
 		protected override void Update()
 		{
 			base.Update();
 			DecideOnBehavior();
+			UpdateHealthBar();
 		}
 		private void DecideOnBehavior()
 		{
+			SearchForPlayer();
 			if (curStates.IsInCombat && !cantReachPlayer)
 			{
 				ChasePlayer();
 			}
 			else
 			{
-				SearchForPlayer();
 				if (!chasingPlayer)
 				{
 					if (lostVisualsOnPlayerLookaroundTimer > 0)
@@ -79,7 +94,9 @@ namespace EoE.Entities
 				}
 				else
 				{
-					ChasePlayer();
+					if (!ChasePlayer())
+						return;
+
 					chaseInterestAmount -= Time.deltaTime;
 					if (chaseInterestAmount <= 0)
 					{
@@ -94,6 +111,9 @@ namespace EoE.Entities
 		#region Idle Behaivior
 		private void SearchForPlayer()
 		{
+			if (!Player.Alive)
+				return;
+
 			float sqrDistance = (player.transform.position - transform.position).sqrMagnitude;
 			if (sqrDistance > (enemySettings.SightRange * enemySettings.SightRange))
 				return;
@@ -112,7 +132,7 @@ namespace EoE.Entities
 					EffectUtils.DisplayInfoText(transform.position, GameController.CurrentGameSettings.StandardTextColor, Vector3.up, "!", 2);
 
 				chasingPlayer = true;
-				cantReachPlayer = true;
+				cantReachPlayer = false;
 				chaseInterestAmount = enemySettings.ChaseInterest;
 				lastConfirmedPlayerPos = player.transform.position;
 			}
@@ -224,10 +244,10 @@ namespace EoE.Entities
 		#endregion
 		#endregion
 		#region Aggresive Behavior
-		private void ChasePlayer()
+		private bool ChasePlayer()
 		{
-			float distance = (player.transform.position - transform.position).magnitude;
-			Vector3 playerDir = (player.transform.position - transform.position)/ distance;
+			float distance = (lastConfirmedPlayerPos - transform.position).magnitude;
+			Vector3 playerDir = (lastConfirmedPlayerPos - transform.position)/ distance;
 			chaseDirection = new Vector3(playerDir.x, 0, playerDir.z).normalized;
 
 			if (distance > enemySettings.AttackRange)
@@ -254,6 +274,8 @@ namespace EoE.Entities
 						lostVisualsOnPlayerLookaroundTimer = enemySettings.LookAroundAfterLostPlayerTime;
 						EffectUtils.DisplayInfoText(transform.position, GameController.CurrentGameSettings.StandardTextColor, Vector3.up, "...", 1.5f);
 						chasingPlayer = false;
+
+						return false;
 					}
 				}
 			}
@@ -261,8 +283,27 @@ namespace EoE.Entities
 			{
 				CombatBehavior(distance);
 			}
+			return true;
 		}
 		protected abstract void CombatBehavior(float distance);
+		#endregion
+		#region Other
+		protected virtual void UpdateHealthBar()
+		{
+			if (curStates.IsInCombat)
+			{
+				if(!healthBar.gameObject.activeInHierarchy)
+					healthBar.gameObject.SetActive(true);
+
+				healthBar.Value = curHealth / curMaxHealth;
+				healthBar.Position = PlayerCameraController.PlayerCamera.WorldToScreenPoint(new Vector3(coll.bounds.center.x, highestPos, coll.bounds.center.z));
+			}
+			else
+			{
+				if (healthBar.gameObject.activeInHierarchy)
+					healthBar.gameObject.SetActive(false);
+			}
+		}
 		#endregion
 	}
 }

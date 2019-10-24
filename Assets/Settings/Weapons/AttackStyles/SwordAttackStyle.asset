@@ -83,16 +83,16 @@ MonoBehaviour:
         penetrateEntities: 0
         penetrateTerrain: 0
       velocityEffect:
-        velocityIntent: 0
+        velocityIntent: 1
         ignoreVerticalVelocity: 0
-        applyForceAfterAnimationCharge: 0
+        applyForceAfterAnimationCharge: 1
         applyForceDelay: 0
         useRightValue: 0
         rightValue: 0
-        useUpValue: 0
-        upValue: 0
-        useForwardValue: 0
-        forwardValue: 0
+        useUpValue: 1
+        upValue: 4
+        useForwardValue: 1
+        forwardValue: 10
     delays: []
   jumpAttack:
     attacks:

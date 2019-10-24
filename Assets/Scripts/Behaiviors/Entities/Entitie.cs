@@ -23,7 +23,6 @@ namespace EoE.Entities
 		[SerializeField] protected Rigidbody body				= default;
 		[SerializeField] protected Collider coll				= default;
 		[SerializeField] protected Animator animationControl	= default;
-		[SerializeField] protected Transform modelTransform		= default;
 
 		//Stats
 		public float curMaxHealth { get; protected set; }
@@ -57,6 +56,7 @@ namespace EoE.Entities
 		protected ColliderType selfColliderType;
 		public Vector3 actuallWorldPosition => SelfSettings.MassCenter + transform.position;
 		public float lowestPos => coll.bounds.center.y - coll.bounds.extents.y;
+		public float highestPos => coll.bounds.center.y + coll.bounds.extents.y;
 		public Vector3 curVelocity => curMoveForce + curJumpForce + curExtraForce;
 		#endregion
 		#region Basic Monobehaivior
@@ -155,9 +155,9 @@ namespace EoE.Entities
 		}
 		protected (float, float) TurnTo(Vector3 turnDirection)
 		{
-			float directionDistance = (modelTransform.forward - turnDirection).magnitude;
+			float directionDistance = (transform.forward - turnDirection).magnitude;
 			float fraction = Mathf.Min(1, Time.deltaTime / SelfSettings.TurnSpeed * Mathf.Max(1, directionDistance * directionDistance));
-			modelTransform.forward = ((1 - fraction) * modelTransform.forward + fraction * turnDirection).normalized;
+			transform.forward = ((1 - fraction) * transform.forward + fraction * turnDirection).normalized;
 
 			return (GameController.CurrentGameSettings.TurnSpeedCurve.Evaluate(1 - (directionDistance / 2)), directionDistance);
 		}
@@ -176,7 +176,7 @@ namespace EoE.Entities
 
 			//We find out in which direction the Entitie should move according to its movement
 			float baseTargetSpeed = curWalkSpeed * (curStates.IsRunning ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
-			curMoveForce = baseTargetSpeed * modelTransform.forward;
+			curMoveForce = baseTargetSpeed * transform.forward;
 
 			//Lerp knockback / other forces to zero based on the entities deceleration stat
 			curExtraForce = Vector3.Lerp(curExtraForce, Vector3.zero, Time.deltaTime / Mathf.Max(0.0001f, SelfSettings.NoMoveDeceleration));
@@ -349,18 +349,28 @@ namespace EoE.Entities
 			if (requiresRecalculate)
 				RecalculateBuffs();
 		}
-		public void ApplyBuff(Buff buff, Entitie applier)
+		public void AddBuff(Buff buff, Entitie applier)
 		{
 			BuffInstance newBuff = new BuffInstance(buff, applier);
-			for(int i = 0; i < buff.Effects.Length; i++)
+			AddBuffEffect(newBuff);
+
+			if (buff.Permanent)
+				permanentBuffs.Add(newBuff);
+			else
+				nonPermanentBuffs.Add(newBuff);
+		}
+		private void AddBuffEffect(BuffInstance buffInstance)
+		{
+			Buff buffBase = buffInstance.Base;
+			for (int i = 0; i < buffBase.Effects.Length; i++)
 			{
 				float change = 0;
 
-				switch (buff.Effects[i].targetStat)
+				switch (buffBase.Effects[i].targetStat)
 				{
 					case TargetStat.Health:
 						{
-							change = buff.Effects[i].Percent ? (buff.Effects[i].Amount / 100) * curMaxHealth : buff.Effects[i].Amount;
+							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curMaxHealth : buffBase.Effects[i].Amount;
 							change = Mathf.Max(-(curMaxHealth - 1), change);
 							curMaxHealth += change;
 							curHealth = Mathf.Min(curMaxHealth, curHealth);
@@ -368,7 +378,7 @@ namespace EoE.Entities
 						}
 					case TargetStat.Mana:
 						{
-							change = buff.Effects[i].Percent ? (buff.Effects[i].Amount / 100) * curMaxMana : buff.Effects[i].Amount;
+							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curMaxMana : buffBase.Effects[i].Amount;
 							change = Mathf.Max(-(curMaxMana), change);
 							curMaxMana += change;
 							curMana = Mathf.Min(curMaxMana, curMana);
@@ -376,49 +386,56 @@ namespace EoE.Entities
 						}
 					case TargetStat.MoveSpeed:
 						{
-							change = buff.Effects[i].Percent ? (buff.Effects[i].Amount / 100) * curWalkSpeed : buff.Effects[i].Amount;
+							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curWalkSpeed : buffBase.Effects[i].Amount;
 							curWalkSpeed += change;
 							break;
 						}
 					case TargetStat.JumpHeight:
 						{
-							change = buff.Effects[i].Percent ? (buff.Effects[i].Amount / 100) * curJumpPower : buff.Effects[i].Amount;
+							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curJumpPower : buffBase.Effects[i].Amount;
 							curJumpPower += change;
 							break;
 						}
 					case TargetStat.PhysicalDamage:
 						{
-							change = buff.Effects[i].Percent ? (buff.Effects[i].Amount / 100) * physicalDamageMultiplier : buff.Effects[i].Amount;
+							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * physicalDamageMultiplier : buffBase.Effects[i].Amount;
 							change = Mathf.Max(-physicalDamageMultiplier, change);
 							physicalDamageMultiplier += change;
 							break;
 						}
 					case TargetStat.MagicalDamage:
 						{
-							change = buff.Effects[i].Percent ? (buff.Effects[i].Amount / 100) * magicalDamageMultiplier : buff.Effects[i].Amount;
+							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * magicalDamageMultiplier : buffBase.Effects[i].Amount;
 							change = Mathf.Max(-magicalDamageMultiplier, change);
 							magicalDamageMultiplier += change;
 							break;
 						}
 				}
 
-				newBuff.FlatChanges[i] = change;
+				buffInstance.FlatChanges[i] = change;
 			}
-
-			if (buff.Permanent)
-				permanentBuffs.Add(newBuff);
-			else
-				nonPermanentBuffs.Add(newBuff);
 		}
 		private void RemoveBuff(int index, bool fromPermanent)
 		{
 			BuffInstance targetBuff = fromPermanent ? permanentBuffs[index] : nonPermanentBuffs[index];
+			RemoveBuffEffect(targetBuff);
 
-			for (int i = 0; i < targetBuff.Base.Effects.Length; i++)
+			if (fromPermanent)
+				permanentBuffs.RemoveAt(index);
+			else
+				nonPermanentBuffs.RemoveAt(index);
+
+			if (fromPermanent)
+				RecalculateBuffs();
+		}
+		private void RemoveBuffEffect(BuffInstance buffInstance)
+		{
+			Buff buffBase = buffInstance.Base;
+			for (int i = 0; i < buffBase.Effects.Length; i++)
 			{
-				float change = targetBuff.FlatChanges[i];
+				float change = buffInstance.FlatChanges[i];
 
-				switch (targetBuff.Base.Effects[i].targetStat)
+				switch (buffBase.Effects[i].targetStat)
 				{
 					case TargetStat.Health:
 						{
@@ -456,22 +473,44 @@ namespace EoE.Entities
 						}
 				}
 			}
-
-			if (fromPermanent)
-				permanentBuffs.RemoveAt(index);
-			else
-				nonPermanentBuffs.RemoveAt(index);
-
-			if (fromPermanent)
-				RecalculateBuffs();
 		}
 		private void RecalculateBuffs()
 		{
+			//Remove all effects
+			for (int i = 0; i < nonPermanentBuffs.Count; i++)
+			{
+				RemoveBuffEffect(nonPermanentBuffs[i]);
+			}
+			for (int i = 0; i < permanentBuffs.Count; i++)
+			{
+				RemoveBuffEffect(permanentBuffs[i]);
+			}
 
+			//Now readd them so the values can be recalculated
+			for (int i = 0; i < nonPermanentBuffs.Count; i++)
+			{
+				AddBuffEffect(nonPermanentBuffs[i]);
+			}
+			for (int i = 0; i < permanentBuffs.Count; i++)
+			{
+				AddBuffEffect(permanentBuffs[i]);
+			}
 		}
 		private void PermanentBuffsControl()
 		{
-
+			for(int i = 0; i < permanentBuffs.Count; i++)
+			{
+				for(int j = 0; j < permanentBuffs[i].DOTCooldowns.Length; j++)
+				{
+					permanentBuffs[i].DOTCooldowns[j] -= Time.deltaTime;
+					if(permanentBuffs[i].DOTCooldowns[j] <= 0)
+					{
+						float cd = permanentBuffs[i].Base.DOTs[j].DelayPerActivation;
+						permanentBuffs[i].DOTCooldowns[j] += cd;
+						ChangeHealth(new InflictionInfo(permanentBuffs[i].Applier, CauseType.DOT, permanentBuffs[i].Base.DOTs[j].Element, actuallWorldPosition, Vector3.up, cd * permanentBuffs[i].Base.DOTs[j].BaseDamage, false));
+					}
+				}
+			}
 		}
 		#endregion
 

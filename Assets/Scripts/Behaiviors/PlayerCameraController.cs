@@ -14,7 +14,7 @@ namespace EoE
 		public static PlayerCameraController Instance => instance;
 		public static Vector2 ToRotate;
 		public static Vector2 CurRotation;
-		public static Camera PlayerCamera => PlayerCamera;
+		public static Camera PlayerCamera => instance.playerCamera;
 
 		[SerializeField] private Camera playerCamera = default;
 		[SerializeField] private Camera screenCapturerCamera = default;
@@ -30,6 +30,9 @@ namespace EoE
 
 		private void AnchorToPlayer()
 		{
+			if (!Player.Alive)
+				return;
+
 			transform.position = Player.Instance.transform.position + playerSettigns.CameraAnchorOffset;
 			transform.eulerAngles = new Vector3(CurRotation.y, CurRotation.x, 0);
 

@@ -21,9 +21,9 @@ namespace EoE.Information
 		}
 		private void CustomInspector()
 		{
-
 			EntitieVelocityArea();
 			BasicBehaiviorArea();
+			VisualsSettingsArea();
 			DamageNumberSettingsArea();
 			OtherSettingsArea();
 			EffectivenessMatrixArea();
@@ -47,6 +47,34 @@ namespace EoE.Information
 			EoEEditor.Header("Basic Behaivior Settings");
 			EoEEditor.FloatField(new GUIContent("Enemy Wandering Urgency", "When a enemy wanders around, at how much of the max speed should the entitie try to reach the wandering point? (0 == None, 0.5 == Half, 1 == Max)"), ref settings.EnemyWanderingUrgency);
 			EoEEditor.FloatField(new GUIContent("Combat Cooldown", "After a Entitie encounters an Enemy how long does a Entitie have to be out of combat before it will be counted as 'Out of Combat'?"), ref settings.CombatCooldown);
+		}
+
+		private void VisualsSettingsArea()
+		{
+			GameSettings settings = target as GameSettings;
+
+			EoEEditor.Header("Visual Settings");
+			UI.EnemyHealthBar newVal = (UI.EnemyHealthBar)EditorGUILayout.ObjectField("Enemy Health Bar Prefab", settings.EnemyHealthBarPrefab, typeof(UI.EnemyHealthBar), false);
+			if (newVal != settings.EnemyHealthBarPrefab)
+			{
+				settings.EnemyHealthBarPrefab = newVal;
+				EoEEditor.isDirty = true;
+			}
+			EoEEditor.FloatField(new GUIContent("Enemey Health Bar Lerp Speed", "How fast should the Healthbar value of Enemy healthbars lerp?"), ref settings.EnemeyHealthBarLerpSpeed);
+
+			ParticleSystem newVal1 = (ParticleSystem)EditorGUILayout.ObjectField("Hit Entitie Particles", settings.HitEntitieParticles, typeof(ParticleSystem), false);
+			if (newVal1 != settings.HitEntitieParticles)
+			{
+				settings.HitEntitieParticles = newVal1;
+				EoEEditor.isDirty = true;
+			}
+			ParticleSystem newVal2 = (ParticleSystem)EditorGUILayout.ObjectField("Hit Terrain Particles", settings.HitTerrainParticles, typeof(ParticleSystem), false);
+			if (newVal2 != settings.HitTerrainParticles)
+			{
+				settings.HitTerrainParticles = newVal2;
+				EoEEditor.isDirty = true;
+			}
+
 		}
 
 		private void DamageNumberSettingsArea()
@@ -111,16 +139,24 @@ namespace EoE.Information
 			{
 				GUILayout.BeginHorizontal();
 				GUILayout.Label(new GUIContent(((ElementType)x).ToString(), "ATTACKER"), GUILayout.Width(labelWidht));
+				EditorGUI.BeginDisabledGroup(x == 0);
 				for (int y = 0; y < elementCount; y++)
 				{
+					if (y == 0)
+						EditorGUI.BeginDisabledGroup(true);
+
 					float newVal = EditorGUILayout.FloatField(settings.EffectivenessMatrix[x][y], GUILayout.Width(labelWidht));
 					if (newVal != settings.EffectivenessMatrix[x][y])
 					{
 						settings.EffectivenessMatrix[x][y] = newVal;
 						isDirty = true;
 					}
+
+					if (y == 0)
+						EditorGUI.EndDisabledGroup();
 				}
 				GUILayout.EndHorizontal();
+				EditorGUI.EndDisabledGroup();
 			}
 		}
 	}

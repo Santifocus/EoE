@@ -1,10 +1,10 @@
-﻿using System.Collections;
+﻿using EoE.Controlls;
+using EoE.Information;
+using EoE.Utils;
+using EoE.Weapons;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using EoE.Information;
-using EoE.Controlls;
-using EoE.Weapons;
-using EoE.Utils;
 
 namespace EoE.Entities
 {
@@ -51,6 +51,7 @@ namespace EoE.Entities
 		#endregion
 
 		//Getter Helpers
+		public static bool Alive { get; private set; }
 		private enum GetEnduranceType : byte { NotAvailable = 0, Available = 1, AvailableWithNewBar = 2 }
 		public enum AttackState : short { NormalStand = 0, NormalSprint = 1, NormalJump = 2, NormalSprintJump = 3, HeavyStand = 4, HeavySprint = 5, HeavyJump = 6, HeavySprintJump = 7 }
 		private static Player instance;
@@ -58,54 +59,14 @@ namespace EoE.Entities
 		public override EntitieSettings SelfSettings => selfSettings;
 		public static PlayerSettings PlayerSettings => instance.selfSettings;
 
+		//Other
+		private bool pressedInteract;
+
 		#endregion
 		#region Basic Monobehaivior
 		protected override void EntitieStart()
 		{
-			Buff a = new Buff()
-			{
-				BuffTime = 0,
-				Effects = new Effect[]
-				{
-					new Effect()
-					{
-						targetStat = TargetStat.Health,
-						Percent = false,
-						Amount = 10,
-					},
-					new Effect()
-					{
-						targetStat = TargetStat.Mana,
-						Percent = true,
-						Amount = 60,
-					},
-				},
-				DOTs = new DOT[0],
-				Permanent = true
-			};
-			ApplyBuff(a, this);
-			Buff b = new Buff()
-			{
-				BuffTime = 5,
-				Effects = new Effect[]
-				{
-					new Effect()
-					{
-						targetStat = TargetStat.Health,
-						Percent = false,
-						Amount = 10,
-					},
-					new Effect()
-					{
-						targetStat = TargetStat.Mana,
-						Percent = true,
-						Amount = -60,
-					},
-				},
-				DOTs = new DOT[0],
-				Permanent = false
-			};
-			ApplyBuff(b, this);
+			Alive = true;
 			instance = this;
 			ChangeWeapon(equipedWeapon);
 			SetupEndurance();
@@ -114,7 +75,8 @@ namespace EoE.Entities
 		{
 			EnduranceRegen();
 			CameraControl();
-			Movement();
+			MovementControl();
+			InteractControl();
 			AttackControl();
 			PositionHeldWeapon();
 		}
@@ -128,7 +90,7 @@ namespace EoE.Entities
 		{
 			if (heldWeapon)
 			{
-				Destroy(heldWeapon);
+				Destroy(heldWeapon.gameObject);
 			}
 			equipedWeapon = newWeapon;
 
@@ -246,7 +208,7 @@ namespace EoE.Entities
 		}
 		#endregion
 		#region Movement
-		private void Movement()
+		private void MovementControl()
 		{
 			JumpControl();
 			PlayerMoveControl();
@@ -306,12 +268,30 @@ namespace EoE.Entities
 			float turnFactor = TurnTo(controllDirection).Item1;
 			UpdateAcceleration(intendedMoveSpeed * turnFactor);
 		}
-
 		private void CameraControl()
 		{
 			Vector2 newMoveDistance = PlayerControlls.CameraMove();
 			newMoveDistance = new Vector2(newMoveDistance.x * selfSettings.CameraRotationPower.x, newMoveDistance.y * selfSettings.CameraRotationPower.y) * Time.deltaTime;
 			PlayerCameraController.ToRotate += newMoveDistance;
+		}
+		private void InteractControl()
+		{
+			if (PlayerControlls.InteractingOrBlocking().Item1)
+			{
+				if (!pressedInteract && Interactable.MarkedInteractable)
+				{
+					Interactable.MarkedInteractable.Interact();
+				}
+				pressedInteract = true;
+			}
+			else
+			{
+				pressedInteract = false;
+			}
+		}
+		private IEnumerator TurnTimed()
+		{
+			yield return null;
 		}
 		#endregion
 		#region Physical Attack Control
@@ -473,15 +453,15 @@ namespace EoE.Entities
 
 			if (effect.useRightValue)
 			{
-				velocity += effect.rightValue * modelTransform.right;
+				velocity += effect.rightValue * transform.right;
 			}
 			if (effect.useUpValue)
 			{
-				velocity += effect.upValue * modelTransform.up;
+				velocity += effect.upValue * transform.up;
 			}
 			if (effect.useForwardValue)
 			{
-				velocity += effect.forwardValue * modelTransform.forward;
+				velocity += effect.forwardValue * transform.forward;
 			}
 
 			if (effect.velocityIntent == AttackVelocityIntent.Set)
@@ -517,6 +497,17 @@ namespace EoE.Entities
 			}
 
 			body.velocity = curVelocity;
+		}
+		#endregion
+		#region StateControl
+		protected override void Death()
+		{
+			if (heldWeapon)
+				Destroy(heldWeapon.gameObject);
+			EffectUtils.BlurScreen(1, 100, 5);
+
+			Alive = false;
+			base.Death();
 		}
 		#endregion
 	}
