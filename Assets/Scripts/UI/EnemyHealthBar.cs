@@ -8,7 +8,7 @@ namespace EoE.UI
 	public class EnemyHealthBar : MonoBehaviour
 	{
 		[SerializeField] private Image sliderImage = default;
-		[SerializeField] private RectTransform rTransform;
+		[SerializeField] private RectTransform rTransform = default;
 		public float Value { get; set; }
 		private Vector3 pos;
 		public Vector3 Position { get => pos; set => SetPosition(value); }

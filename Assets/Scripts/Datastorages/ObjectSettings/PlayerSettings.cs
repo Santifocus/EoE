@@ -12,6 +12,7 @@ namespace EoE.Information
 		public Vector2 CameraRotationPower			= new Vector2(200, 75);
 		public float CameraRotationSpeed			= 10;
 		public Vector2 CameraVerticalAngleClamps	= new Vector2(-50, 50);
+		public float CameraExtraZoomOnVertical		= 0.5f;
 
 		//Endurance Settings
 		public int EnduranceBars					= 4;

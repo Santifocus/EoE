@@ -6,7 +6,7 @@ namespace EoE.Entities
 {
 	public class PlayerInteractController : MonoBehaviour
 	{
-		[SerializeField] private SphereCollider interactableSphere;
+		[SerializeField] private SphereCollider interactableSphere = default;
 
 		private Collider currInteractTarget;
 

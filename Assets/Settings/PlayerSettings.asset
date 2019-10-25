@@ -26,7 +26,7 @@ MonoBehaviour:
   WalkSpeed: 8
   RunSpeedMultiplicator: 1.25
   JumpPower: {x: 0, y: 10, z: 0}
-  TurnSpeed: 0.25
+  TurnSpeed: 540
   MoveAcceleration: 0.5
   NoMoveDeceleration: 0.25
   CameraToPlayerDistance: 7
@@ -34,6 +34,7 @@ MonoBehaviour:
   CameraRotationPower: {x: 200, y: 75}
   CameraRotationSpeed: 10
   CameraVerticalAngleClamps: {x: -50, y: 50}
+  CameraExtraZoomOnVertical: 0.5
   EnduranceBars: 4
   EndurancePerBar: 25
   EnduranceRegen: 4

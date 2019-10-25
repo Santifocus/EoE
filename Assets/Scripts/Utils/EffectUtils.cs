@@ -24,12 +24,12 @@ namespace EoE.Utils
 		}
 		#region ScreenShake
 		private const float DELAY_PER_SHAKE = 0.02f;
-		private const float UN_SHAKE_SPEED = 10;
+		private const float UN_SHAKE_SPEED = 20;
 		private static Coroutine ShakeScreenCoroutine = null;
 		private static List<ScreenShakeInfo> AllScreenShakes = new List<ScreenShakeInfo>();
-		public static void ShakeScreen(float lenght, float intensity)
+		public static void ShakeScreen(float lenght, float axisIntensity, float angleIntensity)
 		{
-			AllScreenShakes.Add(new ScreenShakeInfo(lenght, intensity));
+			AllScreenShakes.Add(new ScreenShakeInfo(lenght, axisIntensity, angleIntensity));
 			if (ShakeScreenCoroutine == null)
 			{
 				ShakeScreenCoroutine = instance.StartCoroutine(instance.ShakeScreenC());
@@ -43,7 +43,8 @@ namespace EoE.Utils
 				yield return new WaitForEndOfFrame();
 				if(AllScreenShakes.Count > 0) //SHAKE
 				{
-					float strongestShake = 0;
+					float strongestAxisIntensity = 0;
+					float strongestAngleIntensity = 0;
 					for(int i = 0; i < AllScreenShakes.Count; i++)
 					{
 						AllScreenShakes[i].remainingTime -= Time.deltaTime;
@@ -54,40 +55,51 @@ namespace EoE.Utils
 						}
 						else
 						{
-							if (strongestShake < AllScreenShakes[i].intensity)
-								strongestShake = AllScreenShakes[i].intensity;
+							if (strongestAxisIntensity < AllScreenShakes[i].axisIntensity)
+								strongestAxisIntensity = AllScreenShakes[i].axisIntensity;
+
+							if (strongestAngleIntensity < AllScreenShakes[i].angleIntensity)
+								strongestAngleIntensity = AllScreenShakes[i].angleIntensity;
 						}
 					}
 
 					timeTillNextShake -= Time.deltaTime;
 					if(timeTillNextShake <= 0)
 					{
-						Shake(strongestShake);
+						Shake(strongestAxisIntensity, strongestAngleIntensity);
 						timeTillNextShake += DELAY_PER_SHAKE;
 					}
 				}
 				else //UNSHAKE
 				{
 					cameraShakeCore.localPosition = Vector3.Lerp(cameraShakeCore.localPosition, Vector3.zero, Time.deltaTime * UN_SHAKE_SPEED);
-					if (cameraShakeCore.localPosition.sqrMagnitude < 0.001f)
+					cameraShakeCore.localEulerAngles = Vector3.Lerp(cameraShakeCore.localEulerAngles, Vector3.zero, Time.deltaTime * UN_SHAKE_SPEED / 4);
+					if (cameraShakeCore.localPosition.sqrMagnitude < 0.001f && cameraShakeCore.localEulerAngles.sqrMagnitude < 0.001f)
+					{
+						cameraShakeCore.localPosition = Vector3.zero;
+						cameraShakeCore.localEulerAngles = Vector3.zero;
 						break;
+					}
 				}
 			}
 
 			ShakeScreenCoroutine = null;
-			void Shake(float intensity)
+			void Shake(float axisIntensity, float angleIntensity)
 			{
-				cameraShakeCore.localPosition = ((Random.value - 0.5f) * cameraShakeCore.transform.right + (Random.value - 0.5f) * cameraShakeCore.transform.up) * intensity;
+				cameraShakeCore.localPosition = ((Random.value - 0.5f) * cameraShakeCore.transform.right + (Random.value - 0.5f) * cameraShakeCore.transform.up) * axisIntensity;
+				cameraShakeCore.localEulerAngles = new Vector3((Random.value - 0.5f) * angleIntensity, (Random.value - 0.5f) * angleIntensity, (Random.value - 0.5f) * angleIntensity);
 			}
 		}
 		private class ScreenShakeInfo
 		{
 			public float remainingTime;
-			public float intensity;
-			public ScreenShakeInfo(float remainingTime, float intensity)
+			public float axisIntensity;
+			public float angleIntensity;
+			public ScreenShakeInfo(float remainingTime, float axisIntensity, float angleIntensity)
 			{
 				this.remainingTime = remainingTime;
-				this.intensity = intensity;
+				this.axisIntensity = axisIntensity;
+				this.angleIntensity = angleIntensity;
 			}
 		}
 		#endregion

@@ -26,7 +26,7 @@ MonoBehaviour:
   WalkSpeed: 8
   RunSpeedMultiplicator: 1.5
   JumpPower: {x: 0, y: 10, z: 0}
-  TurnSpeed: 0.35
+  TurnSpeed: 180
   MoveAcceleration: 0.5
   NoMoveDeceleration: 0.25
   AttackRange: 3

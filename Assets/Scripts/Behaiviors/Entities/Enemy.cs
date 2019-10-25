@@ -38,7 +38,6 @@ namespace EoE.Entities
 
 		//Look around
 		protected bool reachedLookAroundDir;
-		protected Vector3 lookAroundTargetDir;
 
 		//Other
 		private EnemyHealthBar healthBar;
@@ -141,7 +140,6 @@ namespace EoE.Entities
 		private void LookAround()
 		{
 			curStates.IsMoving = false;
-			UpdateAcceleration();
 			if (reachedLookAroundDir)
 			{
 				lookAroundWait -= Time.deltaTime;
@@ -152,8 +150,7 @@ namespace EoE.Entities
 			}
 			else
 			{
-				float turnDistance = TurnTo(lookAroundTargetDir).Item2;
-				if (turnDistance < REACHED_LOOKAROUND_THRESHOLD)
+				if (curStates.IsTurning)
 				{
 					reachedLookAroundDir = true;
 					lookAroundWait = Random.Range(enemySettings.LookAroundDelayMin, enemySettings.LookAroundDelayMax);
@@ -162,9 +159,7 @@ namespace EoE.Entities
 		}
 		private void GetNewLookDirection()
 		{
-			float angle = Random.value * 360 * Mathf.Deg2Rad;
-			lookAroundTargetDir = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle));
-			reachedLookAroundDir = false;
+			intendedRotation = Random.value * 360 * Mathf.Deg2Rad;
 		}
 		#endregion
 		#region WanderAround
@@ -173,7 +168,6 @@ namespace EoE.Entities
 			curStates.IsMoving = !reachedWanderPoint;
 			if (reachedWanderPoint)
 			{
-				UpdateAcceleration();
 				wanderWait -= Time.deltaTime;
 				if(wanderWait <= 0)
 				{
@@ -184,9 +178,8 @@ namespace EoE.Entities
 			}
 			else
 			{
-				wanderDirection = new Vector3(wanderPosition.x - transform.position.x, 0, wanderPosition.y - transform.position.z).normalized;
-				TurnTo(wanderDirection);
-				UpdateAcceleration(GameController.CurrentGameSettings.EnemyWanderingUrgency);
+				intendedRotation = Mathf.Atan2(wanderPosition.y - transform.position.z, wanderPosition.x - transform.position.x) * Mathf.Rad2Deg;
+				intendedAcceleration = GameController.CurrentGameSettings.EnemyWanderingUrgency;
 
 				if (IsStuck())
 				{
@@ -247,14 +240,13 @@ namespace EoE.Entities
 		private bool ChasePlayer()
 		{
 			float distance = (lastConfirmedPlayerPos - transform.position).magnitude;
-			Vector3 playerDir = (lastConfirmedPlayerPos - transform.position)/ distance;
-			chaseDirection = new Vector3(playerDir.x, 0, playerDir.z).normalized;
+			Vector3 playerDif = (lastConfirmedPlayerPos - transform.position);
+			intendedRotation = Mathf.Atan2(playerDif.z, playerDif.x);
 
 			if (distance > enemySettings.AttackRange)
 			{
 				curStates.IsMoving = true;
-				TurnTo(chaseDirection);
-				UpdateAcceleration();
+				intendedAcceleration = 1;
 
 				if (IsStuck())
 				{

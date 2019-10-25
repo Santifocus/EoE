@@ -13,7 +13,7 @@ namespace EoE.Entities
 		private const byte BlockingReset = 247;
 		private const byte CombatReset = 239;
 		private const byte FallingReset = 223;
-		//private const byte ? = 191;
+		private const byte TurningReset = 191;
 		//private const byte ? = 127;
 
 		public bool IsGrounded
@@ -85,6 +85,18 @@ namespace EoE.Entities
 				if (value)
 				{
 					state |= 32;
+				}
+			}
+		}
+		public bool IsTurning
+		{
+			get => ((state | 64) == state);
+			set
+			{
+				state = (byte)(state & TurningReset);
+				if (value)
+				{
+					state |= 64;
 				}
 			}
 		}

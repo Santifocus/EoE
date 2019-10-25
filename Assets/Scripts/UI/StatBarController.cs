@@ -14,25 +14,10 @@ namespace EoE.UI
 		private int displayedStatAmount;
 		private int displayedMaxStatAmount;
 		private float nextStatPointUpdate;
-		private bool playerDead;
-		private void Start()
-		{
-			Events.EventManager.PlayerDiedEvent += PlayerDied;
-		}
-
-		private void PlayerDied(Entitie killer)
-		{
-			playerDead = true;
-		}
-
-		private void OnDestroy()
-		{
-			Events.EventManager.PlayerDiedEvent -= PlayerDied;
-		}
 
 		private void Update()
 		{
-			if (playerDead)
+			if (!Player.Alive)
 				return;
 
 			int playerCurrentStatAmount = displayedStat == DisplayedStat.Health ? (int)Player.Instance.curHealth : (int)Player.Instance.curMana;

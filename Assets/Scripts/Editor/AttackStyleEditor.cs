@@ -41,6 +41,7 @@ namespace EoE.Weapons
 			CustomInspector(t);
 			if (EoEEditor.isDirty)
 			{
+				EoEEditor.isDirty = false;
 				EditorUtility.SetDirty(t);
 			}
 		}

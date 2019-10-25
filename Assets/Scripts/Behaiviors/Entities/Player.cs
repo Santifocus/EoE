@@ -58,6 +58,7 @@ namespace EoE.Entities
 		public static Player Instance => instance;
 		public override EntitieSettings SelfSettings => selfSettings;
 		public static PlayerSettings PlayerSettings => instance.selfSettings;
+		public static Entitie targetedEntitie;
 
 		//Other
 		private bool pressedInteract;
@@ -68,6 +69,7 @@ namespace EoE.Entities
 		{
 			Alive = true;
 			instance = this;
+
 			ChangeWeapon(equipedWeapon);
 			SetupEndurance();
 		}
@@ -78,6 +80,7 @@ namespace EoE.Entities
 			MovementControl();
 			InteractControl();
 			AttackControl();
+			TargetEnemyControl();
 			PositionHeldWeapon();
 		}
 		protected override void EntitieFixedUpdate()
@@ -215,7 +218,7 @@ namespace EoE.Entities
 		}
 		private void JumpControl()
 		{
-			if (PlayerControlls.Buttons.Jump.Down && curStates.IsGrounded)
+			if (InputController.Jump.Down && curStates.IsGrounded)
 			{
 				float cost = PlayerSettings.JumpEnduranceCost;
 				if ((int)CanAffordEnduranceCost(cost) > 0) //0 == Not available; 1/2 == available
@@ -227,58 +230,64 @@ namespace EoE.Entities
 		}
 		private void PlayerMoveControl()
 		{
-			//1.0.: Where is the player Pointing the Joystick at
-			Vector3 controllDirection = PlayerControlls.GetPlayerMove();
+			//Where is the player Pointing the Joystick at?
+			Vector2 controllDirection = InputController.PlayerMove;
 
-			bool moving = controllDirection != Vector3.zero;
+			bool moving = controllDirection != Vector2.zero;
 			curStates.IsMoving = moving;
-			//1.1.: If there is no input, stop here
-			if (!moving)
-			{
-				UpdateAcceleration();
-				return;
-			}
 
-			//Check if the player intends to run ans is able to
+			//Is the player not trying to move? Then stop here
+			if (!moving)
+				return;
+
+			//Check if the player intends to run and is able to
 			bool running = curStates.IsRunning;
 			if(running)
 			{
-				float cost = PlayerSettings.RunEnduranceCost * Time.deltaTime;
-				if ((int)CanAffordEnduranceCost(cost) == 0) //0 == Not available; 1/2 == available
+				float runCost = PlayerSettings.RunEnduranceCost * Time.deltaTime;
+
+				if ((int)CanAffordEnduranceCost(runCost) == 0) //0 == Not available; 1/2 == available
 					running = curStates.IsRunning = false;
 				else
-					UseEndurance(cost);
+					UseEndurance(runCost);
 			}
-			else if (PlayerControlls.Buttons.Run.Active)
+			else if (InputController.Run.Down)
 			{
-				curStates.IsRunning = true;
-				running = true;
+				float runCost = PlayerSettings.RunEnduranceCost * Time.deltaTime;
+
+				if ((int)CanAffordEnduranceCost(runCost) > 0) //0 == Not available; 1/2 == available
+				{
+					UseEndurance(runCost);
+					running = curStates.IsRunning = true;
+				}
 			}
 
-			//1.2.: How fast does the player actually want to walk? (1,1) Would be greater then 1 * MoveSpeed => we map it back to 1
-			float intendedMoveSpeed = Mathf.Min(1, controllDirection.magnitude) * (running ? PlayerSettings.RunSpeedMultiplicator : 1);
+			float intendedControl = Mathf.Min(1, controllDirection.magnitude);
+			intendedAcceleration = intendedControl * (running ? PlayerSettings.RunSpeedMultiplicator : 1);
 
-			//2.: Rotate the controlled direction based on where the camera is facing
-			Vector3 cameraDirection = new Vector3(Mathf.Sin((-PlayerCameraController.CurRotation.x) * Mathf.Deg2Rad), 0, Mathf.Cos((-PlayerCameraController.CurRotation.x) * Mathf.Deg2Rad));
-			float newX = (controllDirection.x * cameraDirection.z) - (controllDirection.z * cameraDirection.x);
-			float newZ = (controllDirection.z * cameraDirection.z) + (controllDirection.x * cameraDirection.x);
-			controllDirection.x = newX;
-			controllDirection.z = newZ;
-
-			float turnFactor = TurnTo(controllDirection).Item1;
-			UpdateAcceleration(intendedMoveSpeed * turnFactor);
+			if(intendedControl > 0.5f)
+				intendedRotation = Mathf.Atan2(controllDirection.y, controllDirection.x) * Mathf.Rad2Deg + 90 + PlayerCameraController.CurRotation.x;
 		}
 		private void CameraControl()
 		{
-			Vector2 newMoveDistance = PlayerControlls.CameraMove();
-			newMoveDistance = new Vector2(newMoveDistance.x * selfSettings.CameraRotationPower.x, newMoveDistance.y * selfSettings.CameraRotationPower.y) * Time.deltaTime;
-			PlayerCameraController.ToRotate += newMoveDistance;
+			if (targetedEntitie == null)
+			{
+				Vector2 newMoveDistance = InputController.CameraMove;
+				newMoveDistance = new Vector2(newMoveDistance.x * selfSettings.CameraRotationPower.x, newMoveDistance.y * selfSettings.CameraRotationPower.y) * Time.deltaTime;
+				PlayerCameraController.ToRotate += newMoveDistance;
+			}
+			else
+			{
+				PlayerCameraController.ToRotate = Vector3.zero;
+				Vector3 dif = (actuallWorldPosition - targetedEntitie.actuallWorldPosition).normalized;
+				PlayerCameraController.CurRotation.x = -Mathf.Atan2(dif.z, dif.x) * Mathf.Rad2Deg - 90;
+			}
 		}
 		private void InteractControl()
 		{
-			if (PlayerControlls.InteractingOrBlocking().Item1)
+			if (Interactable.MarkedInteractable && InputController.Attack.Down)
 			{
-				if (!pressedInteract && Interactable.MarkedInteractable)
+				if (!pressedInteract)
 				{
 					Interactable.MarkedInteractable.Interact();
 				}
@@ -289,14 +298,41 @@ namespace EoE.Entities
 				pressedInteract = false;
 			}
 		}
-		private IEnumerator TurnTimed()
+		private void TargetEnemyControl()
 		{
-			yield return null;
+			if (InputController.Aim.Down)
+			{
+				float lowestDist = 100000;
+				int targetIndex = -1;
+				for(int i = 0; i < AllEntities.Count; i++)
+				{
+					if (AllEntities[i] is Player)
+						continue;
+					float selfDist = (actuallWorldPosition - AllEntities[i].actuallWorldPosition).sqrMagnitude;
+					if(selfDist < lowestDist)
+					{
+						lowestDist = selfDist;
+						targetIndex = i;
+					}
+				}
+
+				if(targetIndex != -1)
+				{
+					targetedEntitie = AllEntities[targetIndex];
+				}
+			}
+
+			if (InputController.Aim.Up)
+				targetedEntitie = null;
 		}
 		#endregion
 		#region Physical Attack Control
 		private void AttackControl()
 		{
+			if (InputController.Dodge.Down)
+			{
+				EffectUtils.ShakeScreen(0.25f, 0.25f, 5);
+			}
 			if (comboTimer.HasValue)
 			{
 				comboTimer -= Time.deltaTime;
@@ -307,11 +343,11 @@ namespace EoE.Entities
 				}
 			}
 
-			if (equipedWeapon == null || isCurrentlyAttacking || (!PlayerControlls.Buttons.Attack.Down && !PlayerControlls.Buttons.HeavyAttack.Down))
+			if (equipedWeapon == null || isCurrentlyAttacking || (!InputController.Attack.Down && !InputController.HeavyAttack.Down))
 				return;
 
 			int state = 0;
-			state += PlayerControlls.Buttons.Attack.Down ? 0 : 4; //If we are here either heavy attack or normal attack was pressed
+			state += InputController.Attack.Down ? 0 : 4; //If we are here either heavy attack or normal attack was pressed
 			state += curStates.IsRunning ? 1 : 0; //Running => Sprint attack
 			state += !curStates.IsGrounded ? 2 : 0; //In air => Jump attack
 

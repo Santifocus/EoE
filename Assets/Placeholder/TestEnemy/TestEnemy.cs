@@ -16,8 +16,6 @@ namespace EoE.Entities
 		protected override void CombatBehavior(float distance)
 		{
 			curStates.IsMoving = false;
-			UpdateAcceleration();
-			TurnTo(chaseDirection);
 		}
 	}
 }

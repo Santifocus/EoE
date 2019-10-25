@@ -31,7 +31,7 @@ namespace EoE.Information
 		public float WalkSpeed						= 8;
 		public float RunSpeedMultiplicator			= 1.25f;
 		public Vector3 JumpPower					= new Vector3(0, 10, 0);
-		public float TurnSpeed						= 0.35f;
+		public float TurnSpeed						= 90;
 
 		//Movement acceleration
 		public float MoveAcceleration				= 0.5f;

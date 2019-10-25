@@ -64,7 +64,7 @@ namespace EoE.Information
 			EoEEditor.FloatField(new GUIContent("Move Speed", "What is the maximum speed at which this Entitie walks?"), ref settings.WalkSpeed);
 			EoEEditor.FloatField(new GUIContent("Run Speed Multiplicator", "Multilpies the walkspeed when running."), ref settings.RunSpeedMultiplicator);
 			EoEEditor.Vector3Field(new GUIContent("Jump Power", "With which velocity does this Entitie jump? (X == Sideways, Y == Upward, Z == Foreward)"), ref settings.JumpPower);
-			EoEEditor.FloatField(new GUIContent("Turn Speed", "How fast does the Entitie to the target direction? Less == Faster"), ref settings.TurnSpeed);
+			EoEEditor.FloatField(new GUIContent("Turn Speed", "How fast does the Entitie to the target direction in degree? More == Faster"), ref settings.TurnSpeed);
 
 			GUILayout.Space(4);
 			EoEEditor.FloatField(new GUIContent("Move Acceleration", "How fast can this Entitie get to its maximum speed? (In Seconds)"), ref settings.MoveAcceleration);

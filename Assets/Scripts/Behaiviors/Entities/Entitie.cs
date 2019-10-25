@@ -15,6 +15,10 @@ namespace EoE.Entities
 		private const float JUMP_GROUND_COOLDOWN				= 0.2f;
 		private const float IS_FALLING_THRESHOLD				= -1;
 		private const float LANDED_VELOCITY_THRESHOLD			= 0.5f;
+		private const float NON_TURNING_THRESHOLD				= 60;
+		private const float LERP_TURNING_AREA					= 0.5f;
+		private const float RUN_ANIM_THRESHOLD					= 0.75f;
+
 		private static readonly Vector3 GroundTestOffset		= new Vector3(0, -0.05f, 0);
 
 		public static List<Entitie> AllEntities = new List<Entitie>();
@@ -42,6 +46,7 @@ namespace EoE.Entities
 		private float combatEndCooldown;
 
 		//Velocity Control
+		protected float intendedAcceleration;
 		protected float curAcceleration;
 		private float jumpGroundCooldown;
 		private float lastFallVelocity;
@@ -49,6 +54,9 @@ namespace EoE.Entities
 		protected Vector3 curMoveForce;
 		protected Vector3 curJumpForce;
 		protected Vector3 curExtraForce;
+
+		protected float curRotation;
+		protected float intendedRotation;
 
 		//Getter Helpers
 		protected enum ColliderType : byte { Box, Sphere, Capsule }
@@ -112,33 +120,35 @@ namespace EoE.Entities
 		protected virtual void EntitieStart(){}
 		protected virtual void Update()
 		{
-			Regen();
+			TurnControl();
+			UpdateAcceleration();
 			UpdateMovementSpeed();
-			EntitieStateControl();
 
+			Regen();
+			EntitieStateControl();
 			EntitieUpdate();
 		}
 		protected void FixedUpdate()
 		{
 			IsGroundedTest();
 			UpdateJumpForce();
-
 			EntitieFixedUpdate();
 		}
 		protected virtual void EntitieUpdate() { }
 		protected virtual void EntitieFixedUpdate() { }
 		#endregion
 		#region Movement
-		protected float UpdateAcceleration(float intendedFactor = 1)
+		private void UpdateAcceleration()
 		{
-			if (curStates.IsMoving)
+			if (curStates.IsMoving && !curStates.IsTurning)
 			{
-				if(curAcceleration < intendedFactor)
+				float clampedIntent = Mathf.Clamp01(intendedAcceleration);
+				if(curAcceleration < clampedIntent)
 				{
 					if (SelfSettings.MoveAcceleration > 0)
-						curAcceleration = Mathf.Min(intendedFactor, curAcceleration + intendedFactor * Time.deltaTime / SelfSettings.MoveAcceleration / SelfSettings.EntitieMass);
+						curAcceleration = Mathf.Min(clampedIntent, curAcceleration + intendedAcceleration * Time.deltaTime / SelfSettings.MoveAcceleration / SelfSettings.EntitieMass);
 					else
-						curAcceleration = intendedFactor;
+						curAcceleration = clampedIntent;
 				}
 			}
 			else //decelerate
@@ -151,37 +161,43 @@ namespace EoE.Entities
 						curAcceleration = 0;
 				}
 			}
-			return curAcceleration;
 		}
-		protected (float, float) TurnTo(Vector3 turnDirection)
+		private void TurnControl()
 		{
-			float directionDistance = (transform.forward - turnDirection).magnitude;
-			float fraction = Mathf.Min(1, Time.deltaTime / SelfSettings.TurnSpeed * Mathf.Max(1, directionDistance * directionDistance));
-			transform.forward = ((1 - fraction) * transform.forward + fraction * turnDirection).normalized;
+			float turnAmount = Time.deltaTime * SelfSettings.TurnSpeed;
+			float normalizedDif = Mathf.Abs(curRotation - intendedRotation) / NON_TURNING_THRESHOLD;
+			turnAmount *= Mathf.Min(normalizedDif * LERP_TURNING_AREA, 1);
+			curRotation = Mathf.MoveTowardsAngle(curRotation, intendedRotation, turnAmount);
 
-			return (GameController.CurrentGameSettings.TurnSpeedCurve.Evaluate(1 - (directionDistance / 2)), directionDistance);
+			curStates.IsTurning = normalizedDif > 1;
+
+			transform.localEulerAngles = new Vector3(	transform.localEulerAngles.x,
+														curRotation,
+														transform.localEulerAngles.z);
 		}
 		private void UpdateMovementSpeed()
 		{
+			bool turning = curStates.IsTurning;
 			bool moving = curStates.IsMoving;
 			bool running = curStates.IsRunning;
 
 			//If the Entitie doesnt move intentionally but is in run mode, then stop the run mode
-			if (!moving && curStates.IsRunning)
+			if (!moving && running)
 				curStates.IsRunning = false;
 
-			//Update animation states
-			animationControl.SetBool("Walking", curAcceleration > 0 && !running);
-			animationControl.SetBool("Running", curAcceleration > 0 &&	running);
+			//Set the animation state to either Turning, Walking or Running
+			animationControl.SetBool("Turning", turning);
+			animationControl.SetBool("Walking", !turning && curAcceleration > 0 && !(running && curAcceleration > RUN_ANIM_THRESHOLD));
+			animationControl.SetBool("Running", !turning && curAcceleration > 0 &&	(running && curAcceleration > RUN_ANIM_THRESHOLD));
 
 			//We find out in which direction the Entitie should move according to its movement
-			float baseTargetSpeed = curWalkSpeed * (curStates.IsRunning ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
+			float baseTargetSpeed = curWalkSpeed * (curStates.IsRunning ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration * (turning ? 0 : 1);
 			curMoveForce = baseTargetSpeed * transform.forward;
 
 			//Lerp knockback / other forces to zero based on the entities deceleration stat
 			curExtraForce = Vector3.Lerp(curExtraForce, Vector3.zero, Time.deltaTime / Mathf.Max(0.0001f, SelfSettings.NoMoveDeceleration));
 
-			//now combine those forces as the current speed
+			//Now combine those forces as the current speed
 			body.velocity = curVelocity;
 		}
 		private void UpdateJumpForce()
@@ -199,7 +215,7 @@ namespace EoE.Entities
 			}
 
 			//Find out wether the entitie is falling
-			bool playerWantsToFall = this is Player && (curStates.IsFalling || !Controlls.PlayerControlls.Buttons.Jump.Active);
+			bool playerWantsToFall = this is Player && (curStates.IsFalling || !Controlls.InputController.Jump.Active);
 			bool falling = !curStates.IsGrounded && jumpGroundCooldown <= 0 && (body.velocity.y < IS_FALLING_THRESHOLD || playerWantsToFall);
 
 			//If so: start the animation and add extra velocity for a better looking fallcurve

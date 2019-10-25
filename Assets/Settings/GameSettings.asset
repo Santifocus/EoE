@@ -79,10 +79,14 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  EnemyWanderingUrgency: 0.5
   GroundHitVelocityLoss: 0.15
   CombatCooldown: 3
-  SecondsPerEntititeRegen: 0.5
+  EnemyWanderingUrgency: 0.5
+  HitEntitieParticles: {fileID: 0}
+  HitTerrainParticles: {fileID: 0}
+  EnemyHealthBarPrefab: {fileID: 2494207287049978237, guid: ee388195767cec3429b9391e9fbd39e5,
+    type: 3}
+  EnemeyHealthBarLerpSpeed: 3
   DamageNumberLifeTime: 1
   ShowRegenNumbers: 1
   DamageNumberFlySpeed: 1
@@ -203,6 +207,8 @@ MonoBehaviour:
     m_Mode: 0
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
+  CritDamageMultiplier: 2
+  SecondsPerEntititeRegen: 0.5
   EffectivenessMatrix:
   - Row:
     - 1

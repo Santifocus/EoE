@@ -16,6 +16,8 @@ namespace EoE
 		public static Vector2 CurRotation;
 		public static Camera PlayerCamera => instance.playerCamera;
 
+
+
 		[SerializeField] private Camera playerCamera = default;
 		[SerializeField] private Camera screenCapturerCamera = default;
 
@@ -51,13 +53,16 @@ namespace EoE
 		{
 			Vector3 rayDir = (playerCamera.transform.position - transform.position).normalized;
 			RaycastHit hit;
+			float distance = 0;
 
 			if(Physics.Raycast(transform.position, rayDir, out hit, playerSettigns.CameraToPlayerDistance, ConstantCollector.TERRAIN_LAYER))
 			{
-				return -(transform.position - hit.point).magnitude * 0.95f;
+				distance = -(transform.position - hit.point).magnitude * 0.95f;
 			}
 			else
-				return -playerSettigns.CameraToPlayerDistance;
+				distance = -playerSettigns.CameraToPlayerDistance * (1 + rayDir.y * playerSettigns.CameraExtraZoomOnVertical);
+
+			return distance;
 		}
 
 		private void Update()
