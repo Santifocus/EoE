@@ -12,11 +12,9 @@ namespace EoE
 
 		private static PlayerCameraController instance;
 		public static PlayerCameraController Instance => instance;
-		public static Vector2 ToRotate;
+		public static Vector2 TargetRotation;
 		public static Vector2 CurRotation;
 		public static Camera PlayerCamera => instance.playerCamera;
-
-
 
 		[SerializeField] private Camera playerCamera = default;
 		[SerializeField] private Camera screenCapturerCamera = default;
@@ -25,6 +23,7 @@ namespace EoE
 
 		private void Start()
 		{
+			TargetRotation = CurRotation = new Vector2(transform.eulerAngles.y, transform.eulerAngles.x);
 			instance = this;
 			playerCamera.transform.localPosition = new Vector3(0, 0, -playerSettigns.CameraToPlayerDistance);
 			AnchorToPlayer();
@@ -34,6 +33,15 @@ namespace EoE
 		{
 			if (!Player.Alive)
 				return;
+
+			if(Player.targetedEntitie)
+			{
+				Vector3 dir = (Player.targetedEntitie.actuallWorldPosition - transform.position).normalized;
+				float hAngle = Mathf.Atan2(dir.z, dir.x) * Mathf.Rad2Deg - 90;
+				float vAngle = Mathf.Asin(dir.y) * Mathf.Rad2Deg;
+
+				TargetRotation = -new Vector2(hAngle, vAngle);
+			}
 
 			transform.position = Player.Instance.transform.position + playerSettigns.CameraAnchorOffset;
 			transform.eulerAngles = new Vector3(CurRotation.y, CurRotation.x, 0);
@@ -53,11 +61,11 @@ namespace EoE
 		{
 			Vector3 rayDir = (playerCamera.transform.position - transform.position).normalized;
 			RaycastHit hit;
-			float distance = 0;
+			float distance;
 
 			if(Physics.Raycast(transform.position, rayDir, out hit, playerSettigns.CameraToPlayerDistance, ConstantCollector.TERRAIN_LAYER))
 			{
-				distance = -(transform.position - hit.point).magnitude * 0.95f;
+				distance = -(transform.position - hit.point).magnitude;
 			}
 			else
 				distance = -playerSettigns.CameraToPlayerDistance * (1 + rayDir.y * playerSettigns.CameraExtraZoomOnVertical);
@@ -73,20 +81,8 @@ namespace EoE
 
 		private void RotateCamera()
 		{
-			if (ToRotate == Vector2.zero)
-				return;
-
-			Vector2 rotateFraction = ToRotate * Mathf.Min(1, playerSettigns.CameraRotationSpeed * Time.deltaTime);
-			CurRotation = new Vector2((CurRotation.x + rotateFraction.x) % 360, Mathf.Clamp(CurRotation.y + rotateFraction.y, playerSettigns.CameraVerticalAngleClamps.x, playerSettigns.CameraVerticalAngleClamps.y));
-
-			ToRotate -= rotateFraction;
-			if (ToRotate.sqrMagnitude < CAMERA_ROTATE_KILL_THRESHOLD)
-				ToRotate = Vector2.zero;
-		}
-
-		public void RotateCameraToDirection(Vector2 direction)
-		{
-
+			TargetRotation.y = Mathf.Clamp(TargetRotation.y, playerSettigns.CameraVerticalAngleClamps.x, playerSettigns.CameraVerticalAngleClamps.y);
+			CurRotation = new Vector2(Mathf.LerpAngle(CurRotation.x, TargetRotation.x, Time.deltaTime * playerSettigns.CameraRotationSpeed), Mathf.LerpAngle(CurRotation.y, TargetRotation.y, Time.deltaTime * playerSettigns.CameraRotationSpeed));
 		}
 	}
 }

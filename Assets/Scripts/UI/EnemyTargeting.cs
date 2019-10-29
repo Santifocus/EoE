@@ -11,6 +11,9 @@ namespace EoE.UI
 		[SerializeField] private RectTransform indicatorAnchor = default;
 		[SerializeField] private Image[] indicatorParts = default;
 		[SerializeField] private Gradient changeStateColors = default;
+
+		[Space(15)]
+		[Header("Values")]
 		[SerializeField] private float changeStateTime = 0.5f;
 		[SerializeField] private float spinSpeed = 1;
 		[SerializeField] private float inOutSpeed = 0.55f;
@@ -19,10 +22,23 @@ namespace EoE.UI
 		[SerializeField] private float startDistance = 90;
 		[SerializeField] private float whenFadeOutAnimationSpeed = 0.35f;
 		[SerializeField] private float indicatorBaseRotaion = 0;
+
+		[Space(15)]
+		[Header("Target Offscreen")]
+		[SerializeField] private Image offScreenIndicator = default;
+		[SerializeField] private float offScreenToAnchorDist = 30;
+		[SerializeField] private float offScreenIndicatorBaseRotation = 0;
+
 		private float showState;
 		private bool isShown;
+		private bool onScreenState;
 
 		private float indicatorAnimationTime;
+		private void Start()
+		{
+			ChangeOnScreenState(true);
+			ChangeOnScreenState(false);
+		}
 		private void Update()
 		{
 			isShown = Player.targetedEntitie != null;
@@ -55,7 +71,6 @@ namespace EoE.UI
 		private void UpdateIndicators(bool changedColor)
 		{
 			RepositionIndicators();
-			AnimateIndicators();
 			if (changedColor)
 				UpdateIndicatorColors();
 		}
@@ -63,8 +78,47 @@ namespace EoE.UI
 		{
 			if (isShown)
 			{
-				indicatorAnchor.position = PlayerCameraController.PlayerCamera.WorldToScreenPoint(Player.targetedEntitie.actuallWorldPosition);
-				indicatorAnchor.gameObject.SetActive(indicatorAnchor.position.z > 0);
+				Vector3 unclampedPos = PlayerCameraController.PlayerCamera.WorldToScreenPoint(Player.targetedEntitie.actuallWorldPosition);
+				Vector3 clampedPos = new Vector3(Mathf.Clamp(unclampedPos.x, 0, Screen.width), Mathf.Clamp(unclampedPos.y, 0, Screen.height), unclampedPos.z);
+				if(unclampedPos == clampedPos && !(unclampedPos.z < 0))
+				{
+					ChangeOnScreenState(true);
+					AnimateIndicators();
+				}
+				else
+				{
+					if (clampedPos.z < 0)
+						unclampedPos *= -1;
+
+					clampedPos = new Vector3(Mathf.Clamp(unclampedPos.x, offScreenToAnchorDist, Screen.width - offScreenToAnchorDist), Mathf.Clamp(unclampedPos.y, offScreenToAnchorDist, Screen.height - offScreenToAnchorDist), unclampedPos.z);
+					Vector2 direction = ((Vector2)clampedPos - (Vector2)unclampedPos).normalized;
+					float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + offScreenIndicatorBaseRotation;
+
+					indicatorAnchor.eulerAngles = new Vector3(0, 0, angle);
+					offScreenIndicator.rectTransform.anchoredPosition = new Vector2(offScreenToAnchorDist, 0);
+					ChangeOnScreenState(false);
+				}
+
+				indicatorAnchor.position = clampedPos;
+			}
+			else
+			{
+				//The spin out animation is unbound to enemys
+				if(onScreenState)
+					AnimateIndicators();
+			}
+		}
+		private void ChangeOnScreenState(bool state)
+		{
+			if (state != onScreenState)
+			{
+				onScreenState = state;
+				offScreenIndicator.gameObject.SetActive(!state);
+				
+				for(int i = 0; i < indicatorParts.Length; i++)
+				{
+					indicatorParts[i].gameObject.SetActive(state);
+				}
 			}
 		}
 		private void AnimateIndicators()
@@ -86,6 +140,7 @@ namespace EoE.UI
 		private void UpdateIndicatorColors()
 		{
 			Color col = changeStateColors.Evaluate(showState);
+			offScreenIndicator.color = col;
 			for(int i = 0; i < indicatorParts.Length; i++)
 			{
 				indicatorParts[i].color = col;

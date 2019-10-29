@@ -270,17 +270,11 @@ namespace EoE.Entities
 		}
 		private void CameraControl()
 		{
-			if (targetedEntitie == null)
+			if (!targetedEntitie)
 			{
 				Vector2 newMoveDistance = InputController.CameraMove;
 				newMoveDistance = new Vector2(newMoveDistance.x * selfSettings.CameraRotationPower.x, newMoveDistance.y * selfSettings.CameraRotationPower.y) * Time.deltaTime;
-				PlayerCameraController.ToRotate += newMoveDistance;
-			}
-			else
-			{
-				PlayerCameraController.ToRotate = Vector3.zero;
-				Vector3 dif = (actuallWorldPosition - targetedEntitie.actuallWorldPosition).normalized;
-				PlayerCameraController.CurRotation.x = -Mathf.Atan2(dif.z, dif.x) * Mathf.Rad2Deg - 90;
+				PlayerCameraController.TargetRotation += newMoveDistance;
 			}
 		}
 		private void InteractControl()
