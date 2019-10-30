@@ -51,6 +51,7 @@ namespace EoE.Entities
 		#endregion
 
 		//Getter Helpers
+		public static int totalSoulCount { get; private set; }
 		public static bool Alive { get; private set; }
 		private enum GetEnduranceType : byte { NotAvailable = 0, Available = 1, AvailableWithNewBar = 2 }
 		public enum AttackState : short { NormalStand = 0, NormalSprint = 1, NormalJump = 2, NormalSprintJump = 3, HeavyStand = 4, HeavySprint = 5, HeavyJump = 6, HeavySprintJump = 7 }
@@ -296,23 +297,56 @@ namespace EoE.Entities
 		{
 			if (InputController.Aim.Down)
 			{
-				float lowestDist = 100000;
-				int targetIndex = -1;
+				float shortestDistance = 100000;
+				List<Entitie> possibleTargets = new List<Entitie>();
+
 				for(int i = 0; i < AllEntities.Count; i++)
 				{
-					if (AllEntities[i] is Player)
+					if (AllEntities[i] is Player) //We ignore the player
 						continue;
-					float selfDist = (actuallWorldPosition - AllEntities[i].actuallWorldPosition).sqrMagnitude;
-					if(selfDist < lowestDist)
+
+					float distance = (AllEntities[i].actuallWorldPosition - PlayerCameraController.PlayerCamera.transform.position).magnitude;
+					if (distance > PlayerSettings.MaxEnemyTargetingDistance)
+						continue;
+
+					Vector3 direction = (AllEntities[i].actuallWorldPosition - PlayerCameraController.PlayerCamera.transform.position) / distance;
+					float cosAngle = Vector3.Dot(PlayerCameraController.PlayerCamera.transform.forward, direction);
+
+					//We use the difference distance multipied with the inversed cosinus angle to find out how far from the view dir the entitie is
+					//Then we add an extra amount to prefer targets that are closer to the camera even if their distance to the viewdirection is the same
+					float distanceToViewDir = (1 - cosAngle) * distance + distance * 0.025f;
+
+					//Now find out where the entitie is on the screen
+					Vector3 screenPos = PlayerCameraController.PlayerCamera.WorldToScreenPoint(AllEntities[i].actuallWorldPosition);
+					Vector2 normScreenPos = new Vector2(screenPos.x / Screen.width, screenPos.y / Screen.height);
+					bool notOnScreen = normScreenPos.x < 0 || normScreenPos.x > 1 || normScreenPos.y < 0 || normScreenPos.y > 1;
+
+					if (screenPos.z < 0 || notOnScreen) //Behind the camera or not on screen? => We bail out
+						continue;
+
+					if (distanceToViewDir < shortestDistance) //The distance is less then any of the previously checked entities
 					{
-						lowestDist = selfDist;
-						targetIndex = i;
+						shortestDistance = distanceToViewDir;
+						possibleTargets.Add(AllEntities[i]);
 					}
 				}
 
-				if(targetIndex != -1)
+				if(possibleTargets.Count > 0)
 				{
-					targetedEntitie = AllEntities[targetIndex];
+					targetedEntitie = null;
+					//Now we have a list if possible targets sorted by highest to lowest distance
+					//We try to find a target that we can see
+					//So we start at the end of the list and keep going untill we find one and take that one as new target
+					//If there is none, then the targetEntitie will stay null
+					for (int i = possibleTargets.Count - 1; i >= 0; i--)
+					{
+						if (CheckIfCanSeeEntitie(possibleTargets[i]))
+						{
+							targetedEntitie = possibleTargets[i];
+							//We found a target so we stop here
+							break;
+						}
+					}
 				}
 			}
 
@@ -502,12 +536,11 @@ namespace EoE.Entities
 				if (effect.ignoreVerticalVelocity)
 				{
 					curExtraForce = new Vector3(velocity.x, curExtraForce.y, velocity.z);
-					curJumpForce = new Vector3(0, curJumpForce.y, 0);
 				}
 				else
 				{
 					curExtraForce = new Vector3(velocity.x, 0, velocity.z);
-					curJumpForce = new Vector3(0, velocity.y, 0);
+					body.velocity = new Vector3(body.velocity.x, velocity.y, body.velocity.z);
 				}
 			}
 			else
@@ -522,7 +555,7 @@ namespace EoE.Entities
 				else
 				{
 					curExtraForce += new Vector3(velocity.x, 0, velocity.z);
-					curJumpForce += new Vector3(0, velocity.y, 0);
+					body.velocity += new Vector3(0, velocity.y, 0);
 				}
 			}
 
@@ -538,6 +571,10 @@ namespace EoE.Entities
 
 			Alive = false;
 			base.Death();
+		}
+		public void AddSouls(int amount)
+		{
+			totalSoulCount += amount;
 		}
 		#endregion
 	}

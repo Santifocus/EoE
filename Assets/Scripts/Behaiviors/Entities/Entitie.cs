@@ -18,14 +18,15 @@ namespace EoE.Entities
 		private const float NON_TURNING_THRESHOLD				= 60;
 		private const float LERP_TURNING_AREA					= 0.5f;
 		private const float RUN_ANIM_THRESHOLD					= 0.75f;
+		private const int VISIBLE_CHECK_RAY_COUNT				= 40;
 
 		private static readonly Vector3 GroundTestOffset		= new Vector3(0, -0.05f, 0);
 
 		public static List<Entitie> AllEntities = new List<Entitie>();
 
 		//Inspector variables
-		[SerializeField] protected Rigidbody body				= default;
-		[SerializeField] protected Collider coll				= default;
+		public Rigidbody body				= default;
+		public Collider coll				= default;
 		[SerializeField] protected Animator animationControl	= default;
 
 		//Stats
@@ -52,7 +53,6 @@ namespace EoE.Entities
 		private float lastFallVelocity;
 
 		protected Vector3 curMoveForce;
-		protected Vector3 curJumpForce;
 		protected Vector3 curExtraForce;
 
 		protected float curRotation;
@@ -65,7 +65,7 @@ namespace EoE.Entities
 		public Vector3 actuallWorldPosition => SelfSettings.MassCenter + transform.position;
 		public float lowestPos => coll.bounds.center.y - coll.bounds.extents.y;
 		public float highestPos => coll.bounds.center.y + coll.bounds.extents.y;
-		public Vector3 curVelocity => curMoveForce + curJumpForce + curExtraForce;
+		public Vector3 curVelocity => new Vector3(curMoveForce.x + curExtraForce.x, body.velocity.y, curMoveForce.z + curExtraForce.z);
 		#endregion
 		#region Basic Monobehaivior
 		protected virtual void Start()
@@ -131,7 +131,7 @@ namespace EoE.Entities
 		protected void FixedUpdate()
 		{
 			IsGroundedTest();
-			UpdateJumpForce();
+			CheckForFalling();
 			EntitieFixedUpdate();
 		}
 		protected virtual void EntitieUpdate() { }
@@ -146,7 +146,7 @@ namespace EoE.Entities
 				if(curAcceleration < clampedIntent)
 				{
 					if (SelfSettings.MoveAcceleration > 0)
-						curAcceleration = Mathf.Min(clampedIntent, curAcceleration + intendedAcceleration * Time.deltaTime / SelfSettings.MoveAcceleration / SelfSettings.EntitieMass);
+						curAcceleration = Mathf.Min(clampedIntent, curAcceleration + intendedAcceleration * Time.deltaTime / SelfSettings.MoveAcceleration / SelfSettings.EntitieMass * (curStates.IsGrounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
 					else
 						curAcceleration = clampedIntent;
 				}
@@ -156,15 +156,22 @@ namespace EoE.Entities
 				if (curAcceleration > 0)
 				{
 					if (SelfSettings.NoMoveDeceleration > 0)
-						curAcceleration = Mathf.Max(0, curAcceleration - Time.deltaTime / SelfSettings.NoMoveDeceleration / SelfSettings.EntitieMass);
+						curAcceleration = Mathf.Max(0, curAcceleration - Time.deltaTime / SelfSettings.NoMoveDeceleration / SelfSettings.EntitieMass * (curStates.IsGrounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
 					else
 						curAcceleration = 0;
 				}
 			}
 		}
+		protected void TargetPosition(Vector3 pos)
+		{
+			Vector2 direction = new Vector2(pos.x - actuallWorldPosition.x, pos.z - actuallWorldPosition.z).normalized;
+			intendedRotation = -Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
+
+			Debug.DrawLine(actuallWorldPosition, actuallWorldPosition + new Vector3(direction.x, 0, direction.y) * (pos - actuallWorldPosition).magnitude, Color.red, Time.deltaTime);
+		}
 		private void TurnControl()
 		{
-			float turnAmount = Time.deltaTime * SelfSettings.TurnSpeed;
+			float turnAmount = Time.deltaTime * SelfSettings.TurnSpeed * (curStates.IsGrounded ? 1 : SelfSettings.InAirTurnSpeedMultiplier);
 			float normalizedDif = Mathf.Abs(curRotation - intendedRotation) / NON_TURNING_THRESHOLD;
 			turnAmount *= Mathf.Min(normalizedDif * LERP_TURNING_AREA, 1);
 			curRotation = Mathf.MoveTowardsAngle(curRotation, intendedRotation, turnAmount);
@@ -182,7 +189,7 @@ namespace EoE.Entities
 			bool running = curStates.IsRunning;
 
 			//If the Entitie doesnt move intentionally but is in run mode, then stop the run mode
-			if (!moving && running)
+			if (running && !moving)
 				curStates.IsRunning = false;
 
 			//Set the animation state to either Turning, Walking or Running
@@ -191,44 +198,35 @@ namespace EoE.Entities
 			animationControl.SetBool("Running", !turning && curAcceleration > 0 &&	(running && curAcceleration > RUN_ANIM_THRESHOLD));
 
 			//We find out in which direction the Entitie should move according to its movement
-			float baseTargetSpeed = curWalkSpeed * (curStates.IsRunning ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration * (turning ? 0 : 1);
+			float baseTargetSpeed = curWalkSpeed * (curStates.IsRunning ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
 			curMoveForce = baseTargetSpeed * transform.forward;
 
 			//Lerp knockback / other forces to zero based on the entities deceleration stat
-			curExtraForce = Vector3.Lerp(curExtraForce, Vector3.zero, Time.deltaTime / Mathf.Max(0.0001f, SelfSettings.NoMoveDeceleration));
+			if (SelfSettings.NoMoveDeceleration > 0)
+				curExtraForce = Vector3.Lerp(curExtraForce, Vector3.zero, Time.deltaTime / SelfSettings.NoMoveDeceleration);
+			else
+				curExtraForce = Vector3.zero;
 
 			//Now combine those forces as the current speed
 			body.velocity = curVelocity;
 		}
-		private void UpdateJumpForce()
+		private void CheckForFalling()
 		{
-			//If we are grounded we can just zero the velocity
-			if (curStates.IsGrounded)
-			{
-				if (curJumpForce.y < 0)
-					curJumpForce = Vector3.zero;
-			}
-			else
-			{
-				//Add gravity
-				curJumpForce += Physics.gravity * Time.fixedDeltaTime;
-			}
-
-			//Find out wether the entitie is falling
+			//Find out wether the entitie is falling or not
 			bool playerWantsToFall = this is Player && (curStates.IsFalling || !Controlls.InputController.Jump.Active);
 			bool falling = !curStates.IsGrounded && jumpGroundCooldown <= 0 && (body.velocity.y < IS_FALLING_THRESHOLD || playerWantsToFall);
 
-			//If so: start the animation and add extra velocity for a better looking fallcurve
+			//If so: we enable the falling animation and add extra velocity for a better looking fallcurve
 			curStates.IsFalling = falling;
 			animationControl.SetBool("IsFalling", falling);
 			if (falling)
 			{
-				curJumpForce += GameController.CurrentGameSettings.WhenFallingExtraVelocity * Physics.gravity * Time.fixedDeltaTime;
+				body.velocity += GameController.CurrentGameSettings.WhenFallingExtraVelocity * Physics.gravity * Time.fixedDeltaTime;
 			}
 		}
 		protected void Jump()
 		{
-			curJumpForce = new Vector3(0, Mathf.Max(SelfSettings.JumpPower.y, curJumpForce.y) * curJumpPower, 0);
+			body.velocity = new Vector3(body.velocity.x, Mathf.Min(body.velocity.y + SelfSettings.JumpPower.y * curJumpPower, SelfSettings.JumpPower.y * curJumpPower), body.velocity.z);
 			curExtraForce += SelfSettings.JumpPower.x * transform.right * curJumpPower;
 			curExtraForce += SelfSettings.JumpPower.z * transform.forward * curJumpPower;
 
@@ -565,8 +563,99 @@ namespace EoE.Entities
 		protected virtual void Death()
 		{
 			AllEntities.Remove(this);
+			BuildDrops();
 			Destroy(gameObject);
 		}
-#endregion
+		private void BuildDrops()
+		{
+			//Create souls drops
+			if(SelfSettings.SoulWorth > 0)
+			{
+				SoulDrop newSoulDrop = Instantiate(GameController.CurrentGameSettings.SoulDropPrefab, Storage.DropStorage);
+				newSoulDrop.transform.position = actuallWorldPosition + new Vector3(0, 2, 0);
+				newSoulDrop.Setup(SelfSettings.SoulWorth);
+			}
+
+			//Create item / other drops
+			if (SelfSettings.PossibleDropsTable == null)
+				return;
+
+			for(int i = 0; i < SelfSettings.PossibleDropsTable.PossibleDrops.Length; i++)
+			{
+				if (Utils.BaseUtils.Chance01(SelfSettings.PossibleDropsTable.PossibleDrops[i].DropChance))
+				{
+					int amount = Random.Range(SelfSettings.PossibleDropsTable.PossibleDrops[i].MinDropAmount, SelfSettings.PossibleDropsTable.PossibleDrops[i].MaxDropAmount + 1);
+					for(int j = 0; j < amount; j++)
+					{
+						GameObject newDrop = Instantiate(SelfSettings.PossibleDropsTable.PossibleDrops[i].Drop, Storage.DropStorage);
+						newDrop.transform.position = actuallWorldPosition;
+					}
+				}
+			}
+		}
+		#endregion
+		#region Helper Functions
+
+		protected bool CheckIfCanSeeEntitie(Entitie target)
+		{
+			//First we check the middle and corners of the entitie
+			//Middle
+			if (CheckPointVisible(target.actuallWorldPosition))
+				return true;
+
+			//Bounding corners
+			Vector3[] boundPoints = GetBoundPoints();
+			for (int i = 0; i < boundPoints.Length; i++)
+			{
+				if (CheckPointVisible(boundPoints[i]))
+					return true;
+			}
+
+			//Now we check a random point inside the bounding points
+			for (int i = 0; i < VISIBLE_CHECK_RAY_COUNT; i++)
+			{
+				if (CheckPointVisible(GetRandomPointInBounds()))
+					return true;
+			}
+
+			//None of the test rays hit, so we decide: We cant see the entitie
+			return false;
+
+			bool CheckPointVisible(Vector3 endPos)
+			{
+				Vector3 dif = endPos - PlayerCameraController.PlayerCamera.transform.position;
+				float dist = dif.magnitude;
+				Vector3 direction = dif / dist;
+
+				return !Physics.Raycast(PlayerCameraController.PlayerCamera.transform.position, direction, dist, ConstantCollector.TERRAIN_LAYER);
+			}
+			Vector3[] GetBoundPoints()
+			{
+				Vector3[] points = new Vector3[8];
+				Vector3 center = target.coll.bounds.center;
+				Vector3 extents = target.coll.bounds.extents;
+
+				//This will not account for rotation, however this does not have to be extremly accurate therefore we will save some performance by not rotating the points
+				points[0] = center + new Vector3(extents.x * 1, extents.y * 1, extents.z * 1);
+				points[1] = center + new Vector3(extents.x * 1, extents.y * 1, extents.z * -1);
+				points[2] = center + new Vector3(extents.x * -1, extents.y * 1, extents.z * 1);
+				points[3] = center + new Vector3(extents.x * -1, extents.y * 1, extents.z * -1);
+
+				points[4] = center + new Vector3(extents.x * 1, extents.y * -1, extents.z * 1);
+				points[5] = center + new Vector3(extents.x * 1, extents.y * -1, extents.z * -1);
+				points[6] = center + new Vector3(extents.x * -1, extents.y * -1, extents.z * 1);
+				points[7] = center + new Vector3(extents.x * -1, extents.y * -1, extents.z * -1);
+
+				return points;
+			}
+			Vector3 GetRandomPointInBounds()
+			{
+				return target.coll.bounds.center +
+					new Vector3(target.coll.bounds.extents.x * (Random.value - 0.5f) * 2,
+									target.coll.bounds.extents.y * (Random.value - 0.5f) * 2,
+									target.coll.bounds.extents.z * (Random.value - 0.5f) * 2);
+			}
+		}
+		#endregion
 	}
 }

@@ -1,4 +1,5 @@
-﻿using EoE.UI;
+﻿using EoE.Entities;
+using EoE.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,6 +38,7 @@ namespace EoE.Information
 		//Other
 		public float CritDamageMultiplier				= 2;
 		public float SecondsPerEntititeRegen			= 0.5f;
+		public SoulDrop SoulDropPrefab					= null;
 
 		//Effectiveness Matrix
 		public ElementEffectivenessRow[] EffectivenessMatrix;

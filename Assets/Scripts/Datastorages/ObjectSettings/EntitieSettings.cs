@@ -14,6 +14,8 @@ namespace EoE.Information
 		public Vector3 MassCenter					= Vector3.zero;
 
 		public ElementType EntitieElement			= ElementType.None;
+		public DropTable PossibleDropsTable			= null;
+		public int SoulWorth						= 10;
 
 		//Health
 		public float Health							= 50;
@@ -32,9 +34,11 @@ namespace EoE.Information
 		public float RunSpeedMultiplicator			= 1.25f;
 		public Vector3 JumpPower					= new Vector3(0, 10, 0);
 		public float TurnSpeed						= 90;
+		public float InAirTurnSpeedMultiplier		= 0.25f;
 
 		//Movement acceleration
 		public float MoveAcceleration				= 0.5f;
 		public float NoMoveDeceleration				= 0.25f;
+		public float InAirAccelerationMultiplier	= 0.3f;
 	}
 }

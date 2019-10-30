@@ -26,6 +26,8 @@ namespace EoE.Entities
 		protected float lostVisualsOnPlayerLookaroundTimer;
 
 		//Chasing
+		private float NormalCosSightCone;
+		private float FoundPlayerCosSightCone;
 		protected bool chasingPlayer;
 		protected Vector3 lastConfirmedPlayerPos;
 		protected Vector3 chaseDirection;
@@ -55,6 +57,9 @@ namespace EoE.Entities
 			GetNewWanderPosition();
 			GetNewLookDirection();
 			EventManager.PlayerDiedEvent += PlayerDied;
+
+			NormalCosSightCone = Mathf.Cos(enemySettings.SightAngle * Mathf.Deg2Rad);
+			FoundPlayerCosSightCone = Mathf.Cos(enemySettings.FoundPlayerSightAngle * Mathf.Deg2Rad);
 
 			healthBar = Instantiate(GameController.CurrentGameSettings.EnemyHealthBarPrefab, GameController.Instance.enemyHealthBarStorage);
 			UpdateHealthBar();
@@ -123,9 +128,7 @@ namespace EoE.Entities
 			if (terrainBlocksSight)
 				return;
 
-			float angleToPlayer = Mathf.Acos(Vector3.Dot(playerDir, transform.forward)) * Mathf.Rad2Deg;
-			
-			if(angleToPlayer < (chasingPlayer ? enemySettings.FoundPlayerSightAngle : enemySettings.SightAngle))
+			if (Vector3.Dot(playerDir, transform.forward) > (chasingPlayer ? FoundPlayerCosSightCone : NormalCosSightCone))
 			{
 				if(!chasingPlayer)
 					EffectUtils.DisplayInfoText(transform.position, GameController.CurrentGameSettings.StandardTextColor, Vector3.up, "!", 2);
@@ -150,7 +153,7 @@ namespace EoE.Entities
 			}
 			else
 			{
-				if (curStates.IsTurning)
+				if (!curStates.IsTurning)
 				{
 					reachedLookAroundDir = true;
 					lookAroundWait = Random.Range(enemySettings.LookAroundDelayMin, enemySettings.LookAroundDelayMax);
@@ -159,7 +162,8 @@ namespace EoE.Entities
 		}
 		private void GetNewLookDirection()
 		{
-			intendedRotation = Random.value * 360 * Mathf.Deg2Rad;
+			intendedRotation = Random.value * 360;
+			reachedLookAroundDir = false;
 		}
 		#endregion
 		#region WanderAround
@@ -178,7 +182,7 @@ namespace EoE.Entities
 			}
 			else
 			{
-				intendedRotation = Mathf.Atan2(wanderPosition.y - transform.position.z, wanderPosition.x - transform.position.x) * Mathf.Rad2Deg;
+				TargetPosition(new Vector3(wanderPosition.x, 0, wanderPosition.y));
 				intendedAcceleration = GameController.CurrentGameSettings.EnemyWanderingUrgency;
 
 				if (IsStuck())
@@ -197,7 +201,7 @@ namespace EoE.Entities
 					}
 				}
 
-				Vector2 planePos = new Vector2(transform.position.x, transform.position.z);
+				Vector2 planePos = new Vector2(actuallWorldPosition.x, actuallWorldPosition.z);
 
 				if((planePos - wanderPosition).sqrMagnitude < REACHED_WANDERPOINT_THRESHOLD)
 				{
@@ -240,9 +244,8 @@ namespace EoE.Entities
 		private bool ChasePlayer()
 		{
 			float distance = (lastConfirmedPlayerPos - transform.position).magnitude;
-			Vector3 playerDif = (lastConfirmedPlayerPos - transform.position);
-			intendedRotation = Mathf.Atan2(playerDif.z, playerDif.x);
-
+			TargetPosition(lastConfirmedPlayerPos);
+			
 			if (distance > enemySettings.AttackRange)
 			{
 				curStates.IsMoving = true;

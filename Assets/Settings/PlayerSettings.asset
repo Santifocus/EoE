@@ -27,14 +27,17 @@ MonoBehaviour:
   RunSpeedMultiplicator: 1.25
   JumpPower: {x: 0, y: 10, z: 0}
   TurnSpeed: 540
+  InAirTurnSpeedMultiplier: 0.5
   MoveAcceleration: 0.5
   NoMoveDeceleration: 0.25
+  InAirAccelerationMultiplier: 0.3
   CameraToPlayerDistance: 7
   CameraAnchorOffset: {x: 0, y: 1.6, z: 0}
   CameraRotationPower: {x: 200, y: 75}
   CameraRotationSpeed: 5
   CameraVerticalAngleClamps: {x: -50, y: 50}
   CameraExtraZoomOnVertical: 0.5
+  MaxEnemyTargetingDistance: 250
   EnduranceBars: 4
   EndurancePerBar: 25
   EnduranceRegen: 4

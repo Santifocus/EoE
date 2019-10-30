@@ -12,6 +12,9 @@ namespace EoE
 		public static GameController Instance => instance;
 		public static GameSettings CurrentGameSettings => instance.gameSettings;
 
+		private static bool gameIsPaused;
+		public static bool GameIsPaused { get => gameIsPaused; set => SetPauseGamestate(value); }
+
 		[SerializeField] private GameSettings gameSettings = default;
 		public Transform bgCanvas = default;
 		public Transform mainCanvas = default;
@@ -24,6 +27,10 @@ namespace EoE
 				Destroy(instance.gameObject);
 			}
 			instance = this;
+		}
+		private static void SetPauseGamestate(bool state)
+		{
+			gameIsPaused = state;
 		}
 	}
 }

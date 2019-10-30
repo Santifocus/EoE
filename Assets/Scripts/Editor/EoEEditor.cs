@@ -139,6 +139,22 @@ namespace EoE
 			}
 			return false;
 		}
+		public static bool ObjectField<T>(string content, ref T curValue, int offSet = 0) where T : Object => ObjectField<T>(new GUIContent(content), ref curValue, offSet);
+		public static bool ObjectField<T>(GUIContent content, ref T curValue, int offSet = 0) where T : Object
+		{
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(offSet * STANDARD_OFFSET);
+			T newValue = (T)EditorGUILayout.ObjectField(content, curValue, typeof(T), false);
+			EditorGUILayout.EndHorizontal();
+
+			if (newValue != curValue)
+			{
+				isDirty = true;
+				curValue = newValue;
+				return true;
+			}
+			return false;
+		}
 		public static bool GradientField(string content, ref Gradient curValue, int offSet = 0) => GradientField(new GUIContent(content), ref curValue, offSet);
 		public static bool GradientField(GUIContent content, ref Gradient curValue, int offSet = 0)
 		{

@@ -13,6 +13,7 @@ namespace EoE.Information
 		public float CameraRotationSpeed			= 10;
 		public Vector2 CameraVerticalAngleClamps	= new Vector2(-50, 50);
 		public float CameraExtraZoomOnVertical		= 0.5f;
+		public float MaxEnemyTargetingDistance		= 100;
 
 		//Endurance Settings
 		public int EnduranceBars					= 4;
