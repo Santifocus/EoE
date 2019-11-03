@@ -16,7 +16,9 @@ MonoBehaviour:
   MassCenter: {x: 0, y: 0, z: 0}
   EntitieElement: 0
   PossibleDropsTable: {fileID: 0}
-  SoulWorth: 10
+  SoulWorth: 5
+  BaseAttackDamage: 10
+  BaseMagicDamage: 10
   Health: 100
   DoHealthRegen: 0
   HealthRegen: 0

@@ -6,7 +6,7 @@ using UnityEngine;
 namespace EoE.Information
 { 
 	public enum BuffType : byte { Negative = 0, Neutral = 1, Positive = 2 }
-	public enum TargetStat { Health = 0, Mana = 1, MoveSpeed = 2, JumpHeight = 3, PhysicalDamage = 4, MagicalDamage = 5 }
+	public enum TargetStat { Health = 0, Mana = 1, PhysicalDamage = 2, MagicalDamage = 3, Defense = 4, MoveSpeed = 5, JumpHeight = 6 }
 	[System.Serializable]
 	public class Buff
 	{

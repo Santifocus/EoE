@@ -10,15 +10,22 @@ namespace EoE
 		private const string LINE_BREAK = "_________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________";
 		private const float STANDARD_OFFSET = 20;
 		public static bool isDirty;
-		public static void Header(string content, int offSet = 0) => Header(new GUIContent(content), offSet);
-		public static void Header(GUIContent content, int offSet = 0)
+		public static void Header(string content, int offSet = 0, bool spaces = true, bool bold = true) => Header(new GUIContent(content), offSet, spaces, bold);
+		public static void Header(GUIContent content, int offSet = 0, bool spaces = true, bool bold = true)
 		{
-			GUILayout.Space(8);
+			if(spaces)
+				GUILayout.Space(8);
+
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Space(offSet * STANDARD_OFFSET);
-			GUILayout.Label(content, EditorStyles.boldLabel);
+			if(bold)
+				GUILayout.Label(content, EditorStyles.boldLabel);
+			else
+				GUILayout.Label(content);
 			EditorGUILayout.EndHorizontal();
-			GUILayout.Space(4);
+
+			if (spaces)
+				GUILayout.Space(4);
 		}
 		public static void LineBreak()
 		{
@@ -33,6 +40,22 @@ namespace EoE
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Space(offSet * STANDARD_OFFSET);
 			float newValue = EditorGUILayout.FloatField(content, curValue);
+			EditorGUILayout.EndHorizontal();
+
+			if (newValue != curValue)
+			{
+				isDirty = true;
+				curValue = newValue;
+				return true;
+			}
+			return false;
+		}
+		public static bool DoubleField(string content, ref double curValue, int offSet = 0) => DoubleField(new GUIContent(content), ref curValue, offSet);
+		public static bool DoubleField(GUIContent content, ref double curValue, int offSet = 0)
+		{
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(offSet * STANDARD_OFFSET);
+			double newValue = EditorGUILayout.DoubleField(content, curValue);
 			EditorGUILayout.EndHorizontal();
 
 			if (newValue != curValue)
@@ -91,6 +114,20 @@ namespace EoE
 			}
 			return false;
 		}
+		public static bool FoldoutHeader(string content, ref bool curValue) => FoldoutHeader(new GUIContent(content), ref curValue);
+		public static bool FoldoutHeader(GUIContent content, ref bool curValue)
+		{
+			bool newValue = EditorGUILayout.BeginFoldoutHeaderGroup(curValue, content);
+
+			if (newValue != curValue)
+			{
+				isDirty = true;
+				curValue = newValue;
+				return true;
+			}
+			return false;
+		}
+		public static void EndFoldoutHeader() => EditorGUILayout.EndFoldoutHeaderGroup();
 		public static bool Vector2Field(string content, ref Vector2 curValue, int offSet = 0) => Vector2Field(new GUIContent(content), ref curValue, offSet);
 		public static bool Vector2Field(GUIContent content, ref Vector2 curValue, int offSet = 0)
 		{

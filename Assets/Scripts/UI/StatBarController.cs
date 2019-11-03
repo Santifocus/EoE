@@ -18,7 +18,14 @@ namespace EoE.UI
 		private void Update()
 		{
 			if (!Player.Alive)
+			{
+				if (displayedStatAmount != 0)
+				{
+					displayedStatAmount = 0;
+					UpdateStatText();
+				}
 				return;
+			}
 
 			int playerCurrentStatAmount = displayedStat == DisplayedStat.Health ? (int)Player.Instance.curHealth : (int)Player.Instance.curMana;
 			int playerMaxStatAmount = displayedStat == DisplayedStat.Health ? (int)Player.Instance.curMaxHealth : (int)Player.Instance.curMaxMana;

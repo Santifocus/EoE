@@ -17,6 +17,11 @@ namespace EoE.Information
 		public DropTable PossibleDropsTable			= null;
 		public int SoulWorth						= 10;
 
+		//Basic Combat Data
+		public float BaseAttackDamage				= 10;
+		public float BaseMagicDamage				= 10;
+		public float BaseDefense					= 0;
+
 		//Health
 		public float Health							= 50;
 		public bool DoHealthRegen					= false;

@@ -14,22 +14,21 @@ namespace EoE.Entities
 		[SerializeField] private Vector3 offsetWhenOpen = default;
 		[SerializeField] private Vector3 offsetWhenClosed = default;
 		private bool openState;
-		private bool isChangingState;
 		private Vector3 basePos;
 
 		private void Start()
 		{
+			canBeInteracted = true;
 			basePos = rend.transform.position;
 		}
-		public override void Interact()
+		protected override void Interact()
 		{
-			if (!isChangingState)
-				StartCoroutine(ChangeState(!openState));
+			StartCoroutine(ChangeState(!openState));
 		}
 
 		private IEnumerator ChangeState(bool openState)
 		{
-			isChangingState = true;
+			canBeInteracted = false;
 			float processTime = 0;
 
 			while(processTime < openTime)
@@ -42,7 +41,7 @@ namespace EoE.Entities
 			}
 
 			this.openState = openState;
-			isChangingState = false;
+			canBeInteracted = true;
 		}
 
 		protected override void MarkAsInteractTarget()

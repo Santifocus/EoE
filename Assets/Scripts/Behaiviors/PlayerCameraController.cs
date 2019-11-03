@@ -34,13 +34,10 @@ namespace EoE
 			if (!Player.Alive)
 				return;
 
-			if(Player.targetedEntitie)
+			if(Player.TargetedEntitie)
 			{
-				Vector3 dir = (Player.targetedEntitie.actuallWorldPosition - transform.position).normalized;
-				float hAngle = Mathf.Atan2(dir.z, dir.x) * Mathf.Rad2Deg - 90;
-				float vAngle = Mathf.Asin(dir.y) * Mathf.Rad2Deg;
-
-				TargetRotation = -new Vector2(hAngle, vAngle);
+				Vector3 dir = (Player.TargetedEntitie.actuallWorldPosition - transform.position).normalized;
+				LookAtDirection(dir);
 			}
 
 			transform.position = Player.Instance.transform.position + playerSettigns.CameraAnchorOffset;
@@ -56,7 +53,13 @@ namespace EoE
 				playerCamera.transform.localPosition = screenCapturerCamera.transform.localPosition = new Vector3(0, 0, Mathf.Lerp(playerCamera.transform.localPosition.z, camDist, Time.deltaTime * 3));
 			}
 		}
+		public void LookAtDirection(Vector3 direction)
+		{
+			float hAngle = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg - 90;
+			float vAngle = Mathf.Asin(direction.y) * Mathf.Rad2Deg;
 
+			TargetRotation = -new Vector2(hAngle, vAngle);
+		}
 		private float GetCameraDistance()
 		{
 			Vector3 rayDir = (playerCamera.transform.position - transform.position).normalized;
@@ -81,7 +84,8 @@ namespace EoE
 
 		private void RotateCamera()
 		{
-			TargetRotation.y = Mathf.Clamp(TargetRotation.y, playerSettigns.CameraVerticalAngleClamps.x, playerSettigns.CameraVerticalAngleClamps.y);
+			bool targeting = Player.TargetedEntitie;
+			TargetRotation.y = Mathf.Clamp(TargetRotation.y, targeting ? playerSettigns.CameraClampsWhenTargeting.x : playerSettigns.CameraVerticalAngleClamps.x, targeting ? playerSettigns.CameraClampsWhenTargeting.y : playerSettigns.CameraVerticalAngleClamps.y);
 			CurRotation = new Vector2(Mathf.LerpAngle(CurRotation.x, TargetRotation.x, Time.deltaTime * playerSettigns.CameraRotationSpeed), Mathf.LerpAngle(CurRotation.y, TargetRotation.y, Time.deltaTime * playerSettigns.CameraRotationSpeed));
 		}
 	}

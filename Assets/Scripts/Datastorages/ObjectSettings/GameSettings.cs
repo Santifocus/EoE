@@ -22,7 +22,7 @@ namespace EoE.Information
 		public ParticleSystem HitEntitieParticles		= null;
 		public ParticleSystem HitTerrainParticles		= null;
 
-		public EnemyHealthBar EnemyHealthBarPrefab		= null;
+		public EntitieStatDisplay EntitieStatDisplayPrefab		= null;
 		public float EnemeyHealthBarLerpSpeed			= 4;
 
 		//Damage Numbers

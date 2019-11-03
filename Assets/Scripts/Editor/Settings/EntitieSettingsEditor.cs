@@ -9,18 +9,45 @@ namespace EoE.Information
 	[CustomEditor(typeof(EntitieSettings), true), CanEditMultipleObjects]
 	public class EntitieSettingsEditor : ObjectSettingEditor
 	{
+		protected bool BaseSettingsOpen;
+		protected bool CombatSettingsOpen;
+		protected bool StatSettingsOpen;
+		protected bool MovementSettingsOpen;
 		protected override void CustomInspector()
 		{
-			BaseSettingsArea();
-			StatSettingsArea();
-			MovementSettingsArea();
+			FoldoutHeader("Base Settings", ref BaseSettingsOpen);
+			if (BaseSettingsOpen)
+			{
+				BaseSettingsArea();
+			}
+			EndFoldoutHeader();
+
+			FoldoutHeader("Combat Settings", ref CombatSettingsOpen);
+			if (CombatSettingsOpen)
+			{
+				CombatSettings();
+			}
+			EndFoldoutHeader();
+
+			FoldoutHeader("Stat Settings", ref StatSettingsOpen);
+			if (StatSettingsOpen)
+			{
+				StatSettingsArea();
+			}
+			EndFoldoutHeader();
+
+			FoldoutHeader("Movement Settings", ref MovementSettingsOpen);
+			if (MovementSettingsOpen)
+			{
+				MovementSettingsArea();
+			}
+			EndFoldoutHeader();
 		}
 
 		protected virtual void BaseSettingsArea()
 		{
 			EntitieSettings settings = target as EntitieSettings;
 
-			Header("Base Settings");
 			if (FloatField(new GUIContent("Entitie Mass", "What is the mass of this Entitie? This will be used for Knockback,- and Acceleration - calculations."), ref settings.EntitieMass) && settings.EntitieMass < EntitieSettings.MIN_ENTITIE_MASS)
 				settings.EntitieMass = EntitieSettings.MIN_ENTITIE_MASS;
 			Vector3Field(new GUIContent("Mass Center", "Where is the Mass center of this Entitie? Based on this the Knockback direction will be calculated."), ref settings.MassCenter);
@@ -36,11 +63,18 @@ namespace EoE.Information
 			}
 		}
 
+		protected virtual void CombatSettings()
+		{
+			EntitieSettings settings = target as EntitieSettings;
+
+			FloatField(new GUIContent("Base Attack Damage", "This value will be used for Physical damage calculations."), ref settings.BaseAttackDamage);
+			FloatField(new GUIContent("Base Magic Damage", "This value will be used for Magic damage calculations."), ref settings.BaseMagicDamage);
+		}
+
 		protected virtual void StatSettingsArea()
 		{
 			EntitieSettings settings = target as EntitieSettings;
 
-			Header("Stat Settings");
 			//Health
 			FloatField(new GUIContent("Start Health", "With what health does this Entitie Spawn?"), ref settings.Health);
 			BoolField(new GUIContent("Do Health Regen", "Should this Entitie Regen over time?"), ref settings.DoHealthRegen);
@@ -65,7 +99,6 @@ namespace EoE.Information
 		{
 			EntitieSettings settings = target as EntitieSettings;
 
-			Header("Movement Settings");
 			FloatField(new GUIContent("Move Speed", "What is the maximum speed at which this Entitie walks?"), ref settings.WalkSpeed);
 			FloatField(new GUIContent("Run Speed Multiplicator", "Multilpies the walkspeed when running."), ref settings.RunSpeedMultiplicator);
 			Vector3Field(new GUIContent("Jump Power", "With which velocity does this Entitie jump? (X == Sideways, Y == Upward, Z == Foreward)"), ref settings.JumpPower);

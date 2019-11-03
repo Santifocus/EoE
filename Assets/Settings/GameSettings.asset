@@ -84,7 +84,7 @@ MonoBehaviour:
   EnemyWanderingUrgency: 0.5
   HitEntitieParticles: {fileID: 0}
   HitTerrainParticles: {fileID: 0}
-  EnemyHealthBarPrefab: {fileID: 2494207287049978237, guid: ee388195767cec3429b9391e9fbd39e5,
+  EntitieStatDisplayPrefab: {fileID: 2494207287049978237, guid: ee388195767cec3429b9391e9fbd39e5,
     type: 3}
   EnemeyHealthBarLerpSpeed: 3
   DamageNumberLifeTime: 1

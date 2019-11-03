@@ -5,17 +5,24 @@ using EoE.Weapons;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using EoE.Events;
 
 namespace EoE.Entities
 {
 	public class Player : Entitie
 	{
 		#region Fields
+		//Constants
+		private const float ATTACK_INTERACT_COOLDOWN = 0.75f;
 		//Inspector variables
 		[Space(10)]
 		[SerializeField] private PlayerSettings selfSettings = default;
 		[SerializeField] private Transform rightHand = default;
 		[SerializeField] private Weapon equipedWeapon = default;
+		[SerializeField] private PlayerBuffDisplay buffDisplay = default;
+		[SerializeField] private TextMeshProUGUI soulCount = default;
+
 		public TMPro.TextMeshProUGUI debugText = default;
 
 		//Endurance
@@ -25,6 +32,11 @@ namespace EoE.Entities
 		[HideInInspector] public int activeEnduranceContainerIndex;
 		[HideInInspector] public float lockedEndurance;
 		private float usedEnduranceCooldown;
+
+		//Dodge
+		[SerializeField] private Transform modelTransform;
+		private float dodgeCooldown;
+		private bool currentlyDodging;
 
 		#region Physical Attack
 		//Attack
@@ -51,7 +63,6 @@ namespace EoE.Entities
 		#endregion
 
 		//Getter Helpers
-		public static int totalSoulCount { get; private set; }
 		public static bool Alive { get; private set; }
 		private enum GetEnduranceType : byte { NotAvailable = 0, Available = 1, AvailableWithNewBar = 2 }
 		public enum AttackState : short { NormalStand = 0, NormalSprint = 1, NormalJump = 2, NormalSprintJump = 3, HeavyStand = 4, HeavySprint = 5, HeavyJump = 6, HeavySprintJump = 7 }
@@ -59,10 +70,19 @@ namespace EoE.Entities
 		public static Player Instance => instance;
 		public override EntitieSettings SelfSettings => selfSettings;
 		public static PlayerSettings PlayerSettings => instance.selfSettings;
-		public static Entitie targetedEntitie;
+		public static Entitie TargetedEntitie;
+		#region Leveling
+		public static Buff LevelingBaseBuff;
+		public static Buff LevelingSkillPointsBuff;
+		public static PlayerBuffDisplay BuffDisplay => instance.buffDisplay;
+		public static int PlayerLevel { get; private set; }
+		public static int TotalSoulCount { get; private set; }
+		public static int RequiredSoulsForLevel { get; private set; }
+		public static int AvailableSkillPoints;
+		#endregion
 
 		//Other
-		private bool pressedInteract;
+		private float attackInteractCooldown;
 
 		#endregion
 		#region Basic Monobehaivior
@@ -71,15 +91,63 @@ namespace EoE.Entities
 			Alive = true;
 			instance = this;
 
+			SetupLevelingControl();
+
 			ChangeWeapon(equipedWeapon);
 			SetupEndurance();
+		}
+		private void SetupLevelingControl()
+		{
+			LevelingBaseBuff = new Buff()
+			{
+				Name = "LevelingBase",
+				Quality = BuffType.Positive,
+				Icon = null,
+				BuffTime = 0,
+				Permanent = true,
+				DOTs = new DOT[0]
+			};
+			LevelingSkillPointsBuff = new Buff()
+			{
+				Name = "LevelingSkillPoints",
+				Quality = BuffType.Positive,
+				Icon = null,
+				BuffTime = 0,
+				Permanent = true,
+				DOTs = new DOT[0]
+			};
+
+			//Health, Mana, PhysicalDamage, MagicalDamage, Defense
+			int incremtingStats = 5;
+
+			LevelingBaseBuff.Effects = new Effect[incremtingStats];
+			LevelingSkillPointsBuff.Effects = new Effect[incremtingStats];
+			for (int i = 0; i < incremtingStats; i++) 
+			{
+				LevelingBaseBuff.Effects[i] = LevelingSkillPointsBuff.Effects[i] = 
+					new Effect
+					{
+						Amount = 0,
+						Percent = false,
+						targetStat = (TargetStat)i
+					};
+			}
+
+			AddBuff(LevelingBaseBuff, this);
+			AddBuff(LevelingSkillPointsBuff, this);
+
+			PlayerLevel = 0;
+			RequiredSoulsForLevel = PlayerSettings.LevelSettings.curve.GetRequiredSouls(PlayerLevel);
+			TotalSoulCount = 0;
+			AvailableSkillPoints = 0;
+			//Safest way to ensure everyhting is correct is by adding 0 Souls to our current count
+			AddSouls(0);
 		}
 		protected override void EntitieUpdate()
 		{
 			EnduranceRegen();
 			CameraControl();
 			MovementControl();
-			InteractControl();
 			AttackControl();
 			TargetEnemyControl();
 			PositionHeldWeapon();
@@ -216,6 +284,7 @@ namespace EoE.Entities
 		{
 			JumpControl();
 			PlayerMoveControl();
+			DodgeControl();
 		}
 		private void JumpControl()
 		{
@@ -266,39 +335,68 @@ namespace EoE.Entities
 			float intendedControl = Mathf.Min(1, controllDirection.magnitude);
 			intendedAcceleration = intendedControl * (running ? PlayerSettings.RunSpeedMultiplicator : 1);
 
-			if(intendedControl > 0.5f)
+			if(intendedControl > 0.15f)
 				intendedRotation = Mathf.Atan2(controllDirection.y, controllDirection.x) * Mathf.Rad2Deg + 90 + PlayerCameraController.CurRotation.x;
+		}
+		private void DodgeControl()
+		{
+			if(dodgeCooldown > 0)
+			{
+				dodgeCooldown -= Time.deltaTime;
+				return;
+			}
+
+			if(InputController.Dodge.Down && !currentlyDodging && CanAffordEnduranceCost(PlayerSettings.DodgeEnduranceCost) != GetEnduranceType.NotAvailable)
+			{
+				UseEndurance(PlayerSettings.DodgeEnduranceCost);
+				StartCoroutine(DodgeCoroutine());
+			}
+		}
+		private IEnumerator DodgeCoroutine()
+		{
+			currentlyDodging = true;
+			float timer = 0;
+			float targetAngle = intendedRotation;
+			Vector2 controllDirection = InputController.PlayerMove;
+			if (controllDirection != Vector2.zero)
+			{
+				targetAngle = Mathf.Atan2(controllDirection.y, controllDirection.x) * Mathf.Rad2Deg + 90 + PlayerCameraController.CurRotation.x;
+			}
+
+			Vector3 newForce = new Vector3(Mathf.Sin(targetAngle * Mathf.Deg2Rad), 0, Mathf.Cos(targetAngle * Mathf.Deg2Rad)) * PlayerSettings.DodgePower * curWalkSpeed;
+			newForce.y = PlayerSettings.DodgeUpForce;
+
+			entitieForceController.ApplyForce(newForce, 1/PlayerSettings.DodgeDuration);
+
+			while(timer < PlayerSettings.DodgeDuration)
+			{
+				yield return new WaitForFixedUpdate();
+				timer += Time.fixedDeltaTime;
+			}
+			dodgeCooldown = PlayerSettings.DodgeCooldown;
+			currentlyDodging = false;
 		}
 		private void CameraControl()
 		{
-			if (!targetedEntitie)
+			if (!TargetedEntitie)
 			{
+				if (InputController.ResetCamera.Active || InputController.ResetCamera.Down)
+				{
+					PlayerCameraController.Instance.LookAtDirection(transform.forward);
+					PlayerCameraController.TargetRotation = new Vector2(PlayerCameraController.TargetRotation.x, PlayerSettings.CameraVerticalAngleClamps.y / 2);
+					return;
+				}
+
 				Vector2 newMoveDistance = InputController.CameraMove;
 				newMoveDistance = new Vector2(newMoveDistance.x * selfSettings.CameraRotationPower.x, newMoveDistance.y * selfSettings.CameraRotationPower.y) * Time.deltaTime;
 				PlayerCameraController.TargetRotation += newMoveDistance;
-			}
-		}
-		private void InteractControl()
-		{
-			if (Interactable.MarkedInteractable && InputController.Attack.Down)
-			{
-				if (!pressedInteract)
-				{
-					Interactable.MarkedInteractable.Interact();
-				}
-				pressedInteract = true;
-			}
-			else
-			{
-				pressedInteract = false;
 			}
 		}
 		private void TargetEnemyControl()
 		{
 			if (InputController.Aim.Down)
 			{
-				float shortestDistance = 100000;
-				List<Entitie> possibleTargets = new List<Entitie>();
+				List<(Entitie, float) > possibleTargets = new List<(Entitie, float)>();
 
 				for(int i = 0; i < AllEntities.Count; i++)
 				{
@@ -324,25 +422,24 @@ namespace EoE.Entities
 					if (screenPos.z < 0 || notOnScreen) //Behind the camera or not on screen? => We bail out
 						continue;
 
-					if (distanceToViewDir < shortestDistance) //The distance is less then any of the previously checked entities
-					{
-						shortestDistance = distanceToViewDir;
-						possibleTargets.Add(AllEntities[i]);
-					}
+					possibleTargets.Add((AllEntities[i], distanceToViewDir));
 				}
 
-				if(possibleTargets.Count > 0)
+				//Sort by distance low to high
+				possibleTargets.Sort((x, y) => x.Item2.CompareTo(y.Item2));
+
+				TargetedEntitie = null;
+				if (possibleTargets.Count > 0)
 				{
-					targetedEntitie = null;
-					//Now we have a list if possible targets sorted by highest to lowest distance
+					//Now we have a list if possible targets sorted by lowest to highest distance
 					//We try to find a target that we can see
-					//So we start at the end of the list and keep going untill we find one and take that one as new target
+					//So we start with the lowest distance (index 0) and keep going until we find one and take that one as new target
 					//If there is none, then the targetEntitie will stay null
-					for (int i = possibleTargets.Count - 1; i >= 0; i--)
+					for (int i = 0; i < possibleTargets.Count; i++)
 					{
-						if (CheckIfCanSeeEntitie(possibleTargets[i]))
+						if (CheckIfCanSeeEntitie(possibleTargets[i].Item1))
 						{
-							targetedEntitie = possibleTargets[i];
+							TargetedEntitie = possibleTargets[i].Item1;
 							//We found a target so we stop here
 							break;
 						}
@@ -351,16 +448,12 @@ namespace EoE.Entities
 			}
 
 			if (InputController.Aim.Up)
-				targetedEntitie = null;
+				TargetedEntitie = null;
 		}
 		#endregion
 		#region Physical Attack Control
 		private void AttackControl()
 		{
-			if (InputController.Dodge.Down)
-			{
-				EffectUtils.ShakeScreen(0.25f, 0.25f, 5);
-			}
 			if (comboTimer.HasValue)
 			{
 				comboTimer -= Time.deltaTime;
@@ -371,7 +464,17 @@ namespace EoE.Entities
 				}
 			}
 
-			if (equipedWeapon == null || isCurrentlyAttacking || (!InputController.Attack.Down && !InputController.HeavyAttack.Down))
+			if (attackInteractCooldown > 0)
+				attackInteractCooldown -= Time.deltaTime;
+
+			bool normalAttack = InputController.Attack.Down;
+			if(normalAttack && Interactable.MarkedInteractable && !(attackInteractCooldown > 0))
+			{
+				if (Interactable.MarkedInteractable.TryInteract())
+					return;
+			}
+
+			if (equipedWeapon == null || isCurrentlyAttacking || (!normalAttack && !InputController.HeavyAttack.Down))
 				return;
 
 			int state = 0;
@@ -450,6 +553,7 @@ namespace EoE.Entities
 					}
 				}
 
+				attackInteractCooldown = ATTACK_INTERACT_COOLDOWN;
 				isCurrentlyAttacking = false;
 				heldWeapon.Active = false;
 				animationControl.SetBool("Attack", false);
@@ -535,11 +639,11 @@ namespace EoE.Entities
 
 				if (effect.ignoreVerticalVelocity)
 				{
-					curExtraForce = new Vector3(velocity.x, curExtraForce.y, velocity.z);
+					impactForce = new Vector3(velocity.x, impactForce.y, velocity.z);
 				}
 				else
 				{
-					curExtraForce = new Vector3(velocity.x, 0, velocity.z);
+					impactForce = new Vector3(velocity.x, 0, velocity.z);
 					body.velocity = new Vector3(body.velocity.x, velocity.y, body.velocity.z);
 				}
 			}
@@ -550,11 +654,11 @@ namespace EoE.Entities
 
 				if (effect.ignoreVerticalVelocity)
 				{
-					curExtraForce += new Vector3(velocity.x, 0, velocity.z);
+					impactForce += new Vector3(velocity.x, 0, velocity.z);
 				}
 				else
 				{
-					curExtraForce += new Vector3(velocity.x, 0, velocity.z);
+					impactForce += new Vector3(velocity.x, 0, velocity.z);
 					body.velocity += new Vector3(0, velocity.y, 0);
 				}
 			}
@@ -574,7 +678,25 @@ namespace EoE.Entities
 		}
 		public void AddSouls(int amount)
 		{
-			totalSoulCount += amount;
+			TotalSoulCount += amount;
+			while(TotalSoulCount >= RequiredSoulsForLevel)
+			{
+				PlayerLevel++;
+				AvailableSkillPoints++;
+				RequiredSoulsForLevel = PlayerSettings.LevelSettings.curve.GetRequiredSouls(PlayerLevel);
+
+				//Update buff
+				for(int i = 0; i < LevelingBaseBuff.Effects.Length; i++)
+				{
+					LevelingBaseBuff.Effects[i].Amount += PlayerSettings.LevelSettings.baseIncrementPerLevel[i];
+				}
+				RecalculateBuffs();
+
+				//Inform all script that need the information that the player leveled
+				EventManager.PlayerLevelupInvoke();
+			}
+
+			soulCount.text = TotalSoulCount + " / " + RequiredSoulsForLevel;
 		}
 		#endregion
 	}

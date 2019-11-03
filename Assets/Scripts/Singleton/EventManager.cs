@@ -16,6 +16,14 @@ namespace EoE.Events
 			PlayerDiedEvent?.Invoke(killer);
 		}
 
+		//Player Levelup
+		public delegate void PlayerLevelup();
+		public static PlayerLevelup PlayerLevelupEvent;
+		public static void PlayerLevelupInvoke()
+		{
+			PlayerLevelupEvent?.Invoke();
+		}
+
 		//Entitie Death
 		public delegate void EntitieDied(Entitie killed, Entitie killer);
 		public static EntitieDied EntitieDiedEvent;

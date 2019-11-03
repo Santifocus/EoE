@@ -7,50 +7,96 @@ namespace EoE.Entities
 {
 	public class SoulDrop : Interactable
 	{
+		[Header("References")]
 		[SerializeField] private TextMeshPro infoSign = default;
 		[SerializeField] private Gradient colorOverTime = default;
-		[SerializeField] private float colorCyleTime = 3;
 		[SerializeField] private Rigidbody body = default;
+		[SerializeField] private MeshRenderer sphereRenderer = default;
+		[SerializeField] private ParticleSystem soulParticles = default;
+
+		[Space(10)]
+		[Header("Animation")]
+		[SerializeField] private float textColorCycleTime = 3;
 		[SerializeField] private float gravityMultiplier = 0.4f;
+		[SerializeField] private float fadeInTime = 1.5f;
+		[SerializeField] private float fadeOutTime = 1.5f;
+
+		[Space(5)]
+		[SerializeField] private float finallSphereSize = 1;
+		[SerializeField] private int pulsateCount = 5;
+		[SerializeField] private float pulsateStrenght = 0.5f;
+		[SerializeField] private Gradient pulsateColorGradient = default;
 
 		private static float colorTime;
-		private bool isTarget;
 		private int soulCount;
-		private bool collected;
-		private float delayTillInteractable;
 
 		public void Setup(int soulCount)
 		{
-			delayTillInteractable = 0.75f;
+			canBeInteracted = false;
 			this.soulCount = soulCount;
 			infoSign.text = "Free " + soulCount + " Souls. [X]";
+			StartCoroutine(FadeIn());
 		}
-		public override void Interact()
+		protected override void Interact()
 		{
-			if (collected || delayTillInteractable > 0)
-				return;
-
 			Player.Instance.AddSouls(soulCount);
 			infoSign.gameObject.SetActive(false);
 
 			StartCoroutine(FadeAway());
 		}
+		private IEnumerator FadeIn()
+		{
+			float timer = 0;
+			float timePerPuls = fadeInTime / pulsateCount;
 
+			while(timer < fadeInTime)
+			{
+				yield return new WaitForEndOfFrame();
+				timer += Time.deltaTime;
+
+				float point = Mathf.Sin(timer / timePerPuls * Mathf.PI);
+
+				float scale = timer / fadeInTime * finallSphereSize + point * pulsateStrenght;
+				sphereRenderer.transform.localScale = scale * Vector3.one;
+				sphereRenderer.material.color = pulsateColorGradient.Evaluate((point + 1) / 2);
+			}
+			sphereRenderer.transform.localScale = finallSphereSize * Vector3.one;
+			infoSign.gameObject.SetActive(isTarget);
+
+			canBeInteracted = true;
+		}
 		private IEnumerator FadeAway()
 		{
-			yield return null;
-			Destroy(gameObject);
+			infoSign.gameObject.SetActive(false);
+
+			canBeInteracted = false;
+			float timer = 0;
+			ParticleSystem.EmissionModule em = soulParticles.emission;
+			em.rateOverTime = soulCount / fadeOutTime;
+			soulParticles.Play();
+
+			while (timer < fadeOutTime)
+			{
+				yield return new WaitForEndOfFrame();
+				timer += Time.deltaTime;
+
+				float scale = (1 - timer / fadeOutTime) * finallSphereSize;
+				sphereRenderer.transform.localScale = scale * Vector3.one;
+			}
+			em.rateOverTime = 0;
+			ParticleSystem.MainModule mm = soulParticles.main;
+
+			sphereRenderer.transform.localScale = Vector3.zero;
+
+			Destroy(gameObject, mm.startLifetime.constantMax * 1.1f);
 		}
 
 		private void Update()
 		{
-			if (delayTillInteractable > 0)
-				delayTillInteractable -= Time.deltaTime;
-
 			if (isTarget)
 			{
-				colorTime += Time.deltaTime / colorCyleTime;
-				float point = Mathf.Abs(Mathf.Sin(colorTime * Mathf.PI));
+				colorTime += Time.deltaTime / textColorCycleTime;
+				float point = (Mathf.Sin(colorTime * Mathf.PI) + 1) / 2;
 				infoSign.color = colorOverTime.Evaluate(point);
 
 				Vector3 signDir = new Vector3(infoSign.transform.position.x - Player.Instance.transform.position.x, 0, infoSign.transform.position.z - Player.Instance.transform.position.z).normalized;
@@ -65,13 +111,11 @@ namespace EoE.Entities
 
 		protected override void MarkAsInteractTarget()
 		{
-			isTarget = true;
-			infoSign.gameObject.SetActive(true);
+			infoSign.gameObject.SetActive(true && canBeInteracted);
 		}
 
 		protected override void StopMarkAsInteractable()
 		{
-			isTarget = false;
 			infoSign.gameObject.SetActive(false);
 		}
 	}

@@ -94,6 +94,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "PlayerMenu",
+                    "type": "Button",
+                    "id": "a34bc4a8-b213-4e55-9385-1db00e9e30d8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "UseItem",
                     "type": "Button",
                     "id": "e8d9a16f-3a49-442f-ab0c-dbcb89a3dbc8",
@@ -382,6 +390,177 @@
                     "processors": "",
                     "groups": "",
                     "action": "ItemScrollDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f7dd6639-5674-47b3-8c8d-0118846e07ed",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PlayerMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "MenuInput",
+            "id": "216672cd-8ca6-4e21-be29-8cbd352a2b8f",
+            "actions": [
+                {
+                    "name": "Right",
+                    "type": "Value",
+                    "id": "064ad7d0-8b18-4a88-97d4-316de4cc46b4",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Left",
+                    "type": "Value",
+                    "id": "1a2b1097-93b8-423a-aa7a-85bf3f43c9ef",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Up",
+                    "type": "Value",
+                    "id": "ab9be2b8-2408-45a9-8a89-b75fd444b359",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Down",
+                    "type": "Value",
+                    "id": "b3e31f01-579b-403d-8882-e2e5c371d702",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Enter",
+                    "type": "Value",
+                    "id": "d71f096e-2858-47fb-b8e7-cd4b8792d127",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Back",
+                    "type": "Value",
+                    "id": "4938438f-107e-46a6-b5a0-ae57eaa6753d",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Pause",
+                    "type": "Value",
+                    "id": "1a05c78e-d8e7-4c0f-94d2-2c02dbb83f71",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "PlayerMenu",
+                    "type": "Value",
+                    "id": "318b1506-d1f1-4a08-9850-970c198fd8ee",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "41349519-dffe-44eb-93c1-328fc00178a2",
+                    "path": "<Gamepad>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Right",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "79e74484-0cf7-4249-a4f7-63ecee5eae3c",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Left",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4b4c94de-ec64-4796-9a36-62ae93e14055",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Up",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "61acd399-067c-4e51-887d-dd3f1c84f992",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Down",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6b50d825-11da-454f-9cca-ce3983ea6d0e",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Enter",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "25a2e37f-48ef-449d-a0fc-dde275dfcd83",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Back",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e3801c94-d11c-4a5e-bba5-10177b178a5d",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2c62c75c-d0e7-4dc1-b89b-1997bc433a84",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PlayerMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -41,8 +41,6 @@ namespace EoE.Entities
 		//Look around
 		protected bool reachedLookAroundDir;
 
-		//Other
-		private EnemyHealthBar healthBar;
 
 		//Getter Helpers
 		protected Player player => Player.Instance;
@@ -60,9 +58,6 @@ namespace EoE.Entities
 
 			NormalCosSightCone = Mathf.Cos(enemySettings.SightAngle * Mathf.Deg2Rad);
 			FoundPlayerCosSightCone = Mathf.Cos(enemySettings.FoundPlayerSightAngle * Mathf.Deg2Rad);
-
-			healthBar = Instantiate(GameController.CurrentGameSettings.EnemyHealthBarPrefab, GameController.Instance.enemyHealthBarStorage);
-			UpdateHealthBar();
 		}
 		private void PlayerDied(Entitie killer)
 		{
@@ -73,7 +68,6 @@ namespace EoE.Entities
 		{
 			base.Update();
 			DecideOnBehavior();
-			UpdateHealthBar();
 		}
 		private void DecideOnBehavior()
 		{
@@ -281,29 +275,6 @@ namespace EoE.Entities
 			return true;
 		}
 		protected abstract void CombatBehavior(float distance);
-		#endregion
-		#region Other
-		protected virtual void UpdateHealthBar()
-		{
-			if (curStates.IsInCombat)
-			{
-				if(!healthBar.gameObject.activeInHierarchy)
-					healthBar.gameObject.SetActive(true);
-
-				healthBar.Value = curHealth / curMaxHealth;
-				healthBar.Position = PlayerCameraController.PlayerCamera.WorldToScreenPoint(new Vector3(coll.bounds.center.x, highestPos, coll.bounds.center.z)) + new Vector3(0,healthBar.Height);
-			}
-			else
-			{
-				if (healthBar.gameObject.activeInHierarchy)
-					healthBar.gameObject.SetActive(false);
-			}
-		}
-		protected override void Death()
-		{
-			Destroy(healthBar.gameObject);
-			base.Death();
-		}
 		#endregion
 	}
 }
