@@ -75,7 +75,7 @@
 
 				float hvA = max(horizontalA + verticalA, 0.001);
 
-				c.a = min(1, lerp(horizontalA, verticalA, verticalA / hvA) * _DepthStrenght);
+				c.a = min(1, lerp(horizontalA, verticalA, verticalA / hvA) * _DepthStrenght) * IN.color.a;
 
 				half3 bluredColor = half3(0,0,0);
 				int totalBlurSteps = _BlurRange * 2 + 1;

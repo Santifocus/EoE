@@ -5,6 +5,7 @@ using EoE.Information;
 using EoE.Events;
 using EoE.Weapons;
 using EoE.UI;
+using EoE.Utils;
 
 namespace EoE.Entities
 {
@@ -31,6 +32,7 @@ namespace EoE.Entities
 		[SerializeField] protected Animator animationControl	= default;
 
 		//Stats
+		public int EntitieLevel { get; protected set; }
 		public float curMaxHealth { get; protected set; }
 		public float curHealth { get; protected set; }
 		public float curMaxMana { get; protected set; }
@@ -42,6 +44,7 @@ namespace EoE.Entities
 		public float curJumpPowerMultiplier { get; protected set; }
 
 		//Entitie states
+		public bool invincible;
 		private List<BuffInstance> nonPermanentBuffs;
 		private List<BuffInstance> permanentBuffs;
 		public EntitieState curStates;
@@ -590,9 +593,38 @@ namespace EoE.Entities
 			}
 			InflictionInfo.InflictionResult damageResult = new InflictionInfo.InflictionResult(causedDamage, this, true);
 
+			if (invincible && (damageResult.finalDamage > 0 || damageResult.causedKnockback.HasValue))
+				return;
+
 			curHealth -= damageResult.finalDamage;
-			impactForce += damageResult.causedKnockback;
+			impactForce += damageResult.causedKnockback.HasValue ? damageResult.causedKnockback.Value : Vector3.zero;
 			curHealth = Mathf.Min(curMaxHealth, curHealth);
+
+			//VFX for player
+			if(this is Player)
+			{
+				if(damageResult.finalDamage > 0)
+				{
+					if (Player.PlayerSettings.ColorScreenOnDamage)
+					{
+						EffectUtils.ColorScreen(Player.PlayerSettings.ColorScreenColor, Player.PlayerSettings.ColorScreenDuration, Player.PlayerSettings.ColorScreenDepth);
+					}
+					if (Player.PlayerSettings.BlurScreenOnDamage)
+					{
+						float healthNormalized = curHealth / curMaxHealth;
+						if (healthNormalized < Player.PlayerSettings.BlurScreenHealthThreshold)
+						{
+							float intensity = Mathf.Min(1, (1 - healthNormalized / Player.PlayerSettings.BlurScreenHealthThreshold) * Player.PlayerSettings.BlurScreenBaseIntensity * damageResult.finalDamage);
+							EffectUtils.BlurScreen(intensity, Player.PlayerSettings.BlurScreenDuration);
+						}
+					}
+				}
+				if(damageResult.causedKnockback.HasValue && Player.PlayerSettings.ShakeScreenOnKnockback)
+				{
+					float shakeForce = damageResult.causedKnockback.Value.magnitude;
+					EffectUtils.ShakeScreen(Player.PlayerSettings.ShakeTimeOnKnockback, shakeForce * Player.PlayerSettings.ShakeScreenAxisIntensity, shakeForce * Player.PlayerSettings.ShakeScreenAngleIntensity);
+				}
+			}
 
 			if(curHealth <= 0)
 			{

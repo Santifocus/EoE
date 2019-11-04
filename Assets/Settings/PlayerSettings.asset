@@ -17,8 +17,8 @@ MonoBehaviour:
   EntitieElement: 0
   PossibleDropsTable: {fileID: 0}
   SoulWorth: 10
-  BaseAttackDamage: 10
-  BaseMagicDamage: 10
+  BaseAttackDamage: 4
+  BaseMagicDamage: 2
   BaseDefense: 0
   Health: 50
   DoHealthRegen: 1
@@ -53,6 +53,12 @@ MonoBehaviour:
   EnduranceRegenDelayAfterUse: 3
   JumpEnduranceCost: 4
   RunEnduranceCost: 3
+  DodgePower: 3
+  DodgeDuration: 0.15
+  DodgeModelExistTime: 0.35
+  DodgeCooldown: 0.3
+  DodgeEnduranceCost: 10
+  DodgeModelMaterial: {fileID: 2100000, guid: 11d51a887e999af408b3d408f575a218, type: 2}
   StatTextUpdateSpeed: 0.5
   EnduranceBarLerpSpeed: 5
   HealthTextColors:
@@ -116,9 +122,24 @@ MonoBehaviour:
   ReserveEnduranceBarColor: {r: 0.5188679, g: 0.26310518, b: 0.007342457, a: 1}
   ActiveEnduranceBarColor: {r: 1, g: 0.5, b: 0, a: 1}
   ReloadingEnduranceBarColor: {r: 0.4, g: 0.4, b: 0.4, a: 0.8}
-  DodgePower: 3.5
-  DodgeDuration: 0.15
-  DodgeCooldown: 0.4
-  DodgeUpForce: 1.3
-  DodgeEnduranceCost: 10
-  DodgeModelMaterial: {fileID: 2100000, guid: 11d51a887e999af408b3d408f575a218, type: 2}
+  ColorScreenOnDamage: 1
+  ColorScreenColor: {r: 0.78431374, g: 0, b: 0, a: 0.43137255}
+  ColorScreenDepth: 0.03
+  ColorScreenDuration: 0.2
+  ShakeScreenOnKnockback: 1
+  ShakeTimeOnKnockback: 0.1
+  ShakeScreenAxisIntensity: 0.3
+  ShakeScreenAngleIntensity: 0.1
+  BlurScreenOnDamage: 1
+  BlurScreenHealthThreshold: 0.4
+  BlurScreenBaseIntensity: 0.4
+  BlurScreenDuration: 0.3
+  SlowOnCriticalHit: 1
+  SlowOnCritTimeIn: 0
+  SlowOnCritTimeStay: 0.5
+  SlowOnCritTimeOut: 0.2
+  SlowOnCritScale: 0.3
+  ScreenShakeOnCrit: 1
+  ShakeTimeOnCrit: 0.1
+  OnCritShakeAxisIntensity: 0.2
+  OnCritShakeAngleIntensity: 0.15

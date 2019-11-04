@@ -26,6 +26,6 @@ Material:
     m_Floats:
     - _BlurPower: 0
     - _BlurRange: 0
-    - _Depth: 0
+    - _Depth: NaN
     - _DepthStrenght: 1
     m_Colors: []

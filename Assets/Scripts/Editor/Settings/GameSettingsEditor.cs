@@ -14,7 +14,9 @@ namespace EoE.Information
 		private static bool VisualsSettingsOpen;
 		private static bool DamageNumberSettingsOpen;
 		private static bool OtherSettingsOpen;
-		private static bool EffectivenessMatrixOpen;
+		private static bool DamageCalculationsOpen;
+		private static bool DamageCalculationValuesOpen;
+		private static bool DialogueSettingsOpen;
 
 		public override void OnInspectorGUI()
 		{
@@ -47,13 +49,18 @@ namespace EoE.Information
 				DamageNumberSettingsArea();
 			EndFoldoutHeader();
 
+			FoldoutHeader("Dialogue Settings Settings", ref DialogueSettingsOpen);
+			if (DialogueSettingsOpen)
+				DialogueSettingsArea();
+			EndFoldoutHeader();
+
 			FoldoutHeader("Other Settings", ref OtherSettingsOpen);
 			if (OtherSettingsOpen)
 				OtherSettingsArea();
 			EndFoldoutHeader();
 
-			FoldoutHeader("Element Effectiveness Settings", ref EffectivenessMatrixOpen);
-			if (EffectivenessMatrixOpen)
+			FoldoutHeader("Damage Calculation Settings", ref DamageCalculationsOpen);
+			if (DamageCalculationsOpen)
 				EffectivenessMatrixArea();
 			EndFoldoutHeader();
 		}
@@ -62,7 +69,6 @@ namespace EoE.Information
 		{
 			GameSettings settings = target as GameSettings;
 
-			AnimationCurveField(new GUIContent("Turn Speed Multiplaction", "How much speed does a Entitie have when it is fully turning vs. walking straight. 0 In the curve means the Entitie walks straight, 1 means when it is currently facing the opposite direction of where it wants to go."), ref settings.TurnSpeedCurve);
 			FloatField(new GUIContent("When Falling Extra Velocity", "When Entities fall then how much velocity (multiplicative) should be added to the normal gravity?"), ref settings.WhenFallingExtraVelocity);
 			AnimationCurveField(new GUIContent("Fall Damage curve", "When en Entitie hits the ground how much damage should it receive based on velocity. X-Axis == FallVelocity, Y-Axis == Damage"), ref settings.FallDamageCurve);
 			FloatField(new GUIContent("Ground Hit Velocity Loss", "When an Entitie hits the ground "), ref settings.GroundHitVelocityLoss);
@@ -103,6 +109,17 @@ namespace EoE.Information
 			GradientField(new GUIContent("Standard Text Color"), ref settings.StandardTextColor);
 		}
 
+		private void DialogueSettingsArea()
+		{
+			GameSettings settings = target as GameSettings;
+
+			ObjectField(new GUIContent("Dialogue Box Prefab"), ref settings.DialogueBoxPrefab);
+			FloatField(new GUIContent("Show Dialogue Base Delay", "When a dialogue request is sent this is the minumum delay until the DialogBox appears."), ref settings.ShowDialogueBaseDelay);
+			FloatField(new GUIContent("Dialogue Delay Per Letter", "When the dialogue box displays a text every letter will take this time to show itself."), ref settings.DialogueDelayPerLetter);
+			BoolField(new GUIContent("Skip Delay On Space", "Should the delay of spaces be ignored?."), ref settings.SkipDelayOnSpace);
+			FloatField(new GUIContent("Delay To Next Dialogue", "After a dialogue finishes what time should be waited until it will be cleared or the next one starts to show?"), ref settings.DelayToNextDialogue);
+		}
+
 		private void OtherSettingsArea()
 		{
 			GameSettings settings = target as GameSettings;
@@ -116,6 +133,20 @@ namespace EoE.Information
 		{
 			GameSettings settings = target as GameSettings;
 
+			//Damage Calculation Values
+			Foldout(new GUIContent("Damage Calculation Base Values"), ref DamageCalculationValuesOpen);
+			if (DamageCalculationValuesOpen)
+			{
+				Header("((Level + " + settings.DamageLevelAdd + "[A]) * Damage) / " + settings.DamageDivider + "[B]", 1);
+				FloatField(new GUIContent("A"), ref settings.DamageLevelAdd, 1);
+				FloatField(new GUIContent("B"), ref settings.DamageDivider, 1);
+
+				Header("((Level + " + settings.DamageLevelAdd + "[C]) * Defense) / " + settings.DamageDivider + "[D]", 1);
+				FloatField(new GUIContent("C"), ref settings.DefenseLevelAdd, 1);
+				FloatField(new GUIContent("D"), ref settings.DefenseLevelDivider, 1);
+
+				GUILayout.Space(5);
+			}
 			//Effectiveness matrix
 			int elementCount = System.Enum.GetNames(typeof(ElementType)).Length;
 

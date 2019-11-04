@@ -23,7 +23,7 @@ namespace EoE.Utils
 			instance = this;
 		}
 		#region ScreenShake
-		private const float DELAY_PER_SHAKE = 0.02f;
+		private const float DELAY_PER_SHAKE = 0.01f;
 		private const float UN_SHAKE_SPEED = 20;
 		private static Coroutine ShakeScreenCoroutine = null;
 		private static List<ScreenShakeInfo> AllScreenShakes = new List<ScreenShakeInfo>();
@@ -72,8 +72,12 @@ namespace EoE.Utils
 				}
 				else //UNSHAKE
 				{
-					cameraShakeCore.localPosition = Vector3.Lerp(cameraShakeCore.localPosition, Vector3.zero, Time.deltaTime * UN_SHAKE_SPEED);
-					cameraShakeCore.localEulerAngles = Vector3.Lerp(cameraShakeCore.localEulerAngles, Vector3.zero, Time.deltaTime * UN_SHAKE_SPEED / 4);
+					float timeStep = Time.deltaTime * UN_SHAKE_SPEED;
+					cameraShakeCore.localPosition = Vector3.Lerp(cameraShakeCore.localPosition, Vector3.zero, timeStep);
+					cameraShakeCore.localEulerAngles = new Vector3(Mathf.LerpAngle(cameraShakeCore.localEulerAngles.x, 0, timeStep / 4),
+						Mathf.LerpAngle(cameraShakeCore.localEulerAngles.y, 0, timeStep / 4),
+						Mathf.LerpAngle(cameraShakeCore.localEulerAngles.z, 0, timeStep / 4));
+
 					if (cameraShakeCore.localPosition.sqrMagnitude < 0.001f && cameraShakeCore.localEulerAngles.sqrMagnitude < 0.001f)
 					{
 						cameraShakeCore.localPosition = Vector3.zero;

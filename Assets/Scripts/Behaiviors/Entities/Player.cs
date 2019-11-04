@@ -34,7 +34,7 @@ namespace EoE.Entities
 		private float usedEnduranceCooldown;
 
 		//Dodge
-		[SerializeField] private Transform modelTransform;
+		[SerializeField] private Transform modelTransform = default;
 		private float dodgeCooldown;
 		private bool currentlyDodging;
 
@@ -71,14 +71,15 @@ namespace EoE.Entities
 		public override EntitieSettings SelfSettings => selfSettings;
 		public static PlayerSettings PlayerSettings => instance.selfSettings;
 		public static Entitie TargetedEntitie;
+		public static PlayerBuffDisplay BuffDisplay => instance.buffDisplay;
+
 		#region Leveling
 		public static Buff LevelingBaseBuff;
 		public static Buff LevelingSkillPointsBuff;
-		public static PlayerBuffDisplay BuffDisplay => instance.buffDisplay;
-		public static int PlayerLevel { get; private set; }
 		public static int TotalSoulCount { get; private set; }
 		public static int RequiredSoulsForLevel { get; private set; }
-		public static int AvailableSkillPoints;
+		public static int AvailableBaseSkillPoints;
+		public static int AvailableSpecialSkillPoints;
 		#endregion
 
 		//Other
@@ -136,10 +137,11 @@ namespace EoE.Entities
 			AddBuff(LevelingBaseBuff, this);
 			AddBuff(LevelingSkillPointsBuff, this);
 
-			PlayerLevel = 0;
-			RequiredSoulsForLevel = PlayerSettings.LevelSettings.curve.GetRequiredSouls(PlayerLevel);
+			EntitieLevel = 0;
+			RequiredSoulsForLevel = PlayerSettings.LevelSettings.curve.GetRequiredSouls(EntitieLevel);
 			TotalSoulCount = 0;
-			AvailableSkillPoints = 0;
+			AvailableBaseSkillPoints = 0;
+			AvailableSpecialSkillPoints = 0;
 			//Safest way to ensure everyhting is correct is by adding 0 Souls to our current count
 			AddSouls(0);
 		}
@@ -282,6 +284,14 @@ namespace EoE.Entities
 		#region Movement
 		private void MovementControl()
 		{
+			if (Input.GetKeyDown(KeyCode.K))
+			{
+				ChangeHealth(new InflictionInfo(this, CauseType.Physical, ElementType.None, actuallWorldPosition, Vector3.back, 17, true, true, 3));
+			}
+			if (Input.GetKeyDown(KeyCode.O))
+			{
+				ChangeHealth(new InflictionInfo(this, CauseType.Physical, ElementType.None, actuallWorldPosition, Vector3.back, 17, false));
+			}
 			JumpControl();
 			PlayerMoveControl();
 			DodgeControl();
@@ -368,24 +378,95 @@ namespace EoE.Entities
 			currentlyDodging = true;
 			float timer = 0;
 			float targetAngle = intendedRotation;
-			Vector2 controllDirection = InputController.PlayerMove;
-			if (controllDirection != Vector2.zero)
+			if (InputController.PlayerMove != Vector2.zero)
 			{
-				targetAngle = Mathf.Atan2(controllDirection.y, controllDirection.x) * Mathf.Rad2Deg + 90 + PlayerCameraController.CurRotation.x;
+				targetAngle = -(Mathf.Atan2(controllDirection.Value.z, controllDirection.Value.x) * Mathf.Rad2Deg - 90);
 			}
 
 			Vector3 newForce = new Vector3(Mathf.Sin(targetAngle * Mathf.Deg2Rad), 0, Mathf.Cos(targetAngle * Mathf.Deg2Rad)) * PlayerSettings.DodgePower * curWalkSpeed;
-			newForce.y = PlayerSettings.DodgeUpForce;
 
 			entitieForceController.ApplyForce(newForce, 1/PlayerSettings.DodgeDuration);
+			EffectUtils.BlurScreen(0.8f, PlayerSettings.DodgeDuration * 1.6f, 6);
 
-			while(timer < PlayerSettings.DodgeDuration)
+			//Create a copy of the player model
+			Material dodgeMaterialInstance = Instantiate(PlayerSettings.DodgeModelMaterial);
+			Transform modelCopy = Instantiate(modelTransform, Storage.ParticleStorage);
+			WeaponController weaponCopy = Instantiate(heldWeapon, Storage.ParticleStorage);
+
+			modelCopy.transform.position = modelTransform.position;
+			modelCopy.transform.localScale = modelTransform.lossyScale;
+			modelCopy.transform.rotation = modelTransform.rotation;
+
+			Color baseColor = dodgeMaterialInstance.color;
+			Color alphaPart = new Color(0, 0, 0, dodgeMaterialInstance.color.a);
+			baseColor.a = 0;
+
+			weaponCopy.enabled = false;
+			for(int i = 0; i < weaponCopy.weaponHitboxes.Length; i++)
+			{
+				weaponCopy.weaponHitboxes[i].enabled = false;
+			}
+
+			ApplyMaterialToAllChildren(modelCopy);
+			ApplyMaterialToAllChildren(weaponCopy.transform);
+
+			invincible = true;
+
+			while(timer < PlayerSettings.DodgeModelExistTime)
 			{
 				yield return new WaitForFixedUpdate();
 				timer += Time.fixedDeltaTime;
+				dodgeMaterialInstance.color = baseColor + alphaPart * (1- timer / PlayerSettings.DodgeModelExistTime);
 			}
 			dodgeCooldown = PlayerSettings.DodgeCooldown;
 			currentlyDodging = false;
+			invincible = false;
+
+			Destroy(modelCopy.gameObject);
+			Destroy(weaponCopy.gameObject);
+
+			void ApplyMaterialToAllChildren(Transform parent)
+			{
+				//Apply to parent
+				{
+					parent.gameObject.layer = 0;
+					Renderer rend = parent.GetComponent<Renderer>();
+					if (rend)
+					{
+						Material[] newMats = new Material[rend.materials.Length];
+						for (int i = 0; i < newMats.Length; i++)
+						{
+							newMats[i] = dodgeMaterialInstance;
+						}
+						rend.materials = newMats;
+					}
+				}
+
+				//Apply to children
+				int c = parent.childCount;
+				for (int i = 0; i < c; i++)
+				{
+					parent.GetChild(i).gameObject.layer = 0;
+					//Apply to children of child
+					if (parent.GetChild(i).childCount > 0)
+					{
+						ApplyMaterialToAllChildren(parent.GetChild(i));
+						continue;
+					}
+
+					Renderer rend = parent.GetChild(i).GetComponent<Renderer>();
+					if (!rend)
+						continue;
+
+					Material[] newMats = new Material[rend.materials.Length];
+					for(int j = 0; j < newMats.Length; j++)
+					{
+						newMats[j] = dodgeMaterialInstance;
+					}
+					rend.materials = newMats;
+
+				}
+			}
 		}
 		private void CameraControl()
 		{
@@ -689,17 +770,24 @@ namespace EoE.Entities
 		}
 		public void AddSouls(int amount)
 		{
+			const int startRotationAt = 1;
+			const int enumOffset = (int)TargetStat.PhysicalDamage;
+
 			TotalSoulCount += amount;
 			while(TotalSoulCount >= RequiredSoulsForLevel)
 			{
-				PlayerLevel++;
-				AvailableSkillPoints++;
-				RequiredSoulsForLevel = PlayerSettings.LevelSettings.curve.GetRequiredSouls(PlayerLevel);
+				EntitieLevel++;
+				RequiredSoulsForLevel = PlayerSettings.LevelSettings.curve.GetRequiredSouls(EntitieLevel);
+				AvailableBaseSkillPoints += PlayerSettings.LevelSettings.BaseSkillPointsPerLevel;
+				AvailableSpecialSkillPoints += PlayerSettings.LevelSettings.ExtraSkillPointsPerLevel;
 
-				//Update buff
-				for(int i = 0; i < LevelingBaseBuff.Effects.Length; i++)
+				float baseRotationAmount = (EntitieLevel / 10) * PlayerSettings.LevelSettings.PerTenLevelsBasePoints + 1;
+				int rotationIndex = (startRotationAt + EntitieLevel) % 3 + enumOffset;
+				for(int i = enumOffset; i < enumOffset + 3; i++)
 				{
-					LevelingBaseBuff.Effects[i].Amount += PlayerSettings.LevelSettings.baseIncrementPerLevel[i];
+					LevelingBaseBuff.Effects[i].Amount += baseRotationAmount;
+					if (i == rotationIndex)
+						LevelingBaseBuff.Effects[i].Amount += PlayerSettings.LevelSettings.RotationExtraPoints;
 				}
 				RecalculateBuffs();
 

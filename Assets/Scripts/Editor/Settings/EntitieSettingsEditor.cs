@@ -67,8 +67,9 @@ namespace EoE.Information
 		{
 			EntitieSettings settings = target as EntitieSettings;
 
-			FloatField(new GUIContent("Base Attack Damage", "This value will be used for Physical damage calculations."), ref settings.BaseAttackDamage);
-			FloatField(new GUIContent("Base Magic Damage", "This value will be used for Magic damage calculations."), ref settings.BaseMagicDamage);
+			FloatField(new GUIContent("Base Attack Damage", "This value will be used for Physical damage calculations. (Against target)"), ref settings.BaseAttackDamage);
+			FloatField(new GUIContent("Base Magic Damage", "This value will be used for Magic damage calculations. (Against target)"), ref settings.BaseMagicDamage);
+			FloatField(new GUIContent("Base Defense", "This value will be used for Physical damage calculations. (On self)"), ref settings.BaseDefense);
 		}
 
 		protected virtual void StatSettingsArea()

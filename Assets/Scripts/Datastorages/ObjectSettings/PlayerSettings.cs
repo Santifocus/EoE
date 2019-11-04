@@ -31,6 +31,14 @@ namespace EoE.Information
 		public float JumpEnduranceCost				= 4;
 		public float RunEnduranceCost				= 3;
 
+		//Dodging
+		public float DodgePower						= 1;
+		public float DodgeDuration					= 0.2f;
+		public float DodgeModelExistTime			= 0.4f;
+		public float DodgeCooldown					= 0.5f;
+		public float DodgeEnduranceCost				= 20;
+		public Material DodgeModelMaterial			= null;
+
 		//UI
 		public float StatTextUpdateSpeed			= 1;
 		public float EnduranceBarLerpSpeed			= 5;
@@ -41,12 +49,36 @@ namespace EoE.Information
 		public Color ActiveEnduranceBarColor		= new Color(1, 0.5f, 0, 1);
 		public Color ReloadingEnduranceBarColor		= new Color(0.4f, 0.4f, 0.4f, 0.8f);
 
-		//Dodging
-		public float DodgePower						= 1;
-		public float DodgeDuration					= 0.2f;
-		public float DodgeCooldown					= 0.5f;
-		public float DodgeUpForce					= 1;
-		public float DodgeEnduranceCost				= 20;
-		public Material DodgeModelMaterial			= null;
+		///VFX
+		//ScreenColor
+		public bool ColorScreenOnDamage				= true;
+		public Color ColorScreenColor				= Color.red;
+		public float ColorScreenDepth			= 0.15f;
+		public float ColorScreenDuration		= 0.75f;
+
+		//ShakeOnknockback
+		public bool ShakeScreenOnKnockback			= true;
+		public float ShakeTimeOnKnockback			= 0.5f;
+		public float ShakeScreenAxisIntensity		= 0.25f;
+		public float ShakeScreenAngleIntensity		= 0.25f;
+
+		//Blur on lowlife
+		public bool BlurScreenOnDamage				= true;
+		public float BlurScreenHealthThreshold		= 0.35f;
+		public float BlurScreenBaseIntensity		= 0.05f;
+		public float BlurScreenDuration				= 0.5f;
+
+		//Slow on Crit
+		public bool SlowOnCriticalHit				= true;
+		public float SlowOnCritTimeIn				= 0.2f;
+		public float SlowOnCritTimeStay				= 0.5f;
+		public float SlowOnCritTimeOut				= 0.2f;
+		public float SlowOnCritScale				= 0.3f;
+
+		//Shake on Crit
+		public bool ScreenShakeOnCrit				= true;
+		public float ShakeTimeOnCrit				= 0.15f;
+		public float OnCritShakeAxisIntensity		= 0.25f;
+		public float OnCritShakeAngleIntensity		= 0.25f;
 	}
 }

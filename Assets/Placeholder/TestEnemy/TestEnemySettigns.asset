@@ -19,6 +19,7 @@ MonoBehaviour:
   SoulWorth: 5
   BaseAttackDamage: 10
   BaseMagicDamage: 10
+  BaseDefense: 0
   Health: 100
   DoHealthRegen: 0
   HealthRegen: 0

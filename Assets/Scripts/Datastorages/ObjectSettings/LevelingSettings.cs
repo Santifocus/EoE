@@ -7,8 +7,18 @@ namespace EoE.Information
 	public class LevelingSettings : ObjectSettings
 	{
 		public LevelingCurve curve;
-		public float[] baseIncrementPerLevel;
-		public float[] incrementsForSkillpoint;
+		public int BaseSkillPointsPerLevel;
+		public int ExtraSkillPointsPerLevel;
+
+		public float PerTenLevelsBasePoints;
+		public float RotationExtraPoints;
+
+		public float HealthPerSkillPoint;
+		public float ManaPerSkillPoint;
+		public float EndurancePerSkillPoint;
+		public float PhysicalDamagePerSkillPoint;
+		public float MagicDamagePerSkillPoint;
+		public float DefensePerSkillPoint;
 
 		[System.Serializable]
 		public class LevelingCurve

@@ -21,4 +21,4 @@ MonoBehaviour:
   baseAttackDamage: 20
   baseEnduranceDrain: 10
   baseKnockbackAmount: 3
-  baseCritChance: 0.2
+  baseCritChance: 0.3

@@ -16,15 +16,13 @@ MonoBehaviour:
     a: 0.5
     b: 8
     c: 10
-  baseIncrementPerLevel:
-  - 20
-  - 10
-  - 5
-  - 3
-  - 1
-  incrementsForSkillpoint:
-  - 25
-  - 15
-  - 7
-  - 5
-  - 2
+  BaseSkillPointsPerLevel: 0
+  ExtraSkillPointsPerLevel: 0
+  PerTenLevelsBasePoints: 1
+  RotationExtraPoints: 1
+  HealthPerSkillPoint: 0
+  ManaPerSkillPoint: 0
+  EndurancePerSkillPoint: 0
+  PhysicalDamagePerSkillPoint: 0
+  MagicDamagePerSkillPoint: 0
+  DefensePerSkillPoint: 0

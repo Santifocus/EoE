@@ -13,12 +13,14 @@ namespace EoE.Information
 		private static bool EnduranceSettingsOpen;
 		private static bool HUDSettingsOpen;
 		private static bool DodgeSettingsOpen;
+		private static bool VFXSettingsOpen;
 		protected override void CustomInspector()
 		{
 			base.CustomInspector();
 			CameraSettingsArea();
-			HUDSettingsArea();
 			DodgeSettingsArea();
+			HUDSettingsArea();
+			VFXSettingsArea();
 		}
 
 		private void CameraSettingsArea()
@@ -64,6 +66,22 @@ namespace EoE.Information
 				FloatField(new GUIContent("Run Endurance Cost", "How much Endurance does running use? (Per Second)"), ref settings.RunEnduranceCost, 1);
 			}
 		}
+		private void DodgeSettingsArea()
+		{
+			PlayerSettings settings = target as PlayerSettings;
+
+			FoldoutHeader("Dodge Settings", ref DodgeSettingsOpen);
+			if (DodgeSettingsOpen)
+			{
+				FloatField(new GUIContent("Dodge Power", "How strong does the player dodge into the intended direction? (Value * Movespeed)"), ref settings.DodgePower);
+				FloatField(new GUIContent("Dodge Duration"), ref settings.DodgeDuration);
+				FloatField(new GUIContent("Dodge Model Exist Time", "The Silhouette that appears after dodging will exist for this amount of time."), ref settings.DodgeModelExistTime);
+				FloatField(new GUIContent("Dodge Cooldown", "After finishing a Dodge, how long should it be on cooldown? (In Seconds)"), ref settings.DodgeCooldown);
+				FloatField(new GUIContent("Dodge Endurance Cost", "How much Endurance does dodging drain?"), ref settings.DodgeEnduranceCost);
+				ObjectField(new GUIContent("Dodge Model Material", "What material should be used for the Dodge Silhouette?"), ref settings.DodgeModelMaterial);
+			}
+			EndFoldoutHeader();
+		}
 		private void HUDSettingsArea()
 		{
 			PlayerSettings settings = target as PlayerSettings;
@@ -85,19 +103,57 @@ namespace EoE.Information
 			}
 			EndFoldoutHeader();
 		}
-		private void DodgeSettingsArea()
+		private void VFXSettingsArea()
 		{
 			PlayerSettings settings = target as PlayerSettings;
 
-			FoldoutHeader("Dodge Settings", ref DodgeSettingsOpen);
-			if (DodgeSettingsOpen)
+			FoldoutHeader("VFX Settings", ref VFXSettingsOpen);
+			if (VFXSettingsOpen)
 			{
-				FloatField(new GUIContent("Dodge Power", "How strong does the player dodge into the intended direction? (Value * Movespeed)"), ref settings.DodgePower);
-				FloatField(new GUIContent("Dodge Up Force", "This will be added as the Vertical force. 0 Would mean high friction with the ground the player is standing on, therefore it is recommended to use a higher value."), ref settings.DodgeUpForce);
-				FloatField(new GUIContent("Dodge Duration"), ref settings.DodgeDuration);
-				FloatField(new GUIContent("Dodge Cooldown", "After finishing a Dodge, how long should it be on cooldown? (In Seconds)"), ref settings.DodgeCooldown);
-				FloatField(new GUIContent("Dodge Endurance Cost", "How much Endurance does dodging drain?"), ref settings.DodgeEnduranceCost);
-				ObjectField(new GUIContent("Dodge Model Material", "What material should be used for the Dodge Silhouette?"), ref settings.DodgeModelMaterial);
+				BoolField(new GUIContent("Color Screen On Damage", "When the player get hit, should there be a color screen feedback?"), ref settings.ColorScreenOnDamage);
+				if (settings.ColorScreenOnDamage)
+				{
+					ColorField(new GUIContent("Color Screen Color", "The Color of the Screen coloring"), ref settings.ColorScreenColor, 1);
+					FloatField(new GUIContent("Color Screen Depth", "How far should the color go into the screen?"), ref settings.ColorScreenDepth, 1);
+					FloatField(new GUIContent("Color Screen Duration", "How long should the screen coloring stay?"), ref settings.ColorScreenDuration, 1);
+				}
+
+				GUILayout.Space(6);
+				BoolField(new GUIContent("Shake Screen On Knockback", "When the player experiences an impact should the screen shake?"), ref settings.ShakeScreenOnKnockback);
+				if (settings.ShakeScreenOnKnockback)
+				{
+					FloatField(new GUIContent("Shake Time On Knockback", "How long should the screen shake?"), ref settings.ShakeTimeOnKnockback, 1);
+					FloatField(new GUIContent("Shake Screen Axis Intensity", "XYZ Position shake multiplier"), ref settings.ShakeScreenAxisIntensity, 1);
+					FloatField(new GUIContent("Shake Screen Angle Intensity", "XYZ Rotation shake multiplier"), ref settings.ShakeScreenAngleIntensity, 1);
+				}
+
+				GUILayout.Space(6);
+				BoolField(new GUIContent("Blur Screen On Damage", "When the player is below a health threshold, should there be a Blur on the sight?"), ref settings.BlurScreenOnDamage);
+				if (settings.BlurScreenOnDamage)
+				{
+					FloatField(new GUIContent("Blur Screen Health Threshold", "If the player is below this threshold (0 - 1) the blur effect will be caused."), ref settings.BlurScreenHealthThreshold, 1);
+					FloatField(new GUIContent("Blur Screen Base Intensity", "How strong should the intensity be? (0 - 1), Will be multiplied by the caused damage and how much health is currently left."), ref settings.BlurScreenBaseIntensity, 1);
+					FloatField(new GUIContent("Blur Screen Duration", "How long should the blur stay? Will be multiplied the same as the intensity"), ref settings.BlurScreenDuration, 1);
+				}
+
+				GUILayout.Space(6);
+				BoolField(new GUIContent("Slow On Critical Hit", "When the player hits a critical strike should there be a time dilution? (Slowdown or Speedup)"), ref settings.SlowOnCriticalHit);
+				if (settings.SlowOnCriticalHit)
+				{
+					FloatField(new GUIContent("Slow On Crit Time In", "How long should the slowdown take until it is at its maximum?"), ref settings.SlowOnCritTimeIn, 1);
+					FloatField(new GUIContent("Slow On Crit Time Stay", "How long should the slowdown stay?"), ref settings.SlowOnCritTimeStay, 1);
+					FloatField(new GUIContent("Slow On Crit Time Out", "How long should the slowdown take until it has faded away?"), ref settings.SlowOnCritTimeOut, 1);
+					FloatField(new GUIContent("Slow On Crit Scale", "What is the maximum slow (This is the time scale while Stay time is active)"), ref settings.SlowOnCritScale, 1);
+
+					GUILayout.Space(3);
+					BoolField(new GUIContent("Screen Shake On Crit"), ref settings.ScreenShakeOnCrit, 1);
+					if (settings.ScreenShakeOnCrit)
+					{
+						FloatField(new GUIContent("Shake Time On Crit", "How long should the screen shake?"), ref settings.ShakeTimeOnCrit, 2);
+						FloatField(new GUIContent("On Crit Shake Axis Intensity", "XYZ Position shake multiplier"), ref settings.OnCritShakeAxisIntensity, 2);
+						FloatField(new GUIContent("On Crit Shake Angle Intensity", "XYZ Rotation shake multiplier"), ref settings.OnCritShakeAngleIntensity, 2);
+					}
+				}
 			}
 			EndFoldoutHeader();
 		}

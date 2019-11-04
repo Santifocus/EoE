@@ -1,4 +1,5 @@
 ﻿using EoE.Entities;
+using EoE.Utils;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -38,13 +39,46 @@ namespace EoE.Information
 		{
 			public readonly float finalDamage;
 			public readonly Vector3 forceDirection;
-			public readonly Vector3 causedKnockback;
+			public readonly Vector3? causedKnockback;
 
 			public InflictionResult(InflictionInfo basis, Entitie receiver, bool createDamageNumber, bool fromRegen = false)
 			{
-				finalDamage = basis.baseDamageAmount;
-				if(basis.cause != CauseType.Heal)
-					finalDamage *= GameController.CurrentGameSettings.GetEffectiveness(basis.element, receiver.SelfSettings.EntitieElement) ;
+				//Calculate the damage that we want to cause
+				finalDamage = (((basis.attacker ? basis.attacker.EntitieLevel : 1) + GameController.CurrentGameSettings.DamageLevelAdd) * basis.baseDamageAmount) / GameController.CurrentGameSettings.DamageDivider;
+				if (basis.cause == CauseType.Physical)
+				{
+					float defenseAmount = ((receiver.EntitieLevel + GameController.CurrentGameSettings.DefenseLevelAdd) * receiver.curDefense) / GameController.CurrentGameSettings.DefenseLevelDivider;
+					finalDamage -= defenseAmount;
+				}
+
+				if (basis.cause != CauseType.Heal)
+					finalDamage *= GameController.CurrentGameSettings.GetEffectiveness(basis.element, receiver.SelfSettings.EntitieElement);
+
+				if (basis.wasCritical)
+					finalDamage *= GameController.CurrentGameSettings.CritDamageMultiplier;
+
+				//VFX for Player
+				if(basis.attacker is Player && Player.PlayerSettings.SlowOnCriticalHit)
+				{
+					if(basis.wasCritical && (basis.cause == CauseType.Physical || basis.cause == CauseType.Magic))
+					{
+						EffectUtils.TimeDilation(
+							0,
+							Player.PlayerSettings.SlowOnCritScale,
+							Player.PlayerSettings.SlowOnCritTimeIn,
+							Player.PlayerSettings.SlowOnCritTimeStay,
+							false,
+							Player.PlayerSettings.SlowOnCritTimeOut);
+
+						if (Player.PlayerSettings.ScreenShakeOnCrit)
+						{
+							EffectUtils.ShakeScreen(
+								Player.PlayerSettings.ShakeTimeOnCrit,
+								Player.PlayerSettings.OnCritShakeAxisIntensity,
+								Player.PlayerSettings.OnCritShakeAngleIntensity);
+						}
+					}
+				}
 
 				//We dont want to overheal, but will allow overkill for bettet VFX
 				finalDamage = Mathf.Max(finalDamage, -(receiver.curMaxHealth - receiver.curHealth));
@@ -57,7 +91,7 @@ namespace EoE.Information
 				else
 				{
 					forceDirection = Vector3.up;
-					causedKnockback = Vector3.zero;
+					causedKnockback = null;
 				}
 
 				if (finalDamage != 0 && createDamageNumber && !(fromRegen && !GameController.CurrentGameSettings.ShowRegenNumbers))
@@ -89,7 +123,8 @@ namespace EoE.Information
 							break;
 					}
 
-					Utils.EffectUtils.CreateDamageNumber(basis.impactPosition, colors, forceDirection * GameController.CurrentGameSettings.DamageNumberFlySpeed, Mathf.Abs(finalDamage), basis.wasCritical);
+					if(!(receiver.invincible && finalDamage > 0))
+						Utils.EffectUtils.CreateDamageNumber(basis.impactPosition, colors, forceDirection * GameController.CurrentGameSettings.DamageNumberFlySpeed, Mathf.Abs(finalDamage), basis.wasCritical);
 				}
 			}
 		}

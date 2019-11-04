@@ -23,14 +23,15 @@ namespace EoE.Information
 		}
 
 		private static bool LevelingCurveOpen;
-		private static bool BaseIncrementsOpen;
 		private static bool SkillPointIncrementOpen;
-		private int TestInput;
-		private string TestOutput;
+		private static bool RotationIncreaseSettings;
+		private int testInput;
+		private string testOutput;
 		private bool needsToCalculateTestValue = true;
 		protected override void CustomInspector() 
 		{
 			LevelingCurveSettingsArea();
+			RotationIncrements();
 			IncrementValues();
 		}
 
@@ -42,12 +43,12 @@ namespace EoE.Information
 			if (LevelingCurveOpen)
 			{
 				Header("Curve: (x^2 * a) + (x * b) + (c)", 1, false);
-				if (IntField(new GUIContent("Test Level", "Input a level to find out what amount of souls is required to reach it."), ref TestInput, 1) || needsToCalculateTestValue)
+				if (IntField(new GUIContent("Test Level", "Input a level to find out what amount of souls is required to reach it."), ref testInput, 1) || needsToCalculateTestValue)
 				{
 					needsToCalculateTestValue = false;
-					TestOutput = settings.curve.GetRequiredSouls(TestInput).ToString();
+					testOutput = settings.curve.GetRequiredSouls(testInput).ToString();
 				}
-				Header("Required Souls: " + TestOutput, 1, false, false);
+				Header("Required Souls: " + testOutput, 1, false, false);
 
 				LineBreak();
 				bool changed = false;
@@ -71,38 +72,37 @@ namespace EoE.Information
 			EndFoldoutHeader();
 		}
 
+		private void RotationIncrements()
+		{
+			LevelingSettings settings = target as LevelingSettings;
+
+			FoldoutHeader(new GUIContent("Rotation Increase Settings"), ref RotationIncreaseSettings);
+			if (RotationIncreaseSettings)
+			{
+				FloatField(new GUIContent("Per Ten Levels Base Points", "This is the base amount of for the stat increases multiplied for every 10 levels. (0-9 = x1, 10 - 19 = x2 ...)"), ref settings.PerTenLevelsBasePoints);
+				FloatField(new GUIContent("Rotation Extra Points"), ref settings.RotationExtraPoints);
+			}
+			EndFoldoutHeader();
+		}
+
 		private void IncrementValues()
 		{
 			LevelingSettings settings = target as LevelingSettings;
 
-			int incrementingStat = 5;
-			Header("Leveling Increments");
-			if (settings.baseIncrementPerLevel == null || settings.baseIncrementPerLevel.Length != incrementingStat)
-			{
-				settings.baseIncrementPerLevel = new float[incrementingStat];
-			}
-			if (settings.incrementsForSkillpoint == null || settings.incrementsForSkillpoint.Length != incrementingStat)
-			{
-				settings.incrementsForSkillpoint = new float[incrementingStat];
-			}
-
-			FoldoutHeader(new GUIContent("Base Increments", "For every level the player increases his Stats by these amounts."), ref BaseIncrementsOpen);
-			if (BaseIncrementsOpen)
-			{
-				for (int i = 0; i < incrementingStat; i++)
-				{
-					FloatField(((TargetStat)i).ToString(), ref settings.baseIncrementPerLevel[i], 1);
-				}
-			}
-			EndFoldoutHeader();
-
-			FoldoutHeader(new GUIContent("SkillPoint Increments", "When the player applies a Skillpoint to a stat he gains the listed amount."), ref SkillPointIncrementOpen);
+			FoldoutHeader(new GUIContent("Skill Point Settings"), ref SkillPointIncrementOpen);
 			if (SkillPointIncrementOpen)
 			{
-				for (int i = 0; i < incrementingStat; i++)
-				{
-					FloatField(((TargetStat)i).ToString(), ref settings.incrementsForSkillpoint[i], 1);
-				}
+				IntField(new GUIContent("Base Skill Points Per Level", "When leveling up how many skillpoints does the player gain that he can use to improve Health/Mana/Endurance?"), ref settings.BaseSkillPointsPerLevel);
+				FloatField(new GUIContent("Health Per Skill Point"), ref settings.HealthPerSkillPoint);
+				FloatField(new GUIContent("Mana Per Skill Point"), ref settings.ManaPerSkillPoint);
+				FloatField(new GUIContent("Endurance Per Skill Point"), ref settings.EndurancePerSkillPoint);
+
+				LineBreak();
+				IntField(new GUIContent("Extra Skill Points Per Level", "When leveling up how many skillpoints does the player gain that he can use to improve his PhysicalDamage/MagicDamage/Defense?"), ref settings.ExtraSkillPointsPerLevel);
+
+				FloatField(new GUIContent("Physical Damage Per Skill Point"), ref settings.PhysicalDamagePerSkillPoint);
+				FloatField(new GUIContent("Magic Damage Per Skill Point"), ref settings.MagicDamagePerSkillPoint);
+				FloatField(new GUIContent("Defense Per Skill Point"), ref settings.DefensePerSkillPoint);
 			}
 			EndFoldoutHeader();
 		}

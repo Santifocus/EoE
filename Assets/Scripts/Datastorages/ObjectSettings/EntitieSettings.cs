@@ -18,9 +18,9 @@ namespace EoE.Information
 		public int SoulWorth						= 10;
 
 		//Basic Combat Data
-		public float BaseAttackDamage				= 10;
-		public float BaseMagicDamage				= 10;
-		public float BaseDefense					= 0;
+		public float BaseAttackDamage				= 4;
+		public float BaseMagicDamage				= 3;
+		public float BaseDefense					= 2;
 
 		//Health
 		public float Health							= 50;
