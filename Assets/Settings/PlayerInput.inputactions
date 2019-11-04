@@ -156,7 +156,7 @@
                     "id": "cc43d195-2008-4e25-9e1e-901dbe73120b",
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
-                    "processors": "InvertVector2(invertX=false),StickDeadzone(min=0.3,max=1)",
+                    "processors": "InvertVector2(invertX=false,invertY=false),StickDeadzone(min=0.3,max=1)",
                     "groups": "",
                     "action": "PlayerMove",
                     "isComposite": false,

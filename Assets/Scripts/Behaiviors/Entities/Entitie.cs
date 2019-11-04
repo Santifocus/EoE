@@ -49,6 +49,7 @@ namespace EoE.Entities
 		private float combatEndCooldown;
 
 		//Velocity Control
+		protected Vector3? controllDirection = null;
 		protected float intendedAcceleration;
 		protected float curAcceleration;
 		private float jumpGroundCooldown;
@@ -213,7 +214,7 @@ namespace EoE.Entities
 
 			//We find out in which direction the Entitie should move according to its movement
 			float baseTargetSpeed = curWalkSpeed * (curStates.IsRunning ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
-			curMoveForce = baseTargetSpeed * transform.forward;
+			curMoveForce = baseTargetSpeed * (controllDirection.HasValue ? controllDirection.Value : transform.forward);
 
 			//Lerp knockback / other forces to zero based on the entities deceleration stat
 			if (SelfSettings.NoMoveDeceleration > 0)

@@ -301,10 +301,13 @@ namespace EoE.Entities
 		private void PlayerMoveControl()
 		{
 			//Where is the player Pointing the Joystick at?
-			Vector2 controllDirection = InputController.PlayerMove;
+			Vector2 inputDirection = InputController.PlayerMove;
 
-			bool moving = controllDirection != Vector2.zero;
+			bool moving = inputDirection != Vector2.zero;
 			curStates.IsMoving = moving;
+
+			if (TargetedEntitie)
+				intendedRotation = PlayerCameraController.TargetRotation.x;
 
 			//Is the player not trying to move? Then stop here
 			if (!moving)
@@ -331,12 +334,20 @@ namespace EoE.Entities
 					running = curStates.IsRunning = true;
 				}
 			}
-
-			float intendedControl = Mathf.Min(1, controllDirection.magnitude);
+			//Check how fast the player wants to accelerate based on how far the movestick is moved
+			float intendedControl = Mathf.Min(1, inputDirection.magnitude);
 			intendedAcceleration = intendedControl * (running ? PlayerSettings.RunSpeedMultiplicator : 1);
 
-			if(intendedControl > 0.15f)
-				intendedRotation = Mathf.Atan2(controllDirection.y, controllDirection.x) * Mathf.Rad2Deg + 90 + PlayerCameraController.CurRotation.x;
+			//Rotate the input direction base on the camera direction
+			float cosDir = Mathf.Cos((-PlayerCameraController.CurRotation.x) * Mathf.Deg2Rad);
+			float sinDir = Mathf.Sin((-PlayerCameraController.CurRotation.x) * Mathf.Deg2Rad);
+			float newX = (inputDirection.x * cosDir) - (inputDirection.y * sinDir);
+			float newZ = (inputDirection.x * sinDir) + (inputDirection.y * cosDir);
+			//Now set the controll direction to the rotated direction, normalize by dividing with the intended speed
+			controllDirection = new Vector3(newX, 0, newZ) / intendedControl;
+
+			if (!TargetedEntitie)
+				intendedRotation = -(Mathf.Atan2(controllDirection.Value.z, controllDirection.Value.x) * Mathf.Rad2Deg - 90);
 		}
 		private void DodgeControl()
 		{
