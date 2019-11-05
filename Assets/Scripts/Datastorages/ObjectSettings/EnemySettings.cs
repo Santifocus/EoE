@@ -12,7 +12,7 @@ namespace EoE.Information
 		public float SightAngle = 60;
 		public float FoundPlayerSightAngle = 120;
 		public float ChaseInterest = 4;
-		public float LookAroundAfterLostPlayerTime = 4;
+		public float InvestigationTime = 8;
 
 		//Wandering
 		public float WanderingFactor = 5;
