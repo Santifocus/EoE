@@ -30,6 +30,7 @@ namespace EoE
 		}
 		private static void SetPauseGamestate(bool state)
 		{
+			Time.timeScale = state ? 0 : 1;
 			gameIsPaused = state;
 		}
 	}

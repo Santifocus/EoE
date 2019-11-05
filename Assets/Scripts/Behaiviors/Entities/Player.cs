@@ -15,6 +15,10 @@ namespace EoE.Entities
 		#region Fields
 		//Constants
 		private const float ATTACK_INTERACT_COOLDOWN = 0.75f;
+		private const float RUN_ANIM_THRESHOLD = 0.75f;
+		private const float NON_TURNING_THRESHOLD = 60;
+		private const float LERP_TURNING_AREA = 0.5f;
+
 		//Inspector variables
 		[Space(10)]
 		[SerializeField] private PlayerSettings selfSettings = default;
@@ -34,9 +38,15 @@ namespace EoE.Entities
 		private float usedEnduranceCooldown;
 
 		//Dodge
-		[SerializeField] private Transform modelTransform = default;
+		public Transform modelTransform = default;
 		private float dodgeCooldown;
 		private bool currentlyDodging;
+
+		//Velocity
+		protected Vector3 curMoveForce;
+		protected Vector3? controllDirection = null;
+		protected float intendedAcceleration;
+		protected float curAcceleration;
 
 		#region Physical Attack
 		//Attack
@@ -147,6 +157,9 @@ namespace EoE.Entities
 		}
 		protected override void EntitieUpdate()
 		{
+			if (GameController.GameIsPaused)
+				return;
+
 			EnduranceRegen();
 			CameraControl();
 			MovementControl();
@@ -157,6 +170,7 @@ namespace EoE.Entities
 		protected override void EntitieFixedUpdate()
 		{
 			PositionHeldWeapon();
+			TurnControl();
 		}
 		#endregion
 		#region Setups
@@ -284,17 +298,77 @@ namespace EoE.Entities
 		#region Movement
 		private void MovementControl()
 		{
-			if (Input.GetKeyDown(KeyCode.K))
-			{
-				ChangeHealth(new InflictionInfo(this, CauseType.Physical, ElementType.None, actuallWorldPosition, Vector3.back, 17, true, true, 3));
-			}
-			if (Input.GetKeyDown(KeyCode.O))
-			{
-				ChangeHealth(new InflictionInfo(this, CauseType.Physical, ElementType.None, actuallWorldPosition, Vector3.back, 17, false));
-			}
+			UpdateAcceleration();
+			UpdateMovementSpeed();
+
 			JumpControl();
 			PlayerMoveControl();
 			DodgeControl();
+		}
+		private void UpdateAcceleration()
+		{
+			if (curStates.IsMoving && !curStates.IsTurning)
+			{
+				float clampedIntent = Mathf.Clamp01(intendedAcceleration);
+				if (curAcceleration < clampedIntent)
+				{
+					if (SelfSettings.MoveAcceleration > 0)
+						curAcceleration = Mathf.Min(clampedIntent, curAcceleration + intendedAcceleration * Time.fixedDeltaTime / SelfSettings.MoveAcceleration / SelfSettings.EntitieMass * (curStates.IsGrounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
+					else
+						curAcceleration = clampedIntent;
+				}
+			}
+			else //decelerate
+			{
+				if (curAcceleration > 0)
+				{
+					if (SelfSettings.NoMoveDeceleration > 0)
+						curAcceleration = Mathf.Max(0, curAcceleration - Time.fixedDeltaTime / SelfSettings.NoMoveDeceleration / SelfSettings.EntitieMass * (curStates.IsGrounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
+					else
+						curAcceleration = 0;
+				}
+			}
+		}
+		private void UpdateMovementSpeed()
+		{
+			bool turning = curStates.IsTurning;
+			bool moving = curStates.IsMoving;
+			bool running = curStates.IsRunning;
+
+			//If the Entitie doesnt move intentionally but is in run mode, then stop the run mode
+			if (running && !moving)
+				curStates.IsRunning = running = false;
+
+			//Set the animation state to either Turning, Walking or Running
+			animationControl.SetBool("Turning", turning);
+			animationControl.SetBool("Walking", !turning && curAcceleration > 0 && !(running && curAcceleration > RUN_ANIM_THRESHOLD));
+			animationControl.SetBool("Running", !turning && curAcceleration > 0 && (running && curAcceleration > RUN_ANIM_THRESHOLD));
+
+			//We find out in which direction the Entitie should move according to its movement
+			float baseTargetSpeed = curWalkSpeed * (curStates.IsRunning ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
+			curMoveForce = baseTargetSpeed * (controllDirection.HasValue ? controllDirection.Value : transform.forward);
+
+			//Lerp knockback to zero based on the entities deceleration stat
+			if (SelfSettings.NoMoveDeceleration > 0)
+				impactForce = Vector3.Lerp(impactForce, Vector3.zero, Time.fixedDeltaTime / SelfSettings.NoMoveDeceleration);
+			else
+				impactForce = Vector3.zero;
+
+			//Now combine those forces as the current speed
+			body.velocity = curVelocity + curMoveForce;
+		}
+		private void TurnControl()
+		{
+			float turnAmount = Time.fixedDeltaTime * SelfSettings.TurnSpeed * (curStates.IsGrounded ? 1 : SelfSettings.InAirTurnSpeedMultiplier);
+			float normalizedDif = Mathf.Abs(curRotation - intendedRotation) / NON_TURNING_THRESHOLD;
+			turnAmount *= Mathf.Min(normalizedDif * LERP_TURNING_AREA, 1);
+			curRotation = Mathf.MoveTowardsAngle(curRotation, intendedRotation, turnAmount);
+
+			curStates.IsTurning = normalizedDif > 1;
+
+			transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,
+														curRotation,
+														transform.localEulerAngles.z);
 		}
 		private void JumpControl()
 		{

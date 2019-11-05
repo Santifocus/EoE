@@ -17,9 +17,6 @@ namespace EoE.Entities
 		private const float JUMP_GROUND_COOLDOWN				= 0.2f;
 		private const float IS_FALLING_THRESHOLD				= -1;
 		private const float LANDED_VELOCITY_THRESHOLD			= 0.5f;
-		private const float NON_TURNING_THRESHOLD				= 60;
-		private const float LERP_TURNING_AREA					= 0.5f;
-		private const float RUN_ANIM_THRESHOLD					= 0.75f;
 		private const int VISIBLE_CHECK_RAY_COUNT				= 40;
 
 		private static readonly Vector3 GroundTestOffset		= new Vector3(0, -0.05f, 0);
@@ -44,7 +41,7 @@ namespace EoE.Entities
 		public float curJumpPowerMultiplier { get; protected set; }
 
 		//Entitie states
-		public bool invincible;
+		[HideInInspector] public bool invincible;
 		private List<BuffInstance> nonPermanentBuffs;
 		private List<BuffInstance> permanentBuffs;
 		public EntitieState curStates;
@@ -52,13 +49,9 @@ namespace EoE.Entities
 		private float combatEndCooldown;
 
 		//Velocity Control
-		protected Vector3? controllDirection = null;
-		protected float intendedAcceleration;
-		protected float curAcceleration;
 		private float jumpGroundCooldown;
 		private float lastFallVelocity;
 
-		protected Vector3 curMoveForce;
 		protected Vector3 impactForce;
 
 		protected float curRotation;
@@ -72,7 +65,7 @@ namespace EoE.Entities
 		public float lowestPos => coll.bounds.center.y - coll.bounds.extents.y;
 		public float highestPos => coll.bounds.center.y + coll.bounds.extents.y;
 		public ForceController entitieForceController;
-		public Vector3 curVelocity => new Vector3(curMoveForce.x, body.velocity.y, curMoveForce.z) + impactForce + entitieForceController.currentTotalForce;
+		public Vector3 curVelocity => new Vector3(0, body.velocity.y, 0) + impactForce + entitieForceController.currentTotalForce;
 
 		//Other
 		private EntitieStatDisplay statDisplay;
@@ -146,9 +139,6 @@ namespace EoE.Entities
 		protected void FixedUpdate()
 		{
 			entitieForceController.Update();
-			TurnControl();
-			UpdateAcceleration();
-			UpdateMovementSpeed();
 
 			IsGroundedTest();
 			CheckForFalling();
@@ -158,75 +148,10 @@ namespace EoE.Entities
 		protected virtual void EntitieFixedUpdate() { }
 		#endregion
 		#region Movement
-		private void UpdateAcceleration()
-		{
-			if (curStates.IsMoving && !curStates.IsTurning)
-			{
-				float clampedIntent = Mathf.Clamp01(intendedAcceleration);
-				if(curAcceleration < clampedIntent)
-				{
-					if (SelfSettings.MoveAcceleration > 0)
-						curAcceleration = Mathf.Min(clampedIntent, curAcceleration + intendedAcceleration * Time.fixedDeltaTime / SelfSettings.MoveAcceleration / SelfSettings.EntitieMass * (curStates.IsGrounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
-					else
-						curAcceleration = clampedIntent;
-				}
-			}
-			else //decelerate
-			{
-				if (curAcceleration > 0)
-				{
-					if (SelfSettings.NoMoveDeceleration > 0)
-						curAcceleration = Mathf.Max(0, curAcceleration - Time.fixedDeltaTime / SelfSettings.NoMoveDeceleration / SelfSettings.EntitieMass * (curStates.IsGrounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
-					else
-						curAcceleration = 0;
-				}
-			}
-		}
 		protected void TargetPosition(Vector3 pos)
 		{
 			Vector2 direction = new Vector2(pos.x - actuallWorldPosition.x, pos.z - actuallWorldPosition.z).normalized;
 			intendedRotation = -Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
-		}
-		private void TurnControl()
-		{
-			float turnAmount = Time.fixedDeltaTime * SelfSettings.TurnSpeed * (curStates.IsGrounded ? 1 : SelfSettings.InAirTurnSpeedMultiplier);
-			float normalizedDif = Mathf.Abs(curRotation - intendedRotation) / NON_TURNING_THRESHOLD;
-			turnAmount *= Mathf.Min(normalizedDif * LERP_TURNING_AREA, 1);
-			curRotation = Mathf.MoveTowardsAngle(curRotation, intendedRotation, turnAmount);
-
-			curStates.IsTurning = normalizedDif > 1;
-
-			transform.localEulerAngles = new Vector3(	transform.localEulerAngles.x,
-														curRotation,
-														transform.localEulerAngles.z);
-		}
-		private void UpdateMovementSpeed()
-		{
-			bool turning = curStates.IsTurning;
-			bool moving = curStates.IsMoving;
-			bool running = curStates.IsRunning;
-
-			//If the Entitie doesnt move intentionally but is in run mode, then stop the run mode
-			if (running && !moving)
-				curStates.IsRunning = false;
-
-			//Set the animation state to either Turning, Walking or Running
-			animationControl.SetBool("Turning", turning);
-			animationControl.SetBool("Walking", !turning && curAcceleration > 0 && !(running && curAcceleration > RUN_ANIM_THRESHOLD));
-			animationControl.SetBool("Running", !turning && curAcceleration > 0 &&	(running && curAcceleration > RUN_ANIM_THRESHOLD));
-
-			//We find out in which direction the Entitie should move according to its movement
-			float baseTargetSpeed = curWalkSpeed * (curStates.IsRunning ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
-			curMoveForce = baseTargetSpeed * (controllDirection.HasValue ? controllDirection.Value : transform.forward);
-
-			//Lerp knockback / other forces to zero based on the entities deceleration stat
-			if (SelfSettings.NoMoveDeceleration > 0)
-				impactForce = Vector3.Lerp(impactForce, Vector3.zero, Time.fixedDeltaTime / SelfSettings.NoMoveDeceleration);
-			else
-				impactForce = Vector3.zero;
-
-			//Now combine those forces as the current speed
-			body.velocity = curVelocity;
 		}
 		private void CheckForFalling()
 		{
@@ -309,10 +234,6 @@ namespace EoE.Entities
 			float damageAmount = GameController.CurrentGameSettings.FallDamageCurve.Evaluate(velDif);
 			if (damageAmount > 0)
 				ChangeHealth(new InflictionInfo(this, CauseType.Physical, ElementType.None, actuallWorldPosition, Vector3.up, damageAmount, false));
-
-			//Decrease the x/z velocity of the Entitie because it landed
-			float curSpeed = new Vector2(body.velocity.x, body.velocity.z).magnitude;
-			curAcceleration = Mathf.Clamp01(curAcceleration - velDif / Mathf.Max(curSpeed, 1) * GameController.CurrentGameSettings.GroundHitVelocityLoss);
 		}
 		#endregion
 		#region State Control
@@ -704,7 +625,7 @@ namespace EoE.Entities
 		#endregion
 		#region Helper Functions
 
-		protected bool CheckIfCanSeeEntitie(Entitie target)
+		protected bool CheckIfCanSeeEntitie(Entitie target, bool lowPriority = false)
 		{
 			//First we check the middle and corners of the entitie
 			//Middle
@@ -718,6 +639,10 @@ namespace EoE.Entities
 				if (CheckPointVisible(boundPoints[i]))
 					return true;
 			}
+
+			//Is this a low priority check? If so, then getting here means we just answer with false
+			if (lowPriority)
+				return false;
 
 			//Now we check a random point inside the bounding points
 			for (int i = 0; i < VISIBLE_CHECK_RAY_COUNT; i++)

@@ -28,12 +28,12 @@ MonoBehaviour:
   DoManaRegen: 0
   ManaRegen: 0
   ManaRegenInCombatMultiplier: 0.5
-  WalkSpeed: 8
+  WalkSpeed: 3
   RunSpeedMultiplicator: 1.5
   JumpPower: {x: 0, y: 10, z: 0}
   TurnSpeed: 180
   InAirTurnSpeedMultiplier: 0.25
-  MoveAcceleration: 0.5
+  MoveAcceleration: 0.1
   NoMoveDeceleration: 0.25
   InAirAccelerationMultiplier: 0.3
   AttackRange: 3

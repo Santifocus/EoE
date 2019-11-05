@@ -246,7 +246,7 @@ namespace EoE.Utils
 			}
 		}
 		#endregion
-		#region SlowDown
+		#region TimeDilation
 		public static int HighestTimeDilutionDominanceIndex;
 		private static float BaseFixedDeltaTime;
 		private static List<TimeDilationEffect> AllTimeDilationsEffects = new List<TimeDilationEffect>();
@@ -270,8 +270,10 @@ namespace EoE.Utils
 			while(AllTimeDilationsEffects.Count > 0)
 			{
 				yield return new WaitForEndOfFrame();
-				if (Time.timeScale == 0) //Game is paused
+				if (GameController.GameIsPaused)
+				{
 					continue;
+				}
 
 				HighestTimeDilutionDominanceIndex = -1;
 				int targetIndex = 0;

@@ -12,10 +12,5 @@ namespace EoE.Entities
 
 		//Getter Helpers
 		public override EnemySettings enemySettings => settings;
-
-		protected override void CombatBehavior(float distance)
-		{
-			curStates.IsMoving = false;
-		}
 	}
 }

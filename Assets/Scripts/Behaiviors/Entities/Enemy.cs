@@ -5,6 +5,7 @@ using EoE.Utils;
 using EoE.Events;
 using EoE.UI;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace EoE.Entities
 {
@@ -12,269 +13,139 @@ namespace EoE.Entities
 	{
 		#region Fields
 		//Constants
-		private const float REACHED_WANDERPOINT_THRESHOLD	= 0.5f;
-		private const float REACHED_LOOKAROUND_THRESHOLD	= 0.05f;
-		private const float STUCK_THRESHOLD					= 0.25f;
-		private const float FORWARD_CAN_STAND_DISTANCE		= 0.25f;
+		private const float RE_CHECK_FREQUENCY = 0.25f;
+		private const float CLOSEST_NAVMESH_POINT_DIST = 20;
 
-		//Enemy States
-		protected bool cantReachPlayer;
-		protected float stuckSince;
-		protected float wanderWait;
-		protected float lookAroundWait;
-		protected float chaseInterestAmount;
-		protected float lostVisualsOnPlayerLookaroundTimer;
+		//Inspector Variables
+		[SerializeField] private NavMeshAgent agent = default;
+
+		protected Vector3 originalSpawnPosition;
+		protected NavMeshPath curPath;
 
 		//Chasing
-		private float NormalCosSightCone;
-		private float FoundPlayerCosSightCone;
-		protected bool chasingPlayer;
+		private bool chasingPlayer;
+		private float normalCosSightCone;
+		private float foundPlayerCosSightCone;
+
+		//Last infos
+		protected float lastSeenPlayer;
+		protected Vector3 lastPlayerSpeed;
 		protected Vector3 lastConfirmedPlayerPos;
-		protected Vector3 chaseDirection;
-
-		//Wandering
-		protected bool reachedWanderPoint;
-		protected Vector3 originalSpawnPosition;
-		protected Vector2 wanderPosition;
-		protected Vector3 wanderDirection;
-
-		//Look around
-		protected bool reachedLookAroundDir;
-
 
 		//Getter Helpers
 		protected Player player => Player.Instance;
 		public override EntitieSettings SelfSettings => enemySettings;
 		public abstract EnemySettings enemySettings { get; }
+		protected Vector3 GuessedPlayerPosition => lastConfirmedPlayerPos + new Vector3(lastPlayerSpeed.x, 0, lastPlayerSpeed.z) * lastSeenPlayer;
 		#endregion
 		#region Basic Monobehaivior
 		protected override void Start()
 		{
 			base.Start();
 			originalSpawnPosition = actuallWorldPosition;
-			GetNewWanderPosition();
-			GetNewLookDirection();
 			EventManager.PlayerDiedEvent += PlayerDied;
 
-			NormalCosSightCone = Mathf.Cos(enemySettings.SightAngle * Mathf.Deg2Rad);
-			FoundPlayerCosSightCone = Mathf.Cos(enemySettings.FoundPlayerSightAngle * Mathf.Deg2Rad);
+			normalCosSightCone = Mathf.Cos(Mathf.Min(360, enemySettings.SightAngle) * Mathf.Deg2Rad);
+			foundPlayerCosSightCone = Mathf.Cos(Mathf.Min(360, enemySettings.FoundPlayerSightAngle) * Mathf.Deg2Rad);
+			SetupNavMeshAgent();
+		}
+		private void SetupNavMeshAgent()
+		{
+			curPath = new NavMeshPath();
+			agent.radius = Mathf.Max(coll.bounds.extents.x, coll.bounds.extents.y);
+			agent.angularSpeed = enemySettings.TurnSpeed;
+			agent.acceleration = 1 / Mathf.Max(0.0001f, enemySettings.MoveAcceleration);
+			agent.speed = enemySettings.WalkSpeed;
 		}
 		private void PlayerDied(Entitie killer)
 		{
 			curStates.IsInCombat = false;
-			chasingPlayer = false;
+			EventManager.PlayerDiedEvent -= PlayerDied;
 		}
 		protected override void Update()
 		{
 			base.Update();
-			DecideOnBehavior();
+			DecideOnBehaivior();
 		}
-		private void DecideOnBehavior()
+		private void DecideOnBehaivior()
 		{
-			SearchForPlayer();
-			if (curStates.IsInCombat && !cantReachPlayer)
+			body.velocity = Vector2.zero;
+			if (CheckForPlayer())
 			{
-				ChasePlayer();
-			}
-			else
-			{
-				if (!chasingPlayer)
+				//Update information on the player
+				lastConfirmedPlayerPos = Player.Instance.actuallWorldPosition;
+				lastPlayerSpeed = Player.Instance.curVelocity;
+				lastSeenPlayer = 0;
+
+				//Find a path
+				//TODO Give a natural behaivior for when the Enemy cant reach the player but sees him
+				Vector3? destination = GetClosestPointOnNavmesh(lastConfirmedPlayerPos);
+
+				if(destination.HasValue && agent.CalculatePath(destination.Value, curPath) && curPath.status != NavMeshPathStatus.PathInvalid)
 				{
-					if (lostVisualsOnPlayerLookaroundTimer > 0)
-					{
-						lostVisualsOnPlayerLookaroundTimer -= Time.deltaTime;
-						LookAround();
-					}
-					else if (enemySettings.WanderingFactor > 0 || (transform.position - originalSpawnPosition).sqrMagnitude > REACHED_WANDERPOINT_THRESHOLD)
-						WanderAround();
-					else
-						LookAround();
+					agent.SetPath(curPath);
 				}
-				else
-				{
-					if (!ChasePlayer())
-						return;
 
-					chaseInterestAmount -= Time.deltaTime;
-					if (chaseInterestAmount <= 0)
-					{
-						lostVisualsOnPlayerLookaroundTimer = enemySettings.LookAroundAfterLostPlayerTime;
-						EffectUtils.DisplayInfoText(transform.position, GameController.CurrentGameSettings.StandardTextColor, Vector3.up, "?", 2);
-						chasingPlayer = false;
-					}
-				}
-			}
-		}
-		#endregion
-		#region Idle Behaivior
-		private void SearchForPlayer()
-		{
-			if (!Player.Alive)
-				return;
-
-			float sqrDistance = (player.transform.position - transform.position).sqrMagnitude;
-			if (sqrDistance > (enemySettings.SightRange * enemySettings.SightRange))
-				return;
-
-			Vector3 playerDir = (player.transform.position - transform.position).normalized;
-			bool terrainBlocksSight = Physics.Raycast(transform.position, playerDir, Mathf.Sqrt(sqrDistance), ConstantCollector.TERRAIN_LAYER);
-
-			if (terrainBlocksSight)
-				return;
-
-			if (Vector3.Dot(playerDir, transform.forward) > (chasingPlayer ? FoundPlayerCosSightCone : NormalCosSightCone))
-			{
-				if(!chasingPlayer)
-					EffectUtils.DisplayInfoText(transform.position, GameController.CurrentGameSettings.StandardTextColor, Vector3.up, "!", 2);
-
+				//Inform the Entitie that it is now chasing the Player
 				chasingPlayer = true;
-				cantReachPlayer = false;
-				chaseInterestAmount = enemySettings.ChaseInterest;
-				lastConfirmedPlayerPos = player.transform.position;
 			}
-		}
-		#region LookAround
-		private void LookAround()
-		{
-			curStates.IsMoving = false;
-			if (reachedLookAroundDir)
+			else if(chasingPlayer)
 			{
-				lookAroundWait -= Time.deltaTime;
-				if(lookAroundWait <= 0)
+				lastSeenPlayer += Time.deltaTime; 
+				Vector3? destination = GetClosestPointOnNavmesh(GuessedPlayerPosition);
+
+				if (destination.HasValue && agent.CalculatePath(destination.Value, curPath) && curPath.status != NavMeshPathStatus.PathInvalid)
 				{
-					GetNewLookDirection();
-				}
-			}
-			else
-			{
-				if (!curStates.IsTurning)
-				{
-					reachedLookAroundDir = true;
-					lookAroundWait = Random.Range(enemySettings.LookAroundDelayMin, enemySettings.LookAroundDelayMax);
+					agent.SetPath(curPath);
 				}
 			}
 		}
-		private void GetNewLookDirection()
+		private bool CheckForPlayer()
 		{
-			intendedRotation = Random.value * 360;
-			reachedLookAroundDir = false;
+			Vector3 dif = Player.Instance.actuallWorldPosition - actuallWorldPosition;
+			float sqrDist = dif.sqrMagnitude;
+
+			if (sqrDist > enemySettings.SightRange * enemySettings.SightRange)
+				return false;
+
+			Vector3 direction = dif / Mathf.Sqrt(sqrDist);
+			float cosAngle = Vector3.Dot(transform.forward, direction);
+
+			if (cosAngle < (chasingPlayer ? foundPlayerCosSightCone : normalCosSightCone))
+				return false;
+
+			//Low priority check if this entitie can see any part of the player
+			return CheckIfCanSeeEntitie(Player.Instance, true);
 		}
-		#endregion
-		#region WanderAround
 		private void WanderAround()
 		{
-			curStates.IsMoving = !reachedWanderPoint;
-			if (reachedWanderPoint)
+
+		}
+		private void TurnAround()
+		{
+
+		}
+		private void ChasePlayer()
+		{
+
+		}
+		#endregion
+		#region Helper Functions
+		protected Vector3? GetRandomNavmeshPoint(float radius)
+		{
+			Vector3 worldPos = Random.insideUnitSphere * radius + actuallWorldPosition;
+			return GetClosestPointOnNavmesh(worldPos, radius);
+		}
+		protected Vector3? GetClosestPointOnNavmesh(Vector3 point, float radius = CLOSEST_NAVMESH_POINT_DIST)
+		{
+			NavMeshHit hit;
+			if (NavMesh.SamplePosition(point, out hit, radius, 1))
 			{
-				wanderWait -= Time.deltaTime;
-				if(wanderWait <= 0)
-				{
-					GetNewWanderPosition();
-				}
-				LookAround();
-				return;
+				return hit.position;
 			}
 			else
-			{
-				TargetPosition(new Vector3(wanderPosition.x, 0, wanderPosition.y));
-				intendedAcceleration = GameController.CurrentGameSettings.EnemyWanderingUrgency;
-
-				if (IsStuck())
-				{
-					if (CanJumpUp())
-					{
-						if (curStates.IsGrounded)
-						{
-							stuckSince = 0;
-							Jump();
-						}
-					}
-					else
-					{
-						reachedWanderPoint = true;
-					}
-				}
-
-				Vector2 planePos = new Vector2(actuallWorldPosition.x, actuallWorldPosition.z);
-
-				if((planePos - wanderPosition).sqrMagnitude < REACHED_WANDERPOINT_THRESHOLD)
-				{
-					reachedWanderPoint = true;
-					wanderWait = Random.Range(enemySettings.WanderingDelayMin, enemySettings.WanderingDelayMax);
-					GetNewLookDirection();
-				}
-			}
+				return null;
 		}
-		private void GetNewWanderPosition()
-		{
-			Vector3 target = originalSpawnPosition + Random.insideUnitSphere * enemySettings.WanderingFactor;
-			wanderPosition = new Vector2(target.x, target.z);
-			reachedWanderPoint = false;
-		}
-		#endregion
-		#region Resolve Issues
-		private bool IsStuck()
-		{
-			if (CheckBoxAtHeight(0.05f))
-				stuckSince += Time.deltaTime;
-			else if(stuckSince > 0)
-				stuckSince = 0;
-
-			return stuckSince >= STUCK_THRESHOLD;
-		}
-		private bool CanJumpUp()
-		{
-			float maxJump = ((enemySettings.JumpPower.y * enemySettings.JumpPower.y) / (-2 * Physics.gravity.y)) * 0.9f;
-			return !CheckBoxAtHeight(maxJump + lowestPos);
-		}
-		private bool CheckBoxAtHeight(float verticalPos)
-		{
-			Vector3 testPos = coll.bounds.center + new Vector3(0, verticalPos, 0) + coll.transform.forward * FORWARD_CAN_STAND_DISTANCE;
-			return Physics.CheckBox(testPos, coll.bounds.extents, transform.rotation, ConstantCollector.TERRAIN_LAYER);
-		}
-		#endregion
-		#endregion
-		#region Aggresive Behavior
-		private bool ChasePlayer()
-		{
-			float distance = (lastConfirmedPlayerPos - transform.position).magnitude;
-			TargetPosition(lastConfirmedPlayerPos);
-			
-			if (distance > enemySettings.AttackRange)
-			{
-				curStates.IsMoving = true;
-				intendedAcceleration = 1;
-
-				if (IsStuck())
-				{
-					if (CanJumpUp())
-					{
-						if (curStates.IsGrounded)
-						{
-							Jump();
-							stuckSince = 0;
-						}
-					}
-					else
-					{
-						cantReachPlayer = true;
-						chaseInterestAmount = 0;
-						stuckSince = 0;
-						lostVisualsOnPlayerLookaroundTimer = enemySettings.LookAroundAfterLostPlayerTime;
-						EffectUtils.DisplayInfoText(transform.position, GameController.CurrentGameSettings.StandardTextColor, Vector3.up, "...", 1.5f);
-						chasingPlayer = false;
-
-						return false;
-					}
-				}
-			}
-			else
-			{
-				CombatBehavior(distance);
-			}
-			return true;
-		}
-		protected abstract void CombatBehavior(float distance);
 		#endregion
 	}
 }

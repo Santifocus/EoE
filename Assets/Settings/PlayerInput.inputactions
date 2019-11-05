@@ -473,6 +473,30 @@
                     "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "LeftPage",
+                    "type": "Button",
+                    "id": "6c38f06c-162d-4d97-a2ed-62e058906748",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "RightPage",
+                    "type": "Button",
+                    "id": "2fec7d5f-c0f8-46db-8af3-f50acd41c31c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "CharacterRotate",
+                    "type": "Value",
+                    "id": "dfd9bd88-1915-4a2d-9ee4-b6fc91e70259",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -561,6 +585,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "PlayerMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "70dd2111-476b-4588-8b78-c5479e7c1e21",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftPage",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dc7ba5f0-401d-4a75-8926-ae71065427f8",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightPage",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5745dc84-107d-409c-9cf2-cafecce56fdd",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "StickDeadzone(min=0.3,max=1)",
+                    "groups": "",
+                    "action": "CharacterRotate",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

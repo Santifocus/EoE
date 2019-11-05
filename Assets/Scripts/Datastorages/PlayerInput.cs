@@ -488,6 +488,30 @@ namespace EoE.Controlls
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""LeftPage"",
+                    ""type"": ""Button"",
+                    ""id"": ""6c38f06c-162d-4d97-a2ed-62e058906748"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""RightPage"",
+                    ""type"": ""Button"",
+                    ""id"": ""2fec7d5f-c0f8-46db-8af3-f50acd41c31c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""CharacterRotate"",
+                    ""type"": ""Value"",
+                    ""id"": ""dfd9bd88-1915-4a2d-9ee4-b6fc91e70259"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -578,6 +602,39 @@ namespace EoE.Controlls
                     ""action"": ""PlayerMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""70dd2111-476b-4588-8b78-c5479e7c1e21"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftPage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dc7ba5f0-401d-4a75-8926-ae71065427f8"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightPage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5745dc84-107d-409c-9cf2-cafecce56fdd"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": ""StickDeadzone(min=0.3,max=1)"",
+                    ""groups"": """",
+                    ""action"": ""CharacterRotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -614,6 +671,9 @@ namespace EoE.Controlls
             m_MenuInput_Back = m_MenuInput.FindAction("Back", throwIfNotFound: true);
             m_MenuInput_Pause = m_MenuInput.FindAction("Pause", throwIfNotFound: true);
             m_MenuInput_PlayerMenu = m_MenuInput.FindAction("PlayerMenu", throwIfNotFound: true);
+            m_MenuInput_LeftPage = m_MenuInput.FindAction("LeftPage", throwIfNotFound: true);
+            m_MenuInput_RightPage = m_MenuInput.FindAction("RightPage", throwIfNotFound: true);
+            m_MenuInput_CharacterRotate = m_MenuInput.FindAction("CharacterRotate", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -840,6 +900,9 @@ namespace EoE.Controlls
         private readonly InputAction m_MenuInput_Back;
         private readonly InputAction m_MenuInput_Pause;
         private readonly InputAction m_MenuInput_PlayerMenu;
+        private readonly InputAction m_MenuInput_LeftPage;
+        private readonly InputAction m_MenuInput_RightPage;
+        private readonly InputAction m_MenuInput_CharacterRotate;
         public struct MenuInputActions
         {
             private PlayerInput m_Wrapper;
@@ -852,6 +915,9 @@ namespace EoE.Controlls
             public InputAction @Back => m_Wrapper.m_MenuInput_Back;
             public InputAction @Pause => m_Wrapper.m_MenuInput_Pause;
             public InputAction @PlayerMenu => m_Wrapper.m_MenuInput_PlayerMenu;
+            public InputAction @LeftPage => m_Wrapper.m_MenuInput_LeftPage;
+            public InputAction @RightPage => m_Wrapper.m_MenuInput_RightPage;
+            public InputAction @CharacterRotate => m_Wrapper.m_MenuInput_CharacterRotate;
             public InputActionMap Get() { return m_Wrapper.m_MenuInput; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -885,6 +951,15 @@ namespace EoE.Controlls
                     PlayerMenu.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnPlayerMenu;
                     PlayerMenu.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnPlayerMenu;
                     PlayerMenu.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnPlayerMenu;
+                    LeftPage.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnLeftPage;
+                    LeftPage.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnLeftPage;
+                    LeftPage.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnLeftPage;
+                    RightPage.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnRightPage;
+                    RightPage.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnRightPage;
+                    RightPage.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnRightPage;
+                    CharacterRotate.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnCharacterRotate;
+                    CharacterRotate.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnCharacterRotate;
+                    CharacterRotate.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnCharacterRotate;
                 }
                 m_Wrapper.m_MenuInputActionsCallbackInterface = instance;
                 if (instance != null)
@@ -913,6 +988,15 @@ namespace EoE.Controlls
                     PlayerMenu.started += instance.OnPlayerMenu;
                     PlayerMenu.performed += instance.OnPlayerMenu;
                     PlayerMenu.canceled += instance.OnPlayerMenu;
+                    LeftPage.started += instance.OnLeftPage;
+                    LeftPage.performed += instance.OnLeftPage;
+                    LeftPage.canceled += instance.OnLeftPage;
+                    RightPage.started += instance.OnRightPage;
+                    RightPage.performed += instance.OnRightPage;
+                    RightPage.canceled += instance.OnRightPage;
+                    CharacterRotate.started += instance.OnCharacterRotate;
+                    CharacterRotate.performed += instance.OnCharacterRotate;
+                    CharacterRotate.canceled += instance.OnCharacterRotate;
                 }
             }
         }
@@ -948,6 +1032,9 @@ namespace EoE.Controlls
             void OnBack(InputAction.CallbackContext context);
             void OnPause(InputAction.CallbackContext context);
             void OnPlayerMenu(InputAction.CallbackContext context);
+            void OnLeftPage(InputAction.CallbackContext context);
+            void OnRightPage(InputAction.CallbackContext context);
+            void OnCharacterRotate(InputAction.CallbackContext context);
         }
     }
 }

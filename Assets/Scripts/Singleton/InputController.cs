@@ -48,6 +48,12 @@ namespace EoE.Controlls
 
 		public static Button MenuPause;
 		public static Button MenuPlayerMenu;
+
+		public static Button LeftPage;
+		public static Button RightPage;
+
+		public static Vector2 CharacterRotate => Instance.characterRotate;
+		private Vector2 characterRotate;
 		#endregion
 
 		//Internal
@@ -125,7 +131,7 @@ namespace EoE.Controlls
 			gameActions.Pause.canceled += ctx => ButtonEnded(Pause);
 
 			//PlayerMenu
-			Pause = new Button("PlayerMenu");
+			PlayerMenu = new Button("PlayerMenu");
 			gameActions.PlayerMenu.started += ctx => ButtonStarted(PlayerMenu);
 			gameActions.PlayerMenu.canceled += ctx => ButtonEnded(PlayerMenu);
 
@@ -193,13 +199,27 @@ namespace EoE.Controlls
 
 			//MenuPause
 			MenuPause = new Button("MenuPause");
-			menuActions.Pause.started += ctx => ButtonStarted(MenuDown);
-			menuActions.Pause.canceled += ctx => ButtonEnded(MenuDown);
+			menuActions.Pause.started += ctx => ButtonStarted(MenuPause);
+			menuActions.Pause.canceled += ctx => ButtonEnded(MenuPause);
 
 			//MenuPlayerMenu
 			MenuPlayerMenu = new Button("MenuPlayerMenu");
 			menuActions.PlayerMenu.started += ctx => ButtonStarted(MenuPlayerMenu);
 			menuActions.PlayerMenu.canceled += ctx => ButtonEnded(MenuPlayerMenu);
+
+			//LeftPage
+			LeftPage = new Button("LeftPage");
+			menuActions.LeftPage.started += ctx => ButtonStarted(LeftPage);
+			menuActions.LeftPage.canceled += ctx => ButtonEnded(LeftPage);
+
+			//RightPage
+			RightPage = new Button("MenuPlayerMenu");
+			menuActions.RightPage.started += ctx => ButtonStarted(RightPage);
+			menuActions.RightPage.canceled += ctx => ButtonEnded(RightPage);
+
+			//CharacterRotate
+			menuActions.CharacterRotate.performed += ctx => characterRotate = ctx.ReadValue<Vector2>();
+			menuActions.CharacterRotate.canceled += ctx => characterRotate = Vector2.zero;
 		}
 
 		private void OnDestroy()
