@@ -7,6 +7,7 @@ namespace EoE.UI
 {
 	public class DialogueController : MonoBehaviour
 	{
+		public static DialogueController Instance { get; private set; }
 		private const string COLOR_CLOSER = "</color>";
 		private const string HIDE_COLOR = "<color=#00000000>";
 
@@ -15,16 +16,17 @@ namespace EoE.UI
 		private bool displayingDialogue;
 		private void Start()
 		{
+			Instance = this;
 			dialogueContainer = Instantiate(GameController.CurrentGameSettings.DialogueBoxPrefab, transform);
 			quedDialogues = new Queue<Dialogue>();
 			ClearDisplay();
 		}
-		public void ShowDialogue(Dialogue newDialogue)
+		public static void ShowDialogue(Dialogue newDialogue)
 		{
-			quedDialogues.Enqueue(newDialogue);
-			if (!displayingDialogue)
+			Instance.quedDialogues.Enqueue(newDialogue);
+			if (!Instance.displayingDialogue)
 			{
-				StartCoroutine(DisplayDialogue());
+				Instance.StartCoroutine(Instance.DisplayDialogue());
 			}
 		}
 		private IEnumerator DisplayDialogue()
@@ -75,6 +77,8 @@ namespace EoE.UI
 					stringIndex += COLOR_CLOSER.Length;
 					dialogueContainer.textDisplay.text = currentText.Insert(stringIndex, HIDE_COLOR);
 				}
+				if(targetDialogue.onFinish != null)
+					targetDialogue.onFinish?.Invoke();
 			}
 
 			yield return new WaitForSeconds(GameController.CurrentGameSettings.DelayToNextDialogue);
@@ -99,10 +103,13 @@ namespace EoE.UI
 	{
 		public DialoguePart[] parts;
 		public int totalTextLenght;
-		public Dialogue(params (string, Color)[] parts)
+
+		public delegate void OnFinishDialogue();
+		public OnFinishDialogue onFinish;
+		public Dialogue(OnFinishDialogue onFinish, params (string, Color)[] parts)
 		{
 			this.parts = new DialoguePart[parts.Length];
-
+			this.onFinish = onFinish;
 			for (int i = 0; i < parts.Length; i++)
 			{
 				totalTextLenght += parts[i].Item1.Length;

@@ -633,7 +633,7 @@ namespace EoE.Entities
 			if (attackInteractCooldown > 0)
 				attackInteractCooldown -= Time.deltaTime;
 
-			bool normalAttack = InputController.Attack.Down;
+			bool normalAttack = InputController.Attack.Down || Input.GetKeyDown(KeyCode.K);
 			if(normalAttack && Interactable.MarkedInteractable && !(attackInteractCooldown > 0))
 			{
 				if (Interactable.MarkedInteractable.TryInteract())

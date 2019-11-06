@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using EoE.UI;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,11 @@ namespace EoE.Entities
 {
 	public class TestInteractable : Interactable
 	{
+		private static Dialogue.OnFinishDialogue soulCountInformInProgress;
+		private static bool shouldSendSoulCountInform;
+		private static bool setupStaticDoorInformer;
+
+		[SerializeField] private int requiredSouls = default;
 		[SerializeField] private float openTime = default;
 		[SerializeField] private MeshRenderer rend = default;
 		[SerializeField] private Vector3 rotationWhenOpen = default;
@@ -20,10 +26,29 @@ namespace EoE.Entities
 		{
 			canBeInteracted = true;
 			basePos = rend.transform.position;
+
+			if (!setupStaticDoorInformer) 
+				SetupStaticDoorInformer();
+		}
+		private static void SetupStaticDoorInformer()
+		{
+			setupStaticDoorInformer = true;
+			shouldSendSoulCountInform = true;
+			soulCountInformInProgress += AllowSendSoulCountInform;
+		}
+		private static void AllowSendSoulCountInform()
+		{
+			shouldSendSoulCountInform = true;
 		}
 		protected override void Interact()
 		{
-			StartCoroutine(ChangeState(!openState));
+			if (Player.TotalSoulCount >= requiredSouls)
+				StartCoroutine(ChangeState(!openState));
+			else if (shouldSendSoulCountInform)
+			{
+				shouldSendSoulCountInform = false;
+				DialogueController.ShowDialogue(new Dialogue(soulCountInformInProgress, ("You cannot open this door, you need to have at least ", Color.white), (requiredSouls + " Souls", Color.red), (" to open it!", Color.white)));
+			}
 		}
 
 		private IEnumerator ChangeState(bool openState)
@@ -46,12 +71,14 @@ namespace EoE.Entities
 
 		protected override void MarkAsInteractTarget()
 		{
-			rend.material.color = Color.Lerp(Color.red, Color.white, 0.75f);
+			if (Player.TotalSoulCount >= requiredSouls)
+				rend.material.color = Color.Lerp(Color.red, Color.white, 0.75f);
 		}
 
 		protected override void StopMarkAsInteractable()
 		{
-			rend.material.color = Color.white;
+			if (Player.TotalSoulCount >= requiredSouls)
+				rend.material.color = Color.white;
 		}
 	}
 }
