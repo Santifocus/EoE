@@ -50,7 +50,7 @@ MonoBehaviour:
   WanderingDelayMax: 5
   LookAroundDelayMin: 0.5
   LookAroundDelayMax: 2
-  AttackSpeed: 0.75
+  AttackSpeed: 1
   InRangeWaitTime: 0.3
   BashSpeed: 25
   BashDistance: 10
