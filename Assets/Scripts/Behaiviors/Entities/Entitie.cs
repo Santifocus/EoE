@@ -74,13 +74,14 @@ namespace EoE.Entities
 		protected virtual void Start()
 		{
 			AllEntities.Add(this);
-			ResetEntitie();
-			GetColliderType();
+
+			FullEntitieReset();
 			EntitieStart();
 		}
-		private void ResetEntitie()
+		protected virtual void FullEntitieReset()
 		{
 			ResetStats();
+			GetColliderType();
 			curStates = new EntitieState();
 
 			nonPermanentBuffs = new List<BuffInstance>();
@@ -148,11 +149,6 @@ namespace EoE.Entities
 		protected virtual void EntitieFixedUpdate() { }
 		#endregion
 		#region Movement
-		protected void TargetPosition(Vector3 pos)
-		{
-			Vector2 direction = new Vector2(pos.x - actuallWorldPosition.x, pos.z - actuallWorldPosition.z).normalized;
-			intendedRotation = -Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
-		}
 		private void CheckForFalling()
 		{
 			//Find out wether the entitie is falling or not
@@ -221,12 +217,17 @@ namespace EoE.Entities
 
 			//Check if we landed
 			float velDif = curVelocity.y - lastFallVelocity;
-			if (velDif > LANDED_VELOCITY_THRESHOLD
-				&& jumpGroundCooldown <= 0) //We stopped falling for a certain amount, and we didnt change velocity because we just jumped
+			if (velDif > LANDED_VELOCITY_THRESHOLD && jumpGroundCooldown <= 0) //We stopped falling for a certain amount, and we didnt change velocity because we just jumped
 			{
 				Landed(velDif);
 			}
 			lastFallVelocity = curVelocity.y;
+
+			//Lerp knockback to zero based on the entities deceleration stat
+			if (SelfSettings.NoMoveDeceleration > 0)
+				impactForce = Vector3.Lerp(impactForce, Vector3.zero, Time.fixedDeltaTime / SelfSettings.NoMoveDeceleration);
+			else
+				impactForce = Vector3.zero;
 		}
 		private void Landed(float velDif)
 		{
@@ -266,7 +267,7 @@ namespace EoE.Entities
 
 		private void EntitieStateControl()
 		{
-			if(combatEndCooldown > 0)
+			if (combatEndCooldown > 0)
 			{
 				combatEndCooldown -= Time.deltaTime;
 				if (combatEndCooldown <= 0)

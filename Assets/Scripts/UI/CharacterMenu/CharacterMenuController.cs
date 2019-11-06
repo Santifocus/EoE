@@ -13,6 +13,7 @@ namespace EoE.UI
 		[SerializeField] private CharacterMenuPage[] menuPages = default;
 		[SerializeField] private float pageScrollTime = 0.3f;
 		[SerializeField] private float pageFinishScrollTime = 0.2f;
+		[SerializeField] private Image characterMenuBackground = default;
 
 		private int curMenuIndex;
 		private bool allowedSlide;
@@ -25,6 +26,7 @@ namespace EoE.UI
 		{
 			allowedSlide = true;
 			pageFinishSlide += AllowSlide;
+			characterMenuBackground.gameObject.SetActive(false);
 		}
 
 		private void Update()
@@ -76,6 +78,7 @@ namespace EoE.UI
 			allowedSlide = false;
 			menuPages[0].ShowPage(LeftScreen, pageScrollTime / 2, pageFinishSlide);
 			curMenuIndex = 0;
+			characterMenuBackground.gameObject.SetActive(true);
 		}
 		public void HideMenu()
 		{
@@ -83,6 +86,7 @@ namespace EoE.UI
 			GameController.GameIsPaused = false;
 			allowedSlide = false;
 			menuPages[curMenuIndex].HidePage(RightScreen, pageScrollTime / 2);
+			characterMenuBackground.gameObject.SetActive(false);
 		}
 		private void AllowSlide()
 		{

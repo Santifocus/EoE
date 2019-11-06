@@ -141,5 +141,5 @@ MonoBehaviour:
   SlowOnCritScale: 0.3
   ScreenShakeOnCrit: 1
   ShakeTimeOnCrit: 0.1
-  OnCritShakeAxisIntensity: 0.2
-  OnCritShakeAngleIntensity: 0.15
+  OnCritShakeAxisIntensity: 0.5
+  OnCritShakeAngleIntensity: 0.3

@@ -348,12 +348,6 @@ namespace EoE.Entities
 			float baseTargetSpeed = curWalkSpeed * (curStates.IsRunning ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
 			curMoveForce = baseTargetSpeed * (controllDirection.HasValue ? controllDirection.Value : transform.forward);
 
-			//Lerp knockback to zero based on the entities deceleration stat
-			if (SelfSettings.NoMoveDeceleration > 0)
-				impactForce = Vector3.Lerp(impactForce, Vector3.zero, Time.fixedDeltaTime / SelfSettings.NoMoveDeceleration);
-			else
-				impactForce = Vector3.zero;
-
 			//Now combine those forces as the current speed
 			body.velocity = curVelocity + curMoveForce;
 		}

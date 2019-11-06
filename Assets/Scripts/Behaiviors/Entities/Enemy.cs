@@ -17,6 +17,8 @@ namespace EoE.Entities
 		private const float CLOSEST_NAVMESH_POINT_DIST = 20;
 		private const float REACH_DESTINATION_MIN = 0.2f;
 
+		private const float REACHED_LOOK_ANGLE_THRESHOLD = 1;
+
 		//Inspector Variables
 		[SerializeField] private NavMeshAgent agent = default;
 
@@ -51,12 +53,19 @@ namespace EoE.Entities
 		protected override void Start()
 		{
 			base.Start();
-			originalSpawnPosition = actuallWorldPosition;
 			EventManager.PlayerDiedEvent += PlayerDied;
+		}
+		protected override void FullEntitieReset()
+		{
+			base.FullEntitieReset();
+			SetupNavMeshAgent();
 
+			originalSpawnPosition = actuallWorldPosition;
 			normalCosSightCone = Mathf.Cos(Mathf.Min(360, enemySettings.SightAngle) * Mathf.Deg2Rad);
 			foundPlayerCosSightCone = Mathf.Cos(Mathf.Min(360, enemySettings.FoundPlayerSightAngle) * Mathf.Deg2Rad);
-			SetupNavMeshAgent();
+
+			wanderingCooldown = Random.Range(enemySettings.WanderingDelayMin, enemySettings.WanderingDelayMax);
+			lookAroundCooldown = Random.Range(enemySettings.LookAroundDelayMin, enemySettings.LookAroundDelayMax);
 		}
 		private void SetupNavMeshAgent()
 		{
@@ -79,7 +88,8 @@ namespace EoE.Entities
 		}
 		private void DecideOnBehaivior()
 		{
-			body.velocity = Vector2.zero;
+			body.velocity = curVelocity;
+
 			if (CheckForPlayer())
 			{
 				//Update information on the player
@@ -125,10 +135,16 @@ namespace EoE.Entities
 					chasingPlayer = false;
 					lostChaseInterestPos = actuallWorldPosition;
 					remainingInvestigationTime = enemySettings.InvestigationTime;
+
+					//Set Cooldowns for wander / look
+					wanderingCooldown = Random.Range(enemySettings.WanderingDelayMin, enemySettings.WanderingDelayMax);
 				}
 			}
 			else
 			{
+				if (remainingInvestigationTime > 0)
+					remainingInvestigationTime -= Time.deltaTime;
+
 				//Idle behaivior
 				if (!WanderAround())
 				{
@@ -140,8 +156,10 @@ namespace EoE.Entities
 		{
 			Vector3 dif = Player.Instance.actuallWorldPosition - actuallWorldPosition;
 			float sqrDist = dif.sqrMagnitude;
+			float sqrSightDist = chasingPlayer ? enemySettings.FoundPlayerSightRange : enemySettings.SightRange;
+			sqrSightDist *= sqrSightDist;
 
-			if (sqrDist > enemySettings.SightRange * enemySettings.SightRange)
+			if (sqrDist > sqrSightDist)
 				return false;
 
 			Vector3 direction = dif / Mathf.Sqrt(sqrDist);
@@ -159,11 +177,64 @@ namespace EoE.Entities
 		}
 		private bool WanderAround()
 		{
+			if(wanderingCooldown > 0)
+			{
+				wanderingCooldown -= Time.deltaTime;
+				if(wanderingCooldown <= 0)
+				{
+					return CreateNewWanderPath();
+				}
+				return false;
+			}
+
+			if (ReachedDestination())
+			{
+				lookAroundCooldown = Random.Range(enemySettings.LookAroundDelayMin, enemySettings.LookAroundDelayMax);
+				wanderingCooldown = lookAroundCooldown + Random.Range(enemySettings.WanderingDelayMin, enemySettings.WanderingDelayMax);
+				return false;
+			}
+
+			return true;
+		}
+		private bool CreateNewWanderPath()
+		{
+			bool investigating = remainingInvestigationTime > 0;
+			float wanderMaxRadius = investigating ? Mathf.Max(enemySettings.WanderingFactor, GameController.CurrentGameSettings.EnemyMinimumInvestigationArea) : enemySettings.WanderingFactor;
+			Vector3 wanderOrigin = investigating ? lostChaseInterestPos : originalSpawnPosition;
+
+			Vector3? destination = GetRandomNavmeshPoint(wanderMaxRadius, wanderOrigin);
+			if(destination.HasValue && agent.CalculatePath(destination.Value, curPath) && curPath.status != NavMeshPathStatus.PathInvalid)
+			{
+				agent.SetPath(curPath);
+				return true;
+			}
 			return false;
 		}
 		private void LookAroundArea()
 		{
+			if (lookAroundCooldown > 0)
+			{
+				lookAroundCooldown -= Time.deltaTime;
+				if(lookAroundCooldown <= 0)
+				{
+					GetNewLookAngle();
+				}
+				return;
+			}
 
+			//Turn the Enemy
+			curRotation = Mathf.LerpAngle(curRotation, intendedRotation, Time.deltaTime * enemySettings.TurnSpeed / 180);
+			transform.localEulerAngles = new Vector3(0, curRotation, 0);
+
+			if (Mathf.Abs(Mathf.DeltaAngle(curRotation, intendedRotation)) < REACHED_LOOK_ANGLE_THRESHOLD)
+			{
+				lookAroundCooldown = Random.Range(enemySettings.LookAroundDelayMin, enemySettings.LookAroundDelayMax);
+			}
+		}
+		private void GetNewLookAngle()
+		{
+			intendedRotation = Random.value * 360;
+			curRotation = transform.localEulerAngles.y;
 		}
 		private void ChasePlayer()
 		{
@@ -179,7 +250,7 @@ namespace EoE.Entities
 		protected Vector3? GetClosestPointOnNavmesh(Vector3 point, float radius = CLOSEST_NAVMESH_POINT_DIST)
 		{
 			NavMeshHit hit;
-			if (NavMesh.SamplePosition(point, out hit, radius, 1))
+			if (NavMesh.SamplePosition(point, out hit, Mathf.Max(radius, coll.bounds.extents.y * 1.5f), 1))
 			{
 				return hit.position;
 			}
