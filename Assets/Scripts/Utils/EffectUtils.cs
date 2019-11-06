@@ -27,9 +27,15 @@ namespace EoE.Utils
 		private const float UN_SHAKE_SPEED = 20;
 		private static Coroutine ShakeScreenCoroutine = null;
 		private static List<ScreenShakeInfo> AllScreenShakes = new List<ScreenShakeInfo>();
-		public static void ShakeScreen(float lenght, float axisIntensity, float angleIntensity)
+		public static void ShakeScreen(float lenght, float axisIntensity, float angleIntensity, Vector3? customAxisMultiplier = null, Vector3? customAngleMultiplier = null)
 		{
-			AllScreenShakes.Add(new ScreenShakeInfo(lenght, axisIntensity, angleIntensity));
+			AllScreenShakes.Add(new ScreenShakeInfo(
+				lenght,
+				axisIntensity,
+				angleIntensity,
+				axisIntensity * (customAxisMultiplier.HasValue ? customAxisMultiplier.Value : Vector3.one),
+				angleIntensity * (customAngleMultiplier.HasValue ? customAngleMultiplier.Value : Vector3.one)));
+
 			if (ShakeScreenCoroutine == null)
 			{
 				ShakeScreenCoroutine = instance.StartCoroutine(instance.ShakeScreenC());
@@ -99,11 +105,17 @@ namespace EoE.Utils
 			public float remainingTime;
 			public float axisIntensity;
 			public float angleIntensity;
-			public ScreenShakeInfo(float remainingTime, float axisIntensity, float angleIntensity)
+			public Vector3 axisIntensityVector;
+			public Vector3 angleIntensityVector;
+			public ScreenShakeInfo(float remainingTime, float axisIntensity, float angleIntensity, Vector3 axisIntensityVector, Vector3 angleIntensityVector)
 			{
 				this.remainingTime = remainingTime;
+
 				this.axisIntensity = axisIntensity;
 				this.angleIntensity = angleIntensity;
+
+				this.axisIntensityVector = axisIntensityVector;
+				this.angleIntensityVector = angleIntensityVector;
 			}
 		}
 		#endregion

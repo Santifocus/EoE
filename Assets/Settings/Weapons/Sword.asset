@@ -18,7 +18,7 @@ MonoBehaviour:
     type: 3}
   weaponHandleOffset: {x: 0, y: 0, z: 1.1}
   element: 0
-  baseAttackDamage: 20
-  baseEnduranceDrain: 10
-  baseKnockbackAmount: 3
+  baseAttackDamage: 5
+  baseEnduranceDrain: 5
+  baseKnockbackAmount: 5
   baseCritChance: 0.3

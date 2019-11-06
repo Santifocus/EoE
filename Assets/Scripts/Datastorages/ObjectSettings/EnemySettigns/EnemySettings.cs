@@ -6,8 +6,12 @@ namespace EoE.Information
 {
 	public class EnemySettings : EntitieSettings
 	{
-		//Player search
+		//Combat
 		public float AttackRange = 2;
+		public float AttackKnockBack = 3;
+		public float CritChance = 0;
+
+		//Player search
 		public float SightRange = 10;
 		public float FoundPlayerSightRange = 30;
 		public float SightAngle = 60;

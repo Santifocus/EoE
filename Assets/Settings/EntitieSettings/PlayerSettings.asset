@@ -127,9 +127,9 @@ MonoBehaviour:
   ColorScreenDepth: 0.03
   ColorScreenDuration: 0.2
   ShakeScreenOnKnockback: 1
-  ShakeTimeOnKnockback: 0.1
-  ShakeScreenAxisIntensity: 0.3
-  ShakeScreenAngleIntensity: 0.1
+  ShakeTimeOnKnockback: 0.15
+  ShakeScreenAxisIntensity: 0.2
+  ShakeScreenAngleIntensity: 0.075
   BlurScreenOnDamage: 1
   BlurScreenHealthThreshold: 0.4
   BlurScreenBaseIntensity: 0.4

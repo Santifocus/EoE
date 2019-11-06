@@ -224,6 +224,7 @@ namespace EoE.Controlls
 
 		private void OnDestroy()
 		{
+			StopAllCoroutines();
 			playerInput.Disable();
 		}
 

@@ -46,7 +46,7 @@ namespace EoE.Information
 			EnemySettings settings = target as EnemySettings;
 
 			FloatField(new GUIContent("Sight Range", "How far can this Enemy see? If the player is further then this it is impossible for the Enemy to see the player."), ref settings.SightRange);
-			FloatField(new GUIContent("Found Player Sight Range", "How far can this Enemy see, after it has spotted the player? If the player is further then this it is impossible for the Enemy to see the player."), ref settings.SightRange);
+			FloatField(new GUIContent("Found Player Sight Range", "How far can this Enemy see, after it has spotted the player? If the player is further then this it is impossible for the Enemy to see the player."), ref settings.FoundPlayerSightRange);
 			FloatField(new GUIContent("Sight Angle", "What is the FOV of this enemy. (In Angles)"), ref settings.SightAngle);
 			FloatField(new GUIContent("Found Player Sight Angle", "When the Enemy found the player the Enemys FOV will be set to this."), ref settings.FoundPlayerSightAngle);
 			FloatField(new GUIContent("Chase Interest", "After this Enemy spotted the player how long will he try to chase him AFTER he lost sight of him. (In Seconds, Tries to go to the last seen position.)"), ref settings.ChaseInterest);
