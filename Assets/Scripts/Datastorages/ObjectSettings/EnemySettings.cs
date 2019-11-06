@@ -9,6 +9,7 @@ namespace EoE.Information
 		//Player search
 		public float AttackRange = 2;
 		public float SightRange = 10;
+		public float FoundPlayerSightRange = 30;
 		public float SightAngle = 60;
 		public float FoundPlayerSightAngle = 120;
 		public float ChaseInterest = 4;

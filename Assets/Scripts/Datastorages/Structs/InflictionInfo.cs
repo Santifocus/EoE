@@ -54,8 +54,24 @@ namespace EoE.Information
 				if (basis.cause != CauseType.Heal)
 					finalDamage *= GameController.CurrentGameSettings.GetEffectiveness(basis.element, receiver.SelfSettings.EntitieElement);
 
+
+				if (basis.causeKnockback)
+				{
+					forceDirection = basis.impactDirection;
+					causedKnockback = forceDirection * basis.knockbackAmount / receiver.SelfSettings.EntitieMass;
+				}
+				else
+				{
+					forceDirection = Vector3.up;
+					causedKnockback = null;
+				}
 				if (basis.wasCritical)
+				{
+					if(causedKnockback.HasValue)
+						causedKnockback *= GameController.CurrentGameSettings.CritDamageMultiplier;
+
 					finalDamage *= GameController.CurrentGameSettings.CritDamageMultiplier;
+				}
 
 				//VFX for Player
 				if(basis.attacker is Player && Player.PlayerSettings.SlowOnCriticalHit)
@@ -82,17 +98,6 @@ namespace EoE.Information
 
 				//We dont want to overheal, but will allow overkill for bettet VFX
 				finalDamage = Mathf.Max(finalDamage, -(receiver.curMaxHealth - receiver.curHealth));
-
-				if (basis.causeKnockback)
-				{
-					forceDirection = basis.impactDirection;
-					causedKnockback = forceDirection * basis.knockbackAmount / receiver.SelfSettings.EntitieMass;
-				}
-				else
-				{
-					forceDirection = Vector3.up;
-					causedKnockback = null;
-				}
 
 				if (finalDamage != 0 && createDamageNumber && !(fromRegen && !GameController.CurrentGameSettings.ShowRegenNumbers))
 				{
@@ -124,7 +129,13 @@ namespace EoE.Information
 					}
 
 					if(!(receiver.invincible && finalDamage > 0))
-						Utils.EffectUtils.CreateDamageNumber(basis.impactPosition, colors, forceDirection * GameController.CurrentGameSettings.DamageNumberFlySpeed, Mathf.Abs(finalDamage), basis.wasCritical);
+						Utils.EffectUtils.CreateDamageNumber(
+							basis.impactPosition, 
+							colors, 
+							forceDirection * GameController.CurrentGameSettings.DamageNumberFlySpeed * (basis.wasCritical ? 2 : 1), 
+							Mathf.Abs(finalDamage), 
+							basis.wasCritical, 
+							basis.wasCritical ? 2 : 1);
 				}
 			}
 		}

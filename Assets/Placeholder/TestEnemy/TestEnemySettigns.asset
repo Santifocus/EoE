@@ -28,22 +28,23 @@ MonoBehaviour:
   DoManaRegen: 0
   ManaRegen: 0
   ManaRegenInCombatMultiplier: 0.5
-  WalkSpeed: 3
+  WalkSpeed: 5
   RunSpeedMultiplicator: 1.5
   JumpPower: {x: 0, y: 10, z: 0}
-  TurnSpeed: 180
+  TurnSpeed: 240
   InAirTurnSpeedMultiplier: 0.25
   MoveAcceleration: 0.1
   NoMoveDeceleration: 0.25
   InAirAccelerationMultiplier: 0.3
   AttackRange: 3.1
   SightRange: 20
+  FoundPlayerSightRange: 30
   SightAngle: 60
   FoundPlayerSightAngle: 120
-  ChaseInterest: 4
-  LookAroundAfterLostPlayerTime: 4
-  WanderingFactor: 20
-  WanderingDelayMin: 0.5
+  ChaseInterest: 6
+  InvestigationTime: 8
+  WanderingFactor: 10
+  WanderingDelayMin: 1
   WanderingDelayMax: 5
-  LookAroundDelayMin: 0.25
+  LookAroundDelayMin: 0.5
   LookAroundDelayMax: 2

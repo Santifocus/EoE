@@ -49,6 +49,7 @@ MonoBehaviour:
   GroundHitVelocityLoss: 0.15
   CombatCooldown: 3
   EnemyWanderingUrgency: 0.5
+  EnemyMinimumInvestigationArea: 10
   HitEntitieParticles: {fileID: 0}
   HitTerrainParticles: {fileID: 0}
   EntitieStatDisplayPrefab: {fileID: 2494207287049978237, guid: ee388195767cec3429b9391e9fbd39e5,
