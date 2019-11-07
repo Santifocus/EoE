@@ -37,6 +37,7 @@ MonoBehaviour:
   NoMoveDeceleration: 0.25
   InAirAccelerationMultiplier: 0.3
   AttackRange: 3.1
+  AttackKnockBack: 3
   SightRange: 20
   FoundPlayerSightRange: 30
   SightAngle: 60

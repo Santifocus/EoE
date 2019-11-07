@@ -1,0 +1,145 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c07e3d0dcb2672346a494c20b6afef0f, type: 3}
+  m_Name: PlayerSettings
+  m_EditorClassIdentifier: 
+  EntitieMass: 1
+  MassCenter: {x: 0, y: 0, z: 0}
+  EntitieElement: 0
+  PossibleDropsTable: {fileID: 0}
+  SoulWorth: 10
+  BaseAttackDamage: 4
+  BaseMagicDamage: 2
+  BaseDefense: 0
+  Health: 50
+  DoHealthRegen: 1
+  HealthRegen: 8
+  HealthRegenInCombatMultiplier: 0
+  Mana: 30
+  DoManaRegen: 1
+  ManaRegen: 4
+  ManaRegenInCombatMultiplier: 0.5
+  WalkSpeed: 8
+  RunSpeedMultiplicator: 1.25
+  JumpPower: {x: 0, y: 10, z: 0}
+  TurnSpeed: 540
+  InAirTurnSpeedMultiplier: 0.5
+  MoveAcceleration: 0.5
+  NoMoveDeceleration: 0.25
+  InAirAccelerationMultiplier: 0.3
+  LevelSettings: {fileID: 11400000, guid: f274dc43aa7e69e4db13a311b4ea6d9e, type: 2}
+  CameraToPlayerDistance: 7
+  CameraAnchorOffset: {x: 0, y: 1.6, z: 0}
+  CameraRotationPower: {x: 200, y: 75}
+  CameraRotationSpeed: 5
+  CameraVerticalAngleClamps: {x: -50, y: 50}
+  CameraExtraZoomOnVertical: 0.5
+  MaxEnemyTargetingDistance: 250
+  CameraClampsWhenTargeting: {x: -30, y: 30}
+  EnduranceBars: 4
+  EndurancePerBar: 25
+  EnduranceRegen: 4
+  LockedEnduranceRegenMutliplier: 0.5
+  EnduranceRegenInCombat: 0.5
+  EnduranceRegenDelayAfterUse: 3
+  JumpEnduranceCost: 4
+  RunEnduranceCost: 3
+  DodgePower: 3
+  DodgeDuration: 0.15
+  DodgeModelExistTime: 0.35
+  DodgeCooldown: 0.3
+  DodgeEnduranceCost: 10
+  DodgeModelMaterial: {fileID: 2100000, guid: 11d51a887e999af408b3d408f575a218, type: 2}
+  StatTextUpdateSpeed: 0.5
+  EnduranceBarLerpSpeed: 5
+  HealthTextColors:
+    serializedVersion: 2
+    key0: {r: 1, g: 0, b: 0, a: 1}
+    key1: {r: 1, g: 0.70534384, b: 0.0047169924, a: 1}
+    key2: {r: 0.034243107, g: 1, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 16384
+    ctime2: 52428
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_NumColorKeys: 3
+    m_NumAlphaKeys: 2
+  ManaTextColors:
+    serializedVersion: 2
+    key0: {r: 1, g: 0, b: 0, a: 1}
+    key1: {r: 1, g: 1, b: 0, a: 1}
+    key2: {r: 0, g: 1, b: 1, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 16384
+    ctime2: 52428
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_NumColorKeys: 3
+    m_NumAlphaKeys: 2
+  ReserveEnduranceBarColor: {r: 1, g: 1, b: 1, a: 1}
+  ActiveEnduranceBarColor: {r: 1, g: 1, b: 1, a: 1}
+  ReloadingEnduranceBarColor: {r: 0.4, g: 0.4, b: 0.4, a: 0.8}
+  ColorScreenOnDamage: 1
+  ColorScreenColor: {r: 0.78431374, g: 0, b: 0, a: 0.43137255}
+  ColorScreenDepth: 0.03
+  ColorScreenDuration: 0.2
+  ShakeScreenOnKnockback: 1
+  ShakeTimeOnKnockback: 0.15
+  ShakeScreenAxisIntensity: 0.2
+  ShakeScreenAngleIntensity: 0.075
+  BlurScreenOnDamage: 1
+  BlurScreenHealthThreshold: 0.4
+  BlurScreenBaseIntensity: 0.4
+  BlurScreenDuration: 0.3
+  SlowOnCriticalHit: 1
+  SlowOnCritTimeIn: 0
+  SlowOnCritTimeStay: 0.5
+  SlowOnCritTimeOut: 0.2
+  SlowOnCritScale: 0.3
+  ScreenShakeOnCrit: 1
+  ShakeTimeOnCrit: 0.1
+  OnCritShakeAxisIntensity: 0.5
+  OnCritShakeAngleIntensity: 0.3

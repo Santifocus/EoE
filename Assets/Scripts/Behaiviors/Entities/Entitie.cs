@@ -137,7 +137,7 @@ namespace EoE.Entities
 			EntitieStateControl();
 			EntitieUpdate();
 		}
-		protected void FixedUpdate()
+		protected virtual void FixedUpdate()
 		{
 			entitieForceController.Update();
 
@@ -234,7 +234,7 @@ namespace EoE.Entities
 			//Check if there is any fall damage to give
 			float damageAmount = GameController.CurrentGameSettings.FallDamageCurve.Evaluate(velDif);
 			if (damageAmount > 0)
-				ChangeHealth(new InflictionInfo(this, CauseType.Physical, ElementType.None, actuallWorldPosition, Vector3.up, damageAmount, false));
+				ChangeHealth(new InflictionInfo(null, CauseType.Physical, ElementType.None, actuallWorldPosition, Vector3.up, damageAmount, false));
 		}
 		#endregion
 		#region State Control
@@ -519,7 +519,11 @@ namespace EoE.Entities
 				return;
 
 			curHealth -= damageResult.finalDamage;
-			impactForce += damageResult.causedKnockback.HasValue ? damageResult.causedKnockback.Value : Vector3.zero;
+			if (damageResult.causedKnockback.HasValue)
+			{
+				impactForce += new Vector3(damageResult.causedKnockback.Value.x, 0, damageResult.causedKnockback.Value.z);
+				body.velocity = new Vector3(body.velocity.x, body.velocity.y + damageResult.causedKnockback.Value.y, body.velocity.z);
+			}
 			curHealth = Mathf.Min(curMaxHealth, curHealth);
 
 			//VFX for player
