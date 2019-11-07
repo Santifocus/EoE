@@ -71,14 +71,12 @@ namespace EoE.Entities
 
 		protected override void MarkAsInteractTarget()
 		{
-			if (Player.TotalSoulCount >= requiredSouls)
-				rend.material.color = Color.Lerp(Color.red, Color.white, 0.75f);
+			rend.material.color = Color.Lerp(Color.red, Color.white, 0.75f);
 		}
 
 		protected override void StopMarkAsInteractable()
 		{
-			if (Player.TotalSoulCount >= requiredSouls)
-				rend.material.color = Color.white;
+			rend.material.color = Color.white;
 		}
 	}
 }

@@ -16,8 +16,8 @@ MonoBehaviour:
     a: 0.5
     b: 8
     c: 10
-  BaseSkillPointsPerLevel: 1
-  ExtraSkillPointsPerLevel: 5
+  AttributePointsPerLevel: 1
+  SkillPointsPerLevel: 5
   PerTenLevelsBasePoints: 1
   RotationExtraPoints: 1
   HealthPerSkillPoint: 25

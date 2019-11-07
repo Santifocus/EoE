@@ -8,7 +8,7 @@ namespace EoE.Entities
 	public class Crawler : Enemy
 	{
 		//Inspector Variables
-		[SerializeField] private CrawlerSettings settings;
+		[SerializeField] private CrawlerSettings settings = default;
 
 		//Attack
 		private ForceController.OnForceDelete bashFinish;

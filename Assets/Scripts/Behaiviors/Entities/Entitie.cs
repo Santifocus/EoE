@@ -319,7 +319,7 @@ namespace EoE.Entities
 				nonPermanentBuffs.Add(newBuff);
 		}
 		private enum CalculateValue : byte { Both = 0, Flat = 1, Percent = 2}
-		private void AddBuffEffect(BuffInstance buffInstance, CalculateValue toCalculate = CalculateValue.Both)
+		private void AddBuffEffect(BuffInstance buffInstance, CalculateValue toCalculate = CalculateValue.Both, bool clampRequired = true)
 		{
 			Buff buffBase = buffInstance.Base;
 			for (int i = 0; i < buffBase.Effects.Length; i++)
@@ -343,7 +343,8 @@ namespace EoE.Entities
 							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curMaxHealth : buffBase.Effects[i].Amount;
 							change = Mathf.Max(-(curMaxHealth - 1), change);
 							curMaxHealth += change;
-							curHealth = Mathf.Min(curMaxHealth, curHealth);
+							if (clampRequired)
+								curHealth = Mathf.Min(curMaxHealth, curHealth);
 							break;
 						}
 					case TargetStat.Mana:
@@ -351,7 +352,23 @@ namespace EoE.Entities
 							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curMaxMana : buffBase.Effects[i].Amount;
 							change = Mathf.Max(-(curMaxMana), change);
 							curMaxMana += change;
-							curMana = Mathf.Min(curMaxMana, curMana);
+							if(clampRequired)
+								curMana = Mathf.Min(curMaxMana, curMana);
+							break;
+						}
+					case TargetStat.Endurance:
+						{
+							//If this is not a player we can just ignore this buff/debuff
+							Player player = this as Player;
+							if (player == null)
+								break;
+
+							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * player.trueEnduranceAmount : buffBase.Effects[i].Amount;
+							change = Mathf.Max(-(player.trueEnduranceAmount), change);
+							player.trueEnduranceAmount += change;
+
+							if (clampRequired)
+								player.UpdateEnduranceStat();
 							break;
 						}
 					case TargetStat.PhysicalDamage:
@@ -409,7 +426,7 @@ namespace EoE.Entities
 			if (fromPermanent)
 				RecalculateBuffs();
 		}
-		private void RemoveBuffEffect(BuffInstance buffInstance)
+		private void RemoveBuffEffect(BuffInstance buffInstance, bool clampRequired = true)
 		{
 			Buff buffBase = buffInstance.Base;
 			for (int i = 0; i < buffBase.Effects.Length; i++)
@@ -421,15 +438,27 @@ namespace EoE.Entities
 					case TargetStat.Health:
 						{
 							curMaxHealth -= change;
-							if (curHealth > curMaxHealth)
+							if (clampRequired && curHealth > curMaxHealth)
 								curHealth = curMaxHealth;
 							break;
 						}
 					case TargetStat.Mana:
 						{
 							curMaxMana -= change;
-							if (curMana > curMaxMana)
+							if (clampRequired && curMana > curMaxMana)
 								curMana = curMaxMana;
+							break;
+						}
+					case TargetStat.Endurance:
+						{
+							//If this is not a player we can just ignore this buff/debuff
+							Player player = this as Player;
+							if (player == null)
+								break;
+
+							player.trueEnduranceAmount -= change;
+							if (clampRequired)
+								player.UpdateEnduranceStat();
 							break;
 						}
 					case TargetStat.PhysicalDamage:
@@ -463,28 +492,41 @@ namespace EoE.Entities
 		public void RecalculateBuffs()
 		{
 			//Remove all effects
-			ResetStats();
+			curMaxHealth = SelfSettings.Health;
+			curMaxMana = SelfSettings.Mana;
+			if (this is Player)
+				(this as Player).trueEnduranceAmount = Player.PlayerSettings.EnduranceBars * Player.PlayerSettings.EndurancePerBar;
+			curPhysicalDamage = SelfSettings.BaseAttackDamage;
+			curMagicalDamage = SelfSettings.BaseMagicDamage;
+			curDefense = SelfSettings.BaseDefense;
+			curWalkSpeed = SelfSettings.WalkSpeed;
+			curJumpPowerMultiplier = 1;
 
 			//Now re-add them, so the values can be recalculated
 			//First add flat values and then percent
 			//Flat
 			for (int i = 0; i < nonPermanentBuffs.Count; i++)
 			{
-				AddBuffEffect(nonPermanentBuffs[i], CalculateValue.Flat);
+				AddBuffEffect(nonPermanentBuffs[i], CalculateValue.Flat, false);
 			}
 			for (int i = 0; i < permanentBuffs.Count; i++)
 			{
-				AddBuffEffect(permanentBuffs[i], CalculateValue.Flat);
+				AddBuffEffect(permanentBuffs[i], CalculateValue.Flat, false);
 			}
 			//Percent
 			for (int i = 0; i < nonPermanentBuffs.Count; i++)
 			{
-				AddBuffEffect(nonPermanentBuffs[i], CalculateValue.Percent);
+				AddBuffEffect(nonPermanentBuffs[i], CalculateValue.Percent, false);
 			}
 			for (int i = 0; i < permanentBuffs.Count; i++)
 			{
-				AddBuffEffect(permanentBuffs[i], CalculateValue.Percent);
+				AddBuffEffect(permanentBuffs[i], CalculateValue.Percent, false);
 			}
+
+			if (curHealth > curMaxHealth)
+				curHealth = curMaxHealth;
+			if (curMana > curMaxMana)
+				curMana = curMaxMana;
 		}
 		private void PermanentBuffsControl()
 		{
@@ -616,14 +658,10 @@ namespace EoE.Entities
 
 			for(int i = 0; i < SelfSettings.PossibleDropsTable.PossibleDrops.Length; i++)
 			{
-				if (Utils.BaseUtils.Chance01(SelfSettings.PossibleDropsTable.PossibleDrops[i].DropChance))
+				if (BaseUtils.Chance01(SelfSettings.PossibleDropsTable.PossibleDrops[i].DropChance))
 				{
 					int amount = Random.Range(SelfSettings.PossibleDropsTable.PossibleDrops[i].MinDropAmount, SelfSettings.PossibleDropsTable.PossibleDrops[i].MaxDropAmount + 1);
-					for(int j = 0; j < amount; j++)
-					{
-						GameObject newDrop = Instantiate(SelfSettings.PossibleDropsTable.PossibleDrops[i].Drop, Storage.DropStorage);
-						newDrop.transform.position = actuallWorldPosition;
-					}
+					SelfSettings.PossibleDropsTable.PossibleDrops[i].Drop.CreateItemDrop(actuallWorldPosition, amount, false);
 				}
 			}
 		}

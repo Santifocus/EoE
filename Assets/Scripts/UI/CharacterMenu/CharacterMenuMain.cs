@@ -75,7 +75,7 @@ namespace EoE.UI
 			atkDisplay.text = Player.Instance.curPhysicalDamage.ToString();
 			mgaDisplay.text = Player.Instance.curMagicalDamage.ToString();
 
-			skillpointDisplay.text = Player.AvailableBaseSkillPoints + " | " + Player.AvailableSpecialSkillPoints;
+			skillpointDisplay.text = Player.AvailableSkillPoints + " | " + Player.AvailableAtributePoints;
 		}
 		private void UpdateSprites()
 		{

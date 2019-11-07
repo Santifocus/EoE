@@ -37,6 +37,8 @@ namespace EoE.Entities
 		[HideInInspector] public float lockedEndurance;
 		private float usedEnduranceCooldown;
 
+		[HideInInspector] public float trueEnduranceAmount;
+
 		//Dodge
 		public Transform modelTransform = default;
 		private float dodgeCooldown;
@@ -82,14 +84,15 @@ namespace EoE.Entities
 		public static PlayerSettings PlayerSettings => instance.selfSettings;
 		public static Entitie TargetedEntitie;
 		public static PlayerBuffDisplay BuffDisplay => instance.buffDisplay;
+		public static Inventory PlayerInventory;
 
 		#region Leveling
 		public static Buff LevelingBaseBuff;
-		public static Buff LevelingSkillPointsBuff;
+		public static Buff LevelingPointsBuff;
 		public static int TotalSoulCount { get; private set; }
 		public static int RequiredSoulsForLevel { get; private set; }
-		public static int AvailableBaseSkillPoints;
-		public static int AvailableSpecialSkillPoints;
+		public static int AvailableSkillPoints;
+		public static int AvailableAtributePoints;
 		#endregion
 
 		//Other
@@ -106,6 +109,7 @@ namespace EoE.Entities
 
 			ChangeWeapon(equipedWeapon);
 			SetupEndurance();
+			PlayerInventory = new Inventory(20);
 		}
 		private void SetupLevelingControl()
 		{
@@ -118,7 +122,7 @@ namespace EoE.Entities
 				Permanent = true,
 				DOTs = new DOT[0]
 			};
-			LevelingSkillPointsBuff = new Buff()
+			LevelingPointsBuff = new Buff()
 			{
 				Name = "LevelingSkillPoints",
 				Quality = BuffType.Positive,
@@ -128,14 +132,14 @@ namespace EoE.Entities
 				DOTs = new DOT[0]
 			};
 
-			//Health, Mana, PhysicalDamage, MagicalDamage, Defense
-			int incremtingStats = 5;
+			//Health, Mana, Endurance, PhysicalDamage, MagicalDamage, Defense
+			int incremtingStats = 6;
 
 			LevelingBaseBuff.Effects = new Effect[incremtingStats];
-			LevelingSkillPointsBuff.Effects = new Effect[incremtingStats];
+			LevelingPointsBuff.Effects = new Effect[incremtingStats];
 			for (int i = 0; i < incremtingStats; i++) 
 			{
-				LevelingBaseBuff.Effects[i] = LevelingSkillPointsBuff.Effects[i] = 
+				LevelingBaseBuff.Effects[i] = LevelingPointsBuff.Effects[i] = 
 					new Effect
 					{
 						Amount = 0,
@@ -145,20 +149,24 @@ namespace EoE.Entities
 			}
 
 			AddBuff(LevelingBaseBuff, this);
-			AddBuff(LevelingSkillPointsBuff, this);
+			AddBuff(LevelingPointsBuff, this);
 
 			EntitieLevel = 0;
 			RequiredSoulsForLevel = PlayerSettings.LevelSettings.curve.GetRequiredSouls(EntitieLevel);
 			TotalSoulCount = 0;
-			AvailableBaseSkillPoints = 0;
-			AvailableSpecialSkillPoints = 0;
+			AvailableSkillPoints = 0;
+			AvailableAtributePoints = 0;
 			//Safest way to ensure everyhting is correct is by adding 0 Souls to our current count
 			AddSouls(0);
 		}
 		protected override void EntitieUpdate()
 		{
 			if (GameController.GameIsPaused)
+			{
+				if (TargetedEntitie)
+					TargetedEntitie = null;
 				return;
+			}
 
 			EnduranceRegen();
 			CameraControl();
@@ -192,6 +200,8 @@ namespace EoE.Entities
 		{
 			activeEnduranceContainerIndex = PlayerSettings.EnduranceBars - 1;
 			totalEnduranceContainers = PlayerSettings.EnduranceBars;
+
+			trueEnduranceAmount = totalEnduranceContainers * PlayerSettings.EndurancePerBar;
 
 			enduranceContainers = new List<float>(totalEnduranceContainers);
 			for(int i = 0; i < totalEnduranceContainers; i++)
@@ -251,7 +261,7 @@ namespace EoE.Entities
 				}
 			}
 		}
-		public void EnduranceRegen()
+		private void EnduranceRegen()
 		{
 			if(recentlyUsedEndurance)
 			{
@@ -293,6 +303,10 @@ namespace EoE.Entities
 				if (enduranceContainers[activeEnduranceContainerIndex] > PlayerSettings.EndurancePerBar)
 					enduranceContainers[activeEnduranceContainerIndex] = PlayerSettings.EndurancePerBar;
 			}
+		}
+		public void UpdateEnduranceStat()
+		{
+
 		}
 		#endregion
 		#region Movement
@@ -846,8 +860,8 @@ namespace EoE.Entities
 			{
 				EntitieLevel++;
 				RequiredSoulsForLevel = PlayerSettings.LevelSettings.curve.GetRequiredSouls(EntitieLevel);
-				AvailableBaseSkillPoints += PlayerSettings.LevelSettings.BaseSkillPointsPerLevel;
-				AvailableSpecialSkillPoints += PlayerSettings.LevelSettings.ExtraSkillPointsPerLevel;
+				AvailableAtributePoints += PlayerSettings.LevelSettings.AttributePointsPerLevel;
+				AvailableSkillPoints += PlayerSettings.LevelSettings.SkillPointsPerLevel;
 
 				float baseRotationAmount = (EntitieLevel / 10) * PlayerSettings.LevelSettings.PerTenLevelsBasePoints + 1;
 				int rotationIndex = (startRotationAt + EntitieLevel) % 3 + enumOffset;

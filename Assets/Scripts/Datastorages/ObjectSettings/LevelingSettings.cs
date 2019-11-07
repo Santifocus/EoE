@@ -7,11 +7,35 @@ namespace EoE.Information
 	public class LevelingSettings : ObjectSettings
 	{
 		public LevelingCurve curve;
-		public int BaseSkillPointsPerLevel;
-		public int ExtraSkillPointsPerLevel;
+		public int AttributePointsPerLevel;
+		public int SkillPointsPerLevel;
 
 		public float PerTenLevelsBasePoints;
 		public float RotationExtraPoints;
+
+		public float this[TargetStat stat]
+		{
+			get
+			{
+				switch (stat)
+				{
+					case TargetStat.Health:
+						return HealthPerSkillPoint;
+					case TargetStat.Mana:
+						return ManaPerSkillPoint;
+					case TargetStat.Endurance:
+						return EndurancePerSkillPoint;
+					case TargetStat.PhysicalDamage:
+						return PhysicalDamagePerSkillPoint;
+					case TargetStat.MagicalDamage:
+						return MagicDamagePerSkillPoint;
+					case TargetStat.Defense:
+						return DefensePerSkillPoint;
+					default:
+						return 0;
+				}
+			}
+		}
 
 		public float HealthPerSkillPoint;
 		public float ManaPerSkillPoint;

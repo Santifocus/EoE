@@ -128,6 +128,7 @@ namespace EoE.Information
 			FloatField(new GUIContent("Seconds Per Entitie Regen", "How many seconds for each regeneration cyle? This will not change the amount of healing only the frequency. (In Seconds)"), ref settings.SecondsPerEntititeRegen);
 			FloatField(new GUIContent("Crit Damage Multiplier", "If a ability / attack was counted as criticall for much should the damage be multiplied?"), ref settings.CritDamageMultiplier);
 			ObjectField(new GUIContent("Soul Drop Prefab", "The prefab that will be spawned when an Entite dies and drops souls."), ref settings.SoulDropPrefab);
+			FloatField(new GUIContent("Item Drop Random Velocity Strenght"), ref settings.ItemDropRandomVelocityStrenght);
 		}
 
 		private void EffectivenessMatrixArea()

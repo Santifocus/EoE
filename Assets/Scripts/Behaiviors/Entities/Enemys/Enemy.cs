@@ -95,7 +95,10 @@ namespace EoE.Entities
 		{
 			body.velocity = curVelocity;
 
-			PlayerInAttackRange = Player.Alive && (player.actuallWorldPosition - actuallWorldPosition).sqrMagnitude < (enemySettings.AttackRange * enemySettings.AttackRange);
+			float sqrPlayerDist = (player.actuallWorldPosition - actuallWorldPosition).sqrMagnitude;
+			PlayerInAttackRange = Player.Alive && sqrPlayerDist < (enemySettings.AttackRange * enemySettings.AttackRange);
+			if (curStates.IsInCombat && (PlayerInAttackRange || sqrPlayerDist < (enemySettings.FoundPlayerSightRange * enemySettings.FoundPlayerSightRange)))
+				chasingPlayer = true;
 
 			if (stopBaseBehaivior)
 				return;

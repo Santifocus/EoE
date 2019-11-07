@@ -46,6 +46,7 @@ namespace EoE.Information
 		public float CritDamageMultiplier					= 2;
 		public float SecondsPerEntititeRegen				= 0.5f;
 		public SoulDrop SoulDropPrefab						= default;
+		public float ItemDropRandomVelocityStrenght			= 2;
 
 		//Damage Calculation
 		public float DamageLevelAdd							= 12;
