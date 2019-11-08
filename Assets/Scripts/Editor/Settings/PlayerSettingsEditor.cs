@@ -144,15 +144,26 @@ namespace EoE.Information
 					FloatField(new GUIContent("Slow On Crit Time Stay", "How long should the slowdown stay?"), ref settings.SlowOnCritTimeStay, 1);
 					FloatField(new GUIContent("Slow On Crit Time Out", "How long should the slowdown take until it has faded away?"), ref settings.SlowOnCritTimeOut, 1);
 					FloatField(new GUIContent("Slow On Crit Scale", "What is the maximum slow (This is the time scale while Stay time is active)"), ref settings.SlowOnCritScale, 1);
+				}
 
-					GUILayout.Space(3);
-					BoolField(new GUIContent("Screen Shake On Crit"), ref settings.ScreenShakeOnCrit, 1);
-					if (settings.ScreenShakeOnCrit)
-					{
-						FloatField(new GUIContent("Shake Time On Crit", "How long should the screen shake?"), ref settings.ShakeTimeOnCrit, 2);
-						FloatField(new GUIContent("On Crit Shake Axis Intensity", "XYZ Position shake multiplier"), ref settings.OnCritShakeAxisIntensity, 2);
-						FloatField(new GUIContent("On Crit Shake Angle Intensity", "XYZ Rotation shake multiplier"), ref settings.OnCritShakeAngleIntensity, 2);
-					}
+				GUILayout.Space(6);
+				BoolField(new GUIContent("Screen Shake On Crit"), ref settings.ScreenShakeOnCrit);
+				if (settings.ScreenShakeOnCrit)
+				{
+					FloatField(new GUIContent("Shake Time On Crit", "How long should the screen shake?"), ref settings.ShakeTimeOnCrit, 1);
+					FloatField(new GUIContent("On Crit Shake Axis Intensity", "XYZ Position shake multiplier"), ref settings.OnCritShakeAxisIntensity, 1);
+					FloatField(new GUIContent("On Crit Shake Angle Intensity", "XYZ Rotation shake multiplier"), ref settings.OnCritShakeAngleIntensity, 1);
+				}
+
+				GUILayout.Space(6);
+				BoolField(new GUIContent("Rumble On Crit"), ref settings.RumbleOnCrit);
+				if (settings.ScreenShakeOnCrit)
+				{
+					FloatField(new GUIContent("Rumble On Crit Time", "How long should the controller rumble? (The intensity will be Interpolated between Star->End intensity)"), ref settings.RumbleOnCritTime, 1);
+					FloatField(new GUIContent("Rumble On Crit Left Intensity Start", "The start rumble intensity of the left motor. (Left motor is Low Frequency therefore it is recommended to use about 1/3 of the right motor as intensity)"), ref settings.RumbleOnCritLeftIntensityStart, 1);
+					FloatField(new GUIContent("Rumble On Crit Right Intensity Start", "The start rumble intensity of the right motor. (Left motor is High Frequency therefore it is recommended to use about 3 time the intensity of the left motor)"), ref settings.RumbleOnCritRightIntensityStart, 1);
+					FloatField(new GUIContent("Rumble On Crit Left Intensity End", "The end rumble intensity of the left motor."), ref settings.RumbleOnCritLeftIntensityEnd, 1);
+					FloatField(new GUIContent("Rumble On Crit Right Intensity End", "The end rumble intensity of the right motor."), ref settings.RumbleOnCritRightIntensityEnd, 1);
 				}
 			}
 			EndFoldoutHeader();

@@ -19,14 +19,14 @@ namespace EoE.Information
 
 			for(int i = 0; i < createdItemDrops.Length; i++)
 			{
-				ItemDrop baseObject = Instantiate(GameController.Instance.itemDropPrefab, Storage.ItemStorage);
+				ItemDrop baseObject = Instantiate(GameController.Instance.itemDropPrefab, Storage.DropStorage);
 				InventoryItem item = new InventoryItem(this, (i == createdItemDrops.Length - 1 ? stackSize % MaxStack : MaxStack));
 				GameObject model = Instantiate(ItemModel, baseObject.transform);
 
 				baseObject.transform.position = positon;
 				baseObject.SetupItemDrop(item, stopVelocity);
 			}
-
+			
 			return createdItemDrops;
 		}
 	}
@@ -37,5 +37,6 @@ namespace EoE.Information
 		public bool Useable;
 		public bool Weapon;
 		public bool Armor;
+		public bool Deletable;
 	}
 }

@@ -74,9 +74,10 @@ namespace EoE.Information
 				}
 
 				//VFX for Player
-				if(basis.attacker is Player && Player.PlayerSettings.SlowOnCriticalHit)
+				if(basis.attacker is Player && basis.wasCritical && (basis.cause == CauseType.Physical || basis.cause == CauseType.Magic))
 				{
-					if(basis.wasCritical && (basis.cause == CauseType.Physical || basis.cause == CauseType.Magic))
+					//Time dilation
+					if (Player.PlayerSettings.SlowOnCriticalHit)
 					{
 						EffectUtils.TimeDilation(
 							0,
@@ -85,14 +86,26 @@ namespace EoE.Information
 							Player.PlayerSettings.SlowOnCritTimeStay,
 							false,
 							Player.PlayerSettings.SlowOnCritTimeOut);
+					}
 
-						if (Player.PlayerSettings.ScreenShakeOnCrit)
-						{
-							EffectUtils.ShakeScreen(
-								Player.PlayerSettings.ShakeTimeOnCrit,
-								Player.PlayerSettings.OnCritShakeAxisIntensity,
-								Player.PlayerSettings.OnCritShakeAngleIntensity);
-						}
+					//Screen shake
+					if (Player.PlayerSettings.ScreenShakeOnCrit)
+					{
+						EffectUtils.ShakeScreen(
+							Player.PlayerSettings.ShakeTimeOnCrit,
+							Player.PlayerSettings.OnCritShakeAxisIntensity,
+							Player.PlayerSettings.OnCritShakeAngleIntensity);
+					}
+
+					//Controller rumble
+					if (Player.PlayerSettings.RumbleOnCrit)
+					{
+						EffectUtils.RumbleController(
+							Player.PlayerSettings.RumbleOnCritTime,
+							Player.PlayerSettings.RumbleOnCritLeftIntensityStart,
+							Player.PlayerSettings.RumbleOnCritRightIntensityStart,
+							Player.PlayerSettings.RumbleOnCritLeftIntensityEnd,
+							Player.PlayerSettings.RumbleOnCritRightIntensityEnd);
 					}
 				}
 

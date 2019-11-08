@@ -14,7 +14,7 @@ namespace EoE.Entities
 	{
 		#region Fields
 		//Constants
-		private const float ATTACK_INTERACT_COOLDOWN = 0.75f;
+		private const float ATTACK_INTERACT_COOLDOWN = 0.25f;
 		private const float RUN_ANIM_THRESHOLD = 0.75f;
 		private const float NON_TURNING_THRESHOLD = 60;
 		private const float LERP_TURNING_AREA = 0.5f;
@@ -845,8 +845,7 @@ namespace EoE.Entities
 		{
 			if (heldWeapon)
 				Destroy(heldWeapon.gameObject);
-			EffectUtils.BlurScreen(1, 100, 5);
-
+			EffectUtils.BlurScreen(1, Mathf.Infinity, 5);
 			Alive = false;
 			base.Death();
 		}

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace EoE.UI
 {
-	public class AcceptResetButton : LevelingMenuComponent
+	public class AcceptResetButton : CMenuItem
 	{
 		[SerializeField] private Vector2 pointerAcceptPosition = default;
 		[SerializeField] private Vector2 pointerResetPosition = default;
@@ -19,13 +19,10 @@ namespace EoE.UI
 			onAcceptPosition = true;
 			pointer.rectTransform.anchoredPosition = pointerAcceptPosition;
 		}
-		protected override void DeSelect()
+		protected override void Update()
 		{
-
-		}
-
-		private void Update()
-		{
+			base.Update();
+			
 			if (!selected)
 				return;
 

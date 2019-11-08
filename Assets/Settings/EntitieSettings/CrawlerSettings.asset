@@ -17,7 +17,7 @@ MonoBehaviour:
   EntitieElement: 2
   PossibleDropsTable: {fileID: 11400000, guid: 6c863124784db984e93eb995e00bd42e, type: 2}
   SoulWorth: 10
-  BaseAttackDamage: 10
+  BaseAttackDamage: 15
   BaseMagicDamage: 3
   BaseDefense: 2
   Health: 50
@@ -36,7 +36,7 @@ MonoBehaviour:
   MoveAcceleration: 0.1
   NoMoveDeceleration: 0.25
   InAirAccelerationMultiplier: 0.3
-  AttackRange: 2.5
+  AttackRange: 3
   AttackKnockBack: 3
   CritChance: 0
   SightRange: 20
@@ -51,7 +51,6 @@ MonoBehaviour:
   LookAroundDelayMin: 0.5
   LookAroundDelayMax: 2
   AttackSpeed: 1
-  InRangeWaitTime: 0.3
-  BashSpeed: 25
-  BashDistance: 10
+  BashSpeed: 40
+  BashDistance: 7
   ForceTranslationMultiplier: 1

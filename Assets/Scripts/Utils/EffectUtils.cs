@@ -1,26 +1,39 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace EoE.Utils
 {
 	public class EffectUtils : MonoBehaviour
 	{
-		private static EffectUtils instance;
+		private static EffectUtils Instance;
 		[SerializeField] private RawImage screenEffectTarget = default;
 		[SerializeField] private Transform cameraShakeCore = default;
 		[SerializeField] private DamageNumber damageNumberPrefab = default;
 		private PoolableObject<DamageNumber> damageNumberPool;
 		private void Start()
 		{
-			if (instance)
-				Destroy(instance);
+			if (Instance)
+				Destroy(Instance);
 
 			BaseFixedDeltaTime = Time.fixedDeltaTime;
 			ResetBlurEffect();
 			damageNumberPool = new PoolableObject<DamageNumber>(50, true, damageNumberPrefab, Storage.ParticleStorage);
-			instance = this;
+			Instance = this;
+		}
+		public static void ResetScreenEffects()
+		{
+			Instance.StopAllCoroutines();
+			AllScreenShakes = new List<ScreenShakeInfo>();
+			AllRumbles = new List<RumbleInfo>();
+			AllScreenColorEffects = new List<ColorScreenEffect>();
+			AllBlurScreenEffects = new List<BlurScreenEffect>();
+			AllTimeDilationsEffects = new List<TimeDilationEffect>();
+
+			Instance.ResetBlurEffect();
+			Gamepad.current.SetMotorSpeeds(0, 0);
 		}
 		#region ScreenShake
 		private const float DELAY_PER_SHAKE = 0.01f;
@@ -38,7 +51,7 @@ namespace EoE.Utils
 
 			if (ShakeScreenCoroutine == null)
 			{
-				ShakeScreenCoroutine = instance.StartCoroutine(instance.ShakeScreenC());
+				ShakeScreenCoroutine = Instance.StartCoroutine(Instance.ShakeScreenC());
 			}
 		}
 		private IEnumerator ShakeScreenC()
@@ -119,6 +132,104 @@ namespace EoE.Utils
 			}
 		}
 		#endregion
+		#region Rumble
+		private static List<RumbleInfo> AllRumbles = new List<RumbleInfo>();
+		private static Coroutine RumbleCoroutine = null;
+		public static void RumbleController(float totalTime, float leftMotorIntensityStart, float rightMotorIntensityStart, float? leftMotorIntensityEnd = null, float? rightMotorIntensityEnd = null)
+		{
+			AllRumbles.Add(new RumbleInfo(
+				totalTime,
+				leftMotorIntensityStart,
+				rightMotorIntensityStart,
+				leftMotorIntensityEnd,
+				rightMotorIntensityEnd));
+
+			if (RumbleCoroutine == null)
+			{
+				RumbleCoroutine = Instance.StartCoroutine(Instance.RumbleC());
+			}
+		}
+		private IEnumerator RumbleC()
+		{
+			while(AllRumbles.Count > 0)
+			{
+				yield return new WaitForEndOfFrame();
+				float highestLeftIntensity = 0;
+				float highestRightIntensity = 0;
+
+				//Update all remaining times and get the highest intensitys
+				for(int i = 0; i < AllRumbles.Count; i++)
+				{
+					AllRumbles[i].remainingTime -= Time.deltaTime;
+					(float left, float right) = AllRumbles[i].GetRumbleIntensitys();
+
+					if (AllRumbles[i].remainingTime <= 0)
+					{
+						AllRumbles.RemoveAt(i);
+						i--;
+					}
+					else
+					{
+						if (left > highestLeftIntensity)
+							highestLeftIntensity = left;
+
+						if (right > highestRightIntensity)
+							highestRightIntensity = right;
+					}
+				}
+
+				//Rumble
+				if (Gamepad.current != null)
+				{
+					Gamepad.current.SetMotorSpeeds(highestLeftIntensity, highestRightIntensity);
+				}
+			}
+
+			//Reset
+			if (Gamepad.current != null)
+			{
+				Gamepad.current.SetMotorSpeeds(0, 0);
+			}
+			RumbleCoroutine = null;
+		}
+
+		private class RumbleInfo
+		{
+			public float totalTime;
+			public float remainingTime;
+
+			public float leftMotorIntensityStart;
+			public float rightMotorIntensityStart;
+
+			public float leftMotorIntensityEnd;
+			public float rightMotorIntensityEnd;
+
+			public RumbleInfo(float totalTime, float leftMotorIntensityStart, float rightMotorIntensityStart, float? leftMotorIntensityEnd = null, float? rightMotorIntensityEnd = null)
+			{
+				this.totalTime = totalTime;
+				this.remainingTime = totalTime;
+
+				this.leftMotorIntensityStart = leftMotorIntensityStart;
+				this.rightMotorIntensityStart = rightMotorIntensityStart;
+				this.leftMotorIntensityEnd = leftMotorIntensityEnd ?? leftMotorIntensityStart;
+				this.rightMotorIntensityEnd = rightMotorIntensityEnd ?? rightMotorIntensityStart;
+
+				this.leftMotorIntensityStart = Mathf.Clamp01(this.leftMotorIntensityStart);
+				this.rightMotorIntensityStart = Mathf.Clamp01(this.rightMotorIntensityStart);
+				this.leftMotorIntensityEnd = Mathf.Clamp01(this.leftMotorIntensityEnd);
+				this.rightMotorIntensityEnd = Mathf.Clamp01(this.rightMotorIntensityEnd);
+			}
+			public (float, float) GetRumbleIntensitys()
+			{
+				//Gradient of 1 to 0
+				float point = remainingTime / totalTime;
+				float left = Mathf.LerpUnclamped(leftMotorIntensityEnd, leftMotorIntensityStart, point);
+				float right = Mathf.LerpUnclamped(rightMotorIntensityEnd, rightMotorIntensityStart, point);
+
+				return (left, right);
+			}
+		}
+		#endregion
 		#region ColorScreen
 		private static List<ColorScreenEffect> AllScreenColorEffects = new List<ColorScreenEffect>();
 		private static Coroutine ColorScreenCoroutine;
@@ -127,7 +238,7 @@ namespace EoE.Utils
 			AllScreenColorEffects.Add(new ColorScreenEffect(col, lenght, Mathf.Clamp01(depth * 2) / 2));
 			if (ColorScreenCoroutine == null)
 			{
-				ColorScreenCoroutine = instance.StartCoroutine(instance.ColorScreenC());
+				ColorScreenCoroutine = Instance.StartCoroutine(Instance.ColorScreenC());
 			}
 		}
 		private IEnumerator ColorScreenC()
@@ -186,7 +297,7 @@ namespace EoE.Utils
 			AllBlurScreenEffects.Add(new BlurScreenEffect(intensity, lenght, blurDistance));
 			if(BlurScreenCoroutine == null)
 			{
-				BlurScreenCoroutine = instance.StartCoroutine(instance.BlurScreenC());
+				BlurScreenCoroutine = Instance.StartCoroutine(Instance.BlurScreenC());
 			}
 		}
 		private IEnumerator BlurScreenC()
@@ -273,7 +384,7 @@ namespace EoE.Utils
 			float totalTime = AllTimeDilationsEffects[AllTimeDilationsEffects.Count - 1].totalTime;
 			if (TimeDilationCoroutine == null)
 			{
-				TimeDilationCoroutine = instance.StartCoroutine(instance.TimeDilationC());
+				TimeDilationCoroutine = Instance.StartCoroutine(Instance.TimeDilationC());
 			}
 			return totalTime;
 		}
@@ -368,16 +479,26 @@ namespace EoE.Utils
 		}
 		public static void CreateDamageNumber(Vector3 startPosition, Gradient colors, Vector3 numberVelocity, float damage, bool wasCrit, float overrideScale = 1)
 		{
-			DamageNumber newDamageNumber = instance.damageNumberPool.GetPoolObject();
+			DamageNumber newDamageNumber = Instance.damageNumberPool.GetPoolObject();
 			newDamageNumber.transform.position = startPosition;
+
 			newDamageNumber.transform.localScale = Vector3.one * overrideScale;
-			string displayedNumber = (Mathf.Round(damage * 100) / 100).ToString();
+			float roundedNumber = Mathf.Round(damage * 100) / 100;
+			int fullNumber = Mathf.FloorToInt(roundedNumber);
+			int afterComma = Mathf.RoundToInt((roundedNumber - fullNumber) * 100);
+			string displayedNumber;
+
+			if (afterComma < Mathf.Epsilon)
+				displayedNumber = fullNumber.ToString();
+			else
+				displayedNumber = fullNumber + ".<size=" + (newDamageNumber.display.fontSize / 1.75f) + ">" + afterComma + "</size>";
+
 			newDamageNumber.BeginDisplay(numberVelocity, colors, displayedNumber, wasCrit);
 		}
 
 		public static void DisplayInfoText(Vector3 startPosition, Gradient colors, Vector3 numberVelocity, string text, float overrideScale = 1)
 		{
-			DamageNumber newDamageNumber = instance.damageNumberPool.GetPoolObject();
+			DamageNumber newDamageNumber = Instance.damageNumberPool.GetPoolObject();
 			newDamageNumber.transform.position = startPosition;
 			newDamageNumber.transform.localScale = Vector3.one * overrideScale;
 			newDamageNumber.BeginDisplay(numberVelocity, colors, text, false);

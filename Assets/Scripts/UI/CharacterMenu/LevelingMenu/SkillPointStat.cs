@@ -8,20 +8,11 @@ using EoE.Entities;
 
 namespace EoE.UI
 {
-	public class SkillPointStat : LevelingMenuComponent
+	public class SkillPointStat : CMenuItem
 	{
 		public TargetStat targetStat = TargetStat.Health;
 		[SerializeField] private TextMeshProUGUI newPoints = default;
 		[SerializeField] private TextMeshProUGUI curPoints = default;
-		protected override void Select()
-		{
-
-		}
-		protected override void DeSelect()
-		{
-
-		}
-
 		private void Update()
 		{
 			if (!selected)

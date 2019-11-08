@@ -18,7 +18,7 @@ namespace EoE
 		private static Vector2 PerlinNoiseScrollZ;
 
 		public PoolableObject<DamageNumber> SelfPool { get; set; }
-		[SerializeField] private TextMeshPro display = default;
+		public TextMeshPro display = default;
 		[SerializeField] private SpriteRenderer critIcon = default;
 		private float lifeTime;
 

@@ -8,7 +8,7 @@ namespace EoE.Entities
 {
 	public class ItemDrop : Interactable
 	{
-		[SerializeField] private Rigidbody body;
+		[SerializeField] private Rigidbody body = default;
 		private InventoryItem containedItem;
 		protected override void Interact()
 		{

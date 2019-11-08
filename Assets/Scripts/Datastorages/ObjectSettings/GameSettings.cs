@@ -15,7 +15,7 @@ namespace EoE.Information
 
 		//Behaiviors
 		public float CombatCooldown							= 3;
-		public float EnemyWanderingUrgency					= 0.5f;
+		public float IdleMovementUrgency					= 0.5f;
 		public float EnemyMinimumInvestigationArea			= 10;
 
 		//Visuals

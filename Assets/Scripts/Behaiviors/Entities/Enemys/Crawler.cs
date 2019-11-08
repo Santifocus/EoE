@@ -12,6 +12,7 @@ namespace EoE.Entities
 
 		//Attack
 		private ForceController.OnForceDelete bashFinish;
+		private bool chargingBash;
 		private bool bashing;
 		private ForceController.SingleForce bashForce;
 
@@ -24,38 +25,43 @@ namespace EoE.Entities
 		protected override void PlayerJustEnteredAttackRange()
 		{
 			base.PlayerJustEnteredAttackRange();
-			StartCoroutine(ChargeUpBash());
+			if(!chargingBash)
+				StartCoroutine(ChargeUpBash());
 		}
 		private IEnumerator ChargeUpBash()
 		{
-			stopBaseBehaivior = true;
+			chargingBash = true;
+			behaviorSimpleStop = true;
+
 			float timer = 0;
 			bool canceled = false;
 			while(timer < settings.AttackSpeed)
 			{
 				yield return new WaitForEndOfFrame();
 				timer += Time.deltaTime;
-
-				if(timer < settings.InRangeWaitTime && !PlayerInAttackRange)
-				{
-					canceled = true;
-					break;
-				}
 			}
+
+			//diable and enable so OnCollisionEnter can be called with a fresh calculation,
+			//this is needed for the situation in which the player is touching the enemy
+			coll.enabled = false;
+			coll.enabled = true;
+			chargingBash = false;
 
 			if (!canceled)
 			{
+				behaviorSimpleStop = false;
+				agentFullStopBehaivior = true;
 				bashing = true;
 				bashForce = entitieForceController.ApplyForce(transform.forward * settings.BashSpeed, settings.BashSpeed / settings.BashDistance, false, bashFinish);
 			}
 			else
 			{
-				stopBaseBehaivior = false;
+				behaviorSimpleStop = false;
 			}
 		}
 		private void FinishedBash()
 		{
-			bashing = stopBaseBehaivior = false;
+			bashing = agentFullStopBehaivior = false;
 			if(PlayerInAttackRange)
 				StartCoroutine(ChargeUpBash());
 		}
