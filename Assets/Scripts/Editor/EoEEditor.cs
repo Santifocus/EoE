@@ -34,6 +34,22 @@ namespace EoE
 			EditorGUILayout.LabelField(LINE_BREAK);
 			EditorGUILayout.EndHorizontal();
 		}
+		public static bool StringField(string content, ref string curValue, int offSet = 0) => StringField(new GUIContent(content), ref curValue, offSet);
+		public static bool StringField(GUIContent content, ref string curValue, int offSet = 0)
+		{
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(offSet * STANDARD_OFFSET);
+			string newValue = EditorGUILayout.TextField(content, curValue);
+			EditorGUILayout.EndHorizontal();
+
+			if (newValue != curValue)
+			{
+				isDirty = true;
+				curValue = newValue;
+				return true;
+			}
+			return false;
+		}
 		public static bool FloatField(string content, ref float curValue, int offSet = 0) => FloatField(new GUIContent(content), ref curValue, offSet);
 		public static bool FloatField(GUIContent content, ref float curValue, int offSet = 0)
 		{
@@ -237,6 +253,21 @@ namespace EoE
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Space(offSet * STANDARD_OFFSET);
 			System.Enum newValue = EditorGUILayout.EnumPopup(content, curValue);
+			EditorGUILayout.EndHorizontal();
+
+			if (newValue != curValue)
+			{
+				isDirty = true;
+				curValue = newValue;
+				return true;
+			}
+			return false;
+		}
+		public static bool EnumFlagField(GUIContent content, ref System.Enum curValue, int offSet = 0)
+		{
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(offSet * STANDARD_OFFSET);
+			System.Enum newValue = EditorGUILayout.EnumFlagsField(content, curValue);
 			EditorGUILayout.EndHorizontal();
 
 			if (newValue != curValue)

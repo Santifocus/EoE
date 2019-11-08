@@ -39,7 +39,7 @@ namespace EoE.Information
 
 			if(table.PossibleDrops == null)
 			{
-				table.PossibleDrops = new DropTable.ItemDrop[0];
+				table.PossibleDrops = new DropTable.ItemDropData[0];
 			}
 
 			if(innerFoldouts == null)
@@ -107,13 +107,13 @@ namespace EoE.Information
 			int newArraySize = curArraySize;
 			if(IntField("Size", ref newArraySize, 1) && newArraySize != curArraySize)
 			{
-				DropTable.ItemDrop[] newArray = new DropTable.ItemDrop[newArraySize];
+				DropTable.ItemDropData[] newArray = new DropTable.ItemDropData[newArraySize];
 				for (int i = 0; i < newArraySize; i++)
 				{
 					if (i < curArraySize)
 						newArray[i] = table.PossibleDrops[i];
 					else
-						newArray[i] = new DropTable.ItemDrop();
+						newArray[i] = new DropTable.ItemDropData();
 				}
 
 				table.PossibleDrops = newArray;

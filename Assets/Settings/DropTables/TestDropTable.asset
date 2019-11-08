@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0cfa02d20316eb49a2c896c4ef8f919, type: 3}
-  m_Name: New Drop Tables
+  m_Name: TestDropTable
   m_EditorClassIdentifier: 
   PossibleDrops:
-  - Drop: {fileID: 0}
+  - Drop: {fileID: 11400000, guid: ca83d72d088cd9c409cb6663d50dd4f1, type: 2}
     MinDropAmount: 2
-    MaxDropAmount: 3
+    MaxDropAmount: 7
     DropChance: 1

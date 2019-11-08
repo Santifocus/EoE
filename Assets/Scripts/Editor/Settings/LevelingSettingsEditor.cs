@@ -92,13 +92,14 @@ namespace EoE.Information
 			FoldoutHeader(new GUIContent("Skill Point Settings"), ref SkillPointIncrementOpen);
 			if (SkillPointIncrementOpen)
 			{
-				IntField(new GUIContent("Base Skill Points Per Level", "When leveling up how many skillpoints does the player gain that he can use to improve Health/Mana/Endurance?"), ref settings.BaseSkillPointsPerLevel);
+				IntField(new GUIContent("Attribute Points Per Level", "When leveling up how many skillpoints does the player gain that he can use to improve Health/Mana/Endurance?"), ref settings.AttributePointsPerLevel);
+
 				FloatField(new GUIContent("Health Per Skill Point"), ref settings.HealthPerSkillPoint);
 				FloatField(new GUIContent("Mana Per Skill Point"), ref settings.ManaPerSkillPoint);
 				FloatField(new GUIContent("Endurance Per Skill Point"), ref settings.EndurancePerSkillPoint);
 
 				LineBreak();
-				IntField(new GUIContent("Extra Skill Points Per Level", "When leveling up how many skillpoints does the player gain that he can use to improve his PhysicalDamage/MagicDamage/Defense?"), ref settings.ExtraSkillPointsPerLevel);
+				IntField(new GUIContent("Skill Points Per Level", "When leveling up how many skillpoints does the player gain that he can use to improve his PhysicalDamage/MagicDamage/Defense?"), ref settings.SkillPointsPerLevel);
 
 				FloatField(new GUIContent("Physical Damage Per Skill Point"), ref settings.PhysicalDamagePerSkillPoint);
 				FloatField(new GUIContent("Magic Damage Per Skill Point"), ref settings.MagicDamagePerSkillPoint);
