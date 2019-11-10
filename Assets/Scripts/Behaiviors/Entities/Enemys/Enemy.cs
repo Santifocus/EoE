@@ -51,7 +51,6 @@ namespace EoE.Entities
 
 		//Behaivior
 		protected bool behaviorSimpleStop;
-		protected bool agentFullStopBehaivior;
 		protected bool isIdle => !(chasingPlayer || remainingInvestigationTime > 0);
 		protected bool lastIdleState = true;
 		#endregion
@@ -65,7 +64,6 @@ namespace EoE.Entities
 		{
 			base.FullEntitieReset();
 			SetupNavMeshAgent();
-			agentFullStopBehaivior = false;
 
 			originalSpawnPosition = actuallWorldPosition;
 			normalCosSightCone = Mathf.Cos(Mathf.Min(360, enemySettings.SightAngle) * Mathf.Deg2Rad);
@@ -87,7 +85,7 @@ namespace EoE.Entities
 		}
 		private void PlayerDied(Entitie killer)
 		{
-			curStates.IsInCombat = false;
+			curStates.Fighting = false;
 			chasingPlayer = false;
 			EventManager.PlayerDiedEvent -= PlayerDied;
 		}
@@ -109,21 +107,28 @@ namespace EoE.Entities
 		{
 			if (Player.Alive)
 			{
+				bool prevInRange = PlayerInAttackRange;
 				float sqrPlayerDist = (player.actuallWorldPosition - actuallWorldPosition).sqrMagnitude;
 				PlayerInAttackRange = Player.Alive && sqrPlayerDist < (enemySettings.AttackRange * enemySettings.AttackRange);
-				if (curStates.IsInCombat && (PlayerInAttackRange || sqrPlayerDist < (enemySettings.FoundPlayerSightRange * enemySettings.FoundPlayerSightRange)))
+				if (curStates.Fighting && (PlayerInAttackRange || sqrPlayerDist < (enemySettings.FoundPlayerSightRange * enemySettings.FoundPlayerSightRange)))
 					chasingPlayer = true;
+
+				if(!prevInRange && PlayerInAttackRange)
+					PlayerJustEnteredAttackRange();
 			}
 			else
 			{
 				chasingPlayer = false;
 				PlayerInAttackRange = false;
 			}
-			
-			if (behaviorSimpleStop)
+
+			if(PlayerInAttackRange)
+				InRangeBehaivior();
+
+			if (behaviorSimpleStop && appliedMoveStuns == 0)
 				return;
 
-			if (agentFullStopBehaivior || !curStates.IsGrounded)
+			if (appliedMoveStuns > 0 || !curStates.Grounded)
 			{
 				body.isKinematic = false;
 				body.velocity = curVelocity;
@@ -151,15 +156,6 @@ namespace EoE.Entities
 					if (reachedDestination)
 					{
 						LookAtPlayer();
-
-						if(curPath.status == NavMeshPathStatus.PathComplete || (player.actuallWorldPosition - actuallWorldPosition).sqrMagnitude < (enemySettings.AttackRange * enemySettings.AttackRange))
-						{
-							if (!curStates.IsInCombat)
-							{
-								PlayerJustEnteredAttackRange();
-							}
-							InRangeBehaivior();
-						}
 					}
 				}
 

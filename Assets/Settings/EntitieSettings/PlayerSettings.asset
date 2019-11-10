@@ -144,8 +144,8 @@ MonoBehaviour:
   OnCritShakeAxisIntensity: 0.5
   OnCritShakeAngleIntensity: 0.3
   RumbleOnCrit: 1
-  RumbleOnCritTime: 0.45
-  RumbleOnCritLeftIntensityStart: 0.3
-  RumbleOnCritRightIntensityStart: 1
-  RumbleOnCritLeftIntensityEnd: 0
-  RumbleOnCritRightIntensityEnd: 0
+  RumbleOnCritTime: 0.1
+  RumbleOnCritLeftIntensityStart: 0.6
+  RumbleOnCritRightIntensityStart: 0.9
+  RumbleOnCritLeftIntensityEnd: 0.5
+  RumbleOnCritRightIntensityEnd: 0.8

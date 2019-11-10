@@ -49,6 +49,7 @@ namespace EoE.Entities
 		private float combatEndCooldown;
 
 		//Velocity Control
+		protected int appliedMoveStuns;
 		private float jumpGroundCooldown;
 		private float lastFallVelocity;
 
@@ -100,6 +101,7 @@ namespace EoE.Entities
 			curDefense = SelfSettings.BaseDefense;
 			curWalkSpeed = SelfSettings.WalkSpeed;
 			curJumpPowerMultiplier = 1;
+			appliedMoveStuns = 0;
 		}
 		private void GetColliderType()
 		{
@@ -152,11 +154,11 @@ namespace EoE.Entities
 		private void CheckForFalling()
 		{
 			//Find out wether the entitie is falling or not
-			bool playerWantsToFall = this is Player && (curStates.IsFalling || !Controlls.InputController.Jump.Active);
-			bool falling = !curStates.IsGrounded && jumpGroundCooldown <= 0 && (body.velocity.y < IS_FALLING_THRESHOLD || playerWantsToFall);
+			bool playerWantsToFall = this is Player && (curStates.Falling || !Controlls.InputController.Jump.Active);
+			bool falling = !curStates.Grounded && jumpGroundCooldown <= 0 && (body.velocity.y < IS_FALLING_THRESHOLD || playerWantsToFall);
 
 			//If so: we enable the falling animation and add extra velocity for a better looking fallcurve
-			curStates.IsFalling = falling;
+			curStates.Falling = falling;
 			animationControl.SetBool("IsFalling", falling);
 			if (falling)
 			{
@@ -170,7 +172,7 @@ namespace EoE.Entities
 			impactForce += SelfSettings.JumpPower.z * transform.forward * curJumpPowerMultiplier;
 
 			jumpGroundCooldown = JUMP_GROUND_COOLDOWN;
-			curStates.IsGrounded = false;
+			curStates.Grounded = false;
 
 			animationControl.SetTrigger("JumpStart");
 		}
@@ -181,7 +183,7 @@ namespace EoE.Entities
 			if (jumpGroundCooldown > 0)
 			{
 				jumpGroundCooldown -= Time.deltaTime;
-				curStates.IsGrounded = false;
+				curStates.Grounded = false;
 			}
 			else
 			{
@@ -193,7 +195,7 @@ namespace EoE.Entities
 							Vector3 boxCenter = coll.bounds.center;
 							boxCenter.y = lowestPos + GroundTestOffset.y + 0.01f; //A little bit of clipping into the original bounding box
 
-							curStates.IsGrounded = Physics.CheckBox(boxCenter, new Vector3(bColl.bounds.extents.x * GROUND_TEST_WIDHT_MUL, -GroundTestOffset.y, bColl.bounds.extents.z * GROUND_TEST_WIDHT_MUL), coll.transform.rotation, ConstantCollector.TERRAIN_LAYER);
+							curStates.Grounded = Physics.CheckBox(boxCenter, new Vector3(bColl.bounds.extents.x * GROUND_TEST_WIDHT_MUL, -GroundTestOffset.y, bColl.bounds.extents.z * GROUND_TEST_WIDHT_MUL), coll.transform.rotation, ConstantCollector.TERRAIN_LAYER);
 							break;
 						}
 					case ColliderType.Capsule:
@@ -202,14 +204,14 @@ namespace EoE.Entities
 							Vector3 extraOffset = new Vector3(0, -cColl.radius * (1 - GROUND_TEST_WIDHT_MUL), 0);
 							Vector3 spherePos = coll.bounds.center - new Vector3(0, cColl.height/2 * coll.transform.lossyScale.y - cColl.radius, 0) + GroundTestOffset + extraOffset;
 
-							curStates.IsGrounded = Physics.CheckSphere(spherePos, cColl.radius * GROUND_TEST_WIDHT_MUL, ConstantCollector.TERRAIN_LAYER);
+							curStates.Grounded = Physics.CheckSphere(spherePos, cColl.radius * GROUND_TEST_WIDHT_MUL, ConstantCollector.TERRAIN_LAYER);
 							break;
 						}
 					case ColliderType.Sphere:
 						{
 							SphereCollider sColl = coll as SphereCollider;
 							Vector3 extraOffset = new Vector3(0, -sColl.radius * GROUND_TEST_WIDHT_MUL, 0);
-							curStates.IsGrounded = Physics.CheckSphere(coll.bounds.center + GroundTestOffset + extraOffset, sColl.radius * GROUND_TEST_WIDHT_MUL, ConstantCollector.TERRAIN_LAYER);
+							curStates.Grounded = Physics.CheckSphere(coll.bounds.center + GroundTestOffset + extraOffset, sColl.radius * GROUND_TEST_WIDHT_MUL, ConstantCollector.TERRAIN_LAYER);
 							break;
 						}
 				}
@@ -243,7 +245,7 @@ namespace EoE.Entities
 			regenTimer += Time.deltaTime;
 			if (regenTimer >= GameController.CurrentGameSettings.SecondsPerEntititeRegen)
 			{
-				bool inCombat = curStates.IsInCombat;
+				bool inCombat = curStates.Fighting;
 				regenTimer -= GameController.CurrentGameSettings.SecondsPerEntititeRegen;
 				if (SelfSettings.DoHealthRegen && curHealth < curMaxHealth)
 				{
@@ -271,7 +273,7 @@ namespace EoE.Entities
 			{
 				combatEndCooldown -= Time.deltaTime;
 				if (combatEndCooldown <= 0)
-					curStates.IsInCombat = false;
+					curStates.Fighting = false;
 			}
 			BuffUpdate();
 		}
@@ -407,6 +409,10 @@ namespace EoE.Entities
 
 				buffInstance.FlatChanges[i] = change;
 			}
+
+			//Custom buff Effects
+			if (buffInstance.Base.CustomEffects.ApplyMoveStun)
+				appliedMoveStuns++;
 		}
 		private void RemoveBuff(int index, bool fromPermanent)
 		{
@@ -488,6 +494,10 @@ namespace EoE.Entities
 						}
 				}
 			}
+
+			//Custom buff Effects
+			if (buffInstance.Base.CustomEffects.ApplyMoveStun)
+				appliedMoveStuns--;
 		}
 		public void RecalculateBuffs()
 		{
@@ -501,6 +511,7 @@ namespace EoE.Entities
 			curDefense = SelfSettings.BaseDefense;
 			curWalkSpeed = SelfSettings.WalkSpeed;
 			curJumpPowerMultiplier = 1;
+			appliedMoveStuns = 0;
 
 			//Now re-add them, so the values can be recalculated
 			//First add flat values and then percent
@@ -613,7 +624,7 @@ namespace EoE.Entities
 			if (this is Player)
 				return;
 
-			bool inCombat = curStates.IsInCombat;
+			bool inCombat = curStates.Fighting;
 			bool intendedState = inCombat;
 			if (inCombat)
 			{
@@ -631,7 +642,7 @@ namespace EoE.Entities
 		}
 		protected void StartCombat()
 		{
-			curStates.IsInCombat = true;
+			curStates.Fighting = true;
 			combatEndCooldown = GameController.CurrentGameSettings.CombatCooldown;
 		}
 		protected virtual void Death()

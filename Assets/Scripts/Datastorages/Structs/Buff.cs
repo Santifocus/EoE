@@ -17,6 +17,7 @@ namespace EoE.Information
 		public Sprite Icon;
 
 		public Effect[] Effects;
+		public CustomEffect CustomEffects;
 		public DOT[] DOTs;
 	}
 
@@ -44,6 +45,11 @@ namespace EoE.Information
 		public TargetStat targetStat;
 		public bool Percent;
 		public float Amount;
+	}
+	[System.Serializable]
+	public struct CustomEffect
+	{
+		public bool ApplyMoveStun;
 	}
 	[System.Serializable]
 	public struct DOT

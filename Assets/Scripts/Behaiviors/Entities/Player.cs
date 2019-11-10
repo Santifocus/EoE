@@ -277,7 +277,7 @@ namespace EoE.Entities
 			{
 				float perSecond =	PlayerSettings.EnduranceRegen *
 									PlayerSettings.LockedEnduranceRegenMutliplier * 
-									(curStates.IsInCombat ? PlayerSettings.EnduranceRegenInCombat : 1);
+									(curStates.Fighting ? PlayerSettings.EnduranceRegenInCombat : 1);
 
 				lockedEndurance += Time.deltaTime * perSecond;
 
@@ -299,7 +299,7 @@ namespace EoE.Entities
 
 			if (!recentlyUsedEndurance && enduranceContainers[activeEnduranceContainerIndex] < PlayerSettings.EndurancePerBar)
 			{
-				enduranceContainers[activeEnduranceContainerIndex] += Time.deltaTime * PlayerSettings.EnduranceRegen * (curStates.IsInCombat ? PlayerSettings.EnduranceRegenInCombat : 1);
+				enduranceContainers[activeEnduranceContainerIndex] += Time.deltaTime * PlayerSettings.EnduranceRegen * (curStates.Fighting ? PlayerSettings.EnduranceRegenInCombat : 1);
 				if (enduranceContainers[activeEnduranceContainerIndex] > PlayerSettings.EndurancePerBar)
 					enduranceContainers[activeEnduranceContainerIndex] = PlayerSettings.EndurancePerBar;
 			}
@@ -321,13 +321,13 @@ namespace EoE.Entities
 		}
 		private void UpdateAcceleration()
 		{
-			if (curStates.IsMoving && !curStates.IsTurning)
+			if (curStates.Moving && !curStates.Turning)
 			{
 				float clampedIntent = Mathf.Clamp01(intendedAcceleration);
 				if (curAcceleration < clampedIntent)
 				{
 					if (SelfSettings.MoveAcceleration > 0)
-						curAcceleration = Mathf.Min(clampedIntent, curAcceleration + intendedAcceleration * Time.fixedDeltaTime / SelfSettings.MoveAcceleration / SelfSettings.EntitieMass * (curStates.IsGrounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
+						curAcceleration = Mathf.Min(clampedIntent, curAcceleration + intendedAcceleration * Time.fixedDeltaTime / SelfSettings.MoveAcceleration / SelfSettings.EntitieMass * (curStates.Grounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
 					else
 						curAcceleration = clampedIntent;
 				}
@@ -337,7 +337,7 @@ namespace EoE.Entities
 				if (curAcceleration > 0)
 				{
 					if (SelfSettings.NoMoveDeceleration > 0)
-						curAcceleration = Mathf.Max(0, curAcceleration - Time.fixedDeltaTime / SelfSettings.NoMoveDeceleration / SelfSettings.EntitieMass * (curStates.IsGrounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
+						curAcceleration = Mathf.Max(0, curAcceleration - Time.fixedDeltaTime / SelfSettings.NoMoveDeceleration / SelfSettings.EntitieMass * (curStates.Grounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
 					else
 						curAcceleration = 0;
 				}
@@ -345,13 +345,13 @@ namespace EoE.Entities
 		}
 		private void UpdateMovementSpeed()
 		{
-			bool turning = curStates.IsTurning;
-			bool moving = curStates.IsMoving;
-			bool running = curStates.IsRunning;
+			bool turning = curStates.Turning;
+			bool moving = curStates.Moving;
+			bool running = curStates.Running;
 
 			//If the Entitie doesnt move intentionally but is in run mode, then stop the run mode
 			if (running && !moving)
-				curStates.IsRunning = running = false;
+				curStates.Running = running = false;
 
 			//Set the animation state to either Turning, Walking or Running
 			animationControl.SetBool("Turning", turning);
@@ -359,7 +359,7 @@ namespace EoE.Entities
 			animationControl.SetBool("Running", !turning && curAcceleration > 0 && (running && curAcceleration > RUN_ANIM_THRESHOLD));
 
 			//We find out in which direction the Entitie should move according to its movement
-			float baseTargetSpeed = curWalkSpeed * (curStates.IsRunning ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
+			float baseTargetSpeed = curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
 			curMoveForce = baseTargetSpeed * (controllDirection.HasValue ? controllDirection.Value : transform.forward);
 
 			//Now combine those forces as the current speed
@@ -367,12 +367,12 @@ namespace EoE.Entities
 		}
 		private void TurnControl()
 		{
-			float turnAmount = Time.fixedDeltaTime * SelfSettings.TurnSpeed * (curStates.IsGrounded ? 1 : SelfSettings.InAirTurnSpeedMultiplier);
+			float turnAmount = Time.fixedDeltaTime * SelfSettings.TurnSpeed * (curStates.Grounded ? 1 : SelfSettings.InAirTurnSpeedMultiplier);
 			float normalizedDif = Mathf.Abs(curRotation - intendedRotation) / NON_TURNING_THRESHOLD;
 			turnAmount *= Mathf.Min(normalizedDif * LERP_TURNING_AREA, 1);
 			curRotation = Mathf.MoveTowardsAngle(curRotation, intendedRotation, turnAmount);
 
-			curStates.IsTurning = normalizedDif > 1;
+			curStates.Turning = normalizedDif > 1;
 
 			transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,
 														curRotation,
@@ -380,7 +380,7 @@ namespace EoE.Entities
 		}
 		private void JumpControl()
 		{
-			if (InputController.Jump.Down && curStates.IsGrounded)
+			if (InputController.Jump.Down && curStates.Grounded)
 			{
 				float cost = PlayerSettings.JumpEnduranceCost;
 				if ((int)CanAffordEnduranceCost(cost) > 0) //0 == Not available; 1/2 == available
@@ -396,7 +396,7 @@ namespace EoE.Entities
 			Vector2 inputDirection = InputController.PlayerMove;
 
 			bool moving = inputDirection != Vector2.zero;
-			curStates.IsMoving = moving;
+			curStates.Moving = moving;
 
 			if (TargetedEntitie)
 				intendedRotation = PlayerCameraController.TargetRotation.x;
@@ -406,13 +406,13 @@ namespace EoE.Entities
 				return;
 
 			//Check if the player intends to run and is able to
-			bool running = curStates.IsRunning;
+			bool running = curStates.Running;
 			if(running)
 			{
 				float runCost = PlayerSettings.RunEnduranceCost * Time.deltaTime;
 
 				if ((int)CanAffordEnduranceCost(runCost) == 0) //0 == Not available; 1/2 == available
-					running = curStates.IsRunning = false;
+					running = curStates.Running = false;
 				else
 					UseEndurance(runCost);
 			}
@@ -423,7 +423,7 @@ namespace EoE.Entities
 				if ((int)CanAffordEnduranceCost(runCost) > 0) //0 == Not available; 1/2 == available
 				{
 					UseEndurance(runCost);
-					running = curStates.IsRunning = true;
+					running = curStates.Running = true;
 				}
 			}
 			//Check how fast the player wants to accelerate based on how far the movestick is moved
@@ -653,8 +653,8 @@ namespace EoE.Entities
 
 			int state = 0;
 			state += InputController.Attack.Down ? 0 : 4; //If we are here either heavy attack or normal attack was pressed
-			state += curStates.IsRunning ? 1 : 0; //Running => Sprint attack
-			state += !curStates.IsGrounded ? 2 : 0; //In air => Jump attack
+			state += curStates.Running ? 1 : 0; //Running => Sprint attack
+			state += !curStates.Grounded ? 2 : 0; //In air => Jump attack
 
 			StartCoroutine(BeginAttack((AttackState)state));
 		}
@@ -772,7 +772,7 @@ namespace EoE.Entities
 		private bool CheckForCancelCondition()
 		{
 			int requiredGroundState = (int)activeAttack.animationInfo.cancelWhenOnGround - 1;
-			bool groundStateAchieved = (curStates.IsGrounded ? 0 : 1) == requiredGroundState;
+			bool groundStateAchieved = (curStates.Grounded ? 0 : 1) == requiredGroundState;
 
 			if (groundStateAchieved && !activeAttack.animationInfo.bothStates)
 				return true;
@@ -781,7 +781,7 @@ namespace EoE.Entities
 				return false;
 
 			int requiredSprintState = (int)activeAttack.animationInfo.cancelWhenSprinting - 1;
-			bool sprintStateAchieved = (curStates.IsRunning ? 0 : 1) == requiredSprintState;
+			bool sprintStateAchieved = (curStates.Running ? 0 : 1) == requiredSprintState;
 
 			return (sprintStateAchieved && groundStateAchieved) || (!activeAttack.animationInfo.bothStates && sprintStateAchieved);
 		}

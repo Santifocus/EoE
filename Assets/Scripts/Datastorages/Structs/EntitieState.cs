@@ -10,13 +10,11 @@ namespace EoE.Entities
 		private const byte GroundedReset = 254;
 		private const byte MovingReset = 253;
 		private const byte RunningReset = 251;
-		private const byte BlockingReset = 247;
-		private const byte CombatReset = 239;
-		private const byte FallingReset = 223;
-		private const byte TurningReset = 191;
-		//private const byte ? = 127;
+		private const byte CombatReset = 247;
+		private const byte FallingReset = 239;
+		private const byte TurningReset = 223;
 
-		public bool IsGrounded
+		public bool Grounded
 		{
 			get => ((state | 1) == state);
 			set
@@ -28,7 +26,7 @@ namespace EoE.Entities
 				}
 			}
 		}
-		public bool IsMoving
+		public bool Moving
 		{
 			get => ((state | 2) == state);
 			set
@@ -40,7 +38,7 @@ namespace EoE.Entities
 				}
 			}
 		}
-		public bool IsRunning
+		public bool Running
 		{
 			get => ((state | 4) == state);
 			set
@@ -52,51 +50,39 @@ namespace EoE.Entities
 				}
 			}
 		}
-		public bool IsBlocking
+		public bool Fighting
 		{
 			get => ((state | 8) == state);
 			set
 			{
-				state = (byte)(state & BlockingReset);
+				state = (byte)(state & CombatReset);
 				if (value)
 				{
 					state |= 8;
 				}
 			}
 		}
-		public bool IsInCombat
+		public bool Falling
 		{
 			get => ((state | 16) == state);
 			set
 			{
-				state = (byte)(state & CombatReset);
+				state = (byte)(state & FallingReset);
 				if (value)
 				{
 					state |= 16;
 				}
 			}
 		}
-		public bool IsFalling
+		public bool Turning
 		{
 			get => ((state | 32) == state);
-			set
-			{
-				state = (byte)(state & FallingReset);
-				if (value)
-				{
-					state |= 32;
-				}
-			}
-		}
-		public bool IsTurning
-		{
-			get => ((state | 64) == state);
 			set
 			{
 				state = (byte)(state & TurningReset);
 				if (value)
 				{
-					state |= 64;
+					state |= 32;
 				}
 			}
 		}

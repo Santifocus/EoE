@@ -22,11 +22,38 @@ namespace EoE.Entities
 		{
 			bashFinish += FinishedBash;
 		}
-		protected override void PlayerJustEnteredAttackRange()
+		protected override void InRangeBehaivior()
 		{
-			base.PlayerJustEnteredAttackRange();
-			if(!chargingBash)
-				StartCoroutine(ChargeUpBash());
+			if (!chargingBash)
+			{
+				bool allowedToBash = true;
+
+				//Make sure the Crawler is looking at the player
+				Vector2 xzDif = new Vector2(player.actuallWorldPosition.x, player.actuallWorldPosition.z) - new Vector2(actuallWorldPosition.x, actuallWorldPosition.z);
+				float distance = xzDif.magnitude;
+				Vector2 directon = xzDif / distance;
+				float cosAngle = Vector2.Dot(new Vector2(transform.forward.x, transform.forward.z), directon);
+
+				//Is the player behind the Crawler? Then just stop here
+				if(cosAngle <= 0)
+				{
+					allowedToBash = false;
+				}
+				else
+				{
+					//Otherwise we calculate the distance between the player and the transform.forward of the Crawler
+					float distToForward = (1 - cosAngle) * distance;
+
+					//If the distance is greater then the widht of this crawler then we cant allow the dash
+					if (distToForward > coll.bounds.extents.x * 0.95f)
+						allowedToBash = false;
+				}
+
+				if (allowedToBash)
+					StartCoroutine(ChargeUpBash());
+				else
+					LookAtPlayer();
+			}
 		}
 		private IEnumerator ChargeUpBash()
 		{
@@ -41,27 +68,25 @@ namespace EoE.Entities
 				timer += Time.deltaTime;
 			}
 
-			//diable and enable so OnCollisionEnter can be called with a fresh calculation,
+			//Disable and enable so OnCollisionEnter can be called with a fresh calculation,
 			//this is needed for the situation in which the player is touching the enemy
 			coll.enabled = false;
 			coll.enabled = true;
+
 			chargingBash = false;
+			behaviorSimpleStop = false;
 
 			if (!canceled)
 			{
-				behaviorSimpleStop = false;
-				agentFullStopBehaivior = true;
 				bashing = true;
+				appliedMoveStuns++;
 				bashForce = entitieForceController.ApplyForce(transform.forward * settings.BashSpeed, settings.BashSpeed / settings.BashDistance, false, bashFinish);
-			}
-			else
-			{
-				behaviorSimpleStop = false;
 			}
 		}
 		private void FinishedBash()
 		{
-			bashing = agentFullStopBehaivior = false;
+			bashing = false;
+			appliedMoveStuns--;
 			if(PlayerInAttackRange)
 				StartCoroutine(ChargeUpBash());
 		}
