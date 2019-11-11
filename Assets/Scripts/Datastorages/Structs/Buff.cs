@@ -50,6 +50,7 @@ namespace EoE.Information
 	public struct CustomEffect
 	{
 		public bool ApplyMoveStun;
+		public bool Invincible;
 	}
 	[System.Serializable]
 	public struct DOT

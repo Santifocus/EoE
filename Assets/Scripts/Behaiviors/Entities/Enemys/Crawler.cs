@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using EoE.Information;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace EoE.Entities
 {
@@ -78,6 +79,7 @@ namespace EoE.Entities
 
 			if (!canceled)
 			{
+				StartCombat();
 				bashing = true;
 				appliedMoveStuns++;
 				bashForce = entitieForceController.ApplyForce(transform.forward * settings.BashSpeed, settings.BashSpeed / settings.BashDistance, false, bashFinish);
@@ -87,8 +89,6 @@ namespace EoE.Entities
 		{
 			bashing = false;
 			appliedMoveStuns--;
-			if(PlayerInAttackRange)
-				StartCoroutine(ChargeUpBash());
 		}
 		private void OnCollisionEnter(Collision collision)
 		{

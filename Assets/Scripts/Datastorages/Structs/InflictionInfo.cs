@@ -141,7 +141,7 @@ namespace EoE.Information
 							break;
 					}
 
-					if(!(receiver.invincible && finalDamage > 0))
+					if(!(receiver.IsInvincible && finalDamage > 0))
 						Utils.EffectUtils.CreateDamageNumber(
 							basis.impactPosition, 
 							colors, 

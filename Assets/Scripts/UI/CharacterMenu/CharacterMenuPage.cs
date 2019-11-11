@@ -23,8 +23,9 @@ namespace EoE.UI
 		public void HidePage(Vector2 slideEnd, float slideTime)
 		{
 			ActivePage = false;
-			pageSlider.CustomTransition(slideEnd, null, slideTime);
+			pageSlider.CustomTransition(slideEnd, () => DeactivatePage(), slideTime);
 		}
 		protected abstract void ResetPage();
+		protected abstract void DeactivatePage();
 	}
 }

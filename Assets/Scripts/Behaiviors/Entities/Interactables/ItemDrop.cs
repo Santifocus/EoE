@@ -13,7 +13,7 @@ namespace EoE.Entities
 		protected override void Interact()
 		{
 			int prevStackSize = containedItem.stackSize;
-			Player.PlayerInventory.AddItem(containedItem);
+			AddToInventory();
 
 			if(prevStackSize != containedItem.stackSize)
 			{
@@ -22,6 +22,25 @@ namespace EoE.Entities
 
 			if (containedItem.stackSize == 0)
 				Destroy(gameObject);
+		}
+		private void AddToInventory()
+		{
+			if(containedItem.data is UseItem)
+			{
+				Player.ItemInventory.AddItem(containedItem);
+			}
+			else if (containedItem.data is ArmorItem)
+			{
+				Player.ArmorInventory.AddItem(containedItem);
+			}
+			else if (containedItem.data is WeaponItem)
+			{
+				Player.WeaponInventory.AddItem(containedItem);
+			}
+			else if (containedItem.data is SpellItem)
+			{
+				Player.SpellInventory.AddItem(containedItem);
+			}
 		}
 		protected override void MarkAsInteractTarget()
 		{

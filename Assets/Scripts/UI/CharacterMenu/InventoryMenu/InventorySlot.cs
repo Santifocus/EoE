@@ -1,125 +1,51 @@
-﻿using EoE.Entities;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using EoE.Information;
 
 namespace EoE.UI
 {
 	public class InventorySlot : CMenuItem
 	{
-		[SerializeField] private RectTransform slotMenuAnchor = default;
-		[SerializeField] private InventorySlotMenuItem slotMenuItemPrefab = default;
-		public static bool InventorySlotMenuOpen { get; private set; }
-		private int selectedSlotMenuIndex;
+		[SerializeField] private Image iconDisplay = default;
+		[SerializeField] private TextMeshProUGUI stackDisplay = default;
+		[SerializeField] private Image onSelectBackground = default;
+		[SerializeField] private Image onNotSelectBackground = default;
 
 		private int inventoryIndex;
-		private bool requiresUpdate;
+		private Inventory targetInventory;
 
-		private InventorySlotMenuItem[] menuItems;
-
-		public void Setup(int inventoryIndex)
+		public void Setup(Inventory targetInventory, int inventoryIndex)
 		{
+			this.targetInventory = targetInventory;
 			this.inventoryIndex = inventoryIndex;
-			requiresUpdate = true;
-			Player.PlayerInventory.InventoryChanged += () => requiresUpdate = true;
+			DeSelect();
 		}
-		protected override void OnPress()
-		{
-			if (!InventorySlotMenuOpen)
-			{ 
-				InventorySlotMenuOpen = true;
-				ShowSlotMenu();
-			}
-			else
-			{
 
+		public void UpdateDisplay()
+		{
+			bool empty = targetInventory[inventoryIndex] == null;
+			if (!empty)
+			{
+				iconDisplay.sprite = targetInventory[inventoryIndex].data.ItemIcon;
+				stackDisplay.text = targetInventory[inventoryIndex].stackSize.ToString();
 			}
+
+			iconDisplay.gameObject.SetActive(!empty);
+			stackDisplay.gameObject.SetActive(!empty);
 		}
-		protected override void OnBack()
+
+		protected override void Select()
 		{
-			if (InventorySlotMenuOpen)
-			{
-				InventorySlotMenuOpen = false;
-				HideSlotMenu();
-			}
+			onSelectBackground.gameObject.SetActive(true);
+			onNotSelectBackground.gameObject.SetActive(false);
 		}
-		private void ShowSlotMenu()
+		protected override void DeSelect()
 		{
-			if (requiresUpdate)
-				BuildSlotMenu();
-
-			selectedSlotMenuIndex = 0;
-			if(menuItems.Length > 0)
-			{
-				for (int i = 0; i < menuItems.Length; i++)
-				{
-					menuItems[i].gameObject.SetActive(true);
-				}
-				menuItems[selectedSlotMenuIndex].Select();
-			}
-		}
-		private void HideSlotMenu()
-		{
-			for(int i = 0; i < menuItems.Length; i++)
-			{
-				menuItems[i].gameObject.SetActive(false);
-			}
-		}
-		private void BuildSlotMenu()
-		{
-			requiresUpdate = false;
-			if(menuItems != null)
-			{
-				for(int i = 0; i < menuItems.Length; i++)
-				{
-					Destroy(menuItems[i].gameObject);
-				}
-			}
-
-			List<InventorySlotMenuItem> newMenuItems = new List<InventorySlotMenuItem>();
-			if (Player.PlayerInventory[inventoryIndex].data.GivenFlags.Useable)
-			{
-				InventorySlotMenuItem useMenuItem = Instantiate(slotMenuItemPrefab, slotMenuAnchor);
-				useMenuItem.Setup(InventoryMenuFunction.UseItem);
-				newMenuItems.Add(useMenuItem);
-
-				InventorySlotMenuItem equipItemMenuItem = Instantiate(slotMenuItemPrefab, slotMenuAnchor);
-				equipItemMenuItem.Setup(InventoryMenuFunction.EquipItem);
-				newMenuItems.Add(equipItemMenuItem);
-			}
-
-			if (Player.PlayerInventory[inventoryIndex].data.GivenFlags.Weapon)
-			{
-				InventorySlotMenuItem weaponMenuItem = Instantiate(slotMenuItemPrefab, slotMenuAnchor);
-				weaponMenuItem.Setup(InventoryMenuFunction.EquipWeapon);
-				newMenuItems.Add(weaponMenuItem);
-			}
-
-			if (Player.PlayerInventory[inventoryIndex].data.GivenFlags.Armor)
-			{
-				InventorySlotMenuItem armorMenuItem = Instantiate(slotMenuItemPrefab, slotMenuAnchor);
-				armorMenuItem.Setup(InventoryMenuFunction.EquipArmor);
-				newMenuItems.Add(armorMenuItem);
-			}
-
-			if (Player.PlayerInventory[inventoryIndex].data.GivenFlags.Deletable)
-			{
-				InventorySlotMenuItem deleteMenuItem = Instantiate(slotMenuItemPrefab, slotMenuAnchor);
-				deleteMenuItem.Setup(InventoryMenuFunction.Delete);
-				newMenuItems.Add(deleteMenuItem);
-			}
-
-			for(int i = 0; i < newMenuItems.Count; i++)
-			{
-				RectTransform r = (newMenuItems[i].transform as RectTransform);
-				r.anchoredPosition = new Vector2(0, r.rect.height * i);
-			}
-
-			menuItems = newMenuItems.ToArray();
-		}
-		private void OnDestroy()
-		{
-			Player.PlayerInventory.InventoryChanged -= () => requiresUpdate = true;
+			onSelectBackground.gameObject.SetActive(false);
+			onNotSelectBackground.gameObject.SetActive(true);
 		}
 	}
 }

@@ -130,5 +130,9 @@ namespace EoE.UI
 				}
 			}
 		}
+		protected override void DeactivatePage()
+		{
+			gameObject.SetActive(false);
+		}
 	}
 }

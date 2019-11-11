@@ -11,13 +11,14 @@ namespace EoE.UI
 		private const string COLOR_CLOSER = "</color>";
 		private const string HIDE_COLOR = "<color=#00000000>";
 
+		[SerializeField] private RectTransform dialogueBoxParent = default;
 		private DialogueBox dialogueContainer;
 		private Queue<Dialogue> quedDialogues;
 		private bool displayingDialogue;
 		private void Start()
 		{
 			Instance = this;
-			dialogueContainer = Instantiate(GameController.CurrentGameSettings.DialogueBoxPrefab, transform);
+			dialogueContainer = Instantiate(GameController.CurrentGameSettings.DialogueBoxPrefab, dialogueBoxParent);
 			quedDialogues = new Queue<Dialogue>();
 			ClearDisplay();
 		}
@@ -63,10 +64,13 @@ namespace EoE.UI
 						if (GameController.CurrentGameSettings.SkipDelayOnSpace)
 						{
 							float delay = targetDialogue.parts[i].Text[j] == ' ' ? 0 : GameController.CurrentGameSettings.DialogueDelayPerLetter;
+
 							yield return new WaitForSeconds(delay);
 						}
 						else
+						{
 							yield return new WaitForSeconds(GameController.CurrentGameSettings.DialogueDelayPerLetter);
+						}
 
 						stringIndex++;
 						dialogueContainer.textDisplay.text = currentText.Insert(stringIndex, HIDE_COLOR);

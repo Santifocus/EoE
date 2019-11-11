@@ -205,5 +205,10 @@ namespace EoE.UI
 				target.UpdateNumbers();
 			}
 		}
+
+		protected override void DeactivatePage()
+		{
+			gameObject.SetActive(false);
+		}
 	}
 }

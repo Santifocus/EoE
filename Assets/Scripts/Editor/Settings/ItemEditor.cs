@@ -38,12 +38,6 @@ namespace EoE.Information
 
 			StringField(new GUIContent("Item Name"), ref item.ItemName);
 			Foldout(new GUIContent("Item Flags"), ref GivenFlagsOpen);
-			if (GivenFlagsOpen)
-			{
-				BoolField(new GUIContent("Usable"), ref item.GivenFlags.Useable, 1);
-				BoolField(new GUIContent("Weapon"), ref item.GivenFlags.Weapon, 1);
-				BoolField(new GUIContent("Armor"), ref item.GivenFlags.Armor, 1);
-			}
 			ObjectField(new GUIContent("Item Model"), ref item.ItemModel);
 			IntField(new GUIContent("Max Stack"), ref item.MaxStack);
 			ObjectField(new GUIContent("Item Icon"), ref item.ItemIcon);

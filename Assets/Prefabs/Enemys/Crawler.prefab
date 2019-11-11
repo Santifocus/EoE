@@ -160,7 +160,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 772bd663e952561419f74aca73692986, type: 2}
+  - {fileID: 2100000, guid: c00016ae28ea3cd458ee3a4bbdc16bb5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -220,7 +220,7 @@ Animator:
   m_GameObject: {fileID: 3643562271358090246}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 62f485705ffc70e4bb6751473d37f867, type: 2}
+  m_Controller: {fileID: 9100000, guid: 1566bb3f85be9564a87e6e7f3442a8ac, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

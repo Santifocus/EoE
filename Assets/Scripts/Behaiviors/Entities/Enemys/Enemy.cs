@@ -83,28 +83,21 @@ namespace EoE.Entities
 
 			agent.stoppingDistance = REACH_DESTINATION_MIN;
 		}
-		private void PlayerDied(Entitie killer)
-		{
-			curStates.Fighting = false;
-			chasingPlayer = false;
-			EventManager.PlayerDiedEvent -= PlayerDied;
-		}
 		protected override void Update()
 		{
 			base.Update();
 			DecideOnBehaivior();
 			EnforceKnockback();
 		}
-		protected void EnforceKnockback()
-		{
-			Vector3 intendedPos = agent.nextPosition + (impactForce + entitieForceController.currentTotalForce) * Time.deltaTime;
-			agent.nextPosition = intendedPos;
-
-		}
 		#endregion
 		#region Behaivior
 		private void DecideOnBehaivior()
 		{
+			if (chasingPlayer)
+			{
+				Debug.DrawLine(actuallWorldPosition, agent.pathEndPosition, Color.red, Time.deltaTime);
+			}
+
 			if (Player.Alive)
 			{
 				bool prevInRange = PlayerInAttackRange;
@@ -112,6 +105,11 @@ namespace EoE.Entities
 				PlayerInAttackRange = Player.Alive && sqrPlayerDist < (enemySettings.AttackRange * enemySettings.AttackRange);
 				if (curStates.Fighting && (PlayerInAttackRange || sqrPlayerDist < (enemySettings.FoundPlayerSightRange * enemySettings.FoundPlayerSightRange)))
 					chasingPlayer = true;
+
+				if(curStates.Fighting)
+				{
+					lastConfirmedPlayerPos = player.actuallWorldPosition;
+				}
 
 				if(!prevInRange && PlayerInAttackRange)
 					PlayerJustEnteredAttackRange();
@@ -125,32 +123,33 @@ namespace EoE.Entities
 			if(PlayerInAttackRange)
 				InRangeBehaivior();
 
-			if (behaviorSimpleStop && appliedMoveStuns == 0)
-				return;
-
-			if (appliedMoveStuns > 0 || !curStates.Grounded)
+			if (IsStunned || !curStates.Grounded)
 			{
 				body.isKinematic = false;
 				body.velocity = curVelocity;
 				return;
 			}
+			else if (behaviorSimpleStop)
+				return;
+
 			body.isKinematic = true;
 
 			if (CheckForPlayer())
 			{
 				//Update information on the player
+				chasingPlayer = true;
 				lastConfirmedPlayerPos = Player.Instance.actuallWorldPosition;
 				lastPlayerSpeed = Player.Instance.curVelocity;
 				lastSeenPlayer = 0;
 
 				//Find a path
-				//TODO Give a natural behaivior for when the Enemy cant reach the player but sees him
 				Vector3? destination = GetClosestPointOnNavmesh(lastConfirmedPlayerPos);
 
+				//TODO: Give a natural behaivior for when the Enemy cant reach the player but sees him
 				if(destination.HasValue && agent.CalculatePath(destination.Value, curPath) && curPath.status != NavMeshPathStatus.PathInvalid)
 				{
 					agent.SetPath(curPath);
-					agent.stoppingDistance = enemySettings.AttackRange * 0.85f;
+					agent.stoppingDistance = enemySettings.AttackRange * 0.95f;
 					bool reachedDestination = ReachedDestination(true);
 
 					if (reachedDestination)
@@ -158,9 +157,6 @@ namespace EoE.Entities
 						LookAtPlayer();
 					}
 				}
-
-				//Inform the Entitie that it is now chasing the Player
-				chasingPlayer = true;
 			}
 			else if(chasingPlayer)
 			{
@@ -206,7 +202,11 @@ namespace EoE.Entities
 			if(lastIdleState != isIdle)
 				UpdateAgentSettings();
 		}
-
+		protected void EnforceKnockback()
+		{
+			Vector3 intendedPos = agent.nextPosition + (impactForce + entitieForceController.currentTotalForce) * Time.deltaTime;
+			agent.nextPosition = intendedPos;
+		}
 		private void UpdateAgentSettings()
 		{
 			if(isIdle)
@@ -246,14 +246,6 @@ namespace EoE.Entities
 
 			//Lastly we do a Low priority check if this entitie can see any part of the player
 			return CheckIfCanSeeEntitie(Player.Instance, true);
-		}
-		private bool ReachedDestination(bool setAgentState)
-		{
-			bool reached = agent.remainingDistance < agent.stoppingDistance;
-			if (setAgentState)
-				SetAgentState(!reached);
-
-			return reached;
 		}
 		private void SetAgentState(bool state)
 		{
@@ -323,6 +315,12 @@ namespace EoE.Entities
 			intendedRotation = Random.value * 360;
 			curRotation = transform.localEulerAngles.y;
 		}
+		private void PlayerDied(Entitie killer)
+		{
+			curStates.Fighting = false;
+			chasingPlayer = false;
+			EventManager.PlayerDiedEvent -= PlayerDied;
+		}
 
 		protected virtual void PlayerJustEnteredAttackRange()
 		{
@@ -346,6 +344,14 @@ namespace EoE.Entities
 			}
 			else
 				return null;
+		}
+		protected bool ReachedDestination(bool setAgentState)
+		{
+			bool reached = agent.remainingDistance < agent.stoppingDistance;
+			if (setAgentState)
+				SetAgentState(!reached);
+
+			return reached;
 		}
 		protected void LookAtPlayer()
 		{

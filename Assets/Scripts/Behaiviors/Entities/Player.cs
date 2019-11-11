@@ -84,8 +84,16 @@ namespace EoE.Entities
 		public static PlayerSettings PlayerSettings => instance.selfSettings;
 		public static Entitie TargetedEntitie;
 		public static PlayerBuffDisplay BuffDisplay => instance.buffDisplay;
-		public static Inventory PlayerInventory;
 
+		public static Inventory ItemInventory;
+		public static Inventory WeaponInventory;
+		public static Inventory ArmorInventory;
+		public static Inventory SpellInventory;
+
+		public static UseItem EquipedUseItem;
+		public static WeaponItem EquipedWeapon;
+		public static ArmorItem EquipedArmor;
+		public static SpellItem EquipedSpell;
 		#region Leveling
 		public static Buff LevelingBaseBuff;
 		public static Buff LevelingPointsBuff;
@@ -109,7 +117,11 @@ namespace EoE.Entities
 
 			ChangeWeapon(equipedWeapon);
 			SetupEndurance();
-			PlayerInventory = new Inventory(20);
+
+			ItemInventory = new Inventory(24);
+			WeaponInventory = new Inventory(8);
+			ArmorInventory = new Inventory(8);
+			SpellInventory = new Inventory(8);
 		}
 		private void SetupLevelingControl()
 		{
@@ -492,8 +504,7 @@ namespace EoE.Entities
 			ApplyMaterialToAllChildren(modelCopy);
 			ApplyMaterialToAllChildren(weaponCopy.transform);
 
-			invincible = true;
-
+			invincible++;
 			while(timer < PlayerSettings.DodgeModelExistTime)
 			{
 				yield return new WaitForFixedUpdate();
@@ -502,7 +513,7 @@ namespace EoE.Entities
 			}
 			dodgeCooldown = PlayerSettings.DodgeCooldown;
 			currentlyDodging = false;
-			invincible = false;
+			invincible--;
 
 			Destroy(modelCopy.gameObject);
 			Destroy(weaponCopy.gameObject);

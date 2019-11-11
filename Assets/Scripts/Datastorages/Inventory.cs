@@ -9,8 +9,7 @@ namespace EoE.Information
 	public class Inventory
 	{
 		private InventoryItem[] containedItems;
-		public InventoryItem this[int index] => containedItems[index];
-
+		public InventoryItem this[int index] { get { if (index < 0 || index > Lenght) return null; else return containedItems[index]; } }
 		public int inventorySize;
 		public int Lenght { get => inventorySize; set => ChangeSize(value); }
 
@@ -72,7 +71,8 @@ namespace EoE.Information
 					continue;
 
 				int openStack = containedItems[i].data.MaxStack - containedItems[i].stackSize;
-					changed |= openStack > 0;
+				changed |= openStack > 0;
+
 				if (openStack >= remainingStack)
 				{
 					containedItems[i].stackSize += remainingStack;
@@ -92,14 +92,14 @@ namespace EoE.Information
 			{
 				if(containedItems[i] == null)
 				{
-					int size = Mathf.Min(toAdd.stackSize, toAdd.data.MaxStack);
+					int size = Mathf.Min(remainingStack, toAdd.data.MaxStack);
 					InventoryItem newItem = new InventoryItem(toAdd.data, size);
 					remainingStack -= size;
 					changed = true;
 
+					containedItems[i] = newItem;
 					if (remainingStack == 0)
 						goto FullyAddedStack;
-
 				}
 			}
 
@@ -172,11 +172,45 @@ namespace EoE.Information
 			}
 			InventoryChanged?.Invoke();
 		}
+		public void ForceUpdate()
+		{
+			//Make sure that all items that have 0 in stacksize will be deleted
+			for(int i = 0; i < Lenght; i++)
+			{
+				if(containedItems[i] != null && containedItems[i].stackSize <= 0)
+				{
+					containedItems[i] = null;
+				}
+			}
+			InventoryChanged?.Invoke();
+		}
+		public override string ToString()
+		{
+			string fullString = "";
+
+			for (int i = 0; i < Lenght; i++)
+			{
+				if (containedItems[i] != null)
+				{
+					fullString += i + ": " + containedItems[i].stackSize + "x " + containedItems[i].data.ItemName;
+					if (i != Lenght - 1)
+						fullString += ", ";
+				}
+				else
+				{
+					fullString += i + ": Empty";
+					if (i != Lenght - 1)
+						fullString += ", ";
+				}
+			}
+			return fullString;
+		}
 	}
 	public class InventoryItem
 	{
 		public readonly Item data;
 		public int stackSize;
+		public bool isEquiped;
 
 		public InventoryItem(Item data, int stackSize = 1)
 		{

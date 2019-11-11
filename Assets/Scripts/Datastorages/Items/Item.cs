@@ -5,13 +5,12 @@ using UnityEngine;
 
 namespace EoE.Information
 {
-	public class Item : ScriptableObject
+	public abstract class Item : ScriptableObject
 	{
 		public string ItemName = "Item";
-		public ItemFlags GivenFlags;
 		public GameObject ItemModel;
 		public int MaxStack = 1;
-		public Texture2D ItemIcon;
+		public Sprite ItemIcon;
 
 		public ItemDrop[] CreateItemDrop(Vector3 positon, int stackSize, bool stopVelocity)
 		{
@@ -20,23 +19,18 @@ namespace EoE.Information
 			for(int i = 0; i < createdItemDrops.Length; i++)
 			{
 				ItemDrop baseObject = Instantiate(GameController.Instance.itemDropPrefab, Storage.DropStorage);
-				InventoryItem item = new InventoryItem(this, (i == createdItemDrops.Length - 1 ? stackSize % MaxStack : MaxStack));
+				InventoryItem item = new InventoryItem(this, ((i == createdItemDrops.Length - 1) && (stackSize % MaxStack != 0) ? stackSize % MaxStack : MaxStack));
 				GameObject model = Instantiate(ItemModel, baseObject.transform);
 
 				baseObject.transform.position = positon;
 				baseObject.SetupItemDrop(item, stopVelocity);
+
+				createdItemDrops[i] = baseObject;
 			}
 			
 			return createdItemDrops;
 		}
-	}
 
-	[System.Serializable]
-	public struct ItemFlags
-	{
-		public bool Useable;
-		public bool Weapon;
-		public bool Armor;
-		public bool Deletable;
+		public abstract void Equip();
 	}
 }

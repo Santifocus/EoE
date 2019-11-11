@@ -13,7 +13,7 @@ namespace EoE.UI
 		public TargetStat targetStat = TargetStat.Health;
 		[SerializeField] private TextMeshProUGUI newPoints = default;
 		[SerializeField] private TextMeshProUGUI curPoints = default;
-		private void Update()
+		protected override void Update()
 		{
 			if (!selected)
 				return;

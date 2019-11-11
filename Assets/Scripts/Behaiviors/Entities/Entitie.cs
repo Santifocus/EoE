@@ -41,7 +41,7 @@ namespace EoE.Entities
 		public float curJumpPowerMultiplier { get; protected set; }
 
 		//Entitie states
-		[HideInInspector] public bool invincible;
+		[HideInInspector] public int invincible;
 		private List<BuffInstance> nonPermanentBuffs;
 		private List<BuffInstance> permanentBuffs;
 		public EntitieState curStates;
@@ -67,6 +67,8 @@ namespace EoE.Entities
 		public float highestPos => coll.bounds.center.y + coll.bounds.extents.y;
 		public ForceController entitieForceController;
 		public Vector3 curVelocity => new Vector3(0, body.velocity.y, 0) + impactForce + entitieForceController.currentTotalForce;
+		public bool IsInvincible => invincible > 0;
+		public bool IsStunned => appliedMoveStuns > 0;
 
 		//Other
 		private EntitieStatDisplay statDisplay;
@@ -413,6 +415,8 @@ namespace EoE.Entities
 			//Custom buff Effects
 			if (buffInstance.Base.CustomEffects.ApplyMoveStun)
 				appliedMoveStuns++;
+			if (buffInstance.Base.CustomEffects.Invincible)
+				invincible++;
 		}
 		private void RemoveBuff(int index, bool fromPermanent)
 		{
@@ -498,6 +502,8 @@ namespace EoE.Entities
 			//Custom buff Effects
 			if (buffInstance.Base.CustomEffects.ApplyMoveStun)
 				appliedMoveStuns--;
+			if (buffInstance.Base.CustomEffects.Invincible)
+				invincible--;
 		}
 		public void RecalculateBuffs()
 		{
@@ -568,7 +574,7 @@ namespace EoE.Entities
 			}
 			InflictionInfo.InflictionResult damageResult = new InflictionInfo.InflictionResult(causedDamage, this, true);
 
-			if (invincible && (damageResult.finalDamage > 0 || damageResult.causedKnockback.HasValue))
+			if (IsInvincible && (damageResult.finalDamage > 0 || damageResult.causedKnockback.HasValue))
 				return;
 
 			curHealth -= damageResult.finalDamage;
