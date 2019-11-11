@@ -143,7 +143,7 @@ namespace EoE.Information
 				FloatField(new GUIContent("A"), ref settings.DamageLevelAdd, 1);
 				FloatField(new GUIContent("B"), ref settings.DamageDivider, 1);
 
-				Header("((Level + " + settings.DamageLevelAdd + "[C]) * Defense) / " + settings.DamageDivider + "[D]", 1);
+				Header("((Level + " + settings.DefenseLevelAdd + "[C]) * Defense) / " + settings.DefenseLevelDivider + "[D]", 1);
 				FloatField(new GUIContent("C"), ref settings.DefenseLevelAdd, 1);
 				FloatField(new GUIContent("D"), ref settings.DefenseLevelDivider, 1);
 
