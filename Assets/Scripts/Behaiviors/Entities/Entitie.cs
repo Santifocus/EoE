@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using EoE.Events;
 using EoE.Information;
-using EoE.Events;
-using EoE.Weapons;
 using EoE.UI;
 using EoE.Utils;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace EoE.Entities
 {
@@ -13,20 +11,20 @@ namespace EoE.Entities
 	{
 		#region Fields
 		//Constants
-		private const float GROUND_TEST_WIDHT_MUL				= 0.95f;
-		private const float JUMP_GROUND_COOLDOWN				= 0.2f;
-		private const float IS_FALLING_THRESHOLD				= -1;
-		private const float LANDED_VELOCITY_THRESHOLD			= 0.5f;
-		private const int VISIBLE_CHECK_RAY_COUNT				= 40;
+		private const float GROUND_TEST_WIDHT_MUL = 0.95f;
+		private const float JUMP_GROUND_COOLDOWN = 0.2f;
+		private const float IS_FALLING_THRESHOLD = -1;
+		private const float LANDED_VELOCITY_THRESHOLD = 0.5f;
+		private const int VISIBLE_CHECK_RAY_COUNT = 40;
 
-		private static readonly Vector3 GroundTestOffset		= new Vector3(0, -0.05f, 0);
+		private static readonly Vector3 GroundTestOffset = new Vector3(0, -0.05f, 0);
 
-		public static List<Entitie> AllEntities					= new List<Entitie>();
+		public static List<Entitie> AllEntities = new List<Entitie>();
 
 		//Inspector variables
-		public Rigidbody body									= default;
-		public Collider coll									= default;
-		[SerializeField] protected Animator animationControl	= default;
+		public Rigidbody body = default;
+		public Collider coll = default;
+		[SerializeField] protected Animator animationControl = default;
 
 		//Stats
 		public int EntitieLevel { get; protected set; }
@@ -42,8 +40,8 @@ namespace EoE.Entities
 
 		//Entitie states
 		[HideInInspector] public int invincible;
-		private List<BuffInstance> nonPermanentBuffs;
-		private List<BuffInstance> permanentBuffs;
+		public List<BuffInstance> nonPermanentBuffs { get; protected set; }
+		public List<BuffInstance> permanentBuffs { get; protected set; }
 		public EntitieState curStates;
 		private float regenTimer;
 		private float combatEndCooldown;
@@ -89,7 +87,7 @@ namespace EoE.Entities
 
 			nonPermanentBuffs = new List<BuffInstance>();
 			permanentBuffs = new List<BuffInstance>();
-			if(!(this is Player))
+			if (!(this is Player))
 				statDisplay = Instantiate(GameController.CurrentGameSettings.EntitieStatDisplayPrefab, GameController.Instance.enemyHealthBarStorage);
 
 			entitieForceController = new ForceController();
@@ -107,13 +105,13 @@ namespace EoE.Entities
 		}
 		private void GetColliderType()
 		{
-			if(!coll)
+			if (!coll)
 			{
 				Debug.LogError("Entitie: '" + name + "' has no collision Collider attached. Please attach one and assign it in the inspector.");
 				return;
 			}
 
-			if(coll is BoxCollider)
+			if (coll is BoxCollider)
 			{
 				selfColliderType = ColliderType.Box;
 				return;
@@ -133,7 +131,7 @@ namespace EoE.Entities
 				Debug.LogError("Entitie: " + name + " has a collision Collider attached, however the type '" + coll.GetType() + "' is not supported. Supported types are 'BoxCollider','SphereCollider' and 'CapsuleCollider'.");
 			}
 		}
-		protected virtual void EntitieStart(){}
+		protected virtual void EntitieStart() { }
 		protected virtual void Update()
 		{
 			Regen();
@@ -204,7 +202,7 @@ namespace EoE.Entities
 						{
 							CapsuleCollider cColl = coll as CapsuleCollider;
 							Vector3 extraOffset = new Vector3(0, -cColl.radius * (1 - GROUND_TEST_WIDHT_MUL), 0);
-							Vector3 spherePos = coll.bounds.center - new Vector3(0, cColl.height/2 * coll.transform.lossyScale.y - cColl.radius, 0) + GroundTestOffset + extraOffset;
+							Vector3 spherePos = coll.bounds.center - new Vector3(0, cColl.height / 2 * coll.transform.lossyScale.y - cColl.radius, 0) + GroundTestOffset + extraOffset;
 
 							curStates.Grounded = Physics.CheckSphere(spherePos, cColl.radius * GROUND_TEST_WIDHT_MUL, ConstantCollector.TERRAIN_LAYER);
 							break;
@@ -238,7 +236,7 @@ namespace EoE.Entities
 			//Check if there is any fall damage to give
 			float damageAmount = GameController.CurrentGameSettings.FallDamageCurve.Evaluate(velDif);
 			if (damageAmount > 0)
-				ChangeHealth(new InflictionInfo(null, CauseType.Physical, ElementType.None, actuallWorldPosition, Vector3.up, damageAmount, false));
+				ChangeHealth(new ChangeInfo(null, CauseType.Physical, ElementType.None, actuallWorldPosition, Vector3.up, damageAmount, false));
 		}
 		#endregion
 		#region State Control
@@ -254,10 +252,10 @@ namespace EoE.Entities
 					float regenAmount = SelfSettings.HealthRegen * GameController.CurrentGameSettings.SecondsPerEntititeRegen * (inCombat ? SelfSettings.HealthRegenInCombatMultiplier : 1);
 					if (regenAmount > 0)
 					{
-						InflictionInfo basis = new InflictionInfo(this, CauseType.Heal, ElementType.None, actuallWorldPosition, Vector3.up, -regenAmount, false);
-						InflictionInfo.InflictionResult regenResult = new InflictionInfo.InflictionResult(basis, this, true, true);
+						ChangeInfo basis = new ChangeInfo(this, CauseType.Heal, -regenAmount);
+						ChangeInfo.ChangeResult regenResult = new ChangeInfo.ChangeResult(basis, this, true, true);
 
-						curHealth = Mathf.Min(curMaxHealth, curHealth - regenResult.finalDamage);
+						curHealth = Mathf.Min(curMaxHealth, curHealth - regenResult.finalChangeAmount);
 					}
 				}
 
@@ -283,17 +281,17 @@ namespace EoE.Entities
 		private void BuffUpdate()
 		{
 			bool requiresRecalculate = false;
-			for(int i = 0; i < nonPermanentBuffs.Count; i++)
+			for (int i = 0; i < nonPermanentBuffs.Count; i++)
 			{
 				nonPermanentBuffs[i].RemainingTime -= Time.deltaTime;
-				for(int j = 0; j < nonPermanentBuffs[i].DOTCooldowns.Length; j++)
+				for (int j = 0; j < nonPermanentBuffs[i].DOTCooldowns.Length; j++)
 				{
 					nonPermanentBuffs[i].DOTCooldowns[j] -= Time.deltaTime;
-					if(nonPermanentBuffs[i].DOTCooldowns[j] <= 0)
+					if (nonPermanentBuffs[i].DOTCooldowns[j] <= 0)
 					{
 						float cd = nonPermanentBuffs[i].Base.DOTs[j].DelayPerActivation;
 						nonPermanentBuffs[i].DOTCooldowns[j] += cd;
-						ChangeHealth(new InflictionInfo(nonPermanentBuffs[i].Applier, CauseType.DOT, nonPermanentBuffs[i].Base.DOTs[j].Element, actuallWorldPosition, Vector3.up, cd * nonPermanentBuffs[i].Base.DOTs[j].BaseDamage, false));
+						ChangeHealth(new ChangeInfo(nonPermanentBuffs[i].Applier, CauseType.DOT, nonPermanentBuffs[i].Base.DOTs[j].Element, actuallWorldPosition, Vector3.up, cd * nonPermanentBuffs[i].Base.DOTs[j].BaseDamage, false));
 					}
 				}
 				if (nonPermanentBuffs[i].RemainingTime <= 0)
@@ -322,7 +320,7 @@ namespace EoE.Entities
 			else
 				nonPermanentBuffs.Add(newBuff);
 		}
-		private enum CalculateValue : byte { Both = 0, Flat = 1, Percent = 2}
+		private enum CalculateValue : byte { Both = 0, Flat = 1, Percent = 2 }
 		private void AddBuffEffect(BuffInstance buffInstance, CalculateValue toCalculate = CalculateValue.Both, bool clampRequired = true)
 		{
 			Buff buffBase = buffInstance.Base;
@@ -356,7 +354,7 @@ namespace EoE.Entities
 							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curMaxMana : buffBase.Effects[i].Amount;
 							change = Mathf.Max(-(curMaxMana), change);
 							curMaxMana += change;
-							if(clampRequired)
+							if (clampRequired)
 								curMana = Mathf.Min(curMaxMana, curMana);
 							break;
 						}
@@ -418,7 +416,7 @@ namespace EoE.Entities
 			if (buffInstance.Base.CustomEffects.Invincible)
 				invincible++;
 		}
-		private void RemoveBuff(int index, bool fromPermanent)
+		public void RemoveBuff(int index, bool fromPermanent)
 		{
 			BuffInstance targetBuff = fromPermanent ? permanentBuffs[index] : nonPermanentBuffs[index];
 			RemoveBuffEffect(targetBuff);
@@ -547,48 +545,55 @@ namespace EoE.Entities
 		}
 		private void PermanentBuffsControl()
 		{
-			for(int i = 0; i < permanentBuffs.Count; i++)
+			for (int i = 0; i < permanentBuffs.Count; i++)
 			{
 				//The only thing that needs to be controlled about permanent buffs are DOTs
 				//If there are none nothing will change
-				for(int j = 0; j < permanentBuffs[i].DOTCooldowns.Length; j++)
+				for (int j = 0; j < permanentBuffs[i].DOTCooldowns.Length; j++)
 				{
 					permanentBuffs[i].DOTCooldowns[j] -= Time.deltaTime;
-					if(permanentBuffs[i].DOTCooldowns[j] <= 0)
+					if (permanentBuffs[i].DOTCooldowns[j] <= 0)
 					{
 						float cd = permanentBuffs[i].Base.DOTs[j].DelayPerActivation;
 						permanentBuffs[i].DOTCooldowns[j] += cd;
-						ChangeHealth(new InflictionInfo(permanentBuffs[i].Applier, CauseType.DOT, permanentBuffs[i].Base.DOTs[j].Element, actuallWorldPosition, Vector3.up, cd * permanentBuffs[i].Base.DOTs[j].BaseDamage, false));
+						ChangeHealth(new ChangeInfo(permanentBuffs[i].Applier, CauseType.DOT, permanentBuffs[i].Base.DOTs[j].Element, actuallWorldPosition, Vector3.up, cd * permanentBuffs[i].Base.DOTs[j].BaseDamage, false));
 					}
 				}
 			}
 		}
 		#endregion
 
-		public void ChangeHealth(InflictionInfo causedDamage)
+		public void ChangeHealth(ChangeInfo causedChange)
 		{
-			if (causedDamage.attacker != null && causedDamage.attacker != this)
+			if (causedChange.attacker != null && causedChange.attacker != this)
 			{
 				StartCombat();
-				causedDamage.attacker.StartCombat();
+				causedChange.attacker.StartCombat();
 			}
-			InflictionInfo.InflictionResult damageResult = new InflictionInfo.InflictionResult(causedDamage, this, true);
+			ChangeInfo.ChangeResult changeResult = new ChangeInfo.ChangeResult(causedChange, this, true);
 
-			if (IsInvincible && (damageResult.finalDamage > 0 || damageResult.causedKnockback.HasValue))
+			//If this Entitie is invincible and the change causes damage and/or knockback then we stop here
+			if (IsInvincible && (changeResult.finalChangeAmount > 0 || changeResult.causedKnockback.HasValue))
 				return;
 
-			curHealth -= damageResult.finalDamage;
-			if (damageResult.causedKnockback.HasValue)
-			{
-				impactForce += new Vector3(damageResult.causedKnockback.Value.x, 0, damageResult.causedKnockback.Value.z);
-				body.velocity = new Vector3(body.velocity.x, body.velocity.y + damageResult.causedKnockback.Value.y, body.velocity.z);
-			}
+			//Cause the health change and clamp max
+			curHealth -= changeResult.finalChangeAmount;
 			curHealth = Mathf.Min(curMaxHealth, curHealth);
 
-			//VFX for player
-			if(this is Player)
+			//Apply knockback
+			if (changeResult.causedKnockback.HasValue)
 			{
-				if(damageResult.finalDamage > 0)
+				impactForce += new Vector3(changeResult.causedKnockback.Value.x, 0, changeResult.causedKnockback.Value.z);
+				body.velocity = new Vector3(body.velocity.x, body.velocity.y + changeResult.causedKnockback.Value.y, body.velocity.z);
+			}
+
+			if (changeResult.finalChangeAmount > 0)
+				ReceivedHealthDamage(causedChange, changeResult);
+
+			//VFX for player
+			if (this is Player)
+			{
+				if (changeResult.finalChangeAmount > 0)
 				{
 					if (Player.PlayerSettings.ColorScreenOnDamage)
 					{
@@ -599,30 +604,38 @@ namespace EoE.Entities
 						float healthNormalized = curHealth / curMaxHealth;
 						if (healthNormalized < Player.PlayerSettings.BlurScreenHealthThreshold)
 						{
-							float intensity = Mathf.Min(1, (1 - healthNormalized / Player.PlayerSettings.BlurScreenHealthThreshold) * Player.PlayerSettings.BlurScreenBaseIntensity * damageResult.finalDamage);
+							float intensity = Mathf.Min(1, (1 - healthNormalized / Player.PlayerSettings.BlurScreenHealthThreshold) * Player.PlayerSettings.BlurScreenBaseIntensity * changeResult.finalChangeAmount);
 							EffectUtils.BlurScreen(intensity, Player.PlayerSettings.BlurScreenDuration);
 						}
 					}
 				}
-				if(damageResult.causedKnockback.HasValue && Player.PlayerSettings.ShakeScreenOnKnockback)
+				if (changeResult.causedKnockback.HasValue && Player.PlayerSettings.ShakeScreenOnKnockback)
 				{
-					float shakeForce = damageResult.causedKnockback.Value.magnitude;
+					float shakeForce = changeResult.causedKnockback.Value.magnitude;
 					EffectUtils.ShakeScreen(Player.PlayerSettings.ShakeTimeOnKnockback, shakeForce * Player.PlayerSettings.ShakeScreenAxisIntensity, shakeForce * Player.PlayerSettings.ShakeScreenAngleIntensity);
 				}
 			}
 
-			if(curHealth <= 0)
+			//Below zero health means death
+			if (curHealth <= 0)
 			{
-				if(this is Player)
+				if (this is Player)
 				{
-					EventManager.PlayerDiedInvoke(causedDamage.attacker);
+					EventManager.PlayerDiedInvoke(causedChange.attacker);
 				}
 				else
 				{
-					EventManager.EntitieDiedInvoke(this, causedDamage.attacker);
+					EventManager.EntitieDiedInvoke(this, causedChange.attacker);
 				}
 				Death();
 			}
+		}
+		protected virtual void ReceivedHealthDamage(ChangeInfo causedChange, ChangeInfo.ChangeResult resultInfo) { }
+		public void ChangeMana(ChangeInfo change)
+		{
+			ChangeInfo.ChangeResult changeResult = new ChangeInfo.ChangeResult(change, this, true);
+			curMana -= changeResult.finalChangeAmount;
+			curMana = Mathf.Min(curMaxMana, curMana);
 		}
 		protected virtual void UpdateStatDisplay()
 		{
@@ -641,7 +654,7 @@ namespace EoE.Entities
 				else
 					intendedState = false;
 			}
-		
+
 			//If we are in a fight => show the display, otherwise hide it
 			if (statDisplay.gameObject.activeInHierarchy != intendedState)
 				statDisplay.gameObject.SetActive(intendedState);
@@ -655,14 +668,14 @@ namespace EoE.Entities
 		{
 			AllEntities.Remove(this);
 			BuildDrops();
-			if(statDisplay)
+			if (statDisplay)
 				Destroy(statDisplay.gameObject);
 			Destroy(gameObject);
 		}
 		private void BuildDrops()
 		{
 			//Create souls drops
-			if(SelfSettings.SoulWorth > 0)
+			if (SelfSettings.SoulWorth > 0)
 			{
 				SoulDrop newSoulDrop = Instantiate(GameController.CurrentGameSettings.SoulDropPrefab, Storage.DropStorage);
 				newSoulDrop.transform.position = actuallWorldPosition;
@@ -673,7 +686,7 @@ namespace EoE.Entities
 			if (SelfSettings.PossibleDropsTable == null)
 				return;
 
-			for(int i = 0; i < SelfSettings.PossibleDropsTable.PossibleDrops.Length; i++)
+			for (int i = 0; i < SelfSettings.PossibleDropsTable.PossibleDrops.Length; i++)
 			{
 				if (BaseUtils.Chance01(SelfSettings.PossibleDropsTable.PossibleDrops[i].DropChance))
 				{

@@ -1,13 +1,10 @@
-﻿using EoE.Entities;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace EoE.Weapons
 {
 	public enum AttackAnimation { Stab, ToRightSlash, ToLeftSlash, TopDownSlash, Uppercut }
-	public enum AnimationCancelCondition { Ignore = 0, True = 1, False = 2}
-	public enum AttackVelocityIntent { Off = 0, Add = 1, Set = 2}
+	public enum AnimationCancelCondition { Ignore = 0, True = 1, False = 2 }
+	public enum AttackVelocityIntent { Off = 0, Add = 1, Set = 2 }
 	public class AttackStyle : ScriptableObject
 	{
 		public AttackCombo this[int index]
@@ -81,7 +78,7 @@ namespace EoE.Weapons
 			this.critChanceMultiplier = critChanceMultiplier;
 		}
 	}
-	
+
 	[System.Serializable]
 	public struct AttackAnimationInfo
 	{

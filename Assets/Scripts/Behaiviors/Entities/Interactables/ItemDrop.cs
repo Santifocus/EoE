@@ -1,7 +1,5 @@
 ﻿using EoE.Information;
 using EoE.UI;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace EoE.Entities
@@ -15,9 +13,13 @@ namespace EoE.Entities
 			int prevStackSize = containedItem.stackSize;
 			AddToInventory();
 
-			if(prevStackSize != containedItem.stackSize)
+			if (prevStackSize != containedItem.stackSize)
 			{
 				DialogueController.ShowDialogue(new Dialogue(null, ("You picked up ", Color.white), ((prevStackSize - containedItem.stackSize) + "x " + containedItem.data.ItemName, Color.green), ("!", Color.white)));
+			}
+			else
+			{
+				DialogueController.ShowDialogue(new Dialogue(null, ("Not enought Inventory Space to pick up ", Color.white), (containedItem.stackSize + "x " + containedItem.data.ItemName, Color.green), ("!", Color.white)));
 			}
 
 			if (containedItem.stackSize == 0)
@@ -25,11 +27,7 @@ namespace EoE.Entities
 		}
 		private void AddToInventory()
 		{
-			if(containedItem.data is UseItem)
-			{
-				Player.ItemInventory.AddItem(containedItem);
-			}
-			else if (containedItem.data is ArmorItem)
+			if (containedItem.data is ArmorItem)
 			{
 				Player.ArmorInventory.AddItem(containedItem);
 			}
@@ -40,6 +38,10 @@ namespace EoE.Entities
 			else if (containedItem.data is SpellItem)
 			{
 				Player.SpellInventory.AddItem(containedItem);
+			}
+			else //Any other Item type
+			{
+				Player.ItemInventory.AddItem(containedItem);
 			}
 		}
 		protected override void MarkAsInteractTarget()

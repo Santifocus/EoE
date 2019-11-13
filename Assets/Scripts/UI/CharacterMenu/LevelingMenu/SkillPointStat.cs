@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using EoE.Controlls;
+﻿using EoE.Controlls;
+using EoE.Entities;
 using EoE.Information;
 using TMPro;
-using EoE.Entities;
+using UnityEngine;
 
 namespace EoE.UI
 {

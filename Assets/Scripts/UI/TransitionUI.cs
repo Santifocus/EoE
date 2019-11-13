@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace EoE.UI
@@ -49,7 +48,7 @@ namespace EoE.UI
 			float timer = 0;
 			float finalTime = time.HasValue ? time.Value : standardTransitionTime;
 
-			while(timer < finalTime)
+			while (timer < finalTime)
 			{
 				yield return new WaitForEndOfFrame();
 				timer += ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
@@ -60,7 +59,7 @@ namespace EoE.UI
 			rTransform.anchoredPosition = targetPos;
 			inTransition = false;
 
-			if(!curState && disableOnEndPos)
+			if (!curState && disableOnEndPos)
 			{
 				gameObject.SetActive(false);
 			}

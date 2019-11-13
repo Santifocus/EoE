@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEditor;
 using static EoE.EoEEditor;
 
 namespace EoE.Information
@@ -13,12 +11,14 @@ namespace EoE.Information
 		private static bool EnduranceSettingsOpen;
 		private static bool HUDSettingsOpen;
 		private static bool DodgeSettingsOpen;
+		private static bool IFramesSettingsOpen;
 		private static bool VFXSettingsOpen;
 		protected override void CustomInspector()
 		{
 			base.CustomInspector();
 			CameraSettingsArea();
 			DodgeSettingsArea();
+			IFramesSettingsArea();
 			HUDSettingsArea();
 			VFXSettingsArea();
 		}
@@ -82,6 +82,24 @@ namespace EoE.Information
 			}
 			EndFoldoutHeader();
 		}
+		private void IFramesSettingsArea()
+		{
+			PlayerSettings settings = target as PlayerSettings;
+
+			FoldoutHeader("IFrames Settings", ref IFramesSettingsOpen);
+			if (IFramesSettingsOpen)
+			{
+				BoolField(new GUIContent("Invincible After Hit", "Should the player be invincible for a set time after getting damaged?"), ref settings.InvincibleAfterHit);
+				if (settings.InvincibleAfterHit)
+				{
+					FloatField(new GUIContent("Invincible After Hit Time", "How long should this invincibility last?."), ref settings.InvincibleAfterHitTime, 1);
+					ColorField(new GUIContent("Invincible Model Flash Color", "In which color should the player model flash while he is invincible?"), ref settings.InvincibleModelFlashColor, 1);
+					FloatField(new GUIContent("Invincible Model Flash Delay", "How long of a delay between each colored model flash?"), ref settings.InvincibleModelFlashDelay, 1);
+					FloatField(new GUIContent("Invincible Model Flash Time", "How long does a model color flash last?"), ref settings.InvincibleModelFlashTime, 1);
+				}
+			}
+			EndFoldoutHeader();
+		}
 		private void HUDSettingsArea()
 		{
 			PlayerSettings settings = target as PlayerSettings;
@@ -134,6 +152,17 @@ namespace EoE.Information
 					FloatField(new GUIContent("Blur Screen Health Threshold", "If the player is below this threshold (0 - 1) the blur effect will be caused."), ref settings.BlurScreenHealthThreshold, 1);
 					FloatField(new GUIContent("Blur Screen Base Intensity", "How strong should the intensity be? (0 - 1), Will be multiplied by the caused damage and how much health is currently left."), ref settings.BlurScreenBaseIntensity, 1);
 					FloatField(new GUIContent("Blur Screen Duration", "How long should the blur stay? Will be multiplied the same as the intensity"), ref settings.BlurScreenDuration, 1);
+				}
+
+				GUILayout.Space(6);
+				BoolField(new GUIContent("Rumble On Damage Receive"), ref settings.RumbleOnReceiveDamage);
+				if (settings.ScreenShakeOnCrit)
+				{
+					FloatField(new GUIContent("Rumble On Receive Damage Time", "How long should the controller rumble? (The intensity will be Interpolated between Star->End intensity)"), ref settings.RumbleOnReceiveDamageTime, 1);
+					FloatField(new GUIContent("Rumble On Receive Damage Left Intensity Start", "The start rumble intensity of the left motor. (Left motor is Low Frequency therefore it is recommended to use about 1/3 of the right motor as intensity)"), ref settings.RumbleOnReceiveDamageLeftIntensityStart, 1);
+					FloatField(new GUIContent("Rumble On Receive Damage Right Intensity Start", "The start rumble intensity of the right motor. (Left motor is High Frequency therefore it is recommended to use about 3 time the intensity of the left motor)"), ref settings.RumbleOnReceiveDamageRightIntensityStart, 1);
+					FloatField(new GUIContent("Rumble On Receive Damage Left Intensity End", "The end rumble intensity of the left motor."), ref settings.RumbleOnReceiveDamageLeftIntensityEnd, 1);
+					FloatField(new GUIContent("Rumble On Receive Damage Right Intensity End", "The end rumble intensity of the right motor."), ref settings.RumbleOnReceiveDamageRightIntensityEnd, 1);
 				}
 
 				GUILayout.Space(6);

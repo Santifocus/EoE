@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace EoE.Entities
 {
@@ -20,7 +18,7 @@ namespace EoE.Entities
 				if (currInteractTarget != curFrameTarget)
 				{
 					//Tell old target its not targeted anymore
-					if(Interactable.MarkedInteractable)
+					if (Interactable.MarkedInteractable)
 						Interactable.MarkedInteractable.StopMarkAsInteractableBase();
 
 					//Inform the new target it is now the interact target

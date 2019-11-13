@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using EoE.Entities;
 
 namespace EoE.Information
 {
 	public class WeaponItem : Item
 	{
-		public override void Equip()
+		protected override void OnUse(Entitie user)
 		{
 
 		}

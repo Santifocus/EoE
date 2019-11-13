@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using EoE.Entities;
 using TMPro;
-using EoE.Entities;
+using UnityEngine;
 
 namespace EoE.UI
 {
@@ -36,7 +34,7 @@ namespace EoE.UI
 				float updateSpeed = Player.PlayerSettings.StatTextUpdateSpeed;
 
 				nextStatPointUpdate += Time.deltaTime * System.Math.Abs(dif);
-				if(nextStatPointUpdate > updateSpeed)
+				if (nextStatPointUpdate > updateSpeed)
 				{
 					int difDir = -System.Math.Sign(dif);
 					int change = (int)(nextStatPointUpdate / updateSpeed);
@@ -46,7 +44,7 @@ namespace EoE.UI
 					UpdateStatText();
 				}
 			}
-			else if(playerMaxStatAmount != displayedMaxStatAmount)
+			else if (playerMaxStatAmount != displayedMaxStatAmount)
 			{
 				displayedMaxStatAmount = playerMaxStatAmount;
 				UpdateStatText();

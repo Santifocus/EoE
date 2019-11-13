@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEditor;
 using static EoE.EoEEditor;
 
 namespace EoE.Information
@@ -28,7 +26,7 @@ namespace EoE.Information
 		private int testInput;
 		private string testOutput;
 		private bool needsToCalculateTestValue = true;
-		protected override void CustomInspector() 
+		protected override void CustomInspector()
 		{
 			LevelingCurveSettingsArea();
 			RotationIncrements();

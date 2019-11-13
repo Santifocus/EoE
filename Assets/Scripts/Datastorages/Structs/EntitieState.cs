@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-namespace EoE.Entities
+﻿namespace EoE.Entities
 {
 	public struct EntitieState
 	{

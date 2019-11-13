@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEditor;
 
 namespace EoE
 {
@@ -13,12 +11,12 @@ namespace EoE
 		public static void Header(string content, int offSet = 0, bool spaces = true, bool bold = true) => Header(new GUIContent(content), offSet, spaces, bold);
 		public static void Header(GUIContent content, int offSet = 0, bool spaces = true, bool bold = true)
 		{
-			if(spaces)
+			if (spaces)
 				GUILayout.Space(8);
 
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Space(offSet * STANDARD_OFFSET);
-			if(bold)
+			if (bold)
 				GUILayout.Label(content, EditorStyles.boldLabel);
 			else
 				GUILayout.Label(content);

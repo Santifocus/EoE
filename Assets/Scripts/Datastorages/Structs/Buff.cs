@@ -1,10 +1,8 @@
 ﻿using EoE.Entities;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace EoE.Information
-{ 
+{
 	public enum BuffType : byte { Negative = 0, Neutral = 1, Positive = 2 }
 	public enum TargetStat { Health = 0, Mana = 1, Endurance = 2, PhysicalDamage = 3, MagicalDamage = 4, Defense = 5, MoveSpeed = 6, JumpHeight = 7 }
 	[System.Serializable]

@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace EoE.Entities 
+namespace EoE.Entities
 {
 	public class ForceController
 	{
@@ -18,11 +17,11 @@ namespace EoE.Entities
 		public void Update()
 		{
 			currentTotalForce = Vector3.zero;
-			for(int i = 0; i < currentForces.Count; i++)
+			for (int i = 0; i < currentForces.Count; i++)
 			{
 				Vector3 sForce = currentForces[i].UpdateForce();
 				currentTotalForce += sForce;
-				if(sForce.sqrMagnitude < FORCE_REMOVE_THRESHOLD)
+				if (sForce.sqrMagnitude < FORCE_REMOVE_THRESHOLD)
 				{
 					currentForces[i].OnRemove();
 					currentForces.RemoveAt(i);

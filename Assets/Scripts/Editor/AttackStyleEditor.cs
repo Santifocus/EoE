@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine;
 
 namespace EoE.Weapons
 {
@@ -52,7 +51,7 @@ namespace EoE.Weapons
 				foldOutStates = new bool[8];
 			if (innerFoldoutStates == null)
 			{
-				int? innerFoldouts =	target.standAttack?.attacks?.Length +
+				int? innerFoldouts = target.standAttack?.attacks?.Length +
 										target.sprintAttack.attacks?.Length +
 										target.jumpAttack?.attacks?.Length +
 										target.sprintJumpAttack.attacks?.Length +
@@ -103,7 +102,7 @@ namespace EoE.Weapons
 					{
 						if (i < failedCombos.Count - 1)
 						{
-							sources += failedCombos[i] + ((i < failedCombos.Count - 2)?", ":" ");
+							sources += failedCombos[i] + ((i < failedCombos.Count - 2) ? ", " : " ");
 						}
 						else //i == failedCombos.Count - 1
 						{
@@ -147,7 +146,7 @@ namespace EoE.Weapons
 					AttackField(curArraySize == 1 ? "Attack" : (i == 0 ? "Start Attack" : i + ". Combo"), ref curVal.attacks[i], 1);
 
 					EoEEditor.LineBreak();
-					if(i < curVal.attacks.Length - 1)
+					if (i < curVal.attacks.Length - 1)
 					{
 						GUILayout.Space(8);
 						EoEEditor.FloatField(new GUIContent("Max Delay to " + (i + 1) + ". combo.", ATTACK_COMBO_DELAY_DISCR), ref curVal.delays[i]);
@@ -208,14 +207,14 @@ namespace EoE.Weapons
 			}
 			else
 				innerDrawnAttacks += curVal.attacks.Length;
-			
+
 			EditorGUILayout.EndFoldoutHeaderGroup();
 			drawnAttacksCombos++;
 
 			//Check if attack combo is breaking any rules
 			if (curVal.attacks.Length > 1)
 			{
-				for(int i = 0; i < curVal.attacks.Length; i++)
+				for (int i = 0; i < curVal.attacks.Length; i++)
 				{
 					if (curVal.attacks[i] != null && !curVal.attacks[i].enabled)
 					{
@@ -228,7 +227,7 @@ namespace EoE.Weapons
 		}
 		private bool AttackField(string content, ref Attack curValue, int offSet = 0) => AttackField(new GUIContent(content), ref curValue, offSet);
 		private bool AttackField(GUIContent content, ref Attack curValue, int offSet = 0)
-		{	
+		{
 			if (curValue == null)
 				curValue = new Attack();
 
@@ -333,7 +332,7 @@ namespace EoE.Weapons
 			EditorGUI.BeginDisabledGroup(fullyOff);
 			changed |= EoEEditor.BoolField(new GUIContent("Ignore Vertical Velocity", "When enabled then this Velocity-Effect wont affect the vertical velocity."), ref curValue.ignoreVerticalVelocity, offSet);
 			changed |= EoEEditor.BoolField(new GUIContent("Apply Force on Animation Charge End", "When enabled the delay to when the force will be applied is set by the animation itself. (For example Stab has a set delay of 0.15 seconds)"), ref curValue.applyForceAfterAnimationCharge, offSet);
-			if(!fullyOff)
+			if (!fullyOff)
 				EditorGUI.BeginDisabledGroup(curValue.applyForceAfterAnimationCharge);
 			changed |= EoEEditor.FloatField(new GUIContent("Apply Force Delay", "Custom time of when to apply the calculated forces. (Wont work if the delay is longer then the animation itself!)"), ref curValue.applyForceDelay, offSet);
 			if (!fullyOff)
@@ -353,7 +352,7 @@ namespace EoE.Weapons
 			bool changed = EoEEditor.BoolField(new GUIContent("", content.tooltip), ref curState, offSet);
 
 			GUILayout.FlexibleSpace();
-			if(!fullyOff)
+			if (!fullyOff)
 				EditorGUI.BeginDisabledGroup(!curState);
 			changed |= EoEEditor.FloatField(content, ref curValue);
 			if (!fullyOff)

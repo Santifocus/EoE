@@ -1,8 +1,6 @@
 ﻿using EoE.Controlls;
 using EoE.Entities;
 using EoE.Information;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -47,7 +45,7 @@ namespace EoE.UI
 			}
 
 			slots = new InventorySlot[targetInventory.Lenght];
-			for(int i = 0; i < targetInventory.Lenght; i++)
+			for (int i = 0; i < targetInventory.Lenght; i++)
 			{
 				InventorySlot newSlot = Instantiate(slotPrefab, slotGrid.transform);
 				newSlot.Setup(targetInventory, i);
@@ -60,7 +58,7 @@ namespace EoE.UI
 		}
 		private void UpdateAllSlots()
 		{
-			for(int i = 0; i < slots.Length; i++)
+			for (int i = 0; i < slots.Length; i++)
 			{
 				slots[i].UpdateDisplay();
 			}
@@ -68,7 +66,7 @@ namespace EoE.UI
 		protected override void ResetPage()
 		{
 			curSlotIndex = 0;
-			slots[0].SelectMenuItem(); 
+			slots[0].SelectMenuItem();
 			actionMenuOpen = false;
 
 			if (dropMenuOpen)
@@ -90,7 +88,7 @@ namespace EoE.UI
 			if (InputController.MenuBack.Down)
 				MenuBack();
 
-			if(navigationCooldown > 0)
+			if (navigationCooldown > 0)
 			{
 				navigationCooldown -= Time.unscaledDeltaTime;
 				return;
@@ -171,26 +169,28 @@ namespace EoE.UI
 				if (item == null)
 					return;
 
-				if (action == ItemAction.ItemActionType.Equip)
+				Item target = item.data;
+				if (action == ItemAction.ItemActionType.Use)
 				{
-					Item target = item.data;
 					if (target)
-						target.Equip();
+						target.Use(Player.Instance, targetInventory);
 				}
 				else if (action == ItemAction.ItemActionType.Equip)
 				{
-					UseItem target = item.data as UseItem;
 					if (target)
-						target.Use();
+						target.Equip(Player.Instance);
 				}
-				else if(action == ItemAction.ItemActionType.Drop)
+				else if (action == ItemAction.ItemActionType.Drop)
 				{
-					Item target = item.data;
 					if (target)
 					{
 						ShowDropMenu();
 					}
 				}
+
+				//If from any of the action the stacksize was changed to 0 (which means null after inventory update) then we want to close the action menu
+				if (targetInventory[curSlotIndex] == null)
+					MenuBack();
 			}
 			else
 			{

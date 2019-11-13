@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public static class ConstantCollector
+﻿public static class ConstantCollector
 {
 	public const int TERRAIN_LAYER = 1 << 8;
 	public const int ENTITIE_LAYER = 1 << 9;

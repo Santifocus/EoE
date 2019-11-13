@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using EoE.Controlls;
-using EoE.Information;
+﻿using EoE.Controlls;
 using EoE.Entities;
+using EoE.Information;
+using UnityEngine;
 
 namespace EoE.UI
 {
@@ -38,7 +36,7 @@ namespace EoE.UI
 		private Buff skillBuff => Player.LevelingPointsBuff;
 		private int skillPoints
 		{ get => Player.AvailableSkillPoints; set => Player.AvailableSkillPoints = value; }
-		private int attributePoints 
+		private int attributePoints
 		{ get => Player.AvailableAtributePoints; set => Player.AvailableAtributePoints = value; }
 
 		//Assigned Skillpoints
@@ -153,7 +151,7 @@ namespace EoE.UI
 
 			AcceptResetButton.PointTarget pointTarget = (int)(menuItems[navigationIndex] as SkillPointStat).targetStat < 3 ? AcceptResetButton.PointTarget.AttributePoints : AcceptResetButton.PointTarget.SkillPoints;
 
-			for(int i = 0; i < menuItems.Length; i++)
+			for (int i = 0; i < menuItems.Length; i++)
 			{
 				AcceptResetButton confirmButton = menuItems[i] as AcceptResetButton;
 				if (confirmButton && confirmButton.targetPoints == pointTarget)
@@ -174,7 +172,7 @@ namespace EoE.UI
 		{
 			if (onAttributes)
 			{
-				for(int i = 0; i < 3; i++)
+				for (int i = 0; i < 3; i++)
 				{
 					assignedAttributePoints[i] = 0;
 				}
@@ -196,7 +194,7 @@ namespace EoE.UI
 		}
 		private void UpdateDisplay()
 		{
-			for(int i = 0; i < menuItems.Length; i++)
+			for (int i = 0; i < menuItems.Length; i++)
 			{
 				SkillPointStat target = menuItems[i] as SkillPointStat;
 				if (target == null)
