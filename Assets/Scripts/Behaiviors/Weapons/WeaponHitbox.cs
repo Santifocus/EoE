@@ -1,7 +1,4 @@
-﻿using EoE.Entities;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace EoE.Weapons
 {
@@ -18,7 +15,7 @@ namespace EoE.Weapons
 			this.controller = controller;
 			if (trail)
 				trail.enabled = false;
-			if(GetComponents<Collider>().Length > 1)
+			if (GetComponents<Collider>().Length > 1)
 				Debug.LogError("Cannot attach more than one collider to a single weapon hitbox!");
 			coll = GetComponent<Collider>();
 			coll.enabled = false;
@@ -28,7 +25,7 @@ namespace EoE.Weapons
 		{
 			coll.enabled = state;
 			curActive = state;
-			if(trail)
+			if (trail)
 				trail.enabled = state;
 		}
 

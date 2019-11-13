@@ -59,6 +59,11 @@ MonoBehaviour:
   DodgeCooldown: 0.3
   DodgeEnduranceCost: 10
   DodgeModelMaterial: {fileID: 2100000, guid: 11d51a887e999af408b3d408f575a218, type: 2}
+  InvincibleAfterHit: 1
+  InvincibleAfterHitTime: 0.4
+  InvincibleModelFlashColor: {r: 1, g: 1, b: 1, a: 1}
+  InvincibleModelFlashDelay: 0.1
+  InvincibleModelFlashTime: 0.025
   StatTextUpdateSpeed: 0.5
   EnduranceBarLerpSpeed: 5
   HealthTextColors:
@@ -128,12 +133,18 @@ MonoBehaviour:
   ColorScreenDuration: 0.2
   ShakeScreenOnKnockback: 1
   ShakeTimeOnKnockback: 0.15
-  ShakeScreenAxisIntensity: 0.2
-  ShakeScreenAngleIntensity: 0.075
+  ShakeScreenAxisIntensity: 0.125
+  ShakeScreenAngleIntensity: 0.05
   BlurScreenOnDamage: 1
   BlurScreenHealthThreshold: 0.4
   BlurScreenBaseIntensity: 0.4
   BlurScreenDuration: 0.3
+  RumbleOnReceiveDamage: 1
+  RumbleOnReceiveDamageTime: 0.2
+  RumbleOnReceiveDamageLeftIntensityStart: 0.7
+  RumbleOnReceiveDamageRightIntensityStart: 0.9
+  RumbleOnReceiveDamageLeftIntensityEnd: 0.6
+  RumbleOnReceiveDamageRightIntensityEnd: 0.8
   SlowOnCriticalHit: 1
   SlowOnCritTimeIn: 0
   SlowOnCritTimeStay: 0.5

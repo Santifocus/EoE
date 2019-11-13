@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using EoE.Entities;
-using EoE.Information;
+﻿using EoE.Entities;
 
 namespace EoE.Events
 {

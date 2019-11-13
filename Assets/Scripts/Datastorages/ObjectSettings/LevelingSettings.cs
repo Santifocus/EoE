@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace EoE.Information
+﻿namespace EoE.Information
 {
 	public class LevelingSettings : ObjectSettings
 	{

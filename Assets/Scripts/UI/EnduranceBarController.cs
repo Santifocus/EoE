@@ -1,6 +1,4 @@
 ﻿using EoE.Entities;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,8 +15,21 @@ namespace EoE.UI
 
 		private void Start()
 		{
+			SetupSmallBars();
+		}
+
+		private void SetupSmallBars()
+		{
+			if(smallBars != null)
+			{
+				for(int i = 0; i < smallBars.Length; i++)
+				{
+					Destroy(smallBars[i].transform.parent.gameObject);
+				}
+			}
+
 			smallBars = new Image[player.totalEnduranceContainers];
-			for(int i = 0; i < smallBars.Length; i++)
+			for (int i = 0; i < smallBars.Length; i++)
 			{
 				smallBars[i] = Instantiate(smallBarPrefab, smallBarsGrid.transform).transform.GetChild(1).GetComponent<Image>();
 			}
@@ -26,37 +37,42 @@ namespace EoE.UI
 
 		private void Update()
 		{
-			int t = player.activeEnduranceContainerIndex;
-			mainBarFill.fillAmount = Mathf.Lerp(mainBarFill.fillAmount, player.enduranceContainers[t] / Player.PlayerSettings.EndurancePerBar, Player.PlayerSettings.EnduranceBarLerpSpeed * Time.deltaTime);
+			if(smallBars.Length != player.totalEnduranceContainers)
+			{
+				//Rebuild the smallbar grid
+				SetupSmallBars();
+			}
 
+			float enduranceToDistribute = player.curEndurance;
 			for (int i = 0; i < smallBars.Length; i++)
 			{
-				if (i < t)
+				enduranceToDistribute -= Player.PlayerSettings.EndurancePerBar;
+				if (enduranceToDistribute > 0)
 				{
-					if(smallBars[i].fillAmount != 1 || smallBars[i].color != Player.PlayerSettings.ReserveEnduranceBarColor)
-					{
-						smallBars[i].fillAmount = 1;
-						smallBars[i].color = Player.PlayerSettings.ReserveEnduranceBarColor;
-					}
-				}
-				else if (i == t)
-				{
-					smallBars[i].fillAmount = Mathf.Lerp(smallBars[i].fillAmount, player.enduranceContainers[t] / Player.PlayerSettings.EndurancePerBar, Player.PlayerSettings.EnduranceBarLerpSpeed * Time.deltaTime);
-					if (smallBars[i].color != Player.PlayerSettings.ActiveEnduranceBarColor)
-					{
-						smallBars[i].color = Player.PlayerSettings.ActiveEnduranceBarColor;
-					}
-				}
-				else if (i == t + 1)
-				{
-					smallBars[i].fillAmount = Mathf.Lerp(smallBars[i].fillAmount, player.lockedEndurance / Player.PlayerSettings.EndurancePerBar, Player.PlayerSettings.EnduranceBarLerpSpeed * Time.deltaTime);
-					if (smallBars[i].color != Player.PlayerSettings.ReloadingEnduranceBarColor)
-					{
-						smallBars[i].color = Player.PlayerSettings.ReloadingEnduranceBarColor;
-					}
+					smallBars[i].fillAmount = Mathf.Lerp(smallBars[i].fillAmount, 1, Time.deltaTime * Player.PlayerSettings.EnduranceBarLerpSpeed);
+					smallBars[i].color = Player.PlayerSettings.ReserveEnduranceBarColor;
 				}
 				else
-					smallBars[i].fillAmount = 0;
+				{
+					float dif = Mathf.Abs(enduranceToDistribute);
+					if(dif < Player.PlayerSettings.EndurancePerBar)
+					{
+						float fill = (Player.PlayerSettings.EndurancePerBar - dif) / Player.PlayerSettings.EndurancePerBar;
+						smallBars[i].fillAmount = Mathf.Lerp(smallBars[i].fillAmount, fill, Time.deltaTime * Player.PlayerSettings.EnduranceBarLerpSpeed);
+						mainBarFill.fillAmount = Mathf.Lerp(mainBarFill.fillAmount, fill, Time.deltaTime * Player.PlayerSettings.EnduranceBarLerpSpeed);
+
+						smallBars[i].color = Player.PlayerSettings.ActiveEnduranceBarColor;
+					}
+					else if(dif < Player.PlayerSettings.EndurancePerBar * 2)
+					{
+						smallBars[i].fillAmount = Mathf.Lerp(smallBars[i].fillAmount, player.lockedEndurance / Player.PlayerSettings.EndurancePerBar, Time.deltaTime * Player.PlayerSettings.EnduranceBarLerpSpeed);
+						smallBars[i].color = Player.PlayerSettings.ReloadingEnduranceBarColor;
+					}
+					else
+					{
+						smallBars[i].fillAmount = 0;
+					}
+				}
 			}
 		}
 	}

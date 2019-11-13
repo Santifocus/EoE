@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEditor;
 using static EoE.EoEEditor;
 
 namespace EoE.Information
@@ -30,7 +28,7 @@ namespace EoE.Information
 		private void CustomInspector()
 		{
 			FoldoutHeader("Entitie Velocity Settings", ref EntititeVelocitySettingsOpen);
-			if(EntititeVelocitySettingsOpen)
+			if (EntititeVelocitySettingsOpen)
 				EntitieVelocityArea();
 			EndFoldoutHeader();
 

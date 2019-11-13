@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using EoE.Information;
+﻿using EoE.Information;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace EoE.Entities
 {
@@ -25,6 +23,14 @@ namespace EoE.Entities
 		}
 		protected override void InRangeBehaivior()
 		{
+			TryForBash();
+		}
+		protected override void PlayerJustEnteredAttackRange()
+		{
+			SetAgentState(false);
+		}
+		private void TryForBash()
+		{
 			if (!chargingBash)
 			{
 				bool allowedToBash = true;
@@ -36,7 +42,7 @@ namespace EoE.Entities
 				float cosAngle = Vector2.Dot(new Vector2(transform.forward.x, transform.forward.z), directon);
 
 				//Is the player behind the Crawler? Then just stop here
-				if(cosAngle <= 0)
+				if (cosAngle <= 0)
 				{
 					allowedToBash = false;
 				}
@@ -61,9 +67,10 @@ namespace EoE.Entities
 			chargingBash = true;
 			behaviorSimpleStop = true;
 
+			GameController.BeginDelayedCall(() => AnnounceBash(), settings.AttackSpeed + settings.BashAnnouncementDelay, TimeType.ScaledDeltaTime, new System.Func<bool>(() => this), OnDelayConditionNotMet.Cancel);
+
 			float timer = 0;
-			bool canceled = false;
-			while(timer < settings.AttackSpeed)
+			while (timer < settings.AttackSpeed)
 			{
 				yield return new WaitForEndOfFrame();
 				timer += Time.deltaTime;
@@ -77,13 +84,16 @@ namespace EoE.Entities
 			chargingBash = false;
 			behaviorSimpleStop = false;
 
-			if (!canceled)
-			{
-				StartCombat();
-				bashing = true;
-				appliedMoveStuns++;
-				bashForce = entitieForceController.ApplyForce(transform.forward * settings.BashSpeed, settings.BashSpeed / settings.BashDistance, false, bashFinish);
-			}
+			StartCombat();
+			bashing = true;
+			appliedMoveStuns++;
+			bashForce = entitieForceController.ApplyForce(transform.forward * settings.BashSpeed, settings.BashSpeed / settings.BashDistance, false, bashFinish);
+		}
+		private void AnnounceBash()
+		{
+			ParticleSystem particles = Instantiate(settings.BashAnnouncementParticles, Storage.ParticleStorage);
+			particles.transform.position = actuallWorldPosition;
+			GameController.KillParticlesWhenDone(particles, false);
 		}
 		private void FinishedBash()
 		{
@@ -105,14 +115,14 @@ namespace EoE.Entities
 
 					for (int i = 0; i < collision.contactCount; i++)
 					{
-						if(collision.GetContact(i).otherCollider == player.coll)
+						if (collision.GetContact(i).otherCollider == player.coll)
 						{
 							hitPoint = collision.GetContact(i).point;
 							break;
 						}
 					}
 
-					player.ChangeHealth(new InflictionInfo(this, CauseType.Physical, settings.EntitieElement, hitPoint, bashForce.Force / restForce, restForce / settings.BashSpeed * settings.BaseAttackDamage, Random.value < settings.CritChance, true, restForce * settings.ForceTranslationMultiplier));
+					player.ChangeHealth(new ChangeInfo(this, CauseType.Physical, settings.EntitieElement, hitPoint, bashForce.Force / restForce, restForce / settings.BashSpeed * settings.BaseAttackDamage, Random.value < settings.CritChance, restForce * settings.ForceTranslationMultiplier));
 					entitieForceController.ForceRemoveForce(bashForce);
 					body.velocity = curVelocity;
 				}

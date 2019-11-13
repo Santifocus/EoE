@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace EoE
@@ -9,7 +8,7 @@ namespace EoE
 		PoolableObject<T> SelfPool { get; set; }
 		void ReturnToPool();
 	}
-	public class PoolableObject<T> where T : MonoBehaviour, IPoolableObject<T> 
+	public class PoolableObject<T> where T : MonoBehaviour, IPoolableObject<T>
 	{
 		private uint poolSize;
 		public uint PoolSize { get => poolSize; set => IncreasePoolsize(value); }
@@ -54,7 +53,7 @@ namespace EoE
 
 		public T GetPoolObject()
 		{
-			if(InActiveObjects.Count == 0)
+			if (InActiveObjects.Count == 0)
 			{
 				if (ReAdjustPoolsize)
 				{
@@ -76,14 +75,14 @@ namespace EoE
 			{
 				if (ReAdjustPoolsize)
 				{
-					IncreasePoolsize(poolSize + (amount-(uint)InActiveObjects.Count));
+					IncreasePoolsize(poolSize + (amount - (uint)InActiveObjects.Count));
 				}
 				else
 					return null;
 			}
 
 			List<T> ret = new List<T>((int)amount);
-			for(int i = 0; i < amount; i++)
+			for (int i = 0; i < amount; i++)
 			{
 				T obj = InActiveObjects.Dequeue();
 				obj.gameObject.SetActive(true);

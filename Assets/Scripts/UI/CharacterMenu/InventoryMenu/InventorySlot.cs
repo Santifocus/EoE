@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using EoE.Information;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using EoE.Information;
 
 namespace EoE.UI
 {

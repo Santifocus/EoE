@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace EoE.UI
 {
@@ -32,7 +31,7 @@ namespace EoE.UI
 		}
 		private IEnumerator DisplayDialogue()
 		{
-			while(quedDialogues.Count > 0)
+			while (quedDialogues.Count > 0)
 			{
 				if (displayingDialogue)
 				{
@@ -45,7 +44,7 @@ namespace EoE.UI
 					displayingDialogue = true;
 				}
 
-				yield return new WaitForSeconds(GameController.CurrentGameSettings.ShowDialogueBaseDelay); 
+				yield return new WaitForSeconds(GameController.CurrentGameSettings.ShowDialogueBaseDelay);
 
 				dialogueContainer.gameObject.SetActive(true);
 				Dialogue targetDialogue = quedDialogues.Dequeue();
@@ -59,7 +58,7 @@ namespace EoE.UI
 					currentText = currentText.Insert(stringIndex, colorOpener);
 					stringIndex += colorOpener.Length;
 
-					for(int j = 0; j < targetDialogue.parts[i].Text.Length; j++)
+					for (int j = 0; j < targetDialogue.parts[i].Text.Length; j++)
 					{
 						if (GameController.CurrentGameSettings.SkipDelayOnSpace)
 						{
@@ -81,7 +80,7 @@ namespace EoE.UI
 					stringIndex += COLOR_CLOSER.Length;
 					dialogueContainer.textDisplay.text = currentText.Insert(stringIndex, HIDE_COLOR);
 				}
-				if(targetDialogue.onFinish != null)
+				if (targetDialogue.onFinish != null)
 					targetDialogue.onFinish?.Invoke();
 			}
 
@@ -123,7 +122,7 @@ namespace EoE.UI
 		public override string ToString()
 		{
 			string fullText = "";
-			for(int i = 0; i < parts.Length; i++)
+			for (int i = 0; i < parts.Length; i++)
 			{
 				fullText += parts[i].Text;
 			}

@@ -1,6 +1,4 @@
 ﻿using EoE.Controlls;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,7 +15,7 @@ namespace EoE.UI
 				SelectedComponent.DeSelectMenuItem();
 
 			selected = true;
-			if(pointer)
+			if (pointer)
 				pointer.gameObject.SetActive(true);
 			SelectedComponent = this;
 			Select();

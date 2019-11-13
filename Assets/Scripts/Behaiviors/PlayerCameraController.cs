@@ -1,7 +1,5 @@
 ﻿using EoE.Entities;
 using EoE.Information;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace EoE
@@ -34,7 +32,7 @@ namespace EoE
 			if (!Player.Alive)
 				return;
 
-			if(Player.TargetedEntitie)
+			if (Player.TargetedEntitie)
 			{
 				Vector3 dir = (Player.TargetedEntitie.actuallWorldPosition - transform.position).normalized;
 				LookAtDirection(dir);
@@ -44,7 +42,7 @@ namespace EoE
 			transform.eulerAngles = new Vector3(CurRotation.y, CurRotation.x, 0);
 
 			float camDist = GetCameraDistance();
-			if(camDist > playerCamera.transform.localPosition.z)
+			if (camDist > playerCamera.transform.localPosition.z)
 			{
 				playerCamera.transform.localPosition = screenCapturerCamera.transform.localPosition = new Vector3(0, 0, camDist);
 			}
@@ -66,7 +64,7 @@ namespace EoE
 			RaycastHit hit;
 			float distance;
 
-			if(Physics.Raycast(transform.position, rayDir, out hit, playerSettigns.CameraToPlayerDistance, ConstantCollector.TERRAIN_LAYER))
+			if (Physics.Raycast(transform.position, rayDir, out hit, playerSettigns.CameraToPlayerDistance, ConstantCollector.TERRAIN_LAYER))
 			{
 				distance = -(transform.position - hit.point).magnitude;
 			}

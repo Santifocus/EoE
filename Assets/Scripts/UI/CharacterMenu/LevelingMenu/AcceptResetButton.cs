@@ -1,6 +1,4 @@
 ﻿using EoE.Controlls;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace EoE.UI
@@ -22,11 +20,11 @@ namespace EoE.UI
 		protected override void Update()
 		{
 			base.Update();
-			
+
 			if (!selected)
 				return;
 
-			if(InputController.MenuRight.Down || InputController.MenuLeft.Down)
+			if (InputController.MenuRight.Down || InputController.MenuLeft.Down)
 			{
 				onAcceptPosition = !onAcceptPosition;
 				pointer.rectTransform.anchoredPosition = onAcceptPosition ? pointerAcceptPosition : pointerResetPosition;

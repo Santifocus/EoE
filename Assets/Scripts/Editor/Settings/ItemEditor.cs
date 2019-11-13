@@ -1,46 +1,69 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEditor;
-using static EoE.EoEEditor;
 
 namespace EoE.Information
 {
-	[CustomEditor(typeof(Item), true), CanEditMultipleObjects]
 	public class ItemEditor : Editor
 	{
-		[MenuItem("EoE/Item")]
+		[MenuItem("EoE/Item/BuffItem")]
 		public static void CreateItem()
 		{
-			Item asset = CreateInstance<Item>();
+			BuffItem asset = CreateInstance<BuffItem>();
 
-			AssetDatabase.CreateAsset(asset, "Assets/Settings/Items/New Item.asset");
+			AssetDatabase.CreateAsset(asset, "Assets/Settings/Items/New BuffItem.asset");
 			AssetDatabase.SaveAssets();
 			EditorUtility.FocusProjectWindow();
 
 			Selection.activeObject = asset;
-			Debug.Log("Created: 'New Item' at: Assets/Settings/Items/...");
+			Debug.Log("Created: 'New BuffItem' at: Assets/Settings/Items/...");
 		}
-
-		private static bool GivenFlagsOpen;
-		public override void OnInspectorGUI()
+		[MenuItem("EoE/Item/HealItem")]
+		public static void CreateHealItem()
 		{
-			CustomInspector();
-			if (isDirty)
-			{
-				isDirty = false;
-				EditorUtility.SetDirty(target);
-			}
+			HealItem asset = CreateInstance<HealItem>();
+
+			AssetDatabase.CreateAsset(asset, "Assets/Settings/Items/New HealItem.asset");
+			AssetDatabase.SaveAssets();
+			EditorUtility.FocusProjectWindow();
+
+			Selection.activeObject = asset;
+			Debug.Log("Created: 'New HealItem' at: Assets/Settings/Items/...");
 		}
-		protected virtual void CustomInspector()
+		[MenuItem("EoE/Item/Weapon")]
+		public static void CreateWeapon()
 		{
-			Item item = target as Item;
+			WeaponItem asset = CreateInstance<WeaponItem>();
 
-			StringField(new GUIContent("Item Name"), ref item.ItemName);
-			Foldout(new GUIContent("Item Flags"), ref GivenFlagsOpen);
-			ObjectField(new GUIContent("Item Model"), ref item.ItemModel);
-			IntField(new GUIContent("Max Stack"), ref item.MaxStack);
-			ObjectField(new GUIContent("Item Icon"), ref item.ItemIcon);
+			AssetDatabase.CreateAsset(asset, "Assets/Settings/Items/New Weapon.asset");
+			AssetDatabase.SaveAssets();
+			EditorUtility.FocusProjectWindow();
+
+			Selection.activeObject = asset;
+			Debug.Log("Created: 'New Weapon' at: Assets/Settings/Items/...");
+		}
+		[MenuItem("EoE/Item/Spell")]
+		public static void CreateSpell()
+		{
+			SpellItem asset = CreateInstance<SpellItem>();
+
+			AssetDatabase.CreateAsset(asset, "Assets/Settings/Items/New Spell.asset");
+			AssetDatabase.SaveAssets();
+			EditorUtility.FocusProjectWindow();
+
+			Selection.activeObject = asset;
+			Debug.Log("Created: 'New Spell' at: Assets/Settings/Items/...");
+		}
+		[MenuItem("EoE/Item/Armor")]
+		public static void CreateArmor()
+		{
+			ArmorItem asset = CreateInstance<ArmorItem>();
+
+			AssetDatabase.CreateAsset(asset, "Assets/Settings/Items/New Armor.asset");
+			AssetDatabase.SaveAssets();
+			EditorUtility.FocusProjectWindow();
+
+			Selection.activeObject = asset;
+			Debug.Log("Created: 'New Armor' at: Assets/Settings/Items/...");
 		}
 	}
 }

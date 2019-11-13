@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 864ce4b4956fd63469942aad9fe28094, type: 3}
+  m_Name: SoulStrenght
+  m_EditorClassIdentifier: 
+  ItemName: SoulStrenght
+  ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
+    type: 3}
+  MaxStack: 5
+  ItemIcon: {fileID: 21300000, guid: 083f51189fd8fb74187c0a3b5b908b2f, type: 3}
+  RemoveOnUse: 1
+  buffInfo:
+    Name: SoulStrenght
+    Quality: 2
+    Permanent: 0
+    BuffTime: 10
+    Icon: {fileID: 21300000, guid: 083f51189fd8fb74187c0a3b5b908b2f, type: 3}
+    Effects:
+    - targetStat: 6
+      Percent: 1
+      Amount: 100
+    CustomEffects:
+      ApplyMoveStun: 0
+      Invincible: 0
+    DOTs: []
+  stackable: 0

@@ -19,7 +19,7 @@ namespace EoE.Utils
 				Destroy(Instance);
 
 			BaseFixedDeltaTime = Time.fixedDeltaTime;
-			ResetBlurEffect();
+			ResetScreenEffectMat();
 			damageNumberPool = new PoolableObject<DamageNumber>(50, true, damageNumberPrefab, Storage.ParticleStorage);
 			Instance = this;
 		}
@@ -32,7 +32,7 @@ namespace EoE.Utils
 			AllBlurScreenEffects = new List<BlurScreenEffect>();
 			AllTimeDilationsEffects = new List<TimeDilationEffect>();
 
-			Instance.ResetBlurEffect();
+			Instance.ResetScreenEffectMat();
 			Gamepad.current.SetMotorSpeeds(0, 0);
 		}
 		#region ScreenShake
@@ -60,14 +60,14 @@ namespace EoE.Utils
 			while (true)
 			{
 				yield return new WaitForEndOfFrame();
-				if(AllScreenShakes.Count > 0) //SHAKE
+				if (AllScreenShakes.Count > 0) //SHAKE
 				{
 					float strongestAxisIntensity = 0;
 					float strongestAngleIntensity = 0;
-					for(int i = 0; i < AllScreenShakes.Count; i++)
+					for (int i = 0; i < AllScreenShakes.Count; i++)
 					{
 						AllScreenShakes[i].remainingTime -= Time.deltaTime;
-						if(AllScreenShakes[i].remainingTime <= 0)
+						if (AllScreenShakes[i].remainingTime <= 0)
 						{
 							AllScreenShakes.RemoveAt(i);
 							i--;
@@ -83,7 +83,7 @@ namespace EoE.Utils
 					}
 
 					timeTillNextShake -= Time.deltaTime;
-					if(timeTillNextShake <= 0)
+					if (timeTillNextShake <= 0)
 					{
 						Shake(strongestAxisIntensity, strongestAngleIntensity);
 						timeTillNextShake += DELAY_PER_SHAKE;
@@ -151,14 +151,14 @@ namespace EoE.Utils
 		}
 		private IEnumerator RumbleC()
 		{
-			while(AllRumbles.Count > 0)
+			while (AllRumbles.Count > 0)
 			{
 				yield return new WaitForEndOfFrame();
 				float highestLeftIntensity = 0;
 				float highestRightIntensity = 0;
 
 				//Update all remaining times and get the highest intensitys
-				for(int i = 0; i < AllRumbles.Count; i++)
+				for (int i = 0; i < AllRumbles.Count; i++)
 				{
 					AllRumbles[i].remainingTime -= Time.deltaTime;
 					(float left, float right) = AllRumbles[i].GetRumbleIntensitys();
@@ -243,12 +243,12 @@ namespace EoE.Utils
 		}
 		private IEnumerator ColorScreenC()
 		{
-			while(AllScreenColorEffects.Count > 0)
+			while (AllScreenColorEffects.Count > 0)
 			{
 				yield return new WaitForEndOfFrame();
 				float averageDepth = 0;
 				Color averageColor = Color.clear;
-				for(int i = 0; i < AllScreenColorEffects.Count; i++)
+				for (int i = 0; i < AllScreenColorEffects.Count; i++)
 				{
 					AllScreenColorEffects[i].passedTime += Time.deltaTime;
 					if (AllScreenColorEffects[i].passedTime >= AllScreenColorEffects[i].totalTime)
@@ -295,7 +295,7 @@ namespace EoE.Utils
 		public static void BlurScreen(float intensity, float lenght, int blurDistance = 4)
 		{
 			AllBlurScreenEffects.Add(new BlurScreenEffect(intensity, lenght, blurDistance));
-			if(BlurScreenCoroutine == null)
+			if (BlurScreenCoroutine == null)
 			{
 				BlurScreenCoroutine = Instance.StartCoroutine(Instance.BlurScreenC());
 			}
@@ -348,13 +348,14 @@ namespace EoE.Utils
 						break;
 				}
 			}
-			ResetBlurEffect();
+			ResetScreenEffectMat();
 			BlurScreenCoroutine = null;
 		}
-		private void ResetBlurEffect()
+		private void ResetScreenEffectMat()
 		{
 			screenEffectTarget.material.SetFloat("_BlurPower", 0);
 			screenEffectTarget.material.SetInt("_BlurRange", 0);
+			screenEffectTarget.material.SetFloat("_Depth", 0);
 		}
 		private class BlurScreenEffect
 		{
@@ -390,7 +391,7 @@ namespace EoE.Utils
 		}
 		private IEnumerator TimeDilationC()
 		{
-			while(AllTimeDilationsEffects.Count > 0)
+			while (AllTimeDilationsEffects.Count > 0)
 			{
 				yield return new WaitForEndOfFrame();
 				if (GameController.GameIsPaused)
@@ -400,17 +401,17 @@ namespace EoE.Utils
 
 				HighestTimeDilutionDominanceIndex = -1;
 				int targetIndex = 0;
-				for(int i = 0; i < AllTimeDilationsEffects.Count; i++)
+				for (int i = 0; i < AllTimeDilationsEffects.Count; i++)
 				{
 					AllTimeDilationsEffects[i].passedTime += Time.unscaledDeltaTime;
-					if(AllTimeDilationsEffects[i].passedTime > AllTimeDilationsEffects[i].totalTime)
+					if (AllTimeDilationsEffects[i].passedTime > AllTimeDilationsEffects[i].totalTime)
 					{
 						AllTimeDilationsEffects.RemoveAt(i);
 						i--;
 					}
 					else
 					{
-						if(HighestTimeDilutionDominanceIndex < AllTimeDilationsEffects[i].dominanceIndex)
+						if (HighestTimeDilutionDominanceIndex < AllTimeDilationsEffects[i].dominanceIndex)
 						{
 							HighestTimeDilutionDominanceIndex = AllTimeDilationsEffects[i].dominanceIndex;
 							targetIndex = i;
@@ -453,11 +454,11 @@ namespace EoE.Utils
 			}
 			public float GetTimeScale()
 			{
-				if(passedTime < timeIn)
+				if (passedTime < timeIn)
 				{
 					return 1 + (passedTime / timeIn) * scaleDif;
 				}
-				else if(passedTime >= timeIn && passedTime < (timeStay + timeIn))
+				else if (passedTime >= timeIn && passedTime < (timeStay + timeIn))
 				{
 					return targetSpeed;
 				}
@@ -506,7 +507,7 @@ namespace EoE.Utils
 #if UNITY_EDITOR
 		private void OnApplicationQuit()
 		{
-			ResetBlurEffect();
+			ResetScreenEffectMat();
 		}
 #endif
 	}

@@ -1,10 +1,7 @@
 ﻿using EoE.Controlls;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
-using EoE.Information;
 using EoE.Entities;
+using TMPro;
+using UnityEngine;
 
 namespace EoE.UI
 {
@@ -78,7 +75,7 @@ namespace EoE.UI
 			else if (InputController.MenuEnter.Down)
 			{
 				bool fullyDropped = false;
-				if(selectedPart != SelectedPart.Cancel) 
+				if (selectedPart != SelectedPart.Cancel)
 				{
 					parent.targetInventory[parent.curSlotIndex].data.CreateItemDrop(Player.Instance.actuallWorldPosition, curDropCount, true);
 					parent.targetInventory[parent.curSlotIndex].stackSize -= curDropCount;

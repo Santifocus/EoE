@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEditor;
 using static EoE.EoEEditor;
 
 namespace EoE.Information
@@ -33,16 +31,16 @@ namespace EoE.Information
 				EditorUtility.SetDirty(target);
 			}
 		}
-		protected virtual void CustomInspector() 
+		protected virtual void CustomInspector()
 		{
 			DropTable table = target as DropTable;
 
-			if(table.PossibleDrops == null)
+			if (table.PossibleDrops == null)
 			{
 				table.PossibleDrops = new DropTable.ItemDropData[0];
 			}
 
-			if(innerFoldouts == null)
+			if (innerFoldouts == null)
 			{
 				innerFoldouts = new bool[table.PossibleDrops.Length];
 			}
@@ -53,7 +51,7 @@ namespace EoE.Information
 				return;
 
 			int curArraySize = table.PossibleDrops.Length;
-			if(innerFoldouts.Length != curArraySize)
+			if (innerFoldouts.Length != curArraySize)
 			{
 				int oldSize = innerFoldouts.Length;
 				bool[] newArray = new bool[curArraySize];
@@ -79,7 +77,7 @@ namespace EoE.Information
 					{
 						if (table.PossibleDrops[i].MinDropAmount < 0)
 							table.PossibleDrops[i].MinDropAmount = 0;
-						
+
 						if (table.PossibleDrops[i].MinDropAmount > table.PossibleDrops[i].MaxDropAmount)
 							table.PossibleDrops[i].MaxDropAmount = table.PossibleDrops[i].MinDropAmount;
 					}
@@ -92,7 +90,7 @@ namespace EoE.Information
 						if (table.PossibleDrops[i].MaxDropAmount < table.PossibleDrops[i].MinDropAmount)
 							table.PossibleDrops[i].MinDropAmount = table.PossibleDrops[i].MaxDropAmount;
 					}
-					if(FloatField(new GUIContent("Drop Chance", "What is the chance to drop this Drop? (0 = 0%; 1 = 100%)"), ref table.PossibleDrops[i].DropChance, 2))
+					if (FloatField(new GUIContent("Drop Chance", "What is the chance to drop this Drop? (0 = 0%; 1 = 100%)"), ref table.PossibleDrops[i].DropChance, 2))
 					{
 						if (table.PossibleDrops[i].DropChance < 0)
 							table.PossibleDrops[i].DropChance = 0;
@@ -105,7 +103,7 @@ namespace EoE.Information
 
 			GUILayout.Space(10);
 			int newArraySize = curArraySize;
-			if(IntField("Size", ref newArraySize, 1) && newArraySize != curArraySize)
+			if (IntField("Size", ref newArraySize, 1) && newArraySize != curArraySize)
 			{
 				DropTable.ItemDropData[] newArray = new DropTable.ItemDropData[newArraySize];
 				for (int i = 0; i < newArraySize; i++)

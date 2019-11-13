@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace EoE.Controlls
@@ -224,8 +223,8 @@ namespace EoE.Controlls
 
 		private void OnDestroy()
 		{
-			StopAllCoroutines();
 			playerInput.Disable();
+			StopAllCoroutines();
 		}
 
 		private void ButtonStarted(Button target)
@@ -247,7 +246,7 @@ namespace EoE.Controlls
 		{
 			//The player can theoretically press and release the button in the same frame which would cause target.Active to be true untill the button will be pressed again
 			//so in case target.Down == true we wait a extra frame
-			if(target.Down)
+			if (target.Down)
 				yield return new WaitForEndOfFrame();
 
 			target.Up = true;

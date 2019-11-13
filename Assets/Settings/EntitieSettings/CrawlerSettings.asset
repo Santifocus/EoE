@@ -28,15 +28,15 @@ MonoBehaviour:
   DoManaRegen: 0
   ManaRegen: 0
   ManaRegenInCombatMultiplier: 0.5
-  WalkSpeed: 8
+  WalkSpeed: 10
   RunSpeedMultiplicator: 1.25
   JumpPower: {x: 0, y: 10, z: 0}
-  TurnSpeed: 240
+  TurnSpeed: 280
   InAirTurnSpeedMultiplier: 0.25
   MoveAcceleration: 0.1
   NoMoveDeceleration: 0.25
   InAirAccelerationMultiplier: 0.3
-  AttackRange: 3
+  AttackRange: 2.5
   AttackKnockBack: 3
   CritChance: 0
   SightRange: 20
@@ -54,3 +54,6 @@ MonoBehaviour:
   BashSpeed: 40
   BashDistance: 7
   ForceTranslationMultiplier: 1
+  BashAnnouncementDelay: -0.5
+  BashAnnouncementParticles: {fileID: 7888936378971455080, guid: e89372d945c3ab247a88e4df8c444749,
+    type: 3}
