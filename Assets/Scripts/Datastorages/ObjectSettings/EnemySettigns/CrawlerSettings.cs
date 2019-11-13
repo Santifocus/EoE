@@ -12,6 +12,6 @@ namespace EoE.Information
 
 		//VFX
 		public float BashAnnouncementDelay = -0.2f;
-		public ParticleSystem BashAnnouncementParticles = null;
+		public GameObject BashAnnouncementParticles = null;
 	}
 }

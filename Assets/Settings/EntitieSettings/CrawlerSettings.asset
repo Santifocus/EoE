@@ -54,6 +54,6 @@ MonoBehaviour:
   BashSpeed: 40
   BashDistance: 7
   ForceTranslationMultiplier: 1
-  BashAnnouncementDelay: -0.5
-  BashAnnouncementParticles: {fileID: 7888936378971455080, guid: e89372d945c3ab247a88e4df8c444749,
+  BashAnnouncementDelay: -0.6
+  BashAnnouncementParticles: {fileID: 388916156728127386, guid: a7a590bf3d306c5498346cde72bc391c,
     type: 3}

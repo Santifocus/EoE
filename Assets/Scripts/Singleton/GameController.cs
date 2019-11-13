@@ -112,16 +112,26 @@ namespace EoE
 			//If the condition input is nothing, then it will always be interpreted as true, otherwise we request the bool via invoke
 			return condition == null || condition.Invoke();
 		}
-		public static void KillParticlesWhenDone(ParticleSystem targetSystem, bool forceZeroSpawns = true)
+		public static void KillParticlesWhenDone(GameObject target, bool forceZeroSpawns = true)
 		{
+			ParticleSystem[] particleSystems = target.GetComponentsInChildren<ParticleSystem>();
 			if (forceZeroSpawns)
 			{
-				ParticleSystem.EmissionModule EM = targetSystem.emission;
-				EM.rateOverTime = 0;
+				for(int i = 0; i < particleSystems.Length; i++)
+				{
+					ParticleSystem.EmissionModule EM = particleSystems[i].emission;
+					EM.rateOverTime = 0;
+				}
 			}
 
-			float delay = targetSystem.main.startLifetime.constantMax;
-			Destroy(targetSystem.gameObject, delay);
+			float delay = 0;
+			for (int i = 0; i < particleSystems.Length; i++)
+			{
+				float targetDelay = particleSystems[i].main.startLifetime.constantMax;
+				if (targetDelay > delay)
+					delay = targetDelay;
+			}
+			Destroy(target, delay);
 		}
 		private void OnDestroy()
 		{
