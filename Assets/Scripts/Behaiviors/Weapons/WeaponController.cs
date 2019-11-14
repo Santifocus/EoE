@@ -55,7 +55,7 @@ namespace EoE.Weapons
 				return;
 
 			bool wasCrit = BaseUtils.Chance01(Player.Instance.PlayerWeapon.baseCritChance * Player.Instance.activeAttack.info.critChanceMultiplier);
-			float damageAmount = Player.Instance.PlayerWeapon.baseAttackDamage * Player.Instance.activeAttack.info.damageMutliplier;
+			float damageAmount = Player.Instance.PlayerWeapon.baseAttackDamage * Player.Instance.activeAttack.info.damageMutliplier + Player.Instance.curPhysicalDamage;
 			float? knockBackAmount = Player.Instance.PlayerWeapon.baseKnockbackAmount * Player.Instance.activeAttack.info.knockbackMutliplier;
 			if (knockBackAmount == 0)
 				knockBackAmount = null;

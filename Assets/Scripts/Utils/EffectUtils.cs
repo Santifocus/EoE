@@ -214,6 +214,7 @@ namespace EoE.Utils
 				this.leftMotorIntensityEnd = leftMotorIntensityEnd ?? leftMotorIntensityStart;
 				this.rightMotorIntensityEnd = rightMotorIntensityEnd ?? rightMotorIntensityStart;
 
+				return;
 				this.leftMotorIntensityStart = Mathf.Clamp01(this.leftMotorIntensityStart);
 				this.rightMotorIntensityStart = Mathf.Clamp01(this.rightMotorIntensityStart);
 				this.leftMotorIntensityEnd = Mathf.Clamp01(this.leftMotorIntensityEnd);

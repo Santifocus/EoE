@@ -542,6 +542,8 @@ namespace EoE.Entities
 				curHealth = curMaxHealth;
 			if (curMana > curMaxMana)
 				curMana = curMaxMana;
+			if (this is Player)
+				(this as Player).UpdateEnduranceStat();
 		}
 		private void PermanentBuffsControl()
 		{

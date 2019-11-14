@@ -141,8 +141,8 @@ MonoBehaviour:
   BlurScreenDuration: 0.3
   RumbleOnReceiveDamage: 1
   RumbleOnReceiveDamageTime: 0.2
-  RumbleOnReceiveDamageLeftIntensityStart: 0.7
-  RumbleOnReceiveDamageRightIntensityStart: 0.9
+  RumbleOnReceiveDamageLeftIntensityStart: 2.8
+  RumbleOnReceiveDamageRightIntensityStart: 3.6
   RumbleOnReceiveDamageLeftIntensityEnd: 0.6
   RumbleOnReceiveDamageRightIntensityEnd: 0.8
   SlowOnCriticalHit: 1

@@ -111,7 +111,7 @@ namespace EoE.Information
 		public void RemoveStackSize(Item data, int stackSize)
 		{
 			bool changed = false;
-			for (int i = 0; i < Lenght; i++)
+			for (int i = Lenght -1; i >= 0; i--)
 			{
 				if (containedItems[i] != null && containedItems[i].data == data)
 				{
