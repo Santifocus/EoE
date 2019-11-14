@@ -55,51 +55,12 @@ namespace EoE.Information
 		public Color ReloadingEnduranceBarColor = new Color(0.4f, 0.4f, 0.4f, 0.8f);
 
 		///VFX
-		//ScreenColor
-		public bool ColorScreenOnDamage = true;
-		public Color ColorScreenColor = Color.red;
-		public float ColorScreenDepth = 0.15f;
-		public float ColorScreenDuration = 0.75f;
-
-		//ShakeOnknockback
-		public bool ShakeScreenOnKnockback = true;
-		public float ShakeTimeOnKnockback = 0.5f;
-		public float ShakeScreenAxisIntensity = 0.25f;
-		public float ShakeScreenAngleIntensity = 0.25f;
-
-		//Blur on lowlife
-		public bool BlurScreenOnDamage = true;
-		public float BlurScreenHealthThreshold = 0.35f;
-		public float BlurScreenBaseIntensity = 0.05f;
-		public float BlurScreenDuration = 0.5f;
-
-		//Rumble on damage receive
-		public bool RumbleOnReceiveDamage = true;
-		public float RumbleOnReceiveDamageTime = 0.1f;
-		public float RumbleOnReceiveDamageLeftIntensityStart = 0.6f;
-		public float RumbleOnReceiveDamageRightIntensityStart = 0.9f;
-		public float RumbleOnReceiveDamageLeftIntensityEnd = 0.5f;
-		public float RumbleOnReceiveDamageRightIntensityEnd = 0.8f;
-
-		//Slow on Crit
-		public bool SlowOnCriticalHit = true;
-		public float SlowOnCritTimeIn = 0.2f;
-		public float SlowOnCritTimeStay = 0.5f;
-		public float SlowOnCritTimeOut = 0.2f;
-		public float SlowOnCritScale = 0.3f;
-
-		//Shake on Crit
-		public bool ScreenShakeOnCrit = true;
-		public float ShakeTimeOnCrit = 0.15f;
-		public float OnCritShakeAxisIntensity = 0.25f;
-		public float OnCritShakeAngleIntensity = 0.25f;
-
-		//Rumble on Crit
-		public bool RumbleOnCrit = true;
-		public float RumbleOnCritTime = 0.1f;
-		public float RumbleOnCritLeftIntensityStart = 0.6f;
-		public float RumbleOnCritRightIntensityStart = 0.9f;
-		public float RumbleOnCritLeftIntensityEnd = 0.5f;
-		public float RumbleOnCritRightIntensityEnd = 0.8f;
+		public VFXEffect[] EffectsOnReceiveDamage = default;
+		public VFXEffect[] EffectsOnReceiveKnockback = default;
+		public VFXEffect[] EffectsOnCauseDamage = default;
+		public VFXEffect[] EffectsOnCauseCrit = default;
+		public VFXEffect[] EffectsOnLevelup = default;
+		public float EffectsHealthThreshold = 0.3f;
+		public VFXEffect[] EffectsOnDamageWhenBelowThreshold = default;
 	}
 }

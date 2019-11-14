@@ -7,18 +7,7 @@ namespace EoE.Information
 	[CustomEditor(typeof(DropTable), true), CanEditMultipleObjects]
 	public class DropTableEditor : Editor
 	{
-		[MenuItem("EoE/DropTable")]
-		public static void CreateDropTable()
-		{
-			DropTable asset = CreateInstance<DropTable>();
-
-			AssetDatabase.CreateAsset(asset, "Assets/Settings/DropTables/New Drop Tables.asset");
-			AssetDatabase.SaveAssets();
-			EditorUtility.FocusProjectWindow();
-
-			Selection.activeObject = asset;
-			Debug.Log("Created: 'New Drop Table' at: Assets/Settings/DropTables/...");
-		}
+		[MenuItem("EoE/DropTable")] public static void CreateDropTable() => AssetCreator<DropTable>("Settings", "DropTables");
 
 		private static bool tableOpen;
 		private bool[] innerFoldouts;

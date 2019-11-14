@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using EoE.Information;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -53,6 +54,10 @@ namespace EoE.Utils
 			{
 				ShakeScreenCoroutine = Instance.StartCoroutine(Instance.ShakeScreenC());
 			}
+		}
+		public static void ShakeScreen(ScreenShake info)
+		{
+			ShakeScreen(info.Time, info.AxisIntensity, info.AngleIntensity, info.CustomAxisMultiplier, info.CustomAngleMultiplier);
 		}
 		private IEnumerator ShakeScreenC()
 		{
@@ -149,6 +154,10 @@ namespace EoE.Utils
 				RumbleCoroutine = Instance.StartCoroutine(Instance.RumbleC());
 			}
 		}
+		public static void RumbleController(ControllerRumble info)
+		{
+			RumbleController(info.Time, info.LeftStartIntensity, info.RightStartIntensity, info.LeftEndIntensity, info.RightEndIntensity);
+		}
 		private IEnumerator RumbleC()
 		{
 			while (AllRumbles.Count > 0)
@@ -214,7 +223,6 @@ namespace EoE.Utils
 				this.leftMotorIntensityEnd = leftMotorIntensityEnd ?? leftMotorIntensityStart;
 				this.rightMotorIntensityEnd = rightMotorIntensityEnd ?? rightMotorIntensityStart;
 
-				return;
 				this.leftMotorIntensityStart = Mathf.Clamp01(this.leftMotorIntensityStart);
 				this.rightMotorIntensityStart = Mathf.Clamp01(this.rightMotorIntensityStart);
 				this.leftMotorIntensityEnd = Mathf.Clamp01(this.leftMotorIntensityEnd);
@@ -241,6 +249,10 @@ namespace EoE.Utils
 			{
 				ColorScreenCoroutine = Instance.StartCoroutine(Instance.ColorScreenC());
 			}
+		}
+		public static void ColorScreenBorder(ScreenBorderColor info)
+		{
+			ColorScreen(info.Color, info.Time, info.Depth);
 		}
 		private IEnumerator ColorScreenC()
 		{
@@ -300,6 +312,10 @@ namespace EoE.Utils
 			{
 				BlurScreenCoroutine = Instance.StartCoroutine(Instance.BlurScreenC());
 			}
+		}
+		public static void BlurScreen(ScreenBlur info)
+		{
+			BlurScreen(info.Intensity, info.Time, info.BlurDistance);
 		}
 		private IEnumerator BlurScreenC()
 		{
@@ -376,7 +392,7 @@ namespace EoE.Utils
 		private static float BaseFixedDeltaTime;
 		private static List<TimeDilationEffect> AllTimeDilationsEffects = new List<TimeDilationEffect>();
 		private static Coroutine TimeDilationCoroutine = null;
-		public static float TimeDilation(int dominanceIndex, float targetSpeed, float timeIn, float timeStay, bool deleteOtherDilations = false, float? timeOut = null)
+		public static float DilateTime(int dominanceIndex, float targetSpeed, float timeIn, float timeStay, bool deleteOtherDilations = false, float? timeOut = null)
 		{
 			if (deleteOtherDilations)
 			{
@@ -386,11 +402,16 @@ namespace EoE.Utils
 			float totalTime = AllTimeDilationsEffects[AllTimeDilationsEffects.Count - 1].totalTime;
 			if (TimeDilationCoroutine == null)
 			{
-				TimeDilationCoroutine = Instance.StartCoroutine(Instance.TimeDilationC());
+				TimeDilationCoroutine = Instance.StartCoroutine(Instance.DilateTimeC());
 			}
 			return totalTime;
 		}
-		private IEnumerator TimeDilationC()
+		public static void DilateTime(TimeDilation info)
+		{
+			uint Dominance = System.Math.Min(info.Dominance, int.MaxValue);
+			DilateTime((int)Dominance, info.Scale, info.TimeIn, info.TimeStay, info.OverwriteOtherTimeDilations, info.TimeOut);
+		}
+		private IEnumerator DilateTimeC()
 		{
 			while (AllTimeDilationsEffects.Count > 0)
 			{

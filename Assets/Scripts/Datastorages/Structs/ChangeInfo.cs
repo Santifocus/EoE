@@ -1,4 +1,5 @@
 ﻿using EoE.Entities;
+using EoE.Events;
 using EoE.Utils;
 using UnityEngine;
 
@@ -93,73 +94,57 @@ namespace EoE.Information
 					causedKnockback = null;
 				}
 
-				//VFX for Player
-				if (basis.attacker is Player && basis.wasCritical && (basis.cause == CauseType.Physical || basis.cause == CauseType.Magic))
-				{
-					//Time dilation
-					if (Player.PlayerSettings.SlowOnCriticalHit)
-					{
-						EffectUtils.TimeDilation(
-							0,
-							Player.PlayerSettings.SlowOnCritScale,
-							Player.PlayerSettings.SlowOnCritTimeIn,
-							Player.PlayerSettings.SlowOnCritTimeStay,
-							false,
-							Player.PlayerSettings.SlowOnCritTimeOut);
-					}
-
-					//Screen shake
-					if (Player.PlayerSettings.ScreenShakeOnCrit)
-					{
-						EffectUtils.ShakeScreen(
-							Player.PlayerSettings.ShakeTimeOnCrit,
-							Player.PlayerSettings.OnCritShakeAxisIntensity,
-							Player.PlayerSettings.OnCritShakeAngleIntensity);
-					}
-
-					//Controller rumble
-					if (Player.PlayerSettings.RumbleOnCrit)
-					{
-						EffectUtils.RumbleController(
-							Player.PlayerSettings.RumbleOnCritTime,
-							Player.PlayerSettings.RumbleOnCritLeftIntensityStart,
-							Player.PlayerSettings.RumbleOnCritRightIntensityStart,
-							Player.PlayerSettings.RumbleOnCritLeftIntensityEnd,
-							Player.PlayerSettings.RumbleOnCritRightIntensityEnd);
-					}
-				}
 
 				//We dont want to overheal, but will allow overkill for bettet VFX
 				finalChangeAmount = Mathf.Max(finalChangeAmount, -(receiver.curMaxHealth - receiver.curHealth));
+
+				//VFX for Player
+				//We dont want to send VFX if the Player caused himself damage
+				if (basis.changeOnHealth)
+				{
+					if (basis.attacker is Player && !(receiver is Player))
+					{
+						EventManager.PlayerCausedDamageInvoke(receiver, basis.wasCritical);
+					}
+
+					if(receiver is Player)
+					{
+						if(finalChangeAmount > 0)
+							EventManager.PlayerTookDamageInvoke(finalChangeAmount, (basis.knockbackAmount / receiver.SelfSettings.EntitieMass) * (basis.wasCritical ? GameController.CurrentGameSettings.CritDamageMultiplier : 1));
+					}
+				}
 
 				//Only show damage numbers if it is a change on health. Also, if the cause is regen, then check if we want to display regen numbers
 				if (basis.changeOnHealth && finalChangeAmount != 0 && createDamageNumber && !(fromRegen && !GameController.CurrentGameSettings.ShowRegenNumbers))
 				{
 					Gradient colors;
-					switch (basis.cause)
+					if (finalChangeAmount < 0)
+						colors = GameController.CurrentGameSettings.HealColors;
+					else
 					{
-						case CauseType.Physical:
-							colors = GameController.CurrentGameSettings.PhysicalDamageColors;
-							break;
-						case CauseType.Magic:
-							colors = GameController.CurrentGameSettings.MagicalDamageColors;
-							break;
-						case CauseType.Heal:
-							colors = GameController.CurrentGameSettings.HealColors;
-							break;
-						case CauseType.DOT:
-							{
-								if (finalChangeAmount < 0)
-									colors = GameController.CurrentGameSettings.HealColors;
-								else if (basis.element != ElementType.None)
-									colors = GameController.CurrentGameSettings.PhysicalDamageColors;
-								else
-									colors = GameController.CurrentGameSettings.MagicalDamageColors;
-							}
-							break;
-						default:
-							colors = null;
-							break;
+						switch (basis.cause)
+						{
+							case CauseType.Physical:
+								colors = GameController.CurrentGameSettings.PhysicalDamageColors;
+								break;
+							case CauseType.Magic:
+								colors = GameController.CurrentGameSettings.MagicalDamageColors;
+								break;
+							case CauseType.Heal:
+								colors = GameController.CurrentGameSettings.HealColors;
+								break;
+							case CauseType.DOT:
+								{
+									if (basis.element != ElementType.None)
+										colors = GameController.CurrentGameSettings.PhysicalDamageColors;
+									else
+										colors = GameController.CurrentGameSettings.MagicalDamageColors;
+								}
+								break;
+							default:
+								colors = null;
+								break;
+						}
 					}
 
 					EffectUtils.CreateDamageNumber(

@@ -839,15 +839,6 @@ namespace EoE.Entities
 					remainingInvincibleTime = PlayerSettings.InvincibleAfterHitTime;
 				}
 			}
-			if (PlayerSettings.RumbleOnReceiveDamage)
-			{
-				EffectUtils.RumbleController(
-					PlayerSettings.RumbleOnReceiveDamageTime,
-					PlayerSettings.RumbleOnReceiveDamageLeftIntensityStart,
-					PlayerSettings.RumbleOnReceiveDamageRightIntensityStart,
-					PlayerSettings.RumbleOnReceiveDamageLeftIntensityEnd,
-					PlayerSettings.RumbleOnReceiveDamageRightIntensityEnd);
-			}
 		}
 		private float? remainingInvincibleTime = null;
 		private IEnumerator OnHitInvincibleCoroutine()

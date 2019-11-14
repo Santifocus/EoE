@@ -127,36 +127,17 @@ MonoBehaviour:
   ReserveEnduranceBarColor: {r: 0.5188679, g: 0.26310518, b: 0.007342457, a: 1}
   ActiveEnduranceBarColor: {r: 1, g: 0.5, b: 0, a: 1}
   ReloadingEnduranceBarColor: {r: 0.4, g: 0.4, b: 0.4, a: 0.8}
-  ColorScreenOnDamage: 1
-  ColorScreenColor: {r: 0.78431374, g: 0, b: 0, a: 0.43137255}
-  ColorScreenDepth: 0.03
-  ColorScreenDuration: 0.2
-  ShakeScreenOnKnockback: 1
-  ShakeTimeOnKnockback: 0.15
-  ShakeScreenAxisIntensity: 0.125
-  ShakeScreenAngleIntensity: 0.05
-  BlurScreenOnDamage: 1
-  BlurScreenHealthThreshold: 0.4
-  BlurScreenBaseIntensity: 0.4
-  BlurScreenDuration: 0.3
-  RumbleOnReceiveDamage: 1
-  RumbleOnReceiveDamageTime: 0.2
-  RumbleOnReceiveDamageLeftIntensityStart: 2.8
-  RumbleOnReceiveDamageRightIntensityStart: 3.6
-  RumbleOnReceiveDamageLeftIntensityEnd: 0.6
-  RumbleOnReceiveDamageRightIntensityEnd: 0.8
-  SlowOnCriticalHit: 1
-  SlowOnCritTimeIn: 0
-  SlowOnCritTimeStay: 0.5
-  SlowOnCritTimeOut: 0.2
-  SlowOnCritScale: 0.3
-  ScreenShakeOnCrit: 1
-  ShakeTimeOnCrit: 0.1
-  OnCritShakeAxisIntensity: 0.5
-  OnCritShakeAngleIntensity: 0.3
-  RumbleOnCrit: 1
-  RumbleOnCritTime: 0.1
-  RumbleOnCritLeftIntensityStart: 0.6
-  RumbleOnCritRightIntensityStart: 0.9
-  RumbleOnCritLeftIntensityEnd: 0.5
-  RumbleOnCritRightIntensityEnd: 0.8
+  EffectsOnReceiveDamage:
+  - {fileID: 11400000, guid: 910d3349e1560ab4ba7478fa7a8e8876, type: 2}
+  - {fileID: 11400000, guid: 11060c91c24341947a8c373d641e5c86, type: 2}
+  EffectsOnReceiveKnockback:
+  - {fileID: 11400000, guid: b09700b6216eb874aab8d980440f121b, type: 2}
+  EffectsOnCauseDamage: []
+  EffectsOnCauseCrit:
+  - {fileID: 11400000, guid: 3c3f83d3e81eae144acbe5a6b02983d0, type: 2}
+  - {fileID: 11400000, guid: e9a7041c1b96b544d9be0195facd23e7, type: 2}
+  - {fileID: 11400000, guid: 6812b6ecf408ba8439c8e9f47922381b, type: 2}
+  EffectsOnLevelup: []
+  EffectsHealthThreshold: 0.3
+  EffectsOnDamageWhenBelowThreshold:
+  - {fileID: 11400000, guid: 668a809c73c04d648ae6ae4e123f2f21, type: 2}

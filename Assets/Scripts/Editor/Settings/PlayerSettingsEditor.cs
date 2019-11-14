@@ -13,6 +13,14 @@ namespace EoE.Information
 		private static bool DodgeSettingsOpen;
 		private static bool IFramesSettingsOpen;
 		private static bool VFXSettingsOpen;
+
+		//VFXEffectArrays
+		private static bool ReceiveDamageOpen;
+		private static bool ReceiveKnockbackOpen;
+		private static bool CauseDamageOpen;
+		private static bool CauseCritOpen;
+		private static bool LevelUpOpen;
+		private static bool LowHealthThresholdOpen;
 		protected override void CustomInspector()
 		{
 			base.CustomInspector();
@@ -128,72 +136,19 @@ namespace EoE.Information
 			FoldoutHeader("VFX Settings", ref VFXSettingsOpen);
 			if (VFXSettingsOpen)
 			{
-				BoolField(new GUIContent("Color Screen On Damage", "When the player get hit, should there be a color screen feedback?"), ref settings.ColorScreenOnDamage);
-				if (settings.ColorScreenOnDamage)
-				{
-					ColorField(new GUIContent("Color Screen Color", "The Color of the Screen coloring"), ref settings.ColorScreenColor, 1);
-					FloatField(new GUIContent("Color Screen Depth", "How far should the color go into the screen?"), ref settings.ColorScreenDepth, 1);
-					FloatField(new GUIContent("Color Screen Duration", "How long should the screen coloring stay?"), ref settings.ColorScreenDuration, 1);
-				}
+				ObjectArrayField(new GUIContent("Effects On Receive Damage"), ref settings.EffectsOnReceiveDamage, ref ReceiveDamageOpen, new GUIContent("Effect "));
+				ObjectArrayField(new GUIContent("Effects On Receive Knockback"), ref settings.EffectsOnReceiveKnockback, ref ReceiveKnockbackOpen, new GUIContent("Effect "));
+				ObjectArrayField(new GUIContent("Effects On Cause Damage"), ref settings.EffectsOnCauseDamage, ref CauseDamageOpen, new GUIContent("Effect "));
+				ObjectArrayField(new GUIContent("Effects On Cause Crit"), ref settings.EffectsOnCauseCrit, ref CauseCritOpen, new GUIContent("Effect "));
+				ObjectArrayField(new GUIContent("Effects On Levelup"), ref settings.EffectsOnLevelup, ref LevelUpOpen, new GUIContent("Effect "));
 
-				GUILayout.Space(6);
-				BoolField(new GUIContent("Shake Screen On Knockback", "When the player experiences an impact should the screen shake?"), ref settings.ShakeScreenOnKnockback);
-				if (settings.ShakeScreenOnKnockback)
+				GUILayout.Space(4);
+				bool changedFloat = FloatField(new GUIContent("Effects Health Threshold", "The effects in the 'Effects On Damage When Below Threshold' will only be played when the player is below this (Health / MaxHealth) Threshold. (0 - 1)"), ref settings.EffectsHealthThreshold);
+				if (changedFloat)
 				{
-					FloatField(new GUIContent("Shake Time On Knockback", "How long should the screen shake?"), ref settings.ShakeTimeOnKnockback, 1);
-					FloatField(new GUIContent("Shake Screen Axis Intensity", "XYZ Position shake multiplier"), ref settings.ShakeScreenAxisIntensity, 1);
-					FloatField(new GUIContent("Shake Screen Angle Intensity", "XYZ Rotation shake multiplier"), ref settings.ShakeScreenAngleIntensity, 1);
+					settings.EffectsHealthThreshold = Mathf.Clamp01(settings.EffectsHealthThreshold);
 				}
-
-				GUILayout.Space(6);
-				BoolField(new GUIContent("Blur Screen On Damage", "When the player is below a health threshold, should there be a Blur on the sight?"), ref settings.BlurScreenOnDamage);
-				if (settings.BlurScreenOnDamage)
-				{
-					FloatField(new GUIContent("Blur Screen Health Threshold", "If the player is below this threshold (0 - 1) the blur effect will be caused."), ref settings.BlurScreenHealthThreshold, 1);
-					FloatField(new GUIContent("Blur Screen Base Intensity", "How strong should the intensity be? (0 - 1), Will be multiplied by the caused damage and how much health is currently left."), ref settings.BlurScreenBaseIntensity, 1);
-					FloatField(new GUIContent("Blur Screen Duration", "How long should the blur stay? Will be multiplied the same as the intensity"), ref settings.BlurScreenDuration, 1);
-				}
-
-				GUILayout.Space(6);
-				BoolField(new GUIContent("Rumble On Damage Receive"), ref settings.RumbleOnReceiveDamage);
-				if (settings.ScreenShakeOnCrit)
-				{
-					FloatField(new GUIContent("Rumble On Receive Damage Time", "How long should the controller rumble? (The intensity will be Interpolated between Star->End intensity)"), ref settings.RumbleOnReceiveDamageTime, 1);
-					FloatField(new GUIContent("Rumble On Receive Damage Left Intensity Start", "The start rumble intensity of the left motor. (Left motor is Low Frequency therefore it is recommended to use about 1/3 of the right motor as intensity)"), ref settings.RumbleOnReceiveDamageLeftIntensityStart, 1);
-					FloatField(new GUIContent("Rumble On Receive Damage Right Intensity Start", "The start rumble intensity of the right motor. (Left motor is High Frequency therefore it is recommended to use about 3 time the intensity of the left motor)"), ref settings.RumbleOnReceiveDamageRightIntensityStart, 1);
-					FloatField(new GUIContent("Rumble On Receive Damage Left Intensity End", "The end rumble intensity of the left motor."), ref settings.RumbleOnReceiveDamageLeftIntensityEnd, 1);
-					FloatField(new GUIContent("Rumble On Receive Damage Right Intensity End", "The end rumble intensity of the right motor."), ref settings.RumbleOnReceiveDamageRightIntensityEnd, 1);
-				}
-
-				GUILayout.Space(6);
-				BoolField(new GUIContent("Slow On Critical Hit", "When the player hits a critical strike should there be a time dilution? (Slowdown or Speedup)"), ref settings.SlowOnCriticalHit);
-				if (settings.SlowOnCriticalHit)
-				{
-					FloatField(new GUIContent("Slow On Crit Time In", "How long should the slowdown take until it is at its maximum?"), ref settings.SlowOnCritTimeIn, 1);
-					FloatField(new GUIContent("Slow On Crit Time Stay", "How long should the slowdown stay?"), ref settings.SlowOnCritTimeStay, 1);
-					FloatField(new GUIContent("Slow On Crit Time Out", "How long should the slowdown take until it has faded away?"), ref settings.SlowOnCritTimeOut, 1);
-					FloatField(new GUIContent("Slow On Crit Scale", "What is the maximum slow (This is the time scale while Stay time is active)"), ref settings.SlowOnCritScale, 1);
-				}
-
-				GUILayout.Space(6);
-				BoolField(new GUIContent("Screen Shake On Crit"), ref settings.ScreenShakeOnCrit);
-				if (settings.ScreenShakeOnCrit)
-				{
-					FloatField(new GUIContent("Shake Time On Crit", "How long should the screen shake?"), ref settings.ShakeTimeOnCrit, 1);
-					FloatField(new GUIContent("On Crit Shake Axis Intensity", "XYZ Position shake multiplier"), ref settings.OnCritShakeAxisIntensity, 1);
-					FloatField(new GUIContent("On Crit Shake Angle Intensity", "XYZ Rotation shake multiplier"), ref settings.OnCritShakeAngleIntensity, 1);
-				}
-
-				GUILayout.Space(6);
-				BoolField(new GUIContent("Rumble On Crit"), ref settings.RumbleOnCrit);
-				if (settings.ScreenShakeOnCrit)
-				{
-					FloatField(new GUIContent("Rumble On Crit Time", "How long should the controller rumble? (The intensity will be Interpolated between Star->End intensity)"), ref settings.RumbleOnCritTime, 1);
-					FloatField(new GUIContent("Rumble On Crit Left Intensity Start", "The start rumble intensity of the left motor. (Left motor is Low Frequency therefore it is recommended to use about 1/3 of the right motor as intensity)"), ref settings.RumbleOnCritLeftIntensityStart, 1);
-					FloatField(new GUIContent("Rumble On Crit Right Intensity Start", "The start rumble intensity of the right motor. (Left motor is High Frequency therefore it is recommended to use about 3 time the intensity of the left motor)"), ref settings.RumbleOnCritRightIntensityStart, 1);
-					FloatField(new GUIContent("Rumble On Crit Left Intensity End", "The end rumble intensity of the left motor."), ref settings.RumbleOnCritLeftIntensityEnd, 1);
-					FloatField(new GUIContent("Rumble On Crit Right Intensity End", "The end rumble intensity of the right motor."), ref settings.RumbleOnCritRightIntensityEnd, 1);
-				}
+				ObjectArrayField(new GUIContent("Effects On Damage When Below Threshold"), ref settings.EffectsOnDamageWhenBelowThreshold, ref LowHealthThresholdOpen, new GUIContent("Effect "));
 			}
 			EndFoldoutHeader();
 		}

@@ -4,12 +4,28 @@ namespace EoE.Events
 {
 	public static class EventManager
 	{
-		//Player Death
-		public static PlayerDied PlayerDiedEvent;
-		public delegate void PlayerDied(Entitie killer);
-		public static void PlayerDiedInvoke(Entitie killer)
+		//Entitie Death
+		public delegate void EntitieDied(Entitie killed, Entitie killer);
+		public static EntitieDied EntitieDiedEvent;
+		public static void EntitieDiedInvoke(Entitie killed, Entitie killer)
 		{
-			PlayerDiedEvent?.Invoke(killer);
+			EntitieDiedEvent?.Invoke(killed, killer);
+		}
+
+		//Player Received Damage
+		public delegate void PlayerTookDamage(float causedDamage, float? knockBack);
+		public static PlayerTookDamage PlayerTookDamageEvent;
+		public static void PlayerTookDamageInvoke(float causedDamage, float? knockBack)
+		{
+			PlayerTookDamageEvent?.Invoke(causedDamage, knockBack);
+		}
+
+		//Player Caused Damage
+		public delegate void PlayerCausedDamage(Entitie receiver, bool wasCrit);
+		public static PlayerCausedDamage PlayerCausedDamageEvent;
+		public static void PlayerCausedDamageInvoke(Entitie receiver, bool wasCrit)
+		{
+			PlayerCausedDamageEvent?.Invoke(receiver, wasCrit);
 		}
 
 		//Player Levelup
@@ -20,12 +36,12 @@ namespace EoE.Events
 			PlayerLevelupEvent?.Invoke();
 		}
 
-		//Entitie Death
-		public delegate void EntitieDied(Entitie killed, Entitie killer);
-		public static EntitieDied EntitieDiedEvent;
-		public static void EntitieDiedInvoke(Entitie killed, Entitie killer)
+		//Player Death
+		public delegate void PlayerDied(Entitie killer);
+		public static PlayerDied PlayerDiedEvent;
+		public static void PlayerDiedInvoke(Entitie killer)
 		{
-			EntitieDiedEvent?.Invoke(killed, killer);
+			PlayerDiedEvent?.Invoke(killer);
 		}
 	}
 }

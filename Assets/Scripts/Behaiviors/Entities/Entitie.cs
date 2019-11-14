@@ -592,32 +592,6 @@ namespace EoE.Entities
 			if (changeResult.finalChangeAmount > 0)
 				ReceivedHealthDamage(causedChange, changeResult);
 
-			//VFX for player
-			if (this is Player)
-			{
-				if (changeResult.finalChangeAmount > 0)
-				{
-					if (Player.PlayerSettings.ColorScreenOnDamage)
-					{
-						EffectUtils.ColorScreen(Player.PlayerSettings.ColorScreenColor, Player.PlayerSettings.ColorScreenDuration, Player.PlayerSettings.ColorScreenDepth);
-					}
-					if (Player.PlayerSettings.BlurScreenOnDamage)
-					{
-						float healthNormalized = curHealth / curMaxHealth;
-						if (healthNormalized < Player.PlayerSettings.BlurScreenHealthThreshold)
-						{
-							float intensity = Mathf.Min(1, (1 - healthNormalized / Player.PlayerSettings.BlurScreenHealthThreshold) * Player.PlayerSettings.BlurScreenBaseIntensity * changeResult.finalChangeAmount);
-							EffectUtils.BlurScreen(intensity, Player.PlayerSettings.BlurScreenDuration);
-						}
-					}
-				}
-				if (changeResult.causedKnockback.HasValue && Player.PlayerSettings.ShakeScreenOnKnockback)
-				{
-					float shakeForce = changeResult.causedKnockback.Value.magnitude;
-					EffectUtils.ShakeScreen(Player.PlayerSettings.ShakeTimeOnKnockback, shakeForce * Player.PlayerSettings.ShakeScreenAxisIntensity, shakeForce * Player.PlayerSettings.ShakeScreenAngleIntensity);
-				}
-			}
-
 			//Below zero health means death
 			if (curHealth <= 0)
 			{
