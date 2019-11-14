@@ -95,7 +95,7 @@
 				fixed3 finalColor = lerp(bluredColor, c.rgb, c.a / totalAlpha);
 				fixed finalAlpha = max(_BlurPower, c.a);
 
-				return fixed4(finalColor * finalAlpha, finalAlpha) ;
+				return fixed4(finalColor * finalAlpha, finalAlpha);
 			}
 		ENDCG
 		}

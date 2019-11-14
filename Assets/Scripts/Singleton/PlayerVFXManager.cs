@@ -21,9 +21,12 @@ namespace EoE
 		}
 		private void PlayerTookDamage(float causedDamage, float? knockBack)
 		{
-			for(int i = 0; i < playerSettings.EffectsOnReceiveDamage.Length; i++)
+			if (causedDamage > 0)
 			{
-				PlayVFX(playerSettings.EffectsOnReceiveDamage[i]);
+				for (int i = 0; i < playerSettings.EffectsOnReceiveDamage.Length; i++)
+				{
+					PlayVFX(playerSettings.EffectsOnReceiveDamage[i]);
+				}
 			}
 
 			if (knockBack.HasValue)
