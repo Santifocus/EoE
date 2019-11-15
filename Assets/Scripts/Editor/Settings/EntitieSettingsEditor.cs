@@ -81,6 +81,9 @@ namespace EoE.Information
 			{
 				FloatField(new GUIContent("Health Regen Amount", "How much Health should this Entitie regenerate? (Per Second)"), ref settings.HealthRegen, 1);
 				FloatField(new GUIContent("Health Regen In Combat Factor", "In combat regeneration will be multiplied by this amount."), ref settings.HealthRegenInCombatMultiplier, 1);
+
+				ObjectField(new GUIContent("Health Regen Particles", "The particles that will be played while this Entitie regens health."), ref settings.HealthRegenParticles);
+				Vector3Field(new GUIContent("Health Regen Particles Offset", "The regen particles will be displayed with this offset to the Entitie."), ref settings.HealthRegenParticlesOffset);
 			}
 
 			//Mana

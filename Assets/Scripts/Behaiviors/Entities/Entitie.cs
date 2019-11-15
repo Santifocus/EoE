@@ -56,6 +56,11 @@ namespace EoE.Entities
 		protected float curRotation;
 		protected float intendedRotation;
 
+		//Regen particles
+		private bool showingHealthRegenParticles;
+		private GameObject mainHealthRegenParticleObject;
+		private ParticleSystem[] healthRegenParticleSystems;
+
 		//Getter Helpers
 		protected enum ColliderType : byte { Box, Sphere, Capsule }
 		public abstract EntitieSettings SelfSettings { get; }
@@ -83,6 +88,7 @@ namespace EoE.Entities
 		{
 			ResetStats();
 			GetColliderType();
+			SetupHealingParticles();
 			curStates = new EntitieState();
 
 			nonPermanentBuffs = new List<BuffInstance>();
@@ -129,6 +135,30 @@ namespace EoE.Entities
 			else
 			{
 				Debug.LogError("Entitie: " + name + " has a collision Collider attached, however the type '" + coll.GetType() + "' is not supported. Supported types are 'BoxCollider','SphereCollider' and 'CapsuleCollider'.");
+			}
+		}
+		private void SetupHealingParticles()
+		{
+			if (mainHealthRegenParticleObject)
+				Destroy(mainHealthRegenParticleObject);
+
+			if (SelfSettings.HealthRegenParticles)
+			{
+				mainHealthRegenParticleObject = Instantiate(SelfSettings.HealthRegenParticles, transform);
+				mainHealthRegenParticleObject.transform.localPosition = SelfSettings.HealthRegenParticlesOffset;
+
+				healthRegenParticleSystems = mainHealthRegenParticleObject.GetComponentsInChildren<ParticleSystem>();
+
+				for (int i = 0; i < healthRegenParticleSystems.Length; i++)
+				{
+					if (healthRegenParticleSystems[i].isPlaying)
+						healthRegenParticleSystems[i].Stop();
+				}
+				showingHealthRegenParticles = false;
+			}
+			else
+			{
+				healthRegenParticleSystems = null;
 			}
 		}
 		protected virtual void EntitieStart() { }
@@ -247,6 +277,7 @@ namespace EoE.Entities
 			{
 				bool inCombat = curStates.Fighting;
 				regenTimer -= GameController.CurrentGameSettings.SecondsPerEntititeRegen;
+				bool regendHealth = false;
 				if (SelfSettings.DoHealthRegen && curHealth < curMaxHealth)
 				{
 					float regenAmount = SelfSettings.HealthRegen * GameController.CurrentGameSettings.SecondsPerEntititeRegen * (inCombat ? SelfSettings.HealthRegenInCombatMultiplier : 1);
@@ -254,15 +285,42 @@ namespace EoE.Entities
 					{
 						ChangeInfo basis = new ChangeInfo(this, CauseType.Heal, -regenAmount);
 						ChangeInfo.ChangeResult regenResult = new ChangeInfo.ChangeResult(basis, this, true, true);
-
 						curHealth = Mathf.Min(curMaxHealth, curHealth - regenResult.finalChangeAmount);
+
+						regendHealth = regenResult.finalChangeAmount < 0;
 					}
 				}
+				ControlRegenParticles(regendHealth);
 
 				if (SelfSettings.DoManaRegen && curMana < curMaxMana)
 				{
 					float regenAmount = SelfSettings.ManaRegen * GameController.CurrentGameSettings.SecondsPerEntititeRegen * (inCombat ? SelfSettings.ManaRegenInCombatMultiplier : 1);
 					curMana = Mathf.Min(curMaxMana, curMana + regenAmount);
+				}
+			}
+		}
+		private void ControlRegenParticles(bool regendHealth)
+		{
+			if (mainHealthRegenParticleObject)
+			{
+				if (showingHealthRegenParticles != regendHealth)
+				{
+					showingHealthRegenParticles = regendHealth;
+					if (regendHealth)
+					{
+						for (int i = 0; i < healthRegenParticleSystems.Length; i++)
+						{
+							healthRegenParticleSystems[i].Play();
+						}
+					}
+					else
+					{
+
+						for (int i = 0; i < healthRegenParticleSystems.Length; i++)
+						{
+							healthRegenParticleSystems[i].Stop(true, ParticleSystemStopBehavior.StopEmitting);
+						}
+					}
 				}
 			}
 		}
@@ -305,7 +363,7 @@ namespace EoE.Entities
 			if (requiresRecalculate)
 				RecalculateBuffs();
 		}
-		public void AddBuff(Buff buff, Entitie applier)
+		public BuffInstance AddBuff(Buff buff, Entitie applier)
 		{
 			BuffInstance newBuff = new BuffInstance(buff, applier);
 			AddBuffEffect(newBuff);
@@ -319,6 +377,8 @@ namespace EoE.Entities
 				permanentBuffs.Add(newBuff);
 			else
 				nonPermanentBuffs.Add(newBuff);
+
+			return newBuff;
 		}
 		private enum CalculateValue : byte { Both = 0, Flat = 1, Percent = 2 }
 		private void AddBuffEffect(BuffInstance buffInstance, CalculateValue toCalculate = CalculateValue.Both, bool clampRequired = true)
@@ -433,6 +493,29 @@ namespace EoE.Entities
 
 			if (fromPermanent)
 				RecalculateBuffs();
+		}
+		public void RemoveBuff(BuffInstance buffInstance)
+		{
+			if (buffInstance.Base.Permanent)
+			{
+				for(int i = 0; i < permanentBuffs.Count; i++)
+				{
+					if(permanentBuffs[i] == buffInstance)
+					{
+						RemoveBuff(i, true);
+					}
+				}
+			}
+			else
+			{
+				for (int i = 0; i < nonPermanentBuffs.Count; i++)
+				{
+					if (nonPermanentBuffs[i] == buffInstance)
+					{
+						RemoveBuff(i, false);
+					}
+				}
+			}
 		}
 		private void RemoveBuffEffect(BuffInstance buffInstance, bool clampRequired = true)
 		{

@@ -37,6 +37,11 @@ namespace EoE.Information
 		public float DodgeEnduranceCost = 20;
 		public Material DodgeModelMaterial = null;
 
+		//Blocking
+		public float StartBlockingInertia = 0.3f;
+		public Buff BlockingBuff = default;
+		public float StopBlockingInertia = 0.3f;
+
 		//IFrames
 		public bool InvincibleAfterHit = true;
 		public float InvincibleAfterHitTime = 0.3f;

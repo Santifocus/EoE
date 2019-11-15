@@ -609,13 +609,72 @@ namespace EoE.Utils
 		}
 		#endregion
 		#region Particle Effects
-		public static void WeaponHitEntitie(Vector3 hitPos)
+		public static void PlayParticleEffect(GameObject mainObject, Vector3 at, bool destroyAfterDelay = true, float destroyDelay = 0, Transform parent = null, bool asInstantiation = true)
 		{
+			GameObject newMain;
+			if (asInstantiation)
+			{
+				newMain = Instantiate(mainObject);
+			}
+			else
+			{
+				newMain = mainObject;
+			}
+			newMain.transform.SetParent(parent ?? Storage.ParticleStorage);
+			newMain.transform.position = at;
 
+			ParticleSystem[] containedSystems = newMain.GetComponentsInChildren<ParticleSystem>();
+			for(int i = 0; i < containedSystems.Length; i++)
+			{
+				if(containedSystems[i].isPlaying)
+					containedSystems[i].Stop();
+				containedSystems[i].Play();
+			}
+
+			if(destroyAfterDelay)
+				KillParticlesWhenDone(newMain, destroyDelay);
 		}
-		public static void WeaponHitTerrain(Vector3 hitPos)
+		public static void PlayParticleEffect(ParticleEffect info, Transform target)
 		{
+			PlayParticleEffect(info.ParticleMainObject, target ? (target.position + info.OffsetToTarget) : Vector3.zero, true, info.DestroyDelay, info.LocalEffect ? target : null);
+		}
+		public static void PlayParticleEffect(ParticleEffect info, Entities.Entitie target)
+		{
+			PlayParticleEffect(info.ParticleMainObject, target ? (target.actuallWorldPosition + info.OffsetToTarget) : Vector3.zero, true, info.DestroyDelay, info.LocalEffect ? target.transform : null);
+		}
+		public static void KillParticlesWhenDone(GameObject target, float? delay)
+		{
+			Instance.StartCoroutine(Instance.KillParticlesWhenDoneC(target, delay));
+		}
+		private IEnumerator KillParticlesWhenDoneC(GameObject target, float? baseDelay)
+		{
+			if (baseDelay.HasValue)
+				yield return new WaitForSeconds(baseDelay.Value);
 
+			ParticleSystem[] particleSystems = target.GetComponentsInChildren<ParticleSystem>();
+			for (int i = 0; i < particleSystems.Length; i++)
+			{
+				particleSystems[i].Stop(true, ParticleSystemStopBehavior.StopEmitting);
+			}
+
+			while (true)
+			{
+				yield return new WaitForEndOfFrame();
+				bool foundParticle = false;
+				for(int i = 0; i < particleSystems.Length; i++)
+				{
+					if(particleSystems[i].particleCount > 0)
+					{
+						foundParticle = true;
+						break;
+					}
+				}
+
+				if (!foundParticle)
+					break;
+			}
+
+			Destroy(target);
 		}
 		#endregion
 		#region Entitie Text

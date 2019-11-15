@@ -67,8 +67,11 @@ namespace EoE
 				PlayVFX(playerSettings.EffectsOnLevelup[i]);
 			}
 		}
-		private void PlayVFX(VFXEffect effect)
+		public static void PlayVFX(VFXEffect effect)
 		{
+			if (GameController.GameIsPaused)
+				return;
+
 			if (effect is ScreenShake)
 			{
 				EffectUtils.ShakeScreen(effect as ScreenShake);
@@ -92,6 +95,10 @@ namespace EoE
 			else if (effect is TimeDilation)
 			{
 				EffectUtils.DilateTime(effect as TimeDilation);
+			}
+			else if (effect is ParticleEffect)
+			{
+				EffectUtils.PlayParticleEffect(effect as ParticleEffect, Player.Instance.transform);
 			}
 		}
 	}

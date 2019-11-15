@@ -1,4 +1,5 @@
 ﻿using EoE.Entities;
+using EoE.Utils;
 using UnityEngine;
 
 namespace EoE.Information
@@ -10,6 +11,7 @@ namespace EoE.Information
 		public int MaxStack = 1;
 		public Sprite ItemIcon;
 		public bool RemoveOnUse;
+		public VFXEffect[] VFXEffectsOnUse;
 
 		public ItemDrop[] CreateItemDrop(Vector3 positon, int stackSize, bool stopVelocity)
 		{
@@ -57,7 +59,25 @@ namespace EoE.Information
 			{
 				origin.RemoveStackSize(this, 1);
 			}
+			PlayEffects(user);
 			OnUse(user);
+		}
+		private void PlayEffects(Entitie user)
+		{
+			if (GameController.GameIsPaused)
+				return;
+
+			for (int i = 0; i < VFXEffectsOnUse.Length; i++)
+			{
+				if(VFXEffectsOnUse[i] is ParticleEffect)
+				{
+					EffectUtils.PlayParticleEffect(VFXEffectsOnUse[i] as ParticleEffect, user);
+				}
+				else if(user is Player)
+				{
+					PlayerVFXManager.PlayVFX(VFXEffectsOnUse[i]);
+				}
+			}
 		}
 		protected virtual void OnEquip(Entitie user) { }
 		protected abstract void OnUse(Entitie user);

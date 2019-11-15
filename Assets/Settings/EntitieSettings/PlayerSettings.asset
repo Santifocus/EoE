@@ -24,6 +24,9 @@ MonoBehaviour:
   DoHealthRegen: 1
   HealthRegen: 8
   HealthRegenInCombatMultiplier: 0
+  HealthRegenParticles: {fileID: 3894390344941758739, guid: 4fc32336d51ae934c9aa8f2a0a80d546,
+    type: 3}
+  HealthRegenParticlesOffset: {x: 0, y: -1.5, z: 0}
   Mana: 30
   DoManaRegen: 1
   ManaRegen: 4
@@ -59,6 +62,19 @@ MonoBehaviour:
   DodgeCooldown: 0.3
   DodgeEnduranceCost: 10
   DodgeModelMaterial: {fileID: 2100000, guid: 11d51a887e999af408b3d408f575a218, type: 2}
+  StartBlockingInertia: 0.3
+  BlockingBuff:
+    Name: 
+    Quality: 1
+    Permanent: 0
+    BuffTime: 5
+    Icon: {fileID: 0}
+    Effects: []
+    CustomEffects:
+      ApplyMoveStun: 0
+      Invincible: 0
+    DOTs: []
+  StopBlockingInertia: 0.3
   InvincibleAfterHit: 1
   InvincibleAfterHitTime: 0.4
   InvincibleModelFlashColor: {r: 1, g: 1, b: 1, a: 1}
@@ -138,7 +154,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3c3f83d3e81eae144acbe5a6b02983d0, type: 2}
   - {fileID: 11400000, guid: e9a7041c1b96b544d9be0195facd23e7, type: 2}
   - {fileID: 11400000, guid: 6812b6ecf408ba8439c8e9f47922381b, type: 2}
-  EffectsOnLevelup: []
+  EffectsOnLevelup:
+  - {fileID: 11400000, guid: 982aab948223d7044bfae67dc43bb77c, type: 2}
   EffectsHealthThreshold: 0.3
   EffectsOnDamageWhenBelowThreshold:
   - {fileID: 11400000, guid: 668a809c73c04d648ae6ae4e123f2f21, type: 2}

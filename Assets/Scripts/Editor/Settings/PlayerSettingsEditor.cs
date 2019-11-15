@@ -9,9 +9,10 @@ namespace EoE.Information
 	{
 		private static bool CameraSettingsOpen;
 		private static bool EnduranceSettingsOpen;
-		private static bool HUDSettingsOpen;
 		private static bool DodgeSettingsOpen;
+		private static bool BlockingSettingsOpen;
 		private static bool IFramesSettingsOpen;
+		private static bool HUDSettingsOpen;
 		private static bool VFXSettingsOpen;
 
 		//VFXEffectArrays
@@ -26,6 +27,7 @@ namespace EoE.Information
 			base.CustomInspector();
 			CameraSettingsArea();
 			DodgeSettingsArea();
+			BlockingSettingsArea();
 			IFramesSettingsArea();
 			HUDSettingsArea();
 			VFXSettingsArea();
@@ -87,6 +89,18 @@ namespace EoE.Information
 				FloatField(new GUIContent("Dodge Cooldown", "After finishing a Dodge, how long should it be on cooldown? (In Seconds)"), ref settings.DodgeCooldown);
 				FloatField(new GUIContent("Dodge Endurance Cost", "How much Endurance does dodging drain?"), ref settings.DodgeEnduranceCost);
 				ObjectField(new GUIContent("Dodge Model Material", "What material should be used for the Dodge Silhouette?"), ref settings.DodgeModelMaterial);
+			}
+			EndFoldoutHeader();
+		}
+		private void BlockingSettingsArea()
+		{
+			PlayerSettings settings = target as PlayerSettings;
+
+			FoldoutHeader("Blocking Settings", ref BlockingSettingsOpen);
+			if (BlockingSettingsOpen)
+			{
+				FloatField(new GUIContent("Start Blocking Inertia"), ref settings.StartBlockingInertia);
+				FloatField(new GUIContent("Stop Blocking Inertia"), ref settings.StopBlockingInertia);
 			}
 			EndFoldoutHeader();
 		}

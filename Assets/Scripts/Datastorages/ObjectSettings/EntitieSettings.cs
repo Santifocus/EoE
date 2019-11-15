@@ -26,6 +26,9 @@ namespace EoE.Information
 		public float HealthRegen = 0;
 		public float HealthRegenInCombatMultiplier = 0.5f;
 
+		public GameObject HealthRegenParticles = null;
+		public Vector3 HealthRegenParticlesOffset = Vector3.zero;
+
 		//Mana
 		public float Mana = 50;
 		public bool DoManaRegen = false;

@@ -91,9 +91,7 @@ namespace EoE.Entities
 		}
 		private void AnnounceBash()
 		{
-			GameObject particles = Instantiate(settings.BashAnnouncementParticles, Storage.ParticleStorage);
-			particles.transform.position = actuallWorldPosition;
-			GameController.KillParticlesWhenDone(particles, false);
+			Utils.EffectUtils.PlayParticleEffect(settings.BashAnnouncementParticles, actuallWorldPosition);
 		}
 		private void FinishedBash()
 		{

@@ -34,6 +34,7 @@ namespace EoE
 		private static void SetPauseGamestate(bool state)
 		{
 			Instance.mainCanvas.gameObject.SetActive(!state);
+			Instance.bgCanvas.gameObject.SetActive(!state);
 			Time.timeScale = state ? 0 : 1;
 			gameIsPaused = state;
 		}
@@ -111,27 +112,6 @@ namespace EoE
 		{
 			//If the condition input is nothing, then it will always be interpreted as true, otherwise we request the bool via invoke
 			return condition == null || condition.Invoke();
-		}
-		public static void KillParticlesWhenDone(GameObject target, bool forceZeroSpawns = true)
-		{
-			ParticleSystem[] particleSystems = target.GetComponentsInChildren<ParticleSystem>();
-			if (forceZeroSpawns)
-			{
-				for(int i = 0; i < particleSystems.Length; i++)
-				{
-					ParticleSystem.EmissionModule EM = particleSystems[i].emission;
-					EM.rateOverTime = 0;
-				}
-			}
-
-			float delay = 0;
-			for (int i = 0; i < particleSystems.Length; i++)
-			{
-				float targetDelay = particleSystems[i].main.startLifetime.constantMax;
-				if (targetDelay > delay)
-					delay = targetDelay;
-			}
-			Destroy(target, delay);
 		}
 		private void OnDestroy()
 		{

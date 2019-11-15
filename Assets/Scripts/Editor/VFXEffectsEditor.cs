@@ -13,5 +13,6 @@ namespace EoE.Information
 		[MenuItem("EoE/VFX/ScreenTint")] public static void CreateScreenTint() => EoEEditor.AssetCreator<ScreenTint>("Settings", "VFX");
 		[MenuItem("EoE/VFX/ControllerRumble")] public static void CreateControllerRumble() => EoEEditor.AssetCreator<ControllerRumble>("Settings", "VFX");
 		[MenuItem("EoE/VFX/TimeDilation")] public static void CreateTimeDilation() => EoEEditor.AssetCreator<TimeDilation>("Settings", "VFX");
+		[MenuItem("EoE/VFX/ParticleEffect")] public static void CreateParticleEffect() => EoEEditor.AssetCreator<ParticleEffect>("Settings", "VFX");
 	}
 }

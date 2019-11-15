@@ -43,6 +43,10 @@ namespace EoE.Entities
 		private float dodgeCooldown;
 		private bool currentlyDodging;
 
+		//Blocking
+		private bool isBlocking;
+		private BuffInstance blockingBuff;
+
 		//Velocity
 		protected Vector3 curMoveForce;
 		protected Vector3? controllDirection = null;
@@ -93,6 +97,7 @@ namespace EoE.Entities
 		public static WeaponItem EquipedWeapon;
 		public static ArmorItem EquipedArmor;
 		public static SpellItem EquipedSpell;
+		public static bool MagicSelected { get; private set; }
 		#region Leveling
 		public static Buff LevelingBaseBuff;
 		public static Buff LevelingPointsBuff;
@@ -121,6 +126,7 @@ namespace EoE.Entities
 			WeaponInventory = new Inventory(8);
 			ArmorInventory = new Inventory(8);
 			SpellInventory = new Inventory(8);
+			MagicSelected = false;
 		}
 		private void SetupLevelingControl()
 		{
@@ -185,6 +191,8 @@ namespace EoE.Entities
 			AttackControl();
 			TargetEnemyControl();
 			PositionHeldWeapon();
+			ItemUseControll();
+			BlockControl();
 		}
 		protected override void EntitieFixedUpdate()
 		{
@@ -598,6 +606,40 @@ namespace EoE.Entities
 				TargetedEntitie = null;
 		}
 		#endregion
+		#region ItemUseControl
+		private void ItemUseControll()
+		{
+			if (InputController.UseItem.Down)
+			{
+				EquipedItem.Use(this, ItemInventory);
+			}
+			if (InputController.PhysicalMagicSwap.Down)
+			{
+				MagicSelected = !MagicSelected;
+			}
+		}
+		#endregion
+		#region BlockControl
+		private void BlockControl()
+		{
+			if (InputController.Block.Down && !isBlocking)
+			{
+				GameController.BeginDelayedCall(() => SetBlockingState(true), PlayerSettings.StartBlockingInertia, TimeType.ScaledDeltaTime, new System.Func<bool>(() => !InputController.Block.Up), OnDelayConditionNotMet.Cancel);
+			}
+			else if (InputController.Block.Up && isBlocking)
+			{
+				GameController.BeginDelayedCall(() => SetBlockingState(false), PlayerSettings.StopBlockingInertia, TimeType.ScaledDeltaTime, new System.Func<bool>(() => !InputController.Block.Down), OnDelayConditionNotMet.Cancel);
+			}
+		}
+		private void SetBlockingState(bool state)
+		{
+			isBlocking = state;
+			if (state)
+				blockingBuff = AddBuff(PlayerSettings.BlockingBuff, this);
+			else
+				RemoveBuff(blockingBuff);
+		}
+		#endregion
 		#region Physical Attack Control
 		private void AttackControl()
 		{
@@ -822,6 +864,8 @@ namespace EoE.Entities
 				Destroy(heldWeapon.gameObject);
 			EffectUtils.BlurScreen(1, Mathf.Infinity, 5);
 			Alive = false;
+			if (TargetedEntitie)
+				TargetedEntitie = null;
 			base.Death();
 		}
 		#region IFrames
