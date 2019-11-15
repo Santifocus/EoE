@@ -85,6 +85,10 @@ namespace EoE
 			{
 				EffectUtils.ColorScreenBorder(effect as ScreenBorderColor);
 			}
+			else if (effect is ScreenTint)
+			{
+				EffectUtils.TintScreen(effect as ScreenTint);
+			}
 			else if (effect is TimeDilation)
 			{
 				EffectUtils.DilateTime(effect as TimeDilation);
