@@ -91,7 +91,7 @@ namespace EoE.Entities
 		}
 		private void AnnounceBash()
 		{
-			Utils.EffectUtils.PlayParticleEffect(settings.BashAnnouncementParticles, actuallWorldPosition);
+			Utils.EffectUtils.PlayParticleEffect(settings.BashAnnouncementParticles, this);
 		}
 		private void FinishedBash()
 		{

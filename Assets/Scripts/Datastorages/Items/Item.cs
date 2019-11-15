@@ -34,30 +34,13 @@ namespace EoE.Information
 
 		public void Equip(Entitie user)
 		{
-			if (this is WeaponItem)
-			{
-				Player.EquipedWeapon = this as WeaponItem;
-			}
-			else if (this is SpellItem)
-			{
-				Player.EquipedSpell = this as SpellItem;
-			}
-			else if (this is ArmorItem)
-			{
-				Player.EquipedArmor = this as ArmorItem;
-			}
-			else
-			{
-				Player.EquipedItem = this;
-			}
-
 			OnEquip(user);
 		}
-		public void Use(Entitie user, Inventory origin)
+		public void Use(InventoryItem originStack, Entitie user, Inventory origin)
 		{
 			if (RemoveOnUse)
 			{
-				origin.RemoveStackSize(this, 1);
+				origin.RemoveInventoryItem(originStack, 1);
 			}
 			PlayEffects(user);
 			OnUse(user);

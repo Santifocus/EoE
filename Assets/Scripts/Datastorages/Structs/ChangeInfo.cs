@@ -57,7 +57,7 @@ namespace EoE.Information
 			public ChangeResult(ChangeInfo basis, Entitie receiver, bool createDamageNumber, bool fromRegen = false)
 			{
 				//Calculate the damage that we want to cause
-				if (receiver != basis.attacker)
+				if (receiver != basis.attacker && basis.baseDamageAmount > 0)
 				{
 					finalChangeAmount = (((basis.attacker ? basis.attacker.EntitieLevel : 1) + GameController.CurrentGameSettings.DamageLevelAdd) * basis.baseDamageAmount) / GameController.CurrentGameSettings.DamageDivider;
 					if (basis.cause == CauseType.Physical)
@@ -65,6 +65,8 @@ namespace EoE.Information
 						float defenseAmount = ((receiver.EntitieLevel + GameController.CurrentGameSettings.DefenseLevelAdd) * receiver.curDefense) / GameController.CurrentGameSettings.DefenseLevelDivider;
 						finalChangeAmount -= defenseAmount;
 					}
+					if (finalChangeAmount < 0)
+						finalChangeAmount = 0;
 				}
 				else
 				{

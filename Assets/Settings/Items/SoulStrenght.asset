@@ -18,6 +18,7 @@ MonoBehaviour:
   MaxStack: 5
   ItemIcon: {fileID: 21300000, guid: 083f51189fd8fb74187c0a3b5b908b2f, type: 3}
   RemoveOnUse: 1
+  VFXEffectsOnUse: []
   buffInfo:
     Name: SoulStrenght
     Quality: 2
@@ -27,7 +28,7 @@ MonoBehaviour:
     Effects:
     - targetStat: 6
       Percent: 1
-      Amount: 100
+      Amount: 50
     CustomEffects:
       ApplyMoveStun: 0
       Invincible: 0

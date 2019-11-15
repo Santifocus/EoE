@@ -24,6 +24,8 @@ MonoBehaviour:
   DoHealthRegen: 0
   HealthRegen: 0
   HealthRegenInCombatMultiplier: 0.5
+  HealthRegenParticles: {fileID: 0}
+  HealthRegenParticlesOffset: {x: 0, y: 0, z: 0}
   Mana: 50
   DoManaRegen: 0
   ManaRegen: 0
@@ -55,5 +57,5 @@ MonoBehaviour:
   BashDistance: 7
   ForceTranslationMultiplier: 1
   BashAnnouncementDelay: -0.6
-  BashAnnouncementParticles: {fileID: 388916156728127386, guid: a7a590bf3d306c5498346cde72bc391c,
-    type: 3}
+  BashAnnouncementParticles: {fileID: 11400000, guid: dd68d9db5e90b2f449f0f973e984a2a8,
+    type: 2}

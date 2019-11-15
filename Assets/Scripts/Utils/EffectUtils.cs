@@ -86,8 +86,12 @@ namespace EoE.Utils
 			while (true)
 			{
 				yield return new WaitForEndOfFrame();
+				if (GameController.GameIsPaused)
+						continue;
+
 				if (AllScreenShakes.Count > 0) //SHAKE
 				{
+
 					float strongestAxisIntensity = 0;
 					float strongestAngleIntensity = 0;
 					for (int i = 0; i < AllScreenShakes.Count; i++)
@@ -184,6 +188,12 @@ namespace EoE.Utils
 			while (AllRumbles.Count > 0)
 			{
 				yield return new WaitForEndOfFrame();
+				if (GameController.GameIsPaused)
+				{
+					Gamepad.current.SetMotorSpeeds(0, 0);
+					continue;
+				}
+
 				float highestLeftIntensity = 0;
 				float highestRightIntensity = 0;
 
@@ -280,6 +290,9 @@ namespace EoE.Utils
 			while (true)
 			{
 				yield return new WaitForEndOfFrame();
+				if (GameController.GameIsPaused)
+					continue;
+
 				float averageDepth = 0;
 				Color averageColor = Color.clear;
 				for (int i = 0; i < AllScreenColorEffects.Count; i++)
@@ -352,6 +365,9 @@ namespace EoE.Utils
 			while (true)
 			{
 				yield return new WaitForEndOfFrame();
+				if (GameController.GameIsPaused)
+					continue;
+
 				if (AllBlurScreenEffects.Count > 0) //BLUR
 				{
 					float strongestIntensity = 0;
@@ -430,6 +446,8 @@ namespace EoE.Utils
 			while (AllTintScreenEffects.Count > 0)
 			{
 				yield return new WaitForEndOfFrame();
+				if (GameController.GameIsPaused)
+					continue;
 
 				//First get the total dominance level, and add passed time
 				int dominanceCount = 0;
@@ -533,9 +551,7 @@ namespace EoE.Utils
 			{
 				yield return new WaitForEndOfFrame();
 				if (GameController.GameIsPaused)
-				{
 					continue;
-				}
 
 				HighestTimeDilutionDominanceIndex = -1;
 				int targetIndex = 0;
@@ -660,6 +676,9 @@ namespace EoE.Utils
 			while (true)
 			{
 				yield return new WaitForEndOfFrame();
+				if (GameController.GameIsPaused)
+					continue;
+
 				bool foundParticle = false;
 				for(int i = 0; i < particleSystems.Length; i++)
 				{

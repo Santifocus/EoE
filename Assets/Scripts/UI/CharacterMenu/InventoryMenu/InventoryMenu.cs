@@ -173,12 +173,31 @@ namespace EoE.UI
 				if (action == ItemAction.ItemActionType.Use)
 				{
 					if (target)
-						target.Use(Player.Instance, targetInventory);
+						target.Use(item, Player.Instance, targetInventory);
 				}
 				else if (action == ItemAction.ItemActionType.Equip)
 				{
 					if (target)
+					{
+						if (target is WeaponItem)
+						{
+							Player.EquipedWeapon = item;
+						}
+						else if (target is SpellItem)
+						{
+							Player.EquipedSpell = item;
+						}
+						else if (target is ArmorItem)
+						{
+							Player.EquipedArmor = item;
+						}
+						else
+						{
+							Player.EquipedItem = item;
+						}
+
 						target.Equip(Player.Instance);
+					}
 				}
 				else if (action == ItemAction.ItemActionType.Drop)
 				{

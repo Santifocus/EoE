@@ -8,6 +8,10 @@ namespace EoE.UI
 {
 	public class SkillPointStat : CMenuItem
 	{
+		private const float SCROLLING_COOLDOWN = 0.125f;
+		private const float SCROLLING_COOLDOWN_ON_FIRST = SCROLLING_COOLDOWN * 3f;
+		private static float PointScrollingCooldown;
+
 		public TargetStat targetStat = TargetStat.Health;
 		[SerializeField] private TextMeshProUGUI newPoints = default;
 		[SerializeField] private TextMeshProUGUI curPoints = default;
@@ -15,11 +19,28 @@ namespace EoE.UI
 		{
 			if (!selected)
 				return;
+			if (PointScrollingCooldown > 0)
+				PointScrollingCooldown -= Time.unscaledDeltaTime;
 
-			byte changedStat = (byte)(InputController.MenuRight.Down ? 2 : (InputController.MenuLeft.Down ? 1 : 0));
-			if (changedStat > 0)
+			if (InputController.MenuRight.Down)
 			{
-				LevelingMenuController.Instance.ModifyAssignedSkillPoint(changedStat == 2, targetStat);
+				LevelingMenuController.Instance.ModifyAssignedSkillPoint(true, targetStat);
+				PointScrollingCooldown = SCROLLING_COOLDOWN_ON_FIRST;
+			}
+			else if(InputController.MenuRight.Active && PointScrollingCooldown <= 0)
+			{
+				LevelingMenuController.Instance.ModifyAssignedSkillPoint(true, targetStat);
+				PointScrollingCooldown = SCROLLING_COOLDOWN;
+			}
+			else if (InputController.MenuLeft.Down)
+			{
+				LevelingMenuController.Instance.ModifyAssignedSkillPoint(false, targetStat);
+				PointScrollingCooldown = SCROLLING_COOLDOWN_ON_FIRST;
+			}
+			else if (InputController.MenuLeft.Active && PointScrollingCooldown <= 0)
+			{
+				LevelingMenuController.Instance.ModifyAssignedSkillPoint(false, targetStat);
+				PointScrollingCooldown = SCROLLING_COOLDOWN;
 			}
 			else if (InputController.MenuEnter.Down)
 			{

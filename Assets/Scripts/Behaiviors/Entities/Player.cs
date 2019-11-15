@@ -93,10 +93,10 @@ namespace EoE.Entities
 		public static Inventory ArmorInventory;
 		public static Inventory SpellInventory;
 
-		public static Item EquipedItem;
-		public static WeaponItem EquipedWeapon;
-		public static ArmorItem EquipedArmor;
-		public static SpellItem EquipedSpell;
+		public static InventoryItem EquipedItem;
+		public static InventoryItem EquipedWeapon;
+		public static InventoryItem EquipedArmor;
+		public static InventoryItem EquipedSpell;
 		public static bool MagicSelected { get; private set; }
 		#region Leveling
 		public static Buff LevelingBaseBuff;
@@ -121,12 +121,7 @@ namespace EoE.Entities
 
 			ChangeWeapon(equipedWeapon);
 			SetupEndurance();
-
-			ItemInventory = new Inventory(24);
-			WeaponInventory = new Inventory(8);
-			ArmorInventory = new Inventory(8);
-			SpellInventory = new Inventory(8);
-			MagicSelected = false;
+			SetupInventorys();
 		}
 		private void SetupLevelingControl()
 		{
@@ -175,6 +170,20 @@ namespace EoE.Entities
 			AvailableAtributePoints = 0;
 			//Safest way to ensure everyhting is correct is by adding 0 Souls to our current count
 			AddSouls(0);
+		}
+		private void SetupInventorys()
+		{
+			MagicSelected = false;
+
+			ItemInventory = new Inventory(24);
+			WeaponInventory = new Inventory(8);
+			ArmorInventory = new Inventory(8);
+			SpellInventory = new Inventory(8);
+
+			ItemInventory.InventoryChanged += UpdateEquipedItems;
+			WeaponInventory.InventoryChanged += UpdateEquipedItems;
+			ArmorInventory.InventoryChanged += UpdateEquipedItems;
+			SpellInventory.InventoryChanged += UpdateEquipedItems;
 		}
 		protected override void EntitieUpdate()
 		{
@@ -609,14 +618,25 @@ namespace EoE.Entities
 		#region ItemUseControl
 		private void ItemUseControll()
 		{
-			if (InputController.UseItem.Down)
+			if (InputController.UseItem.Down && EquipedItem != null)
 			{
-				EquipedItem.Use(this, ItemInventory);
+				EquipedItem.data.Use(EquipedItem, this, ItemInventory);
 			}
 			if (InputController.PhysicalMagicSwap.Down)
 			{
 				MagicSelected = !MagicSelected;
 			}
+		}
+		private void UpdateEquipedItems()
+		{
+			if (EquipedItem != null && EquipedItem.stackSize <= 0)
+				EquipedItem = null;
+			if (EquipedWeapon != null && EquipedWeapon.stackSize <= 0)
+				EquipedWeapon = null;
+			if (EquipedSpell != null && EquipedSpell.stackSize <= 0)
+				EquipedSpell = null;
+			if (EquipedArmor != null && EquipedArmor.stackSize <= 0)
+				EquipedArmor = null;
 		}
 		#endregion
 		#region BlockControl

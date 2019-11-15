@@ -149,6 +149,20 @@ namespace EoE.Information
 				}
 			}
 		}
+		public void RemoveInventoryItem(InventoryItem item, int stackSize)
+		{
+			for (int i = 0; i < Lenght; i++)
+			{
+				if (containedItems[i] == item)
+				{
+					containedItems[i].stackSize -= stackSize;
+					if (containedItems[i].stackSize <= 0)
+						containedItems[i] = null;
+					InventoryChanged?.Invoke();
+					break;
+				}
+			}
+		}
 		public void ClearSlot(int index)
 		{
 			if (index < 0 || index >= Lenght)
