@@ -3,11 +3,15 @@
 	Properties
 	{
 		_MainTex ("Captured Texture", 2D) = "white" {}
-		[PerRendererData] _Depth("Depth", float) = 0
-		[HideInInspector][PreRendererData] _DepthStrenght("Depth Strenght", float) = 1
 
-		[HideInInspector][PreRendererData] _BlurPower("Blur Power", float) = 0
-		[HideInInspector][PreRendererData] _BlurRange("Blur Range", int) = 0
+		_Color("Border Color", Color) = (1,1,1,1)
+		_BorderDepth("Border Depth", float) = 0
+
+		_TintColor("Tint Color", Color) = (1,1,1,1)
+
+		_BlurPower("Blur Power", Range(0, 1)) = 0
+		_BlurRange("Blur Range", int) = 0
+		_BlurPixelDistance("Blur Pixel Distance", float) = 2
 	}
 
 	SubShader
@@ -59,43 +63,60 @@
 			}
 
 			sampler2D _MainTex;
-			float _Depth;
-			float _DepthStrenght;
+			float4 _MainTex_TexelSize;
+
+			fixed4 _Color;
+			fixed4 _TintColor;
+
+			float _BorderDepth;
 
 			float _BlurPower;
 			int _BlurRange;
+			float _BlurPixelDistance;
 
 			fixed4 frag(v2f IN) : SV_Target
 			{
-				fixed4 c = IN.color;
-				float2 nUV = 0.5 - abs(IN.texcoord - 0.5);
+				//Base col
+				fixed4 col = tex2D(_MainTex, IN.texcoord);
 
-				float horizontalA = 1 - min(1, nUV.x / _Depth);
-				float verticalA = 1 - min(1, nUV.y / _Depth);
+				//Start with blur
+				float xyScale = _MainTex_TexelSize.w / _MainTex_TexelSize.z;
+				float xSteps = _BlurPixelDistance / _MainTex_TexelSize.z * xyScale;
+				float ySteps = _BlurPixelDistance / _MainTex_TexelSize.z;
 
-				float hvA = max(horizontalA + verticalA, 0.001);
+				fixed3 bluredColor = fixed3(0,0,0);
+				float sampledCount = _BlurRange * 2 +1;
+				sampledCount *= sampledCount;
 
-				c.a = min(1, lerp(horizontalA, verticalA, verticalA / hvA) * _DepthStrenght) * IN.color.a;
-
-				half3 bluredColor = half3(0,0,0);
-				int totalBlurSteps = _BlurRange * 2 + 1;
-				totalBlurSteps *= totalBlurSteps;
-
-				for(int x = - _BlurRange; x <= _BlurRange; x++)
+				for(int x = -_BlurRange; x <= _BlurRange; x++)
 				{
-					for(int y = - _BlurRange; y <= _BlurRange; y++)
+					for(int y = -_BlurRange; y <= _BlurRange; y++)
 					{
-						bluredColor += tex2D(_MainTex, IN.texcoord + float2(x * 0.0015, y * 0.0015)).rgb;
+						bluredColor += tex2D(_MainTex, IN.texcoord + float2(x * xSteps, y * ySteps));
 					}
 				}
+				bluredColor /= sampledCount;
+				col.rgb = lerp(col, bluredColor, _BlurPower);
 
-				bluredColor /= totalBlurSteps;
+				//Now add the overlays
+				fixed4 overlayColor;
 
-				float totalAlpha = _BlurPower + c.a;
-				fixed3 finalColor = lerp(bluredColor, c.rgb, c.a / totalAlpha);
-				fixed finalAlpha = max(_BlurPower, c.a);
+				//Border
+				float2 nUV = (0.5 - abs(IN.texcoord - 0.5)) * 2; //On the sides == 0, middle = 1.0
+				float xIntense = 1 - min(1, nUV.x / (_BorderDepth * xyScale));
+				float yIntense = 1 - min(1, nUV.y / _BorderDepth);
+				overlayColor = _Color * max(xIntense, yIntense);
+				overlayColor.rgb *= overlayColor.a;
+				
+				//Tint
+				float lerpPoint = _TintColor.a > 0.0 ? (_TintColor.a / (_TintColor.a + overlayColor.a)) : 0;
+				overlayColor.rgb = lerp(overlayColor.rgb, _TintColor.rgb * _TintColor.a, lerpPoint);
+				overlayColor.a = min(overlayColor.a + _TintColor.a, 1);
 
-				return fixed4(finalColor * finalAlpha, finalAlpha);
+				//Lerp both colors
+				col = lerp(col, overlayColor, overlayColor.a);
+				col.a = 1;
+				return col;
 			}
 		ENDCG
 		}

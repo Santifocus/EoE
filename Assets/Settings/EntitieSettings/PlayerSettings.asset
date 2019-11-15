@@ -130,6 +130,7 @@ MonoBehaviour:
   EffectsOnReceiveDamage:
   - {fileID: 11400000, guid: 910d3349e1560ab4ba7478fa7a8e8876, type: 2}
   - {fileID: 11400000, guid: 11060c91c24341947a8c373d641e5c86, type: 2}
+  - {fileID: 11400000, guid: 9d9557ec007fa904aa2d0ef9f1ea3489, type: 2}
   EffectsOnReceiveKnockback:
   - {fileID: 11400000, guid: b09700b6216eb874aab8d980440f121b, type: 2}
   EffectsOnCauseDamage: []

@@ -9,11 +9,14 @@ namespace EoE.Utils
 {
 	public class EffectUtils : MonoBehaviour
 	{
+		#region Fields
 		private static EffectUtils Instance;
-		[SerializeField] private RawImage screenEffectTarget = default;
+		[SerializeField] private Material screenEffectMaterial = default;
 		[SerializeField] private Transform cameraShakeCore = default;
 		[SerializeField] private DamageNumber damageNumberPrefab = default;
 		private PoolableObject<DamageNumber> damageNumberPool;
+		#endregion
+		#region Setups
 		private void Start()
 		{
 			if (Instance)
@@ -36,6 +39,24 @@ namespace EoE.Utils
 			Instance.ResetScreenEffectMat();
 			Gamepad.current.SetMotorSpeeds(0, 0);
 		}
+		private void ResetScreenEffectMat()
+		{
+			screenEffectMaterial.SetFloat("_BorderDepth", 0);
+			screenEffectMaterial.SetColor("_Color", Color.clear);
+
+			screenEffectMaterial.SetFloat("_BlurPower", 0);
+			screenEffectMaterial.SetInt("_BlurRange", 0);
+
+			screenEffectMaterial.SetColor("_TintColor", Color.clear);
+			screenEffectMaterial.SetFloat("_TintStrenght", 0);
+		}
+#if UNITY_EDITOR
+		private void OnApplicationQuit()
+		{
+			ResetScreenEffectMat();
+		}
+#endif
+		#endregion
 		#region ScreenShake
 		private const float DELAY_PER_SHAKE = 0.01f;
 		private const float UN_SHAKE_SPEED = 20;
@@ -256,7 +277,7 @@ namespace EoE.Utils
 		}
 		private IEnumerator ColorScreenC()
 		{
-			while (AllScreenColorEffects.Count > 0)
+			while (true)
 			{
 				yield return new WaitForEndOfFrame();
 				float averageDepth = 0;
@@ -275,12 +296,18 @@ namespace EoE.Utils
 						averageColor += AllScreenColorEffects[i].col;
 					}
 				}
+				if (AllScreenColorEffects.Count == 0)
+					break;
+
 				averageDepth /= AllScreenColorEffects.Count;
 				averageColor /= AllScreenColorEffects.Count;
 
-				screenEffectTarget.material.SetFloat("_Depth", averageDepth);
-				screenEffectTarget.color = averageColor;
+				screenEffectMaterial.SetFloat("_BorderDepth", averageDepth);
+				screenEffectMaterial.SetColor("_Color", averageColor);
 			}
+
+			screenEffectMaterial.SetFloat("_BorderDepth", 0);
+			screenEffectMaterial.SetColor("_Color", Color.clear);
 			ColorScreenCoroutine = null;
 		}
 		private class ColorScreenEffect
@@ -350,29 +377,24 @@ namespace EoE.Utils
 					curBlurIntensity = Mathf.Lerp(curBlurIntensity, strongestIntensity, Time.deltaTime * BLUR_LERP_SPEED);
 					curBlurDistance = Mathf.Lerp(curBlurDistance, strongestBlurDistance, Time.deltaTime * BLUR_LERP_SPEED);
 
-					screenEffectTarget.material.SetFloat("_BlurPower", curBlurIntensity);
-					screenEffectTarget.material.SetInt("_BlurRange", (int)curBlurDistance);
+					screenEffectMaterial.SetFloat("_BlurPower", curBlurIntensity);
+					screenEffectMaterial.SetInt("_BlurRange", (int)curBlurDistance);
 				}
 				else //UNBLUR
 				{
 					curBlurIntensity = Mathf.Lerp(curBlurIntensity, 0, Time.deltaTime * BLUR_LERP_SPEED / 2);
 					curBlurDistance = Mathf.Lerp(curBlurDistance, 0, Time.deltaTime * BLUR_LERP_SPEED / 2);
 
-					screenEffectTarget.material.SetFloat("_BlurPower", curBlurIntensity);
-					screenEffectTarget.material.SetInt("_BlurRange", (int)curBlurDistance);
+					screenEffectMaterial.SetFloat("_BlurPower", curBlurIntensity);
+					screenEffectMaterial.SetInt("_BlurRange", (int)curBlurDistance);
 
 					if (curBlurIntensity < 0.0005f)
 						break;
 				}
 			}
-			ResetScreenEffectMat();
+			screenEffectMaterial.SetFloat("_BlurPower", 0);
+			screenEffectMaterial.SetInt("_BlurRange", 0);
 			BlurScreenCoroutine = null;
-		}
-		private void ResetScreenEffectMat()
-		{
-			screenEffectTarget.material.SetFloat("_BlurPower", 0);
-			screenEffectTarget.material.SetInt("_BlurRange", 0);
-			screenEffectTarget.material.SetFloat("_Depth", 0);
 		}
 		private class BlurScreenEffect
 		{
@@ -384,6 +406,100 @@ namespace EoE.Utils
 				this.intensity = intensity;
 				this.remainingTime = remainingTime;
 				this.blurDistance = blurDistance;
+			}
+		}
+		#endregion
+		#region ScreenTint
+		private static List<TintScreenEffect> AllTintScreenEffects = new List<TintScreenEffect>();
+		private static Coroutine TintScreenCoroutine = null;
+		public static void TintScreen(Color tintColor, float timeIn, float timeStay, float timeOut, int dominance = 1)
+		{
+			AllTintScreenEffects.Add(new TintScreenEffect(tintColor, timeIn, timeStay, timeOut, dominance));
+			if (TintScreenCoroutine == null)
+			{
+				TintScreenCoroutine = Instance.StartCoroutine(Instance.TintScreenC());
+			}
+		}
+		public static void TintScreen(ScreenTint info)
+		{
+			uint Dominance = System.Math.Min(info.Dominance, int.MaxValue);
+			TintScreen(info.TintColor, info.TimeIn, info.TimeStay, info.TimeOut, (int)Dominance);
+		}
+		private IEnumerator TintScreenC()
+		{
+			while (AllTintScreenEffects.Count > 0)
+			{
+				yield return new WaitForEndOfFrame();
+
+				//First get the total dominance level, and add passed time
+				int dominanceCount = 0;
+				for(int i = 0; i < AllTintScreenEffects.Count; i++)
+				{
+					AllTintScreenEffects[i].passedTime += Time.deltaTime;
+					if(AllTintScreenEffects[i].passedTime > AllTintScreenEffects[i].totalTime)
+					{
+						AllTintScreenEffects.RemoveAt(i);
+						i--;
+					}
+					else
+					{
+						dominanceCount += AllTintScreenEffects[i].dominance;
+					}
+				}
+
+				//Better be safe then sorry
+				if (dominanceCount < 1)
+					continue;
+
+				//Now use the total dominance level to lerp a color between all tints
+				Color lerpedColor = Color.clear;
+				for (int i = 0; i < AllTintScreenEffects.Count; i++)
+				{
+					lerpedColor += AllTintScreenEffects[i].GetCurrentColor() * ((float)AllTintScreenEffects[i].dominance / dominanceCount);
+				}
+
+				//Finally set the material color tint
+				screenEffectMaterial.SetColor("_TintColor", lerpedColor);
+			}
+
+			screenEffectMaterial.SetColor("_TintColor", Color.clear);
+			TintScreenCoroutine = null;
+		}
+		private class TintScreenEffect
+		{
+			public Color tintColor;
+			public float timeIn;
+			public float timeStay;
+			public float timeOut;
+			public int dominance;
+
+			public float passedTime;
+			public float totalTime => timeIn + timeStay + timeOut;
+
+			public TintScreenEffect(Color tintColor, float timeIn, float timeStay, float timeOut, int dominance = 1)
+			{
+				this.tintColor = tintColor;
+				this.timeIn = timeIn;
+				this.timeStay = timeStay;
+				this.timeOut = timeOut;
+				this.dominance = dominance;
+			}
+			public Color GetCurrentColor()
+			{
+				Color bCol = new Color(tintColor.r, tintColor.g, tintColor.b, 0);
+				Color bAlpha = new Color(0,0,0, tintColor.a);
+				if(passedTime < timeIn)
+				{
+					return bCol + (bAlpha * passedTime / timeIn);
+				}
+				else if(passedTime < timeIn + timeStay)
+				{
+					return bCol + bAlpha;
+				}
+				else
+				{
+					return bCol + (bAlpha * (1-(passedTime - timeIn - timeStay) / timeOut));
+				}
 			}
 		}
 		#endregion
@@ -492,6 +608,7 @@ namespace EoE.Utils
 			}
 		}
 		#endregion
+		#region Particle Effects
 		public static void WeaponHitEntitie(Vector3 hitPos)
 		{
 
@@ -500,6 +617,8 @@ namespace EoE.Utils
 		{
 
 		}
+		#endregion
+		#region Entitie Text
 		public static void CreateDamageNumber(Vector3 startPosition, Gradient colors, Vector3 numberVelocity, float damage, bool wasCrit, float overrideScale = 1)
 		{
 			DamageNumber newDamageNumber = Instance.damageNumberPool.GetPoolObject();
@@ -526,11 +645,6 @@ namespace EoE.Utils
 			newDamageNumber.transform.localScale = Vector3.one * overrideScale;
 			newDamageNumber.BeginDisplay(numberVelocity, colors, text, false);
 		}
-#if UNITY_EDITOR
-		private void OnApplicationQuit()
-		{
-			ResetScreenEffectMat();
-		}
-#endif
+		#endregion
 	}
 }
