@@ -195,6 +195,14 @@ namespace EoE.Information
 			}
 			InventoryChanged?.Invoke();
 		}
+		public void UpdateCooldown()
+		{
+			for(int i = 0; i < Lenght; i++)
+			{
+				if (containedItems[i] != null && containedItems[i].useCooldown > 0)
+					containedItems[i].useCooldown -= Time.deltaTime;
+			}
+		}
 		public override string ToString()
 		{
 			string fullString = "";
@@ -222,6 +230,7 @@ namespace EoE.Information
 		public readonly Item data;
 		public int stackSize;
 		public bool isEquiped;
+		public float useCooldown;
 
 		public InventoryItem(Item data, int stackSize = 1)
 		{

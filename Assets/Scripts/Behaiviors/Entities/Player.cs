@@ -202,6 +202,12 @@ namespace EoE.Entities
 			PositionHeldWeapon();
 			ItemUseControll();
 			BlockControl();
+
+			//Inventory Cooldowns
+			ItemInventory.UpdateCooldown();
+			WeaponInventory.UpdateCooldown();
+			ArmorInventory.UpdateCooldown();
+			SpellInventory.UpdateCooldown();
 		}
 		protected override void EntitieFixedUpdate()
 		{
@@ -620,7 +626,8 @@ namespace EoE.Entities
 		{
 			if (InputController.UseItem.Down && EquipedItem != null)
 			{
-				EquipedItem.data.Use(EquipedItem, this, ItemInventory);
+				if(EquipedItem.useCooldown <= 0)
+					EquipedItem.data.Use(EquipedItem, this, ItemInventory);
 			}
 			if (InputController.PhysicalMagicSwap.Down)
 			{

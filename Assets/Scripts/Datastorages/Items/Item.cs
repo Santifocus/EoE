@@ -11,6 +11,7 @@ namespace EoE.Information
 		public int MaxStack = 1;
 		public Sprite ItemIcon;
 		public bool RemoveOnUse;
+		public float UseCooldown;
 		public VFXEffect[] VFXEffectsOnUse;
 
 		public ItemDrop[] CreateItemDrop(Vector3 positon, int stackSize, bool stopVelocity)
@@ -38,6 +39,7 @@ namespace EoE.Information
 		}
 		public void Use(InventoryItem originStack, Entitie user, Inventory origin)
 		{
+			originStack.useCooldown = UseCooldown;
 			if (RemoveOnUse)
 			{
 				origin.RemoveInventoryItem(originStack, 1);

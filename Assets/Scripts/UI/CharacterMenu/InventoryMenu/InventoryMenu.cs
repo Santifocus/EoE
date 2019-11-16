@@ -172,7 +172,7 @@ namespace EoE.UI
 				Item target = item.data;
 				if (action == ItemAction.ItemActionType.Use)
 				{
-					if (target)
+					if (target && target.UseCooldown <= 0)
 						target.Use(item, Player.Instance, targetInventory);
 				}
 				else if (action == ItemAction.ItemActionType.Equip)
