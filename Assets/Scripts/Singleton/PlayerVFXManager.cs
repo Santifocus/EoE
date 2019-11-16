@@ -5,6 +5,7 @@ using UnityEngine;
 using EoE.Events;
 using EoE.Information;
 using EoE.Utils;
+using EoE.UI;
 
 namespace EoE
 {
@@ -99,6 +100,10 @@ namespace EoE
 			else if (effect is ParticleEffect)
 			{
 				EffectUtils.PlayParticleEffect(effect as ParticleEffect, Player.Instance.transform);
+			}
+			else if (effect is DialogueInput)
+			{
+				DialogueController.CreateAndShowDialogue(effect as DialogueInput);
 			}
 		}
 	}

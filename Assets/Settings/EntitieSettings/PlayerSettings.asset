@@ -156,6 +156,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6812b6ecf408ba8439c8e9f47922381b, type: 2}
   EffectsOnLevelup:
   - {fileID: 11400000, guid: 982aab948223d7044bfae67dc43bb77c, type: 2}
+  - {fileID: 11400000, guid: 78ecfa374233d13489d906322950f43f, type: 2}
   EffectsHealthThreshold: 0.3
   EffectsOnDamageWhenBelowThreshold:
   - {fileID: 11400000, guid: 668a809c73c04d648ae6ae4e123f2f21, type: 2}

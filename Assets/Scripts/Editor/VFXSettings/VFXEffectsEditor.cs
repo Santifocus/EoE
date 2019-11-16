@@ -14,5 +14,6 @@ namespace EoE.Information
 		[MenuItem("EoE/VFX/ControllerRumble")] public static void CreateControllerRumble() => EoEEditor.AssetCreator<ControllerRumble>("Settings", "VFX");
 		[MenuItem("EoE/VFX/TimeDilation")] public static void CreateTimeDilation() => EoEEditor.AssetCreator<TimeDilation>("Settings", "VFX");
 		[MenuItem("EoE/VFX/ParticleEffect")] public static void CreateParticleEffect() => EoEEditor.AssetCreator<ParticleEffect>("Settings", "VFX");
+		[MenuItem("EoE/VFX/DialogueInput")] public static void CreateDialogueInput() => EoEEditor.AssetCreator<DialogueInput>("Settings", "VFX");
 	}
 }

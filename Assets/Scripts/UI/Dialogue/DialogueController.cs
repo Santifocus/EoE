@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Reflection;
+using EoE.Information;
 
 namespace EoE.UI
 {
@@ -14,6 +16,7 @@ namespace EoE.UI
 		private DialogueBox dialogueContainer;
 		private Queue<Dialogue> quedDialogues;
 		private bool displayingDialogue;
+
 		private void Start()
 		{
 			Instance = this;
@@ -28,6 +31,17 @@ namespace EoE.UI
 			{
 				Instance.StartCoroutine(Instance.DisplayDialogue());
 			}
+		}
+		public static void CreateAndShowDialogue(DialogueInput info)
+		{
+			(string, Color)[] parts = new (string, Color)[info.parts.Length];
+			for(int i = 0; i < parts.Length; i++)
+			{
+				parts[i] = (info.parts[i].text, info.parts[i].textColor);
+			}
+
+			Dialogue createdDialogue = new Dialogue(parts);
+			ShowDialogue(createdDialogue);
 		}
 		private IEnumerator DisplayDialogue()
 		{
@@ -105,14 +119,22 @@ namespace EoE.UI
 	public class Dialogue
 	{
 		public DialoguePart[] parts;
-		public int totalTextLenght;
+		public int totalTextLenght { get; private set; }
 
 		public delegate void OnFinishDialogue();
 		public OnFinishDialogue onFinish;
+		public Dialogue(params (string, Color)[] parts)
+		{
+			SetupParts(parts);
+		}
 		public Dialogue(OnFinishDialogue onFinish, params (string, Color)[] parts)
 		{
-			this.parts = new DialoguePart[parts.Length];
 			this.onFinish = onFinish;
+			SetupParts(parts);
+		}
+		private void SetupParts((string, Color)[] parts)
+		{
+			this.parts = new DialoguePart[parts.Length];
 			for (int i = 0; i < parts.Length; i++)
 			{
 				totalTextLenght += parts[i].Item1.Length;
