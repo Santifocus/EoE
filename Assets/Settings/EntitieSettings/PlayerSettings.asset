@@ -41,7 +41,7 @@ MonoBehaviour:
   LevelSettings: {fileID: 11400000, guid: f274dc43aa7e69e4db13a311b4ea6d9e, type: 2}
   CameraToPlayerDistance: 7
   CameraAnchorOffset: {x: 0, y: 1.6, z: 0}
-  CameraAnchorOffsetWhenTargeting: {x: 0, y: 1.6, z: 0}
+  CameraAnchorOffsetWhenTargeting: {x: 1, y: 2, z: 0}
   CameraRotationPower: {x: 200, y: 75}
   CameraRotationSpeed: 5
   CameraVerticalAngleClamps: {x: -50, y: 50}
@@ -56,7 +56,7 @@ MonoBehaviour:
   EnduranceRegenDelayAfterUse: 3
   JumpEnduranceCost: 4
   RunEnduranceCost: 3
-  DodgePower: 3
+  DodgePower: 4
   DodgeDuration: 0.15
   DodgeModelExistTime: 0.35
   DodgeCooldown: 0.3
@@ -64,16 +64,29 @@ MonoBehaviour:
   DodgeModelMaterial: {fileID: 2100000, guid: 11d51a887e999af408b3d408f575a218, type: 2}
   StartBlockingInertia: 0.3
   BlockingBuff:
-    Name: 
-    Quality: 1
-    Permanent: 0
-    BuffTime: 5
-    Icon: {fileID: 0}
-    Effects: []
+    Name: Blocking
+    Quality: 2
+    Permanent: 1
+    BuffTime: 0
+    Icon: {fileID: 21300000, guid: 799750162dc2c5544a7bac42c74b5f69, type: 3}
+    Effects:
+    - TargetBaseStat: 5
+      Percent: 0
+      Amount: 5
+    - TargetBaseStat: 5
+      Percent: 1
+      Amount: 40
+    - TargetBaseStat: 6
+      Percent: 1
+      Amount: -40
     CustomEffects:
       ApplyMoveStun: 0
       Invincible: 0
-    DOTs: []
+    DOTs:
+    - Element: 0
+      TargetStat: 2
+      DelayPerActivation: 0.25
+      BaseDamage: 3
   StopBlockingInertia: 0.3
   InvincibleAfterHit: 1
   InvincibleAfterHitTime: 0.3
