@@ -4,7 +4,8 @@ using UnityEngine;
 namespace EoE.Information
 {
 	public enum BuffType : byte { Negative = 0, Neutral = 1, Positive = 2 }
-	public enum TargetStat { Health = 0, Mana = 1, Endurance = 2, PhysicalDamage = 3, MagicalDamage = 4, Defense = 5, MoveSpeed = 6, JumpHeight = 7 }
+	public enum TargetBaseStat { Health = 0, Mana = 1, Endurance = 2, PhysicalDamage = 3, MagicalDamage = 4, Defense = 5, MoveSpeed = 6, JumpHeight = 7 }
+	public enum TargetStat { Health = 0, Mana = 1, Endurance = 2 }
 	[System.Serializable]
 	public class Buff
 	{
@@ -40,7 +41,7 @@ namespace EoE.Information
 	[System.Serializable]
 	public struct Effect
 	{
-		public TargetStat targetStat;
+		public TargetBaseStat TargetBaseStat;
 		public bool Percent;
 		public float Amount;
 	}
@@ -54,6 +55,7 @@ namespace EoE.Information
 	public struct DOT
 	{
 		public ElementType Element;
+		public TargetStat TargetStat;
 		public float DelayPerActivation;
 		public float BaseDamage;
 	}

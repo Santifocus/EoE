@@ -287,6 +287,7 @@ namespace EoE
 			}
 			return false;
 		}
+		public static bool EnumField(string content, ref System.Enum curValue, int offSet = 0) => EnumField(new GUIContent(content), ref curValue, offSet);
 		public static bool EnumField(GUIContent content, ref System.Enum curValue, int offSet = 0)
 		{
 			EditorGUILayout.BeginHorizontal();
@@ -302,6 +303,7 @@ namespace EoE
 			}
 			return false;
 		}
+		public static bool EnumFlagField(string content, ref System.Enum curValue, int offSet = 0) => EnumFlagField(new GUIContent(content), ref curValue, offSet);
 		public static bool EnumFlagField(GUIContent content, ref System.Enum curValue, int offSet = 0)
 		{
 			EditorGUILayout.BeginHorizontal();
@@ -316,6 +318,39 @@ namespace EoE
 				return true;
 			}
 			return false;
+		}
+		public static bool DrawArray<T>(GUIContent arrayContent, System.Func<int, int, bool> elementBinding, ref T[] array, ref bool open, int offSet = 0)
+		{
+			bool changed = Foldout(arrayContent, ref open, offSet);
+			if (open)
+			{
+				for(int i = 0; i < array.Length; i++)
+				{
+					changed |= (elementBinding?.Invoke(i, offSet + 1)) ?? false;
+				}
+
+				GUILayout.Space(3);
+				EditorGUILayout.BeginHorizontal();
+				GUILayout.Space((offSet + 1) * STANDARD_OFFSET);
+				int newSize = EditorGUILayout.DelayedIntField("Size", array.Length);
+				EditorGUILayout.EndHorizontal();
+
+				if (newSize != array.Length)
+				{
+					T[] newArray = new T[newSize];
+					for (int i = 0; i < newSize; i++)
+					{
+						if (i < array.Length)
+							newArray[i] = array[i];
+						else
+							break;
+					}
+
+					array = newArray;
+					isDirty = true;
+				}
+			}
+			return changed;
 		}
 		public static void AssetCreator<T>(params string[] pathParts) where T : ScriptableObject
 		{

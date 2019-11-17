@@ -156,7 +156,7 @@ namespace EoE.Entities
 					{
 						Amount = 0,
 						Percent = false,
-						targetStat = (TargetStat)i
+						TargetBaseStat = (TargetBaseStat)i
 					};
 			}
 
@@ -390,7 +390,12 @@ namespace EoE.Entities
 			curStates.Moving = moving;
 
 			if (TargetedEntitie)
-				intendedRotation = PlayerCameraController.TargetRotation.x;
+			{
+				Vector3 direction = (TargetedEntitie.actuallWorldPosition - actuallWorldPosition).normalized;
+				float hAngle = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg -90;
+
+				intendedRotation = -hAngle;
+			}
 
 			//Is the player not trying to move? Then stop here
 			if (!moving)
@@ -653,7 +658,7 @@ namespace EoE.Entities
 			{
 				GameController.BeginDelayedCall(() => SetBlockingState(true), PlayerSettings.StartBlockingInertia, TimeType.ScaledDeltaTime, new System.Func<bool>(() => !InputController.Block.Up), OnDelayConditionNotMet.Cancel);
 			}
-			else if (InputController.Block.Up && isBlocking)
+			else if ((InputController.Block.Up || !InputController.Block.Active) && isBlocking)
 			{
 				GameController.BeginDelayedCall(() => SetBlockingState(false), PlayerSettings.StopBlockingInertia, TimeType.ScaledDeltaTime, new System.Func<bool>(() => !InputController.Block.Down), OnDelayConditionNotMet.Cancel);
 			}
@@ -966,7 +971,7 @@ namespace EoE.Entities
 		public void AddSouls(int amount)
 		{
 			const int startRotationAt = 1;
-			const int enumOffset = (int)TargetStat.PhysicalDamage;
+			const int enumOffset = (int)TargetBaseStat.PhysicalDamage;
 
 			TotalSoulCount += amount;
 			while (TotalSoulCount >= RequiredSoulsForLevel)

@@ -10,6 +10,7 @@ namespace EoE.Information
 		//Camera Settings
 		public float CameraToPlayerDistance = 7;
 		public Vector3 CameraAnchorOffset = new Vector3(0, 1.6f, 0);
+		public Vector3 CameraAnchorOffsetWhenTargeting = new Vector3(0, 1.6f, 0);
 		public Vector2 CameraRotationPower = new Vector2(200, 75);
 		public float CameraRotationSpeed = 10;
 		public Vector2 CameraVerticalAngleClamps = new Vector2(-50, 50);

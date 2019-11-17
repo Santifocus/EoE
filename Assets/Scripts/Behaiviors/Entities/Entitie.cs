@@ -349,7 +349,13 @@ namespace EoE.Entities
 					{
 						float cd = nonPermanentBuffs[i].Base.DOTs[j].DelayPerActivation;
 						nonPermanentBuffs[i].DOTCooldowns[j] += cd;
-						ChangeHealth(new ChangeInfo(nonPermanentBuffs[i].Applier, CauseType.DOT, nonPermanentBuffs[i].Base.DOTs[j].Element, actuallWorldPosition, Vector3.up, cd * nonPermanentBuffs[i].Base.DOTs[j].BaseDamage, false));
+
+						if(nonPermanentBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Health)
+							ChangeHealth(new ChangeInfo(nonPermanentBuffs[i].Applier, CauseType.DOT, nonPermanentBuffs[i].Base.DOTs[j].Element, actuallWorldPosition, Vector3.up, cd * nonPermanentBuffs[i].Base.DOTs[j].BaseDamage, false));
+						else if (nonPermanentBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Mana)
+							ChangeMana(new ChangeInfo(nonPermanentBuffs[i].Applier, CauseType.DOT, cd * nonPermanentBuffs[i].Base.DOTs[j].BaseDamage, false));
+						else if(this is Player)//TargetStat.Endurance
+							(this as Player).ChangeEndurance(new ChangeInfo(nonPermanentBuffs[i].Applier, CauseType.DOT, cd * nonPermanentBuffs[i].Base.DOTs[j].BaseDamage, false));
 					}
 				}
 				if (nonPermanentBuffs[i].RemainingTime <= 0)
@@ -366,7 +372,8 @@ namespace EoE.Entities
 		public BuffInstance AddBuff(Buff buff, Entitie applier)
 		{
 			BuffInstance newBuff = new BuffInstance(buff, applier);
-			AddBuffEffect(newBuff);
+			AddBuffEffect(newBuff, CalculateValue.Flat);
+			AddBuffEffect(newBuff, CalculateValue.Percent);
 
 			if (this is Player)
 				Player.BuffDisplay.AddBuffIcon(newBuff);
@@ -398,9 +405,9 @@ namespace EoE.Entities
 				}
 				float change = 0;
 
-				switch (buffBase.Effects[i].targetStat)
+				switch (buffBase.Effects[i].TargetBaseStat)
 				{
-					case TargetStat.Health:
+					case TargetBaseStat.Health:
 						{
 							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curMaxHealth : buffBase.Effects[i].Amount;
 							change = Mathf.Max(-(curMaxHealth - 1), change);
@@ -409,7 +416,7 @@ namespace EoE.Entities
 								curHealth = Mathf.Min(curMaxHealth, curHealth);
 							break;
 						}
-					case TargetStat.Mana:
+					case TargetBaseStat.Mana:
 						{
 							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curMaxMana : buffBase.Effects[i].Amount;
 							change = Mathf.Max(-(curMaxMana), change);
@@ -418,7 +425,7 @@ namespace EoE.Entities
 								curMana = Mathf.Min(curMaxMana, curMana);
 							break;
 						}
-					case TargetStat.Endurance:
+					case TargetBaseStat.Endurance:
 						{
 							//If this is not a player we can just ignore this buff/debuff
 							Player player = this as Player;
@@ -433,33 +440,33 @@ namespace EoE.Entities
 								player.UpdateEnduranceStat();
 							break;
 						}
-					case TargetStat.PhysicalDamage:
+					case TargetBaseStat.PhysicalDamage:
 						{
 							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curPhysicalDamage : buffBase.Effects[i].Amount;
 							change = Mathf.Max(-curPhysicalDamage, change);
 							curPhysicalDamage += change;
 							break;
 						}
-					case TargetStat.MagicalDamage:
+					case TargetBaseStat.MagicalDamage:
 						{
 							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curMagicalDamage : buffBase.Effects[i].Amount;
 							change = Mathf.Max(-curMagicalDamage, change);
 							curMagicalDamage += change;
 							break;
 						}
-					case TargetStat.Defense:
+					case TargetBaseStat.Defense:
 						{
 							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curDefense : buffBase.Effects[i].Amount;
 							curDefense += change;
 							break;
 						}
-					case TargetStat.MoveSpeed:
+					case TargetBaseStat.MoveSpeed:
 						{
 							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curWalkSpeed : buffBase.Effects[i].Amount;
 							curWalkSpeed += change;
 							break;
 						}
-					case TargetStat.JumpHeight:
+					case TargetBaseStat.JumpHeight:
 						{
 							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curJumpPowerMultiplier : buffBase.Effects[i].Amount;
 							curJumpPowerMultiplier += change;
@@ -520,27 +527,28 @@ namespace EoE.Entities
 		private void RemoveBuffEffect(BuffInstance buffInstance, bool clampRequired = true)
 		{
 			Buff buffBase = buffInstance.Base;
+
 			for (int i = 0; i < buffBase.Effects.Length; i++)
 			{
 				float change = buffInstance.FlatChanges[i];
 
-				switch (buffBase.Effects[i].targetStat)
+				switch (buffBase.Effects[i].TargetBaseStat)
 				{
-					case TargetStat.Health:
+					case TargetBaseStat.Health:
 						{
 							curMaxHealth -= change;
 							if (clampRequired && curHealth > curMaxHealth)
 								curHealth = curMaxHealth;
 							break;
 						}
-					case TargetStat.Mana:
+					case TargetBaseStat.Mana:
 						{
 							curMaxMana -= change;
 							if (clampRequired && curMana > curMaxMana)
 								curMana = curMaxMana;
 							break;
 						}
-					case TargetStat.Endurance:
+					case TargetBaseStat.Endurance:
 						{
 							//If this is not a player we can just ignore this buff/debuff
 							Player player = this as Player;
@@ -552,27 +560,27 @@ namespace EoE.Entities
 								player.UpdateEnduranceStat();
 							break;
 						}
-					case TargetStat.PhysicalDamage:
+					case TargetBaseStat.PhysicalDamage:
 						{
 							curPhysicalDamage -= change;
 							break;
 						}
-					case TargetStat.MagicalDamage:
+					case TargetBaseStat.MagicalDamage:
 						{
 							curMagicalDamage -= change;
 							break;
 						}
-					case TargetStat.Defense:
+					case TargetBaseStat.Defense:
 						{
 							curDefense -= change;
 							break;
 						}
-					case TargetStat.MoveSpeed:
+					case TargetBaseStat.MoveSpeed:
 						{
 							curWalkSpeed -= change;
 							break;
 						}
-					case TargetStat.JumpHeight:
+					case TargetBaseStat.JumpHeight:
 						{
 							curJumpPowerMultiplier -= change;
 							break;
@@ -641,7 +649,13 @@ namespace EoE.Entities
 					{
 						float cd = permanentBuffs[i].Base.DOTs[j].DelayPerActivation;
 						permanentBuffs[i].DOTCooldowns[j] += cd;
-						ChangeHealth(new ChangeInfo(permanentBuffs[i].Applier, CauseType.DOT, permanentBuffs[i].Base.DOTs[j].Element, actuallWorldPosition, Vector3.up, cd * permanentBuffs[i].Base.DOTs[j].BaseDamage, false));
+
+						if (permanentBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Health)
+							ChangeHealth(new ChangeInfo(permanentBuffs[i].Applier, CauseType.DOT, permanentBuffs[i].Base.DOTs[j].Element, actuallWorldPosition, Vector3.up, cd * permanentBuffs[i].Base.DOTs[j].BaseDamage, false));
+						else if (permanentBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Mana)
+							ChangeMana(new ChangeInfo(permanentBuffs[i].Applier, CauseType.DOT, cd * permanentBuffs[i].Base.DOTs[j].BaseDamage, false));
+						else if (this is Player)//TargetStat.Endurance
+							(this as Player).ChangeEndurance(new ChangeInfo(permanentBuffs[i].Applier, CauseType.DOT, cd * permanentBuffs[i].Base.DOTs[j].BaseDamage, false));
 					}
 				}
 			}

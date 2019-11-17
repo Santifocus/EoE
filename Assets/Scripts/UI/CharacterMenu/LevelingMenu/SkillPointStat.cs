@@ -12,7 +12,7 @@ namespace EoE.UI
 		private const float SCROLLING_COOLDOWN_ON_FIRST = SCROLLING_COOLDOWN * 3f;
 		private static float PointScrollingCooldown;
 
-		public TargetStat targetStat = TargetStat.Health;
+		public TargetBaseStat targetStat = TargetBaseStat.Health;
 		[SerializeField] private TextMeshProUGUI newPoints = default;
 		[SerializeField] private TextMeshProUGUI curPoints = default;
 		protected override void Update()

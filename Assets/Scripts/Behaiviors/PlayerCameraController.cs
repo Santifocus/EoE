@@ -15,6 +15,7 @@ namespace EoE
 		public static Camera PlayerCamera => instance.playerCamera;
 
 		[SerializeField] private Camera playerCamera = default;
+		private Vector3 curOffset;
 
 		private PlayerSettings playerSettigns => Player.Instance.SelfSettings as PlayerSettings;
 
@@ -23,6 +24,7 @@ namespace EoE
 			TargetRotation = CurRotation = new Vector2(transform.eulerAngles.y, transform.eulerAngles.x);
 			instance = this;
 			playerCamera.transform.localPosition = new Vector3(0, 0, -playerSettigns.CameraToPlayerDistance);
+			curOffset = GetOffset();
 			AnchorToPlayer();
 		}
 
@@ -37,7 +39,8 @@ namespace EoE
 				LookAtDirection(dir);
 			}
 
-			transform.position = Player.Instance.transform.position + playerSettigns.CameraAnchorOffset;
+			curOffset = Vector3.Lerp(curOffset, GetOffset(), Time.deltaTime * 3);
+			transform.position = Player.Instance.transform.position + curOffset;
 			transform.eulerAngles = new Vector3(CurRotation.y, CurRotation.x, 0);
 
 			float camDist = GetCameraDistance();
@@ -56,6 +59,19 @@ namespace EoE
 			float vAngle = Mathf.Asin(direction.y) * Mathf.Rad2Deg;
 
 			TargetRotation = -new Vector2(hAngle, vAngle);
+		}
+		private Vector3 GetOffset()
+		{
+			float sinPart = Mathf.Sin((CurRotation.x + 90) * Mathf.Deg2Rad);
+			float cosPart = Mathf.Cos((CurRotation.x + 90) * Mathf.Deg2Rad);
+
+			Vector3 baseOffset = Player.TargetedEntitie ? playerSettigns.CameraAnchorOffsetWhenTargeting : playerSettigns.CameraAnchorOffset;
+
+			Vector3 offset = baseOffset.x * new Vector3(sinPart, 0, cosPart) +
+				new Vector3(0, baseOffset.y, 0) +
+				baseOffset.z * new Vector3(cosPart, 0, sinPart);
+
+			return offset;
 		}
 		private float GetCameraDistance()
 		{

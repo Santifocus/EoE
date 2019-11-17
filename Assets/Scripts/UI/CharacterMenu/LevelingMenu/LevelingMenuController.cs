@@ -12,7 +12,7 @@ namespace EoE.UI
 		[SerializeField] private CMenuItem[] menuItems = default;
 
 		//Getter Helpers
-		public int this[TargetStat stat]
+		public int this[TargetBaseStat stat]
 		{
 			get
 			{
@@ -88,7 +88,7 @@ namespace EoE.UI
 				menuItems[navigationIndex].SelectMenuItem();
 			}
 		}
-		public bool ModifyAssignedSkillPoint(bool add, TargetStat stat)
+		public bool ModifyAssignedSkillPoint(bool add, TargetBaseStat stat)
 		{
 			bool toAttributePoints = (int)stat < 3;
 
@@ -125,7 +125,7 @@ namespace EoE.UI
 				attributePoints -= assignedAttributePointCount;
 				for (int i = 0; i < 3; i++)
 				{
-					skillBuff.Effects[i].Amount += baseData.LevelSettings[(TargetStat)i] * assignedAttributePoints[i];
+					skillBuff.Effects[i].Amount += baseData.LevelSettings[(TargetBaseStat)i] * assignedAttributePoints[i];
 					assignedAttributePoints[i] = 0;
 				}
 				assignedAttributePointCount = 0;
@@ -135,7 +135,7 @@ namespace EoE.UI
 				skillPoints -= assignedSkillPointCount;
 				for (int i = 0; i < 3; i++)
 				{
-					skillBuff.Effects[i + 3].Amount += baseData.LevelSettings[(TargetStat)(i + 3)] * assignedSkillPoints[i];
+					skillBuff.Effects[i + 3].Amount += baseData.LevelSettings[(TargetBaseStat)(i + 3)] * assignedSkillPoints[i];
 					assignedSkillPoints[i] = 0;
 				}
 				assignedSkillPointCount = 0;
