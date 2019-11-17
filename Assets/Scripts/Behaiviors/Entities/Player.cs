@@ -26,6 +26,7 @@ namespace EoE.Entities
 		[SerializeField] private Weapon equipedWeapon = default;
 		[SerializeField] private PlayerBuffDisplay buffDisplay = default;
 		[SerializeField] private TextMeshProUGUI soulCount = default;
+		[SerializeField] private TextMeshProUGUI levelDisplay = default;
 
 		public TMPro.TextMeshProUGUI debugText = default;
 
@@ -146,7 +147,7 @@ namespace EoE.Entities
 			};
 
 			//Health, Mana, Endurance, PhysicalDamage, MagicalDamage, Defense
-			int incremtingStats = 6;
+			int incremtingStats = System.Enum.GetNames(typeof(TargetBaseStat)).Length;
 
 			LevelingBaseBuff.Effects = new Effect[incremtingStats];
 			LevelingPointsBuff.Effects = new Effect[incremtingStats];
@@ -1014,8 +1015,67 @@ namespace EoE.Entities
 				//Inform all script that need the information that the player leveled
 				EventManager.PlayerLevelupInvoke();
 			}
-
+			levelDisplay.text = (EntitieLevel + 1).ToString();
 			soulCount.text = TotalSoulCount + " / " + RequiredSoulsForLevel;
+		}
+		public float GetLeveledValue(TargetBaseStat stat)
+		{
+			float value = 0;
+			for (int i = 0; i < LevelingBaseBuff.Effects.Length; i++)
+			{
+				if (LevelingBaseBuff.Effects[i].TargetBaseStat == stat)
+					value += LevelingBaseBuff.Effects[i].Amount;
+			}
+			for (int i = 0; i < LevelingPointsBuff.Effects.Length; i++)
+			{
+				if (LevelingPointsBuff.Effects[i].TargetBaseStat == stat)
+					value += LevelingPointsBuff.Effects[i].Amount;
+			}
+			switch (stat)
+			{
+				case TargetBaseStat.Health:
+					{
+						value += PlayerSettings.Health;
+						break;
+					}
+				case TargetBaseStat.Mana:
+					{
+						value += PlayerSettings.Mana;
+						break;
+					}
+				case TargetBaseStat.Endurance:
+					{
+						value += PlayerSettings.EnduranceBars * PlayerSettings.EndurancePerBar;
+						break;
+					}
+				case TargetBaseStat.PhysicalDamage:
+					{
+						value += PlayerSettings.BaseAttackDamage;
+						break;
+					}
+				case TargetBaseStat.MagicalDamage:
+					{
+						value += PlayerSettings.BaseMagicDamage;
+						break;
+					}
+				case TargetBaseStat.Defense:
+					{
+						value += PlayerSettings.BaseDefense;
+						break;
+					}
+				case TargetBaseStat.MoveSpeed:
+					{
+						value += PlayerSettings.WalkSpeed;
+						break;
+					}
+				case TargetBaseStat.JumpHeight:
+					{
+						value += PlayerSettings.JumpPower.y;
+						break;
+					}
+			}
+
+			return value;
 		}
 		#endregion
 	}

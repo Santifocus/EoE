@@ -7,13 +7,12 @@ namespace EoE.UI
 	{
 		[SerializeField] private Vector2 pointerAcceptPosition = default;
 		[SerializeField] private Vector2 pointerResetPosition = default;
-		public PointTarget targetPoints = default;
-
-		public enum PointTarget { SkillPoints, AttributePoints }
 
 		private bool onAcceptPosition;
+		private bool justSelected;
 		protected override void Select()
 		{
+			justSelected = true;
 			onAcceptPosition = true;
 			pointer.rectTransform.anchoredPosition = pointerAcceptPosition;
 		}
@@ -21,8 +20,11 @@ namespace EoE.UI
 		{
 			base.Update();
 
-			if (!selected)
+			if (justSelected)
+			{
+				justSelected = false;
 				return;
+			}
 
 			if (InputController.MenuRight.Down || InputController.MenuLeft.Down)
 			{
@@ -33,9 +35,9 @@ namespace EoE.UI
 			if (InputController.MenuEnter.Down)
 			{
 				if (onAcceptPosition)
-					LevelingMenuController.Instance.ApplyAssignedPoints(targetPoints == PointTarget.AttributePoints);
+					LevelingMenuController.Instance.ApplyAssignedPoints();
 				else
-					LevelingMenuController.Instance.ResetAssignedSkillPoints(targetPoints == PointTarget.AttributePoints);
+					LevelingMenuController.Instance.ResetAssignedSkillPoints();
 			}
 		}
 	}
