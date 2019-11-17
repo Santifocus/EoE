@@ -24,9 +24,8 @@ MonoBehaviour:
   DoHealthRegen: 1
   HealthRegen: 8
   HealthRegenInCombatMultiplier: 0
-  HealthRegenParticles: {fileID: 3894390344941758739, guid: 4fc32336d51ae934c9aa8f2a0a80d546,
-    type: 3}
-  HealthRegenParticlesOffset: {x: 0, y: -1.5, z: 0}
+  HealthRegenParticles: {fileID: 0}
+  HealthRegenParticlesOffset: {x: 0, y: 0, z: 0}
   Mana: 30
   DoManaRegen: 1
   ManaRegen: 4
@@ -42,7 +41,7 @@ MonoBehaviour:
   LevelSettings: {fileID: 11400000, guid: f274dc43aa7e69e4db13a311b4ea6d9e, type: 2}
   CameraToPlayerDistance: 7
   CameraAnchorOffset: {x: 0, y: 1.6, z: 0}
-  CameraAnchorOffsetWhenTargeting: {x: 1, y: 2, z: 0}
+  CameraAnchorOffsetWhenTargeting: {x: 0, y: 1.6, z: 0}
   CameraRotationPower: {x: 200, y: 75}
   CameraRotationSpeed: 5
   CameraVerticalAngleClamps: {x: -50, y: 50}
@@ -65,35 +64,22 @@ MonoBehaviour:
   DodgeModelMaterial: {fileID: 2100000, guid: 11d51a887e999af408b3d408f575a218, type: 2}
   StartBlockingInertia: 0.3
   BlockingBuff:
-    Name: Blocking
-    Quality: 2
-    Permanent: 1
-    BuffTime: 0
-    Icon: {fileID: 21300000, guid: 799750162dc2c5544a7bac42c74b5f69, type: 3}
-    Effects:
-    - TargetBaseStat: 5
-      Percent: 1
-      Amount: 30
-    - TargetBaseStat: 6
-      Percent: 1
-      Amount: -60
-    - TargetBaseStat: 5
-      Percent: 0
-      Amount: 5
+    Name: 
+    Quality: 1
+    Permanent: 0
+    BuffTime: 5
+    Icon: {fileID: 0}
+    Effects: []
     CustomEffects:
       ApplyMoveStun: 0
       Invincible: 0
-    DOTs:
-    - Element: 0
-      TargetStat: 2
-      DelayPerActivation: 0.25
-      BaseDamage: 3
+    DOTs: []
   StopBlockingInertia: 0.3
   InvincibleAfterHit: 1
-  InvincibleAfterHitTime: 0.4
+  InvincibleAfterHitTime: 0.3
   InvincibleModelFlashColor: {r: 1, g: 1, b: 1, a: 1}
-  InvincibleModelFlashDelay: 0.1
-  InvincibleModelFlashTime: 0.025
+  InvincibleModelFlashDelay: 0.4
+  InvincibleModelFlashTime: 0.4
   StatTextUpdateSpeed: 0.5
   EnduranceBarLerpSpeed: 5
   HealthTextColors:
@@ -154,13 +140,13 @@ MonoBehaviour:
     m_Mode: 0
     m_NumColorKeys: 3
     m_NumAlphaKeys: 2
-  ReserveEnduranceBarColor: {r: 0.5188679, g: 0.26310518, b: 0.007342457, a: 1}
-  ActiveEnduranceBarColor: {r: 1, g: 0.5, b: 0, a: 1}
+  ReserveEnduranceBarColor: {r: 1, g: 1, b: 1, a: 1}
+  ActiveEnduranceBarColor: {r: 1, g: 1, b: 1, a: 1}
   ReloadingEnduranceBarColor: {r: 0.4, g: 0.4, b: 0.4, a: 0.8}
   EffectsOnReceiveDamage:
-  - {fileID: 11400000, guid: 910d3349e1560ab4ba7478fa7a8e8876, type: 2}
   - {fileID: 11400000, guid: 11060c91c24341947a8c373d641e5c86, type: 2}
   - {fileID: 11400000, guid: 9d9557ec007fa904aa2d0ef9f1ea3489, type: 2}
+  - {fileID: 11400000, guid: 910d3349e1560ab4ba7478fa7a8e8876, type: 2}
   EffectsOnReceiveKnockback:
   - {fileID: 11400000, guid: b09700b6216eb874aab8d980440f121b, type: 2}
   EffectsOnCauseDamage: []

@@ -2,6 +2,7 @@
 using EoE.Entities;
 using EoE.Information;
 using UnityEngine;
+using TMPro;
 
 namespace EoE.UI
 {
@@ -10,6 +11,11 @@ namespace EoE.UI
 		//Inspector Variables
 		[SerializeField] private float navigationCooldown = 0.2f;
 		[SerializeField] private CMenuItem[] menuItems = default;
+
+		[SerializeField] private Color remainingSkillpoints = Color.cyan;
+		[SerializeField] private Color noSkillPointsLeft = Color.gray;
+		[SerializeField] private TextMeshProUGUI availableAtributePoints;
+		[SerializeField] private TextMeshProUGUI availableSkillPoints;
 
 		//Getter Helpers
 		public int this[TargetBaseStat stat]
@@ -59,7 +65,8 @@ namespace EoE.UI
 		{
 			curNavigationCooldown = 0;
 			navigationIndex = 0;
-			menuItems[navigationIndex].SelectMenuItem();
+			if(menuItems.Length > 0)
+				menuItems[navigationIndex].SelectMenuItem();
 			UpdateDisplay();
 		}
 		private void Update()
@@ -118,74 +125,51 @@ namespace EoE.UI
 			InputFeedback();
 			return true;
 		}
-		public void ApplyAssignedPoints(bool onAttributes)
+		public void ApplyAssignedPoints()
 		{
-			if (onAttributes)
+			attributePoints -= assignedAttributePointCount;
+			for (int i = 0; i < 3; i++)
 			{
-				attributePoints -= assignedAttributePointCount;
-				for (int i = 0; i < 3; i++)
-				{
-					skillBuff.Effects[i].Amount += baseData.LevelSettings[(TargetBaseStat)i] * assignedAttributePoints[i];
-					assignedAttributePoints[i] = 0;
-				}
-				assignedAttributePointCount = 0;
+				skillBuff.Effects[i].Amount += baseData.LevelSettings[(TargetBaseStat)i] * assignedAttributePoints[i];
+				assignedAttributePoints[i] = 0;
 			}
-			else
+			assignedAttributePointCount = 0;
+
+			skillPoints -= assignedSkillPointCount;
+			for (int i = 0; i < 3; i++)
 			{
-				skillPoints -= assignedSkillPointCount;
-				for (int i = 0; i < 3; i++)
-				{
-					skillBuff.Effects[i + 3].Amount += baseData.LevelSettings[(TargetBaseStat)(i + 3)] * assignedSkillPoints[i];
-					assignedSkillPoints[i] = 0;
-				}
-				assignedSkillPointCount = 0;
+				skillBuff.Effects[i + 3].Amount += baseData.LevelSettings[(TargetBaseStat)(i + 3)] * assignedSkillPoints[i];
+				assignedSkillPoints[i] = 0;
 			}
+			assignedSkillPointCount = 0;
 
 			Player.Instance.RecalculateBuffs();
 			UpdateDisplay();
 		}
 		public void GotoConfirmation()
 		{
-			if (!(menuItems[navigationIndex] is SkillPointStat))
-				return;
-
-			AcceptResetButton.PointTarget pointTarget = (int)(menuItems[navigationIndex] as SkillPointStat).targetStat < 3 ? AcceptResetButton.PointTarget.AttributePoints : AcceptResetButton.PointTarget.SkillPoints;
-
-			for (int i = 0; i < menuItems.Length; i++)
+			for(int i = 0; i < menuItems.Length; i++)
 			{
-				AcceptResetButton confirmButton = menuItems[i] as AcceptResetButton;
-				if (confirmButton && confirmButton.targetPoints == pointTarget)
+				if(menuItems[i] is AcceptResetButton)
 				{
-					navigationIndex = i;
-
-					//By disabling and then enabling we can stop the component to call Update this tick
-					//we dont want it to do a Update because otherwise it would isnatntly request a ApplyPoints
-					menuItems[i].enabled = false;
-					menuItems[i].enabled = true;
-
 					menuItems[i].SelectMenuItem();
 					break;
 				}
 			}
 		}
-		public void ResetAssignedSkillPoints(bool onAttributes)
+		public void ResetAssignedSkillPoints()
 		{
-			if (onAttributes)
+			for (int i = 0; i < 3; i++)
 			{
-				for (int i = 0; i < 3; i++)
-				{
-					assignedAttributePoints[i] = 0;
-				}
-				assignedAttributePointCount = 0;
+				assignedAttributePoints[i] = 0;
 			}
-			else
+			assignedAttributePointCount = 0;
+			for (int i = 0; i < 3; i++)
 			{
-				for (int i = 0; i < 3; i++)
-				{
-					assignedSkillPoints[i] = 0;
-				}
-				assignedSkillPointCount = 0;
+				assignedSkillPoints[i] = 0;
 			}
+			assignedSkillPointCount = 0;
+
 			UpdateDisplay();
 		}
 		private void InputFeedback()
@@ -194,6 +178,11 @@ namespace EoE.UI
 		}
 		private void UpdateDisplay()
 		{
+			availableAtributePoints.text = (attributePoints - assignedAttributePointCount).ToString();
+			availableAtributePoints.color = (attributePoints - assignedAttributePointCount) > 0 ? remainingSkillpoints : noSkillPointsLeft;
+			availableSkillPoints.text = (skillPoints - assignedSkillPointCount).ToString();
+			availableSkillPoints.color = (skillPoints - assignedSkillPointCount) > 0 ? remainingSkillpoints : noSkillPointsLeft;
+
 			for (int i = 0; i < menuItems.Length; i++)
 			{
 				SkillPointStat target = menuItems[i] as SkillPointStat;
