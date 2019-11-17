@@ -24,7 +24,8 @@ MonoBehaviour:
   DoHealthRegen: 1
   HealthRegen: 8
   HealthRegenInCombatMultiplier: 0
-  HealthRegenParticles: {fileID: 0}
+  HealthRegenParticles: {fileID: 3894390344941758739, guid: 4fc32336d51ae934c9aa8f2a0a80d546,
+    type: 3}
   HealthRegenParticlesOffset: {x: 0, y: 0, z: 0}
   Mana: 30
   DoManaRegen: 1
