@@ -44,6 +44,7 @@ namespace EoE.Entities
 		private bool currentlyDodging;
 
 		//Blocking
+		private float blockingTimer;
 		private bool isBlocking;
 		private BuffInstance blockingBuff;
 
@@ -354,6 +355,7 @@ namespace EoE.Entities
 			float baseTargetSpeed = curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
 			curMoveForce = baseTargetSpeed * (controllDirection.HasValue ? controllDirection.Value : transform.forward);
 
+			animationControl.SetFloat("Runspeed", baseTargetSpeed);
 			//Now combine those forces as the current speed
 			body.velocity = curVelocity + curMoveForce;
 		}
@@ -654,22 +656,40 @@ namespace EoE.Entities
 		#region BlockControl
 		private void BlockControl()
 		{
-			if (InputController.Block.Down && !isBlocking)
+			float manaCost = 0;
+			float enduranceCost = 0;
+			for(int i = 0; i < PlayerSettings.BlockingBuff.DOTs.Length; i++)
 			{
-				GameController.BeginDelayedCall(() => SetBlockingState(true), PlayerSettings.StartBlockingInertia, TimeType.ScaledDeltaTime, new System.Func<bool>(() => !InputController.Block.Up), OnDelayConditionNotMet.Cancel);
+				if (PlayerSettings.BlockingBuff.DOTs[i].TargetStat == TargetStat.Mana)
+					manaCost += PlayerSettings.BlockingBuff.DOTs[i].BaseDamage;
+				else if(PlayerSettings.BlockingBuff.DOTs[i].TargetStat == TargetStat.Endurance)
+					enduranceCost += PlayerSettings.BlockingBuff.DOTs[i].BaseDamage;
 			}
-			else if ((InputController.Block.Up || !InputController.Block.Active) && isBlocking)
+			manaCost *= Time.deltaTime;
+			enduranceCost *= Time.deltaTime;
+
+			if ((InputController.Block.Down || InputController.Block.Active) && (curMana >= manaCost && curEndurance >= enduranceCost))
 			{
-				GameController.BeginDelayedCall(() => SetBlockingState(false), PlayerSettings.StopBlockingInertia, TimeType.ScaledDeltaTime, new System.Func<bool>(() => !InputController.Block.Down), OnDelayConditionNotMet.Cancel);
+				if (!isBlocking)
+				{
+					blockingTimer += Time.deltaTime;
+					if (blockingTimer >= PlayerSettings.StartBlockingInertia)
+					{
+						isBlocking = true;
+						blockingBuff = AddBuff(PlayerSettings.BlockingBuff, this);
+					}
+				}
 			}
-		}
-		private void SetBlockingState(bool state)
-		{
-			isBlocking = state;
-			if (state)
-				blockingBuff = AddBuff(PlayerSettings.BlockingBuff, this);
-			else
-				RemoveBuff(blockingBuff);
+			else if(isBlocking)
+			{
+				blockingTimer -= Time.deltaTime;
+				if (blockingTimer < PlayerSettings.StartBlockingInertia - PlayerSettings.StopBlockingInertia)
+				{
+					isBlocking = false;
+					blockingTimer = 0;
+					RemoveBuff(blockingBuff);
+				}
+			}
 		}
 		#endregion
 		#region Physical Attack Control

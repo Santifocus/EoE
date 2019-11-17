@@ -42,6 +42,7 @@ MonoBehaviour:
   LevelSettings: {fileID: 11400000, guid: f274dc43aa7e69e4db13a311b4ea6d9e, type: 2}
   CameraToPlayerDistance: 7
   CameraAnchorOffset: {x: 0, y: 1.6, z: 0}
+  CameraAnchorOffsetWhenTargeting: {x: 1, y: 2, z: 0}
   CameraRotationPower: {x: 200, y: 75}
   CameraRotationSpeed: 5
   CameraVerticalAngleClamps: {x: -50, y: 50}
@@ -64,16 +65,29 @@ MonoBehaviour:
   DodgeModelMaterial: {fileID: 2100000, guid: 11d51a887e999af408b3d408f575a218, type: 2}
   StartBlockingInertia: 0.3
   BlockingBuff:
-    Name: 
-    Quality: 1
-    Permanent: 0
-    BuffTime: 5
-    Icon: {fileID: 0}
-    Effects: []
+    Name: Blocking
+    Quality: 2
+    Permanent: 1
+    BuffTime: 0
+    Icon: {fileID: 21300000, guid: 799750162dc2c5544a7bac42c74b5f69, type: 3}
+    Effects:
+    - TargetBaseStat: 5
+      Percent: 1
+      Amount: 30
+    - TargetBaseStat: 6
+      Percent: 1
+      Amount: -60
+    - TargetBaseStat: 5
+      Percent: 0
+      Amount: 5
     CustomEffects:
       ApplyMoveStun: 0
       Invincible: 0
-    DOTs: []
+    DOTs:
+    - Element: 0
+      TargetStat: 2
+      DelayPerActivation: 0.25
+      BaseDamage: 3
   StopBlockingInertia: 0.3
   InvincibleAfterHit: 1
   InvincibleAfterHitTime: 0.4
@@ -156,7 +170,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6812b6ecf408ba8439c8e9f47922381b, type: 2}
   EffectsOnLevelup:
   - {fileID: 11400000, guid: 982aab948223d7044bfae67dc43bb77c, type: 2}
-  - {fileID: 11400000, guid: 78ecfa374233d13489d906322950f43f, type: 2}
   EffectsHealthThreshold: 0.3
   EffectsOnDamageWhenBelowThreshold:
   - {fileID: 11400000, guid: 668a809c73c04d648ae6ae4e123f2f21, type: 2}
