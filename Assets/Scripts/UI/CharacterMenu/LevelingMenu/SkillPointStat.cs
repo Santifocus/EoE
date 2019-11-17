@@ -18,9 +18,9 @@ namespace EoE.UI
 		[SerializeField] private Color changedColor = Color.green;
 
 		[Space(10)]
-		[SerializeField] private TextMeshProUGUI newPoints = default;
-		[SerializeField] private TextMeshProUGUI curPoints = default;
 		[SerializeField] private TextMeshProUGUI curStatValue = default;
+		[SerializeField] private TextMeshProUGUI totalPoints = default;
+		[SerializeField] private TextMeshProUGUI newStatValue = default;
 
 		[Space(10)]
 		[SerializeField] private Color recentlyChangedCurColor = Color.red;
@@ -61,24 +61,17 @@ namespace EoE.UI
 
 		public void UpdateNumbers()
 		{
-			float curValue = Player.LevelingPointsBuff.Effects[(int)targetStat].Amount;
-			int curPointsCount = Mathf.RoundToInt(curValue / Player.PlayerSettings.LevelSettings[targetStat]);
-			if(!int.TryParse(curPoints.text, out int oldPoints) || oldPoints != curPointsCount)
-			{
-				curPoints.color = standardColor;
-				StopAllCoroutines();
-				StartCoroutine(ChangedCurrent());
-			}
-			curPoints.text = curPointsCount.ToString();
+			float curValue = Player.Instance.GetLeveledValue(targetStat);
+			curStatValue.text = curValue.ToString();
 
-			int newPointsCount = LevelingMenuController.Instance[targetStat];
-			newPoints.text = newPointsCount.ToString();
+			int notConfirmedPoints = LevelingMenuController.Instance[targetStat];
+			totalPoints.text = (Mathf.RoundToInt(Player.LevelingPointsBuff.Effects[(int)targetStat].Amount / Player.PlayerSettings.LevelSettings[targetStat]) + notConfirmedPoints).ToString();
 
-			curStatValue.text = GetCurValue(newPointsCount).ToString();
+			newStatValue.text = (curValue + notConfirmedPoints * Player.PlayerSettings.LevelSettings[targetStat]).ToString();
 
-			bool changed = newPointsCount != 0;
-			curStatValue.color = changed ? changedColor : standardColor;
-			newPoints.color = changed ? changedColor : standardColor;
+			bool changed = notConfirmedPoints != 0;
+			totalPoints.color = changed ? changedColor : standardColor;
+			newStatValue.color = changed ? changedColor : standardColor;
 		}
 
 		private IEnumerator ChangedCurrent()
@@ -86,15 +79,15 @@ namespace EoE.UI
 			for(int i = 0; i < recentlyChangedFlashCount; i++)
 			{
 				yield return new WaitForSecondsRealtime(recentlyChangedFlashTime);
-				curPoints.color = recentlyChangedCurColor;
+				totalPoints.color = recentlyChangedCurColor;
 				yield return new WaitForSecondsRealtime(recentlyChangedFlashTime);
-				curPoints.color = standardColor;
+				totalPoints.color = standardColor;
 			}
 		}
 
 		private float GetCurValue(int newPointsCount)
 		{
-			return Player.Instance.GetLeveledValue(targetStat) + newPointsCount * Player.PlayerSettings.LevelSettings[targetStat];
+			return  + newPointsCount * Player.PlayerSettings.LevelSettings[targetStat];
 		}
 	}
 }

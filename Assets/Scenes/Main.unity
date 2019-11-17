@@ -176,9 +176,9 @@ MonoBehaviour:
   targetStat: 0
   standardColor: {r: 1, g: 1, b: 1, a: 1}
   changedColor: {r: 0, g: 1, b: 0, a: 1}
-  newPoints: {fileID: 2014925693}
-  curPoints: {fileID: 629391308}
   curStatValue: {fileID: 0}
+  totalPoints: {fileID: 0}
+  newStatValue: {fileID: 0}
   recentlyChangedCurColor: {r: 1, g: 0, b: 0, a: 1}
   recentlyChangedFlashTime: 0.2
   recentlyChangedFlashCount: 3
@@ -194,7 +194,7 @@ GameObject:
   - component: {fileID: 9092564}
   - component: {fileID: 9092563}
   m_Layer: 5
-  m_Name: StatValue
+  m_Name: NewStatValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -426,7 +426,7 @@ GameObject:
   - component: {fileID: 35236493}
   - component: {fileID: 35236492}
   m_Layer: 5
-  m_Name: CurrPoints
+  m_Name: TotalPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3056,9 +3056,9 @@ MonoBehaviour:
   targetStat: 2
   standardColor: {r: 1, g: 1, b: 1, a: 1}
   changedColor: {r: 0, g: 1, b: 0, a: 1}
-  newPoints: {fileID: 2096299003}
-  curPoints: {fileID: 1035480496}
   curStatValue: {fileID: 0}
+  totalPoints: {fileID: 0}
+  newStatValue: {fileID: 0}
   recentlyChangedCurColor: {r: 1, g: 0, b: 0, a: 1}
   recentlyChangedFlashTime: 0.2
   recentlyChangedFlashCount: 3
@@ -4531,9 +4531,9 @@ MonoBehaviour:
   targetStat: 5
   standardColor: {r: 1, g: 1, b: 1, a: 1}
   changedColor: {r: 0, g: 1, b: 0, a: 1}
-  newPoints: {fileID: 2022937495}
-  curPoints: {fileID: 853635597}
-  curStatValue: {fileID: 1819284599}
+  curStatValue: {fileID: 2022937495}
+  totalPoints: {fileID: 853635597}
+  newStatValue: {fileID: 1819284599}
   recentlyChangedCurColor: {r: 1, g: 0, b: 0.4002924, a: 1}
   recentlyChangedFlashTime: 0.175
   recentlyChangedFlashCount: 3
@@ -4880,9 +4880,9 @@ MonoBehaviour:
   targetStat: 3
   standardColor: {r: 1, g: 1, b: 1, a: 1}
   changedColor: {r: 0, g: 1, b: 0, a: 1}
-  newPoints: {fileID: 359222246}
-  curPoints: {fileID: 1195804232}
   curStatValue: {fileID: 0}
+  totalPoints: {fileID: 0}
+  newStatValue: {fileID: 0}
   recentlyChangedCurColor: {r: 1, g: 0, b: 0, a: 1}
   recentlyChangedFlashTime: 0.2
   recentlyChangedFlashCount: 3
@@ -4898,7 +4898,7 @@ GameObject:
   - component: {fileID: 449343754}
   - component: {fileID: 449343753}
   m_Layer: 5
-  m_Name: StatValue
+  m_Name: NewStatValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5315,7 +5315,7 @@ GameObject:
   - component: {fileID: 488505840}
   - component: {fileID: 488505839}
   m_Layer: 5
-  m_Name: CurrPoints
+  m_Name: TotalPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5473,7 +5473,7 @@ GameObject:
   - component: {fileID: 543371869}
   - component: {fileID: 543371868}
   m_Layer: 5
-  m_Name: TargetApplyPoints
+  m_Name: CurStatValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6400,7 +6400,7 @@ GameObject:
   - component: {fileID: 618388512}
   - component: {fileID: 618388511}
   m_Layer: 5
-  m_Name: StatValue
+  m_Name: NewStatValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8370,7 +8370,7 @@ GameObject:
   - component: {fileID: 716443854}
   - component: {fileID: 716443853}
   m_Layer: 5
-  m_Name: CurrPoints
+  m_Name: TotalPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8572,9 +8572,9 @@ MonoBehaviour:
   targetStat: 1
   standardColor: {r: 1, g: 1, b: 1, a: 1}
   changedColor: {r: 0, g: 1, b: 0, a: 1}
-  newPoints: {fileID: 1103080611}
-  curPoints: {fileID: 1237286954}
   curStatValue: {fileID: 0}
+  totalPoints: {fileID: 0}
+  newStatValue: {fileID: 0}
   recentlyChangedCurColor: {r: 1, g: 0, b: 0, a: 1}
   recentlyChangedFlashTime: 0.2
   recentlyChangedFlashCount: 3
@@ -8772,7 +8772,7 @@ GameObject:
   - component: {fileID: 831131299}
   - component: {fileID: 831131298}
   m_Layer: 5
-  m_Name: TargetApplyPoints
+  m_Name: CurStatValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9323,7 +9323,7 @@ GameObject:
   - component: {fileID: 853635598}
   - component: {fileID: 853635597}
   m_Layer: 5
-  m_Name: CurrPoints
+  m_Name: TotalPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10001,7 +10001,7 @@ GameObject:
   - component: {fileID: 914033108}
   - component: {fileID: 914033107}
   m_Layer: 5
-  m_Name: TargetApplyPoints
+  m_Name: CurStatValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12235,7 +12235,7 @@ GameObject:
   - component: {fileID: 1077702226}
   - component: {fileID: 1077702225}
   m_Layer: 5
-  m_Name: StatValue
+  m_Name: NewStatValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13556,7 +13556,7 @@ GameObject:
   - component: {fileID: 1141772482}
   - component: {fileID: 1141772481}
   m_Layer: 5
-  m_Name: TargetApplyPoints
+  m_Name: CurStatValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16241,9 +16241,9 @@ MonoBehaviour:
   targetStat: 2
   standardColor: {r: 1, g: 1, b: 1, a: 1}
   changedColor: {r: 0, g: 1, b: 0, a: 1}
-  newPoints: {fileID: 1141772481}
-  curPoints: {fileID: 716443853}
-  curStatValue: {fileID: 9092563}
+  curStatValue: {fileID: 1141772481}
+  totalPoints: {fileID: 716443853}
+  newStatValue: {fileID: 9092563}
   recentlyChangedCurColor: {r: 1, g: 0, b: 0.4002924, a: 1}
   recentlyChangedFlashTime: 0.175
   recentlyChangedFlashCount: 3
@@ -16812,9 +16812,9 @@ MonoBehaviour:
   targetStat: 4
   standardColor: {r: 1, g: 1, b: 1, a: 1}
   changedColor: {r: 0, g: 1, b: 0, a: 1}
-  newPoints: {fileID: 831131298}
-  curPoints: {fileID: 488505839}
-  curStatValue: {fileID: 618388511}
+  curStatValue: {fileID: 831131298}
+  totalPoints: {fileID: 488505839}
+  newStatValue: {fileID: 618388511}
   recentlyChangedCurColor: {r: 1, g: 0, b: 0.4002924, a: 1}
   recentlyChangedFlashTime: 0.175
   recentlyChangedFlashCount: 3
@@ -17020,9 +17020,9 @@ MonoBehaviour:
   targetStat: 0
   standardColor: {r: 1, g: 1, b: 1, a: 1}
   changedColor: {r: 0, g: 1, b: 0, a: 1}
-  newPoints: {fileID: 543371868}
-  curPoints: {fileID: 2115364186}
-  curStatValue: {fileID: 1947963704}
+  curStatValue: {fileID: 543371868}
+  totalPoints: {fileID: 2115364186}
+  newStatValue: {fileID: 1947963704}
   recentlyChangedCurColor: {r: 1, g: 0, b: 0.4002924, a: 1}
   recentlyChangedFlashTime: 0.175
   recentlyChangedFlashCount: 3
@@ -18883,9 +18883,9 @@ MonoBehaviour:
   targetStat: 1
   standardColor: {r: 1, g: 1, b: 1, a: 1}
   changedColor: {r: 0, g: 1, b: 0, a: 1}
-  newPoints: {fileID: 2091556521}
-  curPoints: {fileID: 2130464125}
-  curStatValue: {fileID: 449343753}
+  curStatValue: {fileID: 2091556521}
+  totalPoints: {fileID: 2130464125}
+  newStatValue: {fileID: 449343753}
   recentlyChangedCurColor: {r: 1, g: 0, b: 0.4002924, a: 1}
   recentlyChangedFlashTime: 0.175
   recentlyChangedFlashCount: 3
@@ -19179,9 +19179,9 @@ MonoBehaviour:
   targetStat: 5
   standardColor: {r: 1, g: 1, b: 1, a: 1}
   changedColor: {r: 0, g: 1, b: 0, a: 1}
-  newPoints: {fileID: 1692566003}
-  curPoints: {fileID: 181829589}
   curStatValue: {fileID: 0}
+  totalPoints: {fileID: 0}
+  newStatValue: {fileID: 0}
   recentlyChangedCurColor: {r: 1, g: 0, b: 0, a: 1}
   recentlyChangedFlashTime: 0.2
   recentlyChangedFlashCount: 3
@@ -20034,6 +20034,8 @@ MonoBehaviour:
   - {fileID: 1916526961}
   - {fileID: 1739179536}
   - {fileID: 1980517225}
+  remainingSkillpoints: {r: 0, g: 1, b: 1, a: 1}
+  noSkillPointsLeft: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   availableAtributePoints: {fileID: 0}
   availableSkillPoints: {fileID: 0}
 --- !u!1 &1815397129
@@ -20146,7 +20148,7 @@ GameObject:
   - component: {fileID: 1819284600}
   - component: {fileID: 1819284599}
   m_Layer: 5
-  m_Name: StatValue
+  m_Name: NewStatValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21371,9 +21373,9 @@ MonoBehaviour:
   targetStat: 4
   standardColor: {r: 1, g: 1, b: 1, a: 1}
   changedColor: {r: 0, g: 1, b: 0, a: 1}
-  newPoints: {fileID: 1241240859}
-  curPoints: {fileID: 2024570606}
   curStatValue: {fileID: 0}
+  totalPoints: {fileID: 0}
+  newStatValue: {fileID: 0}
   recentlyChangedCurColor: {r: 1, g: 0, b: 0, a: 1}
   recentlyChangedFlashTime: 0.2
   recentlyChangedFlashCount: 3
@@ -21896,9 +21898,9 @@ MonoBehaviour:
   targetStat: 3
   standardColor: {r: 1, g: 1, b: 1, a: 1}
   changedColor: {r: 0, g: 1, b: 0, a: 1}
-  newPoints: {fileID: 914033107}
-  curPoints: {fileID: 35236492}
-  curStatValue: {fileID: 1077702225}
+  curStatValue: {fileID: 914033107}
+  totalPoints: {fileID: 35236492}
+  newStatValue: {fileID: 1077702225}
   recentlyChangedCurColor: {r: 1, g: 0, b: 0.4002924, a: 1}
   recentlyChangedFlashTime: 0.175
   recentlyChangedFlashCount: 3
@@ -21914,7 +21916,7 @@ GameObject:
   - component: {fileID: 1947963705}
   - component: {fileID: 1947963704}
   m_Layer: 5
-  m_Name: StatValue
+  m_Name: NewStatValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22727,7 +22729,7 @@ GameObject:
   - component: {fileID: 2022937496}
   - component: {fileID: 2022937495}
   m_Layer: 5
-  m_Name: TargetApplyPoints
+  m_Name: CurStatValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23562,7 +23564,7 @@ GameObject:
   - component: {fileID: 2091556522}
   - component: {fileID: 2091556521}
   m_Layer: 5
-  m_Name: TargetApplyPoints
+  m_Name: CurStatValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23964,7 +23966,7 @@ GameObject:
   - component: {fileID: 2115364187}
   - component: {fileID: 2115364186}
   m_Layer: 5
-  m_Name: CurrPoints
+  m_Name: TotalPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24357,7 +24359,7 @@ GameObject:
   - component: {fileID: 2130464126}
   - component: {fileID: 2130464125}
   m_Layer: 5
-  m_Name: CurrPoints
+  m_Name: TotalPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26176,6 +26178,8 @@ MonoBehaviour:
   - {fileID: 1442882146}
   - {fileID: 422491041}
   - {fileID: 344930007}
+  remainingSkillpoints: {r: 0, g: 1, b: 1, a: 1}
+  noSkillPointsLeft: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   availableAtributePoints: {fileID: 989123369}
   availableSkillPoints: {fileID: 1052083453}
 --- !u!114 &4113294019533295230
