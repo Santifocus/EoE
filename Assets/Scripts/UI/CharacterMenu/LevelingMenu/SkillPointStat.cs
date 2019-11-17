@@ -23,6 +23,7 @@ namespace EoE.UI
 		[SerializeField] private TextMeshProUGUI newStatValue = default;
 
 		[Space(10)]
+		private int lastAppliedPoints;
 		[SerializeField] private Color recentlyChangedCurColor = Color.red;
 		[SerializeField] private float recentlyChangedFlashTime = 0.2f;
 		[SerializeField] private int recentlyChangedFlashCount = 3;
@@ -65,7 +66,13 @@ namespace EoE.UI
 			curStatValue.text = curValue.ToString();
 
 			int notConfirmedPoints = LevelingMenuController.Instance[targetStat];
-			totalPoints.text = (Mathf.RoundToInt(Player.LevelingPointsBuff.Effects[(int)targetStat].Amount / Player.PlayerSettings.LevelSettings[targetStat]) + notConfirmedPoints).ToString();
+			int curAppliedPoints = Mathf.RoundToInt(Player.LevelingPointsBuff.Effects[(int)targetStat].Amount / Player.PlayerSettings.LevelSettings[targetStat]);
+			totalPoints.text = (curAppliedPoints + notConfirmedPoints).ToString();
+			if(curAppliedPoints != lastAppliedPoints)
+			{
+				lastAppliedPoints = curAppliedPoints;
+				StartCoroutine(ChangedCurrent());
+			}
 
 			newStatValue.text = (curValue + notConfirmedPoints * Player.PlayerSettings.LevelSettings[targetStat]).ToString();
 
@@ -80,8 +87,10 @@ namespace EoE.UI
 			{
 				yield return new WaitForSecondsRealtime(recentlyChangedFlashTime);
 				totalPoints.color = recentlyChangedCurColor;
+				curStatValue.color = recentlyChangedCurColor;
 				yield return new WaitForSecondsRealtime(recentlyChangedFlashTime);
 				totalPoints.color = standardColor;
+				curStatValue.color = standardColor;
 			}
 		}
 
