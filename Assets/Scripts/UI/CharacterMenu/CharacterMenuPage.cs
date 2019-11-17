@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 namespace EoE.UI
 {
@@ -23,8 +20,9 @@ namespace EoE.UI
 		public void HidePage(Vector2 slideEnd, float slideTime)
 		{
 			ActivePage = false;
-			pageSlider.CustomTransition(slideEnd, null, slideTime);
+			pageSlider.CustomTransition(slideEnd, () => DeactivatePage(), slideTime);
 		}
 		protected abstract void ResetPage();
+		protected abstract void DeactivatePage();
 	}
 }

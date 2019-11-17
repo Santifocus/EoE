@@ -20,12 +20,18 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 8400000, guid: cda8b07ae792f8647bced05a24c9741c, type: 2}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _BlurPixelDistance: 2.5
     - _BlurPower: 0
     - _BlurRange: 0
-    - _Depth: NaN
+    - _BorderDepth: 0
+    - _BorderStrenght: 1
+    - _Depth: 0
     - _DepthStrenght: 1
-    m_Colors: []
+    - _TintStrenght: 0
+    m_Colors:
+    - _Color: {r: 0, g: 0, b: 0, a: 0}
+    - _TintColor: {r: 0, g: 0, b: 0, a: 0}

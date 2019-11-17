@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using EoE.Controlls;
-using EoE.Information;
+﻿using EoE.Controlls;
 using EoE.Entities;
+using EoE.Information;
+using UnityEngine;
 
 namespace EoE.UI
 {
@@ -11,10 +9,10 @@ namespace EoE.UI
 	{
 		//Inspector Variables
 		[SerializeField] private float navigationCooldown = 0.2f;
-		[SerializeField] private LevelingMenuComponent[] components = default;
+		[SerializeField] private CMenuItem[] menuItems = default;
 
 		//Getter Helpers
-		public int this[TargetStat stat]
+		public int this[TargetBaseStat stat]
 		{
 			get
 			{
@@ -38,7 +36,7 @@ namespace EoE.UI
 		private Buff skillBuff => Player.LevelingPointsBuff;
 		private int skillPoints
 		{ get => Player.AvailableSkillPoints; set => Player.AvailableSkillPoints = value; }
-		private int attributePoints 
+		private int attributePoints
 		{ get => Player.AvailableAtributePoints; set => Player.AvailableAtributePoints = value; }
 
 		//Assigned Skillpoints
@@ -61,7 +59,7 @@ namespace EoE.UI
 		{
 			curNavigationCooldown = 0;
 			navigationIndex = 0;
-			components[navigationIndex].SelectComponent();
+			menuItems[navigationIndex].SelectMenuItem();
 			UpdateDisplay();
 		}
 		private void Update()
@@ -74,10 +72,10 @@ namespace EoE.UI
 				curNavigationCooldown = navigationCooldown;
 
 				navigationIndex++;
-				if (navigationIndex == components.Length)
-					navigationIndex -= components.Length;
+				if (navigationIndex == menuItems.Length)
+					navigationIndex -= menuItems.Length;
 
-				components[navigationIndex].SelectComponent();
+				menuItems[navigationIndex].SelectMenuItem();
 			}
 			else if (InputController.MenuUp.Down || (InputController.MenuUp.Active && curNavigationCooldown <= 0))
 			{
@@ -85,12 +83,12 @@ namespace EoE.UI
 
 				navigationIndex--;
 				if (navigationIndex == -1)
-					navigationIndex += components.Length;
+					navigationIndex += menuItems.Length;
 
-				components[navigationIndex].SelectComponent();
+				menuItems[navigationIndex].SelectMenuItem();
 			}
 		}
-		public bool ModifyAssignedSkillPoint(bool add, TargetStat stat)
+		public bool ModifyAssignedSkillPoint(bool add, TargetBaseStat stat)
 		{
 			bool toAttributePoints = (int)stat < 3;
 
@@ -127,7 +125,7 @@ namespace EoE.UI
 				attributePoints -= assignedAttributePointCount;
 				for (int i = 0; i < 3; i++)
 				{
-					skillBuff.Effects[i].Amount += baseData.LevelSettings[(TargetStat)i] * assignedAttributePoints[i];
+					skillBuff.Effects[i].Amount += baseData.LevelSettings[(TargetBaseStat)i] * assignedAttributePoints[i];
 					assignedAttributePoints[i] = 0;
 				}
 				assignedAttributePointCount = 0;
@@ -137,7 +135,7 @@ namespace EoE.UI
 				skillPoints -= assignedSkillPointCount;
 				for (int i = 0; i < 3; i++)
 				{
-					skillBuff.Effects[i + 3].Amount += baseData.LevelSettings[(TargetStat)(i + 3)] * assignedSkillPoints[i];
+					skillBuff.Effects[i + 3].Amount += baseData.LevelSettings[(TargetBaseStat)(i + 3)] * assignedSkillPoints[i];
 					assignedSkillPoints[i] = 0;
 				}
 				assignedSkillPointCount = 0;
@@ -148,24 +146,24 @@ namespace EoE.UI
 		}
 		public void GotoConfirmation()
 		{
-			if (!(components[navigationIndex] is SkillPointStat))
+			if (!(menuItems[navigationIndex] is SkillPointStat))
 				return;
 
-			AcceptResetButton.PointTarget pointTarget = (int)(components[navigationIndex] as SkillPointStat).targetStat < 3 ? AcceptResetButton.PointTarget.AttributePoints : AcceptResetButton.PointTarget.SkillPoints;
+			AcceptResetButton.PointTarget pointTarget = (int)(menuItems[navigationIndex] as SkillPointStat).targetStat < 3 ? AcceptResetButton.PointTarget.AttributePoints : AcceptResetButton.PointTarget.SkillPoints;
 
-			for(int i = 0; i < components.Length; i++)
+			for (int i = 0; i < menuItems.Length; i++)
 			{
-				AcceptResetButton confirmButton = components[i] as AcceptResetButton;
+				AcceptResetButton confirmButton = menuItems[i] as AcceptResetButton;
 				if (confirmButton && confirmButton.targetPoints == pointTarget)
 				{
 					navigationIndex = i;
 
 					//By disabling and then enabling we can stop the component to call Update this tick
 					//we dont want it to do a Update because otherwise it would isnatntly request a ApplyPoints
-					components[i].enabled = false;
-					components[i].enabled = true;
+					menuItems[i].enabled = false;
+					menuItems[i].enabled = true;
 
-					components[i].SelectComponent();
+					menuItems[i].SelectMenuItem();
 					break;
 				}
 			}
@@ -174,7 +172,7 @@ namespace EoE.UI
 		{
 			if (onAttributes)
 			{
-				for(int i = 0; i < 3; i++)
+				for (int i = 0; i < 3; i++)
 				{
 					assignedAttributePoints[i] = 0;
 				}
@@ -196,14 +194,19 @@ namespace EoE.UI
 		}
 		private void UpdateDisplay()
 		{
-			for(int i = 0; i < components.Length; i++)
+			for (int i = 0; i < menuItems.Length; i++)
 			{
-				SkillPointStat target = components[i] as SkillPointStat;
+				SkillPointStat target = menuItems[i] as SkillPointStat;
 				if (target == null)
 					continue;
 
 				target.UpdateNumbers();
 			}
+		}
+
+		protected override void DeactivatePage()
+		{
+			gameObject.SetActive(false);
 		}
 	}
 }

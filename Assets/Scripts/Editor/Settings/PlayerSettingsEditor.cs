@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEditor;
 using static EoE.EoEEditor;
 
 namespace EoE.Information
@@ -11,14 +9,32 @@ namespace EoE.Information
 	{
 		private static bool CameraSettingsOpen;
 		private static bool EnduranceSettingsOpen;
-		private static bool HUDSettingsOpen;
 		private static bool DodgeSettingsOpen;
+		private static bool BlockingSettingsOpen;
+		private static bool IFramesSettingsOpen;
+		private static bool HUDSettingsOpen;
 		private static bool VFXSettingsOpen;
+
+		//Other
+		private static bool BlockingBuffOpen;
+		private static bool BlockingBuffEffectsOpen;
+		private static bool BlockingBuffCustomEffectsOpen;
+		private static bool BlockingBuffDOTsOpen;
+
+		//VFXEffectArrays
+		private static bool ReceiveDamageOpen;
+		private static bool ReceiveKnockbackOpen;
+		private static bool CauseDamageOpen;
+		private static bool CauseCritOpen;
+		private static bool LevelUpOpen;
+		private static bool LowHealthThresholdOpen;
 		protected override void CustomInspector()
 		{
 			base.CustomInspector();
 			CameraSettingsArea();
 			DodgeSettingsArea();
+			BlockingSettingsArea();
+			IFramesSettingsArea();
 			HUDSettingsArea();
 			VFXSettingsArea();
 		}
@@ -31,7 +47,8 @@ namespace EoE.Information
 			if (CameraSettingsOpen)
 			{
 				FloatField(new GUIContent("Camera to Player Distance", "How far from the Player should the camera be?"), ref settings.CameraToPlayerDistance);
-				Vector3Field(new GUIContent("Camera Anchor offset", "The camera will always look at the Camera Anchor."), ref settings.CameraAnchorOffset);
+				Vector3Field(new GUIContent("Camera Anchor Offset", "The anchor off the camera will be offset by this amount."), ref settings.CameraAnchorOffset);
+				Vector3Field(new GUIContent("Camera Anchor Offset When Targeting", "The anchor off the camera will be offset by this amount when the player is targeting something."), ref settings.CameraAnchorOffsetWhenTargeting);
 				Vector2Field(new GUIContent("Camera Rotation Power", "The amount of rotation that will be added when the player tries to rotate the camera."), ref settings.CameraRotationPower);
 				FloatField(new GUIContent("Camera Rotation Speed", "How fast should the added rotation be interpolated. Higher value means less smooth, lower means that even after multiple seconds the camera might still slightly move."), ref settings.CameraRotationSpeed);
 				Vector2Field(new GUIContent("Camera Vertical Angle Clamps", "How far around the X Axis can the player rotate the camera. (Up / Down)"), ref settings.CameraVerticalAngleClamps);
@@ -82,6 +99,111 @@ namespace EoE.Information
 			}
 			EndFoldoutHeader();
 		}
+		private void BlockingSettingsArea()
+		{
+			PlayerSettings settings = target as PlayerSettings;
+
+			FoldoutHeader("Blocking Settings", ref BlockingSettingsOpen);
+			if (BlockingSettingsOpen)
+			{
+				FloatField(new GUIContent("Start Blocking Inertia"), ref settings.StartBlockingInertia);
+				DrawBuff(new GUIContent("Blocking Buff"), ref settings.BlockingBuff);
+				FloatField(new GUIContent("Stop Blocking Inertia"), ref settings.StopBlockingInertia);
+			}
+			EndFoldoutHeader();
+		}
+		private void DrawBuff(GUIContent content, ref Buff buff, int offSet = 0)
+		{
+			Foldout(content, ref BlockingBuffOpen, offSet);
+			if (BlockingBuffOpen)
+			{
+				StringField("Name", ref buff.Name, offSet + 1);
+				System.Enum quality = buff.Quality;
+				if(EnumField(new GUIContent("Quality"), ref quality, offSet + 1))
+				{
+					buff.Quality = (BuffType)quality;
+				}
+				BoolField("Permanent", ref buff.Permanent, offSet + 1);
+				FloatField("Buff Time", ref buff.BuffTime, offSet + 1);
+				ObjectField("Icon", ref buff.Icon, offSet + 1);
+
+				DrawArray(new GUIContent("Effects"), new System.Func<int, int, bool>(DrawEffectStruct), ref buff.Effects, ref BlockingBuffEffectsOpen, offSet + 1);
+
+				Foldout("Custom Effects", ref BlockingBuffCustomEffectsOpen, offSet + 1);
+				if(BlockingBuffCustomEffectsOpen)
+				{
+					BoolField("Apply Move Stun", ref buff.CustomEffects.ApplyMoveStun, offSet + 2);
+					BoolField("Invincible", ref buff.CustomEffects.Invincible, offSet + 2); 
+				}
+
+				DrawArray(new GUIContent("DOTs"), new System.Func<int, int, bool>(DrawDOTStruct), ref buff.DOTs, ref BlockingBuffDOTsOpen, offSet + 1);
+			}
+		}
+		private bool DrawEffectStruct(int arrayIndex, int offSet)
+		{
+			PlayerSettings settings = target as PlayerSettings;
+
+			bool changed = false;
+			System.Enum targetBaseStat = settings.BlockingBuff.Effects[arrayIndex].TargetBaseStat;
+			if(EnumField("Target Base Stat", ref targetBaseStat, offSet))
+			{
+				changed = true;
+				settings.BlockingBuff.Effects[arrayIndex].TargetBaseStat = (TargetBaseStat)targetBaseStat;
+			}
+
+			changed |= BoolField("Percent", ref settings.BlockingBuff.Effects[arrayIndex].Percent, offSet);
+			changed |= FloatField("Amount", ref settings.BlockingBuff.Effects[arrayIndex].Amount, offSet);
+
+			if (arrayIndex < settings.BlockingBuff.Effects.Length - 1)
+				LineBreak();
+
+			return changed;
+		}
+		private bool DrawDOTStruct(int arrayIndex, int offSet)
+		{
+			PlayerSettings settings = target as PlayerSettings;
+
+			bool changed = false;
+			System.Enum targetElement = settings.BlockingBuff.DOTs[arrayIndex].Element;
+			if (EnumField("Target Element", ref targetElement, offSet))
+			{
+				changed = true;
+				settings.BlockingBuff.DOTs[arrayIndex].Element = (ElementType)targetElement;
+			}
+
+			System.Enum targetStat = settings.BlockingBuff.DOTs[arrayIndex].TargetStat;
+			if (EnumField("Target Stat", ref targetStat, offSet))
+			{
+				changed = true;
+				settings.BlockingBuff.DOTs[arrayIndex].TargetStat = (TargetStat)targetStat;
+			}
+
+			changed |= FloatField("Delay Per Activation", ref settings.BlockingBuff.DOTs[arrayIndex].DelayPerActivation, offSet);
+			changed |= FloatField("Base Damage", ref settings.BlockingBuff.DOTs[arrayIndex].BaseDamage, offSet);
+
+			if(arrayIndex < settings.BlockingBuff.DOTs.Length - 1)
+				LineBreak();
+
+			return changed;
+		}
+		private void IFramesSettingsArea()
+		{
+			PlayerSettings settings = target as PlayerSettings;
+
+			FoldoutHeader("IFrames Settings", ref IFramesSettingsOpen);
+			if (IFramesSettingsOpen)
+			{
+				BoolField(new GUIContent("Invincible After Hit", "Should the player be invincible for a set time after getting damaged?"), ref settings.InvincibleAfterHit);
+				if (settings.InvincibleAfterHit)
+				{
+					FloatField(new GUIContent("Invincible After Hit Time", "How long should this invincibility last?."), ref settings.InvincibleAfterHitTime, 1);
+					ColorField(new GUIContent("Invincible Model Flash Color", "In which color should the player model flash while he is invincible?"), ref settings.InvincibleModelFlashColor, 1);
+					FloatField(new GUIContent("Invincible Model Flash Delay", "How long of a delay between each colored model flash?"), ref settings.InvincibleModelFlashDelay, 1);
+					FloatField(new GUIContent("Invincible Model Flash Time", "How long does a model color flash last?"), ref settings.InvincibleModelFlashTime, 1);
+				}
+			}
+			EndFoldoutHeader();
+		}
 		private void HUDSettingsArea()
 		{
 			PlayerSettings settings = target as PlayerSettings;
@@ -110,50 +232,19 @@ namespace EoE.Information
 			FoldoutHeader("VFX Settings", ref VFXSettingsOpen);
 			if (VFXSettingsOpen)
 			{
-				BoolField(new GUIContent("Color Screen On Damage", "When the player get hit, should there be a color screen feedback?"), ref settings.ColorScreenOnDamage);
-				if (settings.ColorScreenOnDamage)
-				{
-					ColorField(new GUIContent("Color Screen Color", "The Color of the Screen coloring"), ref settings.ColorScreenColor, 1);
-					FloatField(new GUIContent("Color Screen Depth", "How far should the color go into the screen?"), ref settings.ColorScreenDepth, 1);
-					FloatField(new GUIContent("Color Screen Duration", "How long should the screen coloring stay?"), ref settings.ColorScreenDuration, 1);
-				}
+				ObjectArrayField(new GUIContent("Effects On Receive Damage"), ref settings.EffectsOnReceiveDamage, ref ReceiveDamageOpen, new GUIContent("Effect "));
+				ObjectArrayField(new GUIContent("Effects On Receive Knockback"), ref settings.EffectsOnReceiveKnockback, ref ReceiveKnockbackOpen, new GUIContent("Effect "));
+				ObjectArrayField(new GUIContent("Effects On Cause Damage"), ref settings.EffectsOnCauseDamage, ref CauseDamageOpen, new GUIContent("Effect "));
+				ObjectArrayField(new GUIContent("Effects On Cause Crit"), ref settings.EffectsOnCauseCrit, ref CauseCritOpen, new GUIContent("Effect "));
+				ObjectArrayField(new GUIContent("Effects On Levelup"), ref settings.EffectsOnLevelup, ref LevelUpOpen, new GUIContent("Effect "));
 
-				GUILayout.Space(6);
-				BoolField(new GUIContent("Shake Screen On Knockback", "When the player experiences an impact should the screen shake?"), ref settings.ShakeScreenOnKnockback);
-				if (settings.ShakeScreenOnKnockback)
+				GUILayout.Space(4);
+				bool changedFloat = FloatField(new GUIContent("Effects Health Threshold", "The effects in the 'Effects On Damage When Below Threshold' will only be played when the player is below this (Health / MaxHealth) Threshold. (0 - 1)"), ref settings.EffectsHealthThreshold);
+				if (changedFloat)
 				{
-					FloatField(new GUIContent("Shake Time On Knockback", "How long should the screen shake?"), ref settings.ShakeTimeOnKnockback, 1);
-					FloatField(new GUIContent("Shake Screen Axis Intensity", "XYZ Position shake multiplier"), ref settings.ShakeScreenAxisIntensity, 1);
-					FloatField(new GUIContent("Shake Screen Angle Intensity", "XYZ Rotation shake multiplier"), ref settings.ShakeScreenAngleIntensity, 1);
+					settings.EffectsHealthThreshold = Mathf.Clamp01(settings.EffectsHealthThreshold);
 				}
-
-				GUILayout.Space(6);
-				BoolField(new GUIContent("Blur Screen On Damage", "When the player is below a health threshold, should there be a Blur on the sight?"), ref settings.BlurScreenOnDamage);
-				if (settings.BlurScreenOnDamage)
-				{
-					FloatField(new GUIContent("Blur Screen Health Threshold", "If the player is below this threshold (0 - 1) the blur effect will be caused."), ref settings.BlurScreenHealthThreshold, 1);
-					FloatField(new GUIContent("Blur Screen Base Intensity", "How strong should the intensity be? (0 - 1), Will be multiplied by the caused damage and how much health is currently left."), ref settings.BlurScreenBaseIntensity, 1);
-					FloatField(new GUIContent("Blur Screen Duration", "How long should the blur stay? Will be multiplied the same as the intensity"), ref settings.BlurScreenDuration, 1);
-				}
-
-				GUILayout.Space(6);
-				BoolField(new GUIContent("Slow On Critical Hit", "When the player hits a critical strike should there be a time dilution? (Slowdown or Speedup)"), ref settings.SlowOnCriticalHit);
-				if (settings.SlowOnCriticalHit)
-				{
-					FloatField(new GUIContent("Slow On Crit Time In", "How long should the slowdown take until it is at its maximum?"), ref settings.SlowOnCritTimeIn, 1);
-					FloatField(new GUIContent("Slow On Crit Time Stay", "How long should the slowdown stay?"), ref settings.SlowOnCritTimeStay, 1);
-					FloatField(new GUIContent("Slow On Crit Time Out", "How long should the slowdown take until it has faded away?"), ref settings.SlowOnCritTimeOut, 1);
-					FloatField(new GUIContent("Slow On Crit Scale", "What is the maximum slow (This is the time scale while Stay time is active)"), ref settings.SlowOnCritScale, 1);
-
-					GUILayout.Space(3);
-					BoolField(new GUIContent("Screen Shake On Crit"), ref settings.ScreenShakeOnCrit, 1);
-					if (settings.ScreenShakeOnCrit)
-					{
-						FloatField(new GUIContent("Shake Time On Crit", "How long should the screen shake?"), ref settings.ShakeTimeOnCrit, 2);
-						FloatField(new GUIContent("On Crit Shake Axis Intensity", "XYZ Position shake multiplier"), ref settings.OnCritShakeAxisIntensity, 2);
-						FloatField(new GUIContent("On Crit Shake Angle Intensity", "XYZ Rotation shake multiplier"), ref settings.OnCritShakeAngleIntensity, 2);
-					}
-				}
+				ObjectArrayField(new GUIContent("Effects On Damage When Below Threshold"), ref settings.EffectsOnDamageWhenBelowThreshold, ref LowHealthThresholdOpen, new GUIContent("Effect "));
 			}
 			EndFoldoutHeader();
 		}

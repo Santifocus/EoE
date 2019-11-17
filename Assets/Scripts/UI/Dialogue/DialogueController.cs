@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using System.Reflection;
+using EoE.Information;
 
 namespace EoE.UI
 {
@@ -11,13 +12,15 @@ namespace EoE.UI
 		private const string COLOR_CLOSER = "</color>";
 		private const string HIDE_COLOR = "<color=#00000000>";
 
+		[SerializeField] private RectTransform dialogueBoxParent = default;
 		private DialogueBox dialogueContainer;
 		private Queue<Dialogue> quedDialogues;
 		private bool displayingDialogue;
+
 		private void Start()
 		{
 			Instance = this;
-			dialogueContainer = Instantiate(GameController.CurrentGameSettings.DialogueBoxPrefab, transform);
+			dialogueContainer = Instantiate(GameController.CurrentGameSettings.DialogueBoxPrefab, dialogueBoxParent);
 			quedDialogues = new Queue<Dialogue>();
 			ClearDisplay();
 		}
@@ -29,9 +32,20 @@ namespace EoE.UI
 				Instance.StartCoroutine(Instance.DisplayDialogue());
 			}
 		}
+		public static void CreateAndShowDialogue(DialogueInput info)
+		{
+			(string, Color)[] parts = new (string, Color)[info.parts.Length];
+			for(int i = 0; i < parts.Length; i++)
+			{
+				parts[i] = (info.parts[i].text, info.parts[i].textColor);
+			}
+
+			Dialogue createdDialogue = new Dialogue(parts);
+			ShowDialogue(createdDialogue);
+		}
 		private IEnumerator DisplayDialogue()
 		{
-			while(quedDialogues.Count > 0)
+			while (quedDialogues.Count > 0)
 			{
 				if (displayingDialogue)
 				{
@@ -44,7 +58,7 @@ namespace EoE.UI
 					displayingDialogue = true;
 				}
 
-				yield return new WaitForSeconds(GameController.CurrentGameSettings.ShowDialogueBaseDelay); 
+				yield return new WaitForSeconds(GameController.CurrentGameSettings.ShowDialogueBaseDelay);
 
 				dialogueContainer.gameObject.SetActive(true);
 				Dialogue targetDialogue = quedDialogues.Dequeue();
@@ -58,15 +72,18 @@ namespace EoE.UI
 					currentText = currentText.Insert(stringIndex, colorOpener);
 					stringIndex += colorOpener.Length;
 
-					for(int j = 0; j < targetDialogue.parts[i].Text.Length; j++)
+					for (int j = 0; j < targetDialogue.parts[i].Text.Length; j++)
 					{
 						if (GameController.CurrentGameSettings.SkipDelayOnSpace)
 						{
 							float delay = targetDialogue.parts[i].Text[j] == ' ' ? 0 : GameController.CurrentGameSettings.DialogueDelayPerLetter;
+
 							yield return new WaitForSeconds(delay);
 						}
 						else
+						{
 							yield return new WaitForSeconds(GameController.CurrentGameSettings.DialogueDelayPerLetter);
+						}
 
 						stringIndex++;
 						dialogueContainer.textDisplay.text = currentText.Insert(stringIndex, HIDE_COLOR);
@@ -77,7 +94,7 @@ namespace EoE.UI
 					stringIndex += COLOR_CLOSER.Length;
 					dialogueContainer.textDisplay.text = currentText.Insert(stringIndex, HIDE_COLOR);
 				}
-				if(targetDialogue.onFinish != null)
+				if (targetDialogue.onFinish != null)
 					targetDialogue.onFinish?.Invoke();
 			}
 
@@ -102,14 +119,22 @@ namespace EoE.UI
 	public class Dialogue
 	{
 		public DialoguePart[] parts;
-		public int totalTextLenght;
+		public int totalTextLenght { get; private set; }
 
 		public delegate void OnFinishDialogue();
 		public OnFinishDialogue onFinish;
+		public Dialogue(params (string, Color)[] parts)
+		{
+			SetupParts(parts);
+		}
 		public Dialogue(OnFinishDialogue onFinish, params (string, Color)[] parts)
 		{
-			this.parts = new DialoguePart[parts.Length];
 			this.onFinish = onFinish;
+			SetupParts(parts);
+		}
+		private void SetupParts((string, Color)[] parts)
+		{
+			this.parts = new DialoguePart[parts.Length];
 			for (int i = 0; i < parts.Length; i++)
 			{
 				totalTextLenght += parts[i].Item1.Length;
@@ -119,7 +144,7 @@ namespace EoE.UI
 		public override string ToString()
 		{
 			string fullText = "";
-			for(int i = 0; i < parts.Length; i++)
+			for (int i = 0; i < parts.Length; i++)
 			{
 				fullText += parts[i].Text;
 			}

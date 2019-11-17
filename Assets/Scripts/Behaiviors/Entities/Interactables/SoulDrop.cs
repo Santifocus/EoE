@@ -1,7 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 namespace EoE.Entities
 {
@@ -49,7 +48,7 @@ namespace EoE.Entities
 			float timer = 0;
 			float timePerPuls = fadeInTime / pulsateCount;
 
-			while(timer < fadeInTime)
+			while (timer < fadeInTime)
 			{
 				yield return new WaitForEndOfFrame();
 				timer += Time.deltaTime;
@@ -99,7 +98,8 @@ namespace EoE.Entities
 				float point = (Mathf.Sin(colorTime * Mathf.PI) + 1) / 2;
 				infoSign.color = colorOverTime.Evaluate(point);
 
-				Vector3 signDir = new Vector3(infoSign.transform.position.x - Player.Instance.transform.position.x, 0, infoSign.transform.position.z - Player.Instance.transform.position.z).normalized;
+				Vector3 facingDir = Vector3.Lerp(Player.Instance.actuallWorldPosition, PlayerCameraController.PlayerCamera.transform.position, 0.35f);
+				Vector3 signDir = (infoSign.transform.position - facingDir).normalized;
 				infoSign.transform.forward = signDir;
 			}
 		}

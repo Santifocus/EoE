@@ -1,7 +1,5 @@
 ﻿using EoE.Entities;
 using EoE.Information;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace EoE
@@ -17,7 +15,7 @@ namespace EoE
 		public static Camera PlayerCamera => instance.playerCamera;
 
 		[SerializeField] private Camera playerCamera = default;
-		[SerializeField] private Camera screenCapturerCamera = default;
+		private Vector3 curOffset;
 
 		private PlayerSettings playerSettigns => Player.Instance.SelfSettings as PlayerSettings;
 
@@ -26,6 +24,7 @@ namespace EoE
 			TargetRotation = CurRotation = new Vector2(transform.eulerAngles.y, transform.eulerAngles.x);
 			instance = this;
 			playerCamera.transform.localPosition = new Vector3(0, 0, -playerSettigns.CameraToPlayerDistance);
+			curOffset = GetOffset();
 			AnchorToPlayer();
 		}
 
@@ -34,23 +33,24 @@ namespace EoE
 			if (!Player.Alive)
 				return;
 
-			if(Player.TargetedEntitie)
+			if (Player.TargetedEntitie)
 			{
 				Vector3 dir = (Player.TargetedEntitie.actuallWorldPosition - transform.position).normalized;
 				LookAtDirection(dir);
 			}
 
-			transform.position = Player.Instance.transform.position + playerSettigns.CameraAnchorOffset;
+			curOffset = Vector3.Lerp(curOffset, GetOffset(), Time.deltaTime * 3);
+			transform.position = Player.Instance.transform.position + curOffset;
 			transform.eulerAngles = new Vector3(CurRotation.y, CurRotation.x, 0);
 
 			float camDist = GetCameraDistance();
-			if(camDist > playerCamera.transform.localPosition.z)
+			if (camDist > playerCamera.transform.localPosition.z)
 			{
-				playerCamera.transform.localPosition = screenCapturerCamera.transform.localPosition = new Vector3(0, 0, camDist);
+				playerCamera.transform.localPosition = new Vector3(0, 0, camDist);
 			}
 			else
 			{
-				playerCamera.transform.localPosition = screenCapturerCamera.transform.localPosition = new Vector3(0, 0, Mathf.Lerp(playerCamera.transform.localPosition.z, camDist, Time.deltaTime * 3));
+				playerCamera.transform.localPosition = new Vector3(0, 0, Mathf.Lerp(playerCamera.transform.localPosition.z, camDist, Time.deltaTime * 3));
 			}
 		}
 		public void LookAtDirection(Vector3 direction)
@@ -60,13 +60,26 @@ namespace EoE
 
 			TargetRotation = -new Vector2(hAngle, vAngle);
 		}
+		private Vector3 GetOffset()
+		{
+			float sinPart = Mathf.Sin((CurRotation.x + 90) * Mathf.Deg2Rad);
+			float cosPart = Mathf.Cos((CurRotation.x + 90) * Mathf.Deg2Rad);
+
+			Vector3 baseOffset = Player.TargetedEntitie ? playerSettigns.CameraAnchorOffsetWhenTargeting : playerSettigns.CameraAnchorOffset;
+
+			Vector3 offset = baseOffset.x * new Vector3(sinPart, 0, cosPart) +
+				new Vector3(0, baseOffset.y, 0) +
+				baseOffset.z * new Vector3(cosPart, 0, sinPart);
+
+			return offset;
+		}
 		private float GetCameraDistance()
 		{
 			Vector3 rayDir = (playerCamera.transform.position - transform.position).normalized;
 			RaycastHit hit;
 			float distance;
 
-			if(Physics.Raycast(transform.position, rayDir, out hit, playerSettigns.CameraToPlayerDistance, ConstantCollector.TERRAIN_LAYER))
+			if (Physics.Raycast(transform.position, rayDir, out hit, playerSettigns.CameraToPlayerDistance, ConstantCollector.TERRAIN_LAYER))
 			{
 				distance = -(transform.position - hit.point).magnitude;
 			}

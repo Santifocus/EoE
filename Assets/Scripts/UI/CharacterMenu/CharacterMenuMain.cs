@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
+﻿using EoE.Controlls;
 using EoE.Entities;
+using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
-using EoE.Controlls;
 
 namespace EoE.UI
 {
@@ -16,7 +14,7 @@ namespace EoE.UI
 		[SerializeField] private RawImage modelDisplay = default;
 		[SerializeField] private Camera modelRendererCameraPrefab = default;
 		[SerializeField] private Vector3 cameraStandardRotation = new Vector3(30, 180, 0);
-		[SerializeField] private Vector3 cameraToModelDistance = new Vector3(0,2,8);
+		[SerializeField] private Vector3 cameraToModelDistance = new Vector3(0, 2, 8);
 
 		[Space(5)]
 		[SerializeField] private Vector2 cameraVerticalAngleClamps = new Vector2(30, -30);
@@ -56,7 +54,7 @@ namespace EoE.UI
 
 		protected override void ResetPage()
 		{
-			if (!playerModelSetup) 
+			if (!playerModelSetup)
 				SetupPlayerModel();
 
 			UpdateStatDisplay();
@@ -115,7 +113,7 @@ namespace EoE.UI
 			void SetLayerForAllChildren(Transform parent)
 			{
 				parent.gameObject.layer = PLAYER_MODEL_DISPLAY_LAYER;
-				
+
 				//Apply to children
 				int c = parent.childCount;
 				for (int i = 0; i < c; i++)
@@ -129,6 +127,10 @@ namespace EoE.UI
 					parent.GetChild(i).gameObject.layer = PLAYER_MODEL_DISPLAY_LAYER;
 				}
 			}
+		}
+		protected override void DeactivatePage()
+		{
+			gameObject.SetActive(false);
 		}
 	}
 }

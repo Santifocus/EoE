@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEditor;
 using static EoE.EoEEditor;
 
 namespace EoE.Information
@@ -9,18 +7,7 @@ namespace EoE.Information
 	[CustomEditor(typeof(LevelingSettings), true), CanEditMultipleObjects]
 	public class LevelingSettingsEditor : ObjectSettingEditor
 	{
-		[MenuItem("EoE/LevelingSettings")]
-		public static void CreateLevelingSettings()
-		{
-			LevelingSettings asset = CreateInstance<LevelingSettings>();
-
-			AssetDatabase.CreateAsset(asset, "Assets/Settings/New LevelingSettings.asset");
-			AssetDatabase.SaveAssets();
-			EditorUtility.FocusProjectWindow();
-
-			Selection.activeObject = asset;
-			Debug.Log("Created: 'New LevelingSettings' at: Assets/Settings/...");
-		}
+		[MenuItem("EoE/LevelingSettings")] public static void CreateLevelingSettings() => AssetCreator<LevelingSettings>("Settings", "EntitieSettings", "LevelingSettings");
 
 		private static bool LevelingCurveOpen;
 		private static bool SkillPointIncrementOpen;
@@ -28,7 +15,7 @@ namespace EoE.Information
 		private int testInput;
 		private string testOutput;
 		private bool needsToCalculateTestValue = true;
-		protected override void CustomInspector() 
+		protected override void CustomInspector()
 		{
 			LevelingCurveSettingsArea();
 			RotationIncrements();

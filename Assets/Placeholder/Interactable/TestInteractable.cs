@@ -1,6 +1,5 @@
 ﻿using EoE.UI;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace EoE.Entities
@@ -27,7 +26,7 @@ namespace EoE.Entities
 			canBeInteracted = true;
 			basePos = rend.transform.position;
 
-			if (!setupStaticDoorInformer) 
+			if (!setupStaticDoorInformer)
 				SetupStaticDoorInformer();
 		}
 		private static void SetupStaticDoorInformer()
@@ -56,7 +55,7 @@ namespace EoE.Entities
 			canBeInteracted = false;
 			float processTime = 0;
 
-			while(processTime < openTime)
+			while (processTime < openTime)
 			{
 				yield return new WaitForEndOfFrame();
 				processTime += Time.deltaTime;

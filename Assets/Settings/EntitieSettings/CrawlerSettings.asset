@@ -17,21 +17,23 @@ MonoBehaviour:
   EntitieElement: 2
   PossibleDropsTable: {fileID: 11400000, guid: 6c863124784db984e93eb995e00bd42e, type: 2}
   SoulWorth: 10
-  BaseAttackDamage: 10
+  BaseAttackDamage: 15
   BaseMagicDamage: 3
   BaseDefense: 2
   Health: 50
   DoHealthRegen: 0
   HealthRegen: 0
   HealthRegenInCombatMultiplier: 0.5
+  HealthRegenParticles: {fileID: 0}
+  HealthRegenParticlesOffset: {x: 0, y: 0, z: 0}
   Mana: 50
   DoManaRegen: 0
   ManaRegen: 0
   ManaRegenInCombatMultiplier: 0.5
-  WalkSpeed: 8
+  WalkSpeed: 10
   RunSpeedMultiplicator: 1.25
   JumpPower: {x: 0, y: 10, z: 0}
-  TurnSpeed: 240
+  TurnSpeed: 280
   InAirTurnSpeedMultiplier: 0.25
   MoveAcceleration: 0.1
   NoMoveDeceleration: 0.25
@@ -51,7 +53,9 @@ MonoBehaviour:
   LookAroundDelayMin: 0.5
   LookAroundDelayMax: 2
   AttackSpeed: 1
-  InRangeWaitTime: 0.3
-  BashSpeed: 25
-  BashDistance: 10
+  BashSpeed: 40
+  BashDistance: 7
   ForceTranslationMultiplier: 1
+  BashAnnouncementDelay: -0.6
+  BashAnnouncementParticles: {fileID: 11400000, guid: dd68d9db5e90b2f449f0f973e984a2a8,
+    type: 2}

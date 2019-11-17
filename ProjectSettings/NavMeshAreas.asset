@@ -11,8 +11,8 @@ NavMeshProjectSettings:
     cost: 1
   - name: Jump
     cost: 2
-  - name: 
-    cost: 1
+  - name: FalloffPlane
+    cost: 20
   - name: 
     cost: 1
   - name: 
@@ -76,7 +76,7 @@ NavMeshProjectSettings:
     agentRadius: 0.5
     agentHeight: 3
     agentSlope: 45
-    agentClimb: 0.5
+    agentClimb: 1
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
     minRegionArea: 2

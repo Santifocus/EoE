@@ -24,6 +24,9 @@ MonoBehaviour:
   DoHealthRegen: 1
   HealthRegen: 8
   HealthRegenInCombatMultiplier: 0
+  HealthRegenParticles: {fileID: 3894390344941758739, guid: 4fc32336d51ae934c9aa8f2a0a80d546,
+    type: 3}
+  HealthRegenParticlesOffset: {x: 0, y: -1.5, z: 0}
   Mana: 30
   DoManaRegen: 1
   ManaRegen: 4
@@ -39,6 +42,7 @@ MonoBehaviour:
   LevelSettings: {fileID: 11400000, guid: f274dc43aa7e69e4db13a311b4ea6d9e, type: 2}
   CameraToPlayerDistance: 7
   CameraAnchorOffset: {x: 0, y: 1.6, z: 0}
+  CameraAnchorOffsetWhenTargeting: {x: 1, y: 2, z: 0}
   CameraRotationPower: {x: 200, y: 75}
   CameraRotationSpeed: 5
   CameraVerticalAngleClamps: {x: -50, y: 50}
@@ -59,6 +63,37 @@ MonoBehaviour:
   DodgeCooldown: 0.3
   DodgeEnduranceCost: 10
   DodgeModelMaterial: {fileID: 2100000, guid: 11d51a887e999af408b3d408f575a218, type: 2}
+  StartBlockingInertia: 0.3
+  BlockingBuff:
+    Name: Blocking
+    Quality: 2
+    Permanent: 1
+    BuffTime: 0
+    Icon: {fileID: 21300000, guid: 799750162dc2c5544a7bac42c74b5f69, type: 3}
+    Effects:
+    - TargetBaseStat: 5
+      Percent: 1
+      Amount: 30
+    - TargetBaseStat: 6
+      Percent: 1
+      Amount: -60
+    - TargetBaseStat: 5
+      Percent: 0
+      Amount: 5
+    CustomEffects:
+      ApplyMoveStun: 0
+      Invincible: 0
+    DOTs:
+    - Element: 0
+      TargetStat: 2
+      DelayPerActivation: 0.25
+      BaseDamage: 3
+  StopBlockingInertia: 0.3
+  InvincibleAfterHit: 1
+  InvincibleAfterHitTime: 0.4
+  InvincibleModelFlashColor: {r: 1, g: 1, b: 1, a: 1}
+  InvincibleModelFlashDelay: 0.1
+  InvincibleModelFlashTime: 0.025
   StatTextUpdateSpeed: 0.5
   EnduranceBarLerpSpeed: 5
   HealthTextColors:
@@ -122,24 +157,19 @@ MonoBehaviour:
   ReserveEnduranceBarColor: {r: 1, g: 1, b: 1, a: 1}
   ActiveEnduranceBarColor: {r: 1, g: 1, b: 1, a: 1}
   ReloadingEnduranceBarColor: {r: 0.4, g: 0.4, b: 0.4, a: 0.8}
-  ColorScreenOnDamage: 1
-  ColorScreenColor: {r: 0.78431374, g: 0, b: 0, a: 0.43137255}
-  ColorScreenDepth: 0.03
-  ColorScreenDuration: 0.2
-  ShakeScreenOnKnockback: 1
-  ShakeTimeOnKnockback: 0.15
-  ShakeScreenAxisIntensity: 0.2
-  ShakeScreenAngleIntensity: 0.075
-  BlurScreenOnDamage: 1
-  BlurScreenHealthThreshold: 0.4
-  BlurScreenBaseIntensity: 0.4
-  BlurScreenDuration: 0.3
-  SlowOnCriticalHit: 1
-  SlowOnCritTimeIn: 0
-  SlowOnCritTimeStay: 0.5
-  SlowOnCritTimeOut: 0.2
-  SlowOnCritScale: 0.3
-  ScreenShakeOnCrit: 1
-  ShakeTimeOnCrit: 0.1
-  OnCritShakeAxisIntensity: 0.5
-  OnCritShakeAngleIntensity: 0.3
+  EffectsOnReceiveDamage:
+  - {fileID: 11400000, guid: 910d3349e1560ab4ba7478fa7a8e8876, type: 2}
+  - {fileID: 11400000, guid: 11060c91c24341947a8c373d641e5c86, type: 2}
+  - {fileID: 11400000, guid: 9d9557ec007fa904aa2d0ef9f1ea3489, type: 2}
+  EffectsOnReceiveKnockback:
+  - {fileID: 11400000, guid: b09700b6216eb874aab8d980440f121b, type: 2}
+  EffectsOnCauseDamage: []
+  EffectsOnCauseCrit:
+  - {fileID: 11400000, guid: 3c3f83d3e81eae144acbe5a6b02983d0, type: 2}
+  - {fileID: 11400000, guid: e9a7041c1b96b544d9be0195facd23e7, type: 2}
+  - {fileID: 11400000, guid: 6812b6ecf408ba8439c8e9f47922381b, type: 2}
+  EffectsOnLevelup:
+  - {fileID: 11400000, guid: 982aab948223d7044bfae67dc43bb77c, type: 2}
+  EffectsHealthThreshold: 0.3
+  EffectsOnDamageWhenBelowThreshold:
+  - {fileID: 11400000, guid: 668a809c73c04d648ae6ae4e123f2f21, type: 2}

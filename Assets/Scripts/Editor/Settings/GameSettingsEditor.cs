@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEditor;
 using static EoE.EoEEditor;
 
 namespace EoE.Information
@@ -30,7 +28,7 @@ namespace EoE.Information
 		private void CustomInspector()
 		{
 			FoldoutHeader("Entitie Velocity Settings", ref EntititeVelocitySettingsOpen);
-			if(EntititeVelocitySettingsOpen)
+			if (EntititeVelocitySettingsOpen)
 				EntitieVelocityArea();
 			EndFoldoutHeader();
 
@@ -78,7 +76,7 @@ namespace EoE.Information
 		{
 			GameSettings settings = target as GameSettings;
 
-			FloatField(new GUIContent("Enemy Wandering Urgency", "When a enemy wanders around, at how much of the max speed should the entitie try to reach the wandering point? (0 == None, 0.5 == Half, 1 == Max)"), ref settings.EnemyWanderingUrgency);
+			FloatField(new GUIContent("Idle Movement Urgency", "When a Enemy is idle, at how much of his max speed should the Enemy move? (0 == None, 0.5 == Half, 1 == Max)"), ref settings.IdleMovementUrgency);
 			FloatField(new GUIContent("Enemy Minimum Investigation Area", "After losing sight of the player, the Enemy first tries to guess where the player is for a set time, after that it will check the close area, the distance the Enemy checks either its 'WanderingFactor' or this value, whichever is bigger."), ref settings.EnemyMinimumInvestigationArea);
 			FloatField(new GUIContent("Combat Cooldown", "After a Entitie encounters an Enemy how long does a Entitie have to be out of combat before it will be counted as 'Out of Combat'?"), ref settings.CombatCooldown);
 		}
@@ -143,7 +141,7 @@ namespace EoE.Information
 				FloatField(new GUIContent("A"), ref settings.DamageLevelAdd, 1);
 				FloatField(new GUIContent("B"), ref settings.DamageDivider, 1);
 
-				Header("((Level + " + settings.DamageLevelAdd + "[C]) * Defense) / " + settings.DamageDivider + "[D]", 1);
+				Header("((Level + " + settings.DefenseLevelAdd + "[C]) * Defense) / " + settings.DefenseLevelDivider + "[D]", 1);
 				FloatField(new GUIContent("C"), ref settings.DefenseLevelAdd, 1);
 				FloatField(new GUIContent("D"), ref settings.DefenseLevelDivider, 1);
 

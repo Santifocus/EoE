@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace EoE.Information
+﻿namespace EoE.Information
 {
 	public class LevelingSettings : ObjectSettings
 	{
@@ -13,23 +9,23 @@ namespace EoE.Information
 		public float PerTenLevelsBasePoints;
 		public float RotationExtraPoints;
 
-		public float this[TargetStat stat]
+		public float this[TargetBaseStat stat]
 		{
 			get
 			{
 				switch (stat)
 				{
-					case TargetStat.Health:
+					case TargetBaseStat.Health:
 						return HealthPerSkillPoint;
-					case TargetStat.Mana:
+					case TargetBaseStat.Mana:
 						return ManaPerSkillPoint;
-					case TargetStat.Endurance:
+					case TargetBaseStat.Endurance:
 						return EndurancePerSkillPoint;
-					case TargetStat.PhysicalDamage:
+					case TargetBaseStat.PhysicalDamage:
 						return PhysicalDamagePerSkillPoint;
-					case TargetStat.MagicalDamage:
+					case TargetBaseStat.MagicalDamage:
 						return MagicDamagePerSkillPoint;
-					case TargetStat.Defense:
+					case TargetBaseStat.Defense:
 						return DefensePerSkillPoint;
 					default:
 						return 0;

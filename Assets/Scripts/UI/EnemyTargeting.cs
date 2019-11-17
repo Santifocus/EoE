@@ -1,6 +1,4 @@
 ﻿using EoE.Entities;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -44,7 +42,7 @@ namespace EoE.UI
 			isShown = Player.TargetedEntitie != null;
 			bool changedColor = false;
 
-			if(isShown && !indicatorAnchor.gameObject.activeInHierarchy)
+			if (isShown && !indicatorAnchor.gameObject.activeInHierarchy)
 				indicatorAnchor.gameObject.SetActive(true);
 
 			if (isShown && showState < 1)
@@ -56,11 +54,11 @@ namespace EoE.UI
 					showState = 1;
 				}
 			}
-			else if(!isShown && showState > 0)
+			else if (!isShown && showState > 0)
 			{
 				changedColor = true;
 				showState -= Time.deltaTime / changeStateTime;
-				if(showState < 0)
+				if (showState < 0)
 				{
 					showState = 0;
 					indicatorAnchor.gameObject.SetActive(false);
@@ -80,7 +78,7 @@ namespace EoE.UI
 			{
 				Vector3 unclampedPos = PlayerCameraController.PlayerCamera.WorldToScreenPoint(Player.TargetedEntitie.actuallWorldPosition);
 				Vector3 clampedPos = new Vector3(Mathf.Clamp(unclampedPos.x, 0, Screen.width), Mathf.Clamp(unclampedPos.y, 0, Screen.height), unclampedPos.z);
-				if(unclampedPos == clampedPos && !(unclampedPos.z < 0))
+				if (unclampedPos == clampedPos && !(unclampedPos.z < 0))
 				{
 					ChangeOnScreenState(true);
 					AnimateIndicators();
@@ -104,7 +102,7 @@ namespace EoE.UI
 			else
 			{
 				//The spin out animation is unbound to enemys
-				if(onScreenState)
+				if (onScreenState)
 					AnimateIndicators();
 			}
 		}
@@ -114,8 +112,8 @@ namespace EoE.UI
 			{
 				onScreenState = state;
 				offScreenIndicator.gameObject.SetActive(!state);
-				
-				for(int i = 0; i < indicatorParts.Length; i++)
+
+				for (int i = 0; i < indicatorParts.Length; i++)
 				{
 					indicatorParts[i].gameObject.SetActive(state);
 				}
@@ -141,7 +139,7 @@ namespace EoE.UI
 		{
 			Color col = changeStateColors.Evaluate(showState);
 			offScreenIndicator.color = col;
-			for(int i = 0; i < indicatorParts.Length; i++)
+			for (int i = 0; i < indicatorParts.Length; i++)
 			{
 				indicatorParts[i].color = col;
 			}

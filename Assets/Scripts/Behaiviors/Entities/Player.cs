@@ -1,12 +1,12 @@
 ﻿using EoE.Controlls;
+using EoE.Events;
 using EoE.Information;
 using EoE.Utils;
 using EoE.Weapons;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
-using EoE.Events;
+using UnityEngine;
 
 namespace EoE.Entities
 {
@@ -14,7 +14,7 @@ namespace EoE.Entities
 	{
 		#region Fields
 		//Constants
-		private const float ATTACK_INTERACT_COOLDOWN = 0.75f;
+		private const float ATTACK_INTERACT_COOLDOWN = 0.25f;
 		private const float RUN_ANIM_THRESHOLD = 0.75f;
 		private const float NON_TURNING_THRESHOLD = 60;
 		private const float LERP_TURNING_AREA = 0.5f;
@@ -30,19 +30,23 @@ namespace EoE.Entities
 		public TMPro.TextMeshProUGUI debugText = default;
 
 		//Endurance
-		[HideInInspector] public bool recentlyUsedEndurance;
-		[HideInInspector] public List<float> enduranceContainers;
-		[HideInInspector] public int totalEnduranceContainers;
-		[HideInInspector] public int activeEnduranceContainerIndex;
-		[HideInInspector] public float lockedEndurance;
-		private float usedEnduranceCooldown;
-
+		public bool recentlyUsedEndurance { get; private set; }
+		public float curEndurance { get; private set; }
+		public float lockedEndurance { get; private set; }
+		public int totalEnduranceContainers { get; private set; }
 		[HideInInspector] public float trueEnduranceAmount;
+		private float usedEnduranceCooldown;
+		private float useableEndurance => totalEnduranceContainers * PlayerSettings.EndurancePerBar;
 
 		//Dodge
 		public Transform modelTransform = default;
 		private float dodgeCooldown;
 		private bool currentlyDodging;
+
+		//Blocking
+		private float blockingTimer;
+		private bool isBlocking;
+		private BuffInstance blockingBuff;
 
 		//Velocity
 		protected Vector3 curMoveForce;
@@ -84,8 +88,17 @@ namespace EoE.Entities
 		public static PlayerSettings PlayerSettings => instance.selfSettings;
 		public static Entitie TargetedEntitie;
 		public static PlayerBuffDisplay BuffDisplay => instance.buffDisplay;
-		public static Inventory PlayerInventory;
 
+		public static Inventory ItemInventory;
+		public static Inventory WeaponInventory;
+		public static Inventory ArmorInventory;
+		public static Inventory SpellInventory;
+
+		public static InventoryItem EquipedItem;
+		public static InventoryItem EquipedWeapon;
+		public static InventoryItem EquipedArmor;
+		public static InventoryItem EquipedSpell;
+		public static bool MagicSelected { get; private set; }
 		#region Leveling
 		public static Buff LevelingBaseBuff;
 		public static Buff LevelingPointsBuff;
@@ -109,7 +122,7 @@ namespace EoE.Entities
 
 			ChangeWeapon(equipedWeapon);
 			SetupEndurance();
-			PlayerInventory = new Inventory(20);
+			SetupInventorys();
 		}
 		private void SetupLevelingControl()
 		{
@@ -137,14 +150,14 @@ namespace EoE.Entities
 
 			LevelingBaseBuff.Effects = new Effect[incremtingStats];
 			LevelingPointsBuff.Effects = new Effect[incremtingStats];
-			for (int i = 0; i < incremtingStats; i++) 
+			for (int i = 0; i < incremtingStats; i++)
 			{
-				LevelingBaseBuff.Effects[i] = LevelingPointsBuff.Effects[i] = 
+				LevelingBaseBuff.Effects[i] = LevelingPointsBuff.Effects[i] =
 					new Effect
 					{
 						Amount = 0,
 						Percent = false,
-						targetStat = (TargetStat)i
+						TargetBaseStat = (TargetBaseStat)i
 					};
 			}
 
@@ -159,6 +172,20 @@ namespace EoE.Entities
 			//Safest way to ensure everyhting is correct is by adding 0 Souls to our current count
 			AddSouls(0);
 		}
+		private void SetupInventorys()
+		{
+			MagicSelected = false;
+
+			ItemInventory = new Inventory(24);
+			WeaponInventory = new Inventory(8);
+			ArmorInventory = new Inventory(8);
+			SpellInventory = new Inventory(8);
+
+			ItemInventory.InventoryChanged += UpdateEquipedItems;
+			WeaponInventory.InventoryChanged += UpdateEquipedItems;
+			ArmorInventory.InventoryChanged += UpdateEquipedItems;
+			SpellInventory.InventoryChanged += UpdateEquipedItems;
+		}
 		protected override void EntitieUpdate()
 		{
 			if (GameController.GameIsPaused)
@@ -168,12 +195,20 @@ namespace EoE.Entities
 				return;
 			}
 
-			EnduranceRegen();
+			RegenEndurance();
 			CameraControl();
 			MovementControl();
 			AttackControl();
 			TargetEnemyControl();
 			PositionHeldWeapon();
+			ItemUseControll();
+			BlockControl();
+
+			//Inventory Cooldowns
+			ItemInventory.UpdateCooldown();
+			WeaponInventory.UpdateCooldown();
+			ArmorInventory.UpdateCooldown();
+			SpellInventory.UpdateCooldown();
 		}
 		protected override void EntitieFixedUpdate()
 		{
@@ -190,7 +225,7 @@ namespace EoE.Entities
 			}
 			equipedWeapon = newWeapon;
 
-			if(equipedWeapon != null)
+			if (equipedWeapon != null)
 			{
 				heldWeapon = Instantiate(equipedWeapon.weaponPrefab);
 				heldWeapon.Setup();
@@ -198,72 +233,41 @@ namespace EoE.Entities
 		}
 		private void SetupEndurance()
 		{
-			activeEnduranceContainerIndex = PlayerSettings.EnduranceBars - 1;
+			trueEnduranceAmount = PlayerSettings.EnduranceBars * PlayerSettings.EndurancePerBar;
 			totalEnduranceContainers = PlayerSettings.EnduranceBars;
-
-			trueEnduranceAmount = totalEnduranceContainers * PlayerSettings.EndurancePerBar;
-
-			enduranceContainers = new List<float>(totalEnduranceContainers);
-			for(int i = 0; i < totalEnduranceContainers; i++)
-			{
-				enduranceContainers.Add(PlayerSettings.EndurancePerBar);
-			}
+			curEndurance = useableEndurance;
 		}
 		protected void PositionHeldWeapon()
 		{
-			Vector3 worldOffset =		equipedWeapon.weaponHandleOffset.x * rightHand.right + 
-										equipedWeapon.weaponHandleOffset.y * rightHand.up + 
+			Vector3 worldOffset = equipedWeapon.weaponHandleOffset.x * rightHand.right +
+										equipedWeapon.weaponHandleOffset.y * rightHand.up +
 										equipedWeapon.weaponHandleOffset.z * rightHand.forward;
 			heldWeapon.transform.position = rightHand.position + worldOffset;
 			heldWeapon.transform.rotation = rightHand.rotation;
 		}
 		#endregion
 		#region Endurance Control
-		private GetEnduranceType CanAffordEnduranceCost(float cost)
+		public void ChangeEndurance(ChangeInfo change)
 		{
-			if (enduranceContainers[activeEnduranceContainerIndex] >= cost)
-				return GetEnduranceType.Available;
-
-			float total = totalEndurance();
-
-			if (total > cost)
-				return GetEnduranceType.AvailableWithNewBar;
-			else
-				return GetEnduranceType.NotAvailable;
-
-			float totalEndurance()
+			ChangeInfo.ChangeResult changeResult = new ChangeInfo.ChangeResult(change, this, false);
+			if (changeResult.finalChangeAmount > 0)
 			{
-				float t = 0;
-				for (int i = 0; i < enduranceContainers.Count; i++)
-					t += enduranceContainers[i];
-
-				return t;
+				recentlyUsedEndurance = true;
+				usedEnduranceCooldown = PlayerSettings.EnduranceRegenDelayAfterUse;
 			}
-		}
-		private void UseEndurance(float amount)
-		{
-			usedEnduranceCooldown = PlayerSettings.EnduranceRegenDelayAfterUse;
-			recentlyUsedEndurance = true;
 
-			enduranceContainers[activeEnduranceContainerIndex] -= amount;
-			if(enduranceContainers[activeEnduranceContainerIndex] <= 0)
-			{
-				activeEnduranceContainerIndex--;
-				if(activeEnduranceContainerIndex < 0)
-				{
-					activeEnduranceContainerIndex = 0;
-					enduranceContainers[0] = 0;
-				}
-				else
-				{
-					enduranceContainers[activeEnduranceContainerIndex] += enduranceContainers[activeEnduranceContainerIndex + 1];
-					enduranceContainers[activeEnduranceContainerIndex + 1] = 0;
-				}
-			}
+			curEndurance -= changeResult.finalChangeAmount;
+			curEndurance = Mathf.Clamp(curEndurance, 0, useableEndurance);
 		}
-		private void EnduranceRegen()
+		public void UpdateEnduranceStat()
 		{
-			if(recentlyUsedEndurance)
+			totalEnduranceContainers = (int)(trueEnduranceAmount / PlayerSettings.EndurancePerBar);
+			if (curEndurance > useableEndurance)
+				curEndurance = useableEndurance;
+		}
+		private void RegenEndurance()
+		{
+			if (recentlyUsedEndurance)
 			{
 				usedEnduranceCooldown -= Time.deltaTime;
 				if (usedEnduranceCooldown <= 0)
@@ -273,23 +277,13 @@ namespace EoE.Entities
 				}
 			}
 
-			if(activeEnduranceContainerIndex < totalEnduranceContainers - 1)
+			if (curEndurance < useableEndurance - PlayerSettings.EndurancePerBar)
 			{
-				float perSecond =	PlayerSettings.EnduranceRegen *
-									PlayerSettings.LockedEnduranceRegenMutliplier * 
-									(curStates.IsInCombat ? PlayerSettings.EnduranceRegenInCombat : 1);
-
-				lockedEndurance += Time.deltaTime * perSecond;
-
-				if (lockedEndurance >= PlayerSettings.EndurancePerBar)
+				lockedEndurance += PlayerSettings.EnduranceRegen * PlayerSettings.LockedEnduranceRegenMutliplier * (curStates.Fighting ? PlayerSettings.EnduranceRegenInCombat : 1) * Time.deltaTime;
+				if(lockedEndurance > PlayerSettings.EndurancePerBar)
 				{
-					float add = PlayerSettings.EndurancePerBar - enduranceContainers[activeEnduranceContainerIndex];
-					enduranceContainers[activeEnduranceContainerIndex] = PlayerSettings.EndurancePerBar;
-					float rest = PlayerSettings.EndurancePerBar - add;
-
-					activeEnduranceContainerIndex++;
-					enduranceContainers[activeEnduranceContainerIndex] = rest;
-					lockedEndurance = 0;
+					curEndurance += PlayerSettings.EndurancePerBar;
+					lockedEndurance -= PlayerSettings.EndurancePerBar;
 				}
 			}
 			else
@@ -297,16 +291,12 @@ namespace EoE.Entities
 				lockedEndurance = 0;
 			}
 
-			if (!recentlyUsedEndurance && enduranceContainers[activeEnduranceContainerIndex] < PlayerSettings.EndurancePerBar)
+			if (!recentlyUsedEndurance && curEndurance < useableEndurance)
 			{
-				enduranceContainers[activeEnduranceContainerIndex] += Time.deltaTime * PlayerSettings.EnduranceRegen * (curStates.IsInCombat ? PlayerSettings.EnduranceRegenInCombat : 1);
-				if (enduranceContainers[activeEnduranceContainerIndex] > PlayerSettings.EndurancePerBar)
-					enduranceContainers[activeEnduranceContainerIndex] = PlayerSettings.EndurancePerBar;
+				curEndurance += PlayerSettings.EnduranceRegen * (curStates.Fighting ? PlayerSettings.EnduranceRegenInCombat : 1) * Time.deltaTime;
+				if (curEndurance > useableEndurance)
+					curEndurance = useableEndurance;
 			}
-		}
-		public void UpdateEnduranceStat()
-		{
-
 		}
 		#endregion
 		#region Movement
@@ -315,19 +305,22 @@ namespace EoE.Entities
 			UpdateAcceleration();
 			UpdateMovementSpeed();
 
+			if (IsStunned)
+				return;
+
 			JumpControl();
 			PlayerMoveControl();
 			DodgeControl();
 		}
 		private void UpdateAcceleration()
 		{
-			if (curStates.IsMoving && !curStates.IsTurning)
+			if (curStates.Moving && !curStates.Turning)
 			{
 				float clampedIntent = Mathf.Clamp01(intendedAcceleration);
 				if (curAcceleration < clampedIntent)
 				{
 					if (SelfSettings.MoveAcceleration > 0)
-						curAcceleration = Mathf.Min(clampedIntent, curAcceleration + intendedAcceleration * Time.fixedDeltaTime / SelfSettings.MoveAcceleration / SelfSettings.EntitieMass * (curStates.IsGrounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
+						curAcceleration = Mathf.Min(clampedIntent, curAcceleration + intendedAcceleration * Time.fixedDeltaTime / SelfSettings.MoveAcceleration / SelfSettings.EntitieMass * (curStates.Grounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
 					else
 						curAcceleration = clampedIntent;
 				}
@@ -337,7 +330,7 @@ namespace EoE.Entities
 				if (curAcceleration > 0)
 				{
 					if (SelfSettings.NoMoveDeceleration > 0)
-						curAcceleration = Mathf.Max(0, curAcceleration - Time.fixedDeltaTime / SelfSettings.NoMoveDeceleration / SelfSettings.EntitieMass * (curStates.IsGrounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
+						curAcceleration = Mathf.Max(0, curAcceleration - Time.fixedDeltaTime / SelfSettings.NoMoveDeceleration / SelfSettings.EntitieMass * (curStates.Grounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
 					else
 						curAcceleration = 0;
 				}
@@ -345,13 +338,13 @@ namespace EoE.Entities
 		}
 		private void UpdateMovementSpeed()
 		{
-			bool turning = curStates.IsTurning;
-			bool moving = curStates.IsMoving;
-			bool running = curStates.IsRunning;
+			bool turning = curStates.Turning;
+			bool moving = curStates.Moving;
+			bool running = curStates.Running;
 
 			//If the Entitie doesnt move intentionally but is in run mode, then stop the run mode
 			if (running && !moving)
-				curStates.IsRunning = running = false;
+				curStates.Running = running = false;
 
 			//Set the animation state to either Turning, Walking or Running
 			animationControl.SetBool("Turning", turning);
@@ -359,20 +352,21 @@ namespace EoE.Entities
 			animationControl.SetBool("Running", !turning && curAcceleration > 0 && (running && curAcceleration > RUN_ANIM_THRESHOLD));
 
 			//We find out in which direction the Entitie should move according to its movement
-			float baseTargetSpeed = curWalkSpeed * (curStates.IsRunning ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
+			float baseTargetSpeed = curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
 			curMoveForce = baseTargetSpeed * (controllDirection.HasValue ? controllDirection.Value : transform.forward);
 
+			animationControl.SetFloat("Runspeed", baseTargetSpeed);
 			//Now combine those forces as the current speed
 			body.velocity = curVelocity + curMoveForce;
 		}
 		private void TurnControl()
 		{
-			float turnAmount = Time.fixedDeltaTime * SelfSettings.TurnSpeed * (curStates.IsGrounded ? 1 : SelfSettings.InAirTurnSpeedMultiplier);
+			float turnAmount = Time.fixedDeltaTime * SelfSettings.TurnSpeed * (curStates.Grounded ? 1 : SelfSettings.InAirTurnSpeedMultiplier);
 			float normalizedDif = Mathf.Abs(curRotation - intendedRotation) / NON_TURNING_THRESHOLD;
 			turnAmount *= Mathf.Min(normalizedDif * LERP_TURNING_AREA, 1);
 			curRotation = Mathf.MoveTowardsAngle(curRotation, intendedRotation, turnAmount);
 
-			curStates.IsTurning = normalizedDif > 1;
+			curStates.Turning = normalizedDif > 1;
 
 			transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,
 														curRotation,
@@ -380,13 +374,12 @@ namespace EoE.Entities
 		}
 		private void JumpControl()
 		{
-			if (InputController.Jump.Down && curStates.IsGrounded)
+			if (InputController.Jump.Down && curStates.Grounded)
 			{
-				float cost = PlayerSettings.JumpEnduranceCost;
-				if ((int)CanAffordEnduranceCost(cost) > 0) //0 == Not available; 1/2 == available
+				if (curEndurance >= PlayerSettings.JumpEnduranceCost)
 				{
 					Jump();
-					UseEndurance(cost);
+					ChangeEndurance(new ChangeInfo(this, CauseType.Magic, PlayerSettings.JumpEnduranceCost, false));
 				}
 			}
 		}
@@ -396,34 +389,43 @@ namespace EoE.Entities
 			Vector2 inputDirection = InputController.PlayerMove;
 
 			bool moving = inputDirection != Vector2.zero;
-			curStates.IsMoving = moving;
+			curStates.Moving = moving;
 
 			if (TargetedEntitie)
-				intendedRotation = PlayerCameraController.TargetRotation.x;
+			{
+				Vector3 direction = (TargetedEntitie.actuallWorldPosition - actuallWorldPosition).normalized;
+				float hAngle = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg -90;
+
+				intendedRotation = -hAngle;
+			}
 
 			//Is the player not trying to move? Then stop here
 			if (!moving)
 				return;
 
 			//Check if the player intends to run and is able to
-			bool running = curStates.IsRunning;
-			if(running)
+			bool running = curStates.Running;
+			if (running)
 			{
 				float runCost = PlayerSettings.RunEnduranceCost * Time.deltaTime;
 
-				if ((int)CanAffordEnduranceCost(runCost) == 0) //0 == Not available; 1/2 == available
-					running = curStates.IsRunning = false;
+				if (curEndurance >= runCost)
+				{
+					ChangeEndurance(new ChangeInfo(this, CauseType.Magic, runCost, false));
+				}
 				else
-					UseEndurance(runCost);
+				{
+					running = curStates.Running = false;
+				}
 			}
 			else if (InputController.Run.Down)
 			{
 				float runCost = PlayerSettings.RunEnduranceCost * Time.deltaTime;
 
-				if ((int)CanAffordEnduranceCost(runCost) > 0) //0 == Not available; 1/2 == available
+				if (curEndurance >= runCost)
 				{
-					UseEndurance(runCost);
-					running = curStates.IsRunning = true;
+					ChangeEndurance(new ChangeInfo(this, CauseType.Magic, runCost, false));
+					running = curStates.Running = true;
 				}
 			}
 			//Check how fast the player wants to accelerate based on how far the movestick is moved
@@ -441,17 +443,18 @@ namespace EoE.Entities
 			if (!TargetedEntitie)
 				intendedRotation = -(Mathf.Atan2(controllDirection.Value.z, controllDirection.Value.x) * Mathf.Rad2Deg - 90);
 		}
+		#region Dodging
 		private void DodgeControl()
 		{
-			if(dodgeCooldown > 0)
+			if (dodgeCooldown > 0)
 			{
 				dodgeCooldown -= Time.deltaTime;
 				return;
 			}
 
-			if(InputController.Dodge.Down && !currentlyDodging && CanAffordEnduranceCost(PlayerSettings.DodgeEnduranceCost) != GetEnduranceType.NotAvailable)
+			if (InputController.Dodge.Down && !currentlyDodging && curEndurance >= PlayerSettings.DodgeEnduranceCost)
 			{
-				UseEndurance(PlayerSettings.DodgeEnduranceCost);
+				ChangeEndurance(new ChangeInfo(this, CauseType.Magic, PlayerSettings.DodgeEnduranceCost, false));
 				StartCoroutine(DodgeCoroutine());
 			}
 		}
@@ -467,7 +470,7 @@ namespace EoE.Entities
 
 			Vector3 newForce = new Vector3(Mathf.Sin(targetAngle * Mathf.Deg2Rad), 0, Mathf.Cos(targetAngle * Mathf.Deg2Rad)) * PlayerSettings.DodgePower * curWalkSpeed;
 
-			entitieForceController.ApplyForce(newForce, 1/PlayerSettings.DodgeDuration);
+			entitieForceController.ApplyForce(newForce, 1 / PlayerSettings.DodgeDuration);
 			EffectUtils.BlurScreen(0.8f, PlayerSettings.DodgeDuration * 1.6f, 6);
 
 			//Create a copy of the player model
@@ -484,7 +487,7 @@ namespace EoE.Entities
 			baseColor.a = 0;
 
 			weaponCopy.enabled = false;
-			for(int i = 0; i < weaponCopy.weaponHitboxes.Length; i++)
+			for (int i = 0; i < weaponCopy.weaponHitboxes.Length; i++)
 			{
 				weaponCopy.weaponHitboxes[i].enabled = false;
 			}
@@ -492,17 +495,16 @@ namespace EoE.Entities
 			ApplyMaterialToAllChildren(modelCopy);
 			ApplyMaterialToAllChildren(weaponCopy.transform);
 
-			invincible = true;
-
-			while(timer < PlayerSettings.DodgeModelExistTime)
+			invincible++;
+			while (timer < PlayerSettings.DodgeModelExistTime)
 			{
 				yield return new WaitForFixedUpdate();
 				timer += Time.fixedDeltaTime;
-				dodgeMaterialInstance.color = baseColor + alphaPart * (1- timer / PlayerSettings.DodgeModelExistTime);
+				dodgeMaterialInstance.color = baseColor + alphaPart * (1 - timer / PlayerSettings.DodgeModelExistTime);
 			}
 			dodgeCooldown = PlayerSettings.DodgeCooldown;
 			currentlyDodging = false;
-			invincible = false;
+			invincible--;
 
 			Destroy(modelCopy.gameObject);
 			Destroy(weaponCopy.gameObject);
@@ -541,7 +543,7 @@ namespace EoE.Entities
 						continue;
 
 					Material[] newMats = new Material[rend.materials.Length];
-					for(int j = 0; j < newMats.Length; j++)
+					for (int j = 0; j < newMats.Length; j++)
 					{
 						newMats[j] = dodgeMaterialInstance;
 					}
@@ -550,6 +552,7 @@ namespace EoE.Entities
 				}
 			}
 		}
+		#endregion
 		private void CameraControl()
 		{
 			if (!TargetedEntitie)
@@ -570,9 +573,9 @@ namespace EoE.Entities
 		{
 			if (InputController.Aim.Down)
 			{
-				List<(Entitie, float) > possibleTargets = new List<(Entitie, float)>();
+				List<(Entitie, float)> possibleTargets = new List<(Entitie, float)>();
 
-				for(int i = 0; i < AllEntities.Count; i++)
+				for (int i = 0; i < AllEntities.Count; i++)
 				{
 					if (AllEntities[i] is Player) //We ignore the player
 						continue;
@@ -625,6 +628,70 @@ namespace EoE.Entities
 				TargetedEntitie = null;
 		}
 		#endregion
+		#region ItemUseControl
+		private void ItemUseControll()
+		{
+			if (InputController.UseItem.Down && EquipedItem != null)
+			{
+				if(EquipedItem.useCooldown <= 0)
+					EquipedItem.data.Use(EquipedItem, this, ItemInventory);
+			}
+			if (InputController.PhysicalMagicSwap.Down)
+			{
+				MagicSelected = !MagicSelected;
+			}
+		}
+		private void UpdateEquipedItems()
+		{
+			if (EquipedItem != null && EquipedItem.stackSize <= 0)
+				EquipedItem = null;
+			if (EquipedWeapon != null && EquipedWeapon.stackSize <= 0)
+				EquipedWeapon = null;
+			if (EquipedSpell != null && EquipedSpell.stackSize <= 0)
+				EquipedSpell = null;
+			if (EquipedArmor != null && EquipedArmor.stackSize <= 0)
+				EquipedArmor = null;
+		}
+		#endregion
+		#region BlockControl
+		private void BlockControl()
+		{
+			float manaCost = 0;
+			float enduranceCost = 0;
+			for(int i = 0; i < PlayerSettings.BlockingBuff.DOTs.Length; i++)
+			{
+				if (PlayerSettings.BlockingBuff.DOTs[i].TargetStat == TargetStat.Mana)
+					manaCost += PlayerSettings.BlockingBuff.DOTs[i].BaseDamage;
+				else if(PlayerSettings.BlockingBuff.DOTs[i].TargetStat == TargetStat.Endurance)
+					enduranceCost += PlayerSettings.BlockingBuff.DOTs[i].BaseDamage;
+			}
+			manaCost *= Time.deltaTime;
+			enduranceCost *= Time.deltaTime;
+
+			if ((InputController.Block.Down || InputController.Block.Active) && (curMana >= manaCost && curEndurance >= enduranceCost))
+			{
+				if (!isBlocking)
+				{
+					blockingTimer += Time.deltaTime;
+					if (blockingTimer >= PlayerSettings.StartBlockingInertia)
+					{
+						isBlocking = true;
+						blockingBuff = AddBuff(PlayerSettings.BlockingBuff, this);
+					}
+				}
+			}
+			else if(isBlocking)
+			{
+				blockingTimer -= Time.deltaTime;
+				if (blockingTimer < PlayerSettings.StartBlockingInertia - PlayerSettings.StopBlockingInertia)
+				{
+					isBlocking = false;
+					blockingTimer = 0;
+					RemoveBuff(blockingBuff);
+				}
+			}
+		}
+		#endregion
 		#region Physical Attack Control
 		private void AttackControl()
 		{
@@ -642,7 +709,7 @@ namespace EoE.Entities
 				attackInteractCooldown -= Time.deltaTime;
 
 			bool normalAttack = InputController.Attack.Down || Input.GetKeyDown(KeyCode.K);
-			if(normalAttack && Interactable.MarkedInteractable && !(attackInteractCooldown > 0))
+			if (normalAttack && Interactable.MarkedInteractable && !(attackInteractCooldown > 0))
 			{
 				if (Interactable.MarkedInteractable.TryInteract())
 					return;
@@ -653,8 +720,8 @@ namespace EoE.Entities
 
 			int state = 0;
 			state += InputController.Attack.Down ? 0 : 4; //If we are here either heavy attack or normal attack was pressed
-			state += curStates.IsRunning ? 1 : 0; //Running => Sprint attack
-			state += !curStates.IsGrounded ? 2 : 0; //In air => Jump attack
+			state += curStates.Running ? 1 : 0; //Running => Sprint attack
+			state += !curStates.Grounded ? 2 : 0; //In air => Jump attack
 
 			StartCoroutine(BeginAttack((AttackState)state));
 		}
@@ -669,7 +736,7 @@ namespace EoE.Entities
 
 			activeAttack = targetAttack;
 			if (targetAttack != null)
-			{ 
+			{
 				AttackAnimation anim = targetAttack.animationInfo.animation;
 
 				isCurrentlyAttacking = true;
@@ -684,12 +751,12 @@ namespace EoE.Entities
 
 				if (chargeDelay == 0)
 				{
-					if(!applyForceAfterCustomDelay)
+					if (!applyForceAfterCustomDelay)
 						ApplyAttackForces();
 					heldWeapon.Active = true;
 				}
 
-				if(applyForceAfterCustomDelay && forceApplyDelay == 0)
+				if (applyForceAfterCustomDelay && forceApplyDelay == 0)
 				{
 					ApplyAttackForces();
 				}
@@ -699,7 +766,7 @@ namespace EoE.Entities
 					yield return new WaitForEndOfFrame();
 					animTime -= Time.deltaTime;
 
-					if(chargeDelay > 0)
+					if (chargeDelay > 0)
 					{
 						chargeDelay -= Time.deltaTime;
 
@@ -711,10 +778,10 @@ namespace EoE.Entities
 						}
 					}
 
-					if(applyForceAfterCustomDelay && forceApplyDelay > 0)
+					if (applyForceAfterCustomDelay && forceApplyDelay > 0)
 					{
 						forceApplyDelay -= Time.deltaTime;
-						if(forceApplyDelay <= 0)
+						if (forceApplyDelay <= 0)
 						{
 							ApplyAttackForces();
 						}
@@ -749,22 +816,24 @@ namespace EoE.Entities
 			{
 				style = null;
 			}
-			else if(equipedWeapon.weaponAttackStyle[attackIndex].attacks.Length > innerIndex + 1)
+			else if (equipedWeapon.weaponAttackStyle[attackIndex].attacks.Length > innerIndex + 1)
 			{
 				comboDelay = equipedWeapon.weaponAttackStyle[attackIndex].delays[innerIndex];
 			}
 
 			//Find out if the player can afford the attack
-			if(style != null)
+			if (style != null)
 			{
 				float cost = style.info.enduranceMultiplier * equipedWeapon.baseEnduranceDrain;
-				if ((int)CanAffordEnduranceCost(cost) == 0) //0 == Not available; 1/2 == available
+				if (curEndurance >= cost)
+				{
+					ChangeEndurance(new ChangeInfo(this, CauseType.Magic, cost, false));
+				}
+				else
 				{
 					style = null;
 					comboDelay = null;
 				}
-				else
-					UseEndurance(cost);
 			}
 
 			return (style, comboDelay);
@@ -772,7 +841,7 @@ namespace EoE.Entities
 		private bool CheckForCancelCondition()
 		{
 			int requiredGroundState = (int)activeAttack.animationInfo.cancelWhenOnGround - 1;
-			bool groundStateAchieved = (curStates.IsGrounded ? 0 : 1) == requiredGroundState;
+			bool groundStateAchieved = (curStates.Grounded ? 0 : 1) == requiredGroundState;
 
 			if (groundStateAchieved && !activeAttack.animationInfo.bothStates)
 				return true;
@@ -781,7 +850,7 @@ namespace EoE.Entities
 				return false;
 
 			int requiredSprintState = (int)activeAttack.animationInfo.cancelWhenSprinting - 1;
-			bool sprintStateAchieved = (curStates.IsRunning ? 0 : 1) == requiredSprintState;
+			bool sprintStateAchieved = (curStates.Running ? 0 : 1) == requiredSprintState;
 
 			return (sprintStateAchieved && groundStateAchieved) || (!activeAttack.animationInfo.bothStates && sprintStateAchieved);
 		}
@@ -845,18 +914,87 @@ namespace EoE.Entities
 		{
 			if (heldWeapon)
 				Destroy(heldWeapon.gameObject);
-			EffectUtils.BlurScreen(1, 100, 5);
-
+			EffectUtils.BlurScreen(1, Mathf.Infinity, 5);
 			Alive = false;
+			if (TargetedEntitie)
+				TargetedEntitie = null;
 			base.Death();
 		}
+		#region IFrames
+		protected override void ReceivedHealthDamage(ChangeInfo baseChange, ChangeInfo.ChangeResult resultInfo)
+		{
+			if(baseChange.attacker != this)
+			{
+				if (PlayerSettings.InvincibleAfterHit)
+				{
+					if (!remainingInvincibleTime.HasValue)
+					{
+						remainingInvincibleTime = PlayerSettings.InvincibleAfterHitTime;
+						StartCoroutine(OnHitInvincibleCoroutine());
+					}
+					remainingInvincibleTime = PlayerSettings.InvincibleAfterHitTime;
+				}
+			}
+		}
+		private float? remainingInvincibleTime = null;
+		private IEnumerator OnHitInvincibleCoroutine()
+		{
+			invincible++;
+			float flashTimer = 0;
+			bool flashOn = false;
+			Renderer[] targetRenderers = GetComponentsInChildren<Renderer>();
+			Color[] baseColors = new Color[targetRenderers.Length];
+
+			for (int i = 0; i < targetRenderers.Length; i++)
+			{
+				baseColors[i] = targetRenderers[i].material.color;
+			}
+
+			while((remainingInvincibleTime ?? 0) > 0)
+			{
+				yield return new WaitForEndOfFrame();
+				remainingInvincibleTime -= Time.deltaTime;
+				flashTimer += Time.deltaTime;
+
+				if(flashTimer > PlayerSettings.InvincibleModelFlashDelay)
+				{
+					if (!flashOn)
+					{
+						FlashMaterials();
+					}
+					if(flashTimer > PlayerSettings.InvincibleModelFlashDelay + PlayerSettings.InvincibleModelFlashTime)
+					{
+						UnFlashMaterials();
+						flashTimer -= PlayerSettings.InvincibleModelFlashDelay + PlayerSettings.InvincibleModelFlashTime;
+					}
+				}
+			}
+			if (flashOn)
+				UnFlashMaterials();
+
+			remainingInvincibleTime = null;
+			invincible--;
+			void FlashMaterials()
+			{
+				flashOn = true;
+				for (int i = 0; i < targetRenderers.Length; i++)
+					targetRenderers[i].material.color = PlayerSettings.InvincibleModelFlashColor;
+			}
+			void UnFlashMaterials()
+			{
+				flashOn = false;
+				for (int i = 0; i < targetRenderers.Length; i++)
+					targetRenderers[i].material.color = baseColors[i];
+			}
+		}
+		#endregion
 		public void AddSouls(int amount)
 		{
 			const int startRotationAt = 1;
-			const int enumOffset = (int)TargetStat.PhysicalDamage;
+			const int enumOffset = (int)TargetBaseStat.PhysicalDamage;
 
 			TotalSoulCount += amount;
-			while(TotalSoulCount >= RequiredSoulsForLevel)
+			while (TotalSoulCount >= RequiredSoulsForLevel)
 			{
 				EntitieLevel++;
 				RequiredSoulsForLevel = PlayerSettings.LevelSettings.curve.GetRequiredSouls(EntitieLevel);
@@ -865,7 +1003,7 @@ namespace EoE.Entities
 
 				float baseRotationAmount = (EntitieLevel / 10) * PlayerSettings.LevelSettings.PerTenLevelsBasePoints + 1;
 				int rotationIndex = (startRotationAt + EntitieLevel) % 3 + enumOffset;
-				for(int i = enumOffset; i < enumOffset + 3; i++)
+				for (int i = enumOffset; i < enumOffset + 3; i++)
 				{
 					LevelingBaseBuff.Effects[i].Amount += baseRotationAmount;
 					if (i == rotationIndex)

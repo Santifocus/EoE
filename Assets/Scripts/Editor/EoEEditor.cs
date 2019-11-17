@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.IO;
 using UnityEditor;
+using UnityEngine;
 
 namespace EoE
 {
@@ -13,12 +12,12 @@ namespace EoE
 		public static void Header(string content, int offSet = 0, bool spaces = true, bool bold = true) => Header(new GUIContent(content), offSet, spaces, bold);
 		public static void Header(GUIContent content, int offSet = 0, bool spaces = true, bool bold = true)
 		{
-			if(spaces)
+			if (spaces)
 				GUILayout.Space(8);
 
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Space(offSet * STANDARD_OFFSET);
-			if(bold)
+			if (bold)
 				GUILayout.Label(content, EditorStyles.boldLabel);
 			else
 				GUILayout.Label(content);
@@ -208,6 +207,46 @@ namespace EoE
 			}
 			return false;
 		}
+		public static bool ObjectArrayField<T>(string content, ref T[] curValue, ref bool open, GUIContent objectContent = null, int offSet = 0) where T : Object => ObjectArrayField<T>(new GUIContent(content), ref curValue, ref open, objectContent, offSet);
+		public static bool ObjectArrayField<T>(GUIContent content, ref T[] curValue, ref bool open, GUIContent objectContent = null, int offSet = 0) where T : Object
+		{
+			bool changed = false;
+			if(curValue == null)
+			{
+				curValue = new T[0];
+				isDirty = changed = true;
+			}
+
+			Foldout(content, ref open, offSet);
+			if (open)
+			{
+				GUIContent targetContent = objectContent != null ? objectContent : new GUIContent("Element ");
+				for(int i = 0; i < curValue.Length; i++)
+				{
+					changed |= ObjectField(new GUIContent(targetContent.text + i, targetContent.tooltip), ref curValue[i], offSet + 1);
+				}
+
+				GUILayout.Space(1);
+				int newSize = curValue.Length;
+				bool sizeChanged = IntField("Size", ref newSize, offSet + 1);
+				if (sizeChanged)
+				{
+					changed = true;
+					T[] newArray = new T[newSize];
+					for(int i = 0; i < newSize; i++)
+					{
+						if (i < curValue.Length)
+							newArray[i] = curValue[i];
+						else
+							break;
+					}
+
+					curValue = newArray;
+					isDirty = true;
+				}
+			}
+			return changed;
+		}
 		public static bool GradientField(string content, ref Gradient curValue, int offSet = 0) => GradientField(new GUIContent(content), ref curValue, offSet);
 		public static bool GradientField(GUIContent content, ref Gradient curValue, int offSet = 0)
 		{
@@ -248,6 +287,7 @@ namespace EoE
 			}
 			return false;
 		}
+		public static bool EnumField(string content, ref System.Enum curValue, int offSet = 0) => EnumField(new GUIContent(content), ref curValue, offSet);
 		public static bool EnumField(GUIContent content, ref System.Enum curValue, int offSet = 0)
 		{
 			EditorGUILayout.BeginHorizontal();
@@ -263,6 +303,7 @@ namespace EoE
 			}
 			return false;
 		}
+		public static bool EnumFlagField(string content, ref System.Enum curValue, int offSet = 0) => EnumFlagField(new GUIContent(content), ref curValue, offSet);
 		public static bool EnumFlagField(GUIContent content, ref System.Enum curValue, int offSet = 0)
 		{
 			EditorGUILayout.BeginHorizontal();
@@ -277,6 +318,62 @@ namespace EoE
 				return true;
 			}
 			return false;
+		}
+		public static bool DrawArray<T>(GUIContent arrayContent, System.Func<int, int, bool> elementBinding, ref T[] array, ref bool open, int offSet = 0)
+		{
+			bool changed = Foldout(arrayContent, ref open, offSet);
+			if (open)
+			{
+				for(int i = 0; i < array.Length; i++)
+				{
+					changed |= (elementBinding?.Invoke(i, offSet + 1)) ?? false;
+				}
+
+				GUILayout.Space(3);
+				EditorGUILayout.BeginHorizontal();
+				GUILayout.Space((offSet + 1) * STANDARD_OFFSET);
+				int newSize = EditorGUILayout.DelayedIntField("Size", array.Length);
+				EditorGUILayout.EndHorizontal();
+
+				if (newSize != array.Length)
+				{
+					T[] newArray = new T[newSize];
+					for (int i = 0; i < newSize; i++)
+					{
+						if (i < array.Length)
+							newArray[i] = array[i];
+						else
+							break;
+					}
+
+					array = newArray;
+					isDirty = true;
+				}
+			}
+			return changed;
+		}
+		public static void AssetCreator<T>(params string[] pathParts) where T : ScriptableObject
+		{
+			T asset = ScriptableObject.CreateInstance<T>();
+			string name = "/New " + typeof(T).Name;
+			string path = "";
+
+			for(int i = 0; i < pathParts.Length; i++)
+			{
+				path += "/" + pathParts[i];
+				if(!Directory.Exists(Application.dataPath + path))
+				{
+					Directory.CreateDirectory(Application.dataPath + path);
+				}
+			}
+			AssetDatabase.CreateAsset(asset, "Assets" + path + name + ".asset");
+
+			AssetDatabase.SaveAssets();
+			AssetDatabase.Refresh();
+			EditorUtility.FocusProjectWindow();
+
+			Selection.activeObject = asset;
+			Debug.Log("Created: '" + name.Substring(1) + "' at: Assets" + path + "/..");
 		}
 	}
 }

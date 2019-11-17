@@ -47,8 +47,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   GroundHitVelocityLoss: 0.15
-  CombatCooldown: 3
-  EnemyWanderingUrgency: 0.5
+  CombatCooldown: 5
+  IdleMovementUrgency: 0.5
   EnemyMinimumInvestigationArea: 10
   HitEntitieParticles: {fileID: 0}
   HitTerrainParticles: {fileID: 0}
@@ -177,15 +177,15 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   DialogueBoxPrefab: {fileID: 2308643982866350638, guid: 33a870a2539712d4685b260a30230ce8,
     type: 3}
-  ShowDialogueBaseDelay: 0.75
-  DialogueDelayPerLetter: 0.05
+  ShowDialogueBaseDelay: 0.25
+  DialogueDelayPerLetter: 0.04
   SkipDelayOnSpace: 1
-  DelayToNextDialogue: 1.5
+  DelayToNextDialogue: 1
   CritDamageMultiplier: 2
   SecondsPerEntititeRegen: 0.5
   SoulDropPrefab: {fileID: 4063212132472539359, guid: a354723b262e2cd4ab866dc03a384c10,
     type: 3}
-  ItemDropRandomVelocityStrenght: 0.5
+  ItemDropRandomVelocityStrenght: 2
   DamageLevelAdd: 12
   DamageDivider: 10
   DefenseLevelAdd: 10

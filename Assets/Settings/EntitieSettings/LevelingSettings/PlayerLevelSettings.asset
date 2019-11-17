@@ -22,7 +22,7 @@ MonoBehaviour:
   RotationExtraPoints: 1
   HealthPerSkillPoint: 25
   ManaPerSkillPoint: 10
-  EndurancePerSkillPoint: 0.5
+  EndurancePerSkillPoint: 12.5
   PhysicalDamagePerSkillPoint: 1
   MagicDamagePerSkillPoint: 1
   DefensePerSkillPoint: 1
