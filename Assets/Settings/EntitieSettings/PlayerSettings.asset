@@ -90,10 +90,10 @@ MonoBehaviour:
       BaseDamage: 3
   StopBlockingInertia: 0.3
   InvincibleAfterHit: 1
-  InvincibleAfterHitTime: 0.3
-  InvincibleModelFlashColor: {r: 1, g: 1, b: 1, a: 1}
-  InvincibleModelFlashDelay: 0.4
-  InvincibleModelFlashTime: 0.4
+  InvincibleAfterHitTime: 2
+  InvincibleModelFlashColor: {r: 1, g: 0, b: 0, a: 0.23137255}
+  InvincibleModelFlashDelay: 0.2
+  InvincibleModelFlashTime: 0.1
   StatTextUpdateSpeed: 0.5
   EnduranceBarLerpSpeed: 5
   HealthTextColors:

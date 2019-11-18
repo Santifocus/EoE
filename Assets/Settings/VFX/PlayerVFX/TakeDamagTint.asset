@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TakeDamagTint
   m_EditorClassIdentifier: 
   TintColor: {r: 1, g: 0, b: 0.10509062, a: 0.15294118}
-  TimeIn: 0.05
-  TimeStay: 0.1
-  TimeOut: 0.075
+  TimeIn: 0.1
+  TimeStay: 0.2
+  TimeOut: 0.1
   Dominance: 1
