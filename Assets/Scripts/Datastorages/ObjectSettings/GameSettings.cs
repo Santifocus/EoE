@@ -7,9 +7,11 @@ namespace EoE.Information
 	public class GameSettings : ScriptableObject
 	{
 		//Entitie Velocity
-		public float WhenFallingExtraVelocity = 0.5f;
+		public float WhenFallingExtraGravity = 0.5f;
 		public AnimationCurve FallDamageCurve = new AnimationCurve();
 		public float GroundHitVelocityLoss = 0.5f;
+		public float GroundHitVelocityLossMinThreshold = 10;
+		public float GroundHitVelocityLossMaxThreshold = 50;
 
 		//Behaiviors
 		public float CombatCooldown = 3;

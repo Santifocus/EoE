@@ -33,11 +33,10 @@ MonoBehaviour:
   ManaRegenInCombatMultiplier: 0.5
   WalkSpeed: 8
   RunSpeedMultiplicator: 1.25
-  JumpPower: {x: 0, y: 10, z: 0}
   TurnSpeed: 540
   InAirTurnSpeedMultiplier: 0.5
-  MoveAcceleration: 0.5
-  NoMoveDeceleration: 0.25
+  MoveAcceleration: 7
+  NoMoveDeceleration: 5
   InAirAccelerationMultiplier: 0.3
   LevelSettings: {fileID: 11400000, guid: f274dc43aa7e69e4db13a311b4ea6d9e, type: 2}
   CameraToPlayerDistance: 7
@@ -57,6 +56,8 @@ MonoBehaviour:
   EnduranceRegenDelayAfterUse: 3
   JumpEnduranceCost: 4
   RunEnduranceCost: 3
+  JumpPower: {x: 0, y: 9, z: 12}
+  JumpImpulsePower: 2
   DodgePower: 4
   DodgeDuration: 0.15
   DodgeModelExistTime: 0.35
@@ -173,3 +174,6 @@ MonoBehaviour:
   EffectsHealthThreshold: 0.3
   EffectsOnDamageWhenBelowThreshold:
   - {fileID: 11400000, guid: 668a809c73c04d648ae6ae4e123f2f21, type: 2}
+  PlayerLandingVelocityThreshold: 10
+  EffectsOnPlayerLanding:
+  - {fileID: 11400000, guid: dd68d9db5e90b2f449f0f973e984a2a8, type: 2}

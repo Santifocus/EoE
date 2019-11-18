@@ -6182,7 +6182,6 @@ GameObject:
   - component: {fileID: 1023450184}
   - component: {fileID: 1023450183}
   - component: {fileID: 1023450181}
-  - component: {fileID: 1023450182}
   m_Layer: 9
   m_Name: Player
   m_TagString: Untagged
@@ -6190,24 +6189,8 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!54 &1023450181
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1023450180}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 100
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 1
-  m_Constraints: 80
-  m_CollisionDetection: 1
---- !u!136 &1023450182
-CapsuleCollider:
+--- !u!143 &1023450181
+CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -6216,9 +6199,13 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.65
+  serializedVersion: 2
   m_Height: 3
-  m_Direction: 1
+  m_Radius: 0.65
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1023450183
 MonoBehaviour:
@@ -6232,8 +6219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10805c4b0ba8a4d43a3031df84fc6f42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  body: {fileID: 1023450181}
-  coll: {fileID: 1023450182}
+  coll: {fileID: 1023450181}
   animationControl: {fileID: 731829528}
   invincible: 0
   selfSettings: {fileID: 11400000, guid: 3d517d6da82d5bf4a9f88e6e105f9701, type: 2}
@@ -6242,7 +6228,8 @@ MonoBehaviour:
   buffDisplay: {fileID: 4113294021114450269}
   soulCount: {fileID: 4113294019692759303}
   levelDisplay: {fileID: 4113294020494951840}
-  debugText: {fileID: 0}
+  charController: {fileID: 1023450181}
+  debugText: {fileID: 4113294021143006148}
   trueEnduranceAmount: 0
   modelTransform: {fileID: 731829527}
   activeAttack:
@@ -15414,7 +15401,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4113294019733925212}
   m_Layer: 0
-  m_Name: UINew
+  m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20526,8 +20513,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 3, y: -3}
-  m_SizeDelta: {x: 258, y: 300}
+  m_AnchoredPosition: {x: 10, y: -225}
+  m_SizeDelta: {x: 550, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &4113294021143006148
 MonoBehaviour:
@@ -20657,7 +20644,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -20}
+  m_AnchoredPosition: {x: 10, y: -225}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &4113294021143006150

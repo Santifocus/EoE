@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 438e09642880d794aa53e804b27dbce9, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
-  WhenFallingExtraVelocity: 1
+  WhenFallingExtraGravity: 1
   FallDamageCurve:
     serializedVersion: 2
     m_Curve:
@@ -46,7 +46,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  GroundHitVelocityLoss: 0.15
+  GroundHitVelocityLoss: 1.25
+  GroundHitVelocityLossMinThreshold: 8
+  GroundHitVelocityLossMaxThreshold: 25
   CombatCooldown: 5
   IdleMovementUrgency: 0.5
   EnemyMinimumInvestigationArea: 10

@@ -20,6 +20,14 @@ namespace EoE.Events
 			PlayerTookDamageEvent?.Invoke(causedDamage, knockBack);
 		}
 
+		//Player Landed on ground
+		public delegate void PlayerLanded(float speed);
+		public static PlayerLanded PlayerLandedEvent;
+		public static void PlayerLandedInvoke(float speed)
+		{
+			PlayerLandedEvent?.Invoke(speed);
+		}
+
 		//Player Caused Damage
 		public delegate void PlayerCausedDamage(Entitie receiver, bool wasCrit);
 		public static PlayerCausedDamage PlayerCausedDamageEvent;

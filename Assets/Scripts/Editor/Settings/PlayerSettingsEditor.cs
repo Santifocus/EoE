@@ -27,6 +27,7 @@ namespace EoE.Information
 		private static bool CauseDamageOpen;
 		private static bool CauseCritOpen;
 		private static bool LevelUpOpen;
+		private static bool OnPlayerLanding;
 		private static bool LowHealthThresholdOpen;
 		protected override void CustomInspector()
 		{
@@ -63,6 +64,15 @@ namespace EoE.Information
 			ObjectField(new GUIContent("Level Settings", "The Level settings that should be applied to the Player."), ref (target as PlayerSettings).LevelSettings);
 			base.StatSettingsArea();
 			EnduranceSettingsArea();
+		}
+		protected override void MovementSettingsArea()
+		{
+			base.MovementSettingsArea();
+
+			PlayerSettings settings = target as PlayerSettings;
+			GUILayout.Space(2);
+			Vector3Field(new GUIContent("Jump Power", "With which velocity does this Entitie jump? (X == Sideways, Y == Upward, Z == Foreward)"), ref settings.JumpPower);
+			FloatField(new GUIContent("Jump Impulse Power"), ref settings.JumpImpulsePower);
 		}
 		private void EnduranceSettingsArea()
 		{
@@ -245,6 +255,14 @@ namespace EoE.Information
 					settings.EffectsHealthThreshold = Mathf.Clamp01(settings.EffectsHealthThreshold);
 				}
 				ObjectArrayField(new GUIContent("Effects On Damage When Below Threshold"), ref settings.EffectsOnDamageWhenBelowThreshold, ref LowHealthThresholdOpen, new GUIContent("Effect "));
+
+				GUILayout.Space(4);
+				changedFloat = FloatField(new GUIContent("Player Landing Velocity Threshold", "The player must land with this or a higher velocity to trigger the on land effects."), ref settings.PlayerLandingVelocityThreshold);
+				if (changedFloat)
+				{
+					settings.EffectsHealthThreshold = Mathf.Clamp01(settings.EffectsHealthThreshold);
+				}
+				ObjectArrayField(new GUIContent("Effects On Player Landing"), ref settings.EffectsOnPlayerLanding, ref OnPlayerLanding, new GUIContent("Effect "));
 			}
 			EndFoldoutHeader();
 		}

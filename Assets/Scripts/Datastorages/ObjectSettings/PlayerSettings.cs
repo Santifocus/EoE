@@ -4,6 +4,7 @@ namespace EoE.Information
 {
 	public class PlayerSettings : EntitieSettings
 	{
+
 		//Leveling settings
 		public LevelingSettings LevelSettings = null;
 
@@ -29,6 +30,10 @@ namespace EoE.Information
 		//Endurance Costs
 		public float JumpEnduranceCost = 4;
 		public float RunEnduranceCost = 3;
+
+		//Jumping
+		public Vector3 JumpPower = new Vector3(0, 10, 0);
+		public float JumpImpulsePower = 2.5f;
 
 		//Dodging
 		public float DodgePower = 1;
@@ -68,5 +73,8 @@ namespace EoE.Information
 		public VFXEffect[] EffectsOnLevelup = default;
 		public float EffectsHealthThreshold = 0.3f;
 		public VFXEffect[] EffectsOnDamageWhenBelowThreshold = default;
+
+		public float PlayerLandingVelocityThreshold = 5f;
+		public VFXEffect[] EffectsOnPlayerLanding = default;
 	}
 }
