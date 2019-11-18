@@ -47,8 +47,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   GroundHitVelocityLoss: 1.25
-  GroundHitVelocityLossMinThreshold: 8
-  GroundHitVelocityLossMaxThreshold: 25
+  GroundHitVelocityLossMinThreshold: 5
+  GroundHitVelocityLossMaxThreshold: 15
   CombatCooldown: 5
   IdleMovementUrgency: 0.5
   EnemyMinimumInvestigationArea: 10

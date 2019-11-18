@@ -42,7 +42,7 @@ MonoBehaviour:
   CameraToPlayerDistance: 7
   CameraAnchorOffset: {x: 0, y: 1.6, z: 0}
   CameraAnchorOffsetWhenTargeting: {x: 1, y: 2, z: 0}
-  CameraRotationPower: {x: 200, y: 75}
+  CameraRotationPower: {x: 200, y: -75}
   CameraRotationSpeed: 5
   CameraVerticalAngleClamps: {x: -50, y: 50}
   CameraExtraZoomOnVertical: 0.5
@@ -91,10 +91,10 @@ MonoBehaviour:
       BaseDamage: 3
   StopBlockingInertia: 0.3
   InvincibleAfterHit: 1
-  InvincibleAfterHitTime: 0.3
-  InvincibleModelFlashColor: {r: 1, g: 1, b: 1, a: 1}
-  InvincibleModelFlashDelay: 0.4
-  InvincibleModelFlashTime: 0.4
+  InvincibleAfterHitTime: 0.5
+  InvincibleModelFlashColor: {r: 1, g: 0.48584908, b: 0.48584908, a: 1}
+  InvincibleModelFlashDelay: 0.15
+  InvincibleModelFlashTime: 0.075
   StatTextUpdateSpeed: 0.5
   EnduranceBarLerpSpeed: 5
   HealthTextColors:
