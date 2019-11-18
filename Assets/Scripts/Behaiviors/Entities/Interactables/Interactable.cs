@@ -6,6 +6,7 @@ namespace EoE.Entities
 	{
 		public static Interactable MarkedInteractable;
 		protected bool isTarget { get; private set; }
+		public bool IsInteractable => canBeInteracted;
 		protected bool canBeInteracted;
 		public void MarkAsInteractTargetBase()
 		{

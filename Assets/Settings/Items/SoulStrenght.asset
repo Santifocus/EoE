@@ -18,6 +18,7 @@ MonoBehaviour:
   MaxStack: 5
   ItemIcon: {fileID: 21300000, guid: 083f51189fd8fb74187c0a3b5b908b2f, type: 3}
   RemoveOnUse: 1
+  UseCooldown: 0
   VFXEffectsOnUse: []
   buffInfo:
     Name: SoulStrenght
@@ -26,7 +27,7 @@ MonoBehaviour:
     BuffTime: 10
     Icon: {fileID: 21300000, guid: 083f51189fd8fb74187c0a3b5b908b2f, type: 3}
     Effects:
-    - targetStat: 6
+    - TargetBaseStat: 0
       Percent: 1
       Amount: 50
     CustomEffects:

@@ -163,6 +163,20 @@ namespace EoE.Information
 				}
 			}
 		}
+		public bool Contains(Item type, int stack = 1)
+		{
+			for(int i = 0; i < Lenght; i++)
+			{
+				if(containedItems[i] != null && containedItems[i].data == type)
+				{
+					stack -= containedItems[i].stackSize;
+					if (stack <= 0)
+						return true;
+				}
+			}
+
+			return false;
+		}
 		public void ClearSlot(int index)
 		{
 			if (index < 0 || index >= Lenght)

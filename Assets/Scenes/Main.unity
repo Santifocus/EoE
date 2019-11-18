@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3734,7 +3734,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 3.536823e-38, y: 2.5036384e+23, z: NaN, w: -3.9514066e-15}
+  m_BoundingSphereOverride: {x: 1e-45, y: 0, z: 0, w: 9.1837e-41}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -13971,7 +13971,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4113294019310746719}
   - component: {fileID: 4113294019310746717}
-  - component: {fileID: 4113294019310746718}
+  - component: {fileID: 4113294019310746713}
   m_Layer: 5
   m_Name: CharacterMenuMainPage
   m_TagString: Untagged
@@ -13979,36 +13979,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &4113294019310746717
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4113294019310746712}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f94ceab494d57f048b27fa481aea84cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pageSlider: {fileID: 4113294019310746718}
-  levelDisplay: {fileID: 4113294019268283153}
-  modelDisplay: {fileID: 4113294019494926208}
-  modelRendererCameraPrefab: {fileID: 7990312237432935532, guid: 6f4f884208bca594cb88b61052c1cec6,
-    type: 3}
-  cameraStandardRotation: {x: -30, y: 20, z: 0}
-  cameraToModelDistance: {x: 0, y: 0.25, z: 3.5}
-  cameraVerticalAngleClamps: {x: -30, y: 30}
-  cameraRotationSpeed: {x: 240, y: 60}
-  cameraSmoothTime: 0.35
-  healthDisplay: {fileID: 4113294020585705823}
-  manaDisplay: {fileID: 4113294020767027274}
-  enduranceDisplay: {fileID: 4113294019142245381}
-  defenseDisplay: {fileID: 4113294020460725794}
-  atkDisplay: {fileID: 4113294019324894131}
-  mgaDisplay: {fileID: 4113294019142606859}
-  skillpointDisplay: {fileID: 4113294021057510008}
---- !u!114 &4113294019310746718
+--- !u!114 &4113294019310746713
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14025,6 +13996,35 @@ MonoBehaviour:
   standardEndPos: {x: 0, y: 0}
   disableOnEndPos: 1
   ignoreTimeScale: 1
+--- !u!114 &4113294019310746717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4113294019310746712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f94ceab494d57f048b27fa481aea84cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pageSlider: {fileID: 4113294019310746713}
+  levelDisplay: {fileID: 4113294019268283153}
+  modelDisplay: {fileID: 4113294019494926208}
+  modelRendererCameraPrefab: {fileID: 7990312237432935532, guid: 6f4f884208bca594cb88b61052c1cec6,
+    type: 3}
+  cameraStandardRotation: {x: -30, y: 20, z: 0}
+  cameraToModelDistance: {x: 0, y: 0.25, z: 3.5}
+  cameraVerticalAngleClamps: {x: -30, y: 30}
+  cameraRotationSpeed: {x: 240, y: 60}
+  cameraSmoothTime: 0.35
+  healthDisplay: {fileID: 4113294020585705823}
+  manaDisplay: {fileID: 4113294020767027274}
+  enduranceDisplay: {fileID: 4113294019142245381}
+  defenseDisplay: {fileID: 4113294020460725794}
+  atkDisplay: {fileID: 4113294019324894131}
+  mgaDisplay: {fileID: 4113294019142606859}
+  skillpointDisplay: {fileID: 4113294021057510008}
 --- !u!224 &4113294019310746719
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14750,7 +14750,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4113294019533295231}
   - component: {fileID: 4113294019533295229}
-  - component: {fileID: 4113294019533295230}
+  - component: {fileID: 4113294019533295225}
   m_Layer: 5
   m_Name: LevelingPage
   m_TagString: Untagged
@@ -14758,33 +14758,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &4113294019533295229
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4113294019533295224}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2153bf67706e0c640a17fbe2fb7d75f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pageSlider: {fileID: 4113294019533295230}
-  navigationCooldown: 0.2
-  menuItems:
-  - {fileID: 1480492383}
-  - {fileID: 1673294106}
-  - {fileID: 1426745021}
-  - {fileID: 1938676703}
-  - {fileID: 1442882146}
-  - {fileID: 422491041}
-  - {fileID: 344930007}
-  remainingSkillpoints: {r: 0, g: 1, b: 1, a: 1}
-  noSkillPointsLeft: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  availableAtributePoints: {fileID: 989123369}
-  availableSkillPoints: {fileID: 1052083453}
---- !u!114 &4113294019533295230
+--- !u!114 &4113294019533295225
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14801,6 +14775,32 @@ MonoBehaviour:
   standardEndPos: {x: 0, y: 0}
   disableOnEndPos: 1
   ignoreTimeScale: 1
+--- !u!114 &4113294019533295229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4113294019533295224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2153bf67706e0c640a17fbe2fb7d75f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pageSlider: {fileID: 4113294019533295225}
+  navigationCooldown: 0.2
+  menuItems:
+  - {fileID: 1480492383}
+  - {fileID: 1673294106}
+  - {fileID: 1426745021}
+  - {fileID: 1938676703}
+  - {fileID: 1442882146}
+  - {fileID: 422491041}
+  - {fileID: 344930007}
+  remainingSkillpoints: {r: 0, g: 1, b: 1, a: 1}
+  noSkillPointsLeft: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  availableAtributePoints: {fileID: 989123369}
+  availableSkillPoints: {fileID: 1052083453}
 --- !u!224 &4113294019533295231
 RectTransform:
   m_ObjectHideFlags: 0

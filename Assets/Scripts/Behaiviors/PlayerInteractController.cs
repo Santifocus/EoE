@@ -39,16 +39,22 @@ namespace EoE.Entities
 		{
 			if (!framesLowestDistance.HasValue)
 			{
-				framesLowestDistance = (interactableSphere.bounds.center - other.bounds.center).sqrMagnitude;
-				curFrameTarget = other;
+				if (other.GetComponent<Interactable>().IsInteractable)
+				{
+					framesLowestDistance = (interactableSphere.bounds.center - other.bounds.center).sqrMagnitude;
+					curFrameTarget = other;
+				}
 			}
 			else
 			{
 				float selfDist = (interactableSphere.bounds.center - other.bounds.center).sqrMagnitude;
 				if (selfDist < framesLowestDistance.Value)
 				{
-					framesLowestDistance = selfDist;
-					curFrameTarget = other;
+					if (other.GetComponent<Interactable>().IsInteractable)
+					{
+						framesLowestDistance = selfDist;
+						curFrameTarget = other;
+					}
 				}
 			}
 		}

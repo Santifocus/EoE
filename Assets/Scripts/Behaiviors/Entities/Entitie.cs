@@ -391,6 +391,17 @@ namespace EoE.Entities
 		private void AddBuffEffect(BuffInstance buffInstance, CalculateValue toCalculate = CalculateValue.Both, bool clampRequired = true)
 		{
 			Buff buffBase = buffInstance.Base;
+
+			//Custom buff Effects
+			//Apply only when either both flat and percent get calculated or only flat
+			if (toCalculate != CalculateValue.Percent)
+			{
+				if (buffInstance.Base.CustomEffects.ApplyMoveStun)
+					appliedMoveStuns++;
+				if (buffInstance.Base.CustomEffects.Invincible)
+					invincible++;
+			}
+
 			for (int i = 0; i < buffBase.Effects.Length; i++)
 			{
 				if (toCalculate != CalculateValue.Both)
@@ -476,12 +487,6 @@ namespace EoE.Entities
 
 				buffInstance.FlatChanges[i] = change;
 			}
-
-			//Custom buff Effects
-			if (buffInstance.Base.CustomEffects.ApplyMoveStun)
-				appliedMoveStuns++;
-			if (buffInstance.Base.CustomEffects.Invincible)
-				invincible++;
 		}
 		public void RemoveBuff(int index, bool fromPermanent)
 		{
@@ -672,6 +677,8 @@ namespace EoE.Entities
 			ChangeInfo.ChangeResult changeResult = new ChangeInfo.ChangeResult(causedChange, this, true);
 
 			//If this Entitie is invincible and the change causes damage and/or knockback then we stop here
+			if(IsInvincible)
+				Debug.Log(invincible);
 			if (IsInvincible && (changeResult.finalChangeAmount > 0 || changeResult.causedKnockback.HasValue))
 				return;
 

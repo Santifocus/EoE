@@ -307,7 +307,10 @@ namespace EoE.Entities
 			UpdateMovementSpeed();
 
 			if (IsStunned)
+			{
+				curAcceleration = 0;
 				return;
+			}
 
 			JumpControl();
 			PlayerMoveControl();
@@ -343,8 +346,8 @@ namespace EoE.Entities
 			bool moving = curStates.Moving;
 			bool running = curStates.Running;
 
-			//If the Entitie doesnt move intentionally but is in run mode, then stop the run mode
-			if (running && !moving)
+			//If the Player doesnt move intentionally but is in run mode, then stop the run mode
+			if (running && (!moving || isBlocking))
 				curStates.Running = running = false;
 
 			//Set the animation state to either Turning, Walking or Running
