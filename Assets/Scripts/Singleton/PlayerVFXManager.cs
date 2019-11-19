@@ -21,6 +21,13 @@ namespace EoE
 			EventManager.PlayerCausedDamageEvent += PlayerCausedDamage;
 			EventManager.PlayerLevelupEvent += PlayerLevelUp;
 		}
+		private void OnDestroy()
+		{
+			EventManager.PlayerTookDamageEvent -= PlayerTookDamage;
+			EventManager.PlayerLandedEvent -= PlayerLanded;
+			EventManager.PlayerCausedDamageEvent -= PlayerCausedDamage;
+			EventManager.PlayerLevelupEvent -= PlayerLevelUp;
+		}
 		private void PlayerTookDamage(float causedDamage, float? knockBack)
 		{
 			if (causedDamage > 0)

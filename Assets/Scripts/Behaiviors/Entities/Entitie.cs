@@ -658,11 +658,14 @@ namespace EoE.Entities
 		}
 		protected virtual void Death()
 		{
-			AllEntities.Remove(this);
 			BuildDrops();
 			if (statDisplay)
 				Destroy(statDisplay.gameObject);
 			Destroy(gameObject);
+		}
+		private void OnDestroy()
+		{
+			AllEntities.Remove(this);
 		}
 		private void BuildDrops()
 		{
