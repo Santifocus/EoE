@@ -11,10 +11,6 @@ namespace EoE.Entities
 	{
 		#region Fields
 		//Constants
-		private const float GROUND_TEST_WIDHT_MUL = 0.95f;
-		private const float JUMP_GROUND_COOLDOWN = 0.2f;
-		private const float IS_FALLING_THRESHOLD = -1;
-		private const float LANDED_VELOCITY_THRESHOLD = 0.5f;
 		private const int VISIBLE_CHECK_RAY_COUNT = 40;
 
 		private static readonly Vector3 GroundTestOffset = new Vector3(0, -0.05f, 0);
@@ -22,7 +18,6 @@ namespace EoE.Entities
 		public static List<Entitie> AllEntities = new List<Entitie>();
 
 		//Inspector variables
-		public Rigidbody body = default;
 		public Collider coll = default;
 		[SerializeField] protected Animator animationControl = default;
 
@@ -48,10 +43,7 @@ namespace EoE.Entities
 
 		//Velocity Control
 		protected int appliedMoveStuns;
-		private float jumpGroundCooldown;
-		private float lastFallVelocity;
-
-		protected Vector3 impactForce;
+		protected Vector2 impactForce;
 
 		protected float curRotation;
 		protected float intendedRotation;
@@ -69,7 +61,7 @@ namespace EoE.Entities
 		public float lowestPos => coll.bounds.center.y - coll.bounds.extents.y;
 		public float highestPos => coll.bounds.center.y + coll.bounds.extents.y;
 		public ForceController entitieForceController;
-		public Vector3 curVelocity => new Vector3(0, body.velocity.y, 0) + impactForce + entitieForceController.currentTotalForce;
+		public virtual Vector3 curVelocity => new Vector3(impactForce.x, 0, impactForce.y) + entitieForceController.currentTotalForce;
 		public bool IsInvincible => invincible > 0;
 		public bool IsStunned => appliedMoveStuns > 0;
 
@@ -127,7 +119,7 @@ namespace EoE.Entities
 				selfColliderType = ColliderType.Sphere;
 				return;
 			}
-			else if (coll is CapsuleCollider)
+			else if (coll is CapsuleCollider || coll is CharacterController)
 			{
 				selfColliderType = ColliderType.Capsule;
 				return;
@@ -173,101 +165,16 @@ namespace EoE.Entities
 		{
 			entitieForceController.Update();
 
-			IsGroundedTest();
-			CheckForFalling();
+			//Lerp knockback to zero based on the entities deceleration stat
+			if (SelfSettings.NoMoveDeceleration > 0)
+				impactForce = Vector3.Lerp(impactForce, Vector3.zero, Time.fixedDeltaTime * SelfSettings.NoMoveDeceleration);
+			else
+				impactForce = Vector3.zero;
+
 			EntitieFixedUpdate();
 		}
 		protected virtual void EntitieUpdate() { }
 		protected virtual void EntitieFixedUpdate() { }
-		#endregion
-		#region Movement
-		private void CheckForFalling()
-		{
-			//Find out wether the entitie is falling or not
-			bool playerWantsToFall = this is Player && (curStates.Falling || !Controlls.InputController.Jump.Active);
-			bool falling = !curStates.Grounded && jumpGroundCooldown <= 0 && (body.velocity.y < IS_FALLING_THRESHOLD || playerWantsToFall);
-
-			//If so: we enable the falling animation and add extra velocity for a better looking fallcurve
-			curStates.Falling = falling;
-			animationControl.SetBool("IsFalling", falling);
-			if (falling)
-			{
-				body.velocity += GameController.CurrentGameSettings.WhenFallingExtraVelocity * Physics.gravity * Time.fixedDeltaTime;
-			}
-		}
-		protected void Jump()
-		{
-			body.velocity = new Vector3(body.velocity.x, Mathf.Min(body.velocity.y + SelfSettings.JumpPower.y * curJumpPowerMultiplier, SelfSettings.JumpPower.y * curJumpPowerMultiplier), body.velocity.z);
-			impactForce += SelfSettings.JumpPower.x * transform.right * curJumpPowerMultiplier;
-			impactForce += SelfSettings.JumpPower.z * transform.forward * curJumpPowerMultiplier;
-
-			jumpGroundCooldown = JUMP_GROUND_COOLDOWN;
-			curStates.Grounded = false;
-
-			animationControl.SetTrigger("JumpStart");
-		}
-		#endregion
-		#region Ground Contact
-		private void IsGroundedTest()
-		{
-			if (jumpGroundCooldown > 0)
-			{
-				jumpGroundCooldown -= Time.deltaTime;
-				curStates.Grounded = false;
-			}
-			else
-			{
-				switch (selfColliderType)
-				{
-					case ColliderType.Box:
-						{
-							BoxCollider bColl = coll as BoxCollider;
-							Vector3 boxCenter = coll.bounds.center;
-							boxCenter.y = lowestPos + GroundTestOffset.y + 0.01f; //A little bit of clipping into the original bounding box
-
-							curStates.Grounded = Physics.CheckBox(boxCenter, new Vector3(bColl.bounds.extents.x * GROUND_TEST_WIDHT_MUL, -GroundTestOffset.y, bColl.bounds.extents.z * GROUND_TEST_WIDHT_MUL), coll.transform.rotation, ConstantCollector.TERRAIN_LAYER);
-							break;
-						}
-					case ColliderType.Capsule:
-						{
-							CapsuleCollider cColl = coll as CapsuleCollider;
-							Vector3 extraOffset = new Vector3(0, -cColl.radius * (1 - GROUND_TEST_WIDHT_MUL), 0);
-							Vector3 spherePos = coll.bounds.center - new Vector3(0, cColl.height / 2 * coll.transform.lossyScale.y - cColl.radius, 0) + GroundTestOffset + extraOffset;
-
-							curStates.Grounded = Physics.CheckSphere(spherePos, cColl.radius * GROUND_TEST_WIDHT_MUL, ConstantCollector.TERRAIN_LAYER);
-							break;
-						}
-					case ColliderType.Sphere:
-						{
-							SphereCollider sColl = coll as SphereCollider;
-							Vector3 extraOffset = new Vector3(0, -sColl.radius * GROUND_TEST_WIDHT_MUL, 0);
-							curStates.Grounded = Physics.CheckSphere(coll.bounds.center + GroundTestOffset + extraOffset, sColl.radius * GROUND_TEST_WIDHT_MUL, ConstantCollector.TERRAIN_LAYER);
-							break;
-						}
-				}
-			}
-
-			//Check if we landed
-			float velDif = curVelocity.y - lastFallVelocity;
-			if (velDif > LANDED_VELOCITY_THRESHOLD && jumpGroundCooldown <= 0) //We stopped falling for a certain amount, and we didnt change velocity because we just jumped
-			{
-				Landed(velDif);
-			}
-			lastFallVelocity = curVelocity.y;
-
-			//Lerp knockback to zero based on the entities deceleration stat
-			if (SelfSettings.NoMoveDeceleration > 0)
-				impactForce = Vector3.Lerp(impactForce, Vector3.zero, Time.fixedDeltaTime / SelfSettings.NoMoveDeceleration);
-			else
-				impactForce = Vector3.zero;
-		}
-		private void Landed(float velDif)
-		{
-			//Check if there is any fall damage to give
-			float damageAmount = GameController.CurrentGameSettings.FallDamageCurve.Evaluate(velDif);
-			if (damageAmount > 0)
-				ChangeHealth(new ChangeInfo(null, CauseType.Physical, ElementType.None, actuallWorldPosition, Vector3.up, damageAmount, false));
-		}
 		#endregion
 		#region State Control
 		protected virtual void Regen()
@@ -333,6 +240,8 @@ namespace EoE.Entities
 				if (combatEndCooldown <= 0)
 					curStates.Fighting = false;
 			}
+
+			//Update buffs
 			BuffUpdate();
 		}
 		#region BuffControl
@@ -689,8 +598,7 @@ namespace EoE.Entities
 			//Apply knockback
 			if (changeResult.causedKnockback.HasValue)
 			{
-				impactForce += new Vector3(changeResult.causedKnockback.Value.x, 0, changeResult.causedKnockback.Value.z);
-				body.velocity = new Vector3(body.velocity.x, body.velocity.y + changeResult.causedKnockback.Value.y, body.velocity.z);
+				ApplyKnockback(changeResult.causedKnockback.Value);
 			}
 
 			if (changeResult.finalChangeAmount > 0)
@@ -709,6 +617,10 @@ namespace EoE.Entities
 				}
 				Death();
 			}
+		}
+		protected virtual void ApplyKnockback(Vector3 causedKnockback)
+		{
+			impactForce += new Vector2(causedKnockback.x, causedKnockback.z);
 		}
 		protected virtual void ReceivedHealthDamage(ChangeInfo causedChange, ChangeInfo.ChangeResult resultInfo) { }
 		public void ChangeMana(ChangeInfo change)

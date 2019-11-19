@@ -1,12 +1,12 @@
-﻿using EoE.Controlls;
+﻿using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using EoE.Controlls;
 using EoE.Events;
 using EoE.Information;
 using EoE.Utils;
 using EoE.Weapons;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using UnityEngine;
 
 namespace EoE.Entities
 {
@@ -18,6 +18,10 @@ namespace EoE.Entities
 		private const float RUN_ANIM_THRESHOLD = 0.75f;
 		private const float NON_TURNING_THRESHOLD = 60;
 		private const float LERP_TURNING_AREA = 0.5f;
+		private const float JUMP_GROUND_COOLDOWN = 0.2f;
+		private const float IS_FALLING_THRESHOLD = -1;
+		private const float LANDED_VELOCITY_THRESHOLD = 0.5f;
+		private const float SWITCH_TARGET_COOLDOWN = 0.45f;
 
 		//Inspector variables
 		[Space(10)]
@@ -27,6 +31,7 @@ namespace EoE.Entities
 		[SerializeField] private PlayerBuffDisplay buffDisplay = default;
 		[SerializeField] private TextMeshProUGUI soulCount = default;
 		[SerializeField] private TextMeshProUGUI levelDisplay = default;
+		[SerializeField] private CharacterController charController = default;
 
 		public TMPro.TextMeshProUGUI debugText = default;
 
@@ -50,10 +55,15 @@ namespace EoE.Entities
 		private BuffInstance blockingBuff;
 
 		//Velocity
-		protected Vector3 curMoveForce;
-		protected Vector3? controllDirection = null;
-		protected float intendedAcceleration;
-		protected float curAcceleration;
+		private Vector3 curMoveForce;
+		private Vector3? controllDirection = null;
+		private float intendedAcceleration;
+		private float curAcceleration;
+		private float jumpGroundCooldown;
+		private float lastFallVelocity;
+
+		//Targeting
+		private float switchTargetTimer;
 
 		#region Physical Attack
 		//Attack
@@ -81,14 +91,17 @@ namespace EoE.Entities
 
 		//Getter Helpers
 		public static bool Alive { get; private set; }
+		public float jumpVelocity { get; private set; }
+		public float verticalVelocity { get; private set; }
+		public float totalVerticalVelocity => jumpVelocity * PlayerSettings.JumpImpulsePower + verticalVelocity;
+		public override Vector3 curVelocity => base.curVelocity + new Vector3(0, totalVerticalVelocity, 0);
 		private enum GetEnduranceType : byte { NotAvailable = 0, Available = 1, AvailableWithNewBar = 2 }
 		public enum AttackState : short { NormalStand = 0, NormalSprint = 1, NormalJump = 2, NormalSprintJump = 3, HeavyStand = 4, HeavySprint = 5, HeavyJump = 6, HeavySprintJump = 7 }
-		private static Player instance;
-		public static Player Instance => instance;
+		public static Player Instance { get; private set; }
 		public override EntitieSettings SelfSettings => selfSettings;
-		public static PlayerSettings PlayerSettings => instance.selfSettings;
+		public static PlayerSettings PlayerSettings => Instance.selfSettings;
 		public static Entitie TargetedEntitie;
-		public static PlayerBuffDisplay BuffDisplay => instance.buffDisplay;
+		public static PlayerBuffDisplay BuffDisplay => Instance.buffDisplay;
 
 		public static Inventory ItemInventory;
 		public static Inventory WeaponInventory;
@@ -116,8 +129,9 @@ namespace EoE.Entities
 		#region Basic Monobehaivior
 		protected override void EntitieStart()
 		{
+			Debug.Log(Application.persistentDataPath);
 			Alive = true;
-			instance = this;
+			Instance = this;
 
 			SetupLevelingControl();
 
@@ -201,9 +215,9 @@ namespace EoE.Entities
 			MovementControl();
 			AttackControl();
 			TargetEnemyControl();
-			PositionHeldWeapon();
 			ItemUseControll();
 			BlockControl();
+			PositionHeldWeapon();
 
 			//Inventory Cooldowns
 			ItemInventory.UpdateCooldown();
@@ -214,7 +228,13 @@ namespace EoE.Entities
 		protected override void EntitieFixedUpdate()
 		{
 			PositionHeldWeapon();
-			TurnControl();
+			CheckForLanding();
+			ApplyForces();
+			CheckForFalling();
+			UpdateAcceleration();
+
+			if(!IsStunned)
+				TurnControl();
 		}
 		#endregion
 		#region Setups
@@ -303,15 +323,14 @@ namespace EoE.Entities
 		#region Movement
 		private void MovementControl()
 		{
-			UpdateAcceleration();
-			UpdateMovementSpeed();
+			UpdateMovementAnimations();
 
 			if (IsStunned)
 			{
 				curAcceleration = 0;
+				curStates.Moving = curStates.Running = curStates.Turning = false;
 				return;
 			}
-
 			JumpControl();
 			PlayerMoveControl();
 			DodgeControl();
@@ -323,8 +342,8 @@ namespace EoE.Entities
 				float clampedIntent = Mathf.Clamp01(intendedAcceleration);
 				if (curAcceleration < clampedIntent)
 				{
-					if (SelfSettings.MoveAcceleration > 0)
-						curAcceleration = Mathf.Min(clampedIntent, curAcceleration + intendedAcceleration * Time.fixedDeltaTime / SelfSettings.MoveAcceleration / SelfSettings.EntitieMass * (curStates.Grounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
+					if (SelfSettings.MoveAcceleration > clampedIntent)
+						curAcceleration = Mathf.Min(clampedIntent, curAcceleration + intendedAcceleration * Time.fixedDeltaTime * SelfSettings.MoveAcceleration / SelfSettings.EntitieMass * (charController.isGrounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
 					else
 						curAcceleration = clampedIntent;
 				}
@@ -334,13 +353,13 @@ namespace EoE.Entities
 				if (curAcceleration > 0)
 				{
 					if (SelfSettings.NoMoveDeceleration > 0)
-						curAcceleration = Mathf.Max(0, curAcceleration - Time.fixedDeltaTime / SelfSettings.NoMoveDeceleration / SelfSettings.EntitieMass * (curStates.Grounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
+						curAcceleration = Mathf.Max(0, curAcceleration - Time.fixedDeltaTime * SelfSettings.NoMoveDeceleration / SelfSettings.EntitieMass * (charController.isGrounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
 					else
 						curAcceleration = 0;
 				}
 			}
 		}
-		private void UpdateMovementSpeed()
+		private void UpdateMovementAnimations()
 		{
 			bool turning = curStates.Turning;
 			bool moving = curStates.Moving;
@@ -350,22 +369,48 @@ namespace EoE.Entities
 			if (running && (!moving || isBlocking))
 				curStates.Running = running = false;
 
-			//Set the animation state to either Turning, Walking or Running
+			//Set all the animation states
 			animationControl.SetBool("Turning", turning);
 			animationControl.SetBool("Walking", !turning && curAcceleration > 0 && !(running && curAcceleration > RUN_ANIM_THRESHOLD));
 			animationControl.SetBool("Running", !turning && curAcceleration > 0 && (running && curAcceleration > RUN_ANIM_THRESHOLD));
+			animationControl.SetFloat("Runspeed", curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration);
+		}
+		private void ApplyForces()
+		{
+			Vector3 appliedForce = (controllDirection ?? transform.forward) * curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration + curVelocity;
 
-			//We find out in which direction the Entitie should move according to its movement
-			float baseTargetSpeed = curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
-			curMoveForce = baseTargetSpeed * (controllDirection.HasValue ? controllDirection.Value : transform.forward);
-
-			animationControl.SetFloat("Runspeed", baseTargetSpeed);
-			//Now combine those forces as the current speed
-			body.velocity = curVelocity + curMoveForce;
+			charController.Move(appliedForce * Time.fixedDeltaTime);
+			ApplyGravity();
+		}
+		private void ApplyGravity(float scale = 1)
+		{
+			const float lowerFallThreshold = -0.1f;
+			float force = scale * Physics.gravity.y * Time.fixedDeltaTime;
+			if (!charController.isGrounded || totalVerticalVelocity > 0)
+			{
+				if (jumpVelocity > 0)
+				{
+					jumpVelocity += force * PlayerSettings.JumpImpulsePower;
+					if (jumpVelocity < 0)
+					{
+						verticalVelocity += jumpVelocity;
+						jumpVelocity = 0;
+					}
+				}
+				else
+				{
+					verticalVelocity += force;
+					jumpVelocity = lowerFallThreshold;
+				}
+			}
+			else
+			{
+				jumpVelocity = verticalVelocity = lowerFallThreshold;
+			}
 		}
 		private void TurnControl()
 		{
-			float turnAmount = Time.fixedDeltaTime * SelfSettings.TurnSpeed * (curStates.Grounded ? 1 : SelfSettings.InAirTurnSpeedMultiplier);
+			float turnAmount = Time.fixedDeltaTime * SelfSettings.TurnSpeed * (charController.isGrounded ? 1 : SelfSettings.InAirTurnSpeedMultiplier);
 			float normalizedDif = Mathf.Abs(curRotation - intendedRotation) / NON_TURNING_THRESHOLD;
 			turnAmount *= Mathf.Min(normalizedDif * LERP_TURNING_AREA, 1);
 			curRotation = Mathf.MoveTowardsAngle(curRotation, intendedRotation, turnAmount);
@@ -376,9 +421,29 @@ namespace EoE.Entities
 														curRotation,
 														transform.localEulerAngles.z);
 		}
+		private void CheckForFalling()
+		{
+			//Find out wether the entitie is falling or not
+			bool playerWantsToFall = curStates.Falling || !InputController.Jump.Active;
+			bool falling = !charController.isGrounded && (totalVerticalVelocity < IS_FALLING_THRESHOLD || playerWantsToFall);
+
+			//If so: we enable the falling animation and add extra velocity for a better looking fallcurve
+			curStates.Falling = falling;
+			animationControl.SetBool("IsFalling", falling);
+			if (falling)
+			{
+				ApplyGravity(GameController.CurrentGameSettings.WhenFallingExtraGravity);
+			}
+		}
 		private void JumpControl()
 		{
-			if (InputController.Jump.Down && curStates.Grounded)
+			if(jumpGroundCooldown > 0)
+			{
+				jumpGroundCooldown -= Time.deltaTime;
+				return;
+			}
+
+			if (InputController.Jump.Down && charController.isGrounded)
 			{
 				if (curEndurance >= PlayerSettings.JumpEnduranceCost)
 				{
@@ -386,6 +451,46 @@ namespace EoE.Entities
 					ChangeEndurance(new ChangeInfo(this, CauseType.Magic, PlayerSettings.JumpEnduranceCost, false));
 				}
 			}
+		}
+		protected void Jump()
+		{
+			jumpVelocity += Mathf.Min(PlayerSettings.JumpPower.y * curJumpPowerMultiplier, PlayerSettings.JumpPower.y * curJumpPowerMultiplier);
+			Vector3 addedExtraForce = PlayerSettings.JumpPower.x * transform.right * curJumpPowerMultiplier + PlayerSettings.JumpPower.z * transform.forward * curJumpPowerMultiplier * (curStates.Running ? PlayerSettings.RunSpeedMultiplicator : 1);
+			impactForce += new Vector2(addedExtraForce.x, addedExtraForce.z) * curAcceleration;
+
+			jumpGroundCooldown = JUMP_GROUND_COOLDOWN;
+			animationControl.SetTrigger("JumpStart");
+		}
+		private void CheckForLanding()
+		{
+			//Check if we landed
+			float velDif = curVelocity.y - lastFallVelocity;
+			if (velDif > LANDED_VELOCITY_THRESHOLD && jumpGroundCooldown <= 0) //We stopped falling for a certain amount, and we didnt change velocity because we just jumped
+			{
+				Landed(velDif);
+			}
+			lastFallVelocity = curVelocity.y;
+		}
+		private void Landed(float velDif)
+		{
+			EventManager.PlayerLandedInvoke(velDif);
+
+			float velocityMultiplier = 0;
+			if(velDif > GameController.CurrentGameSettings.GroundHitVelocityLossMinThreshold)
+			{
+				if (velDif >= GameController.CurrentGameSettings.GroundHitVelocityLossMaxThreshold)
+					velocityMultiplier = GameController.CurrentGameSettings.GroundHitVelocityLoss;
+				else
+					velocityMultiplier = (velDif - GameController.CurrentGameSettings.GroundHitVelocityLossMinThreshold) / (GameController.CurrentGameSettings.GroundHitVelocityLossMaxThreshold - GameController.CurrentGameSettings.GroundHitVelocityLossMinThreshold) * GameController.CurrentGameSettings.GroundHitVelocityLoss;
+			}
+			curAcceleration *= 1 - velocityMultiplier;
+			impactForce *= 1 - velocityMultiplier;
+
+			//Check if there is any fall damage to give
+			float damageAmount = GameController.CurrentGameSettings.FallDamageCurve.Evaluate(velDif);
+
+			if (damageAmount > 0)
+				ChangeHealth(new ChangeInfo(null, CauseType.Physical, ElementType.None, actuallWorldPosition, Vector3.up, damageAmount, false));
 		}
 		private void PlayerMoveControl()
 		{
@@ -446,6 +551,11 @@ namespace EoE.Entities
 
 			if (!TargetedEntitie)
 				intendedRotation = -(Mathf.Atan2(controllDirection.Value.z, controllDirection.Value.x) * Mathf.Rad2Deg - 90);
+		}
+		protected override void ApplyKnockback(Vector3 causedKnockback)
+		{
+			base.ApplyKnockback(causedKnockback);
+			verticalVelocity += causedKnockback.y;
 		}
 		#region Dodging
 		private void DodgeControl()
@@ -575,44 +685,16 @@ namespace EoE.Entities
 		}
 		private void TargetEnemyControl()
 		{
+			if (switchTargetTimer > 0)
+				switchTargetTimer -= Time.deltaTime;
+
 			if (InputController.Aim.Down)
 			{
-				List<(Entitie, float)> possibleTargets = new List<(Entitie, float)>();
-
-				for (int i = 0; i < AllEntities.Count; i++)
-				{
-					if (AllEntities[i] is Player) //We ignore the player
-						continue;
-
-					float distance = (AllEntities[i].actuallWorldPosition - PlayerCameraController.PlayerCamera.transform.position).magnitude;
-					if (distance > PlayerSettings.MaxEnemyTargetingDistance)
-						continue;
-
-					Vector3 direction = (AllEntities[i].actuallWorldPosition - PlayerCameraController.PlayerCamera.transform.position) / distance;
-					float cosAngle = Vector3.Dot(PlayerCameraController.PlayerCamera.transform.forward, direction);
-
-					//We use the difference distance multipied with the inversed cosinus angle to find out how far from the view dir the entitie is
-					//Then we add an extra amount to prefer targets that are closer to the camera even if their distance to the viewdirection is the same
-					float distanceToViewDir = (1 - cosAngle) * distance + distance * 0.025f;
-
-					//Now find out where the entitie is on the screen
-					Vector3 screenPos = PlayerCameraController.PlayerCamera.WorldToScreenPoint(AllEntities[i].actuallWorldPosition);
-					Vector2 normScreenPos = new Vector2(screenPos.x / Screen.width, screenPos.y / Screen.height);
-					bool notOnScreen = normScreenPos.x < 0 || normScreenPos.x > 1 || normScreenPos.y < 0 || normScreenPos.y > 1;
-
-					if (screenPos.z < 0 || notOnScreen) //Behind the camera or not on screen? => We bail out
-						continue;
-
-					possibleTargets.Add((AllEntities[i], distanceToViewDir));
-				}
-
-				//Sort by distance low to high
-				possibleTargets.Sort((x, y) => x.Item2.CompareTo(y.Item2));
-
+				List<(Entitie, float)> possibleTargets = GetPossibleTargets();
 				TargetedEntitie = null;
 				if (possibleTargets.Count > 0)
 				{
-					//Now we have a list if possible targets sorted by lowest to highest distance
+					//Now we have a list of possible targets sorted by lowest to highest distance
 					//We try to find a target that we can see
 					//So we start with the lowest distance (index 0) and keep going until we find one and take that one as new target
 					//If there is none, then the targetEntitie will stay null
@@ -627,9 +709,88 @@ namespace EoE.Entities
 					}
 				}
 			}
+			else if(InputController.Aim.Active && InputController.CameraMove.sqrMagnitude > 0.25f)
+			{
+				if (switchTargetTimer > 0 || TargetedEntitie == null)
+					return;
+				switchTargetTimer = SWITCH_TARGET_COOLDOWN;
 
-			if (InputController.Aim.Up)
+				List<(Entitie, float)> possibleTargets = GetPossibleTargets();
+
+				if (possibleTargets.Count > 0)
+				{
+					List<(Entitie, float)> screenTargets = new List<(Entitie, float)>();
+					Vector2 clickedDirection = InputController.CameraMove.normalized;
+					Vector2 curMiddle = PlayerCameraController.PlayerCamera.WorldToScreenPoint(TargetedEntitie.actuallWorldPosition);
+
+					for (int i = 0; i < possibleTargets.Count; i++)
+					{
+						if (possibleTargets[i].Item1 == TargetedEntitie)
+							continue;
+
+						Vector2 entitieOnScreen = PlayerCameraController.PlayerCamera.WorldToScreenPoint(possibleTargets[i].Item1.actuallWorldPosition);
+						Vector2 dif = (entitieOnScreen - curMiddle);
+						float distance = dif.magnitude;
+
+						float cosAngle = Vector3.Dot(clickedDirection, dif / distance);
+						float distanceToClickDir = (1 - cosAngle) * distance + distance * 0.025f;
+
+						screenTargets.Add((possibleTargets[i].Item1, distanceToClickDir));
+					}
+
+					//Sort by distance low to high
+					screenTargets.Sort((x, y) => x.Item2.CompareTo(y.Item2));
+
+					for (int i = 0; i < screenTargets.Count; i++)
+					{
+						if (CheckIfCanSeeEntitie(screenTargets[i].Item1))
+						{
+							TargetedEntitie = screenTargets[i].Item1;
+							//We found a target so we stop here
+							break;
+						}
+					}
+				}
+			}
+			else if (InputController.Aim.Up)
 				TargetedEntitie = null;
+		}
+		private List<(Entitie, float)> GetPossibleTargets()
+		{
+			List<(Entitie, float)> possibleTargets = new List<(Entitie, float)>();
+
+			for (int i = 0; i < AllEntities.Count; i++)
+			{
+				if (AllEntities[i] is Player) //We ignore the player
+					continue;
+
+				float distance = (AllEntities[i].actuallWorldPosition - PlayerCameraController.PlayerCamera.transform.position).sqrMagnitude;
+				if (distance > PlayerSettings.MaxEnemyTargetingDistance * PlayerSettings.MaxEnemyTargetingDistance)
+					continue;
+
+				distance = Mathf.Sqrt(distance);
+
+				Vector3 direction = (AllEntities[i].actuallWorldPosition - PlayerCameraController.PlayerCamera.transform.position) / distance;
+				float cosAngle = Vector3.Dot(PlayerCameraController.PlayerCamera.transform.forward, direction);
+
+				//We use the difference distance multipied with the inversed cosinus angle to find out how far from the view dir the entitie is
+				//Then we add an extra amount to prefer targets that are closer to the camera even if their distance to the viewdirection is the same
+				float distanceToViewDir = (1 - cosAngle) * distance + distance * 0.025f;
+
+				//Now find out where the entitie is on the screen
+				Vector3 screenPos = PlayerCameraController.PlayerCamera.WorldToScreenPoint(AllEntities[i].actuallWorldPosition);
+				Vector2 normScreenPos = new Vector2(screenPos.x / Screen.width, screenPos.y / Screen.height);
+				bool notOnScreen = normScreenPos.x < 0 || normScreenPos.x > 1 || normScreenPos.y < 0 || normScreenPos.y > 1;
+
+				if (screenPos.z < 0 || notOnScreen) //Behind the camera or not on screen? => We bail out
+					continue;
+
+				possibleTargets.Add((AllEntities[i], distanceToViewDir));
+			}
+
+			//Sort by distance low to high
+			possibleTargets.Sort((x, y) => x.Item2.CompareTo(y.Item2));
+			return possibleTargets;
 		}
 		#endregion
 		#region ItemUseControl
@@ -725,7 +886,7 @@ namespace EoE.Entities
 			int state = 0;
 			state += InputController.Attack.Down ? 0 : 4; //If we are here either heavy attack or normal attack was pressed
 			state += curStates.Running ? 1 : 0; //Running => Sprint attack
-			state += !curStates.Grounded ? 2 : 0; //In air => Jump attack
+			state += !charController.isGrounded ? 2 : 0; //In air => Jump attack
 
 			StartCoroutine(BeginAttack((AttackState)state));
 		}
@@ -812,7 +973,7 @@ namespace EoE.Entities
 		{
 			int attackIndex = (int)state;
 			int innerIndex = state != lastAttackType ? 0 : comboIndex;
-			Attack style = null;
+			Attack style;
 			float? comboDelay = null;
 
 			style = equipedWeapon.weaponAttackStyle[attackIndex].attacks[innerIndex];
@@ -845,7 +1006,7 @@ namespace EoE.Entities
 		private bool CheckForCancelCondition()
 		{
 			int requiredGroundState = (int)activeAttack.animationInfo.cancelWhenOnGround - 1;
-			bool groundStateAchieved = (curStates.Grounded ? 0 : 1) == requiredGroundState;
+			bool groundStateAchieved = (charController.isGrounded ? 0 : 1) == requiredGroundState;
 
 			if (groundStateAchieved && !activeAttack.animationInfo.bothStates)
 				return true;
@@ -890,8 +1051,8 @@ namespace EoE.Entities
 				}
 				else
 				{
-					impactForce = new Vector3(velocity.x, 0, velocity.z);
-					body.velocity = new Vector3(body.velocity.x, velocity.y, body.velocity.z);
+					impactForce = new Vector2(velocity.x, velocity.z);
+					verticalVelocity = velocity.y;
 				}
 			}
 			else
@@ -901,16 +1062,14 @@ namespace EoE.Entities
 
 				if (effect.ignoreVerticalVelocity)
 				{
-					impactForce += new Vector3(velocity.x, 0, velocity.z);
+					impactForce += new Vector2(velocity.x, velocity.z);
 				}
 				else
 				{
-					impactForce += new Vector3(velocity.x, 0, velocity.z);
-					body.velocity += new Vector3(0, velocity.y, 0);
+					impactForce += new Vector2(velocity.x, velocity.z);
+					verticalVelocity += velocity.y;
 				}
 			}
-
-			body.velocity = curVelocity;
 		}
 		#endregion
 		#region StateControl

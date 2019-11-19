@@ -67,9 +67,11 @@ namespace EoE.Information
 		{
 			GameSettings settings = target as GameSettings;
 
-			FloatField(new GUIContent("When Falling Extra Velocity", "When Entities fall then how much velocity (multiplicative) should be added to the normal gravity?"), ref settings.WhenFallingExtraVelocity);
+			FloatField(new GUIContent("When Falling Extra Velocity", "When Entities fall then how much velocity (multiplicative) should be added to the normal gravity?"), ref settings.WhenFallingExtraGravity);
 			AnimationCurveField(new GUIContent("Fall Damage curve", "When en Entitie hits the ground how much damage should it receive based on velocity. X-Axis == FallVelocity, Y-Axis == Damage"), ref settings.FallDamageCurve);
 			FloatField(new GUIContent("Ground Hit Velocity Loss", "When an Entitie hits the ground "), ref settings.GroundHitVelocityLoss);
+			FloatField(new GUIContent("GroundHitVelocityLossMinThreshold"), ref settings.GroundHitVelocityLossMinThreshold);
+			FloatField(new GUIContent("GroundHitVelocityLossMaxThreshold"), ref settings.GroundHitVelocityLossMaxThreshold);
 		}
 
 		private void BasicBehaiviorArea()

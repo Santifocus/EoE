@@ -15,6 +15,7 @@ namespace EoE.Entities
 		private const float REACHED_LOOK_ANGLE_THRESHOLD = 1;
 
 		//Inspector Variables
+		[SerializeField] protected Rigidbody body = default;
 		[SerializeField] protected NavMeshAgent agent = default;
 
 		protected Vector3 originalSpawnPosition;
@@ -40,6 +41,7 @@ namespace EoE.Entities
 
 		//Getter Helpers
 		protected Player player => Player.Instance;
+		public override Vector3 curVelocity => new Vector3(impactForce.x, 0, impactForce.y) + entitieForceController.currentTotalForce;
 		public override EntitieSettings SelfSettings => enemySettings;
 		public abstract EnemySettings enemySettings { get; }
 		public bool PlayerInAttackRange { get; private set; }
@@ -74,7 +76,7 @@ namespace EoE.Entities
 			agent.radius = selfColliderType == ColliderType.Box ? Mathf.Max(coll.bounds.extents.x, coll.bounds.extents.z) : (selfColliderType == ColliderType.Capsule ? (coll as CapsuleCollider).radius : (coll as SphereCollider).radius);
 
 			agent.angularSpeed = enemySettings.TurnSpeed * GameController.CurrentGameSettings.IdleMovementUrgency;
-			agent.acceleration = 1 / Mathf.Max(0.0001f, enemySettings.MoveAcceleration) * GameController.CurrentGameSettings.IdleMovementUrgency;
+			agent.acceleration = enemySettings.MoveAcceleration * GameController.CurrentGameSettings.IdleMovementUrgency;
 			agent.speed = enemySettings.WalkSpeed * GameController.CurrentGameSettings.IdleMovementUrgency;
 
 			agent.stoppingDistance = REACH_DESTINATION_MIN;
@@ -118,7 +120,7 @@ namespace EoE.Entities
 			if (PlayerInAttackRange)
 				InRangeBehaivior();
 
-			if (IsStunned || !curStates.Grounded)
+			if (IsStunned)
 			{
 				body.isKinematic = false;
 				body.velocity = curVelocity;
@@ -199,21 +201,20 @@ namespace EoE.Entities
 		}
 		protected void EnforceKnockback()
 		{
-			Vector3 intendedPos = agent.nextPosition + (impactForce + entitieForceController.currentTotalForce) * Time.deltaTime;
-			agent.nextPosition = intendedPos;
+			agent.nextPosition += curVelocity * Time.deltaTime;
 		}
 		private void UpdateAgentSettings()
 		{
 			if (isIdle)
 			{
 				agent.angularSpeed = enemySettings.TurnSpeed * GameController.CurrentGameSettings.IdleMovementUrgency;
-				agent.acceleration = 1 / Mathf.Max(0.0001f, enemySettings.MoveAcceleration) * GameController.CurrentGameSettings.IdleMovementUrgency;
+				agent.acceleration = enemySettings.MoveAcceleration * GameController.CurrentGameSettings.IdleMovementUrgency;
 				agent.speed = enemySettings.WalkSpeed * GameController.CurrentGameSettings.IdleMovementUrgency;
 			}
 			else
 			{
 				agent.angularSpeed = enemySettings.TurnSpeed;
-				agent.acceleration = 1 / Mathf.Max(0.0001f, enemySettings.MoveAcceleration);
+				agent.acceleration = enemySettings.MoveAcceleration;
 				agent.speed = enemySettings.WalkSpeed;
 			}
 			lastIdleState = isIdle;

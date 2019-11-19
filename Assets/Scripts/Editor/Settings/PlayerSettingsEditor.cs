@@ -13,6 +13,7 @@ namespace EoE.Information
 		private static bool BlockingSettingsOpen;
 		private static bool IFramesSettingsOpen;
 		private static bool HUDSettingsOpen;
+		private static bool InventorySettingsOpen;
 		private static bool VFXSettingsOpen;
 
 		//Other
@@ -27,6 +28,7 @@ namespace EoE.Information
 		private static bool CauseDamageOpen;
 		private static bool CauseCritOpen;
 		private static bool LevelUpOpen;
+		private static bool OnPlayerLanding;
 		private static bool LowHealthThresholdOpen;
 		protected override void CustomInspector()
 		{
@@ -36,6 +38,7 @@ namespace EoE.Information
 			BlockingSettingsArea();
 			IFramesSettingsArea();
 			HUDSettingsArea();
+			InventorySettingsArea();
 			VFXSettingsArea();
 		}
 
@@ -63,6 +66,15 @@ namespace EoE.Information
 			ObjectField(new GUIContent("Level Settings", "The Level settings that should be applied to the Player."), ref (target as PlayerSettings).LevelSettings);
 			base.StatSettingsArea();
 			EnduranceSettingsArea();
+		}
+		protected override void MovementSettingsArea()
+		{
+			base.MovementSettingsArea();
+
+			PlayerSettings settings = target as PlayerSettings;
+			GUILayout.Space(2);
+			Vector3Field(new GUIContent("Jump Power", "With which velocity does this Entitie jump? (X == Sideways, Y == Upward, Z == Foreward)"), ref settings.JumpPower);
+			FloatField(new GUIContent("Jump Impulse Power"), ref settings.JumpImpulsePower);
 		}
 		private void EnduranceSettingsArea()
 		{
@@ -112,80 +124,6 @@ namespace EoE.Information
 			}
 			EndFoldoutHeader();
 		}
-		private void DrawBuff(GUIContent content, ref Buff buff, int offSet = 0)
-		{
-			Foldout(content, ref BlockingBuffOpen, offSet);
-			if (BlockingBuffOpen)
-			{
-				StringField("Name", ref buff.Name, offSet + 1);
-				System.Enum quality = buff.Quality;
-				if(EnumField(new GUIContent("Quality"), ref quality, offSet + 1))
-				{
-					buff.Quality = (BuffType)quality;
-				}
-				BoolField("Permanent", ref buff.Permanent, offSet + 1);
-				FloatField("Buff Time", ref buff.BuffTime, offSet + 1);
-				ObjectField("Icon", ref buff.Icon, offSet + 1);
-
-				DrawArray(new GUIContent("Effects"), new System.Func<int, int, bool>(DrawEffectStruct), ref buff.Effects, ref BlockingBuffEffectsOpen, offSet + 1);
-
-				Foldout("Custom Effects", ref BlockingBuffCustomEffectsOpen, offSet + 1);
-				if(BlockingBuffCustomEffectsOpen)
-				{
-					BoolField("Apply Move Stun", ref buff.CustomEffects.ApplyMoveStun, offSet + 2);
-					BoolField("Invincible", ref buff.CustomEffects.Invincible, offSet + 2); 
-				}
-
-				DrawArray(new GUIContent("DOTs"), new System.Func<int, int, bool>(DrawDOTStruct), ref buff.DOTs, ref BlockingBuffDOTsOpen, offSet + 1);
-			}
-		}
-		private bool DrawEffectStruct(int arrayIndex, int offSet)
-		{
-			PlayerSettings settings = target as PlayerSettings;
-
-			bool changed = false;
-			System.Enum targetBaseStat = settings.BlockingBuff.Effects[arrayIndex].TargetBaseStat;
-			if(EnumField("Target Base Stat", ref targetBaseStat, offSet))
-			{
-				changed = true;
-				settings.BlockingBuff.Effects[arrayIndex].TargetBaseStat = (TargetBaseStat)targetBaseStat;
-			}
-
-			changed |= BoolField("Percent", ref settings.BlockingBuff.Effects[arrayIndex].Percent, offSet);
-			changed |= FloatField("Amount", ref settings.BlockingBuff.Effects[arrayIndex].Amount, offSet);
-
-			if (arrayIndex < settings.BlockingBuff.Effects.Length - 1)
-				LineBreak();
-
-			return changed;
-		}
-		private bool DrawDOTStruct(int arrayIndex, int offSet)
-		{
-			PlayerSettings settings = target as PlayerSettings;
-
-			bool changed = false;
-			System.Enum targetElement = settings.BlockingBuff.DOTs[arrayIndex].Element;
-			if (EnumField("Target Element", ref targetElement, offSet))
-			{
-				changed = true;
-				settings.BlockingBuff.DOTs[arrayIndex].Element = (ElementType)targetElement;
-			}
-
-			System.Enum targetStat = settings.BlockingBuff.DOTs[arrayIndex].TargetStat;
-			if (EnumField("Target Stat", ref targetStat, offSet))
-			{
-				changed = true;
-				settings.BlockingBuff.DOTs[arrayIndex].TargetStat = (TargetStat)targetStat;
-			}
-
-			changed |= FloatField("Delay Per Activation", ref settings.BlockingBuff.DOTs[arrayIndex].DelayPerActivation, offSet);
-			changed |= FloatField("Base Damage", ref settings.BlockingBuff.DOTs[arrayIndex].BaseDamage, offSet);
-
-			if(arrayIndex < settings.BlockingBuff.DOTs.Length - 1)
-				LineBreak();
-
-			return changed;
-		}
 		private void IFramesSettingsArea()
 		{
 			PlayerSettings settings = target as PlayerSettings;
@@ -225,6 +163,20 @@ namespace EoE.Information
 			}
 			EndFoldoutHeader();
 		}
+		private void InventorySettingsArea()
+		{
+			PlayerSettings settings = target as PlayerSettings;
+
+			FoldoutHeader("Inventory Settings", ref InventorySettingsOpen);
+			if (InventorySettingsOpen)
+			{
+				IntField("Use Inventory Size", ref settings.UseInventorySize);
+				IntField("Weapon Inventory Size", ref settings.WeaponInventorySize);
+				IntField("Spell Inventory Size", ref settings.SpellInventorySize);
+				IntField("Armor Inventory Size", ref settings.ArmorInventorySize);
+			}
+			EndFoldoutHeader();
+		}
 		private void VFXSettingsArea()
 		{
 			PlayerSettings settings = target as PlayerSettings;
@@ -245,8 +197,93 @@ namespace EoE.Information
 					settings.EffectsHealthThreshold = Mathf.Clamp01(settings.EffectsHealthThreshold);
 				}
 				ObjectArrayField(new GUIContent("Effects On Damage When Below Threshold"), ref settings.EffectsOnDamageWhenBelowThreshold, ref LowHealthThresholdOpen, new GUIContent("Effect "));
+
+				GUILayout.Space(4);
+				changedFloat = FloatField(new GUIContent("Player Landing Velocity Threshold", "The player must land with this or a higher velocity to trigger the on land effects."), ref settings.PlayerLandingVelocityThreshold);
+				if (changedFloat)
+				{
+					settings.EffectsHealthThreshold = Mathf.Clamp01(settings.EffectsHealthThreshold);
+				}
+				ObjectArrayField(new GUIContent("Effects On Player Landing"), ref settings.EffectsOnPlayerLanding, ref OnPlayerLanding, new GUIContent("Effect "));
 			}
 			EndFoldoutHeader();
 		}
+
+		#region DrawerHelper
+		private void DrawBuff(GUIContent content, ref Buff buff, int offSet = 0)
+		{
+			Foldout(content, ref BlockingBuffOpen, offSet);
+			if (BlockingBuffOpen)
+			{
+				StringField("Name", ref buff.Name, offSet + 1);
+				System.Enum quality = buff.Quality;
+				if (EnumField(new GUIContent("Quality"), ref quality, offSet + 1))
+				{
+					buff.Quality = (BuffType)quality;
+				}
+				BoolField("Permanent", ref buff.Permanent, offSet + 1);
+				FloatField("Buff Time", ref buff.BuffTime, offSet + 1);
+				ObjectField("Icon", ref buff.Icon, offSet + 1);
+
+				DrawArray(new GUIContent("Effects"), new System.Func<int, int, bool>(DrawEffectStruct), ref buff.Effects, ref BlockingBuffEffectsOpen, offSet + 1);
+
+				Foldout("Custom Effects", ref BlockingBuffCustomEffectsOpen, offSet + 1);
+				if (BlockingBuffCustomEffectsOpen)
+				{
+					BoolField("Apply Move Stun", ref buff.CustomEffects.ApplyMoveStun, offSet + 2);
+					BoolField("Invincible", ref buff.CustomEffects.Invincible, offSet + 2);
+				}
+
+				DrawArray(new GUIContent("DOTs"), new System.Func<int, int, bool>(DrawDOTStruct), ref buff.DOTs, ref BlockingBuffDOTsOpen, offSet + 1);
+			}
+		}
+		private bool DrawEffectStruct(int arrayIndex, int offSet)
+		{
+			PlayerSettings settings = target as PlayerSettings;
+
+			bool changed = false;
+			System.Enum targetBaseStat = settings.BlockingBuff.Effects[arrayIndex].TargetBaseStat;
+			if (EnumField("Target Base Stat", ref targetBaseStat, offSet))
+			{
+				changed = true;
+				settings.BlockingBuff.Effects[arrayIndex].TargetBaseStat = (TargetBaseStat)targetBaseStat;
+			}
+
+			changed |= BoolField("Percent", ref settings.BlockingBuff.Effects[arrayIndex].Percent, offSet);
+			changed |= FloatField("Amount", ref settings.BlockingBuff.Effects[arrayIndex].Amount, offSet);
+
+			if (arrayIndex < settings.BlockingBuff.Effects.Length - 1)
+				LineBreak();
+
+			return changed;
+		}
+		private bool DrawDOTStruct(int arrayIndex, int offSet)
+		{
+			PlayerSettings settings = target as PlayerSettings;
+
+			bool changed = false;
+			System.Enum targetElement = settings.BlockingBuff.DOTs[arrayIndex].Element;
+			if (EnumField("Target Element", ref targetElement, offSet))
+			{
+				changed = true;
+				settings.BlockingBuff.DOTs[arrayIndex].Element = (ElementType)targetElement;
+			}
+
+			System.Enum targetStat = settings.BlockingBuff.DOTs[arrayIndex].TargetStat;
+			if (EnumField("Target Stat", ref targetStat, offSet))
+			{
+				changed = true;
+				settings.BlockingBuff.DOTs[arrayIndex].TargetStat = (TargetStat)targetStat;
+			}
+
+			changed |= FloatField("Delay Per Activation", ref settings.BlockingBuff.DOTs[arrayIndex].DelayPerActivation, offSet);
+			changed |= FloatField("Base Damage", ref settings.BlockingBuff.DOTs[arrayIndex].BaseDamage, offSet);
+
+			if (arrayIndex < settings.BlockingBuff.DOTs.Length - 1)
+				LineBreak();
+
+			return changed;
+		}
+		#endregion
 	}
 }

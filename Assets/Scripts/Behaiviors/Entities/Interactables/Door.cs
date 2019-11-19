@@ -76,7 +76,7 @@ namespace EoE.Entities
 
 		private IEnumerator TransitionDoorState(bool state)
 		{
-			animationControll.SetTrigger(state ? "Open" : "Close");
+			animationControll.SetTrigger(state ? openAnimationName : closeAnimationName);
 			transitioning = true;
 			yield return new WaitForSeconds(state ? openAnimationTime : closeAnimationTime);
 			transitioning = false;
@@ -99,6 +99,12 @@ namespace EoE.Entities
 			public Item itemType;
 			public int itemCount;
 			public bool removeItem;
+			public RequiredItem(Item itemType, int itemCount, bool removeItem)
+			{
+				this.itemType = itemType;
+				this.itemCount = itemCount;
+				this.removeItem = removeItem;
+			}
 		}
 	}
 }

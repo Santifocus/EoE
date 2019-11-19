@@ -14,8 +14,8 @@ namespace EoE.UI
 
 		[SerializeField] private Color remainingSkillpoints = Color.cyan;
 		[SerializeField] private Color noSkillPointsLeft = Color.gray;
-		[SerializeField] private TextMeshProUGUI availableAtributePoints;
-		[SerializeField] private TextMeshProUGUI availableSkillPoints;
+		[SerializeField] private TextMeshProUGUI availableAtributePoints = default;
+		[SerializeField] private TextMeshProUGUI availableSkillPoints = default;
 
 		//Getter Helpers
 		public int this[TargetBaseStat stat]
@@ -68,6 +68,7 @@ namespace EoE.UI
 			if(menuItems.Length > 0)
 				menuItems[navigationIndex].SelectMenuItem();
 			UpdateDisplay();
+			ResetAssignedSkillPoints();
 		}
 		private void Update()
 		{

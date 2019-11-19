@@ -103,7 +103,6 @@ namespace EoE.Information
 
 			FloatField(new GUIContent("Move Speed", "What is the maximum speed at which this Entitie walks?"), ref settings.WalkSpeed);
 			FloatField(new GUIContent("Run Speed Multiplicator", "Multilpies the walkspeed when running."), ref settings.RunSpeedMultiplicator);
-			Vector3Field(new GUIContent("Jump Power", "With which velocity does this Entitie jump? (X == Sideways, Y == Upward, Z == Foreward)"), ref settings.JumpPower);
 			FloatField(new GUIContent("Turn Speed", "How fast does the Entitie to the target direction in degree? More == Faster"), ref settings.TurnSpeed);
 			FloatField(new GUIContent("In Air Turn Speed Multiplier", "When in air, by what amount should the Turnspeed be multiplied by?"), ref settings.InAirTurnSpeedMultiplier);
 

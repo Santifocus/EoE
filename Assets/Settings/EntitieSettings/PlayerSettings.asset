@@ -33,17 +33,16 @@ MonoBehaviour:
   ManaRegenInCombatMultiplier: 0.5
   WalkSpeed: 8
   RunSpeedMultiplicator: 1.25
-  JumpPower: {x: 0, y: 10, z: 0}
   TurnSpeed: 540
   InAirTurnSpeedMultiplier: 0.5
-  MoveAcceleration: 0.5
-  NoMoveDeceleration: 0.25
+  MoveAcceleration: 7
+  NoMoveDeceleration: 5
   InAirAccelerationMultiplier: 0.3
   LevelSettings: {fileID: 11400000, guid: f274dc43aa7e69e4db13a311b4ea6d9e, type: 2}
   CameraToPlayerDistance: 7
   CameraAnchorOffset: {x: 0, y: 1.6, z: 0}
   CameraAnchorOffsetWhenTargeting: {x: 1, y: 2, z: 0}
-  CameraRotationPower: {x: 200, y: 75}
+  CameraRotationPower: {x: 200, y: -75}
   CameraRotationSpeed: 5
   CameraVerticalAngleClamps: {x: -50, y: 50}
   CameraExtraZoomOnVertical: 0.5
@@ -57,6 +56,8 @@ MonoBehaviour:
   EnduranceRegenDelayAfterUse: 3
   JumpEnduranceCost: 4
   RunEnduranceCost: 3
+  JumpPower: {x: 0, y: 9, z: 12}
+  JumpImpulsePower: 2
   DodgePower: 4
   DodgeDuration: 0.15
   DodgeModelExistTime: 0.35

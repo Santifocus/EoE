@@ -30,6 +30,10 @@ namespace EoE.Information
 		public float JumpEnduranceCost = 4;
 		public float RunEnduranceCost = 3;
 
+		//Jumping
+		public Vector3 JumpPower = new Vector3(0, 10, 0);
+		public float JumpImpulsePower = 2.5f;
+
 		//Dodging
 		public float DodgePower = 1;
 		public float DodgeDuration = 0.2f;
@@ -60,6 +64,12 @@ namespace EoE.Information
 		public Color ActiveEnduranceBarColor = new Color(1, 0.5f, 0, 1);
 		public Color ReloadingEnduranceBarColor = new Color(0.4f, 0.4f, 0.4f, 0.8f);
 
+		//Inventory
+		public int UseInventorySize = 24;
+		public int WeaponInventorySize = 8;
+		public int SpellInventorySize = 8;
+		public int ArmorInventorySize = 8;
+
 		///VFX
 		public VFXEffect[] EffectsOnReceiveDamage = default;
 		public VFXEffect[] EffectsOnReceiveKnockback = default;
@@ -68,5 +78,8 @@ namespace EoE.Information
 		public VFXEffect[] EffectsOnLevelup = default;
 		public float EffectsHealthThreshold = 0.3f;
 		public VFXEffect[] EffectsOnDamageWhenBelowThreshold = default;
+
+		public float PlayerLandingVelocityThreshold = 5f;
+		public VFXEffect[] EffectsOnPlayerLanding = default;
 	}
 }

@@ -50,12 +50,13 @@ namespace EoE.Utils
 			screenEffectMaterial.SetColor("_TintColor", Color.clear);
 			screenEffectMaterial.SetFloat("_TintStrenght", 0);
 		}
-#if UNITY_EDITOR
 		private void OnApplicationQuit()
 		{
+			Gamepad.current.SetMotorSpeeds(0, 0);
+#if UNITY_EDITOR
 			ResetScreenEffectMat();
-		}
 #endif
+		}
 		#endregion
 		#region ScreenShake
 		private const float DELAY_PER_SHAKE = 0.01f;

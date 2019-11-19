@@ -17,6 +17,7 @@ namespace EoE
 		{
 			Instance = this;
 			EventManager.PlayerTookDamageEvent += PlayerTookDamage;
+			EventManager.PlayerLandedEvent += PlayerLanded;
 			EventManager.PlayerCausedDamageEvent += PlayerCausedDamage;
 			EventManager.PlayerLevelupEvent += PlayerLevelUp;
 		}
@@ -43,6 +44,16 @@ namespace EoE
 				for (int i = 0; i < playerSettings.EffectsOnDamageWhenBelowThreshold.Length; i++)
 				{
 					PlayVFX(playerSettings.EffectsOnDamageWhenBelowThreshold[i]);
+				}
+			}
+		}
+		private void PlayerLanded(float velocity)
+		{
+			if (velocity > playerSettings.PlayerLandingVelocityThreshold)
+			{
+				for (int i = 0; i < playerSettings.EffectsOnPlayerLanding.Length; i++)
+				{
+					PlayVFX(playerSettings.EffectsOnPlayerLanding[i]);
 				}
 			}
 		}
