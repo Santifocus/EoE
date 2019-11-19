@@ -172,4 +172,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 982aab948223d7044bfae67dc43bb77c, type: 2}
   EffectsHealthThreshold: 0.3
   EffectsOnDamageWhenBelowThreshold:
-  - {fileID: 11400000, guid: 668a809c73c04d648ae6ae4e123f2f21, type: 2}
+  - {fileID: 11400000, guid: 9d9557ec007fa904aa2d0ef9f1ea3489, type: 2}
