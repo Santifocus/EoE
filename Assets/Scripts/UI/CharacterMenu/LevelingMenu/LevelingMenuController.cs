@@ -68,6 +68,7 @@ namespace EoE.UI
 			if(menuItems.Length > 0)
 				menuItems[navigationIndex].SelectMenuItem();
 			UpdateDisplay();
+			ResetAssignedSkillPoints();
 		}
 		private void Update()
 		{

@@ -21,6 +21,7 @@ namespace EoE.Entities
 		private const float JUMP_GROUND_COOLDOWN = 0.2f;
 		private const float IS_FALLING_THRESHOLD = -1;
 		private const float LANDED_VELOCITY_THRESHOLD = 0.5f;
+		private const float SWITCH_TARGET_COOLDOWN = 0.45f;
 
 		//Inspector variables
 		[Space(10)]
@@ -60,6 +61,9 @@ namespace EoE.Entities
 		private float curAcceleration;
 		private float jumpGroundCooldown;
 		private float lastFallVelocity;
+
+		//Targeting
+		private float switchTargetTimer;
 
 		#region Physical Attack
 		//Attack
@@ -125,6 +129,7 @@ namespace EoE.Entities
 		#region Basic Monobehaivior
 		protected override void EntitieStart()
 		{
+			Debug.Log(Application.persistentDataPath);
 			Alive = true;
 			Instance = this;
 
@@ -680,44 +685,16 @@ namespace EoE.Entities
 		}
 		private void TargetEnemyControl()
 		{
+			if (switchTargetTimer > 0)
+				switchTargetTimer -= Time.deltaTime;
+
 			if (InputController.Aim.Down)
 			{
-				List<(Entitie, float)> possibleTargets = new List<(Entitie, float)>();
-
-				for (int i = 0; i < AllEntities.Count; i++)
-				{
-					if (AllEntities[i] is Player) //We ignore the player
-						continue;
-
-					float distance = (AllEntities[i].actuallWorldPosition - PlayerCameraController.PlayerCamera.transform.position).magnitude;
-					if (distance > PlayerSettings.MaxEnemyTargetingDistance)
-						continue;
-
-					Vector3 direction = (AllEntities[i].actuallWorldPosition - PlayerCameraController.PlayerCamera.transform.position) / distance;
-					float cosAngle = Vector3.Dot(PlayerCameraController.PlayerCamera.transform.forward, direction);
-
-					//We use the difference distance multipied with the inversed cosinus angle to find out how far from the view dir the entitie is
-					//Then we add an extra amount to prefer targets that are closer to the camera even if their distance to the viewdirection is the same
-					float distanceToViewDir = (1 - cosAngle) * distance + distance * 0.025f;
-
-					//Now find out where the entitie is on the screen
-					Vector3 screenPos = PlayerCameraController.PlayerCamera.WorldToScreenPoint(AllEntities[i].actuallWorldPosition);
-					Vector2 normScreenPos = new Vector2(screenPos.x / Screen.width, screenPos.y / Screen.height);
-					bool notOnScreen = normScreenPos.x < 0 || normScreenPos.x > 1 || normScreenPos.y < 0 || normScreenPos.y > 1;
-
-					if (screenPos.z < 0 || notOnScreen) //Behind the camera or not on screen? => We bail out
-						continue;
-
-					possibleTargets.Add((AllEntities[i], distanceToViewDir));
-				}
-
-				//Sort by distance low to high
-				possibleTargets.Sort((x, y) => x.Item2.CompareTo(y.Item2));
-
+				List<(Entitie, float)> possibleTargets = GetPossibleTargets();
 				TargetedEntitie = null;
 				if (possibleTargets.Count > 0)
 				{
-					//Now we have a list if possible targets sorted by lowest to highest distance
+					//Now we have a list of possible targets sorted by lowest to highest distance
 					//We try to find a target that we can see
 					//So we start with the lowest distance (index 0) and keep going until we find one and take that one as new target
 					//If there is none, then the targetEntitie will stay null
@@ -732,9 +709,88 @@ namespace EoE.Entities
 					}
 				}
 			}
+			else if(InputController.Aim.Active && InputController.CameraMove.sqrMagnitude > 0.25f)
+			{
+				if (switchTargetTimer > 0 || TargetedEntitie == null)
+					return;
+				switchTargetTimer = SWITCH_TARGET_COOLDOWN;
 
-			if (InputController.Aim.Up)
+				List<(Entitie, float)> possibleTargets = GetPossibleTargets();
+
+				if (possibleTargets.Count > 0)
+				{
+					List<(Entitie, float)> screenTargets = new List<(Entitie, float)>();
+					Vector2 clickedDirection = InputController.CameraMove.normalized;
+					Vector2 curMiddle = PlayerCameraController.PlayerCamera.WorldToScreenPoint(TargetedEntitie.actuallWorldPosition);
+
+					for (int i = 0; i < possibleTargets.Count; i++)
+					{
+						if (possibleTargets[i].Item1 == TargetedEntitie)
+							continue;
+
+						Vector2 entitieOnScreen = PlayerCameraController.PlayerCamera.WorldToScreenPoint(possibleTargets[i].Item1.actuallWorldPosition);
+						Vector2 dif = (entitieOnScreen - curMiddle);
+						float distance = dif.magnitude;
+
+						float cosAngle = Vector3.Dot(clickedDirection, dif / distance);
+						float distanceToClickDir = (1 - cosAngle) * distance + distance * 0.025f;
+
+						screenTargets.Add((possibleTargets[i].Item1, distanceToClickDir));
+					}
+
+					//Sort by distance low to high
+					screenTargets.Sort((x, y) => x.Item2.CompareTo(y.Item2));
+
+					for (int i = 0; i < screenTargets.Count; i++)
+					{
+						if (CheckIfCanSeeEntitie(screenTargets[i].Item1))
+						{
+							TargetedEntitie = screenTargets[i].Item1;
+							//We found a target so we stop here
+							break;
+						}
+					}
+				}
+			}
+			else if (InputController.Aim.Up)
 				TargetedEntitie = null;
+		}
+		private List<(Entitie, float)> GetPossibleTargets()
+		{
+			List<(Entitie, float)> possibleTargets = new List<(Entitie, float)>();
+
+			for (int i = 0; i < AllEntities.Count; i++)
+			{
+				if (AllEntities[i] is Player) //We ignore the player
+					continue;
+
+				float distance = (AllEntities[i].actuallWorldPosition - PlayerCameraController.PlayerCamera.transform.position).sqrMagnitude;
+				if (distance > PlayerSettings.MaxEnemyTargetingDistance * PlayerSettings.MaxEnemyTargetingDistance)
+					continue;
+
+				distance = Mathf.Sqrt(distance);
+
+				Vector3 direction = (AllEntities[i].actuallWorldPosition - PlayerCameraController.PlayerCamera.transform.position) / distance;
+				float cosAngle = Vector3.Dot(PlayerCameraController.PlayerCamera.transform.forward, direction);
+
+				//We use the difference distance multipied with the inversed cosinus angle to find out how far from the view dir the entitie is
+				//Then we add an extra amount to prefer targets that are closer to the camera even if their distance to the viewdirection is the same
+				float distanceToViewDir = (1 - cosAngle) * distance + distance * 0.025f;
+
+				//Now find out where the entitie is on the screen
+				Vector3 screenPos = PlayerCameraController.PlayerCamera.WorldToScreenPoint(AllEntities[i].actuallWorldPosition);
+				Vector2 normScreenPos = new Vector2(screenPos.x / Screen.width, screenPos.y / Screen.height);
+				bool notOnScreen = normScreenPos.x < 0 || normScreenPos.x > 1 || normScreenPos.y < 0 || normScreenPos.y > 1;
+
+				if (screenPos.z < 0 || notOnScreen) //Behind the camera or not on screen? => We bail out
+					continue;
+
+				possibleTargets.Add((AllEntities[i], distanceToViewDir));
+			}
+
+			//Sort by distance low to high
+			possibleTargets.Sort((x, y) => x.Item2.CompareTo(y.Item2));
+			return possibleTargets;
 		}
 		#endregion
 		#region ItemUseControl

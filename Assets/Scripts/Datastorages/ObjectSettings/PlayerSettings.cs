@@ -4,7 +4,6 @@ namespace EoE.Information
 {
 	public class PlayerSettings : EntitieSettings
 	{
-
 		//Leveling settings
 		public LevelingSettings LevelSettings = null;
 
@@ -64,6 +63,12 @@ namespace EoE.Information
 		public Color ReserveEnduranceBarColor = new Color(0.65f, 0.325f, 0, 1);
 		public Color ActiveEnduranceBarColor = new Color(1, 0.5f, 0, 1);
 		public Color ReloadingEnduranceBarColor = new Color(0.4f, 0.4f, 0.4f, 0.8f);
+
+		//Inventory
+		public int UseInventorySize = 24;
+		public int WeaponInventorySize = 8;
+		public int SpellInventorySize = 8;
+		public int ArmorInventorySize = 8;
 
 		///VFX
 		public VFXEffect[] EffectsOnReceiveDamage = default;
