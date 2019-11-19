@@ -104,13 +104,13 @@ namespace EoE.Entities
 
 		public static Inventory ItemInventory;
 		public static Inventory WeaponInventory;
-		public static Inventory ArmorInventory;
 		public static Inventory SpellInventory;
+		public static Inventory ArmorInventory;
 
 		public static InventoryItem EquipedItem;
 		public static InventoryItem EquipedWeapon;
-		public static InventoryItem EquipedArmor;
 		public static InventoryItem EquipedSpell;
+		public static InventoryItem EquipedArmor;
 		public static bool MagicSelected { get; private set; }
 		#region Leveling
 		public static Buff LevelingBaseBuff;
@@ -189,10 +189,10 @@ namespace EoE.Entities
 		{
 			MagicSelected = false;
 
-			ItemInventory = new Inventory(24);
-			WeaponInventory = new Inventory(8);
-			ArmorInventory = new Inventory(8);
-			SpellInventory = new Inventory(8);
+			ItemInventory = new Inventory(PlayerSettings.UseInventorySize);
+			WeaponInventory = new Inventory(PlayerSettings.WeaponInventorySize);
+			SpellInventory = new Inventory(PlayerSettings.SpellInventorySize);
+			ArmorInventory = new Inventory(PlayerSettings.ArmorInventorySize);
 
 			ItemInventory.InventoryChanged += UpdateEquipedItems;
 			WeaponInventory.InventoryChanged += UpdateEquipedItems;

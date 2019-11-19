@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace EoE.Information
+namespace EoE.Sound
 {
-	public abstract class FXInstance : ScriptableObject
+	public class MusicController : MonoBehaviour
 	{
 
 	}

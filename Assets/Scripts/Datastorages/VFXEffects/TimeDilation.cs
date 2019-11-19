@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace EoE.Information
 {
-	public class TimeDilation : VFXEffect
+	public class TimeDilation : FXInstance
 	{
 		[Tooltip("The target TimeScale that will be reached and kept at TimeStay.")] 
 		public float Scale = 0.25f;

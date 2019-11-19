@@ -625,6 +625,8 @@ namespace EoE.Utils
 			}
 		}
 		#endregion
+		#region SingleSound
+		#endregion
 		#region Particle Effects
 		public static void PlayParticleEffect(GameObject mainObject, Vector3 at, bool destroyAfterDelay = true, float destroyDelay = 0, Transform parent = null, bool asInstantiation = true)
 		{

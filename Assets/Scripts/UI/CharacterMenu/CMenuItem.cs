@@ -1,4 +1,5 @@
 ﻿using EoE.Controlls;
+using EoE.Sound;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,7 +7,8 @@ namespace EoE.UI
 {
 	public abstract class CMenuItem : MonoBehaviour
 	{
-		[SerializeField] protected Image pointer;
+		[SerializeField] protected Image pointer = default;
+		[SerializeField] protected SoundInstance source = default;
 		public static CMenuItem SelectedComponent { get; private set; }
 		protected bool selected { get; private set; }
 		public void SelectMenuItem()
@@ -39,6 +41,10 @@ namespace EoE.UI
 				OnPress();
 			if (InputController.MenuBack.Down)
 				OnBack();
+		}
+		protected void PlayFeedback()
+		{
+
 		}
 		protected virtual void OnPress() { }
 		protected virtual void OnBack() { }
