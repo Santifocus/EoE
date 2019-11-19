@@ -10,26 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 864ce4b4956fd63469942aad9fe28094, type: 3}
-  m_Name: SoulStrenght
+  m_Name: Wutkraut
   m_EditorClassIdentifier: 
-  ItemName: SoulStrenght
+  ItemName: Wutkraut
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 5
-  ItemIcon: {fileID: 21300000, guid: 083f51189fd8fb74187c0a3b5b908b2f, type: 3}
+  ItemIcon: {fileID: 21300000, guid: 5b060644db4ddc74da4eedea86b832f7, type: 3}
   RemoveOnUse: 1
   UseCooldown: 0
-  VFXEffectsOnUse: []
+  VFXEffectsOnUse:
+  - {fileID: 11400000, guid: 2e8623e6ecdc1bb4aa68c44343ee4f86, type: 2}
   buffInfo:
     Name: SoulStrenght
     Quality: 2
     Permanent: 0
     BuffTime: 10
-    Icon: {fileID: 21300000, guid: 083f51189fd8fb74187c0a3b5b908b2f, type: 3}
+    Icon: {fileID: 21300000, guid: 5b060644db4ddc74da4eedea86b832f7, type: 3}
     Effects:
-    - TargetBaseStat: 0
+    - TargetBaseStat: 3
       Percent: 1
-      Amount: 50
+      Amount: 10
     CustomEffects:
       ApplyMoveStun: 0
       Invincible: 0
