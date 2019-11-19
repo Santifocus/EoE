@@ -22,9 +22,9 @@ namespace EoE.UI
 		private void Start()
 		{
 			gameObject.SetActive(false);
-			EventManager.PlayerDiedEvent += ctx => Show();
+			EventManager.PlayerDiedEvent += Show;
 		}
-		public void Show()
+		public void Show(Entities.Entitie killer)
 		{
 			selectedIndex = 0;
 			gameObject.SetActive(true);
@@ -32,7 +32,7 @@ namespace EoE.UI
 		}
 		private void OnDestroy()
 		{
-			EventManager.PlayerDiedEvent -= ctx => Show();
+			EventManager.PlayerDiedEvent -= Show;
 		}
 		private void Update()
 		{

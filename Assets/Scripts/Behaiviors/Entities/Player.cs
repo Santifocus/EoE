@@ -384,6 +384,7 @@ namespace EoE.Entities
 		{
 			const float lowerFallThreshold = -0.1f;
 			float force = scale * Physics.gravity.y * Time.fixedDeltaTime;
+
 			if (!charController.isGrounded || totalVerticalVelocity > 0)
 			{
 				if (jumpVelocity > 0)

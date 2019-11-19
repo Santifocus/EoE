@@ -16,6 +16,8 @@ namespace EoE.Entities
 		[SerializeField] private Vector3 rotationWhenOpen = default;
 		[SerializeField] private Vector3 rotationWhenClosed = default;
 
+		[SerializeField] private Collider coll = default;
+
 		[SerializeField] private Vector3 offsetWhenOpen = default;
 		[SerializeField] private Vector3 offsetWhenClosed = default;
 		private bool openState;
@@ -54,6 +56,7 @@ namespace EoE.Entities
 		{
 			canBeInteracted = false;
 			float processTime = 0;
+			coll.enabled = false;
 
 			while (processTime < openTime)
 			{
@@ -63,6 +66,8 @@ namespace EoE.Entities
 				rend.transform.eulerAngles = Vector3.Lerp(openState ? rotationWhenClosed : rotationWhenOpen, openState ? rotationWhenOpen : rotationWhenClosed, progress);
 				rend.transform.position = basePos + Vector3.Lerp(openState ? offsetWhenClosed : offsetWhenOpen, openState ? offsetWhenOpen : offsetWhenClosed, progress);
 			}
+
+			coll.enabled = true;
 
 			this.openState = openState;
 			canBeInteracted = true;
