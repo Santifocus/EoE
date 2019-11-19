@@ -21,6 +21,7 @@ namespace EoE.Sounds
 			source.spatialBlend = baseData.spatialBlend;
 			source.volume = baseData.volume;
 			source.priority = baseData.priority;
+			source.outputAudioMixerGroup = baseData.audioGroup;
 
 			source.Stop();
 
