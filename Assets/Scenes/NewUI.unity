@@ -4118,7 +4118,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 4.5918e-41, z: 0, w: 2.3509887e-38}
+  m_BoundingSphereOverride: {x: 7.7e-43, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -15989,7 +15989,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4113294019310746719}
   - component: {fileID: 4113294019310746717}
-  - component: {fileID: 4113294019310746718}
+  - component: {fileID: 4113294019310746713}
   m_Layer: 5
   m_Name: CharacterMenuMainPage
   m_TagString: Untagged
@@ -15997,36 +15997,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &4113294019310746717
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4113294019310746712}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f94ceab494d57f048b27fa481aea84cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pageSlider: {fileID: 4113294019310746718}
-  levelDisplay: {fileID: 4113294019268283153}
-  modelDisplay: {fileID: 4113294019494926208}
-  modelRendererCameraPrefab: {fileID: 7990312237432935532, guid: 6f4f884208bca594cb88b61052c1cec6,
-    type: 3}
-  cameraStandardRotation: {x: -30, y: 20, z: 0}
-  cameraToModelDistance: {x: 0, y: 0.25, z: 3.5}
-  cameraVerticalAngleClamps: {x: -30, y: 30}
-  cameraRotationSpeed: {x: 240, y: 60}
-  cameraSmoothTime: 0.35
-  healthDisplay: {fileID: 4113294020585705823}
-  manaDisplay: {fileID: 4113294020767027274}
-  enduranceDisplay: {fileID: 4113294019142245381}
-  defenseDisplay: {fileID: 4113294020460725794}
-  atkDisplay: {fileID: 4113294019324894131}
-  mgaDisplay: {fileID: 4113294019142606859}
-  skillpointDisplay: {fileID: 4113294021057510008}
---- !u!114 &4113294019310746718
+--- !u!114 &4113294019310746713
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -16043,6 +16014,35 @@ MonoBehaviour:
   standardEndPos: {x: 0, y: 0}
   disableOnEndPos: 1
   ignoreTimeScale: 1
+--- !u!114 &4113294019310746717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4113294019310746712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f94ceab494d57f048b27fa481aea84cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pageSlider: {fileID: 4113294019310746713}
+  levelDisplay: {fileID: 4113294019268283153}
+  modelDisplay: {fileID: 4113294019494926208}
+  modelRendererCameraPrefab: {fileID: 7990312237432935532, guid: 6f4f884208bca594cb88b61052c1cec6,
+    type: 3}
+  cameraStandardRotation: {x: -30, y: 20, z: 0}
+  cameraToModelDistance: {x: 0, y: 0.25, z: 3.5}
+  cameraVerticalAngleClamps: {x: -30, y: 30}
+  cameraRotationSpeed: {x: 240, y: 60}
+  cameraSmoothTime: 0.35
+  healthDisplay: {fileID: 4113294020585705823}
+  manaDisplay: {fileID: 4113294020767027274}
+  enduranceDisplay: {fileID: 4113294019142245381}
+  defenseDisplay: {fileID: 4113294020460725794}
+  atkDisplay: {fileID: 4113294019324894131}
+  mgaDisplay: {fileID: 4113294019142606859}
+  skillpointDisplay: {fileID: 4113294021057510008}
 --- !u!224 &4113294019310746719
 RectTransform:
   m_ObjectHideFlags: 0
