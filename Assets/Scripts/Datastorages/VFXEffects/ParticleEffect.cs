@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace EoE.Information
 {
-	public class ParticleEffect : VFXEffect
+	public class ParticleEffect : FXInstance
 	{
 		[Tooltip("The Object that will be created, all Particle systems attached to it will be played.")]
 		public GameObject ParticleMainObject = null;

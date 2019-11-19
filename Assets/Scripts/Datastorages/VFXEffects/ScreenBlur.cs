@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace EoE.Information
 {
-	public class ScreenBlur : VFXEffect
+	public class ScreenBlur : FXInstance
 	{
 		[Tooltip("How long should the ScreenBlur last?")]
 		public float Time = 0.3f;

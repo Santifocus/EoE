@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace EoE.Information
 {
-	public class DialogueInput : VFXEffect
+	public class DialogueInput : FXInstance
 	{
 		public DialoguePart[] parts;
 		[System.Serializable]

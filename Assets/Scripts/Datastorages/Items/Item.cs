@@ -12,7 +12,7 @@ namespace EoE.Information
 		public Sprite ItemIcon;
 		public bool RemoveOnUse;
 		public float UseCooldown;
-		public VFXEffect[] VFXEffectsOnUse;
+		public FXInstance[] VFXEffectsOnUse;
 
 		public ItemDrop[] CreateItemDrop(Vector3 positon, int stackSize, bool stopVelocity)
 		{
@@ -60,7 +60,7 @@ namespace EoE.Information
 				}
 				else if(user is Player)
 				{
-					PlayerVFXManager.PlayVFX(VFXEffectsOnUse[i]);
+					PlayerFXManager.PlayFX(VFXEffectsOnUse[i]);
 				}
 			}
 		}

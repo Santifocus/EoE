@@ -55,8 +55,7 @@ namespace EoE.Entities
 		private BuffInstance blockingBuff;
 
 		//Velocity
-		private Vector3 curMoveForce;
-		private Vector3? controllDirection = null;
+		private Vector3 controllDirection;
 		private float intendedAcceleration;
 		private float curAcceleration;
 		private float jumpGroundCooldown;
@@ -105,13 +104,13 @@ namespace EoE.Entities
 
 		public static Inventory ItemInventory;
 		public static Inventory WeaponInventory;
-		public static Inventory ArmorInventory;
 		public static Inventory SpellInventory;
+		public static Inventory ArmorInventory;
 
 		public static InventoryItem EquipedItem;
 		public static InventoryItem EquipedWeapon;
-		public static InventoryItem EquipedArmor;
 		public static InventoryItem EquipedSpell;
+		public static InventoryItem EquipedArmor;
 		public static bool MagicSelected { get; private set; }
 		#region Leveling
 		public static Buff LevelingBaseBuff;
@@ -129,7 +128,6 @@ namespace EoE.Entities
 		#region Basic Monobehaivior
 		protected override void EntitieStart()
 		{
-			Debug.Log(Application.persistentDataPath);
 			Alive = true;
 			Instance = this;
 
@@ -191,10 +189,10 @@ namespace EoE.Entities
 		{
 			MagicSelected = false;
 
-			ItemInventory = new Inventory(24);
-			WeaponInventory = new Inventory(8);
-			ArmorInventory = new Inventory(8);
-			SpellInventory = new Inventory(8);
+			ItemInventory = new Inventory(PlayerSettings.UseInventorySize);
+			WeaponInventory = new Inventory(PlayerSettings.WeaponInventorySize);
+			SpellInventory = new Inventory(PlayerSettings.SpellInventorySize);
+			ArmorInventory = new Inventory(PlayerSettings.ArmorInventorySize);
 
 			ItemInventory.InventoryChanged += UpdateEquipedItems;
 			WeaponInventory.InventoryChanged += UpdateEquipedItems;
@@ -377,7 +375,7 @@ namespace EoE.Entities
 		}
 		private void ApplyForces()
 		{
-			Vector3 appliedForce = (controllDirection ?? transform.forward) * curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration + curVelocity;
+			Vector3 appliedForce = controllDirection * curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration + curVelocity;
 
 			charController.Move(appliedForce * Time.fixedDeltaTime);
 			ApplyGravity();
@@ -386,6 +384,7 @@ namespace EoE.Entities
 		{
 			const float lowerFallThreshold = -0.1f;
 			float force = scale * Physics.gravity.y * Time.fixedDeltaTime;
+
 			if (!charController.isGrounded || totalVerticalVelocity > 0)
 			{
 				if (jumpVelocity > 0)
@@ -550,7 +549,7 @@ namespace EoE.Entities
 			controllDirection = new Vector3(newX, 0, newZ) / intendedControl;
 
 			if (!TargetedEntitie)
-				intendedRotation = -(Mathf.Atan2(controllDirection.Value.z, controllDirection.Value.x) * Mathf.Rad2Deg - 90);
+				intendedRotation = -(Mathf.Atan2(controllDirection.z, controllDirection.x) * Mathf.Rad2Deg - 90);
 		}
 		protected override void ApplyKnockback(Vector3 causedKnockback)
 		{
@@ -579,7 +578,7 @@ namespace EoE.Entities
 			float targetAngle = intendedRotation;
 			if (InputController.PlayerMove != Vector2.zero)
 			{
-				targetAngle = -(Mathf.Atan2(controllDirection.Value.z, controllDirection.Value.x) * Mathf.Rad2Deg - 90);
+				targetAngle = -(Mathf.Atan2(controllDirection.z, controllDirection.x) * Mathf.Rad2Deg - 90);
 			}
 
 			Vector3 newForce = new Vector3(Mathf.Sin(targetAngle * Mathf.Deg2Rad), 0, Mathf.Cos(targetAngle * Mathf.Deg2Rad)) * PlayerSettings.DodgePower * curWalkSpeed;
@@ -1043,7 +1042,6 @@ namespace EoE.Entities
 			if (effect.velocityIntent == AttackVelocityIntent.Set)
 			{
 				curAcceleration = 0;
-				curMoveForce = Vector3.zero;
 
 				if (effect.ignoreVerticalVelocity)
 				{
@@ -1058,7 +1056,6 @@ namespace EoE.Entities
 			else
 			{
 				curAcceleration = 0;
-				curMoveForce = Vector3.zero;
 
 				if (effect.ignoreVerticalVelocity)
 				{

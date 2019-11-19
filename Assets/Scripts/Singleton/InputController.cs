@@ -240,7 +240,8 @@ namespace EoE.Controlls
 		}
 		private void ButtonEnded(Button target)
 		{
-			StartCoroutine(FrameDelayEnd(target));
+			if(gameObject && isActiveAndEnabled)
+				StartCoroutine(FrameDelayEnd(target));
 		}
 		private IEnumerator FrameDelayEnd(Button target)
 		{
@@ -261,6 +262,7 @@ namespace EoE.Controlls
 			public bool Down { get; internal set; }
 			public bool Active { get; internal set; }
 			public bool Up { get; internal set; }
+			public bool Pressed => Active || Down;
 
 			public Button(string ButtonName)
 			{

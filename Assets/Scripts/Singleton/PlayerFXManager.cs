@@ -9,9 +9,9 @@ using EoE.UI;
 
 namespace EoE
 {
-	public class PlayerVFXManager : MonoBehaviour
+	public class PlayerFXManager : MonoBehaviour
 	{
-		public static PlayerVFXManager Instance { get; private set; }
+		public static PlayerFXManager Instance { get; private set; }
 		private PlayerSettings playerSettings => Player.PlayerSettings;
 		private void Start()
 		{
@@ -21,13 +21,20 @@ namespace EoE
 			EventManager.PlayerCausedDamageEvent += PlayerCausedDamage;
 			EventManager.PlayerLevelupEvent += PlayerLevelUp;
 		}
+		private void OnDestroy()
+		{
+			EventManager.PlayerTookDamageEvent -= PlayerTookDamage;
+			EventManager.PlayerLandedEvent -= PlayerLanded;
+			EventManager.PlayerCausedDamageEvent -= PlayerCausedDamage;
+			EventManager.PlayerLevelupEvent -= PlayerLevelUp;
+		}
 		private void PlayerTookDamage(float causedDamage, float? knockBack)
 		{
 			if (causedDamage > 0)
 			{
 				for (int i = 0; i < playerSettings.EffectsOnReceiveDamage.Length; i++)
 				{
-					PlayVFX(playerSettings.EffectsOnReceiveDamage[i]);
+					PlayFX(playerSettings.EffectsOnReceiveDamage[i]);
 				}
 			}
 
@@ -35,7 +42,7 @@ namespace EoE
 			{
 				for (int i = 0; i < playerSettings.EffectsOnReceiveKnockback.Length; i++)
 				{
-					PlayVFX(playerSettings.EffectsOnReceiveKnockback[i]);
+					PlayFX(playerSettings.EffectsOnReceiveKnockback[i]);
 				}
 			}
 
@@ -43,7 +50,7 @@ namespace EoE
 			{
 				for (int i = 0; i < playerSettings.EffectsOnDamageWhenBelowThreshold.Length; i++)
 				{
-					PlayVFX(playerSettings.EffectsOnDamageWhenBelowThreshold[i]);
+					PlayFX(playerSettings.EffectsOnDamageWhenBelowThreshold[i]);
 				}
 			}
 		}
@@ -53,7 +60,7 @@ namespace EoE
 			{
 				for (int i = 0; i < playerSettings.EffectsOnPlayerLanding.Length; i++)
 				{
-					PlayVFX(playerSettings.EffectsOnPlayerLanding[i]);
+					PlayFX(playerSettings.EffectsOnPlayerLanding[i]);
 				}
 			}
 		}
@@ -61,14 +68,14 @@ namespace EoE
 		{
 			for (int i = 0; i < playerSettings.EffectsOnCauseDamage.Length; i++)
 			{
-				PlayVFX(playerSettings.EffectsOnCauseDamage[i]);
+				PlayFX(playerSettings.EffectsOnCauseDamage[i]);
 			}
 
 			if (wasCrit)
 			{
 				for (int i = 0; i < playerSettings.EffectsOnCauseCrit.Length; i++)
 				{
-					PlayVFX(playerSettings.EffectsOnCauseCrit[i]);
+					PlayFX(playerSettings.EffectsOnCauseCrit[i]);
 				}
 			}
 		}
@@ -76,10 +83,10 @@ namespace EoE
 		{
 			for (int i = 0; i < playerSettings.EffectsOnLevelup.Length; i++)
 			{
-				PlayVFX(playerSettings.EffectsOnLevelup[i]);
+				PlayFX(playerSettings.EffectsOnLevelup[i]);
 			}
 		}
-		public static void PlayVFX(VFXEffect effect)
+		public static void PlayFX(FXInstance effect)
 		{
 			if (GameController.GameIsPaused)
 				return;

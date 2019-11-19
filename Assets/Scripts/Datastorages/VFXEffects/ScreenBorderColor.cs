@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace EoE.Information
 {
-	public class ScreenBorderColor : VFXEffect
+	public class ScreenBorderColor : FXInstance
 	{
 		[Tooltip("How long should the ScreenBorderColor last?")]
 		public float Time = 0.2f;

@@ -158,7 +158,7 @@ MonoBehaviour:
   ReserveEnduranceBarColor: {r: 1, g: 1, b: 1, a: 1}
   ActiveEnduranceBarColor: {r: 1, g: 1, b: 1, a: 1}
   ReloadingEnduranceBarColor: {r: 0.4, g: 0.4, b: 0.4, a: 0.8}
-  UseInventorySize: 5
+  UseInventorySize: 24
   WeaponInventorySize: 8
   SpellInventorySize: 8
   ArmorInventorySize: 8
@@ -177,6 +177,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 982aab948223d7044bfae67dc43bb77c, type: 2}
   EffectsHealthThreshold: 0.3
   EffectsOnDamageWhenBelowThreshold:
-  - {fileID: 11400000, guid: 9d9557ec007fa904aa2d0ef9f1ea3489, type: 2}
-  PlayerLandingVelocityThreshold: 5
-  EffectsOnPlayerLanding: []
+  - {fileID: 11400000, guid: 668a809c73c04d648ae6ae4e123f2f21, type: 2}
+  PlayerLandingVelocityThreshold: 10
+  EffectsOnPlayerLanding:
+  - {fileID: 11400000, guid: b09700b6216eb874aab8d980440f121b, type: 2}
