@@ -115,6 +115,10 @@ namespace EoE
 			{
 				EffectUtils.DilateTime(effect as TimeDilation);
 			}
+			else if (effect is SoundEffect)
+			{
+				EffectUtils.PlaySound(effect as SoundEffect, Player.Instance.transform);
+			}
 			else if (effect is ParticleEffect)
 			{
 				EffectUtils.PlayParticleEffect(effect as ParticleEffect, Player.Instance.transform);

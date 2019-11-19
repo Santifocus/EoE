@@ -12,6 +12,7 @@ namespace EoE.Information
 		private static bool VisualsSettingsOpen;
 		private static bool DamageNumberSettingsOpen;
 		private static bool OtherSettingsOpen;
+		private static bool GlobalSoundsOpen;
 		private static bool DamageCalculationsOpen;
 		private static bool DamageCalculationValuesOpen;
 		private static bool DialogueSettingsOpen;
@@ -129,6 +130,9 @@ namespace EoE.Information
 			FloatField(new GUIContent("Crit Damage Multiplier", "If a ability / attack was counted as criticall for much should the damage be multiplied?"), ref settings.CritDamageMultiplier);
 			ObjectField(new GUIContent("Soul Drop Prefab", "The prefab that will be spawned when an Entite dies and drops souls."), ref settings.SoulDropPrefab);
 			FloatField(new GUIContent("Item Drop Random Velocity Strenght"), ref settings.ItemDropRandomVelocityStrenght);
+
+			GUILayout.Space(3);
+			ObjectArrayField(new GUIContent("Global Sounds"), ref settings.globalSounds, ref GlobalSoundsOpen, new GUIContent("Sound "));
 		}
 
 		private void EffectivenessMatrixArea()

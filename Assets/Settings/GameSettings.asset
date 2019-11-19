@@ -57,6 +57,9 @@ MonoBehaviour:
   EntitieStatDisplayPrefab: {fileID: 2494207287049978237, guid: ee388195767cec3429b9391e9fbd39e5,
     type: 3}
   EnemeyHealthBarLerpSpeed: 3
+  globalSounds:
+  - {fileID: 11400000, guid: 19c607df5b2184f48858e875307dc35b, type: 2}
+  - {fileID: 11400000, guid: 38b05306f76ea174382246126bd187fb, type: 2}
   DamageNumberLifeTime: 1
   ShowRegenNumbers: 1
   DamageNumberFlySpeed: 1

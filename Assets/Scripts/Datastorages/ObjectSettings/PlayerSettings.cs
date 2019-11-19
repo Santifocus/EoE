@@ -70,7 +70,7 @@ namespace EoE.Information
 		public int SpellInventorySize = 8;
 		public int ArmorInventorySize = 8;
 
-		///VFX
+		///FX
 		public FXInstance[] EffectsOnReceiveDamage = default;
 		public FXInstance[] EffectsOnReceiveKnockback = default;
 		public FXInstance[] EffectsOnCauseDamage = default;

@@ -1,4 +1,5 @@
 ﻿using EoE.Entities;
+using EoE.Sounds;
 using EoE.UI;
 using UnityEngine;
 
@@ -24,6 +25,9 @@ namespace EoE.Information
 
 		public EntitieStatDisplay EntitieStatDisplayPrefab = default;
 		public float EnemeyHealthBarLerpSpeed = 4;
+
+		//Sound
+		public Sound[] globalSounds = default;
 
 		//Damage Numbers
 		public float DamageNumberLifeTime = 1;

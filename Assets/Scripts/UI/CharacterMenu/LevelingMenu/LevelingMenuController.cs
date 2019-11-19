@@ -3,6 +3,7 @@ using EoE.Entities;
 using EoE.Information;
 using UnityEngine;
 using TMPro;
+using EoE.Sounds;
 
 namespace EoE.UI
 {
@@ -68,7 +69,7 @@ namespace EoE.UI
 			if(menuItems.Length > 0)
 				menuItems[navigationIndex].SelectMenuItem();
 			UpdateDisplay();
-			ResetAssignedSkillPoints();
+			ResetAssignedSkillPoints(false);
 		}
 		private void Update()
 		{
@@ -83,6 +84,8 @@ namespace EoE.UI
 				if (navigationIndex == menuItems.Length)
 					navigationIndex -= menuItems.Length;
 
+				PlayFeedback(true);
+
 				menuItems[navigationIndex].SelectMenuItem();
 			}
 			else if (InputController.MenuUp.Down || (InputController.MenuUp.Active && curNavigationCooldown <= 0))
@@ -92,6 +95,8 @@ namespace EoE.UI
 				navigationIndex--;
 				if (navigationIndex == -1)
 					navigationIndex += menuItems.Length;
+
+				PlayFeedback(true);
 
 				menuItems[navigationIndex].SelectMenuItem();
 			}
@@ -103,14 +108,14 @@ namespace EoE.UI
 			//First check if we have enought Points for the stat we want to increment
 			if (add && (toAttributePoints ? assignedAttributePointCount == attributePoints : assignedSkillPointCount == skillPoints))
 			{
-				InputFeedback();
+				PlayFeedback(false);
 				return false;
 			}
 
 			//Then check if we try to remove a point but dont actually have one assigned
 			if (!add && this[stat] == 0)
 			{
-				InputFeedback();
+				PlayFeedback(false);
 				return false;
 			}
 
@@ -123,11 +128,16 @@ namespace EoE.UI
 				assignedSkillPointCount += change;
 
 			UpdateDisplay();
-			InputFeedback();
+			PlayFeedback(true);
 			return true;
 		}
-		public void ApplyAssignedPoints()
+		public bool ApplyAssignedPoints()
 		{
+			if (assignedAttributePointCount + assignedSkillPointCount == 0)
+			{
+				PlayFeedback(false);
+				return false;
+			}
 			attributePoints -= assignedAttributePointCount;
 			for (int i = 0; i < 3; i++)
 			{
@@ -146,6 +156,9 @@ namespace EoE.UI
 
 			Player.Instance.RecalculateBuffs();
 			UpdateDisplay();
+
+			PlayFeedback(true);
+			return true;
 		}
 		public void GotoConfirmation()
 		{
@@ -158,8 +171,15 @@ namespace EoE.UI
 				}
 			}
 		}
-		public void ResetAssignedSkillPoints()
+		public bool ResetAssignedSkillPoints(bool feedback = true)
 		{
+			if (assignedAttributePointCount + assignedSkillPointCount == 0)
+			{
+				if(feedback)
+					PlayFeedback(false);
+				return false;
+			}
+
 			for (int i = 0; i < 3; i++)
 			{
 				assignedAttributePoints[i] = 0;
@@ -172,10 +192,10 @@ namespace EoE.UI
 			assignedSkillPointCount = 0;
 
 			UpdateDisplay();
-		}
-		private void InputFeedback()
-		{
 
+			if (feedback)
+				PlayFeedback(true);
+			return true;
 		}
 		private void UpdateDisplay()
 		{
@@ -192,6 +212,10 @@ namespace EoE.UI
 
 				target.UpdateNumbers();
 			}
+		}
+		private void PlayFeedback(bool succesSound)
+		{
+			SoundManager.SetSoundState(succesSound ? ConstantCollector.MENU_NAV_SOUND : ConstantCollector.FAILED_MENU_NAV_SOUND, true);
 		}
 
 		protected override void DeactivatePage()

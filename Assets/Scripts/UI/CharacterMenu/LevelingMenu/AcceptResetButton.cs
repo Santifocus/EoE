@@ -20,6 +20,8 @@ namespace EoE.UI
 		{
 			base.Update();
 
+			if (!selected)
+				return;
 			if (justSelected)
 			{
 				justSelected = false;
@@ -30,9 +32,9 @@ namespace EoE.UI
 			{
 				onAcceptPosition = !onAcceptPosition;
 				pointer.rectTransform.anchoredPosition = onAcceptPosition ? pointerAcceptPosition : pointerResetPosition;
+				PlayFeedback(true);
 			}
-
-			if (InputController.MenuEnter.Down)
+			else if (InputController.MenuEnter.Down)
 			{
 				if (onAcceptPosition)
 					LevelingMenuController.Instance.ApplyAssignedPoints();

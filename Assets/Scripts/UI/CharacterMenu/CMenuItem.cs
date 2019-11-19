@@ -1,5 +1,5 @@
 ﻿using EoE.Controlls;
-using EoE.Sound;
+using EoE.Sounds;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,7 +8,6 @@ namespace EoE.UI
 	public abstract class CMenuItem : MonoBehaviour
 	{
 		[SerializeField] protected Image pointer = default;
-		[SerializeField] protected SoundInstance source = default;
 		public static CMenuItem SelectedComponent { get; private set; }
 		protected bool selected { get; private set; }
 		public void SelectMenuItem()
@@ -42,9 +41,10 @@ namespace EoE.UI
 			if (InputController.MenuBack.Down)
 				OnBack();
 		}
-		protected void PlayFeedback()
-		{
 
+		protected void PlayFeedback(bool successSound)
+		{
+			SoundManager.SetSoundState(successSound ? ConstantCollector.MENU_NAV_SOUND : ConstantCollector.FAILED_MENU_NAV_SOUND, true);
 		}
 		protected virtual void OnPress() { }
 		protected virtual void OnBack() { }

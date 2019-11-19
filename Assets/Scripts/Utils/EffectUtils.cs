@@ -1,4 +1,5 @@
 ﻿using EoE.Information;
+using EoE.Sounds;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -626,6 +627,16 @@ namespace EoE.Utils
 		}
 		#endregion
 		#region SingleSound
+		public static void PlaySound(SoundEffect info, Transform target)
+		{
+			SoundPlayer soundPlayer = (new GameObject(info.TargetSound.soundName + " Sound Player")).AddComponent<SoundPlayer>();
+
+			soundPlayer.transform.SetParent((info.LocalEffect && target) ? target : Storage.SoundStorage);
+			soundPlayer.transform.position = target ? target.position + info.OffsetToTarget : info.OffsetToTarget;
+
+			soundPlayer.Setup(info.TargetSound, !info.Loop);
+			soundPlayer.Play();
+		}
 		#endregion
 		#region Particle Effects
 		public static void PlayParticleEffect(GameObject mainObject, Vector3 at, bool destroyAfterDelay = true, float destroyDelay = 0, Transform parent = null, bool asInstantiation = true)
@@ -655,11 +666,11 @@ namespace EoE.Utils
 		}
 		public static void PlayParticleEffect(ParticleEffect info, Transform target)
 		{
-			PlayParticleEffect(info.ParticleMainObject, target ? (target.position + info.OffsetToTarget) : Vector3.zero, true, info.DestroyDelay, info.LocalEffect ? target : null);
+			PlayParticleEffect(info.ParticleMainObject, target ? (target.position + info.OffsetToTarget) : info.OffsetToTarget, true, info.DestroyDelay, info.LocalEffect ? target : null);
 		}
 		public static void PlayParticleEffect(ParticleEffect info, Entities.Entitie target)
 		{
-			PlayParticleEffect(info.ParticleMainObject, target ? (target.actuallWorldPosition + info.OffsetToTarget) : Vector3.zero, true, info.DestroyDelay, info.LocalEffect ? target.transform : null);
+			PlayParticleEffect(info.ParticleMainObject, target ? (target.actuallWorldPosition + info.OffsetToTarget) : info.OffsetToTarget, true, info.DestroyDelay, info.LocalEffect ? target.transform : null);
 		}
 		public static void KillParticlesWhenDone(GameObject target, float? delay)
 		{

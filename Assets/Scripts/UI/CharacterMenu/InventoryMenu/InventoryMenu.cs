@@ -1,6 +1,7 @@
 ﻿using EoE.Controlls;
 using EoE.Entities;
 using EoE.Information;
+using EoE.Sounds;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -131,6 +132,7 @@ namespace EoE.UI
 				//Check again in case we scrolled down on a one-line inventory (eg.: Size:6, Index: 4 -> 10 -> 4)
 				if (preSlotIndex != curSlotIndex)
 				{
+					PlayFeedback(true);
 					navigationCooldown = NAV_COOLDOWN;
 					slots[curSlotIndex].SelectMenuItem();
 				}
@@ -145,7 +147,12 @@ namespace EoE.UI
 
 				navigationCooldown = NAV_COOLDOWN;
 				itemActions[itemActionIndex].SelectMenuItem();
+				PlayFeedback(true);
 			}
+		}
+		private void PlayFeedback(bool succesSound)
+		{
+			SoundManager.SetSoundState(succesSound ? ConstantCollector.MENU_NAV_SOUND : ConstantCollector.FAILED_MENU_NAV_SOUND, true);
 		}
 		private int SlotsPerRow()
 		{

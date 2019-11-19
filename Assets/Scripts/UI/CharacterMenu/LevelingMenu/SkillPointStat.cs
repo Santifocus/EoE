@@ -4,7 +4,6 @@ using EoE.Information;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-
 namespace EoE.UI
 {
 	public class SkillPointStat : CMenuItem
@@ -39,7 +38,7 @@ namespace EoE.UI
 				LevelingMenuController.Instance.ModifyAssignedSkillPoint(true, targetStat);
 				PointScrollingCooldown = SCROLLING_COOLDOWN_ON_FIRST;
 			}
-			else if(InputController.MenuRight.Active && PointScrollingCooldown <= 0)
+			else if (InputController.MenuRight.Active && PointScrollingCooldown <= 0)
 			{
 				LevelingMenuController.Instance.ModifyAssignedSkillPoint(true, targetStat);
 				PointScrollingCooldown = SCROLLING_COOLDOWN;
@@ -92,11 +91,6 @@ namespace EoE.UI
 				totalPoints.color = standardColor;
 				curStatValue.color = standardColor;
 			}
-		}
-
-		private float GetCurValue(int newPointsCount)
-		{
-			return  + newPointsCount * Player.PlayerSettings.LevelSettings[targetStat];
 		}
 	}
 }

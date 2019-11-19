@@ -6,11 +6,13 @@ namespace EoE
 	{
 		private static Storage instance;
 		[SerializeField] private Transform particleStorage = default;
+		[SerializeField] private Transform soundStorage = default;
 		[SerializeField] private Transform entitieStorage = default;
 		[SerializeField] private Transform projectileStorage = default;
 		[SerializeField] private Transform dropStorage = default;
 
 		public static Transform ParticleStorage => instance.particleStorage;
+		public static Transform SoundStorage => instance.soundStorage;
 		public static Transform EntitieStorage => instance.entitieStorage;
 		public static Transform ProjectileStorage => instance.projectileStorage;
 		public static Transform DropStorage => instance.dropStorage;

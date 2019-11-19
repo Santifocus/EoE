@@ -39,7 +39,7 @@ namespace EoE.Information
 			IFramesSettingsArea();
 			HUDSettingsArea();
 			InventorySettingsArea();
-			VFXSettingsArea();
+			FXSettingsArea();
 		}
 
 		private void CameraSettingsArea()
@@ -177,11 +177,11 @@ namespace EoE.Information
 			}
 			EndFoldoutHeader();
 		}
-		private void VFXSettingsArea()
+		private void FXSettingsArea()
 		{
 			PlayerSettings settings = target as PlayerSettings;
 
-			FoldoutHeader("VFX Settings", ref VFXSettingsOpen);
+			FoldoutHeader("FX Settings", ref VFXSettingsOpen);
 			if (VFXSettingsOpen)
 			{
 				ObjectArrayField(new GUIContent("Effects On Receive Damage"), ref settings.EffectsOnReceiveDamage, ref ReceiveDamageOpen, new GUIContent("Effect "));

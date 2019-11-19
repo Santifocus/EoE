@@ -15,5 +15,8 @@ namespace EoE.Information
 		[MenuItem("EoE/FX/TimeDilation")] public static void CreateTimeDilation() => EoEEditor.AssetCreator<TimeDilation>("Settings", "FX");
 		[MenuItem("EoE/FX/ParticleEffect")] public static void CreateParticleEffect() => EoEEditor.AssetCreator<ParticleEffect>("Settings", "FX");
 		[MenuItem("EoE/FX/DialogueInput")] public static void CreateDialogueInput() => EoEEditor.AssetCreator<DialogueInput>("Settings", "FX");
+
+		[MenuItem("EoE/FX/Sound/Base")] public static void CreateSound() => EoEEditor.AssetCreator<Sounds.Sound>("SFX", "SoundBases");
+		[MenuItem("EoE/FX/Sound/Effect")] public static void CreateSoundEffect() => EoEEditor.AssetCreator<SoundEffect>("Settings", "FX");
 	}
 }
