@@ -180,4 +180,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 668a809c73c04d648ae6ae4e123f2f21, type: 2}
   PlayerLandingVelocityThreshold: 10
   EffectsOnPlayerLanding:
-  - {fileID: 11400000, guid: b09700b6216eb874aab8d980440f121b, type: 2}
+  - {fileID: 11400000, guid: ba451c2b316cc054ba26cb958cbb7f1a, type: 2}
