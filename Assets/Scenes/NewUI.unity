@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 2039a0ad0a9d05549928b70362f54902, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.18827623, g: 0.19113824, b: 0.191098, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1756,6 +1756,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointer: {fileID: 1152801264}
+  source: {fileID: 0}
   pointerAcceptPosition: {x: 10, y: 0}
   pointerResetPosition: {x: 420, y: 0}
 --- !u!1 &399510459
@@ -1846,6 +1847,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointer: {fileID: 1653096278}
+  source: {fileID: 0}
   targetStat: 5
   standardColor: {r: 1, g: 1, b: 1, a: 1}
   changedColor: {r: 0, g: 1, b: 0, a: 1}
@@ -2277,6 +2279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointer: {fileID: 0}
+  source: {fileID: 0}
   actionType: 0
   onSelect: {fileID: 1973081111}
   onNotSelect: {fileID: 291600711}
@@ -3617,6 +3620,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointer: {fileID: 0}
+  source: {fileID: 0}
   actionType: 3
   onSelect: {fileID: 1951635767}
   onNotSelect: {fileID: 1868706784}
@@ -4118,7 +4122,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 7.7e-43, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: NaN, y: 0, z: 0, w: 1.6179495e-14}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -7100,6 +7104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointer: {fileID: 0}
+  source: {fileID: 0}
   actionType: 0
   onSelect: {fileID: 1013407389}
   onNotSelect: {fileID: 316278278}
@@ -9334,6 +9339,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointer: {fileID: 476481395}
+  source: {fileID: 0}
   targetStat: 2
   standardColor: {r: 1, g: 1, b: 1, a: 1}
   changedColor: {r: 0, g: 1, b: 0, a: 1}
@@ -9591,6 +9597,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointer: {fileID: 1483801024}
+  source: {fileID: 0}
   targetStat: 4
   standardColor: {r: 1, g: 1, b: 1, a: 1}
   changedColor: {r: 0, g: 1, b: 0, a: 1}
@@ -9651,6 +9658,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointer: {fileID: 0}
+  source: {fileID: 0}
   actionType: 3
   onSelect: {fileID: 1706745414}
   onNotSelect: {fileID: 2038394421}
@@ -9745,6 +9753,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointer: {fileID: 2037864751}
+  source: {fileID: 0}
   targetStat: 0
   standardColor: {r: 1, g: 1, b: 1, a: 1}
   changedColor: {r: 0, g: 1, b: 0, a: 1}
@@ -10082,6 +10091,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointer: {fileID: 0}
+  source: {fileID: 0}
   actionType: 2
   onSelect: {fileID: 548991576}
   onNotSelect: {fileID: 1089841446}
@@ -10803,6 +10813,7 @@ MonoBehaviour:
   rend: {fileID: 1761216893}
   rotationWhenOpen: {x: 0, y: -90, z: 0}
   rotationWhenClosed: {x: 0, y: 0, z: 0}
+  coll: {fileID: 0}
   offsetWhenOpen: {x: -2.1, y: 0, z: 2.25}
   offsetWhenClosed: {x: 0, y: 0, z: 0}
 --- !u!1 &1653096276
@@ -10933,6 +10944,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointer: {fileID: 659462044}
+  source: {fileID: 0}
   targetStat: 1
   standardColor: {r: 1, g: 1, b: 1, a: 1}
   changedColor: {r: 0, g: 1, b: 0, a: 1}
@@ -12199,6 +12211,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointer: {fileID: 0}
+  source: {fileID: 0}
   actionType: 1
   onSelect: {fileID: 1611182472}
   onNotSelect: {fileID: 77604515}
@@ -12264,6 +12277,7 @@ MonoBehaviour:
   rend: {fileID: 948585671}
   rotationWhenOpen: {x: 0, y: 90, z: 0}
   rotationWhenClosed: {x: 0, y: 0, z: 0}
+  coll: {fileID: 0}
   offsetWhenOpen: {x: 2.1, y: 0, z: 2.25}
   offsetWhenClosed: {x: 0, y: 0, z: 0}
 --- !u!1 &1888132974
@@ -12661,6 +12675,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointer: {fileID: 692148864}
+  source: {fileID: 0}
   targetStat: 3
   standardColor: {r: 1, g: 1, b: 1, a: 1}
   changedColor: {r: 0, g: 1, b: 0, a: 1}
