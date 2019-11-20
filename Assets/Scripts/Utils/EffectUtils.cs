@@ -53,7 +53,7 @@ namespace EoE.Utils
 		}
 		private void OnApplicationQuit()
 		{
-			Gamepad.current.SetMotorSpeeds(0, 0);
+			Gamepad.current?.SetMotorSpeeds(0, 0);
 #if UNITY_EDITOR
 			ResetScreenEffectMat();
 #endif

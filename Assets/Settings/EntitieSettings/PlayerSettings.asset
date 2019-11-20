@@ -43,7 +43,7 @@ MonoBehaviour:
   CameraAnchorOffset: {x: 0, y: 1.6, z: 0}
   CameraAnchorOffsetWhenTargeting: {x: 1, y: 2, z: 0}
   CameraRotationPower: {x: 200, y: -75}
-  CameraRotationSpeed: 5
+  CameraRotationSpeed: 7
   CameraVerticalAngleClamps: {x: -50, y: 50}
   CameraExtraZoomOnVertical: 0.5
   MaxEnemyTargetingDistance: 250

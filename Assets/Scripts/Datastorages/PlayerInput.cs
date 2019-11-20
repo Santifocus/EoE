@@ -8,12 +8,12 @@ using UnityEngine.InputSystem.Utilities;
 
 namespace EoE.Controlls
 {
-	public class PlayerInput : IInputActionCollection, IDisposable
-	{
-		private InputActionAsset asset;
-		public PlayerInput()
-		{
-			asset = InputActionAsset.FromJson(@"{
+    public class PlayerInput : IInputActionCollection, IDisposable
+    {
+        private InputActionAsset asset;
+        public PlayerInput()
+        {
+            asset = InputActionAsset.FromJson(@"{
     ""name"": ""PlayerInput"",
     ""maps"": [
         {
@@ -33,7 +33,7 @@ namespace EoE.Controlls
                     ""type"": ""Value"",
                     ""id"": ""c3976377-b761-48a1-8e8f-fea9f1eb9c8b"",
                     ""expectedControlType"": ""Vector2"",
-                    ""processors"": ""StickDeadzone(min=0.3,max=1)"",
+                    ""processors"": """",
                     ""interactions"": """"
                 },
                 {
@@ -237,7 +237,18 @@ namespace EoE.Controlls
                     ""id"": ""c91643c6-ce9c-4b28-9bc7-beb1443298a2"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""StickDeadzone(min=0.3,max=1)"",
+                    ""groups"": """",
+                    ""action"": ""CameraMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7b6a5146-b462-4b76-9e2d-6051f3e19d06"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": ""StickDeadzone(max=4),ScaleVector2(x=2,y=2)"",
                     ""groups"": """",
                     ""action"": ""CameraMove"",
                     ""isComposite"": false,
@@ -247,6 +258,17 @@ namespace EoE.Controlls
                     ""name"": """",
                     ""id"": ""6ded021c-cfe3-48bc-8a22-f1d4b8de3400"",
                     ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6975bf05-7319-41a5-8a4c-10a1f0f98ab2"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -267,8 +289,30 @@ namespace EoE.Controlls
                 },
                 {
                     ""name"": """",
+                    ""id"": ""9b09950e-2c4c-4be5-b000-98d4e8856fe8"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""17f48b0a-e4d4-42e1-8e44-81ce09d04395"",
                     ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NormalAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5158316c-de59-418a-a90b-0cd5308307ce"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -300,8 +344,30 @@ namespace EoE.Controlls
                 },
                 {
                     ""name"": """",
+                    ""id"": ""434a7279-7ca0-4144-b466-e399544b5de7"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""8ee8ec51-d7c7-45b5-b7d6-7ade6f305e56"",
                     ""path"": ""<Gamepad>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ResetCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""02245945-3a59-43d9-8db9-564971db7814"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -322,8 +388,30 @@ namespace EoE.Controlls
                 },
                 {
                     ""name"": """",
+                    ""id"": ""61a6bfb8-3a0c-472c-be06-9359cd8a3a80"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""0237551f-f436-4926-b639-e052fc91493a"",
                     ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Block"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""db38803a-b069-4979-aa45-8db799852ec5"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -344,6 +432,17 @@ namespace EoE.Controlls
                 },
                 {
                     ""name"": """",
+                    ""id"": ""3ba48b91-98c7-47c3-a9dd-a401f815acc1"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""413f925e-a271-4c0c-b230-f356e10c65c4"",
                     ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
@@ -355,8 +454,30 @@ namespace EoE.Controlls
                 },
                 {
                     ""name"": """",
+                    ""id"": ""84adc9a4-f10e-4c7e-b66e-76feb3c0f44a"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""da23e232-45fe-4215-b96f-60b80437682f"",
                     ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PhysicalMagicSwap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""25de648f-5049-49d2-9106-17a02ba56408"",
+                    ""path"": ""<Keyboard>/z"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -412,6 +533,17 @@ namespace EoE.Controlls
                     ""name"": """",
                     ""id"": ""f7dd6639-5674-47b3-8c8d-0118846e07ed"",
                     ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PlayerMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""feb9fb69-5563-4cf5-bd57-07e2b3a2b2a7"",
+                    ""path"": ""<Keyboard>/i"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -528,8 +660,30 @@ namespace EoE.Controlls
                 },
                 {
                     ""name"": """",
+                    ""id"": ""960c16d6-6f30-4158-a25e-ac7f793f48a3"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""79e74484-0cf7-4249-a4f7-63ecee5eae3c"",
                     ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""041750df-145b-4468-b4be-ced3d1a04ba7"",
+                    ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -550,8 +704,30 @@ namespace EoE.Controlls
                 },
                 {
                     ""name"": """",
+                    ""id"": ""dd554ee2-56b4-4fd1-be6e-51edd2b720e6"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Up"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""61acd399-067c-4e51-887d-dd3f1c84f992"",
                     ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Down"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6fb25825-9a7e-4411-8b77-263cd14eaf4b"",
+                    ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -572,8 +748,30 @@ namespace EoE.Controlls
                 },
                 {
                     ""name"": """",
+                    ""id"": ""4f330b61-53fc-4174-9a07-3325d46bc40f"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Enter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""25a2e37f-48ef-449d-a0fc-dde275dfcd83"",
                     ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d2245751-835a-4070-bc59-5243417c2153"",
+                    ""path"": ""<Keyboard>/backspace"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -594,8 +792,30 @@ namespace EoE.Controlls
                 },
                 {
                     ""name"": """",
+                    ""id"": ""c7d3d8d8-318b-4cbd-b57d-58772d80c034"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""2c62c75c-d0e7-4dc1-b89b-1997bc433a84"",
                     ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PlayerMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""adb302db-5885-45ab-974c-cf0d675211c4"",
+                    ""path"": ""<Keyboard>/i"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -616,8 +836,30 @@ namespace EoE.Controlls
                 },
                 {
                     ""name"": """",
+                    ""id"": ""9e148e5d-e2ad-45df-954e-463521aa5971"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftPage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""dc7ba5f0-401d-4a75-8926-ae71065427f8"",
                     ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightPage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3b662502-98b1-4700-8609-153fef67bcbe"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -635,406 +877,461 @@ namespace EoE.Controlls
                     ""action"": ""CharacterRotate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""c948a69f-8ecd-4361-8df1-a72638e3de16"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CharacterRotate"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""843329bb-df0c-4964-8240-b8271a07ae50"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CharacterRotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""26d6ef77-3bbf-4a88-97af-e135c0cd9ac4"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CharacterRotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""8c005b57-e5f1-4943-bdc7-cc5b10813738"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CharacterRotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""ddbd2e3e-1452-48df-9774-82ce82ebcf0b"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CharacterRotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
     ],
     ""controlSchemes"": []
 }");
-			// GameInput
-			m_GameInput = asset.FindActionMap("GameInput", throwIfNotFound: true);
-			m_GameInput_PlayerMove = m_GameInput.FindAction("PlayerMove", throwIfNotFound: true);
-			m_GameInput_CameraMove = m_GameInput.FindAction("CameraMove", throwIfNotFound: true);
-			m_GameInput_Jump = m_GameInput.FindAction("Jump", throwIfNotFound: true);
-			m_GameInput_Dodge = m_GameInput.FindAction("Dodge", throwIfNotFound: true);
-			m_GameInput_NormalAttack = m_GameInput.FindAction("NormalAttack", throwIfNotFound: true);
-			m_GameInput_HeavyAttack = m_GameInput.FindAction("HeavyAttack", throwIfNotFound: true);
-			m_GameInput_Run = m_GameInput.FindAction("Run", throwIfNotFound: true);
-			m_GameInput_ResetCamera = m_GameInput.FindAction("ResetCamera", throwIfNotFound: true);
-			m_GameInput_Aim = m_GameInput.FindAction("Aim", throwIfNotFound: true);
-			m_GameInput_Block = m_GameInput.FindAction("Block", throwIfNotFound: true);
-			m_GameInput_Pause = m_GameInput.FindAction("Pause", throwIfNotFound: true);
-			m_GameInput_PlayerMenu = m_GameInput.FindAction("PlayerMenu", throwIfNotFound: true);
-			m_GameInput_UseItem = m_GameInput.FindAction("UseItem", throwIfNotFound: true);
-			m_GameInput_PhysicalMagicSwap = m_GameInput.FindAction("PhysicalMagicSwap", throwIfNotFound: true);
-			m_GameInput_MagicScrollUp = m_GameInput.FindAction("MagicScrollUp", throwIfNotFound: true);
-			m_GameInput_MagicScrollDown = m_GameInput.FindAction("MagicScrollDown", throwIfNotFound: true);
-			m_GameInput_ItemScrollUp = m_GameInput.FindAction("ItemScrollUp", throwIfNotFound: true);
-			m_GameInput_ItemScrollDown = m_GameInput.FindAction("ItemScrollDown", throwIfNotFound: true);
-			// MenuInput
-			m_MenuInput = asset.FindActionMap("MenuInput", throwIfNotFound: true);
-			m_MenuInput_Right = m_MenuInput.FindAction("Right", throwIfNotFound: true);
-			m_MenuInput_Left = m_MenuInput.FindAction("Left", throwIfNotFound: true);
-			m_MenuInput_Up = m_MenuInput.FindAction("Up", throwIfNotFound: true);
-			m_MenuInput_Down = m_MenuInput.FindAction("Down", throwIfNotFound: true);
-			m_MenuInput_Enter = m_MenuInput.FindAction("Enter", throwIfNotFound: true);
-			m_MenuInput_Back = m_MenuInput.FindAction("Back", throwIfNotFound: true);
-			m_MenuInput_Pause = m_MenuInput.FindAction("Pause", throwIfNotFound: true);
-			m_MenuInput_PlayerMenu = m_MenuInput.FindAction("PlayerMenu", throwIfNotFound: true);
-			m_MenuInput_LeftPage = m_MenuInput.FindAction("LeftPage", throwIfNotFound: true);
-			m_MenuInput_RightPage = m_MenuInput.FindAction("RightPage", throwIfNotFound: true);
-			m_MenuInput_CharacterRotate = m_MenuInput.FindAction("CharacterRotate", throwIfNotFound: true);
-		}
+            // GameInput
+            m_GameInput = asset.FindActionMap("GameInput", throwIfNotFound: true);
+            m_GameInput_PlayerMove = m_GameInput.FindAction("PlayerMove", throwIfNotFound: true);
+            m_GameInput_CameraMove = m_GameInput.FindAction("CameraMove", throwIfNotFound: true);
+            m_GameInput_Jump = m_GameInput.FindAction("Jump", throwIfNotFound: true);
+            m_GameInput_Dodge = m_GameInput.FindAction("Dodge", throwIfNotFound: true);
+            m_GameInput_NormalAttack = m_GameInput.FindAction("NormalAttack", throwIfNotFound: true);
+            m_GameInput_HeavyAttack = m_GameInput.FindAction("HeavyAttack", throwIfNotFound: true);
+            m_GameInput_Run = m_GameInput.FindAction("Run", throwIfNotFound: true);
+            m_GameInput_ResetCamera = m_GameInput.FindAction("ResetCamera", throwIfNotFound: true);
+            m_GameInput_Aim = m_GameInput.FindAction("Aim", throwIfNotFound: true);
+            m_GameInput_Block = m_GameInput.FindAction("Block", throwIfNotFound: true);
+            m_GameInput_Pause = m_GameInput.FindAction("Pause", throwIfNotFound: true);
+            m_GameInput_PlayerMenu = m_GameInput.FindAction("PlayerMenu", throwIfNotFound: true);
+            m_GameInput_UseItem = m_GameInput.FindAction("UseItem", throwIfNotFound: true);
+            m_GameInput_PhysicalMagicSwap = m_GameInput.FindAction("PhysicalMagicSwap", throwIfNotFound: true);
+            m_GameInput_MagicScrollUp = m_GameInput.FindAction("MagicScrollUp", throwIfNotFound: true);
+            m_GameInput_MagicScrollDown = m_GameInput.FindAction("MagicScrollDown", throwIfNotFound: true);
+            m_GameInput_ItemScrollUp = m_GameInput.FindAction("ItemScrollUp", throwIfNotFound: true);
+            m_GameInput_ItemScrollDown = m_GameInput.FindAction("ItemScrollDown", throwIfNotFound: true);
+            // MenuInput
+            m_MenuInput = asset.FindActionMap("MenuInput", throwIfNotFound: true);
+            m_MenuInput_Right = m_MenuInput.FindAction("Right", throwIfNotFound: true);
+            m_MenuInput_Left = m_MenuInput.FindAction("Left", throwIfNotFound: true);
+            m_MenuInput_Up = m_MenuInput.FindAction("Up", throwIfNotFound: true);
+            m_MenuInput_Down = m_MenuInput.FindAction("Down", throwIfNotFound: true);
+            m_MenuInput_Enter = m_MenuInput.FindAction("Enter", throwIfNotFound: true);
+            m_MenuInput_Back = m_MenuInput.FindAction("Back", throwIfNotFound: true);
+            m_MenuInput_Pause = m_MenuInput.FindAction("Pause", throwIfNotFound: true);
+            m_MenuInput_PlayerMenu = m_MenuInput.FindAction("PlayerMenu", throwIfNotFound: true);
+            m_MenuInput_LeftPage = m_MenuInput.FindAction("LeftPage", throwIfNotFound: true);
+            m_MenuInput_RightPage = m_MenuInput.FindAction("RightPage", throwIfNotFound: true);
+            m_MenuInput_CharacterRotate = m_MenuInput.FindAction("CharacterRotate", throwIfNotFound: true);
+        }
 
-		public void Dispose()
-		{
-			UnityEngine.Object.Destroy(asset);
-		}
+        public void Dispose()
+        {
+            UnityEngine.Object.Destroy(asset);
+        }
 
-		public InputBinding? bindingMask
-		{
-			get => asset.bindingMask;
-			set => asset.bindingMask = value;
-		}
+        public InputBinding? bindingMask
+        {
+            get => asset.bindingMask;
+            set => asset.bindingMask = value;
+        }
 
-		public ReadOnlyArray<InputDevice>? devices
-		{
-			get => asset.devices;
-			set => asset.devices = value;
-		}
+        public ReadOnlyArray<InputDevice>? devices
+        {
+            get => asset.devices;
+            set => asset.devices = value;
+        }
 
-		public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
+        public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
 
-		public bool Contains(InputAction action)
-		{
-			return asset.Contains(action);
-		}
+        public bool Contains(InputAction action)
+        {
+            return asset.Contains(action);
+        }
 
-		public IEnumerator<InputAction> GetEnumerator()
-		{
-			return asset.GetEnumerator();
-		}
+        public IEnumerator<InputAction> GetEnumerator()
+        {
+            return asset.GetEnumerator();
+        }
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
-		public void Enable()
-		{
-			asset.Enable();
-		}
+        public void Enable()
+        {
+            asset.Enable();
+        }
 
-		public void Disable()
-		{
-			asset.Disable();
-		}
+        public void Disable()
+        {
+            asset.Disable();
+        }
 
-		// GameInput
-		private readonly InputActionMap m_GameInput;
-		private IGameInputActions m_GameInputActionsCallbackInterface;
-		private readonly InputAction m_GameInput_PlayerMove;
-		private readonly InputAction m_GameInput_CameraMove;
-		private readonly InputAction m_GameInput_Jump;
-		private readonly InputAction m_GameInput_Dodge;
-		private readonly InputAction m_GameInput_NormalAttack;
-		private readonly InputAction m_GameInput_HeavyAttack;
-		private readonly InputAction m_GameInput_Run;
-		private readonly InputAction m_GameInput_ResetCamera;
-		private readonly InputAction m_GameInput_Aim;
-		private readonly InputAction m_GameInput_Block;
-		private readonly InputAction m_GameInput_Pause;
-		private readonly InputAction m_GameInput_PlayerMenu;
-		private readonly InputAction m_GameInput_UseItem;
-		private readonly InputAction m_GameInput_PhysicalMagicSwap;
-		private readonly InputAction m_GameInput_MagicScrollUp;
-		private readonly InputAction m_GameInput_MagicScrollDown;
-		private readonly InputAction m_GameInput_ItemScrollUp;
-		private readonly InputAction m_GameInput_ItemScrollDown;
-		public struct GameInputActions
-		{
-			private PlayerInput m_Wrapper;
-			public GameInputActions(PlayerInput wrapper) { m_Wrapper = wrapper; }
-			public InputAction @PlayerMove => m_Wrapper.m_GameInput_PlayerMove;
-			public InputAction @CameraMove => m_Wrapper.m_GameInput_CameraMove;
-			public InputAction @Jump => m_Wrapper.m_GameInput_Jump;
-			public InputAction @Dodge => m_Wrapper.m_GameInput_Dodge;
-			public InputAction @NormalAttack => m_Wrapper.m_GameInput_NormalAttack;
-			public InputAction @HeavyAttack => m_Wrapper.m_GameInput_HeavyAttack;
-			public InputAction @Run => m_Wrapper.m_GameInput_Run;
-			public InputAction @ResetCamera => m_Wrapper.m_GameInput_ResetCamera;
-			public InputAction @Aim => m_Wrapper.m_GameInput_Aim;
-			public InputAction @Block => m_Wrapper.m_GameInput_Block;
-			public InputAction @Pause => m_Wrapper.m_GameInput_Pause;
-			public InputAction @PlayerMenu => m_Wrapper.m_GameInput_PlayerMenu;
-			public InputAction @UseItem => m_Wrapper.m_GameInput_UseItem;
-			public InputAction @PhysicalMagicSwap => m_Wrapper.m_GameInput_PhysicalMagicSwap;
-			public InputAction @MagicScrollUp => m_Wrapper.m_GameInput_MagicScrollUp;
-			public InputAction @MagicScrollDown => m_Wrapper.m_GameInput_MagicScrollDown;
-			public InputAction @ItemScrollUp => m_Wrapper.m_GameInput_ItemScrollUp;
-			public InputAction @ItemScrollDown => m_Wrapper.m_GameInput_ItemScrollDown;
-			public InputActionMap Get() { return m_Wrapper.m_GameInput; }
-			public void Enable() { Get().Enable(); }
-			public void Disable() { Get().Disable(); }
-			public bool enabled => Get().enabled;
-			public static implicit operator InputActionMap(GameInputActions set) { return set.Get(); }
-			public void SetCallbacks(IGameInputActions instance)
-			{
-				if (m_Wrapper.m_GameInputActionsCallbackInterface != null)
-				{
-					PlayerMove.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPlayerMove;
-					PlayerMove.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPlayerMove;
-					PlayerMove.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPlayerMove;
-					CameraMove.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnCameraMove;
-					CameraMove.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnCameraMove;
-					CameraMove.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnCameraMove;
-					Jump.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnJump;
-					Jump.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnJump;
-					Jump.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnJump;
-					Dodge.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnDodge;
-					Dodge.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnDodge;
-					Dodge.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnDodge;
-					NormalAttack.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnNormalAttack;
-					NormalAttack.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnNormalAttack;
-					NormalAttack.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnNormalAttack;
-					HeavyAttack.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnHeavyAttack;
-					HeavyAttack.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnHeavyAttack;
-					HeavyAttack.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnHeavyAttack;
-					Run.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnRun;
-					Run.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnRun;
-					Run.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnRun;
-					ResetCamera.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnResetCamera;
-					ResetCamera.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnResetCamera;
-					ResetCamera.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnResetCamera;
-					Aim.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnAim;
-					Aim.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnAim;
-					Aim.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnAim;
-					Block.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnBlock;
-					Block.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnBlock;
-					Block.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnBlock;
-					Pause.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPause;
-					Pause.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPause;
-					Pause.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPause;
-					PlayerMenu.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPlayerMenu;
-					PlayerMenu.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPlayerMenu;
-					PlayerMenu.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPlayerMenu;
-					UseItem.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnUseItem;
-					UseItem.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnUseItem;
-					UseItem.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnUseItem;
-					PhysicalMagicSwap.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPhysicalMagicSwap;
-					PhysicalMagicSwap.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPhysicalMagicSwap;
-					PhysicalMagicSwap.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPhysicalMagicSwap;
-					MagicScrollUp.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicScrollUp;
-					MagicScrollUp.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicScrollUp;
-					MagicScrollUp.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicScrollUp;
-					MagicScrollDown.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicScrollDown;
-					MagicScrollDown.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicScrollDown;
-					MagicScrollDown.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicScrollDown;
-					ItemScrollUp.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnItemScrollUp;
-					ItemScrollUp.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnItemScrollUp;
-					ItemScrollUp.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnItemScrollUp;
-					ItemScrollDown.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnItemScrollDown;
-					ItemScrollDown.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnItemScrollDown;
-					ItemScrollDown.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnItemScrollDown;
-				}
-				m_Wrapper.m_GameInputActionsCallbackInterface = instance;
-				if (instance != null)
-				{
-					PlayerMove.started += instance.OnPlayerMove;
-					PlayerMove.performed += instance.OnPlayerMove;
-					PlayerMove.canceled += instance.OnPlayerMove;
-					CameraMove.started += instance.OnCameraMove;
-					CameraMove.performed += instance.OnCameraMove;
-					CameraMove.canceled += instance.OnCameraMove;
-					Jump.started += instance.OnJump;
-					Jump.performed += instance.OnJump;
-					Jump.canceled += instance.OnJump;
-					Dodge.started += instance.OnDodge;
-					Dodge.performed += instance.OnDodge;
-					Dodge.canceled += instance.OnDodge;
-					NormalAttack.started += instance.OnNormalAttack;
-					NormalAttack.performed += instance.OnNormalAttack;
-					NormalAttack.canceled += instance.OnNormalAttack;
-					HeavyAttack.started += instance.OnHeavyAttack;
-					HeavyAttack.performed += instance.OnHeavyAttack;
-					HeavyAttack.canceled += instance.OnHeavyAttack;
-					Run.started += instance.OnRun;
-					Run.performed += instance.OnRun;
-					Run.canceled += instance.OnRun;
-					ResetCamera.started += instance.OnResetCamera;
-					ResetCamera.performed += instance.OnResetCamera;
-					ResetCamera.canceled += instance.OnResetCamera;
-					Aim.started += instance.OnAim;
-					Aim.performed += instance.OnAim;
-					Aim.canceled += instance.OnAim;
-					Block.started += instance.OnBlock;
-					Block.performed += instance.OnBlock;
-					Block.canceled += instance.OnBlock;
-					Pause.started += instance.OnPause;
-					Pause.performed += instance.OnPause;
-					Pause.canceled += instance.OnPause;
-					PlayerMenu.started += instance.OnPlayerMenu;
-					PlayerMenu.performed += instance.OnPlayerMenu;
-					PlayerMenu.canceled += instance.OnPlayerMenu;
-					UseItem.started += instance.OnUseItem;
-					UseItem.performed += instance.OnUseItem;
-					UseItem.canceled += instance.OnUseItem;
-					PhysicalMagicSwap.started += instance.OnPhysicalMagicSwap;
-					PhysicalMagicSwap.performed += instance.OnPhysicalMagicSwap;
-					PhysicalMagicSwap.canceled += instance.OnPhysicalMagicSwap;
-					MagicScrollUp.started += instance.OnMagicScrollUp;
-					MagicScrollUp.performed += instance.OnMagicScrollUp;
-					MagicScrollUp.canceled += instance.OnMagicScrollUp;
-					MagicScrollDown.started += instance.OnMagicScrollDown;
-					MagicScrollDown.performed += instance.OnMagicScrollDown;
-					MagicScrollDown.canceled += instance.OnMagicScrollDown;
-					ItemScrollUp.started += instance.OnItemScrollUp;
-					ItemScrollUp.performed += instance.OnItemScrollUp;
-					ItemScrollUp.canceled += instance.OnItemScrollUp;
-					ItemScrollDown.started += instance.OnItemScrollDown;
-					ItemScrollDown.performed += instance.OnItemScrollDown;
-					ItemScrollDown.canceled += instance.OnItemScrollDown;
-				}
-			}
-		}
-		public GameInputActions @GameInput => new GameInputActions(this);
+        // GameInput
+        private readonly InputActionMap m_GameInput;
+        private IGameInputActions m_GameInputActionsCallbackInterface;
+        private readonly InputAction m_GameInput_PlayerMove;
+        private readonly InputAction m_GameInput_CameraMove;
+        private readonly InputAction m_GameInput_Jump;
+        private readonly InputAction m_GameInput_Dodge;
+        private readonly InputAction m_GameInput_NormalAttack;
+        private readonly InputAction m_GameInput_HeavyAttack;
+        private readonly InputAction m_GameInput_Run;
+        private readonly InputAction m_GameInput_ResetCamera;
+        private readonly InputAction m_GameInput_Aim;
+        private readonly InputAction m_GameInput_Block;
+        private readonly InputAction m_GameInput_Pause;
+        private readonly InputAction m_GameInput_PlayerMenu;
+        private readonly InputAction m_GameInput_UseItem;
+        private readonly InputAction m_GameInput_PhysicalMagicSwap;
+        private readonly InputAction m_GameInput_MagicScrollUp;
+        private readonly InputAction m_GameInput_MagicScrollDown;
+        private readonly InputAction m_GameInput_ItemScrollUp;
+        private readonly InputAction m_GameInput_ItemScrollDown;
+        public struct GameInputActions
+        {
+            private PlayerInput m_Wrapper;
+            public GameInputActions(PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @PlayerMove => m_Wrapper.m_GameInput_PlayerMove;
+            public InputAction @CameraMove => m_Wrapper.m_GameInput_CameraMove;
+            public InputAction @Jump => m_Wrapper.m_GameInput_Jump;
+            public InputAction @Dodge => m_Wrapper.m_GameInput_Dodge;
+            public InputAction @NormalAttack => m_Wrapper.m_GameInput_NormalAttack;
+            public InputAction @HeavyAttack => m_Wrapper.m_GameInput_HeavyAttack;
+            public InputAction @Run => m_Wrapper.m_GameInput_Run;
+            public InputAction @ResetCamera => m_Wrapper.m_GameInput_ResetCamera;
+            public InputAction @Aim => m_Wrapper.m_GameInput_Aim;
+            public InputAction @Block => m_Wrapper.m_GameInput_Block;
+            public InputAction @Pause => m_Wrapper.m_GameInput_Pause;
+            public InputAction @PlayerMenu => m_Wrapper.m_GameInput_PlayerMenu;
+            public InputAction @UseItem => m_Wrapper.m_GameInput_UseItem;
+            public InputAction @PhysicalMagicSwap => m_Wrapper.m_GameInput_PhysicalMagicSwap;
+            public InputAction @MagicScrollUp => m_Wrapper.m_GameInput_MagicScrollUp;
+            public InputAction @MagicScrollDown => m_Wrapper.m_GameInput_MagicScrollDown;
+            public InputAction @ItemScrollUp => m_Wrapper.m_GameInput_ItemScrollUp;
+            public InputAction @ItemScrollDown => m_Wrapper.m_GameInput_ItemScrollDown;
+            public InputActionMap Get() { return m_Wrapper.m_GameInput; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(GameInputActions set) { return set.Get(); }
+            public void SetCallbacks(IGameInputActions instance)
+            {
+                if (m_Wrapper.m_GameInputActionsCallbackInterface != null)
+                {
+                    PlayerMove.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPlayerMove;
+                    PlayerMove.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPlayerMove;
+                    PlayerMove.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPlayerMove;
+                    CameraMove.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnCameraMove;
+                    CameraMove.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnCameraMove;
+                    CameraMove.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnCameraMove;
+                    Jump.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnJump;
+                    Jump.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnJump;
+                    Jump.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnJump;
+                    Dodge.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnDodge;
+                    Dodge.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnDodge;
+                    Dodge.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnDodge;
+                    NormalAttack.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnNormalAttack;
+                    NormalAttack.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnNormalAttack;
+                    NormalAttack.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnNormalAttack;
+                    HeavyAttack.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnHeavyAttack;
+                    HeavyAttack.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnHeavyAttack;
+                    HeavyAttack.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnHeavyAttack;
+                    Run.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnRun;
+                    Run.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnRun;
+                    Run.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnRun;
+                    ResetCamera.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnResetCamera;
+                    ResetCamera.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnResetCamera;
+                    ResetCamera.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnResetCamera;
+                    Aim.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnAim;
+                    Aim.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnAim;
+                    Aim.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnAim;
+                    Block.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnBlock;
+                    Block.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnBlock;
+                    Block.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnBlock;
+                    Pause.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPause;
+                    Pause.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPause;
+                    Pause.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPause;
+                    PlayerMenu.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPlayerMenu;
+                    PlayerMenu.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPlayerMenu;
+                    PlayerMenu.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPlayerMenu;
+                    UseItem.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnUseItem;
+                    UseItem.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnUseItem;
+                    UseItem.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnUseItem;
+                    PhysicalMagicSwap.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPhysicalMagicSwap;
+                    PhysicalMagicSwap.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPhysicalMagicSwap;
+                    PhysicalMagicSwap.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPhysicalMagicSwap;
+                    MagicScrollUp.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicScrollUp;
+                    MagicScrollUp.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicScrollUp;
+                    MagicScrollUp.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicScrollUp;
+                    MagicScrollDown.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicScrollDown;
+                    MagicScrollDown.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicScrollDown;
+                    MagicScrollDown.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicScrollDown;
+                    ItemScrollUp.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnItemScrollUp;
+                    ItemScrollUp.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnItemScrollUp;
+                    ItemScrollUp.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnItemScrollUp;
+                    ItemScrollDown.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnItemScrollDown;
+                    ItemScrollDown.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnItemScrollDown;
+                    ItemScrollDown.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnItemScrollDown;
+                }
+                m_Wrapper.m_GameInputActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    PlayerMove.started += instance.OnPlayerMove;
+                    PlayerMove.performed += instance.OnPlayerMove;
+                    PlayerMove.canceled += instance.OnPlayerMove;
+                    CameraMove.started += instance.OnCameraMove;
+                    CameraMove.performed += instance.OnCameraMove;
+                    CameraMove.canceled += instance.OnCameraMove;
+                    Jump.started += instance.OnJump;
+                    Jump.performed += instance.OnJump;
+                    Jump.canceled += instance.OnJump;
+                    Dodge.started += instance.OnDodge;
+                    Dodge.performed += instance.OnDodge;
+                    Dodge.canceled += instance.OnDodge;
+                    NormalAttack.started += instance.OnNormalAttack;
+                    NormalAttack.performed += instance.OnNormalAttack;
+                    NormalAttack.canceled += instance.OnNormalAttack;
+                    HeavyAttack.started += instance.OnHeavyAttack;
+                    HeavyAttack.performed += instance.OnHeavyAttack;
+                    HeavyAttack.canceled += instance.OnHeavyAttack;
+                    Run.started += instance.OnRun;
+                    Run.performed += instance.OnRun;
+                    Run.canceled += instance.OnRun;
+                    ResetCamera.started += instance.OnResetCamera;
+                    ResetCamera.performed += instance.OnResetCamera;
+                    ResetCamera.canceled += instance.OnResetCamera;
+                    Aim.started += instance.OnAim;
+                    Aim.performed += instance.OnAim;
+                    Aim.canceled += instance.OnAim;
+                    Block.started += instance.OnBlock;
+                    Block.performed += instance.OnBlock;
+                    Block.canceled += instance.OnBlock;
+                    Pause.started += instance.OnPause;
+                    Pause.performed += instance.OnPause;
+                    Pause.canceled += instance.OnPause;
+                    PlayerMenu.started += instance.OnPlayerMenu;
+                    PlayerMenu.performed += instance.OnPlayerMenu;
+                    PlayerMenu.canceled += instance.OnPlayerMenu;
+                    UseItem.started += instance.OnUseItem;
+                    UseItem.performed += instance.OnUseItem;
+                    UseItem.canceled += instance.OnUseItem;
+                    PhysicalMagicSwap.started += instance.OnPhysicalMagicSwap;
+                    PhysicalMagicSwap.performed += instance.OnPhysicalMagicSwap;
+                    PhysicalMagicSwap.canceled += instance.OnPhysicalMagicSwap;
+                    MagicScrollUp.started += instance.OnMagicScrollUp;
+                    MagicScrollUp.performed += instance.OnMagicScrollUp;
+                    MagicScrollUp.canceled += instance.OnMagicScrollUp;
+                    MagicScrollDown.started += instance.OnMagicScrollDown;
+                    MagicScrollDown.performed += instance.OnMagicScrollDown;
+                    MagicScrollDown.canceled += instance.OnMagicScrollDown;
+                    ItemScrollUp.started += instance.OnItemScrollUp;
+                    ItemScrollUp.performed += instance.OnItemScrollUp;
+                    ItemScrollUp.canceled += instance.OnItemScrollUp;
+                    ItemScrollDown.started += instance.OnItemScrollDown;
+                    ItemScrollDown.performed += instance.OnItemScrollDown;
+                    ItemScrollDown.canceled += instance.OnItemScrollDown;
+                }
+            }
+        }
+        public GameInputActions @GameInput => new GameInputActions(this);
 
-		// MenuInput
-		private readonly InputActionMap m_MenuInput;
-		private IMenuInputActions m_MenuInputActionsCallbackInterface;
-		private readonly InputAction m_MenuInput_Right;
-		private readonly InputAction m_MenuInput_Left;
-		private readonly InputAction m_MenuInput_Up;
-		private readonly InputAction m_MenuInput_Down;
-		private readonly InputAction m_MenuInput_Enter;
-		private readonly InputAction m_MenuInput_Back;
-		private readonly InputAction m_MenuInput_Pause;
-		private readonly InputAction m_MenuInput_PlayerMenu;
-		private readonly InputAction m_MenuInput_LeftPage;
-		private readonly InputAction m_MenuInput_RightPage;
-		private readonly InputAction m_MenuInput_CharacterRotate;
-		public struct MenuInputActions
-		{
-			private PlayerInput m_Wrapper;
-			public MenuInputActions(PlayerInput wrapper) { m_Wrapper = wrapper; }
-			public InputAction @Right => m_Wrapper.m_MenuInput_Right;
-			public InputAction @Left => m_Wrapper.m_MenuInput_Left;
-			public InputAction @Up => m_Wrapper.m_MenuInput_Up;
-			public InputAction @Down => m_Wrapper.m_MenuInput_Down;
-			public InputAction @Enter => m_Wrapper.m_MenuInput_Enter;
-			public InputAction @Back => m_Wrapper.m_MenuInput_Back;
-			public InputAction @Pause => m_Wrapper.m_MenuInput_Pause;
-			public InputAction @PlayerMenu => m_Wrapper.m_MenuInput_PlayerMenu;
-			public InputAction @LeftPage => m_Wrapper.m_MenuInput_LeftPage;
-			public InputAction @RightPage => m_Wrapper.m_MenuInput_RightPage;
-			public InputAction @CharacterRotate => m_Wrapper.m_MenuInput_CharacterRotate;
-			public InputActionMap Get() { return m_Wrapper.m_MenuInput; }
-			public void Enable() { Get().Enable(); }
-			public void Disable() { Get().Disable(); }
-			public bool enabled => Get().enabled;
-			public static implicit operator InputActionMap(MenuInputActions set) { return set.Get(); }
-			public void SetCallbacks(IMenuInputActions instance)
-			{
-				if (m_Wrapper.m_MenuInputActionsCallbackInterface != null)
-				{
-					Right.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnRight;
-					Right.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnRight;
-					Right.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnRight;
-					Left.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnLeft;
-					Left.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnLeft;
-					Left.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnLeft;
-					Up.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnUp;
-					Up.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnUp;
-					Up.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnUp;
-					Down.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnDown;
-					Down.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnDown;
-					Down.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnDown;
-					Enter.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnEnter;
-					Enter.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnEnter;
-					Enter.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnEnter;
-					Back.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnBack;
-					Back.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnBack;
-					Back.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnBack;
-					Pause.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnPause;
-					Pause.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnPause;
-					Pause.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnPause;
-					PlayerMenu.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnPlayerMenu;
-					PlayerMenu.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnPlayerMenu;
-					PlayerMenu.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnPlayerMenu;
-					LeftPage.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnLeftPage;
-					LeftPage.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnLeftPage;
-					LeftPage.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnLeftPage;
-					RightPage.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnRightPage;
-					RightPage.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnRightPage;
-					RightPage.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnRightPage;
-					CharacterRotate.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnCharacterRotate;
-					CharacterRotate.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnCharacterRotate;
-					CharacterRotate.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnCharacterRotate;
-				}
-				m_Wrapper.m_MenuInputActionsCallbackInterface = instance;
-				if (instance != null)
-				{
-					Right.started += instance.OnRight;
-					Right.performed += instance.OnRight;
-					Right.canceled += instance.OnRight;
-					Left.started += instance.OnLeft;
-					Left.performed += instance.OnLeft;
-					Left.canceled += instance.OnLeft;
-					Up.started += instance.OnUp;
-					Up.performed += instance.OnUp;
-					Up.canceled += instance.OnUp;
-					Down.started += instance.OnDown;
-					Down.performed += instance.OnDown;
-					Down.canceled += instance.OnDown;
-					Enter.started += instance.OnEnter;
-					Enter.performed += instance.OnEnter;
-					Enter.canceled += instance.OnEnter;
-					Back.started += instance.OnBack;
-					Back.performed += instance.OnBack;
-					Back.canceled += instance.OnBack;
-					Pause.started += instance.OnPause;
-					Pause.performed += instance.OnPause;
-					Pause.canceled += instance.OnPause;
-					PlayerMenu.started += instance.OnPlayerMenu;
-					PlayerMenu.performed += instance.OnPlayerMenu;
-					PlayerMenu.canceled += instance.OnPlayerMenu;
-					LeftPage.started += instance.OnLeftPage;
-					LeftPage.performed += instance.OnLeftPage;
-					LeftPage.canceled += instance.OnLeftPage;
-					RightPage.started += instance.OnRightPage;
-					RightPage.performed += instance.OnRightPage;
-					RightPage.canceled += instance.OnRightPage;
-					CharacterRotate.started += instance.OnCharacterRotate;
-					CharacterRotate.performed += instance.OnCharacterRotate;
-					CharacterRotate.canceled += instance.OnCharacterRotate;
-				}
-			}
-		}
-		public MenuInputActions @MenuInput => new MenuInputActions(this);
-		public interface IGameInputActions
-		{
-			void OnPlayerMove(InputAction.CallbackContext context);
-			void OnCameraMove(InputAction.CallbackContext context);
-			void OnJump(InputAction.CallbackContext context);
-			void OnDodge(InputAction.CallbackContext context);
-			void OnNormalAttack(InputAction.CallbackContext context);
-			void OnHeavyAttack(InputAction.CallbackContext context);
-			void OnRun(InputAction.CallbackContext context);
-			void OnResetCamera(InputAction.CallbackContext context);
-			void OnAim(InputAction.CallbackContext context);
-			void OnBlock(InputAction.CallbackContext context);
-			void OnPause(InputAction.CallbackContext context);
-			void OnPlayerMenu(InputAction.CallbackContext context);
-			void OnUseItem(InputAction.CallbackContext context);
-			void OnPhysicalMagicSwap(InputAction.CallbackContext context);
-			void OnMagicScrollUp(InputAction.CallbackContext context);
-			void OnMagicScrollDown(InputAction.CallbackContext context);
-			void OnItemScrollUp(InputAction.CallbackContext context);
-			void OnItemScrollDown(InputAction.CallbackContext context);
-		}
-		public interface IMenuInputActions
-		{
-			void OnRight(InputAction.CallbackContext context);
-			void OnLeft(InputAction.CallbackContext context);
-			void OnUp(InputAction.CallbackContext context);
-			void OnDown(InputAction.CallbackContext context);
-			void OnEnter(InputAction.CallbackContext context);
-			void OnBack(InputAction.CallbackContext context);
-			void OnPause(InputAction.CallbackContext context);
-			void OnPlayerMenu(InputAction.CallbackContext context);
-			void OnLeftPage(InputAction.CallbackContext context);
-			void OnRightPage(InputAction.CallbackContext context);
-			void OnCharacterRotate(InputAction.CallbackContext context);
-		}
-	}
+        // MenuInput
+        private readonly InputActionMap m_MenuInput;
+        private IMenuInputActions m_MenuInputActionsCallbackInterface;
+        private readonly InputAction m_MenuInput_Right;
+        private readonly InputAction m_MenuInput_Left;
+        private readonly InputAction m_MenuInput_Up;
+        private readonly InputAction m_MenuInput_Down;
+        private readonly InputAction m_MenuInput_Enter;
+        private readonly InputAction m_MenuInput_Back;
+        private readonly InputAction m_MenuInput_Pause;
+        private readonly InputAction m_MenuInput_PlayerMenu;
+        private readonly InputAction m_MenuInput_LeftPage;
+        private readonly InputAction m_MenuInput_RightPage;
+        private readonly InputAction m_MenuInput_CharacterRotate;
+        public struct MenuInputActions
+        {
+            private PlayerInput m_Wrapper;
+            public MenuInputActions(PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Right => m_Wrapper.m_MenuInput_Right;
+            public InputAction @Left => m_Wrapper.m_MenuInput_Left;
+            public InputAction @Up => m_Wrapper.m_MenuInput_Up;
+            public InputAction @Down => m_Wrapper.m_MenuInput_Down;
+            public InputAction @Enter => m_Wrapper.m_MenuInput_Enter;
+            public InputAction @Back => m_Wrapper.m_MenuInput_Back;
+            public InputAction @Pause => m_Wrapper.m_MenuInput_Pause;
+            public InputAction @PlayerMenu => m_Wrapper.m_MenuInput_PlayerMenu;
+            public InputAction @LeftPage => m_Wrapper.m_MenuInput_LeftPage;
+            public InputAction @RightPage => m_Wrapper.m_MenuInput_RightPage;
+            public InputAction @CharacterRotate => m_Wrapper.m_MenuInput_CharacterRotate;
+            public InputActionMap Get() { return m_Wrapper.m_MenuInput; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(MenuInputActions set) { return set.Get(); }
+            public void SetCallbacks(IMenuInputActions instance)
+            {
+                if (m_Wrapper.m_MenuInputActionsCallbackInterface != null)
+                {
+                    Right.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnRight;
+                    Right.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnRight;
+                    Right.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnRight;
+                    Left.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnLeft;
+                    Left.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnLeft;
+                    Left.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnLeft;
+                    Up.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnUp;
+                    Up.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnUp;
+                    Up.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnUp;
+                    Down.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnDown;
+                    Down.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnDown;
+                    Down.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnDown;
+                    Enter.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnEnter;
+                    Enter.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnEnter;
+                    Enter.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnEnter;
+                    Back.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnBack;
+                    Back.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnBack;
+                    Back.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnBack;
+                    Pause.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnPause;
+                    Pause.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnPause;
+                    Pause.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnPause;
+                    PlayerMenu.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnPlayerMenu;
+                    PlayerMenu.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnPlayerMenu;
+                    PlayerMenu.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnPlayerMenu;
+                    LeftPage.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnLeftPage;
+                    LeftPage.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnLeftPage;
+                    LeftPage.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnLeftPage;
+                    RightPage.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnRightPage;
+                    RightPage.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnRightPage;
+                    RightPage.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnRightPage;
+                    CharacterRotate.started -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnCharacterRotate;
+                    CharacterRotate.performed -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnCharacterRotate;
+                    CharacterRotate.canceled -= m_Wrapper.m_MenuInputActionsCallbackInterface.OnCharacterRotate;
+                }
+                m_Wrapper.m_MenuInputActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    Right.started += instance.OnRight;
+                    Right.performed += instance.OnRight;
+                    Right.canceled += instance.OnRight;
+                    Left.started += instance.OnLeft;
+                    Left.performed += instance.OnLeft;
+                    Left.canceled += instance.OnLeft;
+                    Up.started += instance.OnUp;
+                    Up.performed += instance.OnUp;
+                    Up.canceled += instance.OnUp;
+                    Down.started += instance.OnDown;
+                    Down.performed += instance.OnDown;
+                    Down.canceled += instance.OnDown;
+                    Enter.started += instance.OnEnter;
+                    Enter.performed += instance.OnEnter;
+                    Enter.canceled += instance.OnEnter;
+                    Back.started += instance.OnBack;
+                    Back.performed += instance.OnBack;
+                    Back.canceled += instance.OnBack;
+                    Pause.started += instance.OnPause;
+                    Pause.performed += instance.OnPause;
+                    Pause.canceled += instance.OnPause;
+                    PlayerMenu.started += instance.OnPlayerMenu;
+                    PlayerMenu.performed += instance.OnPlayerMenu;
+                    PlayerMenu.canceled += instance.OnPlayerMenu;
+                    LeftPage.started += instance.OnLeftPage;
+                    LeftPage.performed += instance.OnLeftPage;
+                    LeftPage.canceled += instance.OnLeftPage;
+                    RightPage.started += instance.OnRightPage;
+                    RightPage.performed += instance.OnRightPage;
+                    RightPage.canceled += instance.OnRightPage;
+                    CharacterRotate.started += instance.OnCharacterRotate;
+                    CharacterRotate.performed += instance.OnCharacterRotate;
+                    CharacterRotate.canceled += instance.OnCharacterRotate;
+                }
+            }
+        }
+        public MenuInputActions @MenuInput => new MenuInputActions(this);
+        public interface IGameInputActions
+        {
+            void OnPlayerMove(InputAction.CallbackContext context);
+            void OnCameraMove(InputAction.CallbackContext context);
+            void OnJump(InputAction.CallbackContext context);
+            void OnDodge(InputAction.CallbackContext context);
+            void OnNormalAttack(InputAction.CallbackContext context);
+            void OnHeavyAttack(InputAction.CallbackContext context);
+            void OnRun(InputAction.CallbackContext context);
+            void OnResetCamera(InputAction.CallbackContext context);
+            void OnAim(InputAction.CallbackContext context);
+            void OnBlock(InputAction.CallbackContext context);
+            void OnPause(InputAction.CallbackContext context);
+            void OnPlayerMenu(InputAction.CallbackContext context);
+            void OnUseItem(InputAction.CallbackContext context);
+            void OnPhysicalMagicSwap(InputAction.CallbackContext context);
+            void OnMagicScrollUp(InputAction.CallbackContext context);
+            void OnMagicScrollDown(InputAction.CallbackContext context);
+            void OnItemScrollUp(InputAction.CallbackContext context);
+            void OnItemScrollDown(InputAction.CallbackContext context);
+        }
+        public interface IMenuInputActions
+        {
+            void OnRight(InputAction.CallbackContext context);
+            void OnLeft(InputAction.CallbackContext context);
+            void OnUp(InputAction.CallbackContext context);
+            void OnDown(InputAction.CallbackContext context);
+            void OnEnter(InputAction.CallbackContext context);
+            void OnBack(InputAction.CallbackContext context);
+            void OnPause(InputAction.CallbackContext context);
+            void OnPlayerMenu(InputAction.CallbackContext context);
+            void OnLeftPage(InputAction.CallbackContext context);
+            void OnRightPage(InputAction.CallbackContext context);
+            void OnCharacterRotate(InputAction.CallbackContext context);
+        }
+    }
 }
