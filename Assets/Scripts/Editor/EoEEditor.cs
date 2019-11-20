@@ -214,7 +214,7 @@ namespace EoE
 			if(curValue == null)
 			{
 				curValue = new T[0];
-				isDirty = changed = true;
+				changed = true;
 			}
 
 			Foldout(content, ref open, offSet);
@@ -242,9 +242,10 @@ namespace EoE
 					}
 
 					curValue = newArray;
-					isDirty = true;
 				}
 			}
+			if (changed)
+				isDirty = true;
 			return changed;
 		}
 		public static bool GradientField(string content, ref Gradient curValue, int offSet = 0) => GradientField(new GUIContent(content), ref curValue, offSet);
@@ -319,12 +320,19 @@ namespace EoE
 			}
 			return false;
 		}
-		public static bool DrawArray<T>(GUIContent arrayContent, System.Func<int, int, bool> elementBinding, ref T[] array, ref bool open, int offSet = 0)
+		public static bool DrawArray<T>(GUIContent arrayContent, System.Func<int, int, bool> elementBinding, ref T[] curValue, ref bool open, int offSet = 0)
 		{
-			bool changed = Foldout(arrayContent, ref open, offSet);
+			bool changed = false;
+			if (curValue == null)
+			{
+				curValue = new T[0];
+				changed = true;
+			}
+
+			changed |= Foldout(arrayContent, ref open, offSet);
 			if (open)
 			{
-				for(int i = 0; i < array.Length; i++)
+				for(int i = 0; i < curValue.Length; i++)
 				{
 					changed |= (elementBinding?.Invoke(i, offSet + 1)) ?? false;
 				}
@@ -332,24 +340,25 @@ namespace EoE
 				GUILayout.Space(3);
 				EditorGUILayout.BeginHorizontal();
 				GUILayout.Space((offSet + 1) * STANDARD_OFFSET);
-				int newSize = EditorGUILayout.DelayedIntField("Size", array.Length);
+				int newSize = EditorGUILayout.DelayedIntField("Size", curValue.Length);
 				EditorGUILayout.EndHorizontal();
 
-				if (newSize != array.Length)
+				if (newSize != curValue.Length)
 				{
 					T[] newArray = new T[newSize];
 					for (int i = 0; i < newSize; i++)
 					{
-						if (i < array.Length)
-							newArray[i] = array[i];
+						if (i < curValue.Length)
+							newArray[i] = curValue[i];
 						else
 							break;
 					}
 
-					array = newArray;
-					isDirty = true;
+					curValue = newArray;
 				}
 			}
+			if(changed)
+				isDirty = true;
 			return changed;
 		}
 		public static void AssetCreator<T>(params string[] pathParts) where T : ScriptableObject
