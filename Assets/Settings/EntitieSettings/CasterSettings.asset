@@ -69,6 +69,5 @@ MonoBehaviour:
     type: 2}
   ProjectileDestroyParticles: {fileID: 11400000, guid: 7f999a2e186ef064aa781c01f433f7fe,
     type: 2}
-  MaxDistanceImpactShake: 20
-  ProjectileImpactShake: {fileID: 11400000, guid: e840a1eafcd96a047bbe880545aaa1d0,
-    type: 2}
+  MaxDistanceImpactShake: 10
+  ProjectileImpactShake: {fileID: 0}
