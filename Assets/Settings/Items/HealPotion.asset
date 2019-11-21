@@ -21,6 +21,7 @@ MonoBehaviour:
   UseCooldown: 1
   VFXEffectsOnUse:
   - {fileID: 11400000, guid: 2b8f1e86bead3e14ab027d9072f9fd35, type: 2}
+  - {fileID: 11400000, guid: 3154eaf86a359724a9b1df91fbcf6f0e, type: 2}
   healEffects:
   - HealType: 0
     Percent: 0

@@ -16,7 +16,7 @@ MonoBehaviour:
   clip: {fileID: 8300000, guid: 8caa8f676d2feb045a36b4073020ac83, type: 3}
   audioGroup: {fileID: 24300002, guid: b8b319c0096b4d34196070be7e374c0c, type: 2}
   priority: 128
-  pitch: 1.5
-  volume: 0.6
+  pitch: 1.3
+  volume: 0.085
   spatialBlend: 0
   scaleStyle: 1

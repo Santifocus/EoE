@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa0729519a808d449bdb777d2d35538b, type: 3}
   m_Name: Drink_Potion
   m_EditorClassIdentifier: 
-  TargetSound: {fileID: 0}
+  TargetSound: {fileID: 11400000, guid: c880e32684be93e45a41323a8e28996c, type: 2}
   OffsetToTarget: {x: 0, y: 0, z: 0}
   Loop: 0
   FollowTarget: 0
