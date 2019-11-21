@@ -323,8 +323,7 @@ namespace EoE.Entities
 			PlayerJustEnteredAttackRange();
 		}
 		protected virtual void PlayerJustEnteredAttackRange(){}
-		protected virtual void InRangeBehaivior()
-		{ }
+		protected virtual void InRangeBehaivior(){}
 		#endregion
 		#region Helper Functions
 		protected Vector3? GetRandomNavmeshPoint(float radius, Vector3 origin)
