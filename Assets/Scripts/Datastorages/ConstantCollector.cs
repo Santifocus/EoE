@@ -10,8 +10,8 @@
 	public const int WEAPON_LAYER_MASK = 1 << WEAPON_LAYER;
 	public const int PROJECTILE_LAYER_MASK = 1 << PROJECTILE_LAYER;
 
-	public const int MAIN_MENU_SCENE_INDEX = 0;
-	public const int GAME_SCENE_INDEX = 1;
+	public const int MAIN_MENU_SCENE_INDEX = 1;
+	public const int GAME_SCENE_INDEX = 0;
 
 	public const string MENU_NAV_SOUND = "MenuNavigation";
 	public const string FAILED_MENU_NAV_SOUND = "FailedMenuNavigation";
