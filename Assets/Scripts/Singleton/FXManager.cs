@@ -38,14 +38,14 @@ namespace EoE
 			{
 				for (int i = 0; i < playerSettings.EffectsOnReceiveDamage.Length; i++)
 				{
-					PlayFX(playerSettings.EffectsOnReceiveDamage[i], Player.Instance.transform);
+					PlayFX(playerSettings.EffectsOnReceiveDamage[i], Player.Instance.transform, 1);
 				}
 
 				if ((Player.Instance.curHealth - causedDamage) / Player.Instance.curMaxHealth < playerSettings.EffectsHealthThreshold)
 				{
 					for (int i = 0; i < playerSettings.EffectsOnDamageWhenBelowThreshold.Length; i++)
 					{
-						PlayFX(playerSettings.EffectsOnDamageWhenBelowThreshold[i], Player.Instance.transform);
+						PlayFX(playerSettings.EffectsOnDamageWhenBelowThreshold[i], Player.Instance.transform, 1);
 					}
 				}
 			}
@@ -54,7 +54,7 @@ namespace EoE
 			{
 				for (int i = 0; i < playerSettings.EffectsOnReceiveKnockback.Length; i++)
 				{
-					PlayFX(playerSettings.EffectsOnReceiveKnockback[i], Player.Instance.transform);
+					PlayFX(playerSettings.EffectsOnReceiveKnockback[i], Player.Instance.transform, 1);
 				}
 			}
 
@@ -65,7 +65,7 @@ namespace EoE
 			{
 				for (int i = 0; i < playerSettings.EffectsOnPlayerLanding.Length; i++)
 				{
-					PlayFX(playerSettings.EffectsOnPlayerLanding[i], Player.Instance.transform);
+					PlayFX(playerSettings.EffectsOnPlayerLanding[i], Player.Instance.transform, 1);
 				}
 			}
 		}
@@ -73,7 +73,7 @@ namespace EoE
 		{
 			for (int i = 0; i < playerSettings.EffectsOnPlayerDodge.Length; i++)
 			{
-				PlayFX(playerSettings.EffectsOnPlayerDodge[i], Player.Instance.transform);
+				PlayFX(playerSettings.EffectsOnPlayerDodge[i], Player.Instance.transform, 1);
 			}
 		}
 		private void EnemyKilled(Entitie killed, Entitie killer)
@@ -82,7 +82,7 @@ namespace EoE
 			{
 				for (int i = 0; i < playerSettings.EffectsOnEnemyKilled.Length; i++)
 				{
-					PlayFX(playerSettings.EffectsOnEnemyKilled[i], Player.Instance.transform);
+					PlayFX(playerSettings.EffectsOnEnemyKilled[i], Player.Instance.transform, 1);
 				}
 			}
 		}
@@ -90,14 +90,14 @@ namespace EoE
 		{
 			for (int i = 0; i < playerSettings.EffectsOnCauseDamage.Length; i++)
 			{
-				PlayFX(playerSettings.EffectsOnCauseDamage[i], Player.Instance.transform);
+				PlayFX(playerSettings.EffectsOnCauseDamage[i], Player.Instance.transform, 1);
 			}
 
 			if (wasCrit)
 			{
 				for (int i = 0; i < playerSettings.EffectsOnCauseCrit.Length; i++)
 				{
-					PlayFX(playerSettings.EffectsOnCauseCrit[i], Player.Instance.transform);
+					PlayFX(playerSettings.EffectsOnCauseCrit[i], Player.Instance.transform, 1);
 				}
 			}
 		}
@@ -105,45 +105,45 @@ namespace EoE
 		{
 			for (int i = 0; i < playerSettings.EffectsOnLevelup.Length; i++)
 			{
-				PlayFX(playerSettings.EffectsOnLevelup[i], Player.Instance.transform);
+				PlayFX(playerSettings.EffectsOnLevelup[i], Player.Instance.transform, 1);
 			}
 		}
-		public static void PlayFX(FXInstance effect, Transform target)
+		public static void PlayFX(FXInstance effect, Transform target, float multiplier = 1)
 		{
 			if (GameController.GameIsPaused)
 				return;
 
 			if (effect is ScreenShake)
 			{
-				EffectUtils.ShakeScreen(effect as ScreenShake);
+				EffectUtils.ShakeScreen(effect as ScreenShake, multiplier);
 			}
 			else if (effect is ControllerRumble)
 			{
-				EffectUtils.RumbleController(effect as ControllerRumble);
+				EffectUtils.RumbleController(effect as ControllerRumble, multiplier);
 			}
 			else if (effect is ScreenBlur)
 			{
-				EffectUtils.BlurScreen(effect as ScreenBlur);
+				EffectUtils.BlurScreen(effect as ScreenBlur, multiplier);
 			}
 			else if (effect is ScreenBorderColor)
 			{
-				EffectUtils.ColorScreenBorder(effect as ScreenBorderColor);
+				EffectUtils.ColorScreenBorder(effect as ScreenBorderColor, multiplier);
 			}
 			else if (effect is ScreenTint)
 			{
-				EffectUtils.TintScreen(effect as ScreenTint);
+				EffectUtils.TintScreen(effect as ScreenTint, multiplier);
 			}
 			else if (effect is TimeDilation)
 			{
-				EffectUtils.DilateTime(effect as TimeDilation);
+				EffectUtils.DilateTime(effect as TimeDilation, multiplier);
 			}
 			else if (effect is CameraFOVWarp)
 			{
-				EffectUtils.WarpCameraFOV(effect as CameraFOVWarp);
+				EffectUtils.WarpCameraFOV(effect as CameraFOVWarp, multiplier);
 			}
 			else if (effect is SoundEffect)
 			{
-				EffectUtils.PlaySound(effect as SoundEffect, target);
+				EffectUtils.PlaySound(effect as SoundEffect, target, multiplier);
 			}
 			else if (effect is ParticleEffect)
 			{

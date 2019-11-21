@@ -49,6 +49,10 @@ namespace EoE.Information
 			ObjectArrayField(new GUIContent("Casting Announcement"), ref settings.CastingAnnouncement, ref CastingAnnouncementOpen, new GUIContent("Effect "));
 			ObjectField(new GUIContent("Projectile Fly Particles"), ref settings.ProjectileFlyParticles);
 			ObjectField(new GUIContent("Projectile Destroy Particles"), ref settings.ProjectileDestroyParticles);
+
+			GUILayout.Space(3);
+			ObjectField(new GUIContent("Projectile Impact Shake"), ref settings.ProjectileImpactShake);
+			FloatField(new GUIContent("Max Distance Impact Shake"), ref settings.MaxDistanceImpactShake);
 		}
 	}
 }
