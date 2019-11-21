@@ -378,7 +378,7 @@ namespace EoE.Entities
 		}
 		private void ApplyGravity(float scale = 1)
 		{
-			float lowerFallThreshold = Physics.gravity.y * Time.fixedDeltaTime;
+			float lowerFallThreshold = Physics.gravity.y;
 			float force = scale * Physics.gravity.y * Time.fixedDeltaTime;
 
 			if (!charController.isGrounded || totalVerticalVelocity > 0)
@@ -395,7 +395,7 @@ namespace EoE.Entities
 				else
 				{
 					verticalVelocity += force;
-					jumpVelocity = lowerFallThreshold;
+					jumpVelocity = 0;
 				}
 			}
 			else
@@ -456,9 +456,10 @@ namespace EoE.Entities
 		}
 		protected void Jump()
 		{
-			jumpVelocity += Mathf.Min(PlayerSettings.JumpPower.y * curJumpPowerMultiplier, PlayerSettings.JumpPower.y * curJumpPowerMultiplier);
+			jumpVelocity = Mathf.Min(PlayerSettings.JumpPower.y * curJumpPowerMultiplier, PlayerSettings.JumpPower.y * curJumpPowerMultiplier);
 			Vector3 addedExtraForce = PlayerSettings.JumpPower.x * transform.right * curJumpPowerMultiplier + PlayerSettings.JumpPower.z * transform.forward * curJumpPowerMultiplier * (curStates.Running ? PlayerSettings.RunSpeedMultiplicator : 1);
 			impactForce += new Vector2(addedExtraForce.x, addedExtraForce.z) * curAcceleration;
+			verticalVelocity = 0;
 
 			jumpGroundCooldown = JUMP_GROUND_COOLDOWN;
 			animationControl.SetTrigger("JumpStart");
@@ -570,6 +571,7 @@ namespace EoE.Entities
 
 			if (InputController.Dodge.Down && !currentlyDodging && curEndurance >= PlayerSettings.DodgeEnduranceCost)
 			{
+				EventManager.PlayerDodgeInvoke();
 				ChangeEndurance(new ChangeInfo(this, CauseType.Magic, PlayerSettings.DodgeEnduranceCost, false));
 				StartCoroutine(DodgeCoroutine());
 			}
@@ -587,7 +589,6 @@ namespace EoE.Entities
 			Vector3 newForce = new Vector3(Mathf.Sin(targetAngle * Mathf.Deg2Rad), 0, Mathf.Cos(targetAngle * Mathf.Deg2Rad)) * PlayerSettings.DodgePower * curWalkSpeed;
 
 			entitieForceController.ApplyForce(newForce, 1 / PlayerSettings.DodgeDuration);
-			EffectUtils.BlurScreen(0.8f, PlayerSettings.DodgeDuration * 1.6f, 6);
 
 			//Create a copy of the player model
 			Material dodgeMaterialInstance = Instantiate(PlayerSettings.DodgeModelMaterial);

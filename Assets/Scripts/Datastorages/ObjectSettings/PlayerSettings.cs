@@ -81,5 +81,6 @@ namespace EoE.Information
 
 		public float PlayerLandingVelocityThreshold = 5f;
 		public FXInstance[] EffectsOnPlayerLanding = default;
+		public FXInstance[] EffectsOnPlayerDodge = default;
 	}
 }

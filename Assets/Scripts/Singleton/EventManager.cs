@@ -28,6 +28,14 @@ namespace EoE.Events
 			PlayerLandedEvent?.Invoke(speed);
 		}
 
+		//Player Dashed
+		public delegate void PlayerDodge();
+		public static PlayerDodge PlayerDodgeEvent;
+		public static void PlayerDodgeInvoke()
+		{
+			PlayerDodgeEvent?.Invoke();
+		}
+
 		//Player Caused Damage
 		public delegate void PlayerCausedDamage(Entitie receiver, bool wasCrit);
 		public static PlayerCausedDamage PlayerCausedDamageEvent;

@@ -182,3 +182,5 @@ MonoBehaviour:
   PlayerLandingVelocityThreshold: 10
   EffectsOnPlayerLanding:
   - {fileID: 11400000, guid: ba451c2b316cc054ba26cb958cbb7f1a, type: 2}
+  EffectsOnPlayerDodge:
+  - {fileID: 0}

@@ -28,7 +28,8 @@ namespace EoE.Information
 		private static bool CauseDamageOpen;
 		private static bool CauseCritOpen;
 		private static bool LevelUpOpen;
-		private static bool OnPlayerLanding;
+		private static bool OnPlayerLandingOpen;
+		private static bool OnPlayerDodgeOpen;
 		private static bool LowHealthThresholdOpen;
 		protected override void CustomInspector()
 		{
@@ -204,7 +205,10 @@ namespace EoE.Information
 				{
 					settings.EffectsHealthThreshold = Mathf.Clamp01(settings.EffectsHealthThreshold);
 				}
-				ObjectArrayField(new GUIContent("Effects On Player Landing"), ref settings.EffectsOnPlayerLanding, ref OnPlayerLanding, new GUIContent("Effect "));
+				ObjectArrayField(new GUIContent("Effects On Player Landing"), ref settings.EffectsOnPlayerLanding, ref OnPlayerLandingOpen, new GUIContent("Effect "));
+
+				GUILayout.Space(4);
+				ObjectArrayField(new GUIContent("Effects On Player Dodge"), ref settings.EffectsOnPlayerDodge, ref OnPlayerDodgeOpen, new GUIContent("Effect "));
 			}
 			EndFoldoutHeader();
 		}

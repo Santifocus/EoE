@@ -109,7 +109,7 @@ namespace EoE.Information
 						EventManager.PlayerCausedDamageInvoke(receiver, basis.wasCritical);
 					}
 
-					if(receiver is Player)
+					if(receiver is Player && (finalChangeAmount > 0 || causedKnockback.HasValue))
 					{
 						EventManager.PlayerTookDamageInvoke(finalChangeAmount, (basis.knockbackAmount / receiver.SelfSettings.EntitieMass) * (basis.wasCritical ? GameController.CurrentGameSettings.CritDamageMultiplier : 1));
 					}

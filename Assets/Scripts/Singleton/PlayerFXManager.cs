@@ -18,6 +18,7 @@ namespace EoE
 			Instance = this;
 			EventManager.PlayerTookDamageEvent += PlayerTookDamage;
 			EventManager.PlayerLandedEvent += PlayerLanded;
+			EventManager.PlayerDodgeEvent += PlayerDodged;
 			EventManager.PlayerCausedDamageEvent += PlayerCausedDamage;
 			EventManager.PlayerLevelupEvent += PlayerLevelUp;
 		}
@@ -25,6 +26,7 @@ namespace EoE
 		{
 			EventManager.PlayerTookDamageEvent -= PlayerTookDamage;
 			EventManager.PlayerLandedEvent -= PlayerLanded;
+			EventManager.PlayerDodgeEvent -= PlayerDodged;
 			EventManager.PlayerCausedDamageEvent -= PlayerCausedDamage;
 			EventManager.PlayerLevelupEvent -= PlayerLevelUp;
 		}
@@ -36,6 +38,14 @@ namespace EoE
 				{
 					PlayFX(playerSettings.EffectsOnReceiveDamage[i]);
 				}
+
+				if ((Player.Instance.curHealth - causedDamage) / Player.Instance.curMaxHealth < playerSettings.EffectsHealthThreshold)
+				{
+					for (int i = 0; i < playerSettings.EffectsOnDamageWhenBelowThreshold.Length; i++)
+					{
+						PlayFX(playerSettings.EffectsOnDamageWhenBelowThreshold[i]);
+					}
+				}
 			}
 
 			if (knockBack.HasValue)
@@ -46,13 +56,6 @@ namespace EoE
 				}
 			}
 
-			if ((Player.Instance.curHealth - causedDamage) / Player.Instance.curMaxHealth < playerSettings.EffectsHealthThreshold)
-			{
-				for (int i = 0; i < playerSettings.EffectsOnDamageWhenBelowThreshold.Length; i++)
-				{
-					PlayFX(playerSettings.EffectsOnDamageWhenBelowThreshold[i]);
-				}
-			}
 		}
 		private void PlayerLanded(float velocity)
 		{
@@ -62,6 +65,13 @@ namespace EoE
 				{
 					PlayFX(playerSettings.EffectsOnPlayerLanding[i]);
 				}
+			}
+		}
+		private void PlayerDodged()
+		{
+			for (int i = 0; i < playerSettings.EffectsOnPlayerDodge.Length; i++)
+			{
+				PlayFX(playerSettings.EffectsOnPlayerDodge[i]);
 			}
 		}
 		private void PlayerCausedDamage(Entitie receiver, bool wasCrit)

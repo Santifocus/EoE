@@ -157,7 +157,6 @@ namespace EoE.Entities
 		protected virtual void Update()
 		{
 			Regen();
-			UpdateStatDisplay();
 			EntitieStateControl();
 			EntitieUpdate();
 		}
@@ -171,6 +170,7 @@ namespace EoE.Entities
 			else
 				impactForce = Vector3.zero;
 
+			UpdateStatDisplay();
 			EntitieFixedUpdate();
 		}
 		protected virtual void EntitieUpdate() { }
