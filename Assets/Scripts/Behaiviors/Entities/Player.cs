@@ -14,7 +14,6 @@ namespace EoE.Entities
 	{
 		#region Fields
 		//Constants
-		private const float ATTACK_INTERACT_COOLDOWN = 0.25f;
 		private const float RUN_ANIM_THRESHOLD = 0.75f;
 		private const float NON_TURNING_THRESHOLD = 60;
 		private const float LERP_TURNING_AREA = 0.5f;
@@ -120,9 +119,6 @@ namespace EoE.Entities
 		public static int AvailableSkillPoints;
 		public static int AvailableAtributePoints;
 		#endregion
-
-		//Other
-		private float attackInteractCooldown;
 
 		#endregion
 		#region Basic Monobehaivior
@@ -382,7 +378,7 @@ namespace EoE.Entities
 		}
 		private void ApplyGravity(float scale = 1)
 		{
-			const float lowerFallThreshold = -0.1f;
+			float lowerFallThreshold = Physics.gravity.y * Time.fixedDeltaTime;
 			float force = scale * Physics.gravity.y * Time.fixedDeltaTime;
 
 			if (!charController.isGrounded || totalVerticalVelocity > 0)
@@ -436,13 +432,20 @@ namespace EoE.Entities
 		}
 		private void JumpControl()
 		{
+			bool jumpPressed = InputController.Jump.Down;
+			if (jumpPressed && Interactable.MarkedInteractable)
+			{
+				if (Interactable.MarkedInteractable.TryInteract())
+					return;
+			}
+
 			if(jumpGroundCooldown > 0)
 			{
 				jumpGroundCooldown -= Time.deltaTime;
 				return;
 			}
 
-			if (InputController.Jump.Down && charController.isGrounded)
+			if (jumpPressed && charController.isGrounded)
 			{
 				if (curEndurance >= PlayerSettings.JumpEnduranceCost)
 				{
@@ -815,6 +818,8 @@ namespace EoE.Entities
 				EquipedSpell = null;
 			if (EquipedArmor != null && EquipedArmor.stackSize <= 0)
 				EquipedArmor = null;
+
+
 		}
 		#endregion
 		#region BlockControl
@@ -869,21 +874,11 @@ namespace EoE.Entities
 				}
 			}
 
-			if (attackInteractCooldown > 0)
-				attackInteractCooldown -= Time.deltaTime;
-
-			bool normalAttack = InputController.Attack.Down || Input.GetKeyDown(KeyCode.K);
-			if (normalAttack && Interactable.MarkedInteractable && !(attackInteractCooldown > 0))
-			{
-				if (Interactable.MarkedInteractable.TryInteract())
-					return;
-			}
-
-			if (equipedWeapon == null || isCurrentlyAttacking || (!normalAttack && !InputController.HeavyAttack.Down))
+			if (equipedWeapon == null || isCurrentlyAttacking || (!InputController.Attack.Pressed && !InputController.HeavyAttack.Pressed))
 				return;
 
 			int state = 0;
-			state += InputController.Attack.Down ? 0 : 4; //If we are here either heavy attack or normal attack was pressed
+			state += InputController.Attack.Pressed ? 0 : 4; //If we are here either heavy attack or normal attack was pressed
 			state += curStates.Running ? 1 : 0; //Running => Sprint attack
 			state += !charController.isGrounded ? 2 : 0; //In air => Jump attack
 
@@ -958,7 +953,6 @@ namespace EoE.Entities
 					}
 				}
 
-				attackInteractCooldown = ATTACK_INTERACT_COOLDOWN;
 				isCurrentlyAttacking = false;
 				heldWeapon.Active = false;
 				animationControl.SetBool("Attack", false);

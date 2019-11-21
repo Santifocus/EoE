@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using EoE.Information;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,12 @@ namespace EoE.Sounds
 		private Sound baseData;
 		private AudioSource source;
 		private bool isPaused;
+
+		private bool following;
+		private Transform toFollow;
+		private Vector3 offset;
+		private BehaiviorOnParentDeath onParentDeathBehaivior;
+		private float fadeOutTime;
 		public void Setup(Sound baseData, bool destroyOnFinish)
 		{
 			this.baseData = baseData;
@@ -28,6 +35,14 @@ namespace EoE.Sounds
 			if (destroyOnFinish)
 				StartCoroutine(WaitForEnd());
 		}
+		public void FollowTargetSetup(Transform toFollow, Vector3 offset, BehaiviorOnParentDeath onParentDeathBehaivior, float fadeOutTime)
+		{
+			following = true;
+			this.toFollow = toFollow;
+			this.offset = offset;
+			this.onParentDeathBehaivior = onParentDeathBehaivior;
+			this.fadeOutTime = fadeOutTime;
+		}
 
 		private IEnumerator WaitForEnd()
 		{
@@ -39,7 +54,51 @@ namespace EoE.Sounds
 			Destroy(gameObject);
 		}
 
+		private IEnumerator FadeOut()
+		{
+			float timer = 0;
+			while(timer < fadeOutTime)
+			{
+				yield return new WaitForEndOfFrame();
+				timer += Time.deltaTime;
+				float point = 1 - timer / fadeOutTime;
+
+				source.volume = baseData.volume * point;
+			}
+			Destroy(gameObject);
+		}
+
 		private void Update()
+		{
+			UpdateScale();
+		}
+		private void FixedUpdate()
+		{
+			FollowTarget();
+		}
+		private void FollowTarget()
+		{
+			if (!following)
+				return;
+
+			if (toFollow)
+			{
+				transform.position = toFollow.position + offset;
+			}
+			else
+			{
+				following = false;
+				if (onParentDeathBehaivior == BehaiviorOnParentDeath.Fade)
+				{
+					StartCoroutine(FadeOut());
+				}
+				else if (onParentDeathBehaivior == BehaiviorOnParentDeath.Remove)
+				{
+					Destroy(gameObject);
+				}
+			}
+		}
+		private void UpdateScale()
 		{
 			if (baseData.scaleStyle == SoundTimeScale.Unscaled)
 				return;
@@ -54,7 +113,7 @@ namespace EoE.Sounds
 						isPaused = true;
 					}
 					else
-					{ 
+					{
 						source.UnPause();
 						isPaused = true;
 					}

@@ -28,6 +28,7 @@ namespace EoE.UI
 		{
 			selectedIndex = 0;
 			gameObject.SetActive(true);
+			(transform as RectTransform).anchoredPosition = Vector2.zero;
 			StartCoroutine(StartFadeIn());
 		}
 		private void OnDestroy()

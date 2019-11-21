@@ -49,14 +49,15 @@ namespace EoE.Information
 		}
 		private void PlayEffects(Entitie user)
 		{
-			if (GameController.GameIsPaused)
-				return;
-
 			for (int i = 0; i < VFXEffectsOnUse.Length; i++)
 			{
 				if(VFXEffectsOnUse[i] is ParticleEffect)
 				{
 					EffectUtils.PlayParticleEffect(VFXEffectsOnUse[i] as ParticleEffect, user);
+				}
+				else if (VFXEffectsOnUse[i] is SoundEffect)
+				{
+					EffectUtils.PlaySound(VFXEffectsOnUse[i] as SoundEffect, user.transform);
 				}
 				else if(user is Player)
 				{

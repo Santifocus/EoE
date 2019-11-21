@@ -91,10 +91,10 @@ MonoBehaviour:
       BaseDamage: 3
   StopBlockingInertia: 0.3
   InvincibleAfterHit: 1
-  InvincibleAfterHitTime: 0.5
-  InvincibleModelFlashColor: {r: 1, g: 0.48584908, b: 0.48584908, a: 1}
-  InvincibleModelFlashDelay: 0.15
-  InvincibleModelFlashTime: 0.075
+  InvincibleAfterHitTime: 2
+  InvincibleModelFlashColor: {r: 1, g: 0, b: 0, a: 0.23137255}
+  InvincibleModelFlashDelay: 0.2
+  InvincibleModelFlashTime: 0.1
   StatTextUpdateSpeed: 0.5
   EnduranceBarLerpSpeed: 5
   HealthTextColors:
@@ -158,7 +158,7 @@ MonoBehaviour:
   ReserveEnduranceBarColor: {r: 1, g: 1, b: 1, a: 1}
   ActiveEnduranceBarColor: {r: 1, g: 1, b: 1, a: 1}
   ReloadingEnduranceBarColor: {r: 0.4, g: 0.4, b: 0.4, a: 0.8}
-  UseInventorySize: 24
+  UseInventorySize: 18
   WeaponInventorySize: 8
   SpellInventorySize: 8
   ArmorInventorySize: 8
@@ -181,4 +181,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 668a809c73c04d648ae6ae4e123f2f21, type: 2}
   PlayerLandingVelocityThreshold: 10
   EffectsOnPlayerLanding:
-  - {fileID: 11400000, guid: dd68d9db5e90b2f449f0f973e984a2a8, type: 2}
+  - {fileID: 11400000, guid: ba451c2b316cc054ba26cb958cbb7f1a, type: 2}
