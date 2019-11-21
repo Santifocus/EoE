@@ -773,11 +773,11 @@ namespace EoE.Utils
 		}
 		public static void PlayParticleEffect(ParticleEffect info, Transform target)
 		{
-			PlayParticleEffect(info.ParticleMainObject, info.OffsetToTarget, true, info.DestroyDelay, info.FollowTarget ? target : null, info.OnTargetDeathBehaivior, info.InheritRotationOfTarget);
+			PlayParticleEffect(info.ParticleMainObject, info.FollowTarget ? info.OffsetToTarget : (target ? target.position + info.OffsetToTarget : info.OffsetToTarget), true, info.DestroyDelay, info.FollowTarget ? target : null, info.OnTargetDeathBehaivior, info.InheritRotationOfTarget);
 		}
 		public static void PlayParticleEffect(ParticleEffect info, Entities.Entitie target)
 		{
-			PlayParticleEffect(info.ParticleMainObject, info.OffsetToTarget, true, info.DestroyDelay, info.FollowTarget ? target.transform : null, info.OnTargetDeathBehaivior, info.InheritRotationOfTarget);
+			PlayParticleEffect(info.ParticleMainObject, info.FollowTarget ? info.OffsetToTarget : (target ? target.actuallWorldPosition + info.OffsetToTarget : info.OffsetToTarget), true, info.DestroyDelay, info.FollowTarget ? target.transform : null, info.OnTargetDeathBehaivior, info.InheritRotationOfTarget);
 		}
 		public static void FadeAndDestroyParticles(GameObject target, float? delay)
 		{

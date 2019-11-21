@@ -16,6 +16,8 @@ namespace EoE.Information
 		public float ProjectileManaCost;
 		public float ProjectileFlightSpeed;
 		public float ProjectileSpellCooldown;
+		public float ProjectileHitboxSize;
+		public Vector3 ProjectileSpawnOffset;
 		public CasterProjectile ProjectilePrefab;
 		public FXInstance[] CastingAnnouncement;
 		public ParticleEffect ProjectileFlyParticles;

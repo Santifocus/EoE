@@ -12,12 +12,13 @@ namespace EoE.Weapons
 		[SerializeField] private SphereCollider coll = default;
 		private CasterSettings data;
 		private Caster parent;
-		public void Setup(CasterSettings data, Caster parent)
+		public void Setup(CasterSettings data, Caster parent, Vector3 projectileDirection)
 		{
 			this.data = data;
 			this.parent = parent;
-			transform.forward = parent.transform.forward;
-			body.velocity = transform.forward * data.ProjectileFlightSpeed;
+			transform.forward = projectileDirection;
+			body.velocity = transform.forward * data.ProjectileFlightSpeed; 
+			coll.radius = data.ProjectileHitboxSize / 2;
 		}
 
 		private void OnTriggerEnter(Collider other)
