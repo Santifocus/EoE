@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 469f7b848055e6b4f804fc4855292c28, type: 3}
-  m_Name: PlayerDodge
+  m_Name: Drink_Potion
   m_EditorClassIdentifier: 
-  soundName: PlayerDodge
-  clip: {fileID: 8300000, guid: 8caa8f676d2feb045a36b4073020ac83, type: 3}
+  soundName: Drink_Potion
+  clip: {fileID: 8300000, guid: 946fe3c1174525f428e15d3384939573, type: 3}
   audioGroup: {fileID: 24300002, guid: b8b319c0096b4d34196070be7e374c0c, type: 2}
   priority: 128
-  pitch: 1.5
-  volume: 0.6
+  pitch: 1
+  volume: 1
   spatialBlend: 0
-  scaleStyle: 1
+  scaleStyle: 0
