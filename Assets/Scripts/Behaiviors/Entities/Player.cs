@@ -42,7 +42,7 @@ namespace EoE.Entities
 		public int totalEnduranceContainers { get; private set; }
 		[HideInInspector] public float trueEnduranceAmount;
 		private float usedEnduranceCooldown;
-		private float useableEndurance => totalEnduranceContainers * PlayerSettings.EndurancePerBar;
+		public float useableEndurance => totalEnduranceContainers * PlayerSettings.EndurancePerBar;
 
 		//Dodge
 		public Transform modelTransform = default;

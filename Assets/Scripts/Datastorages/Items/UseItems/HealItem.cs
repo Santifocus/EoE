@@ -14,7 +14,7 @@ namespace EoE.Information
 				if (t == HealTargetType.Endurance && !(user is Player))
 					continue;
 
-				float targetStatAmount = t == HealTargetType.Health ? user.curMaxHealth : (t == HealTargetType.Mana ? user.curMaxMana : (user as Player).trueEnduranceAmount);
+				float targetStatAmount = t == HealTargetType.Health ? user.curMaxHealth : (t == HealTargetType.Mana ? user.curMaxMana : (user as Player).useableEndurance);
 				float amount = healEffects[i].Percent ? (targetStatAmount * (healEffects[i].Amount / 100)) : healEffects[i].Amount;
 				amount *= -1;
 
