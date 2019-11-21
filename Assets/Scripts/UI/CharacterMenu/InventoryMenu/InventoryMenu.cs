@@ -15,6 +15,8 @@ namespace EoE.UI
 		[SerializeField] private GridLayoutGroup slotGrid = default;
 		[SerializeField] private ItemAction[] itemActions = default;
 		[SerializeField] private DropMenu dropMenu = default;
+		[SerializeField] private Image equippedItemDisplay = default;
+		[SerializeField] private Image equippedSpellDisplay = default;
 
 		private enum InventoryTarget { Item, Weapons, Armor, Spells }
 		private InventorySlot[] slots;
@@ -72,6 +74,7 @@ namespace EoE.UI
 
 			if (dropMenuOpen)
 				HideDropMenu();
+			UpdateEquippedSlots();
 		}
 		private void Update()
 		{
@@ -179,8 +182,9 @@ namespace EoE.UI
 				Item target = item.data;
 				if (action == ItemAction.ItemActionType.Use)
 				{
-					if (target && target.UseCooldown <= 0)
+					if (target && item.useCooldown <= 0)
 						target.Use(item, Player.Instance, targetInventory);
+					UpdateEquippedSlots();
 				}
 				else if (action == ItemAction.ItemActionType.Equip)
 				{
@@ -204,6 +208,7 @@ namespace EoE.UI
 						}
 
 						target.Equip(Player.Instance);
+						UpdateEquippedSlots();
 					}
 				}
 				else if (action == ItemAction.ItemActionType.Drop)
@@ -225,6 +230,30 @@ namespace EoE.UI
 				itemActions[0].SelectMenuItem();
 			}
 		}
+		private void UpdateEquippedSlots()
+		{
+			if (Player.EquipedItem != null)
+			{
+				equippedItemDisplay.sprite = Player.EquipedItem.data.ItemIcon;
+				equippedItemDisplay.color = Color.white;
+			}
+			else
+			{
+				equippedItemDisplay.sprite = null;
+				equippedItemDisplay.color = Color.clear;
+			}
+
+			if (Player.EquipedSpell != null)
+			{
+				equippedSpellDisplay.sprite = Player.EquipedSpell.data.ItemIcon;
+				equippedSpellDisplay.color = Color.white;
+			}
+			else
+			{
+				equippedSpellDisplay.sprite = null;
+				equippedSpellDisplay.color = Color.clear;
+			}
+		}
 		private void ShowDropMenu()
 		{
 			dropMenuOpen = true;
@@ -233,6 +262,7 @@ namespace EoE.UI
 		public void HideDropMenu()
 		{
 			dropMenuOpen = false;
+			UpdateEquippedSlots();
 			dropMenu.Hide();
 		}
 		public void MenuBack()

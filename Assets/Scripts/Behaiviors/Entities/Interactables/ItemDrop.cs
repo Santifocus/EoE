@@ -1,29 +1,28 @@
 ﻿using EoE.Information;
 using EoE.UI;
 using UnityEngine;
+using TMPro;
 
 namespace EoE.Entities
 {
 	public class ItemDrop : Interactable
 	{
 		[SerializeField] private Rigidbody body = default;
+		[SerializeField] private TextMeshPro infoDisplayPrefab = default;
+		[SerializeField] private Vector3 infoDisplayOffset = new Vector3(0, 2, 0);
+		[SerializeField] private Color amountColor = Color.red;
+		[SerializeField] private Color itemNameColor = Color.cyan;
+		private TextMeshPro infoDisplay;
 		private InventoryItem containedItem;
 		protected override void Interact()
 		{
-			int prevStackSize = containedItem.stackSize;
 			AddToInventory();
 
-			if (prevStackSize != containedItem.stackSize)
-			{
-				DialogueController.ShowDialogue(new Dialogue(null, ("You picked up ", Color.white), ((prevStackSize - containedItem.stackSize) + "x " + containedItem.data.ItemName, Color.green), ("!", Color.white)));
-			}
-			else
-			{
-				DialogueController.ShowDialogue(new Dialogue(null, ("Not enought Inventory Space to pick up ", Color.white), (containedItem.stackSize + "x " + containedItem.data.ItemName, Color.green), ("!", Color.white)));
-			}
-
 			if (containedItem.stackSize == 0)
+			{
+				Destroy(infoDisplay.gameObject);
 				Destroy(gameObject);
+			}
 		}
 		private void AddToInventory()
 		{
@@ -44,13 +43,23 @@ namespace EoE.Entities
 				Player.ItemInventory.AddItem(containedItem);
 			}
 		}
+		private void LateUpdate()
+		{
+			if (!isTarget)
+				return;
+
+			infoDisplay.transform.position = transform.position + infoDisplayOffset;
+			Vector3 facingDir = Vector3.Lerp(Player.Instance.actuallWorldPosition, PlayerCameraController.PlayerCamera.transform.position, 0.35f);
+			Vector3 signDir = (infoDisplay.transform.position - facingDir).normalized;
+			infoDisplay.transform.forward = signDir;
+		}
 		protected override void MarkAsInteractTarget()
 		{
-
+			infoDisplay.gameObject.SetActive(true);
 		}
 		protected override void StopMarkAsInteractable()
 		{
-
+			infoDisplay.gameObject.SetActive(false);
 		}
 		public void SetupItemDrop(InventoryItem containedItem, bool stopVelocity)
 		{
@@ -65,6 +74,13 @@ namespace EoE.Entities
 			{
 				body.velocity = Random.insideUnitSphere.normalized * GameController.CurrentGameSettings.ItemDropRandomVelocityStrenght;
 			}
+
+			infoDisplay = Instantiate(infoDisplayPrefab, Storage.ParticleStorage);
+			infoDisplay.gameObject.SetActive(false);
+
+			string amountColHex = ColorUtility.ToHtmlStringRGBA(amountColor);
+			string nameColHex = ColorUtility.ToHtmlStringRGBA(itemNameColor);
+			infoDisplay.text = "Pick up <color=#" + amountColHex + ">" + containedItem.stackSize + "x </color><color=#" + nameColHex + ">" + containedItem.data.ItemName + "</color>[A]";
 		}
 	}
 }

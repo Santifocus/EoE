@@ -586,8 +586,7 @@ namespace EoE.Entities
 			ChangeInfo.ChangeResult changeResult = new ChangeInfo.ChangeResult(causedChange, this, true);
 
 			//If this Entitie is invincible and the change causes damage and/or knockback then we stop here
-			if(IsInvincible)
-				Debug.Log(invincible);
+
 			if (IsInvincible && (changeResult.finalChangeAmount > 0 || changeResult.causedKnockback.HasValue))
 				return;
 

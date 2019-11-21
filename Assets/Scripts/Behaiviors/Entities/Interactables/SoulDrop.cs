@@ -21,6 +21,7 @@ namespace EoE.Entities
 		[SerializeField] private float fadeOutTime = 1.5f;
 
 		[Space(5)]
+		[SerializeField] private Color amountColor = Color.blue;
 		[SerializeField] private float finallSphereSize = 1;
 		[SerializeField] private int pulsateCount = 5;
 		[SerializeField] private float pulsateStrenght = 0.5f;
@@ -33,7 +34,9 @@ namespace EoE.Entities
 		{
 			canBeInteracted = false;
 			this.soulCount = soulCount;
-			infoSign.text = "Free " + soulCount + " Souls. [X]";
+
+			string amountColHex = ColorUtility.ToHtmlStringRGBA(amountColor);
+			infoSign.text = "Free <color=#" + amountColHex + ">" + soulCount + "</color> Souls. [A]";
 			StartCoroutine(FadeIn());
 		}
 		protected override void Interact()

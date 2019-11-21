@@ -12,6 +12,9 @@ namespace EoE.UI
 		[SerializeField] private float pageScrollTime = 0.3f;
 		[SerializeField] private float pageFinishScrollTime = 0.2f;
 		[SerializeField] private Image characterMenuBackground = default;
+		[SerializeField] private float scrollImageFadeTime = 0.3f;
+		[SerializeField] private Image leftScrollImage = default;
+		[SerializeField] private Image rightScrollImage = default;
 
 		private int curMenuIndex;
 		private bool allowedSlide;
@@ -55,6 +58,10 @@ namespace EoE.UI
 					curMenuIndex += menuPages.Length;
 
 				menuPages[curMenuIndex].ShowPage(LeftScreen, pageScrollTime, pageFinishSlide);
+
+				if(LeftScrollFadeC != null)
+					StopCoroutine(LeftScrollFadeC);
+				LeftScrollFadeC = StartCoroutine(FadeTrigger(leftScrollImage));
 			}
 			else if (InputController.RightPage.Active && allowedSlide)
 			{
@@ -67,7 +74,32 @@ namespace EoE.UI
 					curMenuIndex %= menuPages.Length;
 
 				menuPages[curMenuIndex].ShowPage(RightScreen, pageScrollTime, pageFinishSlide);
+
+				if (RightScrollFadeC != null)
+					StopCoroutine(RightScrollFadeC);
+				RightScrollFadeC = StartCoroutine(FadeTrigger(rightScrollImage));
 			}
+		}
+		private Coroutine LeftScrollFadeC;
+		private Coroutine RightScrollFadeC;
+		private IEnumerator FadeTrigger(Image target)
+		{
+			PlayScrollSound();
+			target.gameObject.SetActive(true);
+			target.color = Color.white;
+			float timer = 0;
+
+			while(timer < scrollImageFadeTime)
+			{
+				yield return new WaitForEndOfFrame();
+				timer += Time.unscaledDeltaTime;
+				target.color = new Color(1, 1, 1, 1 - timer / scrollImageFadeTime);
+			}
+			target.color = new Color(1, 1, 1, 0);
+		}
+		private void PlayScrollSound()
+		{
+			Sounds.SoundManager.SetSoundState(ConstantCollector.MENU_SCROLL_SOUND, true);
 		}
 		public void OpenMenu()
 		{

@@ -16,4 +16,6 @@ MonoBehaviour:
     type: 3}
   DestroyDelay: 10
   OffsetToTarget: {x: 0, y: 0, z: 0}
-  LocalEffect: 1
+  FollowTarget: 1
+  InheritRotationOfTarget: 0
+  OnTargetDeathBehaivior: 0

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 469f7b848055e6b4f804fc4855292c28, type: 3}
+  m_Name: LevelUpSound
+  m_EditorClassIdentifier: 
+  soundName: LevelUpSound
+  clip: {fileID: 8300000, guid: 33360798af1d6cf4eb2f2cc4cb6901bd, type: 3}
+  audioGroup: {fileID: 24300002, guid: b8b319c0096b4d34196070be7e374c0c, type: 2}
+  priority: 128
+  pitch: 1
+  volume: 1
+  spatialBlend: 0.3
+  scaleStyle: 0

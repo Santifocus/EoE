@@ -30,11 +30,9 @@ namespace EoE
 				Destroy(Instance.gameObject);
 			}
 			Instance = this;
-			Cursor.lockState = CursorLockMode.Locked;
 		}
 		private static void SetPauseGamestate(bool state)
 		{
-			Cursor.lockState = CursorLockMode.None;
 			Instance.mainCanvas.gameObject.SetActive(!state);
 			Instance.bgCanvas.gameObject.SetActive(!state);
 			Time.timeScale = state ? 0 : 1;

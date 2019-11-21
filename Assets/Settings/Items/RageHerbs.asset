@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 864ce4b4956fd63469942aad9fe28094, type: 3}
-  m_Name: Wutkraut
+  m_Name: RageHerbs
   m_EditorClassIdentifier: 
-  ItemName: Wutkraut
+  ItemName: Rage Herbs
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 5
   ItemIcon: {fileID: 21300000, guid: 5b060644db4ddc74da4eedea86b832f7, type: 3}
   RemoveOnUse: 1
-  UseCooldown: 0
+  UseCooldown: 2
   VFXEffectsOnUse:
   - {fileID: 11400000, guid: 2e8623e6ecdc1bb4aa68c44343ee4f86, type: 2}
   buffInfo:

@@ -639,21 +639,23 @@ namespace EoE.Utils
 		}
 		#endregion
 		#region Particle Effects
-		public static void PlayParticleEffect(GameObject mainObject, Vector3 at, bool destroyAfterDelay = true, float destroyDelay = 0, Transform parent = null, bool asInstantiation = true)
+		public static void PlayParticleEffect(GameObject mainObject, Vector3 offsetToTarget, bool destroyAfterDelay = true, float destroyDelay = 0, Transform parent = null, BehaiviorOnParentDeath parentDeathBehaivior = BehaiviorOnParentDeath.Fade, bool inheritRotation = false, bool asInstantiation = true)
 		{
-			GameObject newMain;
+			GameObject targetObject;
 			if (asInstantiation)
 			{
-				newMain = Instantiate(mainObject);
+				targetObject = Instantiate(mainObject, Storage.ParticleStorage);
 			}
 			else
 			{
-				newMain = mainObject;
+				targetObject = mainObject;
 			}
-			newMain.transform.SetParent(parent ?? Storage.ParticleStorage);
-			newMain.transform.position = at;
+			targetObject.transform.position = parent ? parent.position + offsetToTarget : offsetToTarget;
 
-			ParticleSystem[] containedSystems = newMain.GetComponentsInChildren<ParticleSystem>();
+			if (parent)
+				Instance.StartCoroutine(Instance.ParticleFollowTarget(targetObject.transform, parent, offsetToTarget, inheritRotation, parentDeathBehaivior));
+
+			ParticleSystem[] containedSystems = targetObject.GetComponentsInChildren<ParticleSystem>();
 			for(int i = 0; i < containedSystems.Length; i++)
 			{
 				if(containedSystems[i].isPlaying)
@@ -662,24 +664,56 @@ namespace EoE.Utils
 			}
 
 			if(destroyAfterDelay)
-				KillParticlesWhenDone(newMain, destroyDelay);
+				FadeAndDestroyParticles(targetObject, destroyDelay);
 		}
 		public static void PlayParticleEffect(ParticleEffect info, Transform target)
 		{
-			PlayParticleEffect(info.ParticleMainObject, target ? (target.position + info.OffsetToTarget) : info.OffsetToTarget, true, info.DestroyDelay, info.LocalEffect ? target : null);
+			PlayParticleEffect(info.ParticleMainObject, info.OffsetToTarget, true, info.DestroyDelay, info.FollowTarget ? target : null, info.OnTargetDeathBehaivior, info.InheritRotationOfTarget);
 		}
 		public static void PlayParticleEffect(ParticleEffect info, Entities.Entitie target)
 		{
-			PlayParticleEffect(info.ParticleMainObject, target ? (target.actuallWorldPosition + info.OffsetToTarget) : info.OffsetToTarget, true, info.DestroyDelay, info.LocalEffect ? target.transform : null);
+			PlayParticleEffect(info.ParticleMainObject, info.OffsetToTarget, true, info.DestroyDelay, info.FollowTarget ? target.transform : null, info.OnTargetDeathBehaivior, info.InheritRotationOfTarget);
 		}
-		public static void KillParticlesWhenDone(GameObject target, float? delay)
+		public static void FadeAndDestroyParticles(GameObject target, float? delay)
 		{
-			Instance.StartCoroutine(Instance.KillParticlesWhenDoneC(target, delay));
+			Instance.StartCoroutine(Instance.FadeAndDestroyParticlesC(target, delay));
 		}
-		private IEnumerator KillParticlesWhenDoneC(GameObject target, float? baseDelay)
+		private IEnumerator ParticleFollowTarget(Transform follower, Transform target, Vector3 offset, bool inheritRotation, BehaiviorOnParentDeath deathBehaivior)
+		{
+			while (follower)
+			{
+				if (target)
+				{
+					follower.position = target.position + offset;
+					if (inheritRotation)
+						follower.rotation = target.rotation;
+				}
+				else
+				{
+					if(deathBehaivior == BehaiviorOnParentDeath.Remove)
+					{
+						Destroy(follower.gameObject);
+					}
+					else if(deathBehaivior == BehaiviorOnParentDeath.Fade)
+					{
+						StartCoroutine(FadeAndDestroyParticlesC(follower.gameObject, null));
+						break;
+					}
+					else
+					{
+						break;
+					}
+				}
+				yield return new WaitForFixedUpdate();
+			}
+		}
+		private IEnumerator FadeAndDestroyParticlesC(GameObject target, float? baseDelay)
 		{
 			if (baseDelay.HasValue)
 				yield return new WaitForSeconds(baseDelay.Value);
+
+			if (!target)
+				goto FadeFinished;
 
 			ParticleSystem[] particleSystems = target.GetComponentsInChildren<ParticleSystem>();
 			for (int i = 0; i < particleSystems.Length; i++)
@@ -690,6 +724,9 @@ namespace EoE.Utils
 			while (true)
 			{
 				yield return new WaitForEndOfFrame();
+				if (!target)
+					goto FadeFinished;
+
 				if (GameController.GameIsPaused)
 					continue;
 
@@ -708,6 +745,9 @@ namespace EoE.Utils
 			}
 
 			Destroy(target);
+
+			//We can jump to this in case of external removal of the target
+			FadeFinished:;
 		}
 		#endregion
 		#region Entitie Text
