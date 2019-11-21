@@ -93,7 +93,6 @@ GameObject:
   - component: {fileID: 3643562271358090250}
   - component: {fileID: 3643562271358090251}
   - component: {fileID: 3643562271358090245}
-  - component: {fileID: 3643562271358090255}
   - component: {fileID: 283851788578120806}
   m_Layer: 9
   m_Name: Crawler
@@ -137,10 +136,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2c0552c695fd3b43a8b78e44ad89122, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  body: {fileID: 3643562271358090245}
   coll: {fileID: 3643562271358090251}
-  animationControl: {fileID: 3643562271358090255}
   invincible: 0
+  body: {fileID: 3643562271358090245}
   agent: {fileID: 283851788578120806}
   settings: {fileID: 11400000, guid: 00947b57d79a2034d94b1348e8b8b509, type: 2}
 --- !u!23 &3643562271358090250
@@ -210,25 +208,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 80
   m_CollisionDetection: 3
---- !u!95 &3643562271358090255
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3643562271358090246}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 1566bb3f85be9564a87e6e7f3442a8ac, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!195 &283851788578120806
 NavMeshAgent:
   m_ObjectHideFlags: 0

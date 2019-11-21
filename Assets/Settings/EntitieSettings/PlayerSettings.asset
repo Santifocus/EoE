@@ -183,4 +183,5 @@ MonoBehaviour:
   EffectsOnPlayerLanding:
   - {fileID: 11400000, guid: ba451c2b316cc054ba26cb958cbb7f1a, type: 2}
   EffectsOnPlayerDodge:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: a1a241ff7cc72544e9475b9495c7ee11, type: 2}
+  - {fileID: 11400000, guid: 16c048efcd73fc94fb2bd95baaa20137, type: 2}

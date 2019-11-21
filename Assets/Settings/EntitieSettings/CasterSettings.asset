@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61aa25bca827b2f4e82c2787c39a67cd, type: 3}
+  m_Name: CasterSettings
+  m_EditorClassIdentifier: 
+  EntitieMass: 1
+  MassCenter: {x: 0, y: 0, z: 0}
+  EntitieElement: 4
+  PossibleDropsTable: {fileID: 11400000, guid: 6c863124784db984e93eb995e00bd42e, type: 2}
+  SoulWorth: 10
+  BaseAttackDamage: 15
+  BaseMagicDamage: 3
+  BaseDefense: 2
+  Health: 50
+  DoHealthRegen: 0
+  HealthRegen: 0
+  HealthRegenInCombatMultiplier: 0.5
+  HealthRegenParticles: {fileID: 0}
+  HealthRegenParticlesOffset: {x: 0, y: 0, z: 0}
+  Mana: 50
+  DoManaRegen: 1
+  ManaRegen: 5
+  ManaRegenInCombatMultiplier: 0.25
+  WalkSpeed: 10
+  RunSpeedMultiplicator: 1.25
+  TurnSpeed: 280
+  InAirTurnSpeedMultiplier: 0.25
+  MoveAcceleration: 10
+  NoMoveDeceleration: 15
+  InAirAccelerationMultiplier: 0.3
+  AttackRange: 2.5
+  AttackKnockBack: 3
+  CritChance: 0
+  SightRange: 20
+  FoundPlayerSightRange: 50
+  SightAngle: 60
+  FoundPlayerSightAngle: 120
+  ChaseInterest: 6
+  InvestigationTime: 10
+  WanderingFactor: 15
+  WanderingDelayMin: 1
+  WanderingDelayMax: 5
+  LookAroundDelayMin: 0.5
+  LookAroundDelayMax: 2
+  ProjectileChargeTime: 3
+  ProjectileDamageMultiplier: 1
+  ProjectileElement: 4
+  ProjectileKnockback: 1
+  ProjectileCritChance: 0
+  ProjectileManaCost: 5
+  ProjectileFlightSpeed: 3
+  ProjectileSpellCooldown: 3
+  ProjectilePrefab: {fileID: 8685777211475644402, guid: 4cab2cd482fa3294c90e4af37620fdf1,
+    type: 3}
+  CastingAnnouncement: []
+  ProjectileFlyParticles: {fileID: 0}
+  ProjectileDestroyParticles: {fileID: 0}

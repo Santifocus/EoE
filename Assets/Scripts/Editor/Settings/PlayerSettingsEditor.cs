@@ -14,7 +14,6 @@ namespace EoE.Information
 		private static bool IFramesSettingsOpen;
 		private static bool HUDSettingsOpen;
 		private static bool InventorySettingsOpen;
-		private static bool VFXSettingsOpen;
 
 		//Other
 		private static bool BlockingBuffOpen;
