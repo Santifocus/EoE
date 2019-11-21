@@ -379,7 +379,7 @@ namespace EoE.Entities
 		}
 		private void ApplyGravity(float scale = 1)
 		{
-			float lowerFallThreshold = Physics.gravity.y;
+			float lowerFallThreshold = Physics.gravity.y / 3;
 			float force = scale * Physics.gravity.y * Time.fixedDeltaTime;
 
 			if (!charController.isGrounded || totalVerticalVelocity > 0)
@@ -401,7 +401,8 @@ namespace EoE.Entities
 			}
 			else
 			{
-				jumpVelocity = verticalVelocity = lowerFallThreshold;
+				jumpVelocity = 0;
+				verticalVelocity = lowerFallThreshold;
 			}
 		}
 		private void TurnControl()
@@ -820,8 +821,6 @@ namespace EoE.Entities
 				EquipedSpell = null;
 			if (EquipedArmor != null && EquipedArmor.stackSize <= 0)
 				EquipedArmor = null;
-
-
 		}
 		#endregion
 		#region BlockControl

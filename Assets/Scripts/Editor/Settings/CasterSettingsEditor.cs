@@ -24,8 +24,8 @@ namespace EoE.Information
 			CasterSettings settings = target as CasterSettings;
 			base.CombatSettings();
 
-			FloatField(new GUIContent("ProjectileChargeTime"), ref settings.ProjectileChargeTime);
-			FloatField(new GUIContent("ProjectileDamageMultiplier"), ref settings.ProjectileDamageMultiplier);
+			FloatField(new GUIContent("Projectile Charge Time"), ref settings.ProjectileChargeTime);
+			FloatField(new GUIContent("Projectile Damage Multiplier"), ref settings.ProjectileDamageMultiplier);
 
 			System.Enum ele = settings.ProjectileElement;
 			if(EnumField(new GUIContent("Projectile Element"), ref ele))
@@ -33,11 +33,13 @@ namespace EoE.Information
 				settings.ProjectileElement = (ElementType)ele;
 			}
 
-			FloatField(new GUIContent("ProjectileKnockback"), ref settings.ProjectileKnockback);
-			FloatField(new GUIContent("ProjectileCritChance"), ref settings.ProjectileCritChance);
-			FloatField(new GUIContent("ProjectileManaCost"), ref settings.ProjectileManaCost);
-			FloatField(new GUIContent("ProjectileFlightSpeed"), ref settings.ProjectileFlightSpeed);
-			FloatField(new GUIContent("ProjectileSpellCooldown"), ref settings.ProjectileSpellCooldown);
+			FloatField(new GUIContent("Projectile Knockback"), ref settings.ProjectileKnockback);
+			FloatField(new GUIContent("Projectile Crit Chance"), ref settings.ProjectileCritChance);
+			FloatField(new GUIContent("Projectile Mana Cost"), ref settings.ProjectileManaCost);
+			FloatField(new GUIContent("Projectile FlightSpeed"), ref settings.ProjectileFlightSpeed);
+			FloatField(new GUIContent("Projectile Spell Cooldown"), ref settings.ProjectileSpellCooldown);
+			FloatField(new GUIContent("Projectile Hitbox Size"), ref settings.ProjectileHitboxSize);
+			Vector3Field(new GUIContent("Projectile Spawn Offset"), ref settings.ProjectileSpawnOffset);
 			GUILayout.Space(3);
 			ObjectField(new GUIContent("Projectile Prefab"), ref settings.ProjectilePrefab);
 		}
@@ -47,6 +49,10 @@ namespace EoE.Information
 			ObjectArrayField(new GUIContent("Casting Announcement"), ref settings.CastingAnnouncement, ref CastingAnnouncementOpen, new GUIContent("Effect "));
 			ObjectField(new GUIContent("Projectile Fly Particles"), ref settings.ProjectileFlyParticles);
 			ObjectField(new GUIContent("Projectile Destroy Particles"), ref settings.ProjectileDestroyParticles);
+
+			GUILayout.Space(3);
+			ObjectField(new GUIContent("Projectile Impact Shake"), ref settings.ProjectileImpactShake);
+			FloatField(new GUIContent("Max Distance Impact Shake"), ref settings.MaxDistanceImpactShake);
 		}
 	}
 }

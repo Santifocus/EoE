@@ -17,8 +17,8 @@ MonoBehaviour:
   EntitieElement: 4
   PossibleDropsTable: {fileID: 11400000, guid: d3bb8e598d9ed604b8fed58e3635e765, type: 2}
   SoulWorth: 10
-  BaseAttackDamage: 15
-  BaseMagicDamage: 3
+  BaseAttackDamage: 3
+  BaseMagicDamage: 15
   BaseDefense: 2
   Health: 50
   DoHealthRegen: 0
@@ -37,7 +37,7 @@ MonoBehaviour:
   MoveAcceleration: 10
   NoMoveDeceleration: 15
   InAirAccelerationMultiplier: 0.3
-  AttackRange: 2.5
+  AttackRange: 17
   AttackKnockBack: 3
   CritChance: 0
   SightRange: 20
@@ -51,16 +51,24 @@ MonoBehaviour:
   WanderingDelayMax: 5
   LookAroundDelayMin: 0.5
   LookAroundDelayMax: 2
-  ProjectileChargeTime: 3
+  ProjectileChargeTime: 2.5
   ProjectileDamageMultiplier: 1
   ProjectileElement: 4
-  ProjectileKnockback: 1
+  ProjectileKnockback: 0
   ProjectileCritChance: 0
   ProjectileManaCost: 5
-  ProjectileFlightSpeed: 3
-  ProjectileSpellCooldown: 3
+  ProjectileFlightSpeed: 25
+  ProjectileSpellCooldown: 2
+  ProjectileHitboxSize: 1.5
+  ProjectileSpawnOffset: {x: 0, y: 2, z: 0}
   ProjectilePrefab: {fileID: 8685777211475644402, guid: 4cab2cd482fa3294c90e4af37620fdf1,
     type: 3}
-  CastingAnnouncement: []
-  ProjectileFlyParticles: {fileID: 0}
-  ProjectileDestroyParticles: {fileID: 0}
+  CastingAnnouncement:
+  - {fileID: 11400000, guid: 2bd48134fcb3222429adde541c21e0a7, type: 2}
+  ProjectileFlyParticles: {fileID: 11400000, guid: c39daf5a0f800724bb495b3c7063b211,
+    type: 2}
+  ProjectileDestroyParticles: {fileID: 11400000, guid: 7f999a2e186ef064aa781c01f433f7fe,
+    type: 2}
+  MaxDistanceImpactShake: 20
+  ProjectileImpactShake: {fileID: 11400000, guid: e840a1eafcd96a047bbe880545aaa1d0,
+    type: 2}

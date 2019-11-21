@@ -11,14 +11,18 @@ namespace EoE.Sounds
 		private AudioSource source;
 		private bool isPaused;
 
+		private float multiplier;
+
 		private bool following;
 		private Transform toFollow;
 		private Vector3 offset;
 		private BehaiviorOnParentDeath onParentDeathBehaivior;
 		private float fadeOutTime;
-		public void Setup(Sound baseData, bool destroyOnFinish)
+
+		public void Setup(Sound baseData, bool destroyOnFinish, float multiplier = 1)
 		{
 			this.baseData = baseData;
+			this.multiplier = multiplier;
 
 			source = gameObject.AddComponent<AudioSource>();
 
@@ -26,7 +30,7 @@ namespace EoE.Sounds
 			source.clip = baseData.clip;
 			source.pitch = baseData.pitch;
 			source.spatialBlend = baseData.spatialBlend;
-			source.volume = baseData.volume;
+			source.volume = baseData.volume * multiplier;
 			source.priority = baseData.priority;
 			source.outputAudioMixerGroup = baseData.audioGroup;
 
@@ -63,7 +67,7 @@ namespace EoE.Sounds
 				timer += Time.deltaTime;
 				float point = 1 - timer / fadeOutTime;
 
-				source.volume = baseData.volume * point;
+				source.volume = baseData.volume * point * multiplier;
 			}
 			Destroy(gameObject);
 		}

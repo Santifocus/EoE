@@ -17,6 +17,7 @@ namespace EoE.Information
 		public float CameraExtraZoomOnVertical = 0.5f;
 		public float MaxEnemyTargetingDistance = 100;
 		public Vector2 CameraClampsWhenTargeting = new Vector2(-30, 30);
+		public float CameraBaseFOV = 60;
 
 		//Endurance Settings
 		public int EnduranceBars = 4;
@@ -82,5 +83,6 @@ namespace EoE.Information
 		public float PlayerLandingVelocityThreshold = 5f;
 		public FXInstance[] EffectsOnPlayerLanding = default;
 		public FXInstance[] EffectsOnPlayerDodge = default;
+		public FXInstance[] EffectsOnEnemyKilled = default;
 	}
 }

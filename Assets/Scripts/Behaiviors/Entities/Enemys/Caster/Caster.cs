@@ -11,10 +11,15 @@ namespace EoE.Entities
 		public override EnemySettings enemySettings => settings;
 		public CasterSettings settings;
 		private bool isChargingSpell;
-
+		private float castCooldown;
+		protected override void EntitieUpdate()
+		{
+			if (castCooldown > 0)
+				castCooldown -= Time.deltaTime;
+		}
 		protected override void InRangeBehaivior()
 		{
-			if (!isChargingSpell && curMana >= settings.ProjectileManaCost)
+			if (!isChargingSpell && castCooldown <= 0 && curMana >= settings.ProjectileManaCost)
 			{
 				StartCoroutine(ChargeSpell());
 				ChangeMana(new ChangeInfo(this, CauseType.Magic, settings.ProjectileManaCost, false));
@@ -39,9 +44,10 @@ namespace EoE.Entities
 		private void CreateProjectile()
 		{
 			CasterProjectile projectile = Instantiate(settings.ProjectilePrefab, Storage.ProjectileStorage);
+			projectile.transform.position = actuallWorldPosition + settings.ProjectileSpawnOffset;
+			projectile.Setup(settings, this, (player.actuallWorldPosition - (actuallWorldPosition + settings.ProjectileSpawnOffset)).normalized);
+			castCooldown = settings.ProjectileSpellCooldown;
 
-			projectile.Setup(settings, this);
-			
 			FXManager.PlayFX(settings.ProjectileFlyParticles, projectile.transform);
 		}
 	}

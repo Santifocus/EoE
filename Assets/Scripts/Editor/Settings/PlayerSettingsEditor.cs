@@ -29,6 +29,7 @@ namespace EoE.Information
 		private static bool LevelUpOpen;
 		private static bool OnPlayerLandingOpen;
 		private static bool OnPlayerDodgeOpen;
+		private static bool OnEnemyKilledOpen;
 		private static bool LowHealthThresholdOpen;
 		protected override void CustomInspector()
 		{
@@ -208,6 +209,7 @@ namespace EoE.Information
 
 				GUILayout.Space(4);
 				ObjectArrayField(new GUIContent("Effects On Player Dodge"), ref settings.EffectsOnPlayerDodge, ref OnPlayerDodgeOpen, new GUIContent("Effect "));
+				ObjectArrayField(new GUIContent("Effects On Enemy Killed"), ref settings.EffectsOnEnemyKilled, ref OnEnemyKilledOpen, new GUIContent("Effect "));
 			}
 			EndFoldoutHeader();
 		}
