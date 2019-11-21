@@ -7,14 +7,22 @@ namespace EoE
 	public class PlayerCameraController : MonoBehaviour
 	{
 		private const float CAMERA_ROTATE_KILL_THRESHOLD = 0.001f;
-
-		private static PlayerCameraController instance;
-		public static PlayerCameraController Instance => instance;
+		public static PlayerCameraController Instance { get; private set; }
 		public static Vector2 TargetRotation;
 		public static Vector2 CurRotation;
-		public static Camera PlayerCamera => instance.playerCamera;
+		private static float cameraFOV;
+		public static float CameraFOV
+		{
+			get => cameraFOV;
+			set
+			{
+				cameraFOV = Instance.playerCamera.fieldOfView = Instance.overlayCamera.fieldOfView = value;
+			}
+		}
+		public static Camera PlayerCamera => Instance.playerCamera;
 
 		[SerializeField] private Camera playerCamera = default;
+		[SerializeField] private Camera overlayCamera = default;
 		private Vector3 curOffset;
 
 		private PlayerSettings playerSettigns => Player.Instance.SelfSettings as PlayerSettings;
@@ -22,9 +30,10 @@ namespace EoE
 		private void Start()
 		{
 			TargetRotation = CurRotation = new Vector2(transform.eulerAngles.y, transform.eulerAngles.x);
-			instance = this;
+			Instance = this;
 			playerCamera.transform.localPosition = new Vector3(0, 0, -playerSettigns.CameraToPlayerDistance);
 			curOffset = GetOffset();
+			CameraFOV = playerSettigns.CameraBaseFOV;
 			AnchorToPlayer();
 		}
 

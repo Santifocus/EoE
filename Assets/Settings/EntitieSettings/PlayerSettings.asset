@@ -48,6 +48,7 @@ MonoBehaviour:
   CameraExtraZoomOnVertical: 0.5
   MaxEnemyTargetingDistance: 250
   CameraClampsWhenTargeting: {x: -30, y: 30}
+  CameraBaseFOV: 60
   EnduranceBars: 4
   EndurancePerBar: 25
   EnduranceRegen: 4
@@ -179,9 +180,11 @@ MonoBehaviour:
   EffectsHealthThreshold: 0.3
   EffectsOnDamageWhenBelowThreshold:
   - {fileID: 11400000, guid: 668a809c73c04d648ae6ae4e123f2f21, type: 2}
-  PlayerLandingVelocityThreshold: 10
+  PlayerLandingVelocityThreshold: 7
   EffectsOnPlayerLanding:
   - {fileID: 11400000, guid: ba451c2b316cc054ba26cb958cbb7f1a, type: 2}
   EffectsOnPlayerDodge:
   - {fileID: 11400000, guid: a1a241ff7cc72544e9475b9495c7ee11, type: 2}
   - {fileID: 11400000, guid: 16c048efcd73fc94fb2bd95baaa20137, type: 2}
+  EffectsOnEnemyKilled:
+  - {fileID: 11400000, guid: 634714252dd985c4a9434e87dac6225a, type: 2}

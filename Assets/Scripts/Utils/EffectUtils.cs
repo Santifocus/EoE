@@ -1,10 +1,10 @@
-﻿using EoE.Information;
-using EoE.Sounds;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
+using EoE.Information;
+using EoE.Sounds;
+using EoE.Entities;
 
 namespace EoE.Utils
 {
@@ -528,19 +528,17 @@ namespace EoE.Utils
 		private static float BaseFixedDeltaTime;
 		private static List<TimeDilationEffect> AllTimeDilationsEffects = new List<TimeDilationEffect>();
 		private static Coroutine TimeDilationCoroutine = null;
-		public static float DilateTime(int dominanceIndex, float targetSpeed, float timeIn, float timeStay, bool deleteOtherDilations = false, float? timeOut = null)
+		public static void DilateTime(int dominanceIndex, float targetSpeed, float timeIn, float timeStay, bool deleteOtherDilations = false, float? timeOut = null)
 		{
 			if (deleteOtherDilations)
 			{
 				AllTimeDilationsEffects = new List<TimeDilationEffect>();
 			}
 			AllTimeDilationsEffects.Add(new TimeDilationEffect(dominanceIndex, Mathf.Max(0.001f, targetSpeed), timeIn, timeStay, timeOut));
-			float totalTime = AllTimeDilationsEffects[AllTimeDilationsEffects.Count - 1].totalTime;
 			if (TimeDilationCoroutine == null)
 			{
 				TimeDilationCoroutine = Instance.StartCoroutine(Instance.DilateTimeC());
 			}
-			return totalTime;
 		}
 		public static void DilateTime(TimeDilation info)
 		{
@@ -575,7 +573,7 @@ namespace EoE.Utils
 					}
 				}
 				if (AllTimeDilationsEffects.Count == 0)
-					continue;
+					break;
 
 				float targetTimeScale = AllTimeDilationsEffects[targetIndex].GetTimeScale();
 				Time.timeScale = targetTimeScale;
@@ -622,6 +620,110 @@ namespace EoE.Utils
 				{
 					float fractTime = passedTime - (timeIn + timeStay);
 					return 1 + (1 - fractTime / timeOut) * scaleDif;
+				}
+			}
+		}
+		#endregion
+		#region CameraFOVWarp
+		public static int HighestCameraFOVWarpDominanceIndex;
+		private static List<CameraFOVWarpEffect> AllCameraFOVWarpEffects = new List<CameraFOVWarpEffect>();
+		private static Coroutine CameraFOVWarpCoroutine = null;
+		private const float LERP_FOV_SPEED = 10;
+		public static void WarpCameraFOV(int dominanceIndex, float targetFOV, float timeIn, float timeStay, float timeOut, bool overwriteOtherFOVWarps)
+		{
+			if (overwriteOtherFOVWarps)
+			{
+				AllCameraFOVWarpEffects = new List<CameraFOVWarpEffect>();
+			}
+			AllCameraFOVWarpEffects.Add(new CameraFOVWarpEffect(dominanceIndex, targetFOV, timeIn, timeStay, timeOut));
+			if (CameraFOVWarpCoroutine == null)
+			{
+				CameraFOVWarpCoroutine = Instance.StartCoroutine(Instance.WarpCameraFOVC());
+			}
+		}
+		public static void WarpCameraFOV(CameraFOVWarp info)
+		{
+			WarpCameraFOV(info.Dominance, info.TargetFOV, info.TimeIn, info.TimeStay, info.TimeOut, info.OverwriteOtherFOVWarps);
+		}
+		private IEnumerator WarpCameraFOVC()
+		{
+			while(true)
+			{
+				yield return new WaitForEndOfFrame();
+				if (GameController.GameIsPaused)
+					continue;
+
+				if (AllCameraFOVWarpEffects.Count > 0)
+				{
+					HighestCameraFOVWarpDominanceIndex = -1;
+					int targetIndex = 0;
+					for (int i = 0; i < AllCameraFOVWarpEffects.Count; i++)
+					{
+						AllCameraFOVWarpEffects[i].passedTime += Time.deltaTime;
+						if (AllCameraFOVWarpEffects[i].passedTime >= AllCameraFOVWarpEffects[i].totalTime)
+						{
+							AllCameraFOVWarpEffects.RemoveAt(i);
+							i--;
+						}
+						else
+						{
+							if (HighestCameraFOVWarpDominanceIndex < AllCameraFOVWarpEffects[i].dominanceIndex)
+							{
+								HighestCameraFOVWarpDominanceIndex = AllCameraFOVWarpEffects[i].dominanceIndex;
+								targetIndex = i;
+							}
+						}
+					}
+
+					if (AllCameraFOVWarpEffects.Count == 0)
+						continue;
+
+					PlayerCameraController.CameraFOV = Mathf.Lerp(PlayerCameraController.CameraFOV, AllCameraFOVWarpEffects[targetIndex].GetFOV(), LERP_FOV_SPEED * Time.deltaTime);
+				}
+				else
+				{
+					PlayerCameraController.CameraFOV = Mathf.Lerp(PlayerCameraController.CameraFOV, Player.PlayerSettings.CameraBaseFOV, LERP_FOV_SPEED * Time.deltaTime);
+					if (Mathf.Abs(Player.PlayerSettings.CameraBaseFOV - PlayerCameraController.CameraFOV) < 0.5f)
+						break;
+				}
+			}
+			PlayerCameraController.CameraFOV = Player.PlayerSettings.CameraBaseFOV;
+			CameraFOVWarpCoroutine = null;
+		}
+		private class CameraFOVWarpEffect
+		{
+			public int dominanceIndex;
+			public float targetFOV;
+			public float timeIn;
+			public float timeStay;
+			public float timeOut;
+			public float totalTime => timeIn + timeStay + timeOut;
+			public float passedTime;
+
+			private float dif => targetFOV - Player.PlayerSettings.CameraBaseFOV;
+			public CameraFOVWarpEffect(int dominanceIndex, float targetFOV, float timeIn, float timeStay, float timeOut)
+			{
+				this.dominanceIndex = dominanceIndex;
+				this.targetFOV = targetFOV;
+				this.timeIn = timeIn;
+				this.timeStay = timeStay;
+				this.timeOut = timeOut;
+				passedTime = 0;
+			}
+			public float GetFOV()
+			{
+				if (passedTime < timeIn)
+				{
+					return Player.PlayerSettings.CameraBaseFOV + (passedTime / timeIn) * dif;
+				}
+				else if (passedTime >= timeIn && passedTime < (timeStay + timeIn))
+				{
+					return targetFOV;
+				}
+				else //passedTime >= timeStay + timeIn
+				{
+					float fractTime = passedTime - (timeIn + timeStay);
+					return Player.PlayerSettings.CameraBaseFOV + (1 - fractTime / timeOut) * dif;
 				}
 			}
 		}

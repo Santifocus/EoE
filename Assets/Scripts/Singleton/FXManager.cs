@@ -21,6 +21,7 @@ namespace EoE
 			EventManager.PlayerDodgeEvent += PlayerDodged;
 			EventManager.PlayerCausedDamageEvent += PlayerCausedDamage;
 			EventManager.PlayerLevelupEvent += PlayerLevelUp;
+			EventManager.EntitieDiedEvent += EnemyKilled;
 		}
 		private void OnDestroy()
 		{
@@ -29,6 +30,7 @@ namespace EoE
 			EventManager.PlayerDodgeEvent -= PlayerDodged;
 			EventManager.PlayerCausedDamageEvent -= PlayerCausedDamage;
 			EventManager.PlayerLevelupEvent -= PlayerLevelUp;
+			EventManager.EntitieDiedEvent -= EnemyKilled;
 		}
 		private void PlayerTookDamage(float causedDamage, float? knockBack)
 		{
@@ -72,6 +74,16 @@ namespace EoE
 			for (int i = 0; i < playerSettings.EffectsOnPlayerDodge.Length; i++)
 			{
 				PlayFX(playerSettings.EffectsOnPlayerDodge[i], Player.Instance.transform);
+			}
+		}
+		private void EnemyKilled(Entitie killed, Entitie killer)
+		{
+			if (killer is Player)
+			{
+				for (int i = 0; i < playerSettings.EffectsOnEnemyKilled.Length; i++)
+				{
+					PlayFX(playerSettings.EffectsOnEnemyKilled[i], Player.Instance.transform);
+				}
 			}
 		}
 		private void PlayerCausedDamage(Entitie receiver, bool wasCrit)
@@ -124,6 +136,10 @@ namespace EoE
 			else if (effect is TimeDilation)
 			{
 				EffectUtils.DilateTime(effect as TimeDilation);
+			}
+			else if (effect is CameraFOVWarp)
+			{
+				EffectUtils.WarpCameraFOV(effect as CameraFOVWarp);
 			}
 			else if (effect is SoundEffect)
 			{
