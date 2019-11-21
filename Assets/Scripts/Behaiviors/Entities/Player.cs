@@ -266,6 +266,7 @@ namespace EoE.Entities
 		public void ChangeEndurance(ChangeInfo change)
 		{
 			ChangeInfo.ChangeResult changeResult = new ChangeInfo.ChangeResult(change, this, false);
+
 			if (changeResult.finalChangeAmount > 0)
 			{
 				recentlyUsedEndurance = true;
@@ -452,7 +453,7 @@ namespace EoE.Entities
 				if (curEndurance >= PlayerSettings.JumpEnduranceCost)
 				{
 					Jump();
-					ChangeEndurance(new ChangeInfo(this, CauseType.Magic, PlayerSettings.JumpEnduranceCost, false));
+					ChangeEndurance(new ChangeInfo(this, CauseType.Magic, TargetStat.Endurance, PlayerSettings.JumpEnduranceCost));
 				}
 			}
 		}
@@ -495,7 +496,7 @@ namespace EoE.Entities
 			float damageAmount = GameController.CurrentGameSettings.FallDamageCurve.Evaluate(velDif);
 
 			if (damageAmount > 0)
-				ChangeHealth(new ChangeInfo(null, CauseType.Physical, ElementType.None, actuallWorldPosition, Vector3.up, damageAmount, false));
+				ChangeHealth(new ChangeInfo(null, CauseType.Physical, ElementType.None, TargetStat.Health, actuallWorldPosition, Vector3.up, damageAmount, false));
 		}
 		private void PlayerMoveControl()
 		{
@@ -525,7 +526,7 @@ namespace EoE.Entities
 
 				if (curEndurance >= runCost)
 				{
-					ChangeEndurance(new ChangeInfo(this, CauseType.Magic, runCost, false));
+					ChangeEndurance(new ChangeInfo(this, CauseType.Magic, TargetStat.Endurance, runCost));
 				}
 				else
 				{
@@ -538,7 +539,7 @@ namespace EoE.Entities
 
 				if (curEndurance >= runCost)
 				{
-					ChangeEndurance(new ChangeInfo(this, CauseType.Magic, runCost, false));
+					ChangeEndurance(new ChangeInfo(this, CauseType.Magic, TargetStat.Endurance, runCost));
 					running = curStates.Running = true;
 				}
 			}
@@ -574,7 +575,7 @@ namespace EoE.Entities
 			if (InputController.Dodge.Down && !currentlyDodging && curEndurance >= PlayerSettings.DodgeEnduranceCost)
 			{
 				EventManager.PlayerDodgeInvoke();
-				ChangeEndurance(new ChangeInfo(this, CauseType.Magic, PlayerSettings.DodgeEnduranceCost, false));
+				ChangeEndurance(new ChangeInfo(this, CauseType.Magic, TargetStat.Endurance, PlayerSettings.DodgeEnduranceCost));
 				StartCoroutine(DodgeCoroutine());
 			}
 		}
@@ -986,7 +987,7 @@ namespace EoE.Entities
 				float cost = style.info.enduranceMultiplier * equipedWeapon.baseEnduranceDrain;
 				if (curEndurance >= cost)
 				{
-					ChangeEndurance(new ChangeInfo(this, CauseType.Magic, cost, false));
+					ChangeEndurance(new ChangeInfo(this, CauseType.Magic, TargetStat.Endurance, cost));
 				}
 				else
 				{

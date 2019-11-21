@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98f07595559e1094a9992f06095cf8b0, type: 3}
   m_Name: ManaPotion
   m_EditorClassIdentifier: 
-  ItemName: Endurance Potion
+  ItemName: Mana Potion
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 10

@@ -189,7 +189,7 @@ namespace EoE.Entities
 					float regenAmount = SelfSettings.HealthRegen * GameController.CurrentGameSettings.SecondsPerEntititeRegen * (inCombat ? SelfSettings.HealthRegenInCombatMultiplier : 1);
 					if (regenAmount > 0)
 					{
-						ChangeInfo basis = new ChangeInfo(this, CauseType.Heal, -regenAmount);
+						ChangeInfo basis = new ChangeInfo(this, CauseType.Heal, TargetStat.Health, -regenAmount);
 						ChangeInfo.ChangeResult regenResult = new ChangeInfo.ChangeResult(basis, this, true, true);
 						curHealth = Mathf.Min(curMaxHealth, curHealth - regenResult.finalChangeAmount);
 
@@ -259,11 +259,11 @@ namespace EoE.Entities
 						nonPermanentBuffs[i].DOTCooldowns[j] += cd;
 
 						if(nonPermanentBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Health)
-							ChangeHealth(new ChangeInfo(nonPermanentBuffs[i].Applier, CauseType.DOT, nonPermanentBuffs[i].Base.DOTs[j].Element, actuallWorldPosition, Vector3.up, cd * nonPermanentBuffs[i].Base.DOTs[j].BaseDamage, false));
+							ChangeHealth(new ChangeInfo(nonPermanentBuffs[i].Applier, CauseType.DOT, nonPermanentBuffs[i].Base.DOTs[j].Element, TargetStat.Health, actuallWorldPosition, Vector3.up, cd * nonPermanentBuffs[i].Base.DOTs[j].BaseDamage, false));
 						else if (nonPermanentBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Mana)
-							ChangeMana(new ChangeInfo(nonPermanentBuffs[i].Applier, CauseType.DOT, cd * nonPermanentBuffs[i].Base.DOTs[j].BaseDamage, false));
+							ChangeMana(new ChangeInfo(nonPermanentBuffs[i].Applier, CauseType.DOT, TargetStat.Mana, cd * nonPermanentBuffs[i].Base.DOTs[j].BaseDamage));
 						else if(this is Player)//TargetStat.Endurance
-							(this as Player).ChangeEndurance(new ChangeInfo(nonPermanentBuffs[i].Applier, CauseType.DOT, cd * nonPermanentBuffs[i].Base.DOTs[j].BaseDamage, false));
+							(this as Player).ChangeEndurance(new ChangeInfo(nonPermanentBuffs[i].Applier, CauseType.DOT, TargetStat.Endurance, cd * nonPermanentBuffs[i].Base.DOTs[j].BaseDamage));
 					}
 				}
 				if (nonPermanentBuffs[i].RemainingTime <= 0)
@@ -564,11 +564,11 @@ namespace EoE.Entities
 						permanentBuffs[i].DOTCooldowns[j] += cd;
 
 						if (permanentBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Health)
-							ChangeHealth(new ChangeInfo(permanentBuffs[i].Applier, CauseType.DOT, permanentBuffs[i].Base.DOTs[j].Element, actuallWorldPosition, Vector3.up, cd * permanentBuffs[i].Base.DOTs[j].BaseDamage, false));
+							ChangeHealth(new ChangeInfo(permanentBuffs[i].Applier, CauseType.DOT, permanentBuffs[i].Base.DOTs[j].Element, TargetStat.Health, actuallWorldPosition, Vector3.up, cd * permanentBuffs[i].Base.DOTs[j].BaseDamage, false));
 						else if (permanentBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Mana)
-							ChangeMana(new ChangeInfo(permanentBuffs[i].Applier, CauseType.DOT, cd * permanentBuffs[i].Base.DOTs[j].BaseDamage, false));
+							ChangeMana(new ChangeInfo(permanentBuffs[i].Applier, CauseType.DOT, TargetStat.Mana, cd * permanentBuffs[i].Base.DOTs[j].BaseDamage));
 						else if (this is Player)//TargetStat.Endurance
-							(this as Player).ChangeEndurance(new ChangeInfo(permanentBuffs[i].Applier, CauseType.DOT, cd * permanentBuffs[i].Base.DOTs[j].BaseDamage, false));
+							(this as Player).ChangeEndurance(new ChangeInfo(permanentBuffs[i].Applier, CauseType.DOT, TargetStat.Endurance, cd * permanentBuffs[i].Base.DOTs[j].BaseDamage));
 					}
 				}
 			}

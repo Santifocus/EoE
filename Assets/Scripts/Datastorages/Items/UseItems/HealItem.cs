@@ -1,4 +1,5 @@
 ﻿using EoE.Entities;
+using UnityEngine;
 
 namespace EoE.Information
 {
@@ -20,15 +21,15 @@ namespace EoE.Information
 
 				if (t == HealTargetType.Health)
 				{
-					user.ChangeHealth(new ChangeInfo(user, amount > 0 ? CauseType.Magic : CauseType.Heal, amount));
+					user.ChangeHealth(new ChangeInfo(user, amount > 0 ? CauseType.Magic : CauseType.Heal, TargetStat.Health, amount));
 				}
 				else if (t == HealTargetType.Mana)
 				{
-					user.ChangeMana(new ChangeInfo(user, CauseType.Magic, amount, false));
+					user.ChangeMana(new ChangeInfo(user, amount > 0 ? CauseType.Magic : CauseType.Heal, TargetStat.Mana, amount));
 				}
 				else //t == HealTargetType.Endurance
 				{
-					(user as Player).ChangeEndurance(new ChangeInfo(user, CauseType.Magic, amount, false));
+					(user as Player).ChangeEndurance(new ChangeInfo(user, amount > 0 ? CauseType.Magic : CauseType.Heal, TargetStat.Endurance, amount));
 				}
 			}
 		}

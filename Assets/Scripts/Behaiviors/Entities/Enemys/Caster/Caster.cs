@@ -22,7 +22,7 @@ namespace EoE.Entities
 			if (!isChargingSpell && castCooldown <= 0 && curMana >= settings.ProjectileManaCost)
 			{
 				StartCoroutine(ChargeSpell());
-				ChangeMana(new ChangeInfo(this, CauseType.Magic, settings.ProjectileManaCost, false));
+				ChangeMana(new ChangeInfo(this, CauseType.Magic, TargetStat.Mana, settings.ProjectileManaCost));
 			}
 		}
 		private IEnumerator ChargeSpell()

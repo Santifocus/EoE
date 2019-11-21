@@ -1,4 +1,5 @@
 ﻿using EoE.Entities;
+using EoE.Information;
 using EoE.Utils;
 using System.Collections.Generic;
 using UnityEngine;
@@ -61,7 +62,7 @@ namespace EoE.Weapons
 				knockBackAmount = null;
 			Vector3 impactDirection = (hitEntitie.actuallWorldPosition - Player.Instance.transform.position).normalized;
 
-			hitEntitie.ChangeHealth(new Information.ChangeInfo(Player.Instance, Information.CauseType.Physical, Player.Instance.PlayerWeapon.element, hitPos, impactDirection, damageAmount, wasCrit, knockBackAmount));
+			hitEntitie.ChangeHealth(new Information.ChangeInfo(Player.Instance, Information.CauseType.Physical, Player.Instance.PlayerWeapon.element, TargetStat.Health, hitPos, impactDirection, damageAmount, wasCrit, knockBackAmount));
 
 			if (!Player.Instance.activeAttack.animationInfo.penetrateEntities)
 				Player.Instance.CancelAttackAnimation();

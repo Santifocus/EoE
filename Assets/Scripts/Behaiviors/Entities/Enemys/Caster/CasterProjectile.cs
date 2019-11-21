@@ -30,7 +30,7 @@ namespace EoE.Weapons
 				if (hitPlayer)
 				{
 					float? knockBack = data.ProjectileKnockback > 0 ? ((float?)data.ProjectileKnockback) : null;
-					hitPlayer.ChangeHealth(new ChangeInfo(parent, CauseType.Magic, data.ProjectileElement, coll.ClosestPoint(hitPlayer.actuallWorldPosition), transform.forward, data.BaseMagicDamage * data.ProjectileDamageMultiplier, Random.value < data.ProjectileCritChance, knockBack));
+					hitPlayer.ChangeHealth(new ChangeInfo(parent, CauseType.Magic, data.ProjectileElement, TargetStat.Health, coll.ClosestPoint(hitPlayer.actuallWorldPosition), transform.forward, data.BaseMagicDamage * data.ProjectileDamageMultiplier, Random.value < data.ProjectileCritChance, knockBack));
 
 					ExplodeProjectile();
 				}
