@@ -16,9 +16,9 @@ MonoBehaviour:
   MassCenter: {x: 0, y: 0, z: 0}
   EntitieElement: 4
   PossibleDropsTable: {fileID: 11400000, guid: d3bb8e598d9ed604b8fed58e3635e765, type: 2}
-  SoulWorth: 10
+  SoulWorth: 4
   BaseAttackDamage: 3
-  BaseMagicDamage: 15
+  BaseMagicDamage: 30
   BaseDefense: 2
   Health: 50
   DoHealthRegen: 0
@@ -37,7 +37,7 @@ MonoBehaviour:
   MoveAcceleration: 10
   NoMoveDeceleration: 15
   InAirAccelerationMultiplier: 0.3
-  AttackRange: 17
+  AttackRange: 20
   AttackKnockBack: 3
   CritChance: 0
   SightRange: 20
@@ -57,9 +57,9 @@ MonoBehaviour:
   ProjectileKnockback: 0
   ProjectileCritChance: 0
   ProjectileManaCost: 5
-  ProjectileFlightSpeed: 25
+  ProjectileFlightSpeed: 35
   ProjectileSpellCooldown: 2
-  ProjectileHitboxSize: 1.5
+  ProjectileHitboxSize: 2
   ProjectileSpawnOffset: {x: 0, y: 2, z: 0}
   ProjectilePrefab: {fileID: 8685777211475644402, guid: 4cab2cd482fa3294c90e4af37620fdf1,
     type: 3}

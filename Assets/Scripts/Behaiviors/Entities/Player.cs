@@ -380,7 +380,7 @@ namespace EoE.Entities
 		}
 		private void ApplyGravity(float scale = 1)
 		{
-			float lowerFallThreshold = Physics.gravity.y / 3;
+			float lowerFallThreshold = Physics.gravity.y / 2;
 			float force = scale * Physics.gravity.y * Time.fixedDeltaTime;
 
 			if (!charController.isGrounded || totalVerticalVelocity > 0)

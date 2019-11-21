@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: CrawlerDropTable
   m_EditorClassIdentifier: 
   PossibleDrops:
-  - Drop: {fileID: 11400000, guid: 2ba98f01a544715419f24f7d4c8b7f7b, type: 2}
+  - Drop: {fileID: 11400000, guid: f64f815518c407749858bddca8bf5ac0, type: 2}
     MinDropAmount: 1
-    MaxDropAmount: 4
+    MaxDropAmount: 3
     DropChance: 1
   - Drop: {fileID: 11400000, guid: cc8b9e7eb411f0f47863caffd0450432, type: 2}
     MinDropAmount: 1

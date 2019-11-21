@@ -81,6 +81,7 @@ namespace EoE.Entities
 			GetColliderType();
 			SetupHealingParticles();
 			curStates = new EntitieState();
+			intendedRotation = curRotation = transform.eulerAngles.y;
 
 			nonPermanentBuffs = new List<BuffInstance>();
 			permanentBuffs = new List<BuffInstance>();

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c052f7ecb05a74341bdaa4bcfc91d92f, type: 3}
   m_Name: KillCameraFOVWarp
   m_EditorClassIdentifier: 
-  TargetFOV: 45
-  TimeIn: 0.2
-  TimeStay: 0.4
-  TimeOut: 0.1
+  TargetFOV: 40
+  TimeIn: 0.075
+  TimeStay: 0.35
+  TimeOut: 0.075
   Dominance: 1
   OverwriteOtherFOVWarps: 0

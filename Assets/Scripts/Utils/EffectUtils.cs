@@ -740,7 +740,7 @@ namespace EoE.Utils
 
 			soundPlayer.transform.position = target ? target.position + info.OffsetToTarget : info.OffsetToTarget;
 
-			soundPlayer.Setup(info.TargetSound, !info.Loop, multiplier);
+			soundPlayer.Setup(info, !info.Loop, multiplier);
 			if (info.FollowTarget)
 				soundPlayer.FollowTargetSetup(target, info.OffsetToTarget, info.OnParentDeathBehaivior, info.fadeOutTime);
 

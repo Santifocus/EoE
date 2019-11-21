@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c871e95794c1664eb6ab3b44ed21f55, type: 3}
-  m_Name: CritTimeDilation
+  m_Script: {fileID: 11500000, guid: aa0729519a808d449bdb777d2d35538b, type: 3}
+  m_Name: ChurchMusic
   m_EditorClassIdentifier: 
-  Scale: 0.2
-  TimeIn: 0.15
-  TimeStay: 0.55
-  TimeOut: 0.1
-  Dominance: 0
-  OverwriteOtherTimeDilations: 0
+  TargetSound: {fileID: 11400000, guid: f227c12f2c6511e49902a6b55f2a7d7d, type: 2}
+  OffsetToTarget: {x: 0, y: 0, z: 0}
+  Loop: 1
+  FollowTarget: 0
+  OnParentDeathBehaivior: 1
+  fadeOutTime: 0

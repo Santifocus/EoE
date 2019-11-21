@@ -17,6 +17,7 @@ namespace EoE
 		public static bool GameIsPaused { get => gameIsPaused; set => SetPauseGamestate(value); }
 
 		[SerializeField] private GameSettings gameSettings = default;
+		[SerializeField] private SoundEffect churchMusic = default;
 		public ItemDrop itemDropPrefab;
 
 		public Transform bgCanvas = default;
@@ -29,6 +30,7 @@ namespace EoE
 			{
 				Destroy(Instance.gameObject);
 			}
+			Utils.EffectUtils.PlaySound(churchMusic, null);
 			Instance = this;
 		}
 		private static void SetPauseGamestate(bool state)

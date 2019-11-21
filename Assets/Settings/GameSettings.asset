@@ -61,6 +61,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 19c607df5b2184f48858e875307dc35b, type: 2}
   - {fileID: 11400000, guid: 38b05306f76ea174382246126bd187fb, type: 2}
   - {fileID: 11400000, guid: 9c85170255a35614fba55ffc25478bf1, type: 2}
+  - {fileID: 11400000, guid: f227c12f2c6511e49902a6b55f2a7d7d, type: 2}
   DamageNumberLifeTime: 1
   ShowRegenNumbers: 1
   DamageNumberFlySpeed: 1

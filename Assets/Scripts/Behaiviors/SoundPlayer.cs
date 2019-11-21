@@ -19,25 +19,39 @@ namespace EoE.Sounds
 		private BehaiviorOnParentDeath onParentDeathBehaivior;
 		private float fadeOutTime;
 
-		public void Setup(Sound baseData, bool destroyOnFinish, float multiplier = 1)
+		public void Setup(SoundEffect effectData, bool destroyOnFinish, float multiplier = 1)
 		{
-			this.baseData = baseData;
 			this.multiplier = multiplier;
 
 			source = gameObject.AddComponent<AudioSource>();
-
+			source.loop = effectData.Loop;
 			source.playOnAwake = false;
+			source.Stop();
+			RetrieveData(effectData.TargetSound);
+
+			if (destroyOnFinish)
+				StartCoroutine(WaitForEnd());
+		}
+		public void Setup(Sound baseData, bool destroyOnFinish)
+		{
+			multiplier = 1;
+			source = gameObject.AddComponent<AudioSource>();
+			source.playOnAwake = false;
+			source.Stop();
+			RetrieveData(baseData);
+
+			if (destroyOnFinish)
+				StartCoroutine(WaitForEnd());
+		}
+		private void RetrieveData(Sound baseData)
+		{
+			this.baseData = baseData;
 			source.clip = baseData.clip;
 			source.pitch = baseData.pitch;
 			source.spatialBlend = baseData.spatialBlend;
 			source.volume = baseData.volume * multiplier;
 			source.priority = baseData.priority;
 			source.outputAudioMixerGroup = baseData.audioGroup;
-
-			source.Stop();
-
-			if (destroyOnFinish)
-				StartCoroutine(WaitForEnd());
 		}
 		public void FollowTargetSetup(Transform toFollow, Vector3 offset, BehaiviorOnParentDeath onParentDeathBehaivior, float fadeOutTime)
 		{
