@@ -9,12 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa0729519a808d449bdb777d2d35538b, type: 3}
-  m_Name: Eat_Item
+  m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
+  m_Name: Caster_Announcement
   m_EditorClassIdentifier: 
-  TargetSound: {fileID: 11400000, guid: b72d1784e4ccb9548a46dd8e0d815e53, type: 2}
+  ParticleMainObject: {fileID: 242155299197559482, guid: b5cc45401c8cd5645b046797b03383f9,
+    type: 3}
+  DestroyDelay: 3
   OffsetToTarget: {x: 0, y: 0, z: 0}
-  Loop: 0
-  FollowTarget: 0
-  OnParentDeathBehaivior: 1
-  fadeOutTime: 0
+  FollowTarget: 1
+  InheritRotationOfTarget: 0
+  OnTargetDeathBehaivior: 0
