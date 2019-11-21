@@ -630,11 +630,14 @@ namespace EoE.Utils
 		public static void PlaySound(SoundEffect info, Transform target)
 		{
 			SoundPlayer soundPlayer = (new GameObject(info.TargetSound.soundName + " Sound Player")).AddComponent<SoundPlayer>();
+			soundPlayer.transform.SetParent(Storage.SoundStorage);
 
-			soundPlayer.transform.SetParent((info.LocalEffect && target) ? target : Storage.SoundStorage);
 			soundPlayer.transform.position = target ? target.position + info.OffsetToTarget : info.OffsetToTarget;
 
 			soundPlayer.Setup(info.TargetSound, !info.Loop);
+			if (info.FollowTarget)
+				soundPlayer.FollowTargetSetup(target, info.OffsetToTarget, info.OnParentDeathBehaivior, info.fadeOutTime);
+
 			soundPlayer.Play();
 		}
 		#endregion
