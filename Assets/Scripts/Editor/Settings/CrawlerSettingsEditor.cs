@@ -7,15 +7,14 @@ namespace EoE.Information
 	[CustomEditor(typeof(CrawlerSettings), true), CanEditMultipleObjects]
 	public class CrawlerSettingsEditor : EnemySettingsEditor
 	{
-		private static bool VFXSettingsOpen;
 		protected override void CustomInspector()
 		{
 			base.CustomInspector();
 
-			FoldoutHeader("VFX Settings", ref VFXSettingsOpen);
+			FoldoutHeader("FX Settings", ref VFXSettingsOpen);
 			if (VFXSettingsOpen)
 			{
-				VFXSettingsArea();
+				FXSettingsArea();
 			}
 			EndFoldoutHeader();
 		}
@@ -29,7 +28,7 @@ namespace EoE.Information
 			FloatField(new GUIContent("Bash Distance"), ref settings.BashDistance);
 			FloatField(new GUIContent("ForceTranslationMultiplier", "When the Crawler hits the player he will give the current speed multiplied by this amount to the Player"), ref settings.ForceTranslationMultiplier);
 		}
-		private void VFXSettingsArea()
+		private void FXSettingsArea()
 		{
 			CrawlerSettings settings = target as CrawlerSettings;
 			FloatField(new GUIContent("Bash Announcement Delay", "If 'Bash Start' = T, then the BashAnnouncement will be played at 'T + Delay'"), ref settings.BashAnnouncementDelay);

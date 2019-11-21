@@ -28,7 +28,7 @@ namespace EoE.Weapons
 
 			//collider
 			int layer = -1;
-			int shifted = ConstantCollector.WEAPON_LAYER;
+			int shifted = ConstantCollector.WEAPON_LAYER_MASK;
 			for (; shifted > 0; layer++)
 				shifted = shifted >> 1;
 			newHitbox.gameObject.layer = layer;

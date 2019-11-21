@@ -19,7 +19,6 @@ namespace EoE.Entities
 
 		//Inspector variables
 		public Collider coll = default;
-		[SerializeField] protected Animator animationControl = default;
 
 		//Stats
 		public int EntitieLevel { get; protected set; }
@@ -727,7 +726,7 @@ namespace EoE.Entities
 				float dist = dif.magnitude;
 				Vector3 direction = dif / dist;
 
-				return !Physics.Raycast(PlayerCameraController.PlayerCamera.transform.position, direction, dist, ConstantCollector.TERRAIN_LAYER);
+				return !Physics.Raycast(PlayerCameraController.PlayerCamera.transform.position, direction, dist, ConstantCollector.TERRAIN_LAYER_MASK);
 			}
 			Vector3[] GetBoundPoints()
 			{

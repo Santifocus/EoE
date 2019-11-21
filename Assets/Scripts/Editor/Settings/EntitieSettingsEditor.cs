@@ -7,10 +7,11 @@ namespace EoE.Information
 	[CustomEditor(typeof(EntitieSettings), true), CanEditMultipleObjects]
 	public class EntitieSettingsEditor : ObjectSettingEditor
 	{
-		protected bool BaseSettingsOpen;
-		protected bool CombatSettingsOpen;
-		protected bool StatSettingsOpen;
-		protected bool MovementSettingsOpen;
+		protected static bool BaseSettingsOpen;
+		protected static bool CombatSettingsOpen;
+		protected static bool StatSettingsOpen;
+		protected static bool MovementSettingsOpen;
+		protected static bool VFXSettingsOpen;
 		protected override void CustomInspector()
 		{
 			FoldoutHeader("Base Settings", ref BaseSettingsOpen);

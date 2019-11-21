@@ -9,9 +9,9 @@ using EoE.UI;
 
 namespace EoE
 {
-	public class PlayerFXManager : MonoBehaviour
+	public class FXManager : MonoBehaviour
 	{
-		public static PlayerFXManager Instance { get; private set; }
+		public static FXManager Instance { get; private set; }
 		private PlayerSettings playerSettings => Player.PlayerSettings;
 		private void Start()
 		{
@@ -36,14 +36,14 @@ namespace EoE
 			{
 				for (int i = 0; i < playerSettings.EffectsOnReceiveDamage.Length; i++)
 				{
-					PlayFX(playerSettings.EffectsOnReceiveDamage[i]);
+					PlayFX(playerSettings.EffectsOnReceiveDamage[i], Player.Instance.transform);
 				}
 
 				if ((Player.Instance.curHealth - causedDamage) / Player.Instance.curMaxHealth < playerSettings.EffectsHealthThreshold)
 				{
 					for (int i = 0; i < playerSettings.EffectsOnDamageWhenBelowThreshold.Length; i++)
 					{
-						PlayFX(playerSettings.EffectsOnDamageWhenBelowThreshold[i]);
+						PlayFX(playerSettings.EffectsOnDamageWhenBelowThreshold[i], Player.Instance.transform);
 					}
 				}
 			}
@@ -52,7 +52,7 @@ namespace EoE
 			{
 				for (int i = 0; i < playerSettings.EffectsOnReceiveKnockback.Length; i++)
 				{
-					PlayFX(playerSettings.EffectsOnReceiveKnockback[i]);
+					PlayFX(playerSettings.EffectsOnReceiveKnockback[i], Player.Instance.transform);
 				}
 			}
 
@@ -63,7 +63,7 @@ namespace EoE
 			{
 				for (int i = 0; i < playerSettings.EffectsOnPlayerLanding.Length; i++)
 				{
-					PlayFX(playerSettings.EffectsOnPlayerLanding[i]);
+					PlayFX(playerSettings.EffectsOnPlayerLanding[i], Player.Instance.transform);
 				}
 			}
 		}
@@ -71,21 +71,21 @@ namespace EoE
 		{
 			for (int i = 0; i < playerSettings.EffectsOnPlayerDodge.Length; i++)
 			{
-				PlayFX(playerSettings.EffectsOnPlayerDodge[i]);
+				PlayFX(playerSettings.EffectsOnPlayerDodge[i], Player.Instance.transform);
 			}
 		}
 		private void PlayerCausedDamage(Entitie receiver, bool wasCrit)
 		{
 			for (int i = 0; i < playerSettings.EffectsOnCauseDamage.Length; i++)
 			{
-				PlayFX(playerSettings.EffectsOnCauseDamage[i]);
+				PlayFX(playerSettings.EffectsOnCauseDamage[i], Player.Instance.transform);
 			}
 
 			if (wasCrit)
 			{
 				for (int i = 0; i < playerSettings.EffectsOnCauseCrit.Length; i++)
 				{
-					PlayFX(playerSettings.EffectsOnCauseCrit[i]);
+					PlayFX(playerSettings.EffectsOnCauseCrit[i], Player.Instance.transform);
 				}
 			}
 		}
@@ -93,10 +93,10 @@ namespace EoE
 		{
 			for (int i = 0; i < playerSettings.EffectsOnLevelup.Length; i++)
 			{
-				PlayFX(playerSettings.EffectsOnLevelup[i]);
+				PlayFX(playerSettings.EffectsOnLevelup[i], Player.Instance.transform);
 			}
 		}
-		public static void PlayFX(FXInstance effect)
+		public static void PlayFX(FXInstance effect, Transform target)
 		{
 			if (GameController.GameIsPaused)
 				return;
@@ -127,11 +127,11 @@ namespace EoE
 			}
 			else if (effect is SoundEffect)
 			{
-				EffectUtils.PlaySound(effect as SoundEffect, Player.Instance.transform);
+				EffectUtils.PlaySound(effect as SoundEffect, target);
 			}
 			else if (effect is ParticleEffect)
 			{
-				EffectUtils.PlayParticleEffect(effect as ParticleEffect, Player.Instance.transform);
+				EffectUtils.PlayParticleEffect(effect as ParticleEffect, target);
 			}
 			else if (effect is DialogueInput)
 			{

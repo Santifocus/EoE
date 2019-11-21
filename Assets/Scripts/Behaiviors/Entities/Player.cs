@@ -24,6 +24,7 @@ namespace EoE.Entities
 
 		//Inspector variables
 		[Space(10)]
+		[SerializeField] private Animator animationControl = default;
 		[SerializeField] private PlayerSettings selfSettings = default;
 		[SerializeField] private Transform rightHand = default;
 		[SerializeField] private Weapon equipedWeapon = default;

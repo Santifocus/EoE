@@ -79,7 +79,7 @@ namespace EoE
 			RaycastHit hit;
 			float distance;
 
-			if (Physics.Raycast(transform.position, rayDir, out hit, playerSettigns.CameraToPlayerDistance, ConstantCollector.TERRAIN_LAYER))
+			if (Physics.Raycast(transform.position, rayDir, out hit, playerSettigns.CameraToPlayerDistance, ConstantCollector.TERRAIN_LAYER_MASK))
 			{
 				distance = -(transform.position - hit.point).magnitude;
 			}
