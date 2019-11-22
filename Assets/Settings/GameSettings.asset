@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 438e09642880d794aa53e804b27dbce9, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
+  debugEnabledInternal: 0
   WhenFallingExtraGravity: 1.5
   FallDamageCurve:
     serializedVersion: 2

@@ -62,6 +62,8 @@ MonoBehaviour:
   infoDisplayPrefab: {fileID: 1853090253180107011, guid: d2b701e839218634dbde96bd4ef15d33,
     type: 3}
   infoDisplayOffset: {x: 0, y: 2, z: 0}
+  amountColor: {r: 1, g: 0, b: 0, a: 1}
+  itemNameColor: {r: 0, g: 1, b: 1, a: 1}
 --- !u!54 &877910255125148309
 Rigidbody:
   m_ObjectHideFlags: 0

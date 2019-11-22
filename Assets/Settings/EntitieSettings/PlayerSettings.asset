@@ -167,13 +167,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 11060c91c24341947a8c373d641e5c86, type: 2}
   - {fileID: 11400000, guid: 9d9557ec007fa904aa2d0ef9f1ea3489, type: 2}
   - {fileID: 11400000, guid: 910d3349e1560ab4ba7478fa7a8e8876, type: 2}
+  - {fileID: 11400000, guid: 232ec3e310d97c14da2bad4c274560ee, type: 2}
   EffectsOnReceiveKnockback:
   - {fileID: 11400000, guid: b09700b6216eb874aab8d980440f121b, type: 2}
-  EffectsOnCauseDamage: []
+  EffectsOnCauseDamage:
+  - {fileID: 11400000, guid: e7eca44a4612acd40b0b90359694e612, type: 2}
   EffectsOnCauseCrit:
   - {fileID: 11400000, guid: 3c3f83d3e81eae144acbe5a6b02983d0, type: 2}
   - {fileID: 11400000, guid: e9a7041c1b96b544d9be0195facd23e7, type: 2}
   - {fileID: 11400000, guid: 6812b6ecf408ba8439c8e9f47922381b, type: 2}
+  - {fileID: 11400000, guid: e7eca44a4612acd40b0b90359694e612, type: 2}
   EffectsOnLevelup:
   - {fileID: 11400000, guid: 982aab948223d7044bfae67dc43bb77c, type: 2}
   - {fileID: 11400000, guid: 2a1f29303ceefa04d9d5508f74094d05, type: 2}
@@ -187,3 +190,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 16c048efcd73fc94fb2bd95baaa20137, type: 2}
   EffectsOnEnemyKilled:
   - {fileID: 11400000, guid: 634714252dd985c4a9434e87dac6225a, type: 2}
+  - {fileID: 11400000, guid: 214bf77e3d56f424c84ef37983b6e1f5, type: 2}

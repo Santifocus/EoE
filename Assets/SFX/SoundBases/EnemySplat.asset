@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 469f7b848055e6b4f804fc4855292c28, type: 3}
+  m_Name: EnemySplat
+  m_EditorClassIdentifier: 
+  soundName: EnemySplat
+  clip: {fileID: 8300000, guid: 58131363a4f998d43996465e58e2fe25, type: 3}
+  audioGroup: {fileID: 24300002, guid: b8b319c0096b4d34196070be7e374c0c, type: 2}
+  priority: 128
+  pitch: 0.75
+  volume: 0.7
+  spatialBlend: 0.371
+  scaleStyle: 1
