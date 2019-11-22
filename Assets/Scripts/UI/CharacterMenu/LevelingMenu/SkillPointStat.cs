@@ -80,6 +80,13 @@ namespace EoE.UI
 			newStatValue.color = changed ? changedColor : standardColor;
 		}
 
+		private void OnDisable()
+		{
+			StopAllCoroutines();
+			totalPoints.color = standardColor;
+			curStatValue.color = standardColor;
+		}
+
 		private IEnumerator ChangedCurrent()
 		{
 			for(int i = 0; i < recentlyChangedFlashCount; i++)

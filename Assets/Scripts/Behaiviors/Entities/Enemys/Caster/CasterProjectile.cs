@@ -44,9 +44,12 @@ namespace EoE.Weapons
 		private void ExplodeProjectile()
 		{
 			FXManager.PlayFX(data.ProjectileDestroyParticles, transform);
-			float toPlayerDist = (Player.Instance.actuallWorldPosition - transform.position).magnitude;
-			float multiplier = 1 - Mathf.Clamp01(toPlayerDist / data.MaxDistanceImpactShake);
-			FXManager.PlayFX(data.ProjectileImpactShake, transform, multiplier);
+			if (Player.Alive)
+			{
+				float toPlayerDist = (Player.Instance.actuallWorldPosition - transform.position).magnitude;
+				float multiplier = 1 - Mathf.Clamp01(toPlayerDist / data.MaxDistanceImpactShake);
+				FXManager.PlayFX(data.ProjectileImpactShake, transform, multiplier);
+			}
 			Destroy(gameObject);
 		}
 	}

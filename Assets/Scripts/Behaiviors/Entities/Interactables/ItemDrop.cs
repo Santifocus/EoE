@@ -45,7 +45,7 @@ namespace EoE.Entities
 		}
 		private void LateUpdate()
 		{
-			if (!isTarget)
+			if (!isTarget || !Player.Alive)
 				return;
 
 			infoDisplay.transform.position = transform.position + infoDisplayOffset;

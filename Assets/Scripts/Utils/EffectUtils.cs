@@ -36,6 +36,8 @@ namespace EoE.Utils
 			AllScreenColorEffects = new List<ColorScreenEffect>();
 			AllBlurScreenEffects = new List<BlurScreenEffect>();
 			AllTimeDilationsEffects = new List<TimeDilationEffect>();
+			AllTintScreenEffects = new List<TintScreenEffect>();
+			AllCameraFOVWarpEffects = new List<CameraFOVWarpEffect>();
 
 			Instance.ResetScreenEffectMat();
 			Gamepad.current.SetMotorSpeeds(0, 0);
@@ -53,10 +55,8 @@ namespace EoE.Utils
 		}
 		private void OnApplicationQuit()
 		{
-			Gamepad.current?.SetMotorSpeeds(0, 0);
-#if UNITY_EDITOR
 			ResetScreenEffectMat();
-#endif
+			Gamepad.current.SetMotorSpeeds(0, 0);
 		}
 		#endregion
 		#region ScreenShake

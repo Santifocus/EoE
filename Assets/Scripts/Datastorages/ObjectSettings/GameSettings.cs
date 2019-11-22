@@ -7,6 +7,18 @@ namespace EoE.Information
 {
 	public class GameSettings : ScriptableObject
 	{
+		public bool IsDebugEnabled
+		{
+			get
+			{
+#if UNITY_EDITOR
+				return debugEnabledInternal;
+#else
+				return false;
+#endif
+			}
+		}
+		public bool debugEnabledInternal = false;
 		//Entitie Velocity
 		public float WhenFallingExtraGravity = 0.5f;
 		public AnimationCurve FallDamageCurve = new AnimationCurve();

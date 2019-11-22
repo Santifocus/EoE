@@ -12,6 +12,7 @@ namespace EoE.Entities
 		public CasterSettings settings;
 		private bool isChargingSpell;
 		private float castCooldown;
+		private Vector3 aimPos;
 		protected override void EntitieUpdate()
 		{
 			if (castCooldown > 0)
@@ -29,7 +30,9 @@ namespace EoE.Entities
 		{
 			isChargingSpell = true;
 			float spellChargeTime = 0;
-			for(int i = 0; i < settings.CastingAnnouncement.Length; i++)
+
+			aimPos = Player.Alive ? player.actuallWorldPosition : (actuallWorldPosition + settings.ProjectileSpawnOffset + Random.insideUnitSphere * 3);
+			for (int i = 0; i < settings.CastingAnnouncement.Length; i++)
 			{
 				FXManager.PlayFX(settings.CastingAnnouncement[i], transform);
 			}
@@ -37,6 +40,11 @@ namespace EoE.Entities
 			{
 				yield return new WaitForEndOfFrame();
 				spellChargeTime += Time.deltaTime;
+				if (Player.Alive)
+					aimPos = Vector3.Lerp(aimPos, player.actuallWorldPosition, Time.deltaTime * 5);
+
+				if(GameController.CurrentGameSettings.IsDebugEnabled)
+					Debug.DrawLine(actuallWorldPosition + settings.ProjectileSpawnOffset, aimPos, Color.red, Time.deltaTime * 1.1f);
 			}
 			CreateProjectile();
 			isChargingSpell = false;
@@ -45,7 +53,7 @@ namespace EoE.Entities
 		{
 			CasterProjectile projectile = Instantiate(settings.ProjectilePrefab, Storage.ProjectileStorage);
 			projectile.transform.position = actuallWorldPosition + settings.ProjectileSpawnOffset;
-			projectile.Setup(settings, this, (player.actuallWorldPosition - (actuallWorldPosition + settings.ProjectileSpawnOffset)).normalized);
+			projectile.Setup(settings, this, (aimPos - (actuallWorldPosition + settings.ProjectileSpawnOffset)).normalized);
 			castCooldown = settings.ProjectileSpellCooldown;
 
 			FXManager.PlayFX(settings.ProjectileFlyParticles, projectile.transform);

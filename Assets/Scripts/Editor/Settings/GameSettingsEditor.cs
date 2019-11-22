@@ -28,6 +28,8 @@ namespace EoE.Information
 		}
 		private void CustomInspector()
 		{
+			BoolField(new GUIContent("Enable Debug"), ref (target as GameSettings).debugEnabledInternal);
+
 			FoldoutHeader("Entitie Velocity Settings", ref EntititeVelocitySettingsOpen);
 			if (EntititeVelocitySettingsOpen)
 				EntitieVelocityArea();
