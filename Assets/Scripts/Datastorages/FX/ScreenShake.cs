@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace EoE.Information
 {
-	public class ScreenShake : FXInstance
+	public class ScreenShake : FXObject
 	{
 		[Tooltip("How long should the ScreenShake last?")]
 		public float Time = 0.25f;

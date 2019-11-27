@@ -64,23 +64,25 @@ namespace EoE.Utils
 		private const float UN_SHAKE_SPEED = 20;
 		private static Coroutine ShakeScreenCoroutine = null;
 		private static List<ScreenShakeInfo> AllScreenShakes = new List<ScreenShakeInfo>();
-		public static void ShakeScreen(float lenght, float axisIntensity, float angleIntensity, Vector3? customAxisMultiplier = null, Vector3? customAngleMultiplier = null)
+		public static FXInstance ShakeScreen(float lenght, float axisIntensity, float angleIntensity, Vector3? customAxisMultiplier = null, Vector3? customAngleMultiplier = null)
 		{
-			AllScreenShakes.Add(new ScreenShakeInfo(
+			ScreenShakeInfo newScreenShakeInfo = new ScreenShakeInfo(
 				lenght,
 				axisIntensity,
 				angleIntensity,
 				axisIntensity * (customAxisMultiplier.HasValue ? customAxisMultiplier.Value : Vector3.one),
-				angleIntensity * (customAngleMultiplier.HasValue ? customAngleMultiplier.Value : Vector3.one)));
+				angleIntensity * (customAngleMultiplier.HasValue ? customAngleMultiplier.Value : Vector3.one));
 
+			AllScreenShakes.Add(newScreenShakeInfo);
 			if (ShakeScreenCoroutine == null)
 			{
 				ShakeScreenCoroutine = Instance.StartCoroutine(Instance.ShakeScreenC());
 			}
+			return newScreenShakeInfo;
 		}
-		public static void ShakeScreen(ScreenShake info, float multiplier = 1)
+		public static FXInstance ShakeScreen(ScreenShake info, float multiplier = 1)
 		{
-			ShakeScreen(info.Time, info.AxisIntensity * multiplier, info.AngleIntensity * multiplier, info.CustomAxisMultiplier, info.CustomAngleMultiplier);
+			return ShakeScreen(info.Time, info.AxisIntensity * multiplier, info.AngleIntensity * multiplier, info.CustomAxisMultiplier, info.CustomAngleMultiplier);
 		}
 		private IEnumerator ShakeScreenC()
 		{
@@ -99,7 +101,7 @@ namespace EoE.Utils
 					for (int i = 0; i < AllScreenShakes.Count; i++)
 					{
 						AllScreenShakes[i].remainingTime -= Time.deltaTime;
-						if (AllScreenShakes[i].remainingTime <= 0)
+						if (AllScreenShakes[i].remainingTime <= 0 || AllScreenShakes[i].Canceled)
 						{
 							AllScreenShakes.RemoveAt(i);
 							i--;
@@ -145,8 +147,9 @@ namespace EoE.Utils
 				cameraShakeCore.localEulerAngles = new Vector3((Random.value - 0.5f) * angleIntensity, (Random.value - 0.5f) * angleIntensity, (Random.value - 0.5f) * angleIntensity);
 			}
 		}
-		private class ScreenShakeInfo
+		private class ScreenShakeInfo : FXInstance
 		{
+			public override FXType Type => FXType.Player;
 			public float remainingTime;
 			public float axisIntensity;
 			public float angleIntensity;
@@ -167,23 +170,25 @@ namespace EoE.Utils
 		#region Rumble
 		private static List<RumbleInfo> AllRumbles = new List<RumbleInfo>();
 		private static Coroutine RumbleCoroutine = null;
-		public static void RumbleController(float totalTime, float leftMotorIntensityStart, float rightMotorIntensityStart, float? leftMotorIntensityEnd = null, float? rightMotorIntensityEnd = null)
+		public static FXInstance RumbleController(float totalTime, float leftMotorIntensityStart, float rightMotorIntensityStart, float? leftMotorIntensityEnd = null, float? rightMotorIntensityEnd = null)
 		{
-			AllRumbles.Add(new RumbleInfo(
+			RumbleInfo newRumbleInfo = new RumbleInfo(
 				totalTime,
 				leftMotorIntensityStart,
 				rightMotorIntensityStart,
 				leftMotorIntensityEnd,
-				rightMotorIntensityEnd));
+				rightMotorIntensityEnd);
 
+			AllRumbles.Add(newRumbleInfo);
 			if (RumbleCoroutine == null)
 			{
 				RumbleCoroutine = Instance.StartCoroutine(Instance.RumbleC());
 			}
+			return newRumbleInfo;
 		}
-		public static void RumbleController(ControllerRumble info, float multiplier = 1)
+		public static FXInstance RumbleController(ControllerRumble info, float multiplier = 1)
 		{
-			RumbleController(info.Time, info.LeftStartIntensity * multiplier, info.RightStartIntensity * multiplier, info.LeftEndIntensity * multiplier, info.RightEndIntensity * multiplier);
+			return RumbleController(info.Time, info.LeftStartIntensity * multiplier, info.RightStartIntensity * multiplier, info.LeftEndIntensity * multiplier, info.RightEndIntensity * multiplier);
 		}
 		private IEnumerator RumbleC()
 		{
@@ -205,7 +210,7 @@ namespace EoE.Utils
 					AllRumbles[i].remainingTime -= Time.deltaTime;
 					(float left, float right) = AllRumbles[i].GetRumbleIntensitys();
 
-					if (AllRumbles[i].remainingTime <= 0)
+					if (AllRumbles[i].remainingTime <= 0 || AllRumbles[i].Canceled)
 					{
 						AllRumbles.RemoveAt(i);
 						i--;
@@ -235,8 +240,9 @@ namespace EoE.Utils
 			RumbleCoroutine = null;
 		}
 
-		private class RumbleInfo
+		private class RumbleInfo : FXInstance
 		{
+			public override FXType Type => FXType.Player;
 			public float totalTime;
 			public float remainingTime;
 
@@ -261,6 +267,7 @@ namespace EoE.Utils
 				this.leftMotorIntensityEnd = Mathf.Clamp01(this.leftMotorIntensityEnd);
 				this.rightMotorIntensityEnd = Mathf.Clamp01(this.rightMotorIntensityEnd);
 			}
+
 			public (float, float) GetRumbleIntensitys()
 			{
 				//Gradient of 1 to 0
@@ -275,17 +282,20 @@ namespace EoE.Utils
 		#region ColorScreen
 		private static List<ColorScreenEffect> AllScreenColorEffects = new List<ColorScreenEffect>();
 		private static Coroutine ColorScreenCoroutine;
-		public static void ColorScreen(Color col, float lenght, float depth = 0.2f)
+		public static FXInstance ColorScreen(Color col, float lenght, float depth = 0.2f)
 		{
-			AllScreenColorEffects.Add(new ColorScreenEffect(col, lenght, Mathf.Clamp01(depth * 2) / 2));
+			ColorScreenEffect newColorScreenEffect = new ColorScreenEffect(col, lenght, Mathf.Clamp01(depth * 2) / 2);
+
+			AllScreenColorEffects.Add(newColorScreenEffect);
 			if (ColorScreenCoroutine == null)
 			{
 				ColorScreenCoroutine = Instance.StartCoroutine(Instance.ColorScreenC());
 			}
+			return newColorScreenEffect;
 		}
-		public static void ColorScreenBorder(ScreenBorderColor info, float multiplier = 1)
+		public static FXInstance ColorScreenBorder(ScreenBorderColor info, float multiplier = 1)
 		{
-			ColorScreen(info.Color, info.Time, info.Depth * multiplier);
+			return ColorScreen(info.Color, info.Time, info.Depth * multiplier);
 		}
 		private IEnumerator ColorScreenC()
 		{
@@ -300,7 +310,7 @@ namespace EoE.Utils
 				for (int i = 0; i < AllScreenColorEffects.Count; i++)
 				{
 					AllScreenColorEffects[i].passedTime += Time.deltaTime;
-					if (AllScreenColorEffects[i].passedTime >= AllScreenColorEffects[i].totalTime)
+					if (AllScreenColorEffects[i].passedTime >= AllScreenColorEffects[i].totalTime || AllScreenColorEffects[i].Canceled)
 					{
 						AllScreenColorEffects.RemoveAt(i);
 						i--;
@@ -325,8 +335,9 @@ namespace EoE.Utils
 			screenEffectMaterial.SetColor("_Color", Color.clear);
 			ColorScreenCoroutine = null;
 		}
-		private class ColorScreenEffect
+		private class ColorScreenEffect : FXInstance
 		{
+			public override FXType Type => FXType.Player;
 			public Color col;
 			public float totalTime;
 			public float depth;
@@ -347,17 +358,20 @@ namespace EoE.Utils
 		private const float BLUR_LERP_SPEED = 8;
 		private static List<BlurScreenEffect> AllBlurScreenEffects = new List<BlurScreenEffect>();
 		private static Coroutine BlurScreenCoroutine = null;
-		public static void BlurScreen(float intensity, float lenght, int blurDistance = 4)
+		public static FXInstance BlurScreen(float intensity, float lenght, int blurDistance = 4)
 		{
-			AllBlurScreenEffects.Add(new BlurScreenEffect(intensity, lenght, blurDistance));
+			BlurScreenEffect newBlurScreenEffect = new BlurScreenEffect(intensity, lenght, blurDistance);
+			AllBlurScreenEffects.Add(newBlurScreenEffect);
 			if (BlurScreenCoroutine == null)
 			{
 				BlurScreenCoroutine = Instance.StartCoroutine(Instance.BlurScreenC());
 			}
+
+			return newBlurScreenEffect;
 		}
-		public static void BlurScreen(ScreenBlur info, float multiplier = 1)
+		public static FXInstance BlurScreen(ScreenBlur info, float multiplier = 1)
 		{
-			BlurScreen(info.Intensity * multiplier, info.Time, info.BlurDistance);
+			return BlurScreen(info.Intensity * multiplier, info.Time, info.BlurDistance);
 		}
 		private IEnumerator BlurScreenC()
 		{
@@ -377,7 +391,7 @@ namespace EoE.Utils
 					for (int i = 0; i < AllBlurScreenEffects.Count; i++)
 					{
 						AllBlurScreenEffects[i].remainingTime -= Time.deltaTime;
-						if (AllBlurScreenEffects[i].remainingTime <= 0)
+						if (AllBlurScreenEffects[i].remainingTime <= 0 || AllBlurScreenEffects[i].Canceled)
 						{
 							AllBlurScreenEffects.RemoveAt(i);
 							i--;
@@ -414,8 +428,9 @@ namespace EoE.Utils
 			screenEffectMaterial.SetInt("_BlurRange", 0);
 			BlurScreenCoroutine = null;
 		}
-		private class BlurScreenEffect
+		private class BlurScreenEffect : FXInstance
 		{
+			public override FXType Type => FXType.Player;
 			public float intensity;
 			public float remainingTime;
 			public int blurDistance;
@@ -430,20 +445,24 @@ namespace EoE.Utils
 		#region ScreenTint
 		private static List<TintScreenEffect> AllTintScreenEffects = new List<TintScreenEffect>();
 		private static Coroutine TintScreenCoroutine = null;
-		public static void TintScreen(Color tintColor, float timeIn, float timeStay, float timeOut, int dominance = 1)
+		public static FXInstance TintScreen(Color tintColor, float timeIn, float timeStay, float timeOut, int dominance = 1)
 		{
-			AllTintScreenEffects.Add(new TintScreenEffect(tintColor, timeIn, timeStay, timeOut, dominance));
+			TintScreenEffect newTintScreenEffect = new TintScreenEffect(tintColor, timeIn, timeStay, timeOut, dominance);
+
+			AllTintScreenEffects.Add(newTintScreenEffect);
 			if (TintScreenCoroutine == null)
 			{
 				TintScreenCoroutine = Instance.StartCoroutine(Instance.TintScreenC());
 			}
+
+			return newTintScreenEffect;
 		}
-		public static void TintScreen(ScreenTint info, float multiplier = 1)
+		public static FXInstance TintScreen(ScreenTint info, float multiplier = 1)
 		{
 			uint Dominance = System.Math.Min(info.Dominance, int.MaxValue);
 			Color tint = info.TintColor;
 			tint.a *= multiplier;
-			TintScreen(tint, info.TimeIn, info.TimeStay, info.TimeOut, (int)Dominance);
+			return TintScreen(tint, info.TimeIn, info.TimeStay, info.TimeOut, (int)Dominance);
 		}
 		private IEnumerator TintScreenC()
 		{
@@ -458,7 +477,7 @@ namespace EoE.Utils
 				for(int i = 0; i < AllTintScreenEffects.Count; i++)
 				{
 					AllTintScreenEffects[i].passedTime += Time.deltaTime;
-					if(AllTintScreenEffects[i].passedTime > AllTintScreenEffects[i].totalTime)
+					if(AllTintScreenEffects[i].passedTime > AllTintScreenEffects[i].totalTime || AllTintScreenEffects[i].Canceled)
 					{
 						AllTintScreenEffects.RemoveAt(i);
 						i--;
@@ -487,8 +506,9 @@ namespace EoE.Utils
 			screenEffectMaterial.SetColor("_TintColor", Color.clear);
 			TintScreenCoroutine = null;
 		}
-		private class TintScreenEffect
+		private class TintScreenEffect : FXInstance
 		{
+			public override FXType Type => FXType.Player;
 			public Color tintColor;
 			public float timeIn;
 			public float timeStay;
@@ -530,23 +550,27 @@ namespace EoE.Utils
 		private static float BaseFixedDeltaTime;
 		private static List<TimeDilationEffect> AllTimeDilationsEffects = new List<TimeDilationEffect>();
 		private static Coroutine TimeDilationCoroutine = null;
-		public static void DilateTime(int dominanceIndex, float targetSpeed, float timeIn, float timeStay, bool deleteOtherDilations = false, float? timeOut = null)
+		public static FXInstance DilateTime(int dominanceIndex, float targetSpeed, float timeIn, float timeStay, bool deleteOtherDilations = false, float? timeOut = null)
 		{
 			if (deleteOtherDilations)
 			{
 				AllTimeDilationsEffects = new List<TimeDilationEffect>();
 			}
-			AllTimeDilationsEffects.Add(new TimeDilationEffect(dominanceIndex, Mathf.Max(0.001f, targetSpeed), timeIn, timeStay, timeOut));
+			TimeDilationEffect newTimeDilationEffect = new TimeDilationEffect(dominanceIndex, Mathf.Max(0.001f, targetSpeed), timeIn, timeStay, timeOut);
+
+			AllTimeDilationsEffects.Add(newTimeDilationEffect);
 			if (TimeDilationCoroutine == null)
 			{
 				TimeDilationCoroutine = Instance.StartCoroutine(Instance.DilateTimeC());
 			}
+
+			return newTimeDilationEffect;
 		}
-		public static void DilateTime(TimeDilation info, float multiplier = 1)
+		public static FXInstance DilateTime(TimeDilation info, float multiplier = 1)
 		{
 			uint Dominance = System.Math.Min(info.Dominance, int.MaxValue);
 			float scale = 1 - ((1 - info.Scale) * multiplier);
-			DilateTime((int)Dominance, info.Scale, info.TimeIn, info.TimeStay, info.OverwriteOtherTimeDilations, info.TimeOut);
+			return DilateTime((int)Dominance, info.Scale, info.TimeIn, info.TimeStay, info.OverwriteOtherTimeDilations, info.TimeOut);
 		}
 		private IEnumerator DilateTimeC()
 		{
@@ -561,7 +585,7 @@ namespace EoE.Utils
 				for (int i = 0; i < AllTimeDilationsEffects.Count; i++)
 				{
 					AllTimeDilationsEffects[i].passedTime += Time.unscaledDeltaTime;
-					if (AllTimeDilationsEffects[i].passedTime > AllTimeDilationsEffects[i].totalTime)
+					if (AllTimeDilationsEffects[i].passedTime > AllTimeDilationsEffects[i].totalTime || AllTimeDilationsEffects[i].Canceled)
 					{
 						AllTimeDilationsEffects.RemoveAt(i);
 						i--;
@@ -587,8 +611,9 @@ namespace EoE.Utils
 
 			TimeDilationCoroutine = null;
 		}
-		private class TimeDilationEffect
+		private class TimeDilationEffect : FXInstance
 		{
+			public override FXType Type => FXType.Player;
 			public int dominanceIndex;
 			public float targetSpeed;
 			public float timeIn;
@@ -632,22 +657,25 @@ namespace EoE.Utils
 		private static List<CameraFOVWarpEffect> AllCameraFOVWarpEffects = new List<CameraFOVWarpEffect>();
 		private static Coroutine CameraFOVWarpCoroutine = null;
 		private const float LERP_FOV_SPEED = 10;
-		public static void WarpCameraFOV(int dominanceIndex, float targetFOV, float timeIn, float timeStay, float timeOut, bool overwriteOtherFOVWarps)
+		public static FXInstance WarpCameraFOV(int dominanceIndex, float targetFOV, float timeIn, float timeStay, float timeOut, bool overwriteOtherFOVWarps)
 		{
 			if (overwriteOtherFOVWarps)
 			{
 				AllCameraFOVWarpEffects = new List<CameraFOVWarpEffect>();
 			}
-			AllCameraFOVWarpEffects.Add(new CameraFOVWarpEffect(dominanceIndex, targetFOV, timeIn, timeStay, timeOut));
+			CameraFOVWarpEffect newCameraFOVWarpEffect = new CameraFOVWarpEffect(dominanceIndex, targetFOV, timeIn, timeStay, timeOut);
+
+			AllCameraFOVWarpEffects.Add(newCameraFOVWarpEffect);
 			if (CameraFOVWarpCoroutine == null)
 			{
 				CameraFOVWarpCoroutine = Instance.StartCoroutine(Instance.WarpCameraFOVC());
 			}
+			return newCameraFOVWarpEffect;
 		}
-		public static void WarpCameraFOV(CameraFOVWarp info, float multiplier = 1)
+		public static FXInstance WarpCameraFOV(CameraFOVWarp info, float multiplier = 1)
 		{
 			float fov = PlayerCameraController.CameraFOV - ((PlayerCameraController.CameraFOV - info.TargetFOV) * multiplier);
-			WarpCameraFOV(info.Dominance, fov, info.TimeIn, info.TimeStay, info.TimeOut, info.OverwriteOtherFOVWarps);
+			return WarpCameraFOV(info.Dominance, fov, info.TimeIn, info.TimeStay, info.TimeOut, info.OverwriteOtherFOVWarps);
 		}
 		private IEnumerator WarpCameraFOVC()
 		{
@@ -664,7 +692,7 @@ namespace EoE.Utils
 					for (int i = 0; i < AllCameraFOVWarpEffects.Count; i++)
 					{
 						AllCameraFOVWarpEffects[i].passedTime += Time.deltaTime;
-						if (AllCameraFOVWarpEffects[i].passedTime >= AllCameraFOVWarpEffects[i].totalTime)
+						if (AllCameraFOVWarpEffects[i].passedTime >= AllCameraFOVWarpEffects[i].totalTime || AllCameraFOVWarpEffects[i].Canceled)
 						{
 							AllCameraFOVWarpEffects.RemoveAt(i);
 							i--;
@@ -694,8 +722,9 @@ namespace EoE.Utils
 			PlayerCameraController.CameraFOV = Player.PlayerSettings.CameraBaseFOV;
 			CameraFOVWarpCoroutine = null;
 		}
-		private class CameraFOVWarpEffect
+		private class CameraFOVWarpEffect : FXInstance
 		{
+			public override FXType Type => FXType.Player;
 			public int dominanceIndex;
 			public float targetFOV;
 			public float timeIn;
@@ -733,38 +762,119 @@ namespace EoE.Utils
 		}
 		#endregion
 		#region SingleSound
-		public static void PlaySound(SoundEffect info, Transform target, float multiplier = 1)
+		private static List<SoundFX> AllSoundFXs = new List<SoundFX>();
+		private static Coroutine SoundFXCoroutine = null;
+		public static FXInstance PlaySound(SoundEffect info, Transform followTarget, float multiplier = 1)
 		{
 			SoundPlayer soundPlayer = (new GameObject(info.TargetSound.soundName + " Sound Player")).AddComponent<SoundPlayer>();
 			soundPlayer.transform.SetParent(Storage.SoundStorage);
 
-			soundPlayer.transform.position = target ? target.position + info.OffsetToTarget : info.OffsetToTarget;
+			soundPlayer.transform.position = followTarget ? followTarget.position + info.OffsetToTarget : info.OffsetToTarget;
 
-			soundPlayer.Setup(info, !info.Loop, multiplier);
-			if (info.FollowTarget)
-				soundPlayer.FollowTargetSetup(target, info.OffsetToTarget, info.OnParentDeathBehaivior, info.fadeOutTime);
-
+			soundPlayer.Setup(info.TargetSound, multiplier);
 			soundPlayer.Play();
+
+			SoundFX newSoundFX = new SoundFX(info, followTarget, soundPlayer);
+			AllSoundFXs.Add(newSoundFX);
+
+			if(SoundFXCoroutine == null)
+			{
+				SoundFXCoroutine = Instance.StartCoroutine(Instance.SoundFXC());
+			}
+
+			return newSoundFX;
+		}
+		private IEnumerator SoundFXC()
+		{
+			while(AllSoundFXs.Count > 0)
+			{
+				yield return new WaitForFixedUpdate();
+				for(int i = 0; i < AllSoundFXs.Count; i++)
+				{
+					if (AllSoundFXs[i].IsRemoved)
+					{
+						AllSoundFXs.RemoveAt(i);
+						i--;
+					}
+					else
+					{
+						AllSoundFXs[i].Update();
+					}
+				}
+			}
+
+			SoundFXCoroutine = null;
+		}
+		private class SoundFX : FXInstance
+		{
+			public override FXType Type => FXType.World;
+			private SoundEffect BaseInfo;
+			private Transform ParentTransform;
+			private SoundPlayer SelfPlayer;
+			private float RemainingTime;
+
+			private float fadeTime;
+			private bool RemoveInProgress;
+			public bool IsRemoved => !SelfPlayer;
+
+			public SoundFX(SoundEffect BaseInfo, Transform ParentTransform, SoundPlayer SelfPlayer)
+			{
+				this.BaseInfo = BaseInfo;
+				this.ParentTransform = ParentTransform;
+				this.SelfPlayer = SelfPlayer;
+				this.RemainingTime = BaseInfo.DestroyAfterDelay ? BaseInfo.DestroyDelay : 1;
+			}
+			public void Update()
+			{
+				if (BaseInfo.DestroyAfterDelay && RemainingTime > 0)
+					RemainingTime -= Time.fixedDeltaTime;
+
+				if (BaseInfo.FollowTarget && ParentTransform)
+				{
+					SelfPlayer.transform.position = ParentTransform.position + BaseInfo.OffsetToTarget;
+				}
+
+				if (RemoveInProgress)
+				{
+					if(FadeOut())
+					Destroy(SelfPlayer.gameObject);
+				}
+				else if (ShouldBeRemoved())
+				{
+					RemoveInProgress = true;
+					if(BaseInfo.RemoveStyle == EffectRemoveStyle.Destroy)
+						Destroy(SelfPlayer.gameObject);
+				}
+			}
+			private bool ShouldBeRemoved()
+			{
+				if (Canceled)
+					return true;
+				if (RemainingTime <= 0)
+					return true;
+				else if (BaseInfo.OnParentDeathBehaivior == BehaiviorOnParentDeath.Remove && !ParentTransform)
+					return true;
+				else
+					return false;
+			}
+			public bool FadeOut()
+			{
+				fadeTime += Time.fixedDeltaTime;
+				SelfPlayer.FadePoint = Mathf.Clamp01(1 - fadeTime / BaseInfo.FadeOutTime);
+			
+				return fadeTime > BaseInfo.FadeOutTime;
+			}
 		}
 		#endregion
 		#region Particle Effects
-		public static void PlayParticleEffect(GameObject mainObject, Vector3 offsetToTarget, bool destroyAfterDelay = true, float destroyDelay = 0, Transform parent = null, BehaiviorOnParentDeath parentDeathBehaivior = BehaiviorOnParentDeath.Fade, bool inheritRotation = false, bool asInstantiation = true)
+		private static List<ParticleFX> AllParticleFXs = new List<ParticleFX>();
+		private static Coroutine ParticleFXCoroutine = null;
+		public static FXInstance PlayParticleEffect(ParticleEffect info, Transform parent)
 		{
-			GameObject targetObject;
-			if (asInstantiation)
-			{
-				targetObject = Instantiate(mainObject, Storage.ParticleStorage);
-			}
-			else
-			{
-				targetObject = mainObject;
-			}
-			targetObject.transform.position = parent ? parent.position + offsetToTarget : offsetToTarget;
+			Transform mainObject = Instantiate(info.ParticleMainObject, Storage.ParticleStorage).transform;
+			mainObject.position = parent ? parent.position + info.OffsetToTarget : info.OffsetToTarget;
 
-			if (parent)
-				Instance.StartCoroutine(Instance.ParticleFollowTarget(targetObject.transform, parent, offsetToTarget, inheritRotation, parentDeathBehaivior));
-
-			ParticleSystem[] containedSystems = targetObject.GetComponentsInChildren<ParticleSystem>();
+			ParticleSystem[] containedSystems = mainObject.GetComponentsInChildren<ParticleSystem>();
 			for(int i = 0; i < containedSystems.Length; i++)
 			{
 				if(containedSystems[i].isPlaying)
@@ -772,49 +882,95 @@ namespace EoE.Utils
 				containedSystems[i].Play();
 			}
 
-			if(destroyAfterDelay)
-				FadeAndDestroyParticles(targetObject, destroyDelay);
-		}
-		public static void PlayParticleEffect(ParticleEffect info, Transform target, float multiplier = 1)
-		{
-			PlayParticleEffect(info.ParticleMainObject, info.FollowTarget ? info.OffsetToTarget : (target ? target.position + info.OffsetToTarget : info.OffsetToTarget), true, info.DestroyDelay, info.FollowTarget ? target : null, info.OnTargetDeathBehaivior, info.InheritRotationOfTarget);
-		}
-		public static void PlayParticleEffect(ParticleEffect info, Entities.Entitie target, float multiplier = 1)
-		{
-			PlayParticleEffect(info.ParticleMainObject, info.FollowTarget ? info.OffsetToTarget : (target ? target.actuallWorldPosition + info.OffsetToTarget : info.OffsetToTarget), true, info.DestroyDelay, info.FollowTarget ? target.transform : null, info.OnTargetDeathBehaivior, info.InheritRotationOfTarget);
-		}
-		public static void FadeAndDestroyParticles(GameObject target, float? delay)
-		{
-			Instance.StartCoroutine(Instance.FadeAndDestroyParticlesC(target, delay));
-		}
-		private IEnumerator ParticleFollowTarget(Transform follower, Transform target, Vector3 offset, bool inheritRotation, BehaiviorOnParentDeath deathBehaivior)
-		{
-			while (follower)
+			ParticleFX newParticleFX = new ParticleFX(info, parent, mainObject);
+			AllParticleFXs.Add(newParticleFX);
+
+			if(ParticleFXCoroutine == null)
 			{
-				if (target)
+				ParticleFXCoroutine = Instance.StartCoroutine(Instance.ParticleFXC());
+			}
+			return newParticleFX;
+		}
+		private IEnumerator ParticleFXC()
+		{
+			while(AllParticleFXs.Count > 0)
+			{
+				yield return new WaitForFixedUpdate();
+				if (GameController.GameIsPaused)
+					continue;
+
+				for(int i = 0; i < AllParticleFXs.Count; i++)
 				{
-					follower.position = target.position + offset;
-					if (inheritRotation)
-						follower.rotation = target.rotation;
-				}
-				else
-				{
-					if(deathBehaivior == BehaiviorOnParentDeath.Remove)
+					if (AllParticleFXs[i].IsRemoved)
 					{
-						Destroy(follower.gameObject);
-					}
-					else if(deathBehaivior == BehaiviorOnParentDeath.Fade)
-					{
-						StartCoroutine(FadeAndDestroyParticlesC(follower.gameObject, null));
-						break;
+						AllParticleFXs.RemoveAt(i);
+						i--;
 					}
 					else
 					{
-						break;
+						AllParticleFXs[i].Update();
+						if (!AllParticleFXs[i].RemoveInProgress && AllParticleFXs[i].ShouldBeRemoved())
+						{
+							Debug.Log("Here");
+							AllParticleFXs[i].RemoveInProgress = true;
+							if (AllParticleFXs[i].BaseInfo.DestroyStyle == EffectRemoveStyle.Fade)
+								FadeAndDestroyParticles(AllParticleFXs[i].MainTransform.gameObject, null);
+							else
+								Destroy(AllParticleFXs[i].MainTransform.gameObject);
+						}
 					}
 				}
-				yield return new WaitForFixedUpdate();
 			}
+
+			ParticleFXCoroutine = null;
+		}
+		private class ParticleFX : FXInstance
+		{
+			public override FXType Type => FXType.World;
+			public ParticleEffect BaseInfo;
+			private Transform ParentTransform;
+			public Transform MainTransform;
+			private float RemainingTime;
+
+			public bool RemoveInProgress;
+			public bool IsRemoved => !MainTransform;
+
+			public ParticleFX(ParticleEffect BaseInfo, Transform ParentTransform, Transform MainTransform)
+			{
+				this.BaseInfo = BaseInfo;
+				this.ParentTransform = ParentTransform;
+				this.MainTransform = MainTransform;
+				this.RemainingTime = BaseInfo.DestroyAfterDelay ? BaseInfo.DestroyDelay : 1;
+			}
+			public void Update()
+			{
+				if (BaseInfo.DestroyAfterDelay && RemainingTime > 0)
+					RemainingTime -= Time.fixedDeltaTime;
+
+				if (BaseInfo.FollowTarget && ParentTransform)
+				{
+					MainTransform.position = ParentTransform.position + BaseInfo.OffsetToTarget;
+
+					if (BaseInfo.InheritRotationOfTarget)
+						MainTransform.rotation = ParentTransform.rotation;
+				}
+			}
+			public bool ShouldBeRemoved()
+			{
+				if (Canceled)
+					return true;
+				if (RemainingTime <= 0)
+					return true;
+				else if (BaseInfo.OnParentDeathBehaivior == BehaiviorOnParentDeath.Remove && !ParentTransform)
+					return true;
+				else
+					return false;
+			}
+		}
+		#region FadeParticleSystem
+		public static void FadeAndDestroyParticles(GameObject target, float? delay)
+		{
+			Instance.StartCoroutine(Instance.FadeAndDestroyParticlesC(target, delay));
 		}
 		private IEnumerator FadeAndDestroyParticlesC(GameObject target, float? baseDelay)
 		{
@@ -859,6 +1015,7 @@ namespace EoE.Utils
 			FadeFinished:;
 		}
 		#endregion
+		#endregion
 		#region Entitie Text
 		public static void CreateDamageNumber(Vector3 startPosition, Gradient colors, Vector3 numberVelocity, float damage, bool wasCrit, float overrideScale = 1)
 		{
@@ -888,4 +1045,12 @@ namespace EoE.Utils
 		}
 		#endregion
 	}
+	#region FXInstance BaseClass
+	public enum FXType { Player, World }
+	public abstract class FXInstance
+	{
+		public bool Canceled;
+		public abstract FXType Type { get; }
+	}
+	#endregion
 }

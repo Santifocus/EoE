@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace EoE.Information
 {
-	public class ScreenTint : FXInstance
+	public class ScreenTint : FXObject
 	{
 		[Tooltip("The target Tint that will be reached and kept at TimeStay.")] 
 		public Color TintColor = Color.blue / 2;

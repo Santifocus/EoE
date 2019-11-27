@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Drink_Potion
   m_EditorClassIdentifier: 
   TargetSound: {fileID: 11400000, guid: c880e32684be93e45a41323a8e28996c, type: 2}
-  OffsetToTarget: {x: 0, y: 0, z: 0}
-  Loop: 0
   FollowTarget: 0
+  OffsetToTarget: {x: 0, y: 0, z: 0}
+  DestroyAfterDelay: 1
+  DestroyDelay: 2.4
   OnParentDeathBehaivior: 1
-  fadeOutTime: 0
+  RemoveStyle: 1
+  FadeOutTime: 0

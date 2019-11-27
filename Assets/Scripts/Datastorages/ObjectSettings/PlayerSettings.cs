@@ -72,17 +72,17 @@ namespace EoE.Information
 		public int ArmorInventorySize = 8;
 
 		///FX
-		public FXInstance[] EffectsOnReceiveDamage = default;
-		public FXInstance[] EffectsOnReceiveKnockback = default;
-		public FXInstance[] EffectsOnCauseDamage = default;
-		public FXInstance[] EffectsOnCauseCrit = default;
-		public FXInstance[] EffectsOnLevelup = default;
+		public FXObject[] EffectsOnReceiveDamage = default;
+		public FXObject[] EffectsOnReceiveKnockback = default;
+		public FXObject[] EffectsOnCauseDamage = default;
+		public FXObject[] EffectsOnCauseCrit = default;
+		public FXObject[] EffectsOnLevelup = default;
 		public float EffectsHealthThreshold = 0.3f;
-		public FXInstance[] EffectsOnDamageWhenBelowThreshold = default;
+		public FXObject[] EffectsOnDamageWhenBelowThreshold = default;
 
 		public float PlayerLandingVelocityThreshold = 5f;
-		public FXInstance[] EffectsOnPlayerLanding = default;
-		public FXInstance[] EffectsOnPlayerDodge = default;
-		public FXInstance[] EffectsOnEnemyKilled = default;
+		public FXObject[] EffectsOnPlayerLanding = default;
+		public FXObject[] EffectsOnPlayerDodge = default;
+		public FXObject[] EffectsOnEnemyKilled = default;
 	}
 }

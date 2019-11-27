@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: ChurchMusic
   m_EditorClassIdentifier: 
   TargetSound: {fileID: 11400000, guid: f227c12f2c6511e49902a6b55f2a7d7d, type: 2}
-  OffsetToTarget: {x: 0, y: 0, z: 0}
-  Loop: 1
   FollowTarget: 0
+  OffsetToTarget: {x: 0, y: 0, z: 0}
+  DestroyAfterDelay: 0
+  DestroyDelay: 0
   OnParentDeathBehaivior: 1
-  fadeOutTime: 0
+  RemoveStyle: 1
+  FadeOutTime: 0

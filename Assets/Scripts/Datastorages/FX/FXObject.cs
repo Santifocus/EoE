@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace EoE.Information
 {
-	public abstract class FXInstance : ScriptableObject
+	public abstract class FXObject : ScriptableObject
 	{
 
 	}

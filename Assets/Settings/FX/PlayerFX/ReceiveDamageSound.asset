@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: ReceiveDamageSound
   m_EditorClassIdentifier: 
   TargetSound: {fileID: 11400000, guid: d89549f45a8e6c843af0b4221b09a602, type: 2}
-  OffsetToTarget: {x: 0, y: 0, z: 0}
-  Loop: 0
   FollowTarget: 1
+  OffsetToTarget: {x: 0, y: 0, z: 0}
+  DestroyAfterDelay: 1
+  DestroyDelay: 0.3
   OnParentDeathBehaivior: 1
-  fadeOutTime: 0
+  RemoveStyle: 1
+  FadeOutTime: 0

@@ -381,7 +381,10 @@ namespace EoE
 			AssetDatabase.Refresh();
 			EditorUtility.FocusProjectWindow();
 
+			Selection.activeObject = null;
 			Selection.activeObject = asset;
+			EditorGUIUtility.PingObject(asset);
+
 			Debug.Log("Created: '" + name.Substring(1) + "' at: Assets" + path + "/..");
 		}
 	}

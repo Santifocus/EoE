@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace EoE.Information
 {
-	public class ControllerRumble : FXInstance
+	public class ControllerRumble : FXObject
 	{
 		[Tooltip("How long should the ControllerRumble last?")]
 		public float Time = 0.1f;

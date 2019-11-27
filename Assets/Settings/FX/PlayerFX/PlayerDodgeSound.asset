@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: PlayerDodgeSound
   m_EditorClassIdentifier: 
   TargetSound: {fileID: 11400000, guid: 17dcb8d58d46f4f4ca36b1fd3d658ad9, type: 2}
-  OffsetToTarget: {x: 0, y: 0, z: 0}
-  Loop: 0
   FollowTarget: 1
-  OnParentDeathBehaivior: 2
-  fadeOutTime: 0
+  OffsetToTarget: {x: 0, y: 0, z: 0}
+  DestroyAfterDelay: 1
+  DestroyDelay: 1.7
+  OnParentDeathBehaivior: 1
+  RemoveStyle: 1
+  FadeOutTime: 0

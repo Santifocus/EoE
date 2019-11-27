@@ -15,8 +15,9 @@ MonoBehaviour:
   soundName: HitSound
   clip: {fileID: 8300000, guid: 37bd5d5e1c17f1847a61faa37d1928a3, type: 3}
   audioGroup: {fileID: 24300002, guid: b8b319c0096b4d34196070be7e374c0c, type: 2}
+  Loop: 0
   priority: 128
   pitch: 0.55
   volume: 0.663
   spatialBlend: 0.75
-  scaleStyle: 1
+  scaleStyle: 0

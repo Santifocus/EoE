@@ -28,6 +28,8 @@ namespace EoE.Information
 			FloatField(new GUIContent("Bash Distance"), ref settings.BashDistance);
 			FloatField(new GUIContent("ForceTranslationMultiplier", "When the Crawler hits the player he will give the current speed multiplied by this amount to the Player"), ref settings.ForceTranslationMultiplier);
 		}
+		private static bool thingactive;
+		private static bool openthing;
 		private void FXSettingsArea()
 		{
 			CrawlerSettings settings = target as CrawlerSettings;

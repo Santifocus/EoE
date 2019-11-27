@@ -2,6 +2,8 @@
 using EoE.Information;
 using EoE.UI;
 using EoE.Utils;
+using EoE.Weapons;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,9 +14,6 @@ namespace EoE.Entities
 		#region Fields
 		//Constants
 		private const int VISIBLE_CHECK_RAY_COUNT = 40;
-
-		private static readonly Vector3 GroundTestOffset = new Vector3(0, -0.05f, 0);
-
 		public static List<Entitie> AllEntities = new List<Entitie>();
 
 		//Inspector variables
@@ -39,6 +38,7 @@ namespace EoE.Entities
 		public EntitieState curStates;
 		private float regenTimer;
 		private float combatEndCooldown;
+		protected Vector3? targetPosition = null;
 
 		//Velocity Control
 		protected int appliedMoveStuns;
@@ -51,6 +51,9 @@ namespace EoE.Entities
 		private bool showingHealthRegenParticles;
 		private GameObject mainHealthRegenParticleObject;
 		private ParticleSystem[] healthRegenParticleSystems;
+
+		//Spell Casting
+		public bool CastingSpell { get; private set; }
 
 		//Getter Helpers
 		protected enum ColliderType : byte { Box, Sphere, Capsule }
@@ -75,6 +78,29 @@ namespace EoE.Entities
 			FullEntitieReset();
 			EntitieStart();
 		}
+		protected virtual void EntitieStart() { }
+		protected virtual void Update()
+		{
+			EntitieStateControl();
+			EntitieUpdate();
+		}
+		protected virtual void FixedUpdate()
+		{
+			entitieForceController.Update();
+
+			//Lerp knockback to zero based on the entities deceleration stat
+			if (SelfSettings.NoMoveDeceleration > 0)
+				impactForce = Vector3.Lerp(impactForce, Vector3.zero, Time.fixedDeltaTime * SelfSettings.NoMoveDeceleration);
+			else
+				impactForce = Vector3.zero;
+
+			UpdateStatDisplay();
+			EntitieFixedUpdate();
+		}
+		protected virtual void EntitieUpdate() { }
+		protected virtual void EntitieFixedUpdate() { }
+		#endregion
+		#region Setups
 		protected virtual void FullEntitieReset()
 		{
 			ResetStats();
@@ -153,30 +179,21 @@ namespace EoE.Entities
 				healthRegenParticleSystems = null;
 			}
 		}
-		protected virtual void EntitieStart() { }
-		protected virtual void Update()
-		{
-			Regen();
-			EntitieStateControl();
-			EntitieUpdate();
-		}
-		protected virtual void FixedUpdate()
-		{
-			entitieForceController.Update();
-
-			//Lerp knockback to zero based on the entities deceleration stat
-			if (SelfSettings.NoMoveDeceleration > 0)
-				impactForce = Vector3.Lerp(impactForce, Vector3.zero, Time.fixedDeltaTime * SelfSettings.NoMoveDeceleration);
-			else
-				impactForce = Vector3.zero;
-
-			UpdateStatDisplay();
-			EntitieFixedUpdate();
-		}
-		protected virtual void EntitieUpdate() { }
-		protected virtual void EntitieFixedUpdate() { }
 		#endregion
 		#region State Control
+		private void EntitieStateControl()
+		{
+			if (combatEndCooldown > 0)
+			{
+				combatEndCooldown -= Time.deltaTime;
+				if (combatEndCooldown <= 0)
+					curStates.Fighting = false;
+			}
+
+			//Update buffs
+			BuffUpdate();
+			Regen();
+		}
 		protected virtual void Regen()
 		{
 			regenTimer += Time.deltaTime;
@@ -232,18 +249,120 @@ namespace EoE.Entities
 			}
 		}
 
-		private void EntitieStateControl()
+		public void ChangeHealth(ChangeInfo causedChange)
 		{
-			if (combatEndCooldown > 0)
+			if (causedChange.attacker != null && causedChange.attacker != this)
 			{
-				combatEndCooldown -= Time.deltaTime;
-				if (combatEndCooldown <= 0)
-					curStates.Fighting = false;
+				StartCombat();
+				causedChange.attacker.StartCombat();
+			}
+			ChangeInfo.ChangeResult changeResult = new ChangeInfo.ChangeResult(causedChange, this, true);
+
+			//If this Entitie is invincible and the change causes damage and/or knockback then we stop here
+
+			if (IsInvincible && (changeResult.finalChangeAmount > 0 || changeResult.causedKnockback.HasValue))
+				return;
+
+			//Cause the health change and clamp max
+			curHealth -= changeResult.finalChangeAmount;
+			curHealth = Mathf.Min(curMaxHealth, curHealth);
+
+			//Apply knockback
+			if (changeResult.causedKnockback.HasValue)
+			{
+				ApplyKnockback(changeResult.causedKnockback.Value);
 			}
 
-			//Update buffs
-			BuffUpdate();
+			if (changeResult.finalChangeAmount > 0)
+				ReceivedHealthDamage(causedChange, changeResult);
+
+			//Below zero health means death
+			if (curHealth <= 0)
+			{
+				if (this is Player)
+				{
+					EventManager.PlayerDiedInvoke(causedChange.attacker);
+				}
+				else
+				{
+					EventManager.EntitieDiedInvoke(this, causedChange.attacker);
+				}
+				Death();
+			}
 		}
+		protected virtual void ApplyKnockback(Vector3 causedKnockback)
+		{
+			impactForce += new Vector2(causedKnockback.x, causedKnockback.z);
+		}
+		protected virtual void ReceivedHealthDamage(ChangeInfo causedChange, ChangeInfo.ChangeResult resultInfo) { }
+		public void ChangeMana(ChangeInfo change)
+		{
+			ChangeInfo.ChangeResult changeResult = new ChangeInfo.ChangeResult(change, this, true);
+			curMana -= changeResult.finalChangeAmount;
+			curMana = Mathf.Min(curMaxMana, curMana);
+		}
+		protected virtual void UpdateStatDisplay()
+		{
+			//In world healthbar doesnt exist for player, because it is on the normal HUD
+			if (this is Player)
+				return;
+
+			bool inCombat = curStates.Fighting;
+			bool intendedState = inCombat;
+			if (inCombat)
+			{
+				statDisplay.HealthValue = curHealth / curMaxHealth;
+				Vector3 pos = PlayerCameraController.PlayerCamera.WorldToScreenPoint(new Vector3(coll.bounds.center.x, highestPos, coll.bounds.center.z));
+				if (pos.z > 0)
+					statDisplay.Position = pos + new Vector3(0, statDisplay.Height);
+				else
+					intendedState = false;
+			}
+
+			//If we are in a fight => show the display, otherwise hide it
+			if (statDisplay.gameObject.activeInHierarchy != intendedState)
+				statDisplay.gameObject.SetActive(intendedState);
+		}
+		protected void StartCombat()
+		{
+			curStates.Fighting = true;
+			combatEndCooldown = GameController.CurrentGameSettings.CombatCooldown;
+		}
+		protected virtual void Death()
+		{
+			BuildDrops();
+			if (statDisplay)
+				Destroy(statDisplay.gameObject);
+			Destroy(gameObject);
+		}
+		private void OnDestroy()
+		{
+			AllEntities.Remove(this);
+		}
+		private void BuildDrops()
+		{
+			//Create souls drops
+			if (SelfSettings.SoulWorth > 0)
+			{
+				SoulDrop newSoulDrop = Instantiate(GameController.CurrentGameSettings.SoulDropPrefab, Storage.DropStorage);
+				newSoulDrop.transform.position = actuallWorldPosition;
+				newSoulDrop.Setup(SelfSettings.SoulWorth);
+			}
+
+			//Create item / other drops
+			if (SelfSettings.PossibleDropsTable == null)
+				return;
+
+			for (int i = 0; i < SelfSettings.PossibleDropsTable.PossibleDrops.Length; i++)
+			{
+				if (BaseUtils.Chance01(SelfSettings.PossibleDropsTable.PossibleDrops[i].DropChance))
+				{
+					int amount = Random.Range(SelfSettings.PossibleDropsTable.PossibleDrops[i].MinDropAmount, SelfSettings.PossibleDropsTable.PossibleDrops[i].MaxDropAmount + 1);
+					SelfSettings.PossibleDropsTable.PossibleDrops[i].Drop.CreateItemDrop(actuallWorldPosition, amount, false);
+				}
+			}
+		}
+		#endregion
 		#region BuffControl
 		private void BuffUpdate()
 		{
@@ -259,11 +378,11 @@ namespace EoE.Entities
 						float cd = nonPermanentBuffs[i].Base.DOTs[j].DelayPerActivation;
 						nonPermanentBuffs[i].DOTCooldowns[j] += cd;
 
-						if(nonPermanentBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Health)
+						if (nonPermanentBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Health)
 							ChangeHealth(new ChangeInfo(nonPermanentBuffs[i].Applier, CauseType.DOT, nonPermanentBuffs[i].Base.DOTs[j].Element, TargetStat.Health, actuallWorldPosition, Vector3.up, cd * nonPermanentBuffs[i].Base.DOTs[j].BaseDamage, false));
 						else if (nonPermanentBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Mana)
 							ChangeMana(new ChangeInfo(nonPermanentBuffs[i].Applier, CauseType.DOT, TargetStat.Mana, cd * nonPermanentBuffs[i].Base.DOTs[j].BaseDamage));
-						else if(this is Player)//TargetStat.Endurance
+						else if (this is Player)//TargetStat.Endurance
 							(this as Player).ChangeEndurance(new ChangeInfo(nonPermanentBuffs[i].Applier, CauseType.DOT, TargetStat.Endurance, cd * nonPermanentBuffs[i].Base.DOTs[j].BaseDamage));
 					}
 				}
@@ -277,6 +396,32 @@ namespace EoE.Entities
 			PermanentBuffsControl();
 			if (requiresRecalculate)
 				RecalculateBuffs();
+		}
+		public bool HasBuffActive(Buff buff, Entitie applier)
+		{
+			List<BuffInstance> toSearch = buff.Permanent ? permanentBuffs : nonPermanentBuffs;
+			for (int i = 0; i < toSearch.Count; i++)
+			{
+				if (toSearch[i].Applier == applier && toSearch[i].Base == buff)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+		public (bool, BuffInstance) TryReapplyBuff(Buff buff, Entitie applier)
+		{
+			List<BuffInstance> toSearch = buff.Permanent ? permanentBuffs : nonPermanentBuffs;
+			for (int i = 0; i < toSearch.Count; i++)
+			{
+				if (toSearch[i].Applier == applier && toSearch[i].Base == buff)
+				{
+					toSearch[i].RemainingTime = buff.BuffTime;
+					return (true, toSearch[i]);
+				}
+			}
+
+			return (false, null);
 		}
 		public BuffInstance AddBuff(Buff buff, Entitie applier)
 		{
@@ -419,9 +564,9 @@ namespace EoE.Entities
 		{
 			if (buffInstance.Base.Permanent)
 			{
-				for(int i = 0; i < permanentBuffs.Count; i++)
+				for (int i = 0; i < permanentBuffs.Count; i++)
 				{
-					if(permanentBuffs[i] == buffInstance)
+					if (permanentBuffs[i] == buffInstance)
 					{
 						RemoveBuff(i, true);
 					}
@@ -575,123 +720,343 @@ namespace EoE.Entities
 			}
 		}
 		#endregion
-
-		public void ChangeHealth(ChangeInfo causedChange)
+		#region Spell Casting
+		protected bool CastSpell(Spell spell)
 		{
-			if (causedChange.attacker != null && causedChange.attacker != this)
+			if (curMana < spell.ManaCost)
+				return false;
+			StartCoroutine(CastSpellC(spell));
+			return true;
+		}
+		private IEnumerator CastSpellC(Spell spell)
+		{
+			CastingSpell = true;
+			//Casting
+			if (spell.ContainedParts.HasFlag(SpellPart.Cast))
 			{
-				StartCombat();
-				causedChange.attacker.StartCombat();
-			}
-			ChangeInfo.ChangeResult changeResult = new ChangeInfo.ChangeResult(causedChange, this, true);
+				if (spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting))
+					appliedMoveStuns++;
 
-			//If this Entitie is invincible and the change causes damage and/or knockback then we stop here
-
-			if (IsInvincible && (changeResult.finalChangeAmount > 0 || changeResult.causedKnockback.HasValue))
-				return;
-
-			//Cause the health change and clamp max
-			curHealth -= changeResult.finalChangeAmount;
-			curHealth = Mathf.Min(curMaxHealth, curHealth);
-
-			//Apply knockback
-			if (changeResult.causedKnockback.HasValue)
-			{
-				ApplyKnockback(changeResult.causedKnockback.Value);
-			}
-
-			if (changeResult.finalChangeAmount > 0)
-				ReceivedHealthDamage(causedChange, changeResult);
-
-			//Below zero health means death
-			if (curHealth <= 0)
-			{
-				if (this is Player)
+				float castTime = 0;
+				for(int i = 0; i < spell.CastInfo.StartEffects.Length; i++)
 				{
-					EventManager.PlayerDiedInvoke(causedChange.attacker);
+					ActivateSpellEffect(this, spell.CastInfo.StartEffects[i], transform, spell);
+				}
+
+				while(castTime < spell.CastInfo.Duration)
+				{
+					yield return new WaitForSeconds(GameController.CurrentGameSettings.SpellEffectTickSpeed);
+					castTime += GameController.CurrentGameSettings.SpellEffectTickSpeed;
+
+					for (int i = 0; i < spell.CastInfo.WhileEffects.Length; i++)
+					{
+						ActivateSpellEffect(this, spell.CastInfo.WhileEffects[i], transform, spell);
+					}
+				}
+
+				if (spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting) && !spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting))
+					appliedMoveStuns--;
+			}
+
+			//Start
+			if (spell.ContainedParts.HasFlag(SpellPart.Start))
+			{
+				for (int i = 0; i < spell.StartInfo.Effects.Length; i++)
+				{
+					ActivateSpellEffect(this, spell.StartInfo.Effects[i], transform, spell);
+				}
+			}
+
+			//Projectile
+			if (spell.ContainedParts.HasFlag(SpellPart.Projectile))
+			{
+				for (int i = 0; i < spell.ProjectileInfo.Length; i++)
+				{
+					CreateSpellProjectile(spell, i);
+					yield return new WaitForSeconds(spell.DelayToNextProjectile[i]);
+				}
+				if (spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting))
+					appliedMoveStuns--;
+			}
+			CastingSpell = false;
+		}
+		#region ProjectileControl
+		private void CreateSpellProjectile(Spell spellBase, int index)
+		{
+			Vector3 spawnOffset = spellBase.ProjectileInfo[index].CreateOffsetToCaster.x * transform.right + spellBase.ProjectileInfo[index].CreateOffsetToCaster.y * transform.up + spellBase.ProjectileInfo[index].CreateOffsetToCaster.z * transform.forward;
+
+			//First find out what direction the projectile should fly
+			Vector3 direction;
+			(Vector3, bool) dirInfo = EnumDirToDir(spellBase.ProjectileInfo[index].Direction);
+			if (spellBase.ProjectileInfo[index].DirectionStyle == InherritDirection.Target)
+			{
+				if (targetPosition.HasValue)
+				{
+					direction = (targetPosition.Value - (actuallWorldPosition + spawnOffset));
 				}
 				else
 				{
-					EventManager.EntitieDiedInvoke(this, causedChange.attacker);
+					direction = DirectionFromStyle(spellBase.ProjectileInfo[index].FallbackDirectionStyle);
 				}
-				Death();
 			}
-		}
-		protected virtual void ApplyKnockback(Vector3 causedKnockback)
-		{
-			impactForce += new Vector2(causedKnockback.x, causedKnockback.z);
-		}
-		protected virtual void ReceivedHealthDamage(ChangeInfo causedChange, ChangeInfo.ChangeResult resultInfo) { }
-		public void ChangeMana(ChangeInfo change)
-		{
-			ChangeInfo.ChangeResult changeResult = new ChangeInfo.ChangeResult(change, this, true);
-			curMana -= changeResult.finalChangeAmount;
-			curMana = Mathf.Min(curMaxMana, curMana);
-		}
-		protected virtual void UpdateStatDisplay()
-		{
-			//In world healthbar doesnt exist for player, because it is on the normal HUD
-			if (this is Player)
-				return;
-
-			bool inCombat = curStates.Fighting;
-			bool intendedState = inCombat;
-			if (inCombat)
+			else
 			{
-				statDisplay.HealthValue = curHealth / curMaxHealth;
-				Vector3 pos = PlayerCameraController.PlayerCamera.WorldToScreenPoint(new Vector3(coll.bounds.center.x, highestPos, coll.bounds.center.z));
-				if (pos.z > 0)
-					statDisplay.Position = pos + new Vector3(0, statDisplay.Height);
-				else
-					intendedState = false;
+				direction = DirectionFromStyle(spellBase.ProjectileInfo[index].DirectionStyle);
 			}
 
-			//If we are in a fight => show the display, otherwise hide it
-			if (statDisplay.gameObject.activeInHierarchy != intendedState)
-				statDisplay.gameObject.SetActive(intendedState);
-		}
-		protected void StartCombat()
-		{
-			curStates.Fighting = true;
-			combatEndCooldown = GameController.CurrentGameSettings.CombatCooldown;
-		}
-		protected virtual void Death()
-		{
-			BuildDrops();
-			if (statDisplay)
-				Destroy(statDisplay.gameObject);
-			Destroy(gameObject);
-		}
-		private void OnDestroy()
-		{
-			AllEntities.Remove(this);
-		}
-		private void BuildDrops()
-		{
-			//Create souls drops
-			if (SelfSettings.SoulWorth > 0)
-			{
-				SoulDrop newSoulDrop = Instantiate(GameController.CurrentGameSettings.SoulDropPrefab, Storage.DropStorage);
-				newSoulDrop.transform.position = actuallWorldPosition;
-				newSoulDrop.Setup(SelfSettings.SoulWorth);
-			}
+			//Now create the projectile prefab, and let it start flying
+			SpellProjectile projectile = Instantiate(GameController.ProjectilePrefab, Storage.ProjectileStorage);
+			projectile.Setup(spellBase, index, this, direction);
+			projectile.transform.position = actuallWorldPosition + spawnOffset;
 
-			//Create item / other drops
-			if (SelfSettings.PossibleDropsTable == null)
-				return;
-
-			for (int i = 0; i < SelfSettings.PossibleDropsTable.PossibleDrops.Length; i++)
+			Vector3 DirectionFromStyle(InherritDirection style)
 			{
-				if (BaseUtils.Chance01(SelfSettings.PossibleDropsTable.PossibleDrops[i].DropChance))
+				if (style == InherritDirection.World)
 				{
-					int amount = Random.Range(SelfSettings.PossibleDropsTable.PossibleDrops[i].MinDropAmount, SelfSettings.PossibleDropsTable.PossibleDrops[i].MaxDropAmount + 1);
-					SelfSettings.PossibleDropsTable.PossibleDrops[i].Drop.CreateItemDrop(actuallWorldPosition, amount, false);
+					return dirInfo.Item1 * (dirInfo.Item2 ? -1 : 1);
+				}
+				else //style == InherritDirection.Local
+				{
+					if (dirInfo.Item1 == new Vector3Int(0, 0, 1))
+					{
+						return transform.forward * (dirInfo.Item2 ? -1 : 1);
+					}
+					else if (dirInfo.Item1 == new Vector3Int(1, 0, 0))
+					{
+						return transform.right * (dirInfo.Item2 ? -1 : 1);
+					}
+					else //dir.Item1 == new Vector3Int(0, 1, 0)
+					{
+						return transform.up * (dirInfo.Item2 ? -1 : 1);
+					}
 				}
 			}
 		}
 		#endregion
-		#region Helper Functions
+		#region SpellActivation
+		//Here is where the magic literally happens
+		public static void ActivateSpellEffect(Entitie caster, SpellEffect effect, Transform origin, Spell spellBase)
+		{
+			//If the effect is not applying force based on its center we can find out the direction here
+			//so we dont have to recalculate it everytime a new eligible target is added
+			Vector3 localDirection = Vector3.up;
+			if (effect.KnockbackOrigin != EffectiveDirection.Center)
+			{
+				(Vector3Int, bool) dirInfo = EnumDirToDir(effect.KnockbackDirection);
+				if (effect.KnockbackOrigin == EffectiveDirection.World)
+				{
+					localDirection = dirInfo.Item1 * (dirInfo.Item2 ? -1 : 1);
+				}
+				else //effect.KnockbackDirection == EffectiveDirection.Local
+				{
+					if (dirInfo.Item1 == new Vector3Int(0, 0, 1))
+					{
+						localDirection = origin.forward * (dirInfo.Item2 ? -1 : 1);
+					}
+					else if (dirInfo.Item1 == new Vector3Int(1, 0, 0))
+					{
+						localDirection = origin.right * (dirInfo.Item2 ? -1 : 1);
+					}
+					else //dir.Item1 == new Vector3Int(0, 1, 0)
+					{
+						localDirection = origin.up * (dirInfo.Item2 ? -1 : 1);
+					}
+				}
+			}
 
+			//First find the targets that are eligible
+			float innerSphereDist = effect.BaseEffectRadius * effect.BaseEffectRadius;
+			float outerSphereDist = effect.ZeroOutDistance * effect.ZeroOutDistance;
+
+			//In order to dodge using a list so we dont spam the garbage collector we first find out how many entities will be added
+			//And then build a array with that size, for that we could use Linq aswell but this methode is faster (probably)
+			int requiredCapacity = 0;
+			for (int i = 0; i < AllEntities.Count; i++)
+			{
+				if ((AllEntities[i].actuallWorldPosition - origin.position).sqrMagnitude < outerSphereDist)
+				{
+					//Check if this entitie should be a targetable entitie
+					if (IsAllowedEntitie(AllEntities[i]))
+						requiredCapacity++;
+				}
+			}
+			CollectedEntitieData[] eligibleTargets = new CollectedEntitieData[requiredCapacity];
+
+			int addedEntities = 0;
+			for (int i = 0; i < AllEntities.Count; i++)
+			{
+				Vector3 dif = AllEntities[i].actuallWorldPosition - origin.position;
+				float sqrDist = dif.sqrMagnitude;
+
+				//Generally onbly allow to keep going if the distance is smaller then the other sphere distance
+				if (sqrDist < outerSphereDist)
+				{
+					//Check if this entitie should be a targetable entitie
+					if (!IsAllowedEntitie(AllEntities[i]))
+						continue;
+
+					CollectedEntitieData data = new CollectedEntitieData()
+					{
+						Target = AllEntities[i],
+						SqrDist = sqrDist
+					};
+
+					//If the target is in the outer sphere and we want to normalize the direction based on the center
+					//then we can save one square root by only calculating it in the multiplier calculation
+					float? distance = null;
+
+					//Calculate the multiplier
+					if (sqrDist <= innerSphereDist)
+					{
+						//Max is 1 and inner sphere will always be max
+						data.Multiplier = 1;
+					}
+					else //(sqrDist < outerSphereDist) && (sqrDist > innerSphereDist)
+					{
+						distance = Mathf.Sqrt(sqrDist);
+						float outerDistance = distance.Value - effect.BaseEffectRadius;
+						//The divider will never be zero because of previous if statements so we dont have to catch it
+						data.Multiplier = outerDistance / (effect.ZeroOutDistance - effect.BaseEffectRadius);
+					}
+
+					//Now find out in what direction we want to apply forces
+					if(effect.KnockbackOrigin == EffectiveDirection.Center)
+					{
+						if (!distance.HasValue)
+							distance = Mathf.Sqrt(sqrDist);
+
+						data.ApplyDirection = (distance.Value > 0) ? (dif / distance.Value) : (Vector3.up);
+					}
+					else//effect.KnockbackDirection == EffectiveDirection.Local || effect.KnockbackDirection == EffectiveDirection.World
+					{
+						data.ApplyDirection = localDirection;
+					}
+					eligibleTargets[addedEntities] = data;
+					addedEntities++;
+				}
+			}
+
+			//If there is a limited amount of hits we sort based on distance and later we only use the first 'effect.MaximumHits' results in the list
+			if ((effect.HasMaximumHits) && (eligibleTargets.Length > effect.MaximumHits))
+			{
+				System.Array.Sort(eligibleTargets, (x, y) => x.SqrDist.CompareTo(y.SqrDist));
+			}
+
+			//Now we have to apply effects: Damage, Knockback, Buffs and FXEffects
+			int targetCount = effect.HasMaximumHits ? System.Math.Min(eligibleTargets.Length, effect.MaximumHits) : eligibleTargets.Length;
+			bool effectWasCrit = Random.value < effect.CritChance;
+			float baseKnockBack = effect.KnockbackMultiplier * spellBase.BaseKnockback;
+
+			for (int i = 0; i < targetCount; i++)
+			{
+				//Damage / Knockback
+				float damage = spellBase.BaseDamage * effect.DamageMultiplier * eligibleTargets[i].Multiplier;
+				float? knockbackAmount = (baseKnockBack != 0) ? (float?)(baseKnockBack * eligibleTargets[i].Multiplier) : (null);
+
+				eligibleTargets[i].Target.ChangeHealth(new ChangeInfo(
+					caster, 
+					CauseType.Magic, 
+					effect.DamageElement, 
+					TargetStat.Health, 
+					eligibleTargets[i].Target.actuallWorldPosition,
+					eligibleTargets[i].ApplyDirection, 
+					damage, 
+					effectWasCrit, 
+					knockbackAmount));
+
+				//Buffs
+				for(int j = 0; j < effect.BuffsToApply.Length; j++)
+				{
+					if(effect.BuffStackStyle == BuffStackingStyle.Stack)
+					{
+						eligibleTargets[i].Target.AddBuff(effect.BuffsToApply[j], caster);
+					}
+					else if (effect.BuffStackStyle == BuffStackingStyle.Reapply)
+					{
+						if (!(eligibleTargets[i].Target.TryReapplyBuff(effect.BuffsToApply[j], caster).Item1))
+						{
+							eligibleTargets[i].Target.AddBuff(effect.BuffsToApply[j], caster);
+						}
+					}
+					else //effect.BuffStackStyle == BuffStackingStyle.DoNothing
+					{
+						if (!(eligibleTargets[i].Target.HasBuffActive(effect.BuffsToApply[j], caster)))
+						{
+							eligibleTargets[i].Target.AddBuff(effect.BuffsToApply[j], caster);
+						}
+					}
+				}
+
+				//FXEffects
+				for (int j = 0; j < effect.Effects.Length; i++)
+				{
+					FXManager.PlayFX(effect.Effects[j], eligibleTargets[i].Target.transform, eligibleTargets[i].Target is Player, eligibleTargets[i].Multiplier);
+				}
+			}
+
+			//Helper functions
+			bool IsAllowedEntitie(Entitie target)
+			{
+				bool isSelf = caster == target;
+				bool selfIsPlayer = caster is Player;
+				bool otherIsPlayer = target is Player;
+
+				//First rule out if the target is self
+				if(isSelf)
+				{
+					return HasMaskFlag(SpellTargetMask.Self);
+				}
+				else
+				{
+					//Now check if the compared entities are both of the same team ie NonPlayer & NonPlayer ( / Player & Player, not going to happen because its not multiplayer)
+					if (selfIsPlayer == otherIsPlayer)
+					{
+						return HasMaskFlag(SpellTargetMask.Allied);
+					}
+					else //Player & NonPlayer / NonPlayer & Player
+					{
+						return HasMaskFlag(SpellTargetMask.Enemy);
+					}
+				}
+			}
+			//Dont use Enum.HasFlag() because it checks unnecessary things
+			bool HasMaskFlag(SpellTargetMask mask)
+			{
+				return (effect.AffectedTargets | mask) == effect.AffectedTargets;
+			}
+			//Absolute of direction and a bool for if its inversed
+			
+		}
+		private static (Vector3Int, bool) EnumDirToDir(DirectionBase direction)
+		{
+			switch (direction)
+			{
+				case DirectionBase.Forward:
+					return (new Vector3Int(0, 0, 1), false);
+				case DirectionBase.Back:
+					return (new Vector3Int(0, 0, 1), true);
+				case DirectionBase.Right:
+					return (new Vector3Int(1, 0, 0), false);
+				case DirectionBase.Left:
+					return (new Vector3Int(1, 0, 0), true);
+				case DirectionBase.Up:
+					return (new Vector3Int(0, 1, 0), false);
+				case DirectionBase.Down:
+					return (new Vector3Int(0, 1, 0), true);
+				default:
+					return (new Vector3Int(0, 0, 1), false);
+			}
+		}
+		private struct CollectedEntitieData
+		{
+			public Entitie Target;
+			public float Multiplier;
+			public float SqrDist;
+			public Vector3 ApplyDirection;
+		}
+		#endregion
+		#endregion
+		#region Helper Functions
 		protected bool CheckIfCanSeeEntitie(Entitie target, bool lowPriority = false)
 		{
 			//First we check the middle and corners of the entitie

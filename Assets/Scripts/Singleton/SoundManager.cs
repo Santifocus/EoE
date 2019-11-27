@@ -21,7 +21,7 @@ namespace EoE.Sounds
 			{
 				soundPlayers[i] = (new GameObject(GameController.CurrentGameSettings.globalSounds[i].soundName + " Sound Player")).AddComponent<SoundPlayer>();
 				soundPlayers[i].transform.SetParent(transform);
-				soundPlayers[i].Setup(GameController.CurrentGameSettings.globalSounds[i], false);
+				soundPlayers[i].Setup(GameController.CurrentGameSettings.globalSounds[i]);
 				soundHashes[i] = GameController.CurrentGameSettings.globalSounds[i].soundName.GetHashCode();
 			}
 			CheckForDupeNames();

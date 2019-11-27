@@ -34,7 +34,7 @@ namespace EoE.Entities
 			aimPos = Player.Alive ? player.actuallWorldPosition : (actuallWorldPosition + settings.ProjectileSpawnOffset + Random.insideUnitSphere * 3);
 			for (int i = 0; i < settings.CastingAnnouncement.Length; i++)
 			{
-				FXManager.PlayFX(settings.CastingAnnouncement[i], transform);
+				FXManager.PlayFX(settings.CastingAnnouncement[i], transform, true);
 			}
 			while (spellChargeTime < settings.ProjectileChargeTime)
 			{
@@ -56,7 +56,7 @@ namespace EoE.Entities
 			projectile.Setup(settings, this, (aimPos - (actuallWorldPosition + settings.ProjectileSpawnOffset)).normalized);
 			castCooldown = settings.ProjectileSpellCooldown;
 
-			FXManager.PlayFX(settings.ProjectileFlyParticles, projectile.transform);
+			FXManager.PlayFX(settings.ProjectileFlyParticles, projectile.transform, true);
 		}
 	}
 }

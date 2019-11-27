@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ParticleMainObject: {fileID: 4716907923997228044, guid: 2bd6864216252b94e93a81e6a44c1b54,
     type: 3}
-  DestroyDelay: 3
+  DestroyAfterDelay: 0
+  DestroyDelay: 0
   OffsetToTarget: {x: 0, y: 0, z: 0}
   FollowTarget: 1
   InheritRotationOfTarget: 0
-  OnTargetDeathBehaivior: 1
+  OnParentDeathBehaivior: 0
+  DestroyStyle: 1

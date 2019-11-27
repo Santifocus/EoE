@@ -2,6 +2,7 @@
 using System.Collections;
 using EoE.Entities;
 using EoE.Information;
+using EoE.Weapons;
 using UnityEngine;
 
 namespace EoE
@@ -12,12 +13,13 @@ namespace EoE
 	{
 		public static GameController Instance { get; private set; }
 		public static GameSettings CurrentGameSettings => Instance.gameSettings;
-
+		public static SpellProjectile ProjectilePrefab => Instance.projectilePrefab;
 		private static bool gameIsPaused;
 		public static bool GameIsPaused { get => gameIsPaused; set => SetPauseGamestate(value); }
 
 		[SerializeField] private GameSettings gameSettings = default;
 		[SerializeField] private SoundEffect churchMusic = default;
+		[SerializeField] private SpellProjectile projectilePrefab = default;
 		public ItemDrop itemDropPrefab;
 
 		public Transform bgCanvas = default;
@@ -30,8 +32,13 @@ namespace EoE
 			{
 				Destroy(Instance.gameObject);
 			}
-			Utils.EffectUtils.PlaySound(churchMusic, null);
 			Instance = this;
+			StartCoroutine(E());
+		}
+		private IEnumerator E()
+		{
+			yield return new WaitForEndOfFrame();
+			Utils.EffectUtils.PlaySound(churchMusic, null);
 		}
 		private static void SetPauseGamestate(bool state)
 		{

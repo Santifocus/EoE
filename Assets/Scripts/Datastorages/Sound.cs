@@ -11,6 +11,7 @@ namespace EoE.Sounds
 		public string soundName = "Sound";
 		public AudioClip clip = null;
 		public AudioMixerGroup audioGroup = null;
+		public bool Loop = false;
 		[Range(0, 256)] public int priority = 128;
 		[Range(-3, 3)] public float pitch = 1;
 		[Range(0, 1)] public float volume = 1;

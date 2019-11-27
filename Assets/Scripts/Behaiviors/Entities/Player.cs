@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using TMPro;
 using EoE.Controlls;
 using EoE.Events;
 using EoE.Information;
@@ -206,7 +206,6 @@ namespace EoE.Entities
 			}
 
 			RegenEndurance();
-			CameraControl();
 			MovementControl();
 			AttackControl();
 			TargetEnemyControl();
@@ -319,7 +318,8 @@ namespace EoE.Entities
 		#region Movement
 		private void MovementControl()
 		{
-			UpdateMovementAnimations();
+			CameraControl();
+			UpdateWalkingAnimations();
 
 			if (IsStunned)
 			{
@@ -331,31 +331,24 @@ namespace EoE.Entities
 			PlayerMoveControl();
 			DodgeControl();
 		}
-		private void UpdateAcceleration()
+		private void CameraControl()
 		{
-			if (curStates.Moving && !curStates.Turning)
+			if (!TargetedEntitie)
 			{
-				float clampedIntent = Mathf.Clamp01(intendedAcceleration);
-				if (curAcceleration < clampedIntent)
+				if (InputController.ResetCamera.Active || InputController.ResetCamera.Down)
 				{
-					if (SelfSettings.MoveAcceleration > clampedIntent)
-						curAcceleration = Mathf.Min(clampedIntent, curAcceleration + intendedAcceleration * Time.fixedDeltaTime * SelfSettings.MoveAcceleration / SelfSettings.EntitieMass * (charController.isGrounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
-					else
-						curAcceleration = clampedIntent;
+					PlayerCameraController.Instance.LookAtDirection(transform.forward);
+					PlayerCameraController.TargetRotation = new Vector2(PlayerCameraController.TargetRotation.x, PlayerSettings.CameraVerticalAngleClamps.y / 2);
+					return;
 				}
-			}
-			else //decelerate
-			{
-				if (curAcceleration > 0)
-				{
-					if (SelfSettings.NoMoveDeceleration > 0)
-						curAcceleration = Mathf.Max(0, curAcceleration - Time.fixedDeltaTime * SelfSettings.NoMoveDeceleration / SelfSettings.EntitieMass * (charController.isGrounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
-					else
-						curAcceleration = 0;
-				}
+
+				Vector2 newMoveDistance = InputController.CameraMove;
+				newMoveDistance = new Vector2(newMoveDistance.x * selfSettings.CameraRotationPower.x, newMoveDistance.y * selfSettings.CameraRotationPower.y) * Time.deltaTime;
+				PlayerCameraController.TargetRotation += newMoveDistance;
 			}
 		}
-		private void UpdateMovementAnimations()
+		#region Walking
+		private void UpdateWalkingAnimations()
 		{
 			bool turning = curStates.Turning;
 			bool moving = curStates.Moving;
@@ -371,41 +364,6 @@ namespace EoE.Entities
 			animationControl.SetBool("Running", !turning && curAcceleration > 0 && (running && curAcceleration > RUN_ANIM_THRESHOLD));
 			animationControl.SetFloat("Runspeed", curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration);
 		}
-		private void ApplyForces()
-		{
-			Vector3 appliedForce = controllDirection * curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration + curVelocity;
-
-			charController.Move(appliedForce * Time.fixedDeltaTime);
-			ApplyGravity();
-		}
-		private void ApplyGravity(float scale = 1)
-		{
-			float lowerFallThreshold = Physics.gravity.y / 2;
-			float force = scale * Physics.gravity.y * Time.fixedDeltaTime;
-
-			if (!charController.isGrounded || totalVerticalVelocity > 0)
-			{
-				if (jumpVelocity > 0)
-				{
-					jumpVelocity += force * PlayerSettings.JumpImpulsePower;
-					if (jumpVelocity < 0)
-					{
-						verticalVelocity += jumpVelocity;
-						jumpVelocity = 0;
-					}
-				}
-				else
-				{
-					verticalVelocity += force;
-					jumpVelocity = 0;
-				}
-			}
-			else
-			{
-				jumpVelocity = 0;
-				verticalVelocity = lowerFallThreshold;
-			}
-		}
 		private void TurnControl()
 		{
 			float turnAmount = Time.fixedDeltaTime * SelfSettings.TurnSpeed * (charController.isGrounded ? 1 : SelfSettings.InAirTurnSpeedMultiplier);
@@ -418,85 +376,6 @@ namespace EoE.Entities
 			transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,
 														curRotation,
 														transform.localEulerAngles.z);
-		}
-		private void CheckForFalling()
-		{
-			//Find out wether the entitie is falling or not
-			bool playerWantsToFall = curStates.Falling || !InputController.Jump.Active;
-			bool falling = !charController.isGrounded && (totalVerticalVelocity < IS_FALLING_THRESHOLD || playerWantsToFall);
-
-			//If so: we enable the falling animation and add extra velocity for a better looking fallcurve
-			curStates.Falling = falling;
-			animationControl.SetBool("IsFalling", falling);
-			if (falling)
-			{
-				ApplyGravity(GameController.CurrentGameSettings.WhenFallingExtraGravity);
-			}
-		}
-		private void JumpControl()
-		{
-			bool jumpPressed = InputController.Jump.Down;
-			if (jumpPressed && Interactable.MarkedInteractable)
-			{
-				if (Interactable.MarkedInteractable.TryInteract())
-					return;
-			}
-
-			if(jumpGroundCooldown > 0)
-			{
-				jumpGroundCooldown -= Time.deltaTime;
-				return;
-			}
-
-			if (jumpPressed && charController.isGrounded)
-			{
-				if (curEndurance >= PlayerSettings.JumpEnduranceCost)
-				{
-					Jump();
-					ChangeEndurance(new ChangeInfo(this, CauseType.Magic, TargetStat.Endurance, PlayerSettings.JumpEnduranceCost));
-				}
-			}
-		}
-		protected void Jump()
-		{
-			jumpVelocity = Mathf.Min(PlayerSettings.JumpPower.y * curJumpPowerMultiplier, PlayerSettings.JumpPower.y * curJumpPowerMultiplier);
-			Vector3 addedExtraForce = PlayerSettings.JumpPower.x * transform.right * curJumpPowerMultiplier + PlayerSettings.JumpPower.z * transform.forward * curJumpPowerMultiplier * (curStates.Running ? PlayerSettings.RunSpeedMultiplicator : 1);
-			impactForce += new Vector2(addedExtraForce.x, addedExtraForce.z) * curAcceleration;
-			verticalVelocity = 0;
-
-			jumpGroundCooldown = JUMP_GROUND_COOLDOWN;
-			animationControl.SetTrigger("JumpStart");
-		}
-		private void CheckForLanding()
-		{
-			//Check if we landed
-			float velDif = curVelocity.y - lastFallVelocity;
-			if (velDif > LANDED_VELOCITY_THRESHOLD && jumpGroundCooldown <= 0) //We stopped falling for a certain amount, and we didnt change velocity because we just jumped
-			{
-				Landed(velDif);
-			}
-			lastFallVelocity = curVelocity.y;
-		}
-		private void Landed(float velDif)
-		{
-			EventManager.PlayerLandedInvoke(velDif);
-
-			float velocityMultiplier = 0;
-			if(velDif > GameController.CurrentGameSettings.GroundHitVelocityLossMinThreshold)
-			{
-				if (velDif >= GameController.CurrentGameSettings.GroundHitVelocityLossMaxThreshold)
-					velocityMultiplier = GameController.CurrentGameSettings.GroundHitVelocityLoss;
-				else
-					velocityMultiplier = (velDif - GameController.CurrentGameSettings.GroundHitVelocityLossMinThreshold) / (GameController.CurrentGameSettings.GroundHitVelocityLossMaxThreshold - GameController.CurrentGameSettings.GroundHitVelocityLossMinThreshold) * GameController.CurrentGameSettings.GroundHitVelocityLoss;
-			}
-			curAcceleration *= 1 - velocityMultiplier;
-			impactForce *= 1 - velocityMultiplier;
-
-			//Check if there is any fall damage to give
-			float damageAmount = GameController.CurrentGameSettings.FallDamageCurve.Evaluate(velDif);
-
-			if (damageAmount > 0)
-				ChangeHealth(new ChangeInfo(null, CauseType.Physical, ElementType.None, TargetStat.Health, actuallWorldPosition, Vector3.up, damageAmount, false));
 		}
 		private void PlayerMoveControl()
 		{
@@ -558,11 +437,155 @@ namespace EoE.Entities
 			if (!TargetedEntitie)
 				intendedRotation = -(Mathf.Atan2(controllDirection.z, controllDirection.x) * Mathf.Rad2Deg - 90);
 		}
+		#endregion
+		#region Jumping
+		private void JumpControl()
+		{
+			bool jumpPressed = InputController.Jump.Down;
+			if (jumpPressed && Interactable.MarkedInteractable)
+			{
+				if (Interactable.MarkedInteractable.TryInteract())
+					return;
+			}
+
+			if (jumpGroundCooldown > 0)
+			{
+				jumpGroundCooldown -= Time.deltaTime;
+				return;
+			}
+
+			if (jumpPressed && charController.isGrounded)
+			{
+				if (curEndurance >= PlayerSettings.JumpEnduranceCost)
+				{
+					Jump();
+					ChangeEndurance(new ChangeInfo(this, CauseType.Magic, TargetStat.Endurance, PlayerSettings.JumpEnduranceCost));
+				}
+			}
+		}
+		protected void Jump()
+		{
+			jumpVelocity = Mathf.Min(PlayerSettings.JumpPower.y * curJumpPowerMultiplier, PlayerSettings.JumpPower.y * curJumpPowerMultiplier);
+			Vector3 addedExtraForce = PlayerSettings.JumpPower.x * transform.right * curJumpPowerMultiplier + PlayerSettings.JumpPower.z * transform.forward * curJumpPowerMultiplier * (curStates.Running ? PlayerSettings.RunSpeedMultiplicator : 1);
+			impactForce += new Vector2(addedExtraForce.x, addedExtraForce.z) * curAcceleration;
+			verticalVelocity = 0;
+
+			jumpGroundCooldown = JUMP_GROUND_COOLDOWN;
+			animationControl.SetTrigger("JumpStart");
+		}
+		private void CheckForFalling()
+		{
+			//Find out wether the entitie is falling or not
+			bool playerWantsToFall = curStates.Falling || !InputController.Jump.Active;
+			bool falling = !charController.isGrounded && (totalVerticalVelocity < IS_FALLING_THRESHOLD || playerWantsToFall);
+
+			//If so: we enable the falling animation and add extra velocity for a better looking fallcurve
+			curStates.Falling = falling;
+			animationControl.SetBool("IsFalling", falling);
+			if (falling)
+			{
+				ApplyGravity(GameController.CurrentGameSettings.WhenFallingExtraGravity);
+			}
+		}
+		private void CheckForLanding()
+		{
+			//Check if we landed
+			float velDif = curVelocity.y - lastFallVelocity;
+			if (velDif > LANDED_VELOCITY_THRESHOLD && jumpGroundCooldown <= 0) //We stopped falling for a certain amount, and we didnt change velocity because we just jumped
+			{
+				Landed(velDif);
+			}
+			lastFallVelocity = curVelocity.y;
+		}
+		private void Landed(float velDif)
+		{
+			EventManager.PlayerLandedInvoke(velDif);
+
+			float velocityMultiplier = 0;
+			if (velDif > GameController.CurrentGameSettings.GroundHitVelocityLossMinThreshold)
+			{
+				if (velDif >= GameController.CurrentGameSettings.GroundHitVelocityLossMaxThreshold)
+					velocityMultiplier = GameController.CurrentGameSettings.GroundHitVelocityLoss;
+				else
+					velocityMultiplier = (velDif - GameController.CurrentGameSettings.GroundHitVelocityLossMinThreshold) / (GameController.CurrentGameSettings.GroundHitVelocityLossMaxThreshold - GameController.CurrentGameSettings.GroundHitVelocityLossMinThreshold) * GameController.CurrentGameSettings.GroundHitVelocityLoss;
+			}
+			curAcceleration *= 1 - velocityMultiplier;
+			impactForce *= 1 - velocityMultiplier;
+
+			//Check if there is any fall damage to give
+			float damageAmount = GameController.CurrentGameSettings.FallDamageCurve.Evaluate(velDif);
+
+			if (damageAmount > 0)
+				ChangeHealth(new ChangeInfo(null, CauseType.Physical, ElementType.None, TargetStat.Health, actuallWorldPosition, Vector3.up, damageAmount, false));
+		}
+		#endregion
+		#endregion
+		#region ForceControl
+		private void UpdateAcceleration()
+		{
+			if (curStates.Moving && !curStates.Turning)
+			{
+				float clampedIntent = Mathf.Clamp01(intendedAcceleration);
+				if (curAcceleration < clampedIntent)
+				{
+					if (SelfSettings.MoveAcceleration > clampedIntent)
+						curAcceleration = Mathf.Min(clampedIntent, curAcceleration + intendedAcceleration * Time.fixedDeltaTime * SelfSettings.MoveAcceleration / SelfSettings.EntitieMass * (charController.isGrounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
+					else
+						curAcceleration = clampedIntent;
+				}
+			}
+			else //decelerate
+			{
+				if (curAcceleration > 0)
+				{
+					if (SelfSettings.NoMoveDeceleration > 0)
+						curAcceleration = Mathf.Max(0, curAcceleration - Time.fixedDeltaTime * SelfSettings.NoMoveDeceleration / SelfSettings.EntitieMass * (charController.isGrounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
+					else
+						curAcceleration = 0;
+				}
+			}
+		}
 		protected override void ApplyKnockback(Vector3 causedKnockback)
 		{
 			base.ApplyKnockback(causedKnockback);
 			verticalVelocity += causedKnockback.y;
 		}
+		private void ApplyForces()
+		{
+			Vector3 appliedForce = controllDirection * curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration + curVelocity;
+
+			charController.Move(appliedForce * Time.fixedDeltaTime);
+			ApplyGravity();
+		}
+		private void ApplyGravity(float scale = 1)
+		{
+			float lowerFallThreshold = Physics.gravity.y / 2;
+			float force = scale * Physics.gravity.y * Time.fixedDeltaTime;
+
+			if (!charController.isGrounded || totalVerticalVelocity > 0)
+			{
+				if (jumpVelocity > 0)
+				{
+					jumpVelocity += force * PlayerSettings.JumpImpulsePower;
+					if (jumpVelocity < 0)
+					{
+						verticalVelocity += jumpVelocity;
+						jumpVelocity = 0;
+					}
+				}
+				else
+				{
+					verticalVelocity += force;
+					jumpVelocity = 0;
+				}
+			}
+			else
+			{
+				jumpVelocity = 0;
+				verticalVelocity = lowerFallThreshold;
+			}
+		}
+		#endregion
 		#region Dodging
 		private void DodgeControl()
 		{
@@ -673,26 +696,13 @@ namespace EoE.Entities
 			}
 		}
 		#endregion
-		private void CameraControl()
-		{
-			if (!TargetedEntitie)
-			{
-				if (InputController.ResetCamera.Active || InputController.ResetCamera.Down)
-				{
-					PlayerCameraController.Instance.LookAtDirection(transform.forward);
-					PlayerCameraController.TargetRotation = new Vector2(PlayerCameraController.TargetRotation.x, PlayerSettings.CameraVerticalAngleClamps.y / 2);
-					return;
-				}
-
-				Vector2 newMoveDistance = InputController.CameraMove;
-				newMoveDistance = new Vector2(newMoveDistance.x * selfSettings.CameraRotationPower.x, newMoveDistance.y * selfSettings.CameraRotationPower.y) * Time.deltaTime;
-				PlayerCameraController.TargetRotation += newMoveDistance;
-			}
-		}
+		#region EnemyTargeting
 		private void TargetEnemyControl()
 		{
 			if (switchTargetTimer > 0)
 				switchTargetTimer -= Time.deltaTime;
+
+			targetPosition = TargetedEntitie ? (Vector3?)TargetedEntitie.actuallWorldPosition : null;
 
 			if (InputController.Aim.Down)
 			{
@@ -715,7 +725,7 @@ namespace EoE.Entities
 					}
 				}
 			}
-			else if(InputController.Aim.Active && InputController.CameraMove.sqrMagnitude > 0.25f)
+			else if (InputController.Aim.Active && InputController.CameraMove.sqrMagnitude > 0.25f)
 			{
 				if (switchTargetTimer > 0 || TargetedEntitie == null)
 					return;

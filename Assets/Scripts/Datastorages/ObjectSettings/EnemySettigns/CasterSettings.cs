@@ -19,7 +19,7 @@ namespace EoE.Information
 		public float ProjectileHitboxSize = 1.5f;
 		public Vector3 ProjectileSpawnOffset = default;
 		public CasterProjectile ProjectilePrefab = null;
-		public FXInstance[] CastingAnnouncement = null;
+		public FXObject[] CastingAnnouncement = null;
 
 		public ParticleEffect ProjectileFlyParticles = null;
 		public ParticleEffect ProjectileDestroyParticles = null;

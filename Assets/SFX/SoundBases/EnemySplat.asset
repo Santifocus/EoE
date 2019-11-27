@@ -15,8 +15,9 @@ MonoBehaviour:
   soundName: EnemySplat
   clip: {fileID: 8300000, guid: 58131363a4f998d43996465e58e2fe25, type: 3}
   audioGroup: {fileID: 24300002, guid: b8b319c0096b4d34196070be7e374c0c, type: 2}
+  Loop: 0
   priority: 128
   pitch: 0.75
   volume: 0.7
   spatialBlend: 0.371
-  scaleStyle: 1
+  scaleStyle: 0
