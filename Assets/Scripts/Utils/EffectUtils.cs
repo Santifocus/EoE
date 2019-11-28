@@ -38,6 +38,8 @@ namespace EoE.Utils
 			AllTimeDilationsEffects = new List<TimeDilationEffect>();
 			AllTintScreenEffects = new List<TintScreenEffect>();
 			AllCameraFOVWarpEffects = new List<CameraFOVWarpEffect>();
+			AllSoundFXs = new List<SoundFX>();
+			AllParticleFXs = new List<ParticleFX>();
 
 			Instance.ResetScreenEffectMat();
 			Gamepad.current.SetMotorSpeeds(0, 0);
@@ -62,7 +64,7 @@ namespace EoE.Utils
 		#region ScreenShake
 		private const float DELAY_PER_SHAKE = 0.01f;
 		private const float UN_SHAKE_SPEED = 20;
-		private static Coroutine ShakeScreenCoroutine = null;
+		private Coroutine ShakeScreenCoroutine = null;
 		private static List<ScreenShakeInfo> AllScreenShakes = new List<ScreenShakeInfo>();
 		public static FXInstance ShakeScreen(float lenght, float axisIntensity, float angleIntensity, Vector3? customAxisMultiplier = null, Vector3? customAngleMultiplier = null)
 		{
@@ -74,9 +76,9 @@ namespace EoE.Utils
 				angleIntensity * (customAngleMultiplier.HasValue ? customAngleMultiplier.Value : Vector3.one));
 
 			AllScreenShakes.Add(newScreenShakeInfo);
-			if (ShakeScreenCoroutine == null)
+			if (Instance.ShakeScreenCoroutine == null)
 			{
-				ShakeScreenCoroutine = Instance.StartCoroutine(Instance.ShakeScreenC());
+				Instance.ShakeScreenCoroutine = Instance.StartCoroutine(Instance.ShakeScreenC());
 			}
 			return newScreenShakeInfo;
 		}
@@ -169,7 +171,7 @@ namespace EoE.Utils
 		#endregion
 		#region Rumble
 		private static List<RumbleInfo> AllRumbles = new List<RumbleInfo>();
-		private static Coroutine RumbleCoroutine = null;
+		private Coroutine RumbleCoroutine = null;
 		public static FXInstance RumbleController(float totalTime, float leftMotorIntensityStart, float rightMotorIntensityStart, float? leftMotorIntensityEnd = null, float? rightMotorIntensityEnd = null)
 		{
 			RumbleInfo newRumbleInfo = new RumbleInfo(
@@ -180,9 +182,9 @@ namespace EoE.Utils
 				rightMotorIntensityEnd);
 
 			AllRumbles.Add(newRumbleInfo);
-			if (RumbleCoroutine == null)
+			if (Instance.RumbleCoroutine == null)
 			{
-				RumbleCoroutine = Instance.StartCoroutine(Instance.RumbleC());
+				Instance.RumbleCoroutine = Instance.StartCoroutine(Instance.RumbleC());
 			}
 			return newRumbleInfo;
 		}
@@ -281,15 +283,15 @@ namespace EoE.Utils
 		#endregion
 		#region ColorScreen
 		private static List<ColorScreenEffect> AllScreenColorEffects = new List<ColorScreenEffect>();
-		private static Coroutine ColorScreenCoroutine;
+		private Coroutine ColorScreenCoroutine;
 		public static FXInstance ColorScreen(Color col, float lenght, float depth = 0.2f)
 		{
 			ColorScreenEffect newColorScreenEffect = new ColorScreenEffect(col, lenght, Mathf.Clamp01(depth * 2) / 2);
 
 			AllScreenColorEffects.Add(newColorScreenEffect);
-			if (ColorScreenCoroutine == null)
+			if (Instance.ColorScreenCoroutine == null)
 			{
-				ColorScreenCoroutine = Instance.StartCoroutine(Instance.ColorScreenC());
+				Instance.ColorScreenCoroutine = Instance.StartCoroutine(Instance.ColorScreenC());
 			}
 			return newColorScreenEffect;
 		}
@@ -357,14 +359,14 @@ namespace EoE.Utils
 		#region BlurScreen
 		private const float BLUR_LERP_SPEED = 8;
 		private static List<BlurScreenEffect> AllBlurScreenEffects = new List<BlurScreenEffect>();
-		private static Coroutine BlurScreenCoroutine = null;
+		private Coroutine BlurScreenCoroutine = null;
 		public static FXInstance BlurScreen(float intensity, float lenght, int blurDistance = 4)
 		{
 			BlurScreenEffect newBlurScreenEffect = new BlurScreenEffect(intensity, lenght, blurDistance);
 			AllBlurScreenEffects.Add(newBlurScreenEffect);
-			if (BlurScreenCoroutine == null)
+			if (Instance.BlurScreenCoroutine == null)
 			{
-				BlurScreenCoroutine = Instance.StartCoroutine(Instance.BlurScreenC());
+				Instance.BlurScreenCoroutine = Instance.StartCoroutine(Instance.BlurScreenC());
 			}
 
 			return newBlurScreenEffect;
@@ -444,15 +446,15 @@ namespace EoE.Utils
 		#endregion
 		#region ScreenTint
 		private static List<TintScreenEffect> AllTintScreenEffects = new List<TintScreenEffect>();
-		private static Coroutine TintScreenCoroutine = null;
+		private Coroutine TintScreenCoroutine = null;
 		public static FXInstance TintScreen(Color tintColor, float timeIn, float timeStay, float timeOut, int dominance = 1)
 		{
 			TintScreenEffect newTintScreenEffect = new TintScreenEffect(tintColor, timeIn, timeStay, timeOut, dominance);
 
 			AllTintScreenEffects.Add(newTintScreenEffect);
-			if (TintScreenCoroutine == null)
+			if (Instance.TintScreenCoroutine == null)
 			{
-				TintScreenCoroutine = Instance.StartCoroutine(Instance.TintScreenC());
+				Instance.TintScreenCoroutine = Instance.StartCoroutine(Instance.TintScreenC());
 			}
 
 			return newTintScreenEffect;
@@ -549,7 +551,7 @@ namespace EoE.Utils
 		public static int HighestTimeDilutionDominanceIndex;
 		private static float BaseFixedDeltaTime;
 		private static List<TimeDilationEffect> AllTimeDilationsEffects = new List<TimeDilationEffect>();
-		private static Coroutine TimeDilationCoroutine = null;
+		private Coroutine TimeDilationCoroutine = null;
 		public static FXInstance DilateTime(int dominanceIndex, float targetSpeed, float timeIn, float timeStay, bool deleteOtherDilations = false, float? timeOut = null)
 		{
 			if (deleteOtherDilations)
@@ -559,9 +561,9 @@ namespace EoE.Utils
 			TimeDilationEffect newTimeDilationEffect = new TimeDilationEffect(dominanceIndex, Mathf.Max(0.001f, targetSpeed), timeIn, timeStay, timeOut);
 
 			AllTimeDilationsEffects.Add(newTimeDilationEffect);
-			if (TimeDilationCoroutine == null)
+			if (Instance.TimeDilationCoroutine == null)
 			{
-				TimeDilationCoroutine = Instance.StartCoroutine(Instance.DilateTimeC());
+				Instance.TimeDilationCoroutine = Instance.StartCoroutine(Instance.DilateTimeC());
 			}
 
 			return newTimeDilationEffect;
@@ -655,7 +657,7 @@ namespace EoE.Utils
 		#region CameraFOVWarp
 		public static int HighestCameraFOVWarpDominanceIndex;
 		private static List<CameraFOVWarpEffect> AllCameraFOVWarpEffects = new List<CameraFOVWarpEffect>();
-		private static Coroutine CameraFOVWarpCoroutine = null;
+		private Coroutine CameraFOVWarpCoroutine = null;
 		private const float LERP_FOV_SPEED = 10;
 		public static FXInstance WarpCameraFOV(int dominanceIndex, float targetFOV, float timeIn, float timeStay, float timeOut, bool overwriteOtherFOVWarps)
 		{
@@ -666,9 +668,9 @@ namespace EoE.Utils
 			CameraFOVWarpEffect newCameraFOVWarpEffect = new CameraFOVWarpEffect(dominanceIndex, targetFOV, timeIn, timeStay, timeOut);
 
 			AllCameraFOVWarpEffects.Add(newCameraFOVWarpEffect);
-			if (CameraFOVWarpCoroutine == null)
+			if (Instance.CameraFOVWarpCoroutine == null)
 			{
-				CameraFOVWarpCoroutine = Instance.StartCoroutine(Instance.WarpCameraFOVC());
+				Instance.CameraFOVWarpCoroutine = Instance.StartCoroutine(Instance.WarpCameraFOVC());
 			}
 			return newCameraFOVWarpEffect;
 		}
@@ -763,7 +765,7 @@ namespace EoE.Utils
 		#endregion
 		#region SingleSound
 		private static List<SoundFX> AllSoundFXs = new List<SoundFX>();
-		private static Coroutine SoundFXCoroutine = null;
+		private Coroutine SoundFXCoroutine = null;
 		public static FXInstance PlaySound(SoundEffect info, Transform followTarget, float multiplier = 1)
 		{
 			SoundPlayer soundPlayer = (new GameObject(info.TargetSound.soundName + " Sound Player")).AddComponent<SoundPlayer>();
@@ -777,9 +779,9 @@ namespace EoE.Utils
 			SoundFX newSoundFX = new SoundFX(info, followTarget, soundPlayer);
 			AllSoundFXs.Add(newSoundFX);
 
-			if(SoundFXCoroutine == null)
+			if(Instance.SoundFXCoroutine == null)
 			{
-				SoundFXCoroutine = Instance.StartCoroutine(Instance.SoundFXC());
+				Instance.SoundFXCoroutine = Instance.StartCoroutine(Instance.SoundFXC());
 			}
 
 			return newSoundFX;
@@ -868,7 +870,7 @@ namespace EoE.Utils
 		#endregion
 		#region Particle Effects
 		private static List<ParticleFX> AllParticleFXs = new List<ParticleFX>();
-		private static Coroutine ParticleFXCoroutine = null;
+		private Coroutine ParticleFXCoroutine = null;
 		public static FXInstance PlayParticleEffect(ParticleEffect info, Transform parent)
 		{
 			Transform mainObject = Instantiate(info.ParticleMainObject, Storage.ParticleStorage).transform;
@@ -891,9 +893,9 @@ namespace EoE.Utils
 			ParticleFX newParticleFX = new ParticleFX(info, parent, mainObject);
 			AllParticleFXs.Add(newParticleFX);
 
-			if(ParticleFXCoroutine == null)
+			if(Instance.ParticleFXCoroutine == null)
 			{
-				ParticleFXCoroutine = Instance.StartCoroutine(Instance.ParticleFXC());
+				Instance.ParticleFXCoroutine = Instance.StartCoroutine(Instance.ParticleFXC());
 			}
 			return newParticleFX;
 		}

@@ -41,7 +41,7 @@ MonoBehaviour:
     StartEffects: []
     WhileEffects: []
     CollideMask: 3
-    Bounces: 1
+    Bounces: 10
     BounceOffEntities: 0
     CollisionEffectsOnBounce: 1
     CollisionParticleEffects:
