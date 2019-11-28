@@ -20,6 +20,7 @@ namespace EoE.Weapons
 		private float bounceCooldown;
 
 		private float delayToWhileCast;
+		private bool isDead;
 		private bool isRemenants;
 
 		private void Start()
@@ -78,6 +79,10 @@ namespace EoE.Weapons
 				}
 			}
 		}
+		private void FixedUpdate()
+		{
+			transform.forward = body.velocity.normalized;
+		}
 		private void OnCollisionEnter(Collision collision)
 		{
 			if (bounceCooldown > 0 || isRemenants)
@@ -94,7 +99,7 @@ namespace EoE.Weapons
 					FinishProjectileFlight();
 				}
 			}
-			else if(HasCollisionFlag(SpellCollideMask.Terrain))// && collision.gameObject.layer == ConstantCollector.TERRAIN_LAYER
+			else if(collision.gameObject.layer == ConstantCollector.TERRAIN_LAYER && HasCollisionFlag(SpellCollideMask.Terrain))
 			{
 				if (remainingBounces > 0)
 				{
@@ -114,16 +119,23 @@ namespace EoE.Weapons
 		{
 			remainingBounces--;
 			bounceCooldown = BOUNCE_COOLDOWN;
-			body.velocity = Vector3.Reflect(body.velocity, normal);
 
 			if (info.ProjectileInfo[index].CollisionEffectsOnBounce)
+			{
 				ActivateSpellEffects(info.ProjectileInfo[index].CollisionEffects);
+				CreateCollisionParticles();
+			}
 		}
 		private void FinishProjectileFlight()
 		{
+			if (isDead)
+				return;
+
 			ActivateSpellEffects(info.ProjectileInfo[index].CollisionEffects);
+			CreateCollisionParticles();
 			if (info.ProjectileInfo[index].CreatesRemenants)
 			{
+				isRemenants = true;
 				body.velocity = Vector3.zero;
 				ActivateSpellEffects(info.ProjectileInfo[index].Remenants.StartEffects);
 				this.remainingLifeTime = info.ProjectileInfo[index].Remenants.Duration;
@@ -135,6 +147,8 @@ namespace EoE.Weapons
 			}
 			else
 			{
+				body.velocity = Vector3.zero;
+				isDead = true;
 				Destroy(gameObject);
 			}
 		}
@@ -142,6 +156,11 @@ namespace EoE.Weapons
 		{
 			for (int i = 0; i < effects.Length; i++)
 				Entitie.ActivateSpellEffect(creator, effects[i], transform, info);
+		}
+		private void CreateCollisionParticles()
+		{
+			for (int i = 0; i < info.ProjectileInfo[index].CollisionParticleEffects.Length; i++)
+				FXManager.PlayFX(info.ProjectileInfo[index].CollisionParticleEffects[i], transform, false);
 		}
 		public void Fall()
 		{

@@ -8,6 +8,7 @@
 		public float CritChance = 0;
 
 		//Player search
+		public float PlayerTrackSpeed = 4;
 		public float SightRange = 10;
 		public float FoundPlayerSightRange = 30;
 		public float SightAngle = 60;

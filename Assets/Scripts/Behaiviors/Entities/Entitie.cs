@@ -54,6 +54,7 @@ namespace EoE.Entities
 
 		//Spell Casting
 		public bool CastingSpell { get; private set; }
+		public float CastingCooldown { get; private set; }
 
 		//Getter Helpers
 		protected enum ColliderType : byte { Box, Sphere, Capsule }
@@ -183,6 +184,7 @@ namespace EoE.Entities
 		#region State Control
 		private void EntitieStateControl()
 		{
+			CastingCooldown -= Time.deltaTime;
 			if (combatEndCooldown > 0)
 			{
 				combatEndCooldown -= Time.deltaTime;
@@ -723,8 +725,9 @@ namespace EoE.Entities
 		#region Spell Casting
 		protected bool CastSpell(Spell spell)
 		{
-			if (curMana < spell.ManaCost)
+			if (curMana < spell.ManaCost || CastingSpell || CastingCooldown > 0)
 				return false;
+
 			StartCoroutine(CastSpellC(spell));
 			return true;
 		}
@@ -741,6 +744,10 @@ namespace EoE.Entities
 				for(int i = 0; i < spell.CastInfo.StartEffects.Length; i++)
 				{
 					ActivateSpellEffect(this, spell.CastInfo.StartEffects[i], transform, spell);
+				}
+				for(int i = 0; i < spell.CastInfo.ParticleEffects.Length; i++)
+				{
+					FXManager.PlayFX(spell.CastInfo.ParticleEffects[i], transform, this is Player);
 				}
 
 				while(castTime < spell.CastInfo.Duration)
@@ -765,6 +772,10 @@ namespace EoE.Entities
 				{
 					ActivateSpellEffect(this, spell.StartInfo.Effects[i], transform, spell);
 				}
+				for (int i = 0; i < spell.StartInfo.ParticleEffects.Length; i++)
+				{
+					FXManager.PlayFX(spell.StartInfo.ParticleEffects[i], transform, this is Player);
+				}
 			}
 
 			//Projectile
@@ -772,16 +783,22 @@ namespace EoE.Entities
 			{
 				for (int i = 0; i < spell.ProjectileInfo.Length; i++)
 				{
-					CreateSpellProjectile(spell, i);
-					yield return new WaitForSeconds(spell.DelayToNextProjectile[i]);
+					Transform t = CreateSpellProjectile(spell, i).transform;
+					for (int j = 0; j < spell.ProjectileInfo[i].ParticleEffects.Length; j++)
+					{
+						FXManager.PlayFX(spell.ProjectileInfo[i].ParticleEffects[j], t, this is Player);
+					}
+					if(i < spell.ProjectileInfo.Length - 1)
+						yield return new WaitForSeconds(spell.DelayToNextProjectile[i]);
 				}
 				if (spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting))
 					appliedMoveStuns--;
 			}
 			CastingSpell = false;
+			CastingCooldown = spell.SpellCooldown;
 		}
 		#region ProjectileControl
-		private void CreateSpellProjectile(Spell spellBase, int index)
+		private SpellProjectile CreateSpellProjectile(Spell spellBase, int index)
 		{
 			Vector3 spawnOffset = spellBase.ProjectileInfo[index].CreateOffsetToCaster.x * transform.right + spellBase.ProjectileInfo[index].CreateOffsetToCaster.y * transform.up + spellBase.ProjectileInfo[index].CreateOffsetToCaster.z * transform.forward;
 
@@ -792,7 +809,7 @@ namespace EoE.Entities
 			{
 				if (targetPosition.HasValue)
 				{
-					direction = (targetPosition.Value - (actuallWorldPosition + spawnOffset));
+					direction = (targetPosition.Value - (actuallWorldPosition + spawnOffset)).normalized;
 				}
 				else
 				{
@@ -809,6 +826,7 @@ namespace EoE.Entities
 			projectile.Setup(spellBase, index, this, direction);
 			projectile.transform.position = actuallWorldPosition + spawnOffset;
 
+			return projectile;
 			Vector3 DirectionFromStyle(InherritDirection style)
 			{
 				if (style == InherritDirection.World)
@@ -988,7 +1006,7 @@ namespace EoE.Entities
 				}
 
 				//FXEffects
-				for (int j = 0; j < effect.Effects.Length; i++)
+				for (int j = 0; j < effect.Effects.Length; j++)
 				{
 					FXManager.PlayFX(effect.Effects[j], eligibleTargets[i].Target.transform, eligibleTargets[i].Target is Player, eligibleTargets[i].Multiplier);
 				}

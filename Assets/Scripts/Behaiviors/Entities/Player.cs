@@ -136,24 +136,25 @@ namespace EoE.Entities
 		}
 		private void SetupLevelingControl()
 		{
-			LevelingBaseBuff = new Buff()
+			LevelingBaseBuff = ScriptableObject.CreateInstance<Buff>();
 			{
-				Name = "LevelingBase",
-				Quality = BuffType.Positive,
-				Icon = null,
-				BuffTime = 0,
-				Permanent = true,
-				DOTs = new DOT[0]
-			};
-			LevelingPointsBuff = new Buff()
+				LevelingBaseBuff.Name = "LevelingBase";
+				LevelingBaseBuff.Quality = BuffType.Positive;
+				LevelingBaseBuff.Icon = null;
+				LevelingBaseBuff.BuffTime = 0;
+				LevelingBaseBuff.Permanent = true;
+				LevelingBaseBuff.DOTs = new DOT[0];
+			}
+
+			LevelingPointsBuff = ScriptableObject.CreateInstance<Buff>();
 			{
-				Name = "LevelingSkillPoints",
-				Quality = BuffType.Positive,
-				Icon = null,
-				BuffTime = 0,
-				Permanent = true,
-				DOTs = new DOT[0]
-			};
+				LevelingPointsBuff.Name = "LevelingSkillPoints";
+				LevelingPointsBuff.Quality = BuffType.Positive;
+				LevelingPointsBuff.Icon = null;
+				LevelingPointsBuff.BuffTime = 0;
+				LevelingPointsBuff.Permanent = true;
+				LevelingPointsBuff.DOTs = new DOT[0];
+			}
 
 			//Health, Mana, Endurance, PhysicalDamage, MagicalDamage, Defense
 			int incremtingStats = System.Enum.GetNames(typeof(TargetBaseStat)).Length;

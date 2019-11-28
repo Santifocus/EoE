@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace EoE
 {
-	public class EoEEditor
+	public static class EoEEditor
 	{
-		private const string LINE_BREAK = "_________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________";
+		private const string LINE_BREAK = "――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――";
 		private const float STANDARD_OFFSET = 20;
 		public static bool isDirty;
 		public static void Header(string content, int offSet = 0, bool spaces = true, bool bold = true) => Header(new GUIContent(content), offSet, spaces, bold);
@@ -288,15 +288,15 @@ namespace EoE
 			}
 			return false;
 		}
-		public static bool EnumField(string content, ref System.Enum curValue, int offSet = 0) => EnumField(new GUIContent(content), ref curValue, offSet);
-		public static bool EnumField(GUIContent content, ref System.Enum curValue, int offSet = 0)
+		public static bool EnumField<T>(string content, ref T curValue, int offSet = 0) where T : System.Enum => EnumField(new GUIContent(content), ref curValue, offSet);
+		public static bool EnumField<T>(GUIContent content, ref T curValue, int offSet = 0) where T : System.Enum
 		{
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Space(offSet * STANDARD_OFFSET);
-			System.Enum newValue = EditorGUILayout.EnumPopup(content, curValue);
+			T newValue = (T)EditorGUILayout.EnumPopup(content, curValue);
 			EditorGUILayout.EndHorizontal();
 
-			if (newValue != curValue)
+			if (newValue.GetHashCode() != curValue.GetHashCode())
 			{
 				isDirty = true;
 				curValue = newValue;
@@ -304,23 +304,23 @@ namespace EoE
 			}
 			return false;
 		}
-		public static bool EnumFlagField(string content, ref System.Enum curValue, int offSet = 0) => EnumFlagField(new GUIContent(content), ref curValue, offSet);
-		public static bool EnumFlagField(GUIContent content, ref System.Enum curValue, int offSet = 0)
+		public static bool EnumFlagField<T>(string content, ref T curValue, int offSet = 0) where T : System.Enum => EnumFlagField(new GUIContent(content), ref curValue, offSet);
+		public static bool EnumFlagField<T>(GUIContent content, ref T curValue, int offSet = 0) where T : System.Enum
 		{
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Space(offSet * STANDARD_OFFSET);
-			System.Enum newValue = EditorGUILayout.EnumFlagsField(content, curValue);
+			T newValue = (T)EditorGUILayout.EnumFlagsField(content, curValue);
 			EditorGUILayout.EndHorizontal();
 
-			if (newValue != curValue)
+			if (newValue.GetHashCode() != curValue.GetHashCode())
 			{
 				isDirty = true;
-				curValue = newValue;
+				curValue = (T)newValue;
 				return true;
 			}
 			return false;
 		}
-		public static bool DrawArray<T>(GUIContent arrayContent, System.Func<int, int, bool> elementBinding, ref T[] curValue, ref bool open, int offSet = 0)
+		public static bool DrawArray<T>(GUIContent arrayContent, System.Func<int, int, bool> elementBinding, ref T[] curValue, ref bool open, int offSet = 0, bool asHeader = false)
 		{
 			bool changed = false;
 			if (curValue == null)
@@ -329,7 +329,10 @@ namespace EoE
 				changed = true;
 			}
 
-			changed |= Foldout(arrayContent, ref open, offSet);
+			if (asHeader)
+				changed |= FoldoutHeader(arrayContent, ref open);
+			else
+				changed |= Foldout(arrayContent, ref open, offSet);
 			if (open)
 			{
 				for(int i = 0; i < curValue.Length; i++)
@@ -357,7 +360,10 @@ namespace EoE
 					curValue = newArray;
 				}
 			}
-			if(changed)
+
+			if (asHeader)
+				EndFoldoutHeader();
+			if (changed)
 				isDirty = true;
 			return changed;
 		}

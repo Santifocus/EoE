@@ -76,7 +76,23 @@ namespace EoE.Information
 
 		public float GetEffectiveness(ElementType inflicter, ElementType receiver)
 		{
-			return EffectivenessMatrix[(int)inflicter][(int)receiver];
+			int inflicterIndex = 0;
+			int receiverIndex = 0;
+
+			int typeIndex = (int)inflicter;
+			while (typeIndex >= 2)
+			{
+				typeIndex /= 2;
+				inflicterIndex++;
+			}
+
+			typeIndex = (int)receiver;
+			while (typeIndex >= 2)
+			{
+				typeIndex /= 2;
+				receiverIndex++;
+			}
+			return EffectivenessMatrix[inflicterIndex][receiverIndex];
 		}
 
 		[System.Serializable]

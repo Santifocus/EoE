@@ -1,0 +1,139 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbc89a2906f120d45877860a48c8c4e2, type: 3}
+  m_Name: FireballSpell
+  m_EditorClassIdentifier: 
+  ManaCost: 10
+  BaseDamage: 30
+  BaseKnockback: 0
+  SpellCooldown: 2
+  ContainedParts: -1
+  MovementRestrictions: -1
+  CastInfo:
+    Duration: 1.7
+    ParticleEffects:
+    - {fileID: 11400000, guid: 0c1bf3d6adb169e4b8149be02f80b674, type: 2}
+    StartEffects: []
+    WhileEffects: []
+  StartInfo:
+    ParticleEffects:
+    - {fileID: 11400000, guid: 58c19c7b60833bd448f0db05e659e5bb, type: 2}
+    Effects: []
+  ProjectileInfo:
+  - DirectionStyle: 2
+    FallbackDirectionStyle: 1
+    Direction: 1
+    HitboxSize: 0.75
+    Duration: 10
+    FlightSpeed: 30
+    CreateOffsetToCaster: {x: 0, y: 5, z: 0}
+    ParticleEffects:
+    - {fileID: 11400000, guid: f3a5d4a11481585419aa5a911b8dcce1, type: 2}
+    StartEffects: []
+    WhileEffects: []
+    CollideMask: 3
+    Bounces: 1
+    BounceOffEntities: 0
+    CollisionEffectsOnBounce: 1
+    CollisionParticleEffects:
+    - {fileID: 11400000, guid: 2762cd21c6bde30458700de03ee7df29, type: 2}
+    CollisionEffects:
+    - {fileID: 11400000, guid: 44806d8447931e9408e4e93cb4e6611f, type: 2}
+    CreatesRemenants: 0
+    Remenants:
+      Duration: 5
+      ParticleEffects: []
+      StartEffects: []
+      WhileEffects: []
+      TryGroundRemenants: 1
+  - DirectionStyle: 2
+    FallbackDirectionStyle: 1
+    Direction: 1
+    HitboxSize: 0.75
+    Duration: 10
+    FlightSpeed: 30
+    CreateOffsetToCaster: {x: 0, y: 5, z: 1}
+    ParticleEffects:
+    - {fileID: 11400000, guid: f3a5d4a11481585419aa5a911b8dcce1, type: 2}
+    StartEffects: []
+    WhileEffects: []
+    CollideMask: 3
+    Bounces: 1
+    BounceOffEntities: 0
+    CollisionEffectsOnBounce: 1
+    CollisionParticleEffects:
+    - {fileID: 11400000, guid: 2762cd21c6bde30458700de03ee7df29, type: 2}
+    CollisionEffects:
+    - {fileID: 11400000, guid: 44806d8447931e9408e4e93cb4e6611f, type: 2}
+    CreatesRemenants: 0
+    Remenants:
+      Duration: 5
+      ParticleEffects: []
+      StartEffects: []
+      WhileEffects: []
+      TryGroundRemenants: 1
+  - DirectionStyle: 2
+    FallbackDirectionStyle: 1
+    Direction: 1
+    HitboxSize: 0.75
+    Duration: 10
+    FlightSpeed: 30
+    CreateOffsetToCaster: {x: 0, y: 5, z: 1}
+    ParticleEffects:
+    - {fileID: 11400000, guid: f3a5d4a11481585419aa5a911b8dcce1, type: 2}
+    StartEffects: []
+    WhileEffects: []
+    CollideMask: 3
+    Bounces: 1
+    BounceOffEntities: 0
+    CollisionEffectsOnBounce: 1
+    CollisionParticleEffects:
+    - {fileID: 11400000, guid: 2762cd21c6bde30458700de03ee7df29, type: 2}
+    CollisionEffects:
+    - {fileID: 11400000, guid: 44806d8447931e9408e4e93cb4e6611f, type: 2}
+    CreatesRemenants: 0
+    Remenants:
+      Duration: 5
+      ParticleEffects: []
+      StartEffects: []
+      WhileEffects: []
+      TryGroundRemenants: 1
+  - DirectionStyle: 2
+    FallbackDirectionStyle: 1
+    Direction: 1
+    HitboxSize: 0.75
+    Duration: 10
+    FlightSpeed: 30
+    CreateOffsetToCaster: {x: 0, y: 5, z: 1}
+    ParticleEffects:
+    - {fileID: 11400000, guid: f3a5d4a11481585419aa5a911b8dcce1, type: 2}
+    StartEffects: []
+    WhileEffects: []
+    CollideMask: 3
+    Bounces: 1
+    BounceOffEntities: 0
+    CollisionEffectsOnBounce: 1
+    CollisionParticleEffects:
+    - {fileID: 11400000, guid: 2762cd21c6bde30458700de03ee7df29, type: 2}
+    CollisionEffects:
+    - {fileID: 11400000, guid: 44806d8447931e9408e4e93cb4e6611f, type: 2}
+    CreatesRemenants: 0
+    Remenants:
+      Duration: 5
+      ParticleEffects: []
+      StartEffects: []
+      WhileEffects: []
+      TryGroundRemenants: 1
+  DelayToNextProjectile:
+  - 0.25
+  - 0.25
+  - 0.25

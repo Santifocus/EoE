@@ -6,8 +6,7 @@ namespace EoE.Information
 	public enum BuffType : byte { Negative = 0, Neutral = 1, Positive = 2 }
 	public enum TargetBaseStat { Health = 0, Mana = 1, Endurance = 2, PhysicalDamage = 3, MagicalDamage = 4, Defense = 5, MoveSpeed = 6, JumpHeight = 7 }
 	public enum TargetStat { Health = 0, Mana = 1, Endurance = 2 }
-	[System.Serializable]
-	public class Buff
+	public class Buff : ScriptableObject
 	{
 		public string Name;
 		public BuffType Quality = BuffType.Neutral;

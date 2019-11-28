@@ -23,8 +23,8 @@ namespace EoE.Weapons
 		public EffectiveDirection KnockbackOrigin = EffectiveDirection.Center;
 		public DirectionBase KnockbackDirection = DirectionBase.Forward;
 
-		public Buff[] BuffsToApply = new Buff[0];
 		public BuffStackingStyle BuffStackStyle = BuffStackingStyle.Reapply;
+		public Buff[] BuffsToApply = new Buff[0];
 
 		public FXObject[] Effects = new FXObject[0];
 	}

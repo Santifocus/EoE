@@ -109,16 +109,26 @@ namespace EoE.Entities
 				}
 
 				if (!prevInRange && PlayerInAttackRange)
+				{
 					PlayerJustEnteredAttackRangeBase();
+				}
+
+				if (chasingPlayer)
+				{
+					targetPosition = Vector3.Lerp(targetPosition ?? GuessedPlayerPosition, GuessedPlayerPosition, Time.deltaTime * enemySettings.PlayerTrackSpeed);
+					if (GameController.CurrentGameSettings.IsDebugEnabled)
+						Debug.DrawLine(actuallWorldPosition, targetPosition.Value, Color.red, Time.deltaTime * 1.1f);
+				}
 			}
 			else
 			{
 				chasingPlayer = false;
 				PlayerInAttackRange = false;
+				targetPosition = null;
 			}
 
-			if (PlayerInAttackRange)
-				InRangeBehaivior();
+			if (PlayerInAttackRange) 
+				InRangeBehaiviorBase();
 
 			if (IsStunned)
 			{
@@ -322,7 +332,12 @@ namespace EoE.Entities
 			StartCombat();
 			PlayerJustEnteredAttackRange();
 		}
-		protected virtual void PlayerJustEnteredAttackRange(){}
+		protected virtual void PlayerJustEnteredAttackRange(){ }
+		private void InRangeBehaiviorBase()
+		{
+			StartCombat();
+			InRangeBehaivior();
+		}
 		protected virtual void InRangeBehaivior(){}
 		#endregion
 		#region Helper Functions

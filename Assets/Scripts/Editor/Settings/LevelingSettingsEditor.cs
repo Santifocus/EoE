@@ -7,7 +7,6 @@ namespace EoE.Information
 	[CustomEditor(typeof(LevelingSettings), true), CanEditMultipleObjects]
 	public class LevelingSettingsEditor : ObjectSettingEditor
 	{
-		[MenuItem("EoE/LevelingSettings")] public static void CreateLevelingSettings() => AssetCreator<LevelingSettings>("Settings", "EntitieSettings", "LevelingSettings");
 
 		private static bool LevelingCurveOpen;
 		private static bool SkillPointIncrementOpen;

@@ -16,6 +16,8 @@ namespace EoE.Information
 		public float DestroyDelay = 0.3f;
 		[Tooltip("With which offset should the Effect be spawned?")]
 		public Vector3 OffsetToTarget = Vector3.zero;
+		[Tooltip("With which rotation offset should the Effect be spawned?")]
+		public Vector3 RotationOffset = Vector3.zero;
 		[Tooltip("When enabled, this effect will follow the target, otherwise it will stay at the position it was spawned at.")]
 		public bool FollowTarget = false;
 		[Tooltip("When enabled, this effect will inherit the rotation of the target it is following, otherwise the rotation stays as it was when it spawned.")]

@@ -48,12 +48,11 @@ namespace EoE.Information
 			EntitieSettings settings = target as EntitieSettings;
 
 			if (FloatField(new GUIContent("Entitie Mass", "What is the mass of this Entitie? This will be used for Knockback,- and Acceleration - calculations."), ref settings.EntitieMass) && settings.EntitieMass < EntitieSettings.MIN_ENTITIE_MASS)
+			{
 				settings.EntitieMass = EntitieSettings.MIN_ENTITIE_MASS;
+			}
 			Vector3Field(new GUIContent("Mass Center", "Where is the Mass center of this Entitie? Based on this the Knockback direction will be calculated."), ref settings.MassCenter);
-			System.Enum element = settings.EntitieElement;
-			bool changed = EnumField(new GUIContent("Entitie Element", "Which element is this Entitie? (Will be used for damage calculations)"), ref element);
-			if (changed)
-				settings.EntitieElement = (ElementType)element;
+			EnumField(new GUIContent("Entitie Element", "Which element is this Entitie? (Will be used for damage calculations)"), ref settings.EntitieElement);
 
 			if (!(target is PlayerSettings))
 			{

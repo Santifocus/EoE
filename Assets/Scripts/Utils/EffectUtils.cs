@@ -874,6 +874,12 @@ namespace EoE.Utils
 			Transform mainObject = Instantiate(info.ParticleMainObject, Storage.ParticleStorage).transform;
 			mainObject.position = parent ? parent.position + info.OffsetToTarget : info.OffsetToTarget;
 
+			if (parent && info.InheritRotationOfTarget)
+			{
+				mainObject.transform.forward = parent.transform.forward;
+				mainObject.transform.eulerAngles += info.RotationOffset;
+			}
+
 			ParticleSystem[] containedSystems = mainObject.GetComponentsInChildren<ParticleSystem>();
 			for(int i = 0; i < containedSystems.Length; i++)
 			{
@@ -911,7 +917,6 @@ namespace EoE.Utils
 						AllParticleFXs[i].Update();
 						if (!AllParticleFXs[i].RemoveInProgress && AllParticleFXs[i].ShouldBeRemoved())
 						{
-							Debug.Log("Here");
 							AllParticleFXs[i].RemoveInProgress = true;
 							if (AllParticleFXs[i].BaseInfo.DestroyStyle == EffectRemoveStyle.Fade)
 								FadeAndDestroyParticles(AllParticleFXs[i].MainTransform.gameObject, null);
@@ -952,7 +957,10 @@ namespace EoE.Utils
 					MainTransform.position = ParentTransform.position + BaseInfo.OffsetToTarget;
 
 					if (BaseInfo.InheritRotationOfTarget)
-						MainTransform.rotation = ParentTransform.rotation;
+					{
+						MainTransform.transform.forward = ParentTransform.transform.forward;
+						MainTransform.transform.eulerAngles += BaseInfo.RotationOffset;
+					}
 				}
 			}
 			public bool ShouldBeRemoved()

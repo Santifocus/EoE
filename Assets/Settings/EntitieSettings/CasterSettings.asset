@@ -40,6 +40,7 @@ MonoBehaviour:
   AttackRange: 20
   AttackKnockBack: 3
   CritChance: 0
+  PlayerTrackSpeed: 4
   SightRange: 20
   FoundPlayerSightRange: 50
   SightAngle: 60
@@ -51,24 +52,4 @@ MonoBehaviour:
   WanderingDelayMax: 5
   LookAroundDelayMin: 0.5
   LookAroundDelayMax: 2
-  ProjectileChargeTime: 2.5
-  ProjectileDamageMultiplier: 1
-  ProjectileElement: 4
-  ProjectileKnockback: 0
-  ProjectileCritChance: 0
-  ProjectileManaCost: 5
-  ProjectileFlightSpeed: 35
-  ProjectileSpellCooldown: 2
-  ProjectileHitboxSize: 2
-  ProjectileSpawnOffset: {x: 0, y: 2, z: 0}
-  ProjectilePrefab: {fileID: 8685777211475644402, guid: 4cab2cd482fa3294c90e4af37620fdf1,
-    type: 3}
-  CastingAnnouncement:
-  - {fileID: 11400000, guid: 2bd48134fcb3222429adde541c21e0a7, type: 2}
-  ProjectileFlyParticles: {fileID: 11400000, guid: c39daf5a0f800724bb495b3c7063b211,
-    type: 2}
-  ProjectileDestroyParticles: {fileID: 11400000, guid: 7f999a2e186ef064aa781c01f433f7fe,
-    type: 2}
-  MaxDistanceImpactShake: 10
-  ProjectileImpactShake: {fileID: 11400000, guid: e840a1eafcd96a047bbe880545aaa1d0,
-    type: 2}
+  CasterAttack: {fileID: 11400000, guid: 0671c0a9f08b5a14e83b4da25a2b6c7a, type: 2}

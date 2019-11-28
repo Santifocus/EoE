@@ -7,7 +7,6 @@ namespace EoE.Information
 	[CustomEditor(typeof(DropTable), true), CanEditMultipleObjects]
 	public class DropTableEditor : Editor
 	{
-		[MenuItem("EoE/DropTable")] public static void CreateDropTable() => AssetCreator<DropTable>("Settings", "DropTables");
 
 		private static bool tableOpen;
 		private bool[] innerFoldouts;

@@ -177,7 +177,7 @@ namespace EoE.Information
 			for (int x = 0; x < elementCount; x++)
 			{
 				GUILayout.FlexibleSpace();
-				GUILayout.Label(new GUIContent(((ElementType)x).ToString(), "RECEIVER"), GUILayout.Width(labelWidht));
+				GUILayout.Label(new GUIContent(((ElementType)(1<<x)).ToString(), "RECEIVER"), GUILayout.Width(labelWidht));
 			}
 			GUILayout.EndHorizontal();
 
@@ -185,7 +185,7 @@ namespace EoE.Information
 			for (int x = 0; x < elementCount; x++)
 			{
 				GUILayout.BeginHorizontal();
-				GUILayout.Label(new GUIContent(((ElementType)x).ToString(), "ATTACKER"), GUILayout.Width(labelWidht));
+				GUILayout.Label(new GUIContent(((ElementType)(1 << x)).ToString(), "ATTACKER"), GUILayout.Width(labelWidht));
 				EditorGUI.BeginDisabledGroup(x == 0);
 				for (int y = 0; y < elementCount; y++)
 				{
