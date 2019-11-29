@@ -52,4 +52,4 @@ MonoBehaviour:
   WanderingDelayMax: 5
   LookAroundDelayMin: 0.5
   LookAroundDelayMax: 2
-  CasterAttack: {fileID: 11400000, guid: 0671c0a9f08b5a14e83b4da25a2b6c7a, type: 2}
+  CasterAttack: {fileID: 11400000, guid: 434c6572f91508a49927ea0dc469f2c7, type: 2}

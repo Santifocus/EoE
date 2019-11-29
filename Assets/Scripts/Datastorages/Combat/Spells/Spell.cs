@@ -1,4 +1,5 @@
-﻿using EoE.Information;
+﻿using EoE.Entities;
+using EoE.Information;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,6 +34,56 @@ namespace EoE.Weapons
 		{
 			return ((int)ContainedParts | (int)part) == ((int)ContainedParts);
 		}
+		//Helper functions
+		public static bool IsAllowedEntitie(Entitie target, Entitie caster, SpellTargetMask mask)
+		{
+			bool isSelf = caster == target;
+			bool selfIsPlayer = caster is Player;
+			bool otherIsPlayer = target is Player;
+
+			//First rule out if the target is self
+			if (isSelf)
+			{
+				return HasMaskFlag(SpellTargetMask.Self);
+			}
+			else
+			{
+				//Now check if the compared entities are both of the same team ie NonPlayer & NonPlayer ( / Player & Player, not going to happen because its not multiplayer)
+				if (selfIsPlayer == otherIsPlayer)
+				{
+					return HasMaskFlag(SpellTargetMask.Allied);
+				}
+				else //Player & NonPlayer / NonPlayer & Player
+				{
+					return HasMaskFlag(SpellTargetMask.Enemy);
+				}
+			}
+
+			bool HasMaskFlag(SpellTargetMask flag)
+			{
+				return (flag | mask) == mask;
+			}
+		}
+		public static (Vector3Int, bool) EnumDirToDir(DirectionBase direction)
+		{
+			switch (direction)
+			{
+				case DirectionBase.Forward:
+					return (new Vector3Int(0, 0, 1), false);
+				case DirectionBase.Back:
+					return (new Vector3Int(0, 0, 1), true);
+				case DirectionBase.Right:
+					return (new Vector3Int(1, 0, 0), false);
+				case DirectionBase.Left:
+					return (new Vector3Int(1, 0, 0), true);
+				case DirectionBase.Up:
+					return (new Vector3Int(0, 1, 0), false);
+				case DirectionBase.Down:
+					return (new Vector3Int(0, 1, 0), true);
+				default:
+					return (new Vector3Int(0, 0, 1), false);
+			}
+		}
 	}
 
 	[System.Serializable]
@@ -54,10 +105,8 @@ namespace EoE.Weapons
 	{
 		public InherritDirection DirectionStyle = InherritDirection.Target;
 		public InherritDirection FallbackDirectionStyle = InherritDirection.Local;
-
 		public DirectionBase Direction = DirectionBase.Forward;
 
-		public float HitboxSize = 1;
 		public float Duration = 15;
 		public float FlightSpeed = 25;
 		public Vector3 CreateOffsetToCaster = Vector3.forward;
@@ -66,13 +115,35 @@ namespace EoE.Weapons
 		public SpellEffect[] WhileEffects = new SpellEffect[0];
 
 		//Collision
+		public float EntitieHitboxSize = 1;
+		public float TerrainHitboxSize = 0.5f;
 		public SpellCollideMask CollideMask = (SpellCollideMask)3;
 		public int Bounces = 0;
-		public bool BounceOffEntities = false;
+		public bool DestroyOnEntiteBounce = true;
 		public bool CollisionEffectsOnBounce = true;
 
 		public ParticleEffect[] CollisionParticleEffects = new ParticleEffect[0];
 		public SpellEffect[] CollisionEffects = new SpellEffect[0];
+
+		//Direct hit
+		public ProjectileDirectHit DirectHit = new ProjectileDirectHit();
+		[System.Serializable]
+		public class ProjectileDirectHit
+		{
+			public SpellTargetMask AffectedTargets = SpellTargetMask.Enemy;
+
+			public ElementType DamageElement = ElementType.None;
+			public float DamageMultiplier = 0;
+			public float CritChance = 0;
+
+			public float KnockbackMultiplier = 0;
+			public EffectiveDirection KnockbackOrigin = EffectiveDirection.Center;
+			public DirectionBase KnockbackDirection = DirectionBase.Forward;
+
+			public BuffStackingStyle BuffStackStyle = BuffStackingStyle.Reapply;
+			public Buff[] BuffsToApply = new Buff[0];
+			public FXObject[] Effects = new FXObject[0];
+		}
 
 		//Remenants
 		public bool CreatesRemenants = false;

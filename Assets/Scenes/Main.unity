@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18827623, g: 0.19113824, b: 0.191098, a: 1}
+  m_IndirectSpecularColor: {r: 0.1882762, g: 0.19113812, b: 0.19109797, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1996,7 +1996,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameSettings: {fileID: 11400000, guid: eb894c191e0767e428687e3c68a86e59, type: 2}
   churchMusic: {fileID: 11400000, guid: 52090d5eff9eed545868a3c93010be83, type: 2}
-  projectilePrefab: {fileID: 5831252690003263670, guid: b161c93739aa6b94b9bc8bb2974557a7,
+  projectilePrefab: {fileID: 7949894643786082984, guid: b161c93739aa6b94b9bc8bb2974557a7,
     type: 3}
   itemDropPrefab: {fileID: 877910255125148308, guid: dc9c93ad228c9d745a7fd655bc5c04c8,
     type: 3}

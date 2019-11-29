@@ -1090,7 +1090,7 @@ namespace EoE.Entities
 		#region IFrames
 		protected override void ReceivedHealthDamage(ChangeInfo baseChange, ChangeInfo.ChangeResult resultInfo)
 		{
-			if(baseChange.attacker != this)
+			if(baseChange.attacker != this && baseChange.cause != CauseType.DOT)
 			{
 				if (PlayerSettings.InvincibleAfterHit)
 				{

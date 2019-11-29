@@ -16,8 +16,8 @@ namespace EoE.Weapons
 		public int MaximumHits = 0;
 
 		public ElementType DamageElement = ElementType.None;
-		public float CritChance = 0;
 		public float DamageMultiplier = 1;
+		public float CritChance = 0;
 
 		public float KnockbackMultiplier = 1;
 		public EffectiveDirection KnockbackOrigin = EffectiveDirection.Center;

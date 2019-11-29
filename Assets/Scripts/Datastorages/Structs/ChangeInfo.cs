@@ -10,7 +10,7 @@ namespace EoE.Information
 	public struct ChangeInfo
 	{
 		public readonly Entitie attacker;
-		private readonly CauseType cause;
+		public readonly CauseType cause;
 		private readonly ElementType element;
 		private readonly TargetStat targetStat;
 
@@ -105,7 +105,7 @@ namespace EoE.Information
 
 				//VFX for Player
 				//We dont want to send VFX if the Player caused himself damage
-				if (basis.targetStat == TargetStat.Health)
+				if (basis.targetStat == TargetStat.Health && basis.cause != CauseType.DOT)
 				{
 					if (basis.attacker is Player && !(receiver is Player))
 					{

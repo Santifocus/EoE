@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dbc89a2906f120d45877860a48c8c4e2, type: 3}
-  m_Name: CasterAttack
+  m_Name: ShadowBombSpell
   m_EditorClassIdentifier: 
   ManaCost: 5
   BaseDamage: 35
-  BaseKnockback: 0
+  BaseKnockback: 10
   SpellCooldown: 2
   ContainedParts: 5
   MovementRestrictions: 3
@@ -31,7 +31,6 @@ MonoBehaviour:
   - DirectionStyle: 2
     FallbackDirectionStyle: 1
     Direction: 1
-    HitboxSize: 0.75
     Duration: 15
     FlightSpeed: 30
     CreateOffsetToCaster: {x: 0, y: 2, z: 0}
@@ -39,18 +38,32 @@ MonoBehaviour:
     - {fileID: 11400000, guid: c39daf5a0f800724bb495b3c7063b211, type: 2}
     StartEffects: []
     WhileEffects: []
-    CollideMask: 3
+    EntitieHitboxSize: 1
+    TerrainHitboxSize: 0.25
+    CollideMask: -1
     Bounces: 0
-    BounceOffEntities: 0
+    DestroyOnEntiteBounce: 1
     CollisionEffectsOnBounce: 1
     CollisionParticleEffects:
     - {fileID: 11400000, guid: 7f999a2e186ef064aa781c01f433f7fe, type: 2}
     CollisionEffects:
     - {fileID: 11400000, guid: aa9439905846bbc47a6067475eef6df5, type: 2}
+    DirectHit:
+      AffectedTargets: 4
+      DamageElement: 16
+      DamageMultiplier: 1
+      CritChance: 0
+      KnockbackMultiplier: 1
+      KnockbackOrigin: 1
+      KnockbackDirection: 1
+      BuffStackStyle: 2
+      BuffsToApply: []
+      Effects: []
     CreatesRemenants: 0
     Remenants:
       Duration: 5
-      ParticleEffects: []
+      ParticleEffects:
+      - {fileID: 0}
       StartEffects: []
       WhileEffects: []
       TryGroundRemenants: 1

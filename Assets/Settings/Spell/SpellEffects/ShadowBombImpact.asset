@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f26a7d5fe156864d9dc8c08f742157c, type: 3}
-  m_Name: CasterAttackImpact
+  m_Name: ShadowBombImpact
   m_EditorClassIdentifier: 
   AffectedTargets: 4
   BaseEffectRadius: 4
@@ -18,8 +18,8 @@ MonoBehaviour:
   HasMaximumHits: 0
   MaximumHits: 0
   DamageElement: 16
+  DamageMultiplier: 0
   CritChance: 0
-  DamageMultiplier: 1
   KnockbackMultiplier: 0
   KnockbackOrigin: 2
   KnockbackDirection: 1

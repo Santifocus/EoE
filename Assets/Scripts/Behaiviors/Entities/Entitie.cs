@@ -783,11 +783,7 @@ namespace EoE.Entities
 			{
 				for (int i = 0; i < spell.ProjectileInfo.Length; i++)
 				{
-					Transform t = CreateSpellProjectile(spell, i).transform;
-					for (int j = 0; j < spell.ProjectileInfo[i].ParticleEffects.Length; j++)
-					{
-						FXManager.PlayFX(spell.ProjectileInfo[i].ParticleEffects[j], t, this is Player);
-					}
+					CreateSpellProjectile(spell, i);
 					if(i < spell.ProjectileInfo.Length - 1)
 						yield return new WaitForSeconds(spell.DelayToNextProjectile[i]);
 				}
@@ -804,7 +800,7 @@ namespace EoE.Entities
 
 			//First find out what direction the projectile should fly
 			Vector3 direction;
-			(Vector3, bool) dirInfo = EnumDirToDir(spellBase.ProjectileInfo[index].Direction);
+			(Vector3, bool) dirInfo = Spell.EnumDirToDir(spellBase.ProjectileInfo[index].Direction);
 			if (spellBase.ProjectileInfo[index].DirectionStyle == InherritDirection.Target)
 			{
 				if (targetPosition.HasValue)
@@ -860,7 +856,7 @@ namespace EoE.Entities
 			Vector3 localDirection = Vector3.up;
 			if (effect.KnockbackOrigin != EffectiveDirection.Center)
 			{
-				(Vector3Int, bool) dirInfo = EnumDirToDir(effect.KnockbackDirection);
+				(Vector3Int, bool) dirInfo = Spell.EnumDirToDir(effect.KnockbackDirection);
 				if (effect.KnockbackOrigin == EffectiveDirection.World)
 				{
 					localDirection = dirInfo.Item1 * (dirInfo.Item2 ? -1 : 1);
@@ -894,7 +890,7 @@ namespace EoE.Entities
 				if ((AllEntities[i].actuallWorldPosition - origin.position).sqrMagnitude < outerSphereDist)
 				{
 					//Check if this entitie should be a targetable entitie
-					if (IsAllowedEntitie(AllEntities[i]))
+					if (Spell.IsAllowedEntitie(AllEntities[i], caster, effect.AffectedTargets))
 						requiredCapacity++;
 				}
 			}
@@ -910,7 +906,7 @@ namespace EoE.Entities
 				if (sqrDist < outerSphereDist)
 				{
 					//Check if this entitie should be a targetable entitie
-					if (!IsAllowedEntitie(AllEntities[i]))
+					if (!Spell.IsAllowedEntitie(AllEntities[i], caster, effect.AffectedTargets))
 						continue;
 
 					CollectedEntitieData data = new CollectedEntitieData()
@@ -1010,59 +1006,6 @@ namespace EoE.Entities
 				{
 					FXManager.PlayFX(effect.Effects[j], eligibleTargets[i].Target.transform, eligibleTargets[i].Target is Player, eligibleTargets[i].Multiplier);
 				}
-			}
-
-			//Helper functions
-			bool IsAllowedEntitie(Entitie target)
-			{
-				bool isSelf = caster == target;
-				bool selfIsPlayer = caster is Player;
-				bool otherIsPlayer = target is Player;
-
-				//First rule out if the target is self
-				if(isSelf)
-				{
-					return HasMaskFlag(SpellTargetMask.Self);
-				}
-				else
-				{
-					//Now check if the compared entities are both of the same team ie NonPlayer & NonPlayer ( / Player & Player, not going to happen because its not multiplayer)
-					if (selfIsPlayer == otherIsPlayer)
-					{
-						return HasMaskFlag(SpellTargetMask.Allied);
-					}
-					else //Player & NonPlayer / NonPlayer & Player
-					{
-						return HasMaskFlag(SpellTargetMask.Enemy);
-					}
-				}
-			}
-			//Dont use Enum.HasFlag() because it checks unnecessary things
-			bool HasMaskFlag(SpellTargetMask mask)
-			{
-				return (effect.AffectedTargets | mask) == effect.AffectedTargets;
-			}
-			//Absolute of direction and a bool for if its inversed
-			
-		}
-		private static (Vector3Int, bool) EnumDirToDir(DirectionBase direction)
-		{
-			switch (direction)
-			{
-				case DirectionBase.Forward:
-					return (new Vector3Int(0, 0, 1), false);
-				case DirectionBase.Back:
-					return (new Vector3Int(0, 0, 1), true);
-				case DirectionBase.Right:
-					return (new Vector3Int(1, 0, 0), false);
-				case DirectionBase.Left:
-					return (new Vector3Int(1, 0, 0), true);
-				case DirectionBase.Up:
-					return (new Vector3Int(0, 1, 0), false);
-				case DirectionBase.Down:
-					return (new Vector3Int(0, 1, 0), true);
-				default:
-					return (new Vector3Int(0, 0, 1), false);
 			}
 		}
 		private struct CollectedEntitieData

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f6d4205812b5584418e18937cd4db88f, type: 3}
-  m_Name: CasterProjectileImpactShake
+  m_Name: ShadowBombImpactScreenShake
   m_EditorClassIdentifier: 
   Time: 0.4
   AxisIntensity: 1.25

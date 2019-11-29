@@ -22,12 +22,23 @@ namespace EoE.Information
 
 		private static bool ProjectileHeaderOpen;
 		private bool ListsSetup;
+
 		private List<bool> ProjectileInfoOpen = new List<bool>();
+
+		private List<bool> ProjectileDirectionSettingsOpen = new List<bool>();
+		private List<bool> ProjectileFlightSettingsOpen = new List<bool>();
+		private List<bool> ProjectileCollisionSettingsOpen = new List<bool>();
+
+		private List<bool> ProjectileDirectHitSettingsOpen = new List<bool>();
+		private List<bool> ProjectileDirectHitBuffsOpen = new List<bool>();
+		private List<bool> ProjectileDirectHitEffectsOpen = new List<bool>();
+
 		private List<bool> ProjectileParticlesOpen = new List<bool>();
 		private List<bool> ProjectileStartEffectsOpen = new List<bool>();
 		private List<bool> ProjectileWhileEffectsOpen = new List<bool>();
 		private List<bool> ProjectileCollisionEffectsOpen = new List<bool>();
 		private List<bool> ProjectileCollisionParticleEffectsOpen = new List<bool>();
+
 		private List<(bool, bool, bool)> ProjectileRemenantsInfosOpen = new List<(bool, bool, bool)>();
 
 		protected override void CustomInspector() 
@@ -127,11 +138,21 @@ namespace EoE.Information
 			int size = settings.ProjectileInfo.Length;
 
 			UpdateListSize(ProjectileInfoOpen, size);
+
+			UpdateListSize(ProjectileDirectionSettingsOpen, size);
+			UpdateListSize(ProjectileFlightSettingsOpen, size);
+			UpdateListSize(ProjectileCollisionSettingsOpen, size);
+
+			UpdateListSize(ProjectileDirectHitSettingsOpen, size);
+			UpdateListSize(ProjectileDirectHitBuffsOpen, size);
+			UpdateListSize(ProjectileDirectHitEffectsOpen, size);
+
 			UpdateListSize(ProjectileParticlesOpen, size);
 			UpdateListSize(ProjectileStartEffectsOpen, size);
 			UpdateListSize(ProjectileWhileEffectsOpen, size);
 			UpdateListSize(ProjectileCollisionEffectsOpen, size);
 			UpdateListSize(ProjectileCollisionParticleEffectsOpen, size);
+
 			UpdateListSize(ProjectileRemenantsInfosOpen, size);
 		}
 		private void UpdateListSize<T>(List<T> old, int size)
@@ -153,70 +174,128 @@ namespace EoE.Information
 			ProjectileInfoOpen[index] = open;
 			if (open)
 			{
-				//Direction style
-				changed |= EnumField(new GUIContent("Direction Style"), ref settings.ProjectileInfo[index].DirectionStyle, offset + 1);
-
-				//Fallback direction style
-				if (settings.ProjectileInfo[index].DirectionStyle == InherritDirection.Target)
+				//Direction settings
+				open = ProjectileDirectionSettingsOpen[index];
+				Foldout(new GUIContent("Direction settings"), ref open, offset + 1);
+				ProjectileDirectionSettingsOpen[index] = open;
+				if (open)
 				{
-					if (EnumField(new GUIContent("Fallback Direction Style"), ref settings.ProjectileInfo[index].FallbackDirectionStyle, offset + 1))
+					//Direction style
+					changed |= EnumField(new GUIContent("Direction Style"), ref settings.ProjectileInfo[index].DirectionStyle, offset + 2);
+
+					//Fallback direction style
+					if (settings.ProjectileInfo[index].DirectionStyle == InherritDirection.Target)
 					{
-						changed = true;
-						if (settings.ProjectileInfo[index].FallbackDirectionStyle == InherritDirection.Target)
+						if (EnumField(new GUIContent("Fallback Direction Style"), ref settings.ProjectileInfo[index].FallbackDirectionStyle, offset + 2))
 						{
-							settings.ProjectileInfo[index].FallbackDirectionStyle = InherritDirection.Local;
+							changed = true;
+							if (settings.ProjectileInfo[index].FallbackDirectionStyle == InherritDirection.Target)
+							{
+								settings.ProjectileInfo[index].FallbackDirectionStyle = InherritDirection.Local;
+							}
 						}
 					}
+					//Direction Base
+					changed |= EnumField(new GUIContent("Direction"), ref settings.ProjectileInfo[index].Direction, offset + 3);
+					GUILayout.Space(5);
 				}
 
 				//Projectile flight
+				open = ProjectileFlightSettingsOpen[index];
+				Foldout(new GUIContent("Projectile Flight"), ref open, offset + 1);
+				ProjectileFlightSettingsOpen[index] = open;
+				if (open)
 				{
-					//Direction Base
-					changed |= EnumField(new GUIContent("Direction"), ref settings.ProjectileInfo[index].Direction, offset + 1);
 
-					if (FloatField(new GUIContent("Hitbox Size"), ref settings.ProjectileInfo[index].HitboxSize, offset + 1))
-					{
-						changed = true;
-						settings.ProjectileInfo[index].HitboxSize = Mathf.Max(0, settings.ProjectileInfo[index].HitboxSize);
-					}
-					changed |= FloatField(new GUIContent("Max Lifetime"), ref settings.ProjectileInfo[index].Duration, offset + 1);
-					changed |= FloatField(new GUIContent("Flight Speed"), ref settings.ProjectileInfo[index].FlightSpeed, offset + 1);
+					changed |= FloatField(new GUIContent("Max Lifetime"), ref settings.ProjectileInfo[index].Duration, offset + 2);
+					changed |= FloatField(new GUIContent("Flight Speed"), ref settings.ProjectileInfo[index].FlightSpeed, offset + 2);
 
-					changed |= Vector3Field(new GUIContent("CreateOffsetToCaster"), ref settings.ProjectileInfo[index].CreateOffsetToCaster, offset + 1);
+					changed |= Vector3Field(new GUIContent("CreateOffsetToCaster"), ref settings.ProjectileInfo[index].CreateOffsetToCaster, offset + 2);
 
 					open = ProjectileParticlesOpen[index];
-					changed |= ObjectArrayField(new GUIContent("Particle Effects"), ref settings.ProjectileInfo[index].ParticleEffects, ref open, new GUIContent("Particle "), offset + 1);
+					changed |= ObjectArrayField(new GUIContent("Particle Effects"), ref settings.ProjectileInfo[index].ParticleEffects, ref open, new GUIContent("Particle "), offset + 2);
 					ProjectileParticlesOpen[index] = open;
 
 					open = ProjectileStartEffectsOpen[index];
-					changed |= ObjectArrayField(new GUIContent("Start Effects"), ref settings.ProjectileInfo[index].StartEffects, ref open, new GUIContent("Effect "), offset + 1);
+					changed |= ObjectArrayField(new GUIContent("Start Effects"), ref settings.ProjectileInfo[index].StartEffects, ref open, new GUIContent("Effect "), offset + 2);
 					ProjectileStartEffectsOpen[index] = open;
 
 					open = ProjectileWhileEffectsOpen[index];
-					changed |= ObjectArrayField(new GUIContent("While Effects"), ref settings.ProjectileInfo[index].WhileEffects, ref open, new GUIContent("Effect "), offset + 1);
+					changed |= ObjectArrayField(new GUIContent("While Effects"), ref settings.ProjectileInfo[index].WhileEffects, ref open, new GUIContent("Effect "), offset + 2);
 					ProjectileWhileEffectsOpen[index] = open;
+					GUILayout.Space(5);
 				}
 
 				//Collision
+				open = ProjectileCollisionSettingsOpen[index];
+				Foldout(new GUIContent("Collision settings"), ref open, offset + 1);
+				ProjectileCollisionSettingsOpen[index] = open;
+				if (open)
 				{
-					changed |= EnumFlagField(new GUIContent("Collide Mask"), ref settings.ProjectileInfo[index].CollideMask, offset + 1);
+					changed |= EnumFlagField(new GUIContent("Collide Mask"), ref settings.ProjectileInfo[index].CollideMask, offset + 2);
+
+					if (FloatField(new GUIContent("Terrain Hitbox Size"), ref settings.ProjectileInfo[index].TerrainHitboxSize, offset + 2))
+					{
+						changed = true;
+						settings.ProjectileInfo[index].TerrainHitboxSize = Mathf.Max(0, settings.ProjectileInfo[index].TerrainHitboxSize);
+					}
+
+					if (((settings.ProjectileInfo[index].CollideMask | SpellCollideMask.Terrain) == settings.ProjectileInfo[index].CollideMask) &&
+						FloatField(new GUIContent("Entitie Hitbox Size"), ref settings.ProjectileInfo[index].EntitieHitboxSize, offset + 2))
+					{
+						changed = true;
+						settings.ProjectileInfo[index].EntitieHitboxSize = Mathf.Max(0, settings.ProjectileInfo[index].EntitieHitboxSize);
+					}
 
 					//Bounce
-					changed |= IntField(new GUIContent("Bounces"), ref settings.ProjectileInfo[index].Bounces, offset + 1);
+					changed |= IntField(new GUIContent("Bounces"), ref settings.ProjectileInfo[index].Bounces, offset + 2);
 					if (settings.ProjectileInfo[index].Bounces > 0)
 					{
-						changed |= BoolField(new GUIContent("Bounce Off Entities"), ref settings.ProjectileInfo[index].BounceOffEntities, offset + 2);
-						changed |= BoolField(new GUIContent("Collision Effects On Bounce"), ref settings.ProjectileInfo[index].CollisionEffectsOnBounce, offset + 2);
+						changed |= BoolField(new GUIContent("Destroy On Entite Bounce"), ref settings.ProjectileInfo[index].DestroyOnEntiteBounce, offset + 3);
+						changed |= BoolField(new GUIContent("Collision Effects On Bounce"), ref settings.ProjectileInfo[index].CollisionEffectsOnBounce, offset + 3);
 					}
 
 					//Effects
 					open = ProjectileCollisionParticleEffectsOpen[index];
-					changed |= ObjectArrayField(new GUIContent("Collision Particle Effects"), ref settings.ProjectileInfo[index].CollisionParticleEffects, ref open, new GUIContent("Particle "), offset + 1);
+					changed |= ObjectArrayField(new GUIContent("Collision Particle Effects"), ref settings.ProjectileInfo[index].CollisionParticleEffects, ref open, new GUIContent("Particle "), offset + 2);
 					ProjectileCollisionParticleEffectsOpen[index] = open;
 
 					open = ProjectileCollisionEffectsOpen[index];
-					changed |= ObjectArrayField(new GUIContent("Collision Effects"), ref settings.ProjectileInfo[index].CollisionEffects, ref open, new GUIContent("Effect "), offset + 1);
+					changed |= ObjectArrayField(new GUIContent("Collision Effects"), ref settings.ProjectileInfo[index].CollisionEffects, ref open, new GUIContent("Effect "), offset + 2);
 					ProjectileCollisionEffectsOpen[index] = open;
+					GUILayout.Space(5);
+				}
+
+				//DirectHit
+				open = ProjectileDirectHitSettingsOpen[index];
+				Foldout(new GUIContent("Direct Hit settings"), ref open, offset + 1);
+				ProjectileDirectHitSettingsOpen[index] = open;
+				if (open)
+				{
+					EnumFlagField(new GUIContent("Affected Targets"), ref settings.ProjectileInfo[index].DirectHit.AffectedTargets, offset + 2);
+
+					EnumField(new GUIContent("Damage Element"), ref settings.ProjectileInfo[index].DirectHit.DamageElement, offset + 2);
+					FloatField(new GUIContent("Damage Multiplier"), ref settings.ProjectileInfo[index].DirectHit.DamageMultiplier, offset + 2);
+					FloatField(new GUIContent("Crit Chance"), ref settings.ProjectileInfo[index].DirectHit.CritChance, offset + 2);
+
+					GUILayout.Space(3);
+					FloatField(new GUIContent("Knockback Multiplier"), ref settings.ProjectileInfo[index].DirectHit.KnockbackMultiplier, offset + 2);
+					EnumField(new GUIContent("Knockback Origin"), ref settings.ProjectileInfo[index].DirectHit.KnockbackOrigin, offset + 2);
+					if(settings.ProjectileInfo[index].DirectHit.KnockbackOrigin == EffectiveDirection.World)
+						EnumField(new GUIContent("Knockback Direction"), ref settings.ProjectileInfo[index].DirectHit.KnockbackDirection, offset + 3);
+
+					GUILayout.Space(3);
+					EnumField(new GUIContent("Buff Stack Style"), ref settings.ProjectileInfo[index].DirectHit.BuffStackStyle, offset + 2);
+
+					open = ProjectileDirectHitBuffsOpen[index];
+					ObjectArrayField<Buff>(new GUIContent("Buffs"), ref settings.ProjectileInfo[index].DirectHit.BuffsToApply, ref open, new GUIContent("Buff "), offset + 2);
+					ProjectileDirectHitBuffsOpen[index] = open;
+
+					open = ProjectileDirectHitEffectsOpen[index];
+					ObjectArrayField<FXObject>(new GUIContent("Effects"), ref settings.ProjectileInfo[index].DirectHit.Effects, ref open, new GUIContent("Effect "), offset + 2);
+					ProjectileDirectHitEffectsOpen[index] = open;
+
+					GUILayout.Space(5);
 				}
 
 				//Remenants
