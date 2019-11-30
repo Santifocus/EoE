@@ -102,10 +102,7 @@ namespace EoE.Entities
 		public static Entitie TargetedEntitie;
 		public static PlayerBuffDisplay BuffDisplay => Instance.buffDisplay;
 
-		public static Inventory ItemInventory;
-		public static Inventory WeaponInventory;
-		public static Inventory SpellInventory;
-		public static Inventory ArmorInventory;
+		public static Inventory Inventory;
 
 		public static InventoryItem EquipedItem;
 		public static InventoryItem EquipedWeapon;
@@ -133,6 +130,51 @@ namespace EoE.Entities
 			ChangeWeapon(equipedWeapon);
 			SetupEndurance();
 			SetupInventorys();
+		}
+		protected override void EntitieUpdate()
+		{
+			if (GameController.GameIsPaused)
+			{
+				if (TargetedEntitie)
+					TargetedEntitie = null;
+				return;
+			}
+
+			RegenEndurance();
+			MovementControl();
+			AttackControl();
+			TargetEnemyControl();
+			ItemUseControll();
+			BlockControl();
+			PositionHeldWeapon();
+			Inventory.UpdateCooldown();
+		}
+		protected override void EntitieFixedUpdate()
+		{
+			PositionHeldWeapon();
+			CheckForLanding();
+			ApplyForces();
+			CheckForFalling();
+			UpdateAcceleration();
+
+			if(!IsStunned)
+				TurnControl();
+		}
+		#endregion
+		#region Setups
+		private void ChangeWeapon(Weapon newWeapon)
+		{
+			if (heldWeapon)
+			{
+				Destroy(heldWeapon.gameObject);
+			}
+			equipedWeapon = newWeapon;
+
+			if (equipedWeapon != null)
+			{
+				heldWeapon = Instantiate(equipedWeapon.weaponPrefab);
+				heldWeapon.Setup();
+			}
 		}
 		private void SetupLevelingControl()
 		{
@@ -187,65 +229,8 @@ namespace EoE.Entities
 		{
 			MagicSelected = false;
 
-			ItemInventory = new Inventory(PlayerSettings.UseInventorySize);
-			WeaponInventory = new Inventory(PlayerSettings.WeaponInventorySize);
-			SpellInventory = new Inventory(PlayerSettings.SpellInventorySize);
-			ArmorInventory = new Inventory(PlayerSettings.ArmorInventorySize);
-
-			ItemInventory.InventoryChanged += UpdateEquipedItems;
-			WeaponInventory.InventoryChanged += UpdateEquipedItems;
-			ArmorInventory.InventoryChanged += UpdateEquipedItems;
-			SpellInventory.InventoryChanged += UpdateEquipedItems;
-		}
-		protected override void EntitieUpdate()
-		{
-			if (GameController.GameIsPaused)
-			{
-				if (TargetedEntitie)
-					TargetedEntitie = null;
-				return;
-			}
-
-			RegenEndurance();
-			MovementControl();
-			AttackControl();
-			TargetEnemyControl();
-			ItemUseControll();
-			BlockControl();
-			PositionHeldWeapon();
-
-			//Inventory Cooldowns
-			ItemInventory.UpdateCooldown();
-			WeaponInventory.UpdateCooldown();
-			ArmorInventory.UpdateCooldown();
-			SpellInventory.UpdateCooldown();
-		}
-		protected override void EntitieFixedUpdate()
-		{
-			PositionHeldWeapon();
-			CheckForLanding();
-			ApplyForces();
-			CheckForFalling();
-			UpdateAcceleration();
-
-			if(!IsStunned)
-				TurnControl();
-		}
-		#endregion
-		#region Setups
-		private void ChangeWeapon(Weapon newWeapon)
-		{
-			if (heldWeapon)
-			{
-				Destroy(heldWeapon.gameObject);
-			}
-			equipedWeapon = newWeapon;
-
-			if (equipedWeapon != null)
-			{
-				heldWeapon = Instantiate(equipedWeapon.weaponPrefab);
-				heldWeapon.Setup();
-			}
+			Inventory = new Inventory(PlayerSettings.UseInventorySize);
+			Inventory.InventoryChanged += UpdateEquipedItems;
 		}
 		private void SetupEndurance()
 		{
@@ -816,7 +801,7 @@ namespace EoE.Entities
 			if (InputController.UseItem.Down && EquipedItem != null)
 			{
 				if(EquipedItem.useCooldown <= 0)
-					EquipedItem.data.Use(EquipedItem, this, ItemInventory);
+					EquipedItem.data.Use(EquipedItem, this, Inventory);
 			}
 			if (InputController.PhysicalMagicSwap.Down)
 			{
@@ -886,7 +871,11 @@ namespace EoE.Entities
 					comboIndex = 0;
 				}
 			}
-
+			if (MagicSelected && EquipedSpell != null && InputController.Attack.Pressed)
+			{
+				EquipedSpell.data.Use(EquipedSpell, this, Inventory);
+				return;
+			}
 			if (equipedWeapon == null || isCurrentlyAttacking || (!InputController.Attack.Pressed && !InputController.HeavyAttack.Pressed))
 				return;
 

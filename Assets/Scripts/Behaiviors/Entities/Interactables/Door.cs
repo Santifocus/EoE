@@ -35,6 +35,8 @@ namespace EoE.Entities
 
 		protected override void Interact()
 		{
+			//If the door is transitioning we cant interact with it
+			//We also check if the required soulcount is reached
 			if (transitioning || Player.TotalSoulCount < requiredSouls)
 				return;
 
@@ -44,25 +46,13 @@ namespace EoE.Entities
 			{
 				for (int i = 0; i < requiredItems.Length; i++)
 				{
-					Inventory targetInventory;
-
-					//First find the inventory we are checking
-					if (requiredItems[i].itemType is WeaponItem)
-						targetInventory = Player.WeaponInventory;
-					else if (requiredItems[i].itemType is ArmorItem)
-						targetInventory = Player.ArmorInventory;
-					else if (requiredItems[i].itemType is SpellItem)
-						targetInventory = Player.SpellInventory;
-					else
-						targetInventory = Player.ItemInventory;
-
-					//Now check if in the targetinventory contains the required item and the stacksize
-					//if not stop here, if yes then if this is the remove loop then take the item out aswell
-					//if this is the remove loop then we already confirmed that the item is in the invenory so we can skip the check
-					if (remove || targetInventory.Contains(requiredItems[i].itemType, requiredItems[i].itemCount))
+					//First we check if the player has this particular item, if not we can stop here,
+					//If we find all items that should be removed then we can start removing them,
+					//If we are in the second iteration of the removing loop we can skip the contains check
+					if (remove || Player.Inventory.Contains(requiredItems[i].itemType, requiredItems[i].itemCount))
 					{
 						if(remove)
-							targetInventory.RemoveStackSize(requiredItems[i].itemType, requiredItems[i].itemCount);
+							Player.Inventory.RemoveStackSize(requiredItems[i].itemType, requiredItems[i].itemCount);
 					}
 					else
 					{

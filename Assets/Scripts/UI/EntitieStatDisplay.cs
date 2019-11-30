@@ -18,7 +18,7 @@ namespace EoE.UI
 		private float displayedValue;
 		private Dictionary<BuffInstance, Transform> buffIconLookup;
 
-		private void Start()
+		public void Setup()
 		{
 			displayedValue = 1;
 			HealthValue = 1;

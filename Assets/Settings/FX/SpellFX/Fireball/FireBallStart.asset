@@ -16,7 +16,7 @@ MonoBehaviour:
     type: 3}
   DestroyAfterDelay: 1
   DestroyDelay: 1
-  OffsetToTarget: {x: 0, y: 0, z: 0}
+  OffsetToTarget: {x: 0, y: 5, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}
   FollowTarget: 0
   InheritRotationOfTarget: 0

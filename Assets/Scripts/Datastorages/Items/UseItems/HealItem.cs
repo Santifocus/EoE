@@ -6,7 +6,7 @@ namespace EoE.Information
 	public class HealItem : Item
 	{
 		public HealTargetInfo[] healEffects;
-		protected override void OnUse(Entitie user)
+		protected override bool OnUse(Entitie user)
 		{
 			for (int i = 0; i < healEffects.Length; i++)
 			{
@@ -31,6 +31,7 @@ namespace EoE.Information
 					(user as Player).ChangeEndurance(new ChangeInfo(user, amount > 0 ? CauseType.Magic : CauseType.Heal, t, amount));
 				}
 			}
+			return true;
 		}
 
 		[System.Serializable]

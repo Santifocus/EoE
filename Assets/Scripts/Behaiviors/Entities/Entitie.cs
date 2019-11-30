@@ -113,8 +113,10 @@ namespace EoE.Entities
 			nonPermanentBuffs = new List<BuffInstance>();
 			permanentBuffs = new List<BuffInstance>();
 			if (!(this is Player))
+			{
 				statDisplay = Instantiate(GameController.CurrentGameSettings.EntitieStatDisplayPrefab, GameController.Instance.enemyHealthBarStorage);
-
+				statDisplay.Setup();
+			}
 			entitieForceController = new ForceController();
 		}
 		private void ResetStats()
@@ -723,11 +725,12 @@ namespace EoE.Entities
 		}
 		#endregion
 		#region Spell Casting
-		protected bool CastSpell(Spell spell)
+		public bool CastSpell(Spell spell)
 		{
 			if (curMana < spell.ManaCost || CastingSpell || CastingCooldown > 0)
 				return false;
 
+			ChangeMana(new ChangeInfo(this, CauseType.Magic, TargetStat.Mana, spell.ManaCost));
 			StartCoroutine(CastSpellC(spell));
 			return true;
 		}
@@ -761,7 +764,7 @@ namespace EoE.Entities
 					}
 				}
 
-				if (spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting) && !spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting))
+				if (spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting))
 					appliedMoveStuns--;
 			}
 
@@ -781,13 +784,15 @@ namespace EoE.Entities
 			//Projectile
 			if (spell.ContainedParts.HasFlag(SpellPart.Projectile))
 			{
+				if (spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileShooting))
+					appliedMoveStuns++;
 				for (int i = 0; i < spell.ProjectileInfo.Length; i++)
 				{
 					CreateSpellProjectile(spell, i);
 					if(i < spell.ProjectileInfo.Length - 1)
 						yield return new WaitForSeconds(spell.DelayToNextProjectile[i]);
 				}
-				if (spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting))
+				if (spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileShooting))
 					appliedMoveStuns--;
 			}
 			CastingSpell = false;

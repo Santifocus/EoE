@@ -10,17 +10,17 @@ namespace EoE.UI
 	public class InventoryMenu : CharacterMenuPage
 	{
 		private const float NAV_COOLDOWN = 0.15f;
-		[SerializeField] private InventoryTarget target = default;
 		[SerializeField] private InventorySlot slotPrefab = default;
 		[SerializeField] private GridLayoutGroup slotGrid = default;
 		[SerializeField] private ItemAction[] itemActions = default;
 		[SerializeField] private DropMenu dropMenu = default;
-		[SerializeField] private Image equippedItemDisplay = default;
-		[SerializeField] private Image equippedSpellDisplay = default;
 
-		private enum InventoryTarget { Item, Weapons, Armor, Spells }
+		[SerializeField] private Image equippedWeaponDisplay = default;
+		[SerializeField] private Image equippedSpellDisplay = default;
+		[SerializeField] private Image equippedArmorDisplay = default;
+		[SerializeField] private Image equippedItemDisplay = default;
+
 		private InventorySlot[] slots;
-		[HideInInspector] public Inventory targetInventory;
 		private float navigationCooldown;
 
 		private bool actionMenuOpen;
@@ -31,32 +31,16 @@ namespace EoE.UI
 		protected override void Start()
 		{
 			base.Start();
-			switch (target)
-			{
-				case InventoryTarget.Item:
-					targetInventory = Player.ItemInventory;
-					break;
-				case InventoryTarget.Weapons:
-					targetInventory = Player.WeaponInventory;
-					break;
-				case InventoryTarget.Armor:
-					targetInventory = Player.ArmorInventory;
-					break;
-				case InventoryTarget.Spells:
-					targetInventory = Player.SpellInventory;
-					break;
-			}
-
-			slots = new InventorySlot[targetInventory.Lenght];
-			for (int i = 0; i < targetInventory.Lenght; i++)
+			slots = new InventorySlot[Player.Inventory.Lenght];
+			for (int i = 0; i < Player.Inventory.Lenght; i++)
 			{
 				InventorySlot newSlot = Instantiate(slotPrefab, slotGrid.transform);
-				newSlot.Setup(targetInventory, i);
+				newSlot.Setup(Player.Inventory, i);
 				slots[i] = newSlot;
 			}
 
 			dropMenu.Setup(this);
-			targetInventory.InventoryChanged += UpdateAllSlots;
+			Player.Inventory.InventoryChanged += UpdateAllSlots;
 			UpdateAllSlots();
 		}
 		private void UpdateAllSlots()
@@ -87,7 +71,7 @@ namespace EoE.UI
 			if (dropMenuOpen)
 				return;
 
-			if (InputController.MenuEnter.Down && targetInventory[curSlotIndex] != null)
+			if (InputController.MenuEnter.Down && Player.Inventory[curSlotIndex] != null)
 				MenuEnter();
 			if (InputController.MenuBack.Down)
 				MenuBack();
@@ -175,7 +159,7 @@ namespace EoE.UI
 					return;
 				}
 
-				InventoryItem item = targetInventory[curSlotIndex];
+				InventoryItem item = Player.Inventory[curSlotIndex];
 				if (item == null)
 					return;
 
@@ -183,7 +167,7 @@ namespace EoE.UI
 				if (action == ItemAction.ItemActionType.Use)
 				{
 					if (target && item.useCooldown <= 0)
-						target.Use(item, Player.Instance, targetInventory);
+						target.Use(item, Player.Instance, Player.Inventory);
 					UpdateEquippedSlots();
 				}
 				else if (action == ItemAction.ItemActionType.Equip)
@@ -220,7 +204,7 @@ namespace EoE.UI
 				}
 
 				//If from any of the action the stacksize was changed to 0 (which means null after inventory update) then we want to close the action menu
-				if (targetInventory[curSlotIndex] == null)
+				if (Player.Inventory[curSlotIndex] == null)
 					MenuBack();
 			}
 			else
@@ -232,15 +216,15 @@ namespace EoE.UI
 		}
 		private void UpdateEquippedSlots()
 		{
-			if (Player.EquipedItem != null)
+			if (Player.EquipedWeapon != null)
 			{
-				equippedItemDisplay.sprite = Player.EquipedItem.data.ItemIcon;
-				equippedItemDisplay.color = Color.white;
+				equippedWeaponDisplay.sprite = Player.EquipedWeapon.data.ItemIcon;
+				equippedWeaponDisplay.color = Color.white;
 			}
 			else
 			{
-				equippedItemDisplay.sprite = null;
-				equippedItemDisplay.color = Color.clear;
+				equippedWeaponDisplay.sprite = null;
+				equippedWeaponDisplay.color = Color.clear;
 			}
 
 			if (Player.EquipedSpell != null)
@@ -252,6 +236,28 @@ namespace EoE.UI
 			{
 				equippedSpellDisplay.sprite = null;
 				equippedSpellDisplay.color = Color.clear;
+			}
+
+			if (Player.EquipedArmor != null)
+			{
+				equippedArmorDisplay.sprite = Player.EquipedArmor.data.ItemIcon;
+				equippedArmorDisplay.color = Color.white;
+			}
+			else
+			{
+				equippedArmorDisplay.sprite = null;
+				equippedArmorDisplay.color = Color.clear;
+			}
+
+			if (Player.EquipedItem != null)
+			{
+				equippedItemDisplay.sprite = Player.EquipedItem.data.ItemIcon;
+				equippedItemDisplay.color = Color.white;
+			}
+			else
+			{
+				equippedItemDisplay.sprite = null;
+				equippedItemDisplay.color = Color.clear;
 			}
 		}
 		private void ShowDropMenu()

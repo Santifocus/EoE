@@ -39,13 +39,17 @@ namespace EoE.Information
 		}
 		public void Use(InventoryItem originStack, Entitie user, Inventory origin)
 		{
-			originStack.useCooldown = UseCooldown;
-			if (RemoveOnUse)
+			//We have basic item mechanics that we always want to execute, however in some cases the override OnUse
+			//give us the info that the item cannot be used if that is the case we dont do any of the base mechanics
+			if (OnUse(user))
 			{
-				origin.RemoveInventoryItem(originStack, 1);
+				PlayEffects(user);
+				originStack.useCooldown = UseCooldown;
+				if (RemoveOnUse)
+				{
+					origin.RemoveInventoryItem(originStack, 1);
+				}
 			}
-			PlayEffects(user);
-			OnUse(user);
 		}
 		private void PlayEffects(Entitie user)
 		{
@@ -55,6 +59,6 @@ namespace EoE.Information
 			}
 		}
 		protected virtual void OnEquip(Entitie user) { }
-		protected abstract void OnUse(Entitie user);
+		protected abstract bool OnUse(Entitie user);
 	}
 }

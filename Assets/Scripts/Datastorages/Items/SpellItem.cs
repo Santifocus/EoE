@@ -1,12 +1,14 @@
 ﻿using EoE.Entities;
+using EoE.Weapons;
 
 namespace EoE.Information
 {
 	public class SpellItem : Item
 	{
-		protected override void OnUse(Entitie user)
+		public Spell targetSpell;
+		protected override bool OnUse(Entitie user)
 		{
-
+			return user.CastSpell(targetSpell);
 		}
 	}
 }

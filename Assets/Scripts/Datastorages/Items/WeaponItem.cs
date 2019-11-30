@@ -4,9 +4,9 @@ namespace EoE.Information
 {
 	public class WeaponItem : Item
 	{
-		protected override void OnUse(Entitie user)
+		protected override bool OnUse(Entitie user)
 		{
-
+			return false;
 		}
 	}
 }

@@ -16,31 +16,11 @@ namespace EoE.Entities
 		private InventoryItem containedItem;
 		protected override void Interact()
 		{
-			AddToInventory();
-
+			Player.Inventory.AddItem(containedItem);
 			if (containedItem.stackSize == 0)
 			{
 				Destroy(infoDisplay.gameObject);
 				Destroy(gameObject);
-			}
-		}
-		private void AddToInventory()
-		{
-			if (containedItem.data is ArmorItem)
-			{
-				Player.ArmorInventory.AddItem(containedItem);
-			}
-			else if (containedItem.data is WeaponItem)
-			{
-				Player.WeaponInventory.AddItem(containedItem);
-			}
-			else if (containedItem.data is SpellItem)
-			{
-				Player.SpellInventory.AddItem(containedItem);
-			}
-			else //Any other Item type
-			{
-				Player.ItemInventory.AddItem(containedItem);
 			}
 		}
 		private void LateUpdate()

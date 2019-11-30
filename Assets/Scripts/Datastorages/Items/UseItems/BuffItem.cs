@@ -8,7 +8,7 @@ namespace EoE.Information
 		public Buff[] buffsToApply;
 		public bool stackable;
 
-		protected override void OnUse(Entitie user)
+		protected override bool OnUse(Entitie user)
 		{
 			if (stackable)
 			{
@@ -25,6 +25,7 @@ namespace EoE.Information
 						user.AddBuff(buffsToApply[i], user);
 				}
 			}
+			return true;
 		}
 	}
 }
