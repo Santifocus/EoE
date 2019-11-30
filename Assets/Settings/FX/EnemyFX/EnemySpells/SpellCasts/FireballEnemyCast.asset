@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
-  m_Name: FireBallStart
+  m_Name: FireballEnemyCast
   m_EditorClassIdentifier: 
-  ParticleMainObject: {fileID: 4111788752334134514, guid: 70e13daebdc530540a5046242b930055,
+  ParticleMainObject: {fileID: 9145301141764976278, guid: 0b41ceca3788cc24b8720aa8097296b0,
     type: 3}
   DestroyAfterDelay: 1
-  DestroyDelay: 1
-  OffsetToTarget: {x: -1.2, y: 0, z: 0}
+  DestroyDelay: 2.25
+  OffsetToTarget: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}
-  FollowTarget: 0
-  InheritRotationOfTarget: 0
+  FollowTarget: 1
+  InheritRotationOfTarget: 1
   OnParentDeathBehaivior: 0
   DestroyStyle: 0
