@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Ball_Lightning
   m_EditorClassIdentifier: 
   ItemName: Ball Lightning
-  ItemModel: {fileID: 0}
+  ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
+    type: 3}
   MaxStack: 1
   ItemIcon: {fileID: 21300000, guid: b8093cca8a5ef6c44acbddd2697a666f, type: 3}
   RemoveOnUse: 0

@@ -16,7 +16,7 @@ MonoBehaviour:
   BaseDamage: 15
   BaseKnockback: 10
   SpellCooldown: 2
-  ContainedParts: 6
+  ContainedParts: -1
   MovementRestrictions: -1
   CastInfo:
     Duration: 1.7

@@ -34,7 +34,7 @@ MonoBehaviour:
     Direction: 1
     Duration: 15
     FlightSpeed: 60
-    CreateOffsetToCaster: {x: 0, y: 5, z: 1}
+    CreateOffsetToCaster: {x: 1, y: 0, z: 0}
     ParticleEffects:
     - {fileID: 11400000, guid: 2d9464ef70c8d5b47989f2acfbbe9a96, type: 2}
     StartEffects: []
