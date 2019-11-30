@@ -21,4 +21,4 @@ MonoBehaviour:
   FollowTarget: 1
   InheritRotationOfTarget: 0
   OnParentDeathBehaivior: 0
-  DestroyStyle: 0
+  DestroyStyle: 1

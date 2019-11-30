@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
-  m_Name: ShadowBombCast
+  m_Name: Lightning_Cast
   m_EditorClassIdentifier: 
-  ParticleMainObject: {fileID: 242155299197559482, guid: b5cc45401c8cd5645b046797b03383f9,
+  ParticleMainObject: {fileID: 4571684713159586539, guid: 6cb07f1f48456424dbfab2e32f59d72e,
     type: 3}
-  DestroyAfterDelay: 0
-  DestroyDelay: 3
+  DestroyAfterDelay: 1
+  DestroyDelay: 1
   OffsetToTarget: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}
   FollowTarget: 1
   InheritRotationOfTarget: 0
   OnParentDeathBehaivior: 0
-  DestroyStyle: 1
+  DestroyStyle: 0

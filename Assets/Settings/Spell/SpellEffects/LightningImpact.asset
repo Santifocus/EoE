@@ -10,21 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f26a7d5fe156864d9dc8c08f742157c, type: 3}
-  m_Name: FireballImpact
+  m_Name: LightningImpact
   m_EditorClassIdentifier: 
   AffectedTargets: 4
   BaseEffectRadius: 2
   ZeroOutDistance: 5
   HasMaximumHits: 0
   MaximumHits: 0
-  DamageElement: 2
+  DamageElement: 16
   DamageMultiplier: 1
   CritChance: 0
-  KnockbackMultiplier: 0
+  KnockbackMultiplier: 12
   KnockbackOrigin: 2
   KnockbackDirection: 1
   BuffStackStyle: 2
-  BuffsToApply:
-  - {fileID: 11400000, guid: 23e1ab5c5ac8dba46b691279a20574b8, type: 2}
+  BuffsToApply: []
   Effects:
-  - {fileID: 11400000, guid: 9e2e9642ad6963544a6c31cec64e0d4a, type: 2}
+  - {fileID: 11400000, guid: e840a1eafcd96a047bbe880545aaa1d0, type: 2}

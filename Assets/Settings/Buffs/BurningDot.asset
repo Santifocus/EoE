@@ -25,4 +25,4 @@ MonoBehaviour:
   - Element: 2
     TargetStat: 0
     DelayPerActivation: 0.5
-    BaseDamage: 5
+    BaseDamage: 3
