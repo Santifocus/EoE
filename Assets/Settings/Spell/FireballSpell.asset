@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FireballSpell
   m_EditorClassIdentifier: 
   ManaCost: 20
-  BaseDamage: 30
+  BaseDamage: 15
   BaseKnockback: 10
   SpellCooldown: 2
   ContainedParts: 6
@@ -34,7 +34,7 @@ MonoBehaviour:
     Direction: 1
     Duration: 10
     FlightSpeed: 30
-    CreateOffsetToCaster: {x: 0, y: 5, z: 0}
+    CreateOffsetToCaster: {x: 1, y: 0, z: 0}
     ParticleEffects:
     - {fileID: 11400000, guid: f3a5d4a11481585419aa5a911b8dcce1, type: 2}
     StartEffects: []
@@ -72,7 +72,7 @@ MonoBehaviour:
     Direction: 1
     Duration: 10
     FlightSpeed: 30
-    CreateOffsetToCaster: {x: 0, y: 5, z: 1}
+    CreateOffsetToCaster: {x: 1, y: 0, z: 0}
     ParticleEffects:
     - {fileID: 11400000, guid: f3a5d4a11481585419aa5a911b8dcce1, type: 2}
     StartEffects: []
@@ -110,45 +110,7 @@ MonoBehaviour:
     Direction: 1
     Duration: 10
     FlightSpeed: 30
-    CreateOffsetToCaster: {x: 0, y: 5, z: 1}
-    ParticleEffects:
-    - {fileID: 11400000, guid: f3a5d4a11481585419aa5a911b8dcce1, type: 2}
-    StartEffects: []
-    WhileEffects: []
-    EntitieHitboxSize: 1
-    TerrainHitboxSize: 0.5
-    CollideMask: 3
-    Bounces: 0
-    DestroyOnEntiteBounce: 1
-    CollisionEffectsOnBounce: 1
-    CollisionParticleEffects:
-    - {fileID: 11400000, guid: 2762cd21c6bde30458700de03ee7df29, type: 2}
-    CollisionEffects:
-    - {fileID: 11400000, guid: 44806d8447931e9408e4e93cb4e6611f, type: 2}
-    DirectHit:
-      AffectedTargets: 4
-      DamageElement: 1
-      DamageMultiplier: 0
-      CritChance: 0
-      KnockbackMultiplier: 0
-      KnockbackOrigin: 2
-      KnockbackDirection: 1
-      BuffStackStyle: 2
-      BuffsToApply: []
-      Effects: []
-    CreatesRemenants: 0
-    Remenants:
-      Duration: 5
-      ParticleEffects: []
-      StartEffects: []
-      WhileEffects: []
-      TryGroundRemenants: 1
-  - DirectionStyle: 2
-    FallbackDirectionStyle: 1
-    Direction: 1
-    Duration: 10
-    FlightSpeed: 30
-    CreateOffsetToCaster: {x: 0, y: 5, z: 1}
+    CreateOffsetToCaster: {x: 1, y: 0, z: 0}
     ParticleEffects:
     - {fileID: 11400000, guid: f3a5d4a11481585419aa5a911b8dcce1, type: 2}
     StartEffects: []
@@ -182,6 +144,5 @@ MonoBehaviour:
       WhileEffects: []
       TryGroundRemenants: 1
   DelayToNextProjectile:
-  - 0.25
   - 0.25
   - 0.25
