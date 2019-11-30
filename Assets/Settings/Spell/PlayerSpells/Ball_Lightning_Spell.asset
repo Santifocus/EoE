@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dbc89a2906f120d45877860a48c8c4e2, type: 3}
-  m_Name: Ball_Lightning
+  m_Name: Ball_Lightning_Spell
   m_EditorClassIdentifier: 
   ManaCost: 25
-  BaseDamage: 30
+  BaseDamage: 35
   BaseKnockback: 0
   SpellCooldown: 3
   ContainedParts: 7
   MovementRestrictions: 3
   CastInfo:
-    Duration: 1.7
+    Duration: 1.2
     ParticleEffects:
     - {fileID: 11400000, guid: 7862dc0c47048144d978bfc5b67aabf5, type: 2}
     StartEffects: []
@@ -33,16 +33,16 @@ MonoBehaviour:
     FallbackDirectionStyle: 1
     Direction: 1
     Duration: 15
-    FlightSpeed: 60
+    FlightSpeed: 100
     CreateOffsetToCaster: {x: 1, y: 0, z: 0}
     ParticleEffects:
     - {fileID: 11400000, guid: 2d9464ef70c8d5b47989f2acfbbe9a96, type: 2}
     StartEffects: []
     WhileEffects: []
-    EntitieHitboxSize: 1
+    EntitieHitboxSize: 2
     TerrainHitboxSize: 0.5
     CollideMask: 3
-    Bounces: 2
+    Bounces: 5
     DestroyOnEntiteBounce: 0
     CollisionEffectsOnBounce: 1
     CollisionParticleEffects:

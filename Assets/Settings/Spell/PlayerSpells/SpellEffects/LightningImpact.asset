@@ -24,6 +24,7 @@ MonoBehaviour:
   KnockbackOrigin: 2
   KnockbackDirection: 1
   BuffStackStyle: 2
-  BuffsToApply: []
+  BuffsToApply:
+  - {fileID: 11400000, guid: 6da2ca87550612d4cb05ca60fbfcb6ba, type: 2}
   Effects:
-  - {fileID: 11400000, guid: e840a1eafcd96a047bbe880545aaa1d0, type: 2}
+  - {fileID: 11400000, guid: 5c28d04af48610b47b181b05fc6bf580, type: 2}
