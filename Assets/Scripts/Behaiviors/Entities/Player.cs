@@ -599,7 +599,7 @@ namespace EoE.Entities
 			FXInstance[] dodgeEffects = new FXInstance[PlayerSettings.EffectsOnPlayerDodge.Length];
 			for (int i = 0; i < PlayerSettings.EffectsOnPlayerDodge.Length; i++)
 			{
-				dodgeEffects[i] = FXManager.PlayFX(PlayerSettings.EffectsOnPlayerDodge[i], Player.Instance.transform, true, 1);
+				dodgeEffects[i] = FXManager.PlayFX(PlayerSettings.EffectsOnPlayerDodge[i], transform, true);
 			}
 
 			Vector3 newForce = new Vector3(Mathf.Sin(targetAngle * Mathf.Deg2Rad), 0, Mathf.Cos(targetAngle * Mathf.Deg2Rad)) * PlayerSettings.DodgePower * curWalkSpeed;

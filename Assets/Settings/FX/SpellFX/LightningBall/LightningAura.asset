@@ -10,15 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
-  m_Name: Lightning_Start
+  m_Name: LightningAura
   m_EditorClassIdentifier: 
-  ParticleMainObject: {fileID: 5502592718962757382, guid: f617881108b38e94b93d620e279f6b9f,
+  TimeIn: 0
+  TimeOut: 0
+  FinishConditions:
+    OnParentDeath: 0
+    OnTimeout: 0
+    TimeStay: 1
+  ParticleMainObject: {fileID: 4786585486759666015, guid: fbad92c39d5e79c45919b8db8fb1f469,
     type: 3}
-  DestroyAfterDelay: 1
-  DestroyDelay: 1
-  OffsetToTarget: {x: -1, y: 0, z: 0}
+  OffsetToTarget: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}
-  FollowTarget: 0
+  FollowTarget: 1
   InheritRotationOfTarget: 0
-  OnParentDeathBehaivior: 0
-  DestroyStyle: 0

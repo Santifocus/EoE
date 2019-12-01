@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FireBallStart
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0
+  TimeOut: 0.3
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 0
