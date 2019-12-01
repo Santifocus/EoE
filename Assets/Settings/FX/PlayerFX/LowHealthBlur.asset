@@ -12,6 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3f99014803e0b847b46eafc212b1761, type: 3}
   m_Name: LowHealthBlur
   m_EditorClassIdentifier: 
-  Time: 1
+  TimeIn: 0.1
+  TimeOut: 0.25
+  FinishConditions:
+    OnParentDeath: 0
+    OnTimeout: 1
+    TimeStay: 0.3
   Intensity: 1
   BlurDistance: 6

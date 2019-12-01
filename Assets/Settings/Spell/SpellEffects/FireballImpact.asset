@@ -18,13 +18,12 @@ MonoBehaviour:
   HasMaximumHits: 0
   MaximumHits: 0
   DamageElement: 2
-  CritChance: 0
   DamageMultiplier: 1
+  CritChance: 0
   KnockbackMultiplier: 0
   KnockbackOrigin: 2
   KnockbackDirection: 1
   BuffStackStyle: 2
   BuffsToApply:
   - {fileID: 11400000, guid: 23e1ab5c5ac8dba46b691279a20574b8, type: 2}
-  Effects:
-  - {fileID: 11400000, guid: 9e2e9642ad6963544a6c31cec64e0d4a, type: 2}
+  Effects: []

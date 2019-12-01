@@ -84,5 +84,6 @@ namespace EoE.Information
 		public FXObject[] EffectsOnPlayerLanding = default;
 		public FXObject[] EffectsOnPlayerDodge = default;
 		public FXObject[] EffectsOnEnemyKilled = default;
+		public FXObject[] EffectsOnPlayerDeath = default;
 	}
 }

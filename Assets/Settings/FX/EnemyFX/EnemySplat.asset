@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa0729519a808d449bdb777d2d35538b, type: 3}
   m_Name: EnemySplat
   m_EditorClassIdentifier: 
+  TimeIn: 0
+  TimeOut: 0
+  FinishConditions:
+    OnParentDeath: 0
+    OnTimeout: 0
+    TimeStay: 1
   TargetSound: {fileID: 11400000, guid: d914b1f7a64b5cd41a0b24f650b5ef21, type: 2}
   FollowTarget: 0
   OffsetToTarget: {x: 0, y: 0, z: 0}
-  DestroyAfterDelay: 1
-  DestroyDelay: 1.4
-  OnParentDeathBehaivior: 1
-  RemoveStyle: 1
-  FadeOutTime: 0

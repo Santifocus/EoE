@@ -12,10 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
   m_Name: DamageBuff
   m_EditorClassIdentifier: 
+  TimeIn: 0
+  TimeOut: 0
+  FinishConditions:
+    OnParentDeath: 0
+    OnTimeout: 0
+    TimeStay: 1
   ParticleMainObject: {fileID: 8898843886906588985, guid: d094848bb5f16094492ed8e111c2deeb,
     type: 3}
-  DestroyDelay: 10
   OffsetToTarget: {x: 0, y: 0, z: 0}
+  RotationOffset: {x: 0, y: 0, z: 0}
   FollowTarget: 1
   InheritRotationOfTarget: 0
-  OnTargetDeathBehaivior: 0

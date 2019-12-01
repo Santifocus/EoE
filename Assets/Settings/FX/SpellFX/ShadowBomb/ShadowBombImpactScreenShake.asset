@@ -12,8 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6d4205812b5584418e18937cd4db88f, type: 3}
   m_Name: ShadowBombImpactScreenShake
   m_EditorClassIdentifier: 
-  Time: 0.4
-  AxisIntensity: 1.25
-  AngleIntensity: 0.45
+  TimeIn: 0
+  TimeOut: 0.1
+  FinishConditions:
+    OnParentDeath: 0
+    OnTimeout: 1
+    TimeStay: 0.2
+  AxisIntensity: 1
+  AngleIntensity: 4
   CustomAxisMultiplier: {x: 1, y: 1, z: 1}
   CustomAngleMultiplier: {x: 1, y: 1, z: 1}

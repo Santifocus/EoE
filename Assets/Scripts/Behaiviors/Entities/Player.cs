@@ -5,8 +5,8 @@ using TMPro;
 using EoE.Controlls;
 using EoE.Events;
 using EoE.Information;
-using EoE.Utils;
 using EoE.Weapons;
+using EoE.Utils;
 
 namespace EoE.Entities
 {
@@ -20,7 +20,7 @@ namespace EoE.Entities
 		private const float JUMP_GROUND_COOLDOWN = 0.2f;
 		private const float IS_FALLING_THRESHOLD = -1;
 		private const float LANDED_VELOCITY_THRESHOLD = 0.5f;
-		private const float SWITCH_TARGET_COOLDOWN = 0.45f;
+		private const float SWITCH_TARGET_COOLDOWN = 0.25f;
 
 		//Inspector variables
 		[Space(10)]
@@ -89,12 +89,10 @@ namespace EoE.Entities
 		#endregion
 
 		//Getter Helpers
-		public static bool Alive { get; private set; }
 		public float jumpVelocity { get; private set; }
 		public float verticalVelocity { get; private set; }
 		public float totalVerticalVelocity => jumpVelocity * PlayerSettings.JumpImpulsePower + verticalVelocity;
 		public override Vector3 curVelocity => base.curVelocity + new Vector3(0, totalVerticalVelocity, 0);
-		private enum GetEnduranceType : byte { NotAvailable = 0, Available = 1, AvailableWithNewBar = 2 }
 		public enum AttackState : short { NormalStand = 0, NormalSprint = 1, NormalJump = 2, NormalSprintJump = 3, HeavyStand = 4, HeavySprint = 5, HeavyJump = 6, HeavySprintJump = 7 }
 		public static Player Instance { get; private set; }
 		public override EntitieSettings SelfSettings => selfSettings;
@@ -122,7 +120,6 @@ namespace EoE.Entities
 		#region Basic Monobehaivior
 		protected override void EntitieStart()
 		{
-			Alive = true;
 			Instance = this;
 
 			SetupLevelingControl();
@@ -598,6 +595,13 @@ namespace EoE.Entities
 				targetAngle = -(Mathf.Atan2(controllDirection.z, controllDirection.x) * Mathf.Rad2Deg - 90);
 			}
 
+			//Play FX
+			FXInstance[] dodgeEffects = new FXInstance[PlayerSettings.EffectsOnPlayerDodge.Length];
+			for (int i = 0; i < PlayerSettings.EffectsOnPlayerDodge.Length; i++)
+			{
+				dodgeEffects[i] = FXManager.PlayFX(PlayerSettings.EffectsOnPlayerDodge[i], Player.Instance.transform, true, 1);
+			}
+
 			Vector3 newForce = new Vector3(Mathf.Sin(targetAngle * Mathf.Deg2Rad), 0, Mathf.Cos(targetAngle * Mathf.Deg2Rad)) * PlayerSettings.DodgePower * curWalkSpeed;
 
 			entitieForceController.ApplyForce(newForce, 1 / PlayerSettings.DodgeDuration);
@@ -637,6 +641,11 @@ namespace EoE.Entities
 
 			Destroy(modelCopy.gameObject);
 			Destroy(weaponCopy.gameObject);
+
+			for(int i = 0; i < dodgeEffects.Length; i++)
+			{
+				dodgeEffects[i].FinishFX();
+			}
 
 			void ApplyMaterialToAllChildren(Transform parent)
 			{
@@ -1070,8 +1079,7 @@ namespace EoE.Entities
 		{
 			if (heldWeapon)
 				Destroy(heldWeapon.gameObject);
-			EffectUtils.BlurScreen(1, Mathf.Infinity, 5);
-			Alive = false;
+
 			if (TargetedEntitie)
 				TargetedEntitie = null;
 			base.Death();

@@ -41,7 +41,7 @@ namespace EoE.UI
 			{
 				if(InputController.MenuRight.Down || InputController.MenuLeft.Down || InputController.MenuEnter.Down)
 				{
-					navigationCooldown = NAV_COOLDOWN;
+					navigationCooldown = NAV_COOLDOWN * 2;
 					StopAllCoroutines();
 					SelectIndex();
 					FinishFadeIn();

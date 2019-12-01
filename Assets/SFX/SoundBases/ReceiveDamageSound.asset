@@ -15,8 +15,9 @@ MonoBehaviour:
   soundName: ReceiveDamage
   clip: {fileID: 8300000, guid: 8b5fbb261e0984b439abb860a43b360b, type: 3}
   audioGroup: {fileID: 24300002, guid: b8b319c0096b4d34196070be7e374c0c, type: 2}
+  Loop: 0
   priority: 128
   pitch: 1
   volume: 1
   spatialBlend: 0.3
-  scaleStyle: 1
+  scaleStyle: 0

@@ -12,13 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
   m_Name: ShadowBombImpact
   m_EditorClassIdentifier: 
+  TimeIn: 0
+  TimeOut: 0
+  FinishConditions:
+    OnParentDeath: 0
+    OnTimeout: 1
+    TimeStay: 1
   ParticleMainObject: {fileID: 7853481114493589748, guid: b1bf8863712d7b94d8d5ccd8b6e71864,
     type: 3}
-  DestroyAfterDelay: 1
-  DestroyDelay: 1.5
   OffsetToTarget: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}
   FollowTarget: 0
   InheritRotationOfTarget: 0
-  OnParentDeathBehaivior: 0
-  DestroyStyle: 0

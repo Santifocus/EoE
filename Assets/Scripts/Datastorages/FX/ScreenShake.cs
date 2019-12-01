@@ -6,8 +6,6 @@ namespace EoE.Information
 {
 	public class ScreenShake : FXObject
 	{
-		[Tooltip("How long should the ScreenShake last?")]
-		public float Time = 0.25f;
 		[Tooltip("How strong is the intensity on the XYZ Axis")]
 		public float AxisIntensity = 0.125f;
 		[Tooltip("How strong is the intensity on the XYZ Angles")]

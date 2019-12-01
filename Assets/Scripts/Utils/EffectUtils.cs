@@ -31,15 +31,15 @@ namespace EoE.Utils
 		public static void ResetScreenEffects()
 		{
 			Instance.StopAllCoroutines();
-			AllScreenShakes = new List<ScreenShakeInfo>();
-			AllRumbles = new List<RumbleInfo>();
-			AllScreenColorEffects = new List<ColorScreenEffect>();
-			AllBlurScreenEffects = new List<BlurScreenEffect>();
-			AllTimeDilationsEffects = new List<TimeDilationEffect>();
-			AllTintScreenEffects = new List<TintScreenEffect>();
-			AllCameraFOVWarpEffects = new List<CameraFOVWarpEffect>();
-			AllSoundFXs = new List<SoundFX>();
-			AllParticleFXs = new List<ParticleFX>();
+			AllScreenShakes = new List<ScreenShakeInstance>();
+			AllRumbles = new List<ControllerRumbleInstance>();
+			AllScreenColorEffects = new List<ScreenBorderColorInstance>();
+			AllBlurScreenEffects = new List<ScreenBlurInstance>();
+			AllTimeDilationsEffects = new List<TimeDilationInstance>();
+			AllTintScreenEffects = new List<ScreenTintInstance>();
+			AllCameraFOVWarpEffects = new List<CameraFOVWarpInstance>();
+			AllSoundFXs = new List<SoundEffectInstance>();
+			AllParticleFXs = new List<ParticleEffectInstance>();
 
 			Instance.ResetScreenEffectMat();
 			Gamepad.current.SetMotorSpeeds(0, 0);
@@ -63,134 +63,115 @@ namespace EoE.Utils
 		#endregion
 		#region ScreenShake
 		private const float DELAY_PER_SHAKE = 0.01f;
-		private const float UN_SHAKE_SPEED = 20;
 		private Coroutine ShakeScreenCoroutine = null;
-		private static List<ScreenShakeInfo> AllScreenShakes = new List<ScreenShakeInfo>();
-		public static FXInstance ShakeScreen(float lenght, float axisIntensity, float angleIntensity, Vector3? customAxisMultiplier = null, Vector3? customAngleMultiplier = null)
+		private static List<ScreenShakeInstance> AllScreenShakes = new List<ScreenShakeInstance>();
+		public static FXInstance ShakeScreen(ScreenShake info, float multiplier = 1)
 		{
-			ScreenShakeInfo newScreenShakeInfo = new ScreenShakeInfo(
-				lenght,
-				axisIntensity,
-				angleIntensity,
-				axisIntensity * (customAxisMultiplier.HasValue ? customAxisMultiplier.Value : Vector3.one),
-				angleIntensity * (customAngleMultiplier.HasValue ? customAngleMultiplier.Value : Vector3.one));
-
+			ScreenShakeInstance newScreenShakeInfo = new ScreenShakeInstance(info);
+			newScreenShakeInfo.BaseSetup(multiplier, Player.Instance.transform);
 			AllScreenShakes.Add(newScreenShakeInfo);
+
 			if (Instance.ShakeScreenCoroutine == null)
 			{
 				Instance.ShakeScreenCoroutine = Instance.StartCoroutine(Instance.ShakeScreenC());
 			}
 			return newScreenShakeInfo;
 		}
-		public static FXInstance ShakeScreen(ScreenShake info, float multiplier = 1)
-		{
-			return ShakeScreen(info.Time, info.AxisIntensity * multiplier, info.AngleIntensity * multiplier, info.CustomAxisMultiplier, info.CustomAngleMultiplier);
-		}
 		private IEnumerator ShakeScreenC()
 		{
 			float timeTillNextShake = 0;
-			while (true)
+			while (AllScreenShakes.Count > 0)
 			{
 				yield return new WaitForEndOfFrame();
 				if (GameController.GameIsPaused)
 						continue;
 
-				if (AllScreenShakes.Count > 0) //SHAKE
+				timeTillNextShake -= Time.deltaTime;
+				if (timeTillNextShake <= 0)
 				{
-
 					float strongestAxisIntensity = 0;
+					Vector3 strongestAxisIntensityVector = Vector3.zero;
 					float strongestAngleIntensity = 0;
+					Vector3 strongestAngleIntensityVector = Vector3.zero;
+
 					for (int i = 0; i < AllScreenShakes.Count; i++)
 					{
-						AllScreenShakes[i].remainingTime -= Time.deltaTime;
-						if (AllScreenShakes[i].remainingTime <= 0 || AllScreenShakes[i].Canceled)
+						AllScreenShakes[i].Update(Time.deltaTime);
+						if (AllScreenShakes[i].ShouldBeRemoved && AllScreenShakes[i].AllowedToRemove())
 						{
+							AllScreenShakes[i].OnRemove();
 							AllScreenShakes.RemoveAt(i);
 							i--;
 						}
 						else
 						{
-							if (strongestAxisIntensity < AllScreenShakes[i].axisIntensity)
-								strongestAxisIntensity = AllScreenShakes[i].axisIntensity;
+							(Vector3 axisIntensityVector, Vector3 angleIntensityVector) = AllScreenShakes[i].GetIntensities();
+							float axisIntensity = axisIntensityVector.sqrMagnitude;
+							if (axisIntensity > strongestAxisIntensity)
+							{
+								strongestAxisIntensity = axisIntensity;
+								strongestAxisIntensityVector = axisIntensityVector;
+							}
 
-							if (strongestAngleIntensity < AllScreenShakes[i].angleIntensity)
-								strongestAngleIntensity = AllScreenShakes[i].angleIntensity;
+							float angleIntensity = angleIntensityVector.sqrMagnitude;
+							if (angleIntensity > strongestAngleIntensity)
+							{
+								strongestAngleIntensity = angleIntensity;
+								strongestAngleIntensityVector = angleIntensityVector;
+							}
 						}
 					}
 
-					timeTillNextShake -= Time.deltaTime;
-					if (timeTillNextShake <= 0)
-					{
-						Shake(strongestAxisIntensity, strongestAngleIntensity);
-						timeTillNextShake += DELAY_PER_SHAKE;
-					}
-				}
-				else //UNSHAKE
-				{
-					float timeStep = Time.deltaTime * UN_SHAKE_SPEED;
-					cameraShakeCore.localPosition = Vector3.Lerp(cameraShakeCore.localPosition, Vector3.zero, timeStep);
-					cameraShakeCore.localEulerAngles = new Vector3(Mathf.LerpAngle(cameraShakeCore.localEulerAngles.x, 0, timeStep / 4),
-						Mathf.LerpAngle(cameraShakeCore.localEulerAngles.y, 0, timeStep / 4),
-						Mathf.LerpAngle(cameraShakeCore.localEulerAngles.z, 0, timeStep / 4));
-
-					if (cameraShakeCore.localPosition.sqrMagnitude < 0.001f && cameraShakeCore.localEulerAngles.sqrMagnitude < 0.001f)
-					{
-						cameraShakeCore.localPosition = Vector3.zero;
-						cameraShakeCore.localEulerAngles = Vector3.zero;
-						break;
-					}
+					Shake(strongestAxisIntensityVector, strongestAngleIntensityVector);
+					timeTillNextShake += DELAY_PER_SHAKE;
 				}
 			}
+
+			cameraShakeCore.localPosition = Vector3.zero;
+			cameraShakeCore.localEulerAngles = Vector3.zero;
 
 			ShakeScreenCoroutine = null;
-			void Shake(float axisIntensity, float angleIntensity)
+			void Shake(Vector3 axisIntensity, Vector3 angleIntensity)
 			{
-				cameraShakeCore.localPosition = ((Random.value - 0.5f) * cameraShakeCore.transform.right + (Random.value - 0.5f) * cameraShakeCore.transform.up) * axisIntensity;
-				cameraShakeCore.localEulerAngles = new Vector3((Random.value - 0.5f) * angleIntensity, (Random.value - 0.5f) * angleIntensity, (Random.value - 0.5f) * angleIntensity);
+				cameraShakeCore.localPosition = (Random.value - 0.5f) * cameraShakeCore.transform.right * axisIntensity.x +
+												(Random.value - 0.5f) * cameraShakeCore.transform.up * axisIntensity.y +
+												(Random.value - 0.5f) * cameraShakeCore.transform.forward * axisIntensity.z;
+				cameraShakeCore.localEulerAngles = new Vector3((Random.value - 0.5f) * angleIntensity.x, 
+																(Random.value - 0.5f) * angleIntensity.y, 
+																(Random.value - 0.5f) * angleIntensity.z);
 			}
 		}
-		private class ScreenShakeInfo : FXInstance
+		private class ScreenShakeInstance : FXInstance
 		{
 			public override FXType Type => FXType.Player;
-			public float remainingTime;
-			public float axisIntensity;
-			public float angleIntensity;
-			public Vector3 axisIntensityVector;
-			public Vector3 angleIntensityVector;
-			public ScreenShakeInfo(float remainingTime, float axisIntensity, float angleIntensity, Vector3 axisIntensityVector, Vector3 angleIntensityVector)
+			public override FXObject BaseInfo => ScreenShakeInfo;
+			private ScreenShake ScreenShakeInfo;
+
+			public ScreenShakeInstance(ScreenShake ScreenShakeInfo)
 			{
-				this.remainingTime = remainingTime;
-
-				this.axisIntensity = axisIntensity;
-				this.angleIntensity = angleIntensity;
-
-				this.axisIntensityVector = axisIntensityVector;
-				this.angleIntensityVector = angleIntensityVector;
+				this.ScreenShakeInfo = ScreenShakeInfo;
+			}
+			public (Vector3, Vector3) GetIntensities()
+			{
+				float multiplier = GetCurMultiplier();
+				return (ScreenShakeInfo.AxisIntensity * ScreenShakeInfo.CustomAxisMultiplier * multiplier, ScreenShakeInfo.AngleIntensity * ScreenShakeInfo.CustomAngleMultiplier * multiplier);
 			}
 		}
 		#endregion
 		#region Rumble
-		private static List<RumbleInfo> AllRumbles = new List<RumbleInfo>();
+		private static List<ControllerRumbleInstance> AllRumbles = new List<ControllerRumbleInstance>();
 		private Coroutine RumbleCoroutine = null;
-		public static FXInstance RumbleController(float totalTime, float leftMotorIntensityStart, float rightMotorIntensityStart, float? leftMotorIntensityEnd = null, float? rightMotorIntensityEnd = null)
+		public static FXInstance RumbleController(ControllerRumble info, float multiplier = 1)
 		{
-			RumbleInfo newRumbleInfo = new RumbleInfo(
-				totalTime,
-				leftMotorIntensityStart,
-				rightMotorIntensityStart,
-				leftMotorIntensityEnd,
-				rightMotorIntensityEnd);
-
+			ControllerRumbleInstance newRumbleInfo = new ControllerRumbleInstance(info);
+			newRumbleInfo.BaseSetup(multiplier, Player.Instance.transform);
 			AllRumbles.Add(newRumbleInfo);
+
 			if (Instance.RumbleCoroutine == null)
 			{
 				Instance.RumbleCoroutine = Instance.StartCoroutine(Instance.RumbleC());
 			}
 			return newRumbleInfo;
-		}
-		public static FXInstance RumbleController(ControllerRumble info, float multiplier = 1)
-		{
-			return RumbleController(info.Time, info.LeftStartIntensity * multiplier, info.RightStartIntensity * multiplier, info.LeftEndIntensity * multiplier, info.RightEndIntensity * multiplier);
 		}
 		private IEnumerator RumbleC()
 		{
@@ -199,7 +180,10 @@ namespace EoE.Utils
 				yield return new WaitForEndOfFrame();
 				if (GameController.GameIsPaused)
 				{
-					Gamepad.current.SetMotorSpeeds(0, 0);
+					if (Gamepad.current != null)
+					{
+						Gamepad.current.SetMotorSpeeds(0, 0);
+					}
 					continue;
 				}
 
@@ -209,16 +193,17 @@ namespace EoE.Utils
 				//Update all remaining times and get the highest intensitys
 				for (int i = 0; i < AllRumbles.Count; i++)
 				{
-					AllRumbles[i].remainingTime -= Time.deltaTime;
-					(float left, float right) = AllRumbles[i].GetRumbleIntensitys();
-
-					if (AllRumbles[i].remainingTime <= 0 || AllRumbles[i].Canceled)
+					AllRumbles[i].Update(Time.unscaledDeltaTime);
+					if (AllRumbles[i].ShouldBeRemoved && AllRumbles[i].AllowedToRemove())
 					{
+						AllRumbles[i].OnRemove();
 						AllRumbles.RemoveAt(i);
 						i--;
 					}
 					else
 					{
+						(float left, float right) = AllRumbles[i].GetRumbleIntensitys();
+
 						if (left > highestLeftIntensity)
 							highestLeftIntensity = left;
 
@@ -242,62 +227,40 @@ namespace EoE.Utils
 			RumbleCoroutine = null;
 		}
 
-		private class RumbleInfo : FXInstance
+		private class ControllerRumbleInstance : FXInstance
 		{
 			public override FXType Type => FXType.Player;
-			public float totalTime;
-			public float remainingTime;
+			public override FXObject BaseInfo => ControllerRumbleInfo;
+			private ControllerRumble ControllerRumbleInfo;
 
-			public float leftMotorIntensityStart;
-			public float rightMotorIntensityStart;
-
-			public float leftMotorIntensityEnd;
-			public float rightMotorIntensityEnd;
-
-			public RumbleInfo(float totalTime, float leftMotorIntensityStart, float rightMotorIntensityStart, float? leftMotorIntensityEnd = null, float? rightMotorIntensityEnd = null)
+			public ControllerRumbleInstance(ControllerRumble ControllerRumbleInfo)
 			{
-				this.totalTime = totalTime;
-				this.remainingTime = totalTime;
-
-				this.leftMotorIntensityStart = leftMotorIntensityStart;
-				this.rightMotorIntensityStart = rightMotorIntensityStart;
-				this.leftMotorIntensityEnd = leftMotorIntensityEnd ?? leftMotorIntensityStart;
-				this.rightMotorIntensityEnd = rightMotorIntensityEnd ?? rightMotorIntensityStart;
-
-				this.leftMotorIntensityStart = Mathf.Clamp01(this.leftMotorIntensityStart);
-				this.rightMotorIntensityStart = Mathf.Clamp01(this.rightMotorIntensityStart);
-				this.leftMotorIntensityEnd = Mathf.Clamp01(this.leftMotorIntensityEnd);
-				this.rightMotorIntensityEnd = Mathf.Clamp01(this.rightMotorIntensityEnd);
+				this.ControllerRumbleInfo = ControllerRumbleInfo;
 			}
-
 			public (float, float) GetRumbleIntensitys()
 			{
-				//Gradient of 1 to 0
-				float point = remainingTime / totalTime;
-				float left = Mathf.LerpUnclamped(leftMotorIntensityEnd, leftMotorIntensityStart, point);
-				float right = Mathf.LerpUnclamped(rightMotorIntensityEnd, rightMotorIntensityStart, point);
+				float point = GetCurMultiplier();
+				float left = Mathf.LerpUnclamped(ControllerRumbleInfo.LeftMinIntensity, ControllerRumbleInfo.LeftMaxIntensity, point);
+				float right = Mathf.LerpUnclamped(ControllerRumbleInfo.RightMinIntensity, ControllerRumbleInfo.RightMaxIntensity, point);
 
 				return (left, right);
 			}
 		}
 		#endregion
 		#region ColorScreen
-		private static List<ColorScreenEffect> AllScreenColorEffects = new List<ColorScreenEffect>();
+		private static List<ScreenBorderColorInstance> AllScreenColorEffects = new List<ScreenBorderColorInstance>();
 		private Coroutine ColorScreenCoroutine;
-		public static FXInstance ColorScreen(Color col, float lenght, float depth = 0.2f)
+		public static FXInstance ColorScreenBorder(ScreenBorderColor info, float multiplier = 1)
 		{
-			ColorScreenEffect newColorScreenEffect = new ColorScreenEffect(col, lenght, Mathf.Clamp01(depth * 2) / 2);
-
+			ScreenBorderColorInstance newColorScreenEffect = new ScreenBorderColorInstance(info);
+			newColorScreenEffect.BaseSetup(multiplier, Player.Instance.transform);
 			AllScreenColorEffects.Add(newColorScreenEffect);
+
 			if (Instance.ColorScreenCoroutine == null)
 			{
 				Instance.ColorScreenCoroutine = Instance.StartCoroutine(Instance.ColorScreenC());
 			}
 			return newColorScreenEffect;
-		}
-		public static FXInstance ColorScreenBorder(ScreenBorderColor info, float multiplier = 1)
-		{
-			return ColorScreen(info.Color, info.Time, info.Depth * multiplier);
 		}
 		private IEnumerator ColorScreenC()
 		{
@@ -311,16 +274,17 @@ namespace EoE.Utils
 				Color averageColor = Color.clear;
 				for (int i = 0; i < AllScreenColorEffects.Count; i++)
 				{
-					AllScreenColorEffects[i].passedTime += Time.deltaTime;
-					if (AllScreenColorEffects[i].passedTime >= AllScreenColorEffects[i].totalTime || AllScreenColorEffects[i].Canceled)
+					AllScreenColorEffects[i].Update(Time.deltaTime);
+					if (AllScreenColorEffects[i].ShouldBeRemoved && AllScreenColorEffects[i].AllowedToRemove())
 					{
+						AllScreenColorEffects[i].OnRemove();
 						AllScreenColorEffects.RemoveAt(i);
 						i--;
 					}
 					else
 					{
 						averageDepth += AllScreenColorEffects[i].GetDepth();
-						averageColor += AllScreenColorEffects[i].col;
+						averageColor += AllScreenColorEffects[i].BorderColor;
 					}
 				}
 				if (AllScreenColorEffects.Count == 0)
@@ -337,33 +301,32 @@ namespace EoE.Utils
 			screenEffectMaterial.SetColor("_Color", Color.clear);
 			ColorScreenCoroutine = null;
 		}
-		private class ColorScreenEffect : FXInstance
+		private class ScreenBorderColorInstance : FXInstance
 		{
 			public override FXType Type => FXType.Player;
-			public Color col;
-			public float totalTime;
-			public float depth;
-			public float passedTime;
-			public ColorScreenEffect(Color col, float totalTime, float depth)
+			public override FXObject BaseInfo => ScreenBorderColorInfo;
+			private ScreenBorderColor ScreenBorderColorInfo;
+			public Color BorderColor => ScreenBorderColorInfo.Color;
+			public ScreenBorderColorInstance(ScreenBorderColor ScreenBorderColorInfo)
 			{
-				this.col = col;
-				this.totalTime = totalTime;
-				this.depth = depth;
+				this.ScreenBorderColorInfo = ScreenBorderColorInfo;
 			}
 			public float GetDepth()
 			{
-				return Mathf.Max(0, Mathf.Sin((passedTime / totalTime * Mathf.PI)) * depth);
+				return GetCurMultiplier() * ScreenBorderColorInfo.Depth;
 			}
 		}
 		#endregion
 		#region BlurScreen
 		private const float BLUR_LERP_SPEED = 8;
-		private static List<BlurScreenEffect> AllBlurScreenEffects = new List<BlurScreenEffect>();
+		private static List<ScreenBlurInstance> AllBlurScreenEffects = new List<ScreenBlurInstance>();
 		private Coroutine BlurScreenCoroutine = null;
-		public static FXInstance BlurScreen(float intensity, float lenght, int blurDistance = 4)
+		public static FXInstance BlurScreen(ScreenBlur info, float multiplier = 1)
 		{
-			BlurScreenEffect newBlurScreenEffect = new BlurScreenEffect(intensity, lenght, blurDistance);
+			ScreenBlurInstance newBlurScreenEffect = new ScreenBlurInstance(info);
+			newBlurScreenEffect.BaseSetup(multiplier, Player.Instance.transform);
 			AllBlurScreenEffects.Add(newBlurScreenEffect);
+
 			if (Instance.BlurScreenCoroutine == null)
 			{
 				Instance.BlurScreenCoroutine = Instance.StartCoroutine(Instance.BlurScreenC());
@@ -371,100 +334,81 @@ namespace EoE.Utils
 
 			return newBlurScreenEffect;
 		}
-		public static FXInstance BlurScreen(ScreenBlur info, float multiplier = 1)
-		{
-			return BlurScreen(info.Intensity * multiplier, info.Time, info.BlurDistance);
-		}
 		private IEnumerator BlurScreenC()
 		{
 			float curBlurIntensity = 0;
 			float curBlurDistance = 0;
 
-			while (true)
+			while (AllBlurScreenEffects.Count > 0)
 			{
 				yield return new WaitForEndOfFrame();
 				if (GameController.GameIsPaused)
 					continue;
 
-				if (AllBlurScreenEffects.Count > 0) //BLUR
+				float strongestIntensity = 0;
+				int strongestBlurDistance = 0;
+				for (int i = 0; i < AllBlurScreenEffects.Count; i++)
 				{
-					float strongestIntensity = 0;
-					int strongestBlurDistance = 0;
-					for (int i = 0; i < AllBlurScreenEffects.Count; i++)
+					AllBlurScreenEffects[i].Update(Time.deltaTime);
+					if (AllBlurScreenEffects[i].ShouldBeRemoved && AllBlurScreenEffects[i].AllowedToRemove())
 					{
-						AllBlurScreenEffects[i].remainingTime -= Time.deltaTime;
-						if (AllBlurScreenEffects[i].remainingTime <= 0 || AllBlurScreenEffects[i].Canceled)
-						{
-							AllBlurScreenEffects.RemoveAt(i);
-							i--;
-						}
-						else
-						{
-							if (AllBlurScreenEffects[i].intensity > strongestIntensity)
-								strongestIntensity = AllBlurScreenEffects[i].intensity;
-
-							if (AllBlurScreenEffects[i].blurDistance > strongestBlurDistance)
-								strongestBlurDistance = AllBlurScreenEffects[i].blurDistance;
-						}
+						AllBlurScreenEffects[i].OnRemove();
+						AllBlurScreenEffects.RemoveAt(i);
+						i--;
 					}
+					else
+					{
+						(float intensity, int blurDistance) = AllBlurScreenEffects[i].GetIntensityAndDistance();
+						if (intensity > strongestIntensity)
+							strongestIntensity = intensity;
 
-					curBlurIntensity = Mathf.Lerp(curBlurIntensity, strongestIntensity, Time.deltaTime * BLUR_LERP_SPEED);
-					curBlurDistance = Mathf.Lerp(curBlurDistance, strongestBlurDistance, Time.deltaTime * BLUR_LERP_SPEED);
-
-					screenEffectMaterial.SetFloat("_BlurPower", curBlurIntensity);
-					screenEffectMaterial.SetInt("_BlurRange", (int)curBlurDistance);
+						if (blurDistance > strongestBlurDistance)
+							strongestBlurDistance = blurDistance;
+					}
 				}
-				else //UNBLUR
-				{
-					curBlurIntensity = Mathf.Lerp(curBlurIntensity, 0, Time.deltaTime * BLUR_LERP_SPEED / 2);
-					curBlurDistance = Mathf.Lerp(curBlurDistance, 0, Time.deltaTime * BLUR_LERP_SPEED / 2);
 
-					screenEffectMaterial.SetFloat("_BlurPower", curBlurIntensity);
-					screenEffectMaterial.SetInt("_BlurRange", (int)curBlurDistance);
+				curBlurIntensity = Mathf.Lerp(curBlurIntensity, strongestIntensity, Time.deltaTime * BLUR_LERP_SPEED);
+				curBlurDistance = Mathf.Lerp(curBlurDistance, strongestBlurDistance, Time.deltaTime * BLUR_LERP_SPEED);
 
-					if (curBlurIntensity < 0.0005f)
-						break;
-				}
+				screenEffectMaterial.SetFloat("_BlurPower", curBlurIntensity);
+				screenEffectMaterial.SetInt("_BlurRange", (int)curBlurDistance);
 			}
+
 			screenEffectMaterial.SetFloat("_BlurPower", 0);
 			screenEffectMaterial.SetInt("_BlurRange", 0);
 			BlurScreenCoroutine = null;
 		}
-		private class BlurScreenEffect : FXInstance
+		private class ScreenBlurInstance : FXInstance
 		{
 			public override FXType Type => FXType.Player;
-			public float intensity;
-			public float remainingTime;
-			public int blurDistance;
-			public BlurScreenEffect(float intensity, float remainingTime, int blurDistance)
+			public override FXObject BaseInfo => ScreenBlurInfo;
+			private ScreenBlur ScreenBlurInfo;
+			public ScreenBlurInstance(ScreenBlur ScreenBlurInfo)
 			{
-				this.intensity = intensity;
-				this.remainingTime = remainingTime;
-				this.blurDistance = blurDistance;
+				this.ScreenBlurInfo = ScreenBlurInfo;
+			}
+			public (float, int) GetIntensityAndDistance()
+			{
+				float multiplier = GetCurMultiplier();
+				return (ScreenBlurInfo.Intensity * multiplier, Mathf.RoundToInt(ScreenBlurInfo.BlurDistance * multiplier));
 			}
 		}
 		#endregion
 		#region ScreenTint
-		private static List<TintScreenEffect> AllTintScreenEffects = new List<TintScreenEffect>();
+		private static List<ScreenTintInstance> AllTintScreenEffects = new List<ScreenTintInstance>();
 		private Coroutine TintScreenCoroutine = null;
-		public static FXInstance TintScreen(Color tintColor, float timeIn, float timeStay, float timeOut, int dominance = 1)
+		public static FXInstance TintScreen(ScreenTint info, float multiplier = 1)
 		{
-			TintScreenEffect newTintScreenEffect = new TintScreenEffect(tintColor, timeIn, timeStay, timeOut, dominance);
-
+			ScreenTintInstance newTintScreenEffect = new ScreenTintInstance(info);
+			newTintScreenEffect.BaseSetup(multiplier, Player.Instance.transform);
 			AllTintScreenEffects.Add(newTintScreenEffect);
+
 			if (Instance.TintScreenCoroutine == null)
 			{
 				Instance.TintScreenCoroutine = Instance.StartCoroutine(Instance.TintScreenC());
 			}
 
 			return newTintScreenEffect;
-		}
-		public static FXInstance TintScreen(ScreenTint info, float multiplier = 1)
-		{
-			uint Dominance = System.Math.Min(info.Dominance, int.MaxValue);
-			Color tint = info.TintColor;
-			tint.a *= multiplier;
-			return TintScreen(tint, info.TimeIn, info.TimeStay, info.TimeOut, (int)Dominance);
 		}
 		private IEnumerator TintScreenC()
 		{
@@ -478,15 +422,16 @@ namespace EoE.Utils
 				int dominanceCount = 0;
 				for(int i = 0; i < AllTintScreenEffects.Count; i++)
 				{
-					AllTintScreenEffects[i].passedTime += Time.deltaTime;
-					if(AllTintScreenEffects[i].passedTime > AllTintScreenEffects[i].totalTime || AllTintScreenEffects[i].Canceled)
+					AllTintScreenEffects[i].Update(Time.deltaTime);
+					if (AllTintScreenEffects[i].ShouldBeRemoved && AllTintScreenEffects[i].AllowedToRemove())
 					{
+						AllTintScreenEffects[i].OnRemove();
 						AllTintScreenEffects.RemoveAt(i);
 						i--;
 					}
 					else
 					{
-						dominanceCount += AllTintScreenEffects[i].dominance;
+						dominanceCount += (int)AllTintScreenEffects[i].DominanceIndex;
 					}
 				}
 
@@ -498,7 +443,7 @@ namespace EoE.Utils
 				Color lerpedColor = Color.clear;
 				for (int i = 0; i < AllTintScreenEffects.Count; i++)
 				{
-					lerpedColor += AllTintScreenEffects[i].GetCurrentColor() * ((float)AllTintScreenEffects[i].dominance / dominanceCount);
+					lerpedColor += AllTintScreenEffects[i].GetCurrentColor() * ((float)AllTintScreenEffects[i].DominanceIndex / dominanceCount);
 				}
 
 				//Finally set the material color tint
@@ -508,71 +453,44 @@ namespace EoE.Utils
 			screenEffectMaterial.SetColor("_TintColor", Color.clear);
 			TintScreenCoroutine = null;
 		}
-		private class TintScreenEffect : FXInstance
+		private class ScreenTintInstance : FXInstance
 		{
 			public override FXType Type => FXType.Player;
-			public Color tintColor;
-			public float timeIn;
-			public float timeStay;
-			public float timeOut;
-			public int dominance;
+			public override FXObject BaseInfo => ScreenTintInfo;
+			private ScreenTint ScreenTintInfo;
+			public uint DominanceIndex => ScreenTintInfo.Dominance;
 
-			public float passedTime;
-			public float totalTime => timeIn + timeStay + timeOut;
-
-			public TintScreenEffect(Color tintColor, float timeIn, float timeStay, float timeOut, int dominance = 1)
+			public ScreenTintInstance(ScreenTint ScreenTintInfo)
 			{
-				this.tintColor = tintColor;
-				this.timeIn = timeIn;
-				this.timeStay = timeStay;
-				this.timeOut = timeOut;
-				this.dominance = dominance;
+				this.ScreenTintInfo = ScreenTintInfo;
 			}
 			public Color GetCurrentColor()
 			{
-				Color bCol = new Color(tintColor.r, tintColor.g, tintColor.b, 0);
-				Color bAlpha = new Color(0,0,0, tintColor.a);
-				if(passedTime < timeIn)
-				{
-					return bCol + (bAlpha * passedTime / timeIn);
-				}
-				else if(passedTime < timeIn + timeStay)
-				{
-					return bCol + bAlpha;
-				}
-				else
-				{
-					return bCol + (bAlpha * (1-(passedTime - timeIn - timeStay) / timeOut));
-				}
+				return new Color(ScreenTintInfo.TintColor.r, ScreenTintInfo.TintColor.g, ScreenTintInfo.TintColor.b, ScreenTintInfo.TintColor.a * GetCurMultiplier());
 			}
 		}
 		#endregion
 		#region TimeDilation
 		public static int HighestTimeDilutionDominanceIndex;
 		private static float BaseFixedDeltaTime;
-		private static List<TimeDilationEffect> AllTimeDilationsEffects = new List<TimeDilationEffect>();
+		private static List<TimeDilationInstance> AllTimeDilationsEffects = new List<TimeDilationInstance>();
 		private Coroutine TimeDilationCoroutine = null;
-		public static FXInstance DilateTime(int dominanceIndex, float targetSpeed, float timeIn, float timeStay, bool deleteOtherDilations = false, float? timeOut = null)
+		public static FXInstance DilateTime(TimeDilation info, float multiplier = 1)
 		{
-			if (deleteOtherDilations)
+			if (info.OverwriteOtherTimeDilations)
 			{
-				AllTimeDilationsEffects = new List<TimeDilationEffect>();
+				AllTimeDilationsEffects = new List<TimeDilationInstance>();
 			}
-			TimeDilationEffect newTimeDilationEffect = new TimeDilationEffect(dominanceIndex, Mathf.Max(0.001f, targetSpeed), timeIn, timeStay, timeOut);
-
+			TimeDilationInstance newTimeDilationEffect = new TimeDilationInstance(info);
+			newTimeDilationEffect.BaseSetup(multiplier, Player.Instance.transform);
 			AllTimeDilationsEffects.Add(newTimeDilationEffect);
+
 			if (Instance.TimeDilationCoroutine == null)
 			{
 				Instance.TimeDilationCoroutine = Instance.StartCoroutine(Instance.DilateTimeC());
 			}
 
 			return newTimeDilationEffect;
-		}
-		public static FXInstance DilateTime(TimeDilation info, float multiplier = 1)
-		{
-			uint Dominance = System.Math.Min(info.Dominance, int.MaxValue);
-			float scale = 1 - ((1 - info.Scale) * multiplier);
-			return DilateTime((int)Dominance, info.Scale, info.TimeIn, info.TimeStay, info.OverwriteOtherTimeDilations, info.TimeOut);
 		}
 		private IEnumerator DilateTimeC()
 		{
@@ -586,17 +504,18 @@ namespace EoE.Utils
 				int targetIndex = 0;
 				for (int i = 0; i < AllTimeDilationsEffects.Count; i++)
 				{
-					AllTimeDilationsEffects[i].passedTime += Time.unscaledDeltaTime;
-					if (AllTimeDilationsEffects[i].passedTime > AllTimeDilationsEffects[i].totalTime || AllTimeDilationsEffects[i].Canceled)
+					AllTimeDilationsEffects[i].Update(Time.unscaledDeltaTime);
+					if (AllTimeDilationsEffects[i].ShouldBeRemoved && AllTimeDilationsEffects[i].AllowedToRemove())
 					{
+						AllTimeDilationsEffects[i].OnRemove();
 						AllTimeDilationsEffects.RemoveAt(i);
 						i--;
 					}
 					else
 					{
-						if (HighestTimeDilutionDominanceIndex < AllTimeDilationsEffects[i].dominanceIndex)
+						if (HighestTimeDilutionDominanceIndex < AllTimeDilationsEffects[i].DominanceIndex)
 						{
-							HighestTimeDilutionDominanceIndex = AllTimeDilationsEffects[i].dominanceIndex;
+							HighestTimeDilutionDominanceIndex = (int)AllTimeDilationsEffects[i].DominanceIndex;
 							targetIndex = i;
 						}
 					}
@@ -613,170 +532,114 @@ namespace EoE.Utils
 
 			TimeDilationCoroutine = null;
 		}
-		private class TimeDilationEffect : FXInstance
+		private class TimeDilationInstance : FXInstance
 		{
 			public override FXType Type => FXType.Player;
-			public int dominanceIndex;
-			public float targetSpeed;
-			public float timeIn;
-			public float timeStay;
-			public float timeOut;
-			public float totalTime => timeIn + timeStay + timeOut;
+			public override FXObject BaseInfo => TimeDilationInfo;
+			private TimeDilation TimeDilationInfo;
+			public uint DominanceIndex => TimeDilationInfo.Dominance;
+			private float scaleDif => TimeDilationInfo.Scale - 1;
 
-			public float passedTime;
-			private float scaleDif;
-
-			public TimeDilationEffect(int dominanceIndex, float targetSpeed, float timeIn, float timeStay, float? timeOut)
+			public TimeDilationInstance(TimeDilation TimeDilationInfo)
 			{
-				this.dominanceIndex = dominanceIndex;
-				this.targetSpeed = targetSpeed;
-				this.timeIn = timeIn;
-				this.timeStay = timeStay;
-				this.timeOut = timeOut.HasValue ? timeOut.Value : timeIn;
-				passedTime = 0;
-				scaleDif = targetSpeed - 1;
+				this.TimeDilationInfo = TimeDilationInfo;
 			}
 			public float GetTimeScale()
 			{
-				if (passedTime < timeIn)
-				{
-					return 1 + (passedTime / timeIn) * scaleDif;
-				}
-				else if (passedTime >= timeIn && passedTime < (timeStay + timeIn))
-				{
-					return targetSpeed;
-				}
-				else //passedTime >= timeStay + timeIn
-				{
-					float fractTime = passedTime - (timeIn + timeStay);
-					return 1 + (1 - fractTime / timeOut) * scaleDif;
-				}
+				return 1 + GetCurMultiplier() * scaleDif;
 			}
 		}
 		#endregion
 		#region CameraFOVWarp
 		public static int HighestCameraFOVWarpDominanceIndex;
-		private static List<CameraFOVWarpEffect> AllCameraFOVWarpEffects = new List<CameraFOVWarpEffect>();
+		private static List<CameraFOVWarpInstance> AllCameraFOVWarpEffects = new List<CameraFOVWarpInstance>();
 		private Coroutine CameraFOVWarpCoroutine = null;
 		private const float LERP_FOV_SPEED = 10;
-		public static FXInstance WarpCameraFOV(int dominanceIndex, float targetFOV, float timeIn, float timeStay, float timeOut, bool overwriteOtherFOVWarps)
+		public static FXInstance WarpCameraFOV(CameraFOVWarp info, float multiplier = 1)
 		{
-			if (overwriteOtherFOVWarps)
+			if (info.OverwriteOtherFOVWarps)
 			{
-				AllCameraFOVWarpEffects = new List<CameraFOVWarpEffect>();
+				AllCameraFOVWarpEffects = new List<CameraFOVWarpInstance>();
 			}
-			CameraFOVWarpEffect newCameraFOVWarpEffect = new CameraFOVWarpEffect(dominanceIndex, targetFOV, timeIn, timeStay, timeOut);
-
+			CameraFOVWarpInstance newCameraFOVWarpEffect = new CameraFOVWarpInstance(info);
+			newCameraFOVWarpEffect.BaseSetup(multiplier, Player.Instance.transform);
 			AllCameraFOVWarpEffects.Add(newCameraFOVWarpEffect);
+
 			if (Instance.CameraFOVWarpCoroutine == null)
 			{
 				Instance.CameraFOVWarpCoroutine = Instance.StartCoroutine(Instance.WarpCameraFOVC());
 			}
 			return newCameraFOVWarpEffect;
 		}
-		public static FXInstance WarpCameraFOV(CameraFOVWarp info, float multiplier = 1)
-		{
-			float fov = PlayerCameraController.CameraFOV - ((PlayerCameraController.CameraFOV - info.TargetFOV) * multiplier);
-			return WarpCameraFOV(info.Dominance, fov, info.TimeIn, info.TimeStay, info.TimeOut, info.OverwriteOtherFOVWarps);
-		}
 		private IEnumerator WarpCameraFOVC()
 		{
-			while(true)
+			while(AllCameraFOVWarpEffects.Count > 0)
 			{
 				yield return new WaitForEndOfFrame();
 				if (GameController.GameIsPaused)
 					continue;
 
-				if (AllCameraFOVWarpEffects.Count > 0)
+				HighestCameraFOVWarpDominanceIndex = -1;
+				int targetIndex = 0;
+				for (int i = 0; i < AllCameraFOVWarpEffects.Count; i++)
 				{
-					HighestCameraFOVWarpDominanceIndex = -1;
-					int targetIndex = 0;
-					for (int i = 0; i < AllCameraFOVWarpEffects.Count; i++)
+					AllCameraFOVWarpEffects[i].Update(Time.deltaTime);
+					if (AllCameraFOVWarpEffects[i].ShouldBeRemoved && AllCameraFOVWarpEffects[i].AllowedToRemove())
 					{
-						AllCameraFOVWarpEffects[i].passedTime += Time.deltaTime;
-						if (AllCameraFOVWarpEffects[i].passedTime >= AllCameraFOVWarpEffects[i].totalTime || AllCameraFOVWarpEffects[i].Canceled)
+						AllCameraFOVWarpEffects[i].OnRemove();
+						AllCameraFOVWarpEffects.RemoveAt(i);
+						i--;
+					}
+					else
+					{
+						if (HighestCameraFOVWarpDominanceIndex < AllCameraFOVWarpEffects[i].DominanceIndex)
 						{
-							AllCameraFOVWarpEffects.RemoveAt(i);
-							i--;
-						}
-						else
-						{
-							if (HighestCameraFOVWarpDominanceIndex < AllCameraFOVWarpEffects[i].dominanceIndex)
-							{
-								HighestCameraFOVWarpDominanceIndex = AllCameraFOVWarpEffects[i].dominanceIndex;
-								targetIndex = i;
-							}
+							HighestCameraFOVWarpDominanceIndex = AllCameraFOVWarpEffects[i].DominanceIndex;
+							targetIndex = i;
 						}
 					}
-
-					if (AllCameraFOVWarpEffects.Count == 0)
-						continue;
-
-					PlayerCameraController.CameraFOV = Mathf.Lerp(PlayerCameraController.CameraFOV, AllCameraFOVWarpEffects[targetIndex].GetFOV(), LERP_FOV_SPEED * Time.deltaTime);
 				}
-				else
-				{
-					PlayerCameraController.CameraFOV = Mathf.Lerp(PlayerCameraController.CameraFOV, Player.PlayerSettings.CameraBaseFOV, LERP_FOV_SPEED * Time.deltaTime);
-					if (Mathf.Abs(Player.PlayerSettings.CameraBaseFOV - PlayerCameraController.CameraFOV) < 0.5f)
-						break;
-				}
+
+				if (AllCameraFOVWarpEffects.Count == 0)
+					continue;
+
+				PlayerCameraController.CameraFOV = Mathf.Lerp(PlayerCameraController.CameraFOV, AllCameraFOVWarpEffects[targetIndex].GetFOV(), LERP_FOV_SPEED * Time.deltaTime);
 			}
 			PlayerCameraController.CameraFOV = Player.PlayerSettings.CameraBaseFOV;
 			CameraFOVWarpCoroutine = null;
 		}
-		private class CameraFOVWarpEffect : FXInstance
+		private class CameraFOVWarpInstance : FXInstance
 		{
 			public override FXType Type => FXType.Player;
-			public int dominanceIndex;
-			public float targetFOV;
-			public float timeIn;
-			public float timeStay;
-			public float timeOut;
-			public float totalTime => timeIn + timeStay + timeOut;
-			public float passedTime;
-
-			private float dif => targetFOV - Player.PlayerSettings.CameraBaseFOV;
-			public CameraFOVWarpEffect(int dominanceIndex, float targetFOV, float timeIn, float timeStay, float timeOut)
+			public override FXObject BaseInfo => CameraFOVWarpInfo;
+			private CameraFOVWarp CameraFOVWarpInfo;
+			public int DominanceIndex => CameraFOVWarpInfo.Dominance;
+			private float dif => CameraFOVWarpInfo.TargetFOV - Player.PlayerSettings.CameraBaseFOV;
+			public CameraFOVWarpInstance(CameraFOVWarp CameraFOVWarpInfo)
 			{
-				this.dominanceIndex = dominanceIndex;
-				this.targetFOV = targetFOV;
-				this.timeIn = timeIn;
-				this.timeStay = timeStay;
-				this.timeOut = timeOut;
-				passedTime = 0;
+				this.CameraFOVWarpInfo = CameraFOVWarpInfo;
 			}
 			public float GetFOV()
 			{
-				if (passedTime < timeIn)
-				{
-					return Player.PlayerSettings.CameraBaseFOV + (passedTime / timeIn) * dif;
-				}
-				else if (passedTime >= timeIn && passedTime < (timeStay + timeIn))
-				{
-					return targetFOV;
-				}
-				else //passedTime >= timeStay + timeIn
-				{
-					float fractTime = passedTime - (timeIn + timeStay);
-					return Player.PlayerSettings.CameraBaseFOV + (1 - fractTime / timeOut) * dif;
-				}
+				return Player.PlayerSettings.CameraBaseFOV + GetCurMultiplier() * dif;
 			}
 		}
 		#endregion
 		#region SingleSound
-		private static List<SoundFX> AllSoundFXs = new List<SoundFX>();
+		private static List<SoundEffectInstance> AllSoundFXs = new List<SoundEffectInstance>();
 		private Coroutine SoundFXCoroutine = null;
-		public static FXInstance PlaySound(SoundEffect info, Transform followTarget, float multiplier = 1)
+		public static FXInstance PlaySound(SoundEffect info, Transform target, float multiplier = 1)
 		{
 			SoundPlayer soundPlayer = (new GameObject(info.TargetSound.soundName + " Sound Player")).AddComponent<SoundPlayer>();
 			soundPlayer.transform.SetParent(Storage.SoundStorage);
 
-			soundPlayer.transform.position = followTarget ? followTarget.position + info.OffsetToTarget : info.OffsetToTarget;
+			soundPlayer.transform.position = target ? target.position + info.OffsetToTarget : info.OffsetToTarget;
 
-			soundPlayer.Setup(info.TargetSound, multiplier);
+			soundPlayer.Setup(info.TargetSound);
 			soundPlayer.Play();
 
-			SoundFX newSoundFX = new SoundFX(info, followTarget, soundPlayer);
+			SoundEffectInstance newSoundFX = new SoundEffectInstance(info, soundPlayer);
+			newSoundFX.BaseSetup(multiplier, target);
 			AllSoundFXs.Add(newSoundFX);
 
 			if(Instance.SoundFXCoroutine == null)
@@ -791,87 +654,52 @@ namespace EoE.Utils
 			while(AllSoundFXs.Count > 0)
 			{
 				yield return new WaitForFixedUpdate();
-				for(int i = 0; i < AllSoundFXs.Count; i++)
+				if (GameController.GameIsPaused)
+					continue;
+
+				for (int i = 0; i < AllSoundFXs.Count; i++)
 				{
-					if (AllSoundFXs[i].IsRemoved)
+					AllSoundFXs[i].Update(Time.fixedDeltaTime);
+					if (AllSoundFXs[i].ShouldBeRemoved && AllSoundFXs[i].AllowedToRemove())
 					{
+						AllSoundFXs[i].OnRemove();
 						AllSoundFXs.RemoveAt(i);
 						i--;
-					}
-					else
-					{
-						AllSoundFXs[i].Update();
 					}
 				}
 			}
 
 			SoundFXCoroutine = null;
 		}
-		private class SoundFX : FXInstance
+		private class SoundEffectInstance : FXInstance
 		{
 			public override FXType Type => FXType.World;
-			private SoundEffect BaseInfo;
-			private Transform ParentTransform;
-			private SoundPlayer SelfPlayer;
-			private float RemainingTime;
+			public override FXObject BaseInfo => SoundEffectInfo;
+			private SoundEffect SoundEffectInfo;
+			private SoundPlayer soundPlayer;
 
-			private float fadeTime;
-			private bool RemoveInProgress;
-			public bool IsRemoved => !SelfPlayer;
-
-			public SoundFX(SoundEffect BaseInfo, Transform ParentTransform, SoundPlayer SelfPlayer)
+			public SoundEffectInstance(SoundEffect SoundInfo, SoundPlayer SelfPlayer)
 			{
-				this.BaseInfo = BaseInfo;
-				this.ParentTransform = ParentTransform;
-				this.SelfPlayer = SelfPlayer;
-				this.RemainingTime = BaseInfo.DestroyAfterDelay ? BaseInfo.DestroyDelay : 1;
+				this.SoundEffectInfo = SoundInfo;
+				this.soundPlayer = SelfPlayer;
 			}
-			public void Update()
+			protected override void InternalUpdate()
 			{
-				if (BaseInfo.DestroyAfterDelay && RemainingTime > 0)
-					RemainingTime -= Time.fixedDeltaTime;
+				if (SoundEffectInfo.FollowTarget && parent)
+				{
+					soundPlayer.transform.position = parent.position + SoundEffectInfo.OffsetToTarget;
+				}
+				soundPlayer.FadePoint = GetCurMultiplier();
 
-				if (BaseInfo.FollowTarget && ParentTransform)
-				{
-					SelfPlayer.transform.position = ParentTransform.position + BaseInfo.OffsetToTarget;
-				}
-
-				if (RemoveInProgress)
-				{
-					if(FadeOut())
-					Destroy(SelfPlayer.gameObject);
-				}
-				else if (ShouldBeRemoved())
-				{
-					RemoveInProgress = true;
-					if(BaseInfo.RemoveStyle == EffectRemoveStyle.Destroy)
-						Destroy(SelfPlayer.gameObject);
-				}
-			}
-			private bool ShouldBeRemoved()
-			{
-				if (Canceled)
-					return true;
-				if (RemainingTime <= 0)
-					return true;
-				else if (BaseInfo.OnParentDeathBehaivior == BehaiviorOnParentDeath.Remove && !ParentTransform)
-					return true;
-				else
-					return false;
-			}
-			public bool FadeOut()
-			{
-				fadeTime += Time.fixedDeltaTime;
-				SelfPlayer.FadePoint = Mathf.Clamp01(1 - fadeTime / BaseInfo.FadeOutTime);
-			
-				return fadeTime > BaseInfo.FadeOutTime;
+				if (soundPlayer.FullyStopped)
+					FinishFX();
 			}
 		}
 		#endregion
 		#region Particle Effects
-		private static List<ParticleFX> AllParticleFXs = new List<ParticleFX>();
+		private static List<ParticleEffectInstance> AllParticleFXs = new List<ParticleEffectInstance>();
 		private Coroutine ParticleFXCoroutine = null;
-		public static FXInstance PlayParticleEffect(ParticleEffect info, Transform parent)
+		public static FXInstance PlayParticleEffect(ParticleEffect info, Transform parent, float multiplier = 1)
 		{
 			Transform mainObject = Instantiate(info.ParticleMainObject, Storage.ParticleStorage).transform;
 			mainObject.position = parent ? parent.position + info.OffsetToTarget : info.OffsetToTarget;
@@ -890,7 +718,8 @@ namespace EoE.Utils
 				containedSystems[i].Play();
 			}
 
-			ParticleFX newParticleFX = new ParticleFX(info, parent, mainObject);
+			ParticleEffectInstance newParticleFX = new ParticleEffectInstance(info, mainObject, containedSystems);
+			newParticleFX.BaseSetup(multiplier, parent);
 			AllParticleFXs.Add(newParticleFX);
 
 			if(Instance.ParticleFXCoroutine == null)
@@ -909,72 +738,95 @@ namespace EoE.Utils
 
 				for(int i = 0; i < AllParticleFXs.Count; i++)
 				{
-					if (AllParticleFXs[i].IsRemoved)
+					AllParticleFXs[i].Update(Time.fixedDeltaTime);
+					if (AllParticleFXs[i].ShouldBeRemoved && AllParticleFXs[i].AllowedToRemove())
 					{
+						AllParticleFXs[i].OnRemove();
 						AllParticleFXs.RemoveAt(i);
 						i--;
-					}
-					else
-					{
-						AllParticleFXs[i].Update();
-						if (!AllParticleFXs[i].RemoveInProgress && AllParticleFXs[i].ShouldBeRemoved())
-						{
-							AllParticleFXs[i].RemoveInProgress = true;
-							if (AllParticleFXs[i].BaseInfo.DestroyStyle == EffectRemoveStyle.Fade)
-								FadeAndDestroyParticles(AllParticleFXs[i].MainTransform.gameObject, null);
-							else
-								Destroy(AllParticleFXs[i].MainTransform.gameObject);
-						}
 					}
 				}
 			}
 
 			ParticleFXCoroutine = null;
 		}
-		private class ParticleFX : FXInstance
+		private class ParticleEffectInstance : FXInstance
 		{
 			public override FXType Type => FXType.World;
-			public ParticleEffect BaseInfo;
-			private Transform ParentTransform;
-			public Transform MainTransform;
-			private float RemainingTime;
+			public override FXObject BaseInfo => ParticleEffectInfo;
+			public ParticleEffect ParticleEffectInfo;
 
-			public bool RemoveInProgress;
-			public bool IsRemoved => !MainTransform;
+			private Transform particleTransform;
 
-			public ParticleFX(ParticleEffect BaseInfo, Transform ParentTransform, Transform MainTransform)
+			private ParticleSystem[] containedSystems;
+			private float[] emissionBasis;
+			private float lastMultiplier = -1;
+
+			public ParticleEffectInstance(ParticleEffect ParticleInfo, Transform particleTransform, ParticleSystem[] containedSystems)
 			{
-				this.BaseInfo = BaseInfo;
-				this.ParentTransform = ParentTransform;
-				this.MainTransform = MainTransform;
-				this.RemainingTime = BaseInfo.DestroyAfterDelay ? BaseInfo.DestroyDelay : 1;
-			}
-			public void Update()
-			{
-				if (BaseInfo.DestroyAfterDelay && RemainingTime > 0)
-					RemainingTime -= Time.fixedDeltaTime;
+				this.ParticleEffectInfo = ParticleInfo;
+				this.particleTransform = particleTransform;
 
-				if (BaseInfo.FollowTarget && ParentTransform)
+				this.containedSystems = containedSystems;
+				emissionBasis = new float[containedSystems.Length];
+
+				for (int i = 0; i < containedSystems.Length; i++)
 				{
-					MainTransform.position = ParentTransform.position + BaseInfo.OffsetToTarget;
+					emissionBasis[i] = containedSystems[i].emission.rateOverTimeMultiplier;
+				}
+				UpdateEmission();
+			}
+			protected override void InternalUpdate()
+			{
+				if (ParticleEffectInfo.FollowTarget && parent)
+				{
+					particleTransform.position = parent.position + ParticleEffectInfo.OffsetToTarget;
 
-					if (BaseInfo.InheritRotationOfTarget)
+					if (ParticleEffectInfo.InheritRotationOfTarget)
 					{
-						MainTransform.transform.forward = ParentTransform.transform.forward;
-						MainTransform.transform.eulerAngles += BaseInfo.RotationOffset;
+						particleTransform.transform.forward = parent.transform.forward;
+						particleTransform.transform.eulerAngles += ParticleEffectInfo.RotationOffset;
+					}
+				}
+				UpdateEmission();
+			}
+			private void UpdateEmission()
+			{
+				float newMultiplier = GetCurMultiplier();
+				if (newMultiplier != lastMultiplier)
+				{
+					lastMultiplier = newMultiplier;
+					if (currentState == FXState.End && Mathf.RoundToInt(newMultiplier * 100) == 0)
+					{
+						for (int i = 0; i < containedSystems.Length; i++)
+						{
+							containedSystems[i].Stop(true, ParticleSystemStopBehavior.StopEmitting);
+						}
+					}
+					else
+					{
+						for (int i = 0; i < containedSystems.Length; i++)
+						{
+							ParticleSystem.EmissionModule em = containedSystems[i].emission;
+							em.rateOverTimeMultiplier = newMultiplier * emissionBasis[i];
+						}
 					}
 				}
 			}
-			public bool ShouldBeRemoved()
+			public override bool AllowedToRemove()
 			{
-				if (Canceled)
-					return true;
-				if (RemainingTime <= 0)
-					return true;
-				else if (BaseInfo.OnParentDeathBehaivior == BehaiviorOnParentDeath.Remove && !ParentTransform)
-					return true;
-				else
-					return false;
+				for (int i = 0; i < containedSystems.Length; i++)
+				{
+					if (containedSystems[i].particleCount > 0)
+					{
+						return false;
+					}
+				}
+				return true;
+			}
+			public override void OnRemove()
+			{
+				Destroy(particleTransform.gameObject);
 			}
 		}
 		#region FadeParticleSystem
@@ -1057,10 +909,90 @@ namespace EoE.Utils
 	}
 	#region FXInstance BaseClass
 	public enum FXType { Player, World }
+	public enum FXState { Start = 1, Stay = 2, End = 4 }
 	public abstract class FXInstance
 	{
-		public bool Canceled;
 		public abstract FXType Type { get; }
+		public abstract FXObject BaseInfo { get; }
+		public bool ShouldBeRemoved { get; private set; }
+
+		protected Transform parent;
+		private float baseMultiplier;
+
+		protected FXState currentState { get; private set; }
+		private float passedTime;
+		private float stateMultiplier;
+
+		public void Update(float timeStep)
+		{
+			if(!ShouldBeRemoved)
+				passedTime += timeStep;
+			if (BaseInfo.FinishConditions.OnParentDeath && !parent)
+				FinishFX();
+
+			if(currentState == FXState.Start && passedTime > BaseInfo.TimeIn)
+			{
+				passedTime -= BaseInfo.TimeIn;
+				currentState = FXState.Stay;
+			}
+
+			if (currentState == FXState.Stay && BaseInfo.FinishConditions.OnTimeout && passedTime > BaseInfo.FinishConditions.TimeStay)
+			{
+				passedTime -= BaseInfo.FinishConditions.TimeStay;
+				currentState = FXState.End;
+			}
+
+			if (currentState == FXState.End && !ShouldBeRemoved) 
+			{
+				if (passedTime > BaseInfo.TimeOut)
+				{
+					ShouldBeRemoved = true;
+					passedTime = BaseInfo.TimeOut;
+				} 
+			}
+
+			if(currentState == FXState.Start)
+			{
+				if (BaseInfo.TimeIn > 0)
+					stateMultiplier = passedTime / BaseInfo.TimeIn;
+				else
+					stateMultiplier = 1;
+			}
+			else if(currentState == FXState.Stay)
+			{
+				stateMultiplier = 1;
+			}
+			else //currentState == FXState.End
+			{
+				if (BaseInfo.TimeOut > 0)
+					stateMultiplier = 1 - (passedTime / BaseInfo.TimeOut);
+				else
+					stateMultiplier = 0;
+			}
+
+			InternalUpdate();
+		}
+		public void BaseSetup(float baseMultiplier, Transform parent)
+		{
+			currentState = FXState.Start;
+			this.baseMultiplier = baseMultiplier;
+			this.parent = parent;
+		}
+		protected float GetCurMultiplier()
+		{
+			return stateMultiplier * baseMultiplier;
+		}
+		public virtual void FinishFX()
+		{
+			if (currentState != FXState.End)
+			{
+				passedTime = 0;
+				currentState = FXState.End;
+			}
+		}
+		public virtual bool AllowedToRemove() => true;
+		protected virtual void InternalUpdate() { }
+		public virtual void OnRemove() { }
 	}
 	#endregion
 }

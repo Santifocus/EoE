@@ -166,5 +166,6 @@ MonoBehaviour:
   EffectsOnPlayerDodge:
   - {fileID: 11400000, guid: 16c048efcd73fc94fb2bd95baaa20137, type: 2}
   EffectsOnEnemyKilled:
-  - {fileID: 11400000, guid: 634714252dd985c4a9434e87dac6225a, type: 2}
   - {fileID: 11400000, guid: 214bf77e3d56f424c84ef37983b6e1f5, type: 2}
+  EffectsOnPlayerDeath:
+  - {fileID: 11400000, guid: 0cf11713d16b4034c873591e936d21cc, type: 2}

@@ -15,7 +15,7 @@ namespace EoE.UI
 
 		private void Update()
 		{
-			if (!Player.Alive)
+			if (!Player.Instance.Alive)
 			{
 				if (displayedStatAmount != 0)
 				{

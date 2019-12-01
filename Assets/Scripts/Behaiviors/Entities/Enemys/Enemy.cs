@@ -91,11 +91,11 @@ namespace EoE.Entities
 		#region Behaivior
 		private void DecideOnBehaivior()
 		{
-			if (Player.Alive)
+			if (Player.Instance.Alive)
 			{
 				bool prevInRange = PlayerInAttackRange;
 				float sqrPlayerDist = (player.actuallWorldPosition - actuallWorldPosition).sqrMagnitude;
-				PlayerInAttackRange = Player.Alive && sqrPlayerDist < (enemySettings.AttackRange * enemySettings.AttackRange);
+				PlayerInAttackRange = sqrPlayerDist < (enemySettings.AttackRange * enemySettings.AttackRange);
 
 				if (curStates.Fighting)
 				{
@@ -134,12 +134,17 @@ namespace EoE.Entities
 			{
 				body.isKinematic = false;
 				body.velocity = curVelocity;
+				SetAgentState(false);
 				return;
 			}
 			else if (behaviorSimpleStop)
+			{
+				SetAgentState(false);
 				return;
+			}
 
 			body.isKinematic = true;
+			SetAgentState(true);
 
 			if (CheckForPlayer())
 			{
@@ -231,7 +236,7 @@ namespace EoE.Entities
 		}
 		private bool CheckForPlayer()
 		{
-			if (!Player.Alive)
+			if (!Player.Instance.Alive)
 				return false;
 
 			Vector3 dif = Player.Instance.actuallWorldPosition - actuallWorldPosition;
@@ -257,8 +262,8 @@ namespace EoE.Entities
 		{
 			if (!state)
 				agent.velocity = Vector3.zero;
-
-			agent.isStopped = !state;
+			if(agent.isStopped == state)
+				agent.isStopped = !state;
 		}
 		private bool WanderAround()
 		{

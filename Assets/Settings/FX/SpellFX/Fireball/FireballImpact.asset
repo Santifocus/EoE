@@ -12,12 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
   m_Name: FireballImpact
   m_EditorClassIdentifier: 
+  TimeIn: 0
+  TimeOut: 0
+  FinishConditions:
+    OnParentDeath: 0
+    OnTimeout: 0
+    TimeStay: 1
   ParticleMainObject: {fileID: 157506569864035450, guid: c3e6f51421ba77546903eeb501203743,
     type: 3}
-  DestroyAfterDelay: 1
-  DestroyDelay: 0.3
   OffsetToTarget: {x: 0, y: 0, z: 0}
+  RotationOffset: {x: 0, y: 0, z: 0}
   FollowTarget: 0
   InheritRotationOfTarget: 0
-  OnParentDeathBehaivior: 0
-  DestroyStyle: 0

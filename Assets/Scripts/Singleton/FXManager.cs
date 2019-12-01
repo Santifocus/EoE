@@ -18,19 +18,19 @@ namespace EoE
 			Instance = this;
 			EventManager.PlayerTookDamageEvent += PlayerTookDamage;
 			EventManager.PlayerLandedEvent += PlayerLanded;
-			EventManager.PlayerDodgeEvent += PlayerDodged;
 			EventManager.PlayerCausedDamageEvent += PlayerCausedDamage;
 			EventManager.PlayerLevelupEvent += PlayerLevelUp;
 			EventManager.EntitieDiedEvent += EnemyKilled;
+			EventManager.PlayerDiedEvent += PlayerDied;
 		}
 		private void OnDestroy()
 		{
 			EventManager.PlayerTookDamageEvent -= PlayerTookDamage;
 			EventManager.PlayerLandedEvent -= PlayerLanded;
-			EventManager.PlayerDodgeEvent -= PlayerDodged;
 			EventManager.PlayerCausedDamageEvent -= PlayerCausedDamage;
 			EventManager.PlayerLevelupEvent -= PlayerLevelUp;
 			EventManager.EntitieDiedEvent -= EnemyKilled;
+			EventManager.PlayerDiedEvent -= PlayerDied;
 		}
 		private void PlayerTookDamage(float causedDamage, float? knockBack)
 		{
@@ -69,11 +69,11 @@ namespace EoE
 				}
 			}
 		}
-		private void PlayerDodged()
+		private void PlayerLevelUp()
 		{
-			for (int i = 0; i < playerSettings.EffectsOnPlayerDodge.Length; i++)
+			for (int i = 0; i < playerSettings.EffectsOnLevelup.Length; i++)
 			{
-				PlayFX(playerSettings.EffectsOnPlayerDodge[i], Player.Instance.transform, true, 1);
+				PlayFX(playerSettings.EffectsOnLevelup[i], Player.Instance.transform, true, 1);
 			}
 		}
 		private void EnemyKilled(Entitie killed, Entitie killer)
@@ -84,6 +84,13 @@ namespace EoE
 				{
 					PlayFX(playerSettings.EffectsOnEnemyKilled[i], Player.Instance.transform, true, 1);
 				}
+			}
+		}
+		private void PlayerDied(Entitie killer)
+		{
+			for (int i = 0; i < playerSettings.EffectsOnPlayerDeath.Length; i++)
+			{
+				PlayFX(playerSettings.EffectsOnPlayerDeath[i], Player.Instance.transform, true, 1);
 			}
 		}
 		private void PlayerCausedDamage(Entitie receiver, bool wasCrit)
@@ -99,13 +106,6 @@ namespace EoE
 				{
 					PlayFX(playerSettings.EffectsOnCauseCrit[i], Player.Instance.transform, true, 1);
 				}
-			}
-		}
-		private void PlayerLevelUp()
-		{
-			for (int i = 0; i < playerSettings.EffectsOnLevelup.Length; i++)
-			{
-				PlayFX(playerSettings.EffectsOnLevelup[i], Player.Instance.transform, true, 1);
 			}
 		}
 		public static FXInstance PlayFX(FXObject effect, Transform target, bool allowScreenEffects, float multiplier = 1)
@@ -153,7 +153,7 @@ namespace EoE
 			}
 			else if (effect is ParticleEffect)
 			{
-				return EffectUtils.PlayParticleEffect(effect as ParticleEffect, target);
+				return EffectUtils.PlayParticleEffect(effect as ParticleEffect, target, multiplier);
 			}
 			return null;
 		}

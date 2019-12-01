@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f01d21cfe84eb5e4985cab77ea31a332, type: 3}
   m_Name: TakeDamagTint
   m_EditorClassIdentifier: 
-  TintColor: {r: 1, g: 0, b: 0.10509062, a: 0.15294118}
   TimeIn: 0.1
-  TimeStay: 1
   TimeOut: 0.1
+  FinishConditions:
+    OnParentDeath: 0
+    OnTimeout: 1
+    TimeStay: 0.2
+  TintColor: {r: 1, g: 0, b: 0.10509062, a: 0.15294118}
   Dominance: 1

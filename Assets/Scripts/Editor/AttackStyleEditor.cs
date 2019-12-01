@@ -7,19 +7,6 @@ namespace EoE.Weapons
 	[CustomEditor(typeof(AttackStyle), true), CanEditMultipleObjects]
 	public class AttackStyleEditor : Editor
 	{
-		[MenuItem("EoE/Weapons/New Attack Style")]
-		public static void CreateAttackStyle()
-		{
-			AttackStyle asset = CreateInstance<AttackStyle>();
-
-			AssetDatabase.CreateAsset(asset, "Assets/Settings/Weapons/AttackStyles/New Attack Style.asset");
-			AssetDatabase.SaveAssets();
-			EditorUtility.FocusProjectWindow();
-
-			Selection.activeObject = asset;
-			Debug.Log("Created: 'New Attack Style' at: Assets/Settings/Weapons/AttackStyles/...");
-		}
-
 		private const string ATTACK_COMBO_DELAY_DISCR = "What is the max delay (In Seconds) before the attack combo will be canceled? (Time begins after animation of previous attack ended)";
 		private bool atLeastOneIncompleteCombo;
 

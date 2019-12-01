@@ -1,4 +1,5 @@
 ﻿using EoE.Entities;
+using EoE.Utils;
 using UnityEngine;
 
 namespace EoE.Information
@@ -17,23 +18,39 @@ namespace EoE.Information
 		public Effect[] Effects;
 		public CustomEffect CustomEffects;
 		public DOT[] DOTs;
+		public FXObject[] FXEffects;
 	}
 
 	public class BuffInstance
 	{
 		public Buff Base;
 		public Entitie Applier;
+		public Entitie Target;
 		public float RemainingTime;
 		public float[] FlatChanges;
 		public float[] DOTCooldowns;
+		public FXInstance[] BoundEffects;
 
-		public BuffInstance(Buff Base, Entitie Applier)
+		public BuffInstance(Buff Base, Entitie Applier, Entitie Target)
 		{
 			this.Base = Base;
 			this.Applier = Applier;
 			this.RemainingTime = Base.BuffTime;
 			this.FlatChanges = new float[Base.Effects.Length];
 			this.DOTCooldowns = new float[Base.DOTs.Length];
+
+			BoundEffects = new FXInstance[Base.FXEffects != null ? Base.FXEffects.Length : 0];
+			for(int i = 0; i < BoundEffects.Length; i++)
+			{
+				BoundEffects[i] = FXManager.PlayFX(Base.FXEffects[i], Target.transform, Target is Player);
+			}
+		}
+		public void OnRemove()
+		{
+			for(int i = 0; i < BoundEffects.Length; i++)
+			{
+				BoundEffects[i].FinishFX();
+			}
 		}
 	}
 

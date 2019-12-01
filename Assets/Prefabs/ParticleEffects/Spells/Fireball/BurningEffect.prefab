@@ -51,7 +51,7 @@ ParticleSystem:
   playOnAwake: 1
   useUnscaledTime: 1
   autoRandomSeed: 0
-  useRigidbodyForVelocity: 1
+  useRigidbodyForVelocity: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -4762,7 +4762,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2645369773393905205}
   m_Layer: 0
-  m_Name: EffektOnGround
+  m_Name: BurningEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4835,7 +4835,7 @@ ParticleSystem:
   playOnAwake: 1
   useUnscaledTime: 1
   autoRandomSeed: 0
-  useRigidbodyForVelocity: 1
+  useRigidbodyForVelocity: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0

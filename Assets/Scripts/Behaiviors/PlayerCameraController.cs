@@ -39,7 +39,7 @@ namespace EoE
 
 		private void AnchorToPlayer()
 		{
-			if (!Player.Alive)
+			if (!Player.Instance.Alive)
 				return;
 
 			if (Player.TargetedEntitie)

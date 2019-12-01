@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c871e95794c1664eb6ab3b44ed21f55, type: 3}
   m_Name: CritTimeDilation
   m_EditorClassIdentifier: 
+  TimeIn: 0.1
+  TimeOut: 0.15
+  FinishConditions:
+    OnParentDeath: 0
+    OnTimeout: 1
+    TimeStay: 0.4
   Scale: 0.2
-  TimeIn: 0.15
-  TimeStay: 0.55
-  TimeOut: 0.1
   Dominance: 0
   OverwriteOtherTimeDilations: 0

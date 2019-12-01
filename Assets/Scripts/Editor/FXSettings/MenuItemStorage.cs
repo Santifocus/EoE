@@ -9,9 +9,9 @@ namespace EoE.Information
 		//Items
 		[MenuItem("EoE/Item/BuffItem")] public static void CreateBuffItem() => AssetCreator<BuffItem>("Settings", "Items");
 		[MenuItem("EoE/Item/HealItem")] public static void CreateHealItem() => AssetCreator<HealItem>("Settings", "Items");
-		[MenuItem("EoE/Item/Weapon")] public static void CreateWeaponItem() => AssetCreator<WeaponItem>("Settings", "Items");
-		[MenuItem("EoE/Item/Spell")] public static void CreateSpellItem() => AssetCreator<SpellItem>("Settings", "Items");
-		[MenuItem("EoE/Item/Armor")] public static void CreateArmorItem() => AssetCreator<ArmorItem>("Settings", "Items");
+		[MenuItem("EoE/Item/WeaponItem")] public static void CreateWeaponItem() => AssetCreator<WeaponItem>("Settings", "Items");
+		[MenuItem("EoE/Item/SpellItem")] public static void CreateSpellItem() => AssetCreator<SpellItem>("Settings", "Items");
+		[MenuItem("EoE/Item/ArmorItem")] public static void CreateArmorItem() => AssetCreator<ArmorItem>("Settings", "Items");
 
 		//VFX
 		[MenuItem("EoE/FX/ScreenShake")] public static void CreateScreenShake() => AssetCreator<ScreenShake>("Settings", "FX");

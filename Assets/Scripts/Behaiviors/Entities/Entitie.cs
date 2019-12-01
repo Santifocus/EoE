@@ -33,6 +33,7 @@ namespace EoE.Entities
 
 		//Entitie states
 		[HideInInspector] public int invincible;
+		public bool Alive;
 		public List<BuffInstance> nonPermanentBuffs { get; protected set; }
 		public List<BuffInstance> permanentBuffs { get; protected set; }
 		public EntitieState curStates;
@@ -104,6 +105,7 @@ namespace EoE.Entities
 		#region Setups
 		protected virtual void FullEntitieReset()
 		{
+			Alive = true;
 			ResetStats();
 			GetColliderType();
 			SetupHealingParticles();
@@ -334,6 +336,10 @@ namespace EoE.Entities
 		}
 		protected virtual void Death()
 		{
+			if (!Alive)
+				return;
+
+			Alive = false;
 			BuildDrops();
 			if (statDisplay)
 				Destroy(statDisplay.gameObject);
@@ -429,7 +435,7 @@ namespace EoE.Entities
 		}
 		public BuffInstance AddBuff(Buff buff, Entitie applier)
 		{
-			BuffInstance newBuff = new BuffInstance(buff, applier);
+			BuffInstance newBuff = new BuffInstance(buff, applier, this);
 			AddBuffEffect(newBuff, CalculateValue.Flat);
 			AddBuffEffect(newBuff, CalculateValue.Percent);
 
@@ -550,6 +556,7 @@ namespace EoE.Entities
 		{
 			BuffInstance targetBuff = fromPermanent ? permanentBuffs[index] : nonPermanentBuffs[index];
 			RemoveBuffEffect(targetBuff);
+			targetBuff.OnRemove();
 
 			if (this is Player)
 				Player.BuffDisplay.RemoveBuffIcon(targetBuff);
@@ -738,6 +745,7 @@ namespace EoE.Entities
 		{
 			CastingSpell = true;
 			//Casting
+			FXInstance[] curParticles = null;
 			if (spell.ContainedParts.HasFlag(SpellPart.Cast))
 			{
 				if (spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting))
@@ -748,9 +756,10 @@ namespace EoE.Entities
 				{
 					ActivateSpellEffect(this, spell.CastInfo.StartEffects[i], transform, spell);
 				}
-				for(int i = 0; i < spell.CastInfo.ParticleEffects.Length; i++)
+				curParticles = new FXInstance[spell.CastInfo.ParticleEffects.Length];
+				for (int i = 0; i < spell.CastInfo.ParticleEffects.Length; i++)
 				{
-					FXManager.PlayFX(spell.CastInfo.ParticleEffects[i], transform, this is Player);
+					curParticles[i] = FXManager.PlayFX(spell.CastInfo.ParticleEffects[i], transform, this is Player);
 				}
 
 				while(castTime < spell.CastInfo.Duration)
@@ -768,6 +777,15 @@ namespace EoE.Entities
 					appliedMoveStuns--;
 			}
 
+			if(curParticles != null)
+			{
+				for(int i = 0; i < curParticles.Length; i++)
+				{
+					curParticles[i].FinishFX();
+				}
+				curParticles = null;
+			}
+
 			//Start
 			if (spell.ContainedParts.HasFlag(SpellPart.Start))
 			{
@@ -775,9 +793,18 @@ namespace EoE.Entities
 				{
 					ActivateSpellEffect(this, spell.StartInfo.Effects[i], transform, spell);
 				}
+				curParticles = new FXInstance[spell.StartInfo.ParticleEffects.Length];
 				for (int i = 0; i < spell.StartInfo.ParticleEffects.Length; i++)
 				{
-					FXManager.PlayFX(spell.StartInfo.ParticleEffects[i], transform, this is Player);
+					curParticles[i] = FXManager.PlayFX(spell.StartInfo.ParticleEffects[i], transform, this is Player);
+				}
+			}
+
+			if (curParticles != null)
+			{
+				for (int i = 0; i < curParticles.Length; i++)
+				{
+					curParticles[i].FinishFX();
 				}
 			}
 

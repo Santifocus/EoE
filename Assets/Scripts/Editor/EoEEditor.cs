@@ -7,7 +7,7 @@ namespace EoE
 	public static class EoEEditor
 	{
 		private const string LINE_BREAK = "――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――";
-		private const float STANDARD_OFFSET = 20;
+		private const float STANDARD_OFFSET = 15;
 		public static bool isDirty;
 		public static void Header(string content, int offSet = 0, bool spaces = true, bool bold = true) => Header(new GUIContent(content), offSet, spaces, bold);
 		public static void Header(GUIContent content, int offSet = 0, bool spaces = true, bool bold = true)

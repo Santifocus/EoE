@@ -12,8 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64ce1e2b103b437499f83bb0124712ea, type: 3}
   m_Name: CritRumble
   m_EditorClassIdentifier: 
-  Time: 0.1
-  LeftStartIntensity: 0.6
-  RightStartIntensity: 0.9
-  LeftEndIntensity: 0.5
-  RightEndIntensity: 0.8
+  TimeIn: 0
+  TimeOut: 0.2
+  FinishConditions:
+    OnParentDeath: 0
+    OnTimeout: 1
+    TimeStay: 0.3
+  LeftMinIntensity: 0.6
+  RightMinIntensity: 0.9
+  LeftMaxIntensity: 0.5
+  RightMaxIntensity: 0.8

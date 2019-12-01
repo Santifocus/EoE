@@ -12,13 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
   m_Name: FireballCast
   m_EditorClassIdentifier: 
+  TimeIn: 0
+  TimeOut: 0
+  FinishConditions:
+    OnParentDeath: 0
+    OnTimeout: 0
+    TimeStay: 1
   ParticleMainObject: {fileID: 9145301141764976278, guid: f7dc1bfc87648254a891c4f4746b22fc,
     type: 3}
-  DestroyAfterDelay: 1
-  DestroyDelay: 2.25
   OffsetToTarget: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}
   FollowTarget: 1
   InheritRotationOfTarget: 0
-  OnParentDeathBehaivior: 0
-  DestroyStyle: 0

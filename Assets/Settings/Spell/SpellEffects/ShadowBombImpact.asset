@@ -18,7 +18,7 @@ MonoBehaviour:
   HasMaximumHits: 0
   MaximumHits: 0
   DamageElement: 16
-  DamageMultiplier: 0
+  DamageMultiplier: 0.5
   CritChance: 0
   KnockbackMultiplier: 0
   KnockbackOrigin: 2

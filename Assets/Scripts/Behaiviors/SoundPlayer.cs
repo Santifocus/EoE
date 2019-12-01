@@ -10,14 +10,12 @@ namespace EoE.Sounds
 		private Sound baseData;
 		private AudioSource source;
 
-		private float multiplier;
-		public float FadePoint { get => fadePoint; set { fadePoint = value; source.volume = baseData.volume * value * multiplier; } }
+		public float FadePoint { get => fadePoint; set { fadePoint = value; source.volume = baseData.volume * value; } }
 		private float fadePoint;
-
-		public void Setup(Sound baseData, float multiplier = 1)
+		public bool FullyStopped => !isPaused && !source.isPlaying;
+		private bool isPaused;
+		public void Setup(Sound baseData)
 		{
-			this.multiplier = multiplier;
-
 			source = gameObject.AddComponent<AudioSource>();
 			source.playOnAwake = false;
 			source.Stop();
@@ -31,7 +29,7 @@ namespace EoE.Sounds
 			source.pitch = baseData.pitch;
 			source.loop = baseData.Loop;
 			source.spatialBlend = baseData.spatialBlend;
-			source.volume = baseData.volume * multiplier;
+			source.volume = baseData.volume;
 			source.priority = baseData.priority;
 			source.outputAudioMixerGroup = baseData.audioGroup;
 		}
@@ -51,10 +49,12 @@ namespace EoE.Sounds
 				{
 					if (GameController.GameIsPaused)
 					{
+						isPaused = true;
 						source.Pause();
 					}
 					else
 					{
+						isPaused = false;
 						source.UnPause();
 					}
 				}
@@ -65,10 +65,12 @@ namespace EoE.Sounds
 			{
 				if (GameController.GameIsPaused)
 				{
+					isPaused = true;
 					source.Pause();
 				}
 				else
 				{
+					isPaused = false;
 					source.UnPause();
 				}
 			}
@@ -77,12 +79,16 @@ namespace EoE.Sounds
 		{
 			if (source.isPlaying)
 				source.Stop();
+
+			isPaused = false;
 			source.Play();
 		}
 		public void Stop()
 		{
 			if (source.isPlaying)
 				source.Stop();
+
+			isPaused = false;
 		}
 	}
 }

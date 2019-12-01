@@ -219,7 +219,7 @@ namespace EoE.Weapons
 		}
 		private void FinishProjectileFlight()
 		{
-			if (isDead)
+			if (isDead || isRemenants)
 				return;
 
 			ActivateSpellEffects(info.ProjectileInfo[index].CollisionEffects);
@@ -228,12 +228,9 @@ namespace EoE.Weapons
 			{
 				isRemenants = true;
 				body.velocity = Vector3.zero;
-				for(int i = 0; i < boundEffects.Count; i++)
-				{
-					boundEffects[i].Canceled = true;
-				}
+				StopBoundParticles();
 				ActivateSpellEffects(info.ProjectileInfo[index].Remenants.StartEffects);
-				CreateParticles(info.ProjectileInfo[index].Remenants.ParticleEffects);
+				CreateParticles(info.ProjectileInfo[index].Remenants.ParticleEffects, true);
 
 				this.remainingLifeTime = info.ProjectileInfo[index].Remenants.Duration;
 
@@ -263,6 +260,14 @@ namespace EoE.Weapons
 					boundEffects.Add(instance);
 			}
 		}
+		private void StopBoundParticles()
+		{
+			for (int i = 0; i < boundEffects.Count; i++)
+			{
+				boundEffects[i].FinishFX();
+			}
+			boundEffects = new List<FXInstance>();
+		}
 		public void Fall()
 		{
 			entitieColl.enabled = entitieTriggerColl.enabled = false;
@@ -276,6 +281,7 @@ namespace EoE.Weapons
 		}
 		private void OnDestroy()
 		{
+			StopBoundParticles();
 			AllSpellProjectiles.Remove(this);
 		}
 	}
