@@ -1808,7 +1808,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &399510460
 Transform:
   m_ObjectHideFlags: 0
@@ -1995,7 +1995,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameSettings: {fileID: 11400000, guid: eb894c191e0767e428687e3c68a86e59, type: 2}
-  churchMusic: {fileID: 11400000, guid: 52090d5eff9eed545868a3c93010be83, type: 2}
   projectilePrefab: {fileID: 7949894643786082984, guid: b161c93739aa6b94b9bc8bb2974557a7,
     type: 3}
   itemDropPrefab: {fileID: 877910255125148308, guid: dc9c93ad228c9d745a7fd655bc5c04c8,
@@ -6415,8 +6414,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 2.25, y: 2.25, z: -20}
   m_LocalScale: {x: 4.5, y: 4.5, z: 0.25}
-  m_Children:
-  - {fileID: 1880863734}
+  m_Children: []
   m_Father: {fileID: 824699723}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11595,11 +11593,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1650741043}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -1, y: -0.00000016292068, z: 0.00000019470717, w: 0.00000007549793}
+  m_LocalPosition: {x: 0.013381366, y: -0.031620514, z: -0.0065080384}
+  m_LocalScale: {x: 0.031841006, y: 0.10061348, z: 0.015347365}
   m_Children: []
-  m_Father: {fileID: 1761216895}
+  m_Father: {fileID: 2817675166153711029}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1650741045
@@ -11627,12 +11625,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f86435507266b74888cf3f5e303242d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredSouls: 10
+  requiredSouls: 0
   openTime: 1
-  rend: {fileID: 1761216893}
+  rend: {fileID: 8169562548876610017}
   rotationWhenOpen: {x: 0, y: -90, z: 0}
   rotationWhenClosed: {x: 0, y: 0, z: 0}
-  coll: {fileID: 1761216892}
+  coll: {fileID: 1505093666198307324}
   offsetWhenOpen: {x: -2.1, y: 0, z: 2.25}
   offsetWhenClosed: {x: 0, y: 0, z: 0}
 --- !u!54 &1650741047
@@ -12007,8 +12005,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -2.25, y: 2.25, z: -20}
   m_LocalScale: {x: 4.5, y: 4.5, z: 0.25}
-  m_Children:
-  - {fileID: 1650741044}
+  m_Children: []
   m_Father: {fileID: 824699723}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -12863,11 +12860,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1880863733}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 4.255461e-15, y: -0.000000021855694, z: -1, w: -0.00000019470718}
+  m_LocalPosition: {x: -0.017330643, y: -0.030816961, z: -0.017186353}
+  m_LocalScale: {x: 0.03288583, y: 0.10061349, z: 0.015347366}
   m_Children: []
-  m_Father: {fileID: 948585673}
+  m_Father: {fileID: 5822837237020251198}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1880863735
@@ -12895,12 +12892,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f86435507266b74888cf3f5e303242d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredSouls: 10
+  requiredSouls: 0
   openTime: 1
-  rend: {fileID: 948585671}
+  rend: {fileID: 2906999894458154321}
   rotationWhenOpen: {x: 0, y: 90, z: 0}
   rotationWhenClosed: {x: 0, y: 0, z: 0}
-  coll: {fileID: 948585670}
+  coll: {fileID: 1505093666198307325}
   offsetWhenOpen: {x: 2.1, y: 0, z: 2.25}
   offsetWhenClosed: {x: 0, y: 0, z: 0}
 --- !u!54 &1880863737
@@ -53351,7 +53348,8 @@ Transform:
   m_LocalRotation: {x: 1, y: 0.00000016292068, z: -0.00000019470717, w: 0.00000007549793}
   m_LocalPosition: {x: -239.16518, y: -47.831665, z: -310.8461}
   m_LocalScale: {x: 176.65898, y: 138.64941, z: 101.19815}
-  m_Children: []
+  m_Children:
+  - {fileID: 1650741044}
   m_Father: {fileID: 5879905033434786231}
   m_RootOrder: 201
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -68239,7 +68237,8 @@ Transform:
   m_LocalRotation: {x: -4.255461e-15, y: 0.000000021855694, z: 1, w: -0.00000019470718}
   m_LocalPosition: {x: -234.14058, y: -47.720253, z: -308.44827}
   m_LocalScale: {x: 171.0463, y: 138.64941, z: 101.19815}
-  m_Children: []
+  m_Children:
+  - {fileID: 1880863734}
   m_Father: {fileID: 5879905033434786231}
   m_RootOrder: 202
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
