@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b68c3564075a204ab65946eb6308666, type: 3}
   m_Name: FreezeItem
   m_EditorClassIdentifier: 
-  ItemName: Item
+  ItemName: FreezeSpell
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 1

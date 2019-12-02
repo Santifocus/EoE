@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: FreezeImpact
   m_EditorClassIdentifier: 
   AffectedTargets: 4
-  BaseEffectRadius: 10
-  ZeroOutDistance: 10
+  BaseEffectRadius: 8
+  ZeroOutDistance: 8
   HasMaximumHits: 0
   MaximumHits: 0
   DamageElement: 1
   DamageMultiplier: 1
   CritChance: 0
-  KnockbackMultiplier: 10
+  KnockbackMultiplier: 8
   KnockbackOrigin: 2
   KnockbackDirection: 1
   BuffStackStyle: 2

@@ -28,7 +28,7 @@ MonoBehaviour:
     ParticleEffects: []
     Effects: []
   ProjectileInfo:
-  - DirectionStyle: 2
+  - DirectionStyle: 4
     FallbackDirectionStyle: 1
     Direction: 32
     Duration: 5

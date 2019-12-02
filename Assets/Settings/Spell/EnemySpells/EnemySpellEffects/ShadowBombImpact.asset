@@ -20,7 +20,7 @@ MonoBehaviour:
   DamageElement: 16
   DamageMultiplier: 0.5
   CritChance: 0
-  KnockbackMultiplier: 0
+  KnockbackMultiplier: 10
   KnockbackOrigin: 2
   KnockbackDirection: 1
   BuffStackStyle: 2
