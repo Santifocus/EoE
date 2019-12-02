@@ -50,7 +50,6 @@ namespace EoE.Entities
 		//Behaivior
 		protected bool behaviorSimpleStop;
 		protected bool isIdle => !(chasingPlayer || remainingInvestigationTime > 0);
-		protected bool lastIdleState = true;
 		#endregion
 		#region Basic Monobehaivior
 		protected override void Start()
@@ -126,6 +125,7 @@ namespace EoE.Entities
 				PlayerInAttackRange = false;
 				targetPosition = null;
 			}
+			UpdateAgentSettings();
 
 			if (PlayerInAttackRange) 
 				InRangeBehaiviorBase();
@@ -211,8 +211,6 @@ namespace EoE.Entities
 				}
 			}
 
-			if (lastIdleState != isIdle)
-				UpdateAgentSettings();
 		}
 		protected void EnforceKnockback()
 		{
@@ -224,15 +222,15 @@ namespace EoE.Entities
 			{
 				agent.angularSpeed = enemySettings.TurnSpeed * GameController.CurrentGameSettings.IdleMovementUrgency;
 				agent.acceleration = enemySettings.MoveAcceleration * GameController.CurrentGameSettings.IdleMovementUrgency;
-				agent.speed = enemySettings.WalkSpeed * GameController.CurrentGameSettings.IdleMovementUrgency;
+				agent.speed = curWalkSpeed * GameController.CurrentGameSettings.IdleMovementUrgency;
 			}
 			else
 			{
 				agent.angularSpeed = enemySettings.TurnSpeed;
 				agent.acceleration = enemySettings.MoveAcceleration;
-				agent.speed = enemySettings.WalkSpeed;
+				agent.speed = curWalkSpeed;
+				Debug.Log(curWalkSpeed);
 			}
-			lastIdleState = isIdle;
 		}
 		private bool CheckForPlayer()
 		{

@@ -1231,7 +1231,7 @@ namespace EoE.Entities
 						value += PlayerSettings.WalkSpeed;
 						break;
 					}
-				case TargetBaseStat.JumpHeight:
+				case TargetBaseStat.JumpHeightMultiplier:
 					{
 						value += PlayerSettings.JumpPower.y;
 						break;
