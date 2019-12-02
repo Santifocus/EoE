@@ -22,7 +22,7 @@ MonoBehaviour:
   CastInfo:
     Duration: 1.7
     CustomEffects:
-    - openInInspector: 0
+    - openInInspector: 1
       FX: {fileID: 11400000, guid: 0c1bf3d6adb169e4b8149be02f80b674, type: 2}
       HasCustomOffset: 0
       CustomOffset: {x: 0, y: 0, z: 0}
@@ -53,7 +53,7 @@ MonoBehaviour:
     FlightSpeed: 35
     CreateOffsetToCaster: {x: 1, y: 0, z: 0}
     CustomEffects:
-    - openInInspector: 0
+    - openInInspector: 1
       FX: {fileID: 11400000, guid: f3a5d4a11481585419aa5a911b8dcce1, type: 2}
       HasCustomOffset: 0
       CustomOffset: {x: 0, y: 0, z: 0}
@@ -70,14 +70,14 @@ MonoBehaviour:
     DestroyOnEntiteBounce: 1
     CollisionEffectsOnBounce: 1
     CollisionCustomEffects:
-    - openInInspector: 0
+    - openInInspector: 1
       FX: {fileID: 11400000, guid: 2762cd21c6bde30458700de03ee7df29, type: 2}
       HasCustomOffset: 0
       CustomOffset: {x: 0, y: 0, z: 0}
       HasCustomRotationOffset: 0
       CustomRotation: {x: 0, y: 0, z: 0}
       HasCustomScale: 0
-      CustomScale: {x: 0, y: 0, z: 0}
+      CustomScale: {x: 1, y: 1, z: 1}
     CollisionEffects:
     - {fileID: 11400000, guid: 44806d8447931e9408e4e93cb4e6611f, type: 2}
     DirectHit:
