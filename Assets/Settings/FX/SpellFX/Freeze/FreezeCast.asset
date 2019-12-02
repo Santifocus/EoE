@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
-  m_Name: FireBallStart
+  m_Name: FreezeCast
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0.3
+  TimeOut: 0
   FinishConditions:
     OnParentDeath: 0
-    OnTimeout: 0
-    TimeStay: 1
-  ParticleMainObject: {fileID: 4111788752334134514, guid: 70e13daebdc530540a5046242b930055,
+    OnTimeout: 1
+    TimeStay: 0.8
+  ParticleMainObject: {fileID: 8130500063453708033, guid: 488f4d6d4f6f0ff409edcab005bbc770,
     type: 3}
-  OffsetToTarget: {x: 1, y: 0, z: 0}
+  OffsetToTarget: {x: 0, y: -1.5, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}
-  FollowTarget: 0
-  InheritRotationOfTarget: 0
+  FollowTarget: 1
+  InheritRotationOfTarget: 1

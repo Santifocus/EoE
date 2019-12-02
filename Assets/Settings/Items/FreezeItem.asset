@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b68c3564075a204ab65946eb6308666, type: 3}
+  m_Name: FreezeItem
+  m_EditorClassIdentifier: 
+  ItemName: FreezeSpell
+  ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
+    type: 3}
+  MaxStack: 1
+  ItemIcon: {fileID: 21300000, guid: d81ae178b4840114fbef5d43b239ceb5, type: 3}
+  RemoveOnUse: 0
+  UseCooldown: 3
+  VFXEffectsOnUse: []
+  targetSpell: {fileID: 11400000, guid: ac6d4f2b9cddec34c9d42ed76b3bbe50, type: 2}

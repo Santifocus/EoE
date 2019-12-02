@@ -10,20 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f26a7d5fe156864d9dc8c08f742157c, type: 3}
-  m_Name: ShadowBombImpact
+  m_Name: FreezeImpact
   m_EditorClassIdentifier: 
   AffectedTargets: 4
-  BaseEffectRadius: 4
+  BaseEffectRadius: 8
   ZeroOutDistance: 8
   HasMaximumHits: 0
   MaximumHits: 0
-  DamageElement: 16
-  DamageMultiplier: 0.5
+  DamageElement: 1
+  DamageMultiplier: 1
   CritChance: 0
-  KnockbackMultiplier: 10
+  KnockbackMultiplier: 8
   KnockbackOrigin: 2
   KnockbackDirection: 1
   BuffStackStyle: 2
-  BuffsToApply: []
+  BuffsToApply:
+  - {fileID: 11400000, guid: 52e0f12ca3092cc46b63bfe6edacac12, type: 2}
   Effects:
-  - {fileID: 11400000, guid: e840a1eafcd96a047bbe880545aaa1d0, type: 2}
+  - {fileID: 11400000, guid: a011d9a7ab4db1e47893dbc30aa0bfca, type: 2}
