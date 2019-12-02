@@ -19,7 +19,7 @@ MonoBehaviour:
   ContainedParts: -1
   MovementRestrictions: -1
   CastInfo:
-    Duration: 1.7
+    Duration: 1.5
     ParticleEffects:
     - {fileID: 11400000, guid: 0c1bf3d6adb169e4b8149be02f80b674, type: 2}
     StartEffects: []

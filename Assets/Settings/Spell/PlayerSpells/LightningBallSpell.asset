@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dbc89a2906f120d45877860a48c8c4e2, type: 3}
-  m_Name: Ball_Lightning_Spell
+  m_Name: LightningBallSpell
   m_EditorClassIdentifier: 
   ManaCost: 25
   BaseDamage: 35
