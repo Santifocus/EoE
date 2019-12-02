@@ -108,7 +108,7 @@ namespace EoE
 				}
 			}
 		}
-		public static FXInstance PlayFX(FXObject effect, Transform target, bool allowScreenEffects, float multiplier = 1)
+		public static FXInstance PlayFX(FXObject effect, Transform target, bool allowScreenEffects, float multiplier = 1, Vector3? customOffset = null, Vector3? customRotationOffset = null, Vector3? customScale = null)
 		{
 			if (allowScreenEffects)
 			{
@@ -149,11 +149,11 @@ namespace EoE
 			}
 			else if (effect is SoundEffect)
 			{
-				return EffectUtils.PlaySound(effect as SoundEffect, target, multiplier);
+				return EffectUtils.PlaySound(effect as SoundEffect, target, customOffset, multiplier);
 			}
 			else if (effect is ParticleEffect)
 			{
-				return EffectUtils.PlayParticleEffect(effect as ParticleEffect, target, multiplier);
+				return EffectUtils.PlayParticleEffect(effect as ParticleEffect, target, customOffset, customRotationOffset, customScale, multiplier);
 			}
 			return null;
 		}

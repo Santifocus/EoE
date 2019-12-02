@@ -21,8 +21,9 @@ namespace EoE.Weapons
 		public float BaseKnockback = 0;
 		public float SpellCooldown = 3;
 
-		public SpellPart ContainedParts = (SpellPart)7;
-		public SpellMovementRestrictionsMask MovementRestrictions = (SpellMovementRestrictionsMask)3;
+		public SpellPart ContainedParts = (SpellPart)(-1);
+		public SpellMovementRestrictionsMask MovementRestrictions = (SpellMovementRestrictionsMask)(-1);
+		public SpellPart SubtractManaAtPart = SpellPart.Start;
 
 		public SpellCastPart CastInfo = new SpellCastPart();
 		public SpellBeginningPart StartInfo = new SpellBeginningPart();
@@ -90,39 +91,45 @@ namespace EoE.Weapons
 	public class SpellCastPart
 	{
 		public float Duration = 3;
-		public ParticleEffect[] ParticleEffects = new ParticleEffect[0];
+		public CustomFXObject[] CustomEffects = new CustomFXObject[0];
 		public SpellEffect[] StartEffects = new SpellEffect[0];
 		public SpellEffect[] WhileEffects = new SpellEffect[0];
 	}
 	[System.Serializable]
 	public class SpellBeginningPart
 	{
-		public ParticleEffect[] ParticleEffects = new ParticleEffect[0];
+		public CustomFXObject[] CustomEffects = new CustomFXObject[0];
 		public SpellEffect[] Effects = new SpellEffect[0];
 	}
 	[System.Serializable]
 	public class SpellProjectilePart
 	{
+		//Execution info
+		public int ExecutionCount = 1;
+		public float DelayPerExecution = 0.1f;
+
+		//Direction
 		public InherritDirection DirectionStyle = InherritDirection.Target;
 		public InherritDirection FallbackDirectionStyle = InherritDirection.Local;
 		public DirectionBase Direction = DirectionBase.Forward;
 
+		//Flight
 		public float Duration = 15;
 		public float FlightSpeed = 25;
 		public Vector3 CreateOffsetToCaster = Vector3.forward;
-		public ParticleEffect[] ParticleEffects = new ParticleEffect[0];
+		public CustomFXObject[] CustomEffects = new CustomFXObject[0];
 		public SpellEffect[] StartEffects = new SpellEffect[0];
 		public SpellEffect[] WhileEffects = new SpellEffect[0];
 
 		//Collision
 		public float EntitieHitboxSize = 1;
 		public float TerrainHitboxSize = 0.5f;
-		public SpellCollideMask CollideMask = (SpellCollideMask)3;
+		public SpellCollideMask CollideMask = (SpellCollideMask)(-1);
 		public int Bounces = 0;
 		public bool DestroyOnEntiteBounce = true;
 		public bool CollisionEffectsOnBounce = true;
 
-		public ParticleEffect[] CollisionParticleEffects = new ParticleEffect[0];
+		public CustomFXObject[] CollisionCustomEffects = new CustomFXObject[0];
 		public SpellEffect[] CollisionEffects = new SpellEffect[0];
 
 		//Direct hit
@@ -157,5 +164,22 @@ namespace EoE.Weapons
 		public SpellEffect[] StartEffects = new SpellEffect[0];
 		public SpellEffect[] WhileEffects = new SpellEffect[0];
 		public bool TryGroundRemenants = true;
+	}
+	[System.Serializable]
+	public class CustomFXObject
+	{
+#if UNITY_EDITOR
+		public bool openInInspector = false;
+#endif
+		public FXObject FX;
+		
+		public bool HasCustomOffset = false;
+		public Vector3 CustomOffset = Vector3.zero;
+
+		public bool HasCustomRotationOffset = false;
+		public Vector3 CustomRotation = Vector3.zero;
+
+		public bool HasCustomScale = false;
+		public Vector3 CustomScale = Vector3.one;
 	}
 }

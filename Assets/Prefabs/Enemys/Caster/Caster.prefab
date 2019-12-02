@@ -189,6 +189,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coll: {fileID: 8095854218189230374}
   invincible: 0
+  Alive: 0
   body: {fileID: 8095854218189230376}
   agent: {fileID: 8095854218189230379}
   settings: {fileID: 11400000, guid: ac583c8de2667cc4fb07da4bd968c52b, type: 2}
@@ -207,7 +208,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
 --- !u!195 &8095854218189230379
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -320,7 +320,7 @@ namespace EoE
 			}
 			return false;
 		}
-		public static bool DrawArray<T>(GUIContent arrayContent, System.Func<int, int, bool> elementBinding, ref T[] curValue, ref bool open, int offSet = 0, bool asHeader = false)
+		public static bool DrawArray<T>(GUIContent arrayContent, System.Func<int, int, T[], bool> elementBinding, ref T[] curValue, ref bool open, int offSet = 0, bool asHeader = false)
 		{
 			bool changed = false;
 			if (curValue == null)
@@ -337,7 +337,7 @@ namespace EoE
 			{
 				for(int i = 0; i < curValue.Length; i++)
 				{
-					changed |= (elementBinding?.Invoke(i, offSet + 1)) ?? false;
+					changed |= (elementBinding?.Invoke(i, offSet + 1, curValue)) ?? false;
 				}
 
 				GUILayout.Space(3);

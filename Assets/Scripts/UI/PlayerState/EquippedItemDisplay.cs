@@ -35,8 +35,7 @@ namespace EoE.UI
 
 				if (itemCountDisplay)
 					itemCountDisplay.gameObject.SetActive(newTarget != null);
-
-				lastCooldown = (newTarget == null) ? 0 : newTarget.useCooldown;
+				UpdateCooldown();
 			}
 
 			if(newTarget != null)
@@ -46,13 +45,13 @@ namespace EoE.UI
 				{
 					StartCoroutine(BlinkIcon());
 				}
+				float maxCooldown = MaxCooldown();
+				UpdateCooldown();
 
-				if (newTarget.data.UseCooldown > 0)
-					cooldDownDisplay.fillAmount = Mathf.Clamp01(newTarget.useCooldown / newTarget.data.UseCooldown);
+				if (maxCooldown > 0)
+					cooldDownDisplay.fillAmount = Mathf.Clamp01(lastCooldown / maxCooldown);
 				else
 					cooldDownDisplay.fillAmount = 0;
-
-				lastCooldown = newTarget.useCooldown;
 
 				//Update count
 				if (itemCountDisplay && newTarget.stackSize != lastCount)
@@ -62,6 +61,19 @@ namespace EoE.UI
 				}
 			}
 
+		}
+		private void UpdateCooldown()
+		{
+			lastCooldown = (lastTarget == null) ? (0) : ((targetType == TargetItemType.Combat && Player.MagicSelected ? Mathf.Max(Player.Instance.CastingCooldown, lastTarget.useCooldown) : lastTarget.useCooldown));
+		}
+		private float MaxCooldown()
+		{
+			if(targetType == TargetItemType.Combat && Player.MagicSelected)
+			{
+				return Mathf.Max(lastTarget.data.UseCooldown, (lastTarget.data as SpellItem).targetSpell.SpellCooldown);
+			}
+			else
+				return lastTarget.data.UseCooldown;
 		}
 
 		private IEnumerator BlinkIcon()

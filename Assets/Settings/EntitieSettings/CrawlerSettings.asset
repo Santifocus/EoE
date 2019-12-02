@@ -40,6 +40,7 @@ MonoBehaviour:
   AttackRange: 3
   AttackKnockBack: 3
   CritChance: 0
+  PlayerTrackSpeed: 4
   SightRange: 20
   FoundPlayerSightRange: 50
   SightAngle: 60
@@ -56,5 +57,5 @@ MonoBehaviour:
   BashDistance: 7
   ForceTranslationMultiplier: 1.5
   BashAnnouncementDelay: -0.6
-  BashAnnouncementParticles: {fileID: 11400000, guid: dd68d9db5e90b2f449f0f973e984a2a8,
-    type: 2}
+  BashAnnouncement:
+  - {fileID: 11400000, guid: dd68d9db5e90b2f449f0f973e984a2a8, type: 2}

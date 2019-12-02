@@ -628,7 +628,7 @@ namespace EoE.Utils
 		#region SingleSound
 		private static List<SoundEffectInstance> AllSoundFXs = new List<SoundEffectInstance>();
 		private Coroutine SoundFXCoroutine = null;
-		public static FXInstance PlaySound(SoundEffect info, Transform target, float multiplier = 1)
+		public static FXInstance PlaySound(SoundEffect info, Transform target, Vector3? customOffset, float multiplier = 1)
 		{
 			SoundPlayer soundPlayer = (new GameObject(info.TargetSound.soundName + " Sound Player")).AddComponent<SoundPlayer>();
 			soundPlayer.transform.SetParent(Storage.SoundStorage);
@@ -638,7 +638,7 @@ namespace EoE.Utils
 			soundPlayer.Setup(info.TargetSound);
 			soundPlayer.Play();
 
-			SoundEffectInstance newSoundFX = new SoundEffectInstance(info, soundPlayer);
+			SoundEffectInstance newSoundFX = new SoundEffectInstance(info, soundPlayer, customOffset);
 			newSoundFX.BaseSetup(multiplier, target);
 			AllSoundFXs.Add(newSoundFX);
 
@@ -678,10 +678,13 @@ namespace EoE.Utils
 			private SoundEffect SoundEffectInfo;
 			private SoundPlayer soundPlayer;
 
-			public SoundEffectInstance(SoundEffect SoundInfo, SoundPlayer SelfPlayer)
+			private Vector3 positionOffset;
+
+			public SoundEffectInstance(SoundEffect SoundInfo, SoundPlayer SelfPlayer, Vector3? positionOffset)
 			{
 				this.SoundEffectInfo = SoundInfo;
 				this.soundPlayer = SelfPlayer;
+				this.positionOffset = positionOffset ?? SoundInfo.OffsetToTarget;
 			}
 			protected override void InternalUpdate()
 			{
@@ -699,10 +702,12 @@ namespace EoE.Utils
 		#region Particle Effects
 		private static List<ParticleEffectInstance> AllParticleFXs = new List<ParticleEffectInstance>();
 		private Coroutine ParticleFXCoroutine = null;
-		public static FXInstance PlayParticleEffect(ParticleEffect info, Transform parent, float multiplier = 1)
+		public static FXInstance PlayParticleEffect(ParticleEffect info, Transform parent, Vector3? customOffset, Vector3? customRotation, Vector3? customScale, float multiplier = 1)
 		{
 			Transform mainObject = Instantiate(info.ParticleMainObject, Storage.ParticleStorage).transform;
-			mainObject.position = parent ? parent.position + info.OffsetToTarget : info.OffsetToTarget;
+			Vector3 offset = customOffset ?? info.OffsetToTarget;
+			mainObject.position = parent ? parent.position + offset : offset;
+			mainObject.localScale = customScale ?? mainObject.localScale;
 
 			if (parent && info.InheritRotationOfTarget)
 			{
@@ -718,7 +723,7 @@ namespace EoE.Utils
 				containedSystems[i].Play();
 			}
 
-			ParticleEffectInstance newParticleFX = new ParticleEffectInstance(info, mainObject, containedSystems);
+			ParticleEffectInstance newParticleFX = new ParticleEffectInstance(info, mainObject, containedSystems, customOffset, customRotation);
 			newParticleFX.BaseSetup(multiplier, parent);
 			AllParticleFXs.Add(newParticleFX);
 
@@ -762,13 +767,19 @@ namespace EoE.Utils
 			private float[] emissionBasis;
 			private float lastMultiplier = -1;
 
-			public ParticleEffectInstance(ParticleEffect ParticleInfo, Transform particleTransform, ParticleSystem[] containedSystems)
+			private Vector3 positionOffset;
+			private Vector3 rotationOffset;
+
+			public ParticleEffectInstance(ParticleEffect ParticleInfo, Transform particleTransform, ParticleSystem[] containedSystems, Vector3? positionOffset, Vector3? rotationOffset)
 			{
 				this.ParticleEffectInfo = ParticleInfo;
 				this.particleTransform = particleTransform;
 
 				this.containedSystems = containedSystems;
 				emissionBasis = new float[containedSystems.Length];
+
+				this.positionOffset = positionOffset ?? ParticleInfo.OffsetToTarget;
+				this.rotationOffset = rotationOffset ?? ParticleInfo.RotationOffset;
 
 				for (int i = 0; i < containedSystems.Length; i++)
 				{
@@ -780,12 +791,12 @@ namespace EoE.Utils
 			{
 				if (ParticleEffectInfo.FollowTarget && parent)
 				{
-					particleTransform.position = parent.position + ParticleEffectInfo.OffsetToTarget;
+					particleTransform.position = parent.position + positionOffset;
 
 					if (ParticleEffectInfo.InheritRotationOfTarget)
 					{
 						particleTransform.transform.forward = parent.transform.forward;
-						particleTransform.transform.eulerAngles += ParticleEffectInfo.RotationOffset;
+						particleTransform.transform.eulerAngles += rotationOffset;
 					}
 				}
 				UpdateEmission();

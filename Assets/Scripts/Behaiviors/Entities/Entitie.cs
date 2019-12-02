@@ -748,32 +748,49 @@ namespace EoE.Entities
 			FXInstance[] curParticles = null;
 			if (spell.ContainedParts.HasFlag(SpellPart.Cast))
 			{
-				if (spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting))
+				bool appliedStun = spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting);
+				if (appliedStun)
 					appliedMoveStuns++;
 
-				float castTime = 0;
 				for(int i = 0; i < spell.CastInfo.StartEffects.Length; i++)
 				{
 					ActivateSpellEffect(this, spell.CastInfo.StartEffects[i], transform, spell);
 				}
-				curParticles = new FXInstance[spell.CastInfo.ParticleEffects.Length];
-				for (int i = 0; i < spell.CastInfo.ParticleEffects.Length; i++)
+				curParticles = new FXInstance[spell.CastInfo.CustomEffects.Length];
+				for (int i = 0; i < spell.CastInfo.CustomEffects.Length; i++)
 				{
-					curParticles[i] = FXManager.PlayFX(spell.CastInfo.ParticleEffects[i], transform, this is Player);
+					curParticles[i] = FXManager.PlayFX(	spell.CastInfo.CustomEffects[i].FX, 
+														transform, 
+														this is Player,
+														1,
+														spell.CastInfo.CustomEffects[i].HasCustomOffset ? ((Vector3?)spell.CastInfo.CustomEffects[i].CustomOffset) : (null),
+														spell.CastInfo.CustomEffects[i].HasCustomRotationOffset ? ((Vector3?)spell.CastInfo.CustomEffects[i].CustomRotation) : (null),
+														spell.CastInfo.CustomEffects[i].HasCustomScale ? ((Vector3?)spell.CastInfo.CustomEffects[i].CustomScale) : (null)
+														);
 				}
 
+				float castTime = 0;
+				float effectTick = 0;
 				while(castTime < spell.CastInfo.Duration)
 				{
-					yield return new WaitForSeconds(GameController.CurrentGameSettings.SpellEffectTickSpeed);
-					castTime += GameController.CurrentGameSettings.SpellEffectTickSpeed;
+					yield return new WaitForEndOfFrame();
+					castTime += Time.deltaTime;
+					effectTick += Time.deltaTime;
 
-					for (int i = 0; i < spell.CastInfo.WhileEffects.Length; i++)
+					if (appliedMoveStuns > (appliedStun ? 1 : 0))
+						goto StoppedSpell;
+
+					if (effectTick > GameController.CurrentGameSettings.SpellEffectTickSpeed)
 					{
-						ActivateSpellEffect(this, spell.CastInfo.WhileEffects[i], transform, spell);
+						effectTick -= GameController.CurrentGameSettings.SpellEffectTickSpeed;
+						for (int i = 0; i < spell.CastInfo.WhileEffects.Length; i++)
+						{
+							ActivateSpellEffect(this, spell.CastInfo.WhileEffects[i], transform, spell);
+						}
 					}
 				}
 
-				if (spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting))
+				if (appliedStun)
 					appliedMoveStuns--;
 			}
 
@@ -793,10 +810,17 @@ namespace EoE.Entities
 				{
 					ActivateSpellEffect(this, spell.StartInfo.Effects[i], transform, spell);
 				}
-				curParticles = new FXInstance[spell.StartInfo.ParticleEffects.Length];
-				for (int i = 0; i < spell.StartInfo.ParticleEffects.Length; i++)
+				curParticles = new FXInstance[spell.StartInfo.CustomEffects.Length];
+				for (int i = 0; i < spell.StartInfo.CustomEffects.Length; i++)
 				{
-					curParticles[i] = FXManager.PlayFX(spell.StartInfo.ParticleEffects[i], transform, this is Player);
+					curParticles[i] = FXManager.PlayFX(spell.StartInfo.CustomEffects[i].FX,
+														transform,
+														this is Player,
+														1,
+														spell.StartInfo.CustomEffects[i].HasCustomOffset ? ((Vector3?)spell.StartInfo.CustomEffects[i].CustomOffset) : (null),
+														spell.StartInfo.CustomEffects[i].HasCustomRotationOffset ? ((Vector3?)spell.StartInfo.CustomEffects[i].CustomRotation) : (null),
+														spell.StartInfo.CustomEffects[i].HasCustomScale ? ((Vector3?)spell.StartInfo.CustomEffects[i].CustomScale) : (null)
+														);
 				}
 			}
 
@@ -811,19 +835,53 @@ namespace EoE.Entities
 			//Projectile
 			if (spell.ContainedParts.HasFlag(SpellPart.Projectile))
 			{
-				if (spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileShooting))
+				bool appliedStun = spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileShooting);
+				if (appliedStun)
 					appliedMoveStuns++;
+
 				for (int i = 0; i < spell.ProjectileInfo.Length; i++)
 				{
-					CreateSpellProjectile(spell, i);
-					if(i < spell.ProjectileInfo.Length - 1)
-						yield return new WaitForSeconds(spell.DelayToNextProjectile[i]);
+					for(int j = 0; j < spell.ProjectileInfo[i].ExecutionCount; j++)
+					{
+						CreateSpellProjectile(spell, i);
+						if (j < spell.ProjectileInfo[i].ExecutionCount - 1)
+						{
+							float timer = 0;
+							while(timer < spell.ProjectileInfo[i].DelayPerExecution)
+							{
+								yield return new WaitForEndOfFrame();
+								timer += Time.deltaTime;
+								if (appliedMoveStuns > (appliedStun ? 1 : 0))
+									goto StoppedSpell;
+							}
+						}
+					}
+
+					if (i < spell.ProjectileInfo.Length - 1)
+					{
+						float timer = 0;
+						while (timer < spell.DelayToNextProjectile[i])
+						{
+							yield return new WaitForEndOfFrame();
+							timer += Time.deltaTime;
+							if (appliedMoveStuns > (appliedStun ? 1 : 0))
+								goto StoppedSpell;
+						} 
+					}
 				}
-				if (spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileShooting))
+				if (appliedStun)
 					appliedMoveStuns--;
 			}
+		StoppedSpell:;
 			CastingSpell = false;
 			CastingCooldown = spell.SpellCooldown;
+			if (curParticles != null)
+			{
+				for (int i = 0; i < curParticles.Length; i++)
+				{
+					curParticles[i].FinishFX();
+				}
+			}
 		}
 		#region ProjectileControl
 		private SpellProjectile CreateSpellProjectile(Spell spellBase, int index)

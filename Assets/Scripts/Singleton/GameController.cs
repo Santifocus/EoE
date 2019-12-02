@@ -18,7 +18,6 @@ namespace EoE
 		public static bool GameIsPaused { get => gameIsPaused; set => SetPauseGamestate(value); }
 
 		[SerializeField] private GameSettings gameSettings = default;
-		[SerializeField] private SoundEffect churchMusic = default;
 		[SerializeField] private SpellProjectile projectilePrefab = default;
 		public ItemDrop itemDropPrefab;
 
@@ -33,12 +32,12 @@ namespace EoE
 				Destroy(Instance.gameObject);
 			}
 			Instance = this;
-			StartCoroutine(E());
+			StartCoroutine(StartMusic());
 		}
-		private IEnumerator E()
+		private IEnumerator StartMusic()
 		{
 			yield return new WaitForEndOfFrame();
-			Utils.EffectUtils.PlaySound(churchMusic, null);
+			Sounds.SoundManager.SetSoundState("ChurchMusic", true);
 		}
 		private static void SetPauseGamestate(bool state)
 		{

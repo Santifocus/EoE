@@ -91,7 +91,10 @@ namespace EoE.Entities
 		}
 		private void AnnounceBash()
 		{
-			Utils.EffectUtils.PlayParticleEffect(settings.BashAnnouncementParticles, transform);
+			for(int i = 0; i < settings.BashAnnouncement.Length; i++)
+			{
+				FXManager.PlayFX(settings.BashAnnouncement[i], transform, false);
+			}
 		}
 		private void FinishedBash()
 		{

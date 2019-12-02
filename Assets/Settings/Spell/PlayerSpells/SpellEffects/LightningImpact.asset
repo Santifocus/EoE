@@ -26,5 +26,4 @@ MonoBehaviour:
   BuffStackStyle: 2
   BuffsToApply:
   - {fileID: 11400000, guid: 6da2ca87550612d4cb05ca60fbfcb6ba, type: 2}
-  Effects:
-  - {fileID: 11400000, guid: 5c28d04af48610b47b181b05fc6bf580, type: 2}
+  Effects: []

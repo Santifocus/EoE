@@ -10,33 +10,57 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dbc89a2906f120d45877860a48c8c4e2, type: 3}
-  m_Name: Ball_Lightning_Spell
+  m_Name: LightningBallSpell
   m_EditorClassIdentifier: 
   ManaCost: 25
   BaseDamage: 35
   BaseKnockback: 0
-  SpellCooldown: 3
-  ContainedParts: 7
-  MovementRestrictions: 3
+  SpellCooldown: 2
+  ContainedParts: -1
+  MovementRestrictions: -1
+  SubtractManaAtPart: 2
   CastInfo:
     Duration: 1.2
-    ParticleEffects:
-    - {fileID: 11400000, guid: 7862dc0c47048144d978bfc5b67aabf5, type: 2}
+    CustomEffects:
+    - openInInspector: 0
+      FX: {fileID: 11400000, guid: 7862dc0c47048144d978bfc5b67aabf5, type: 2}
+      HasCustomOffset: 0
+      CustomOffset: {x: 0, y: 0, z: 0}
+      HasCustomRotationOffset: 0
+      CustomRotation: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
     StartEffects: []
     WhileEffects: []
   StartInfo:
-    ParticleEffects:
-    - {fileID: 11400000, guid: e2693ff5d8f1dab4f948eece6830a48b, type: 2}
+    CustomEffects:
+    - openInInspector: 0
+      FX: {fileID: 11400000, guid: e2693ff5d8f1dab4f948eece6830a48b, type: 2}
+      HasCustomOffset: 0
+      CustomOffset: {x: 0, y: 0, z: 0}
+      HasCustomRotationOffset: 0
+      CustomRotation: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
     Effects: []
   ProjectileInfo:
-  - DirectionStyle: 2
+  - ExecutionCount: 1
+    DelayPerExecution: 0.1
+    DirectionStyle: 2
     FallbackDirectionStyle: 1
     Direction: 1
     Duration: 15
     FlightSpeed: 100
     CreateOffsetToCaster: {x: 1, y: 0, z: 0}
-    ParticleEffects:
-    - {fileID: 11400000, guid: 2d9464ef70c8d5b47989f2acfbbe9a96, type: 2}
+    CustomEffects:
+    - openInInspector: 0
+      FX: {fileID: 11400000, guid: 2d9464ef70c8d5b47989f2acfbbe9a96, type: 2}
+      HasCustomOffset: 0
+      CustomOffset: {x: 0, y: 0, z: 0}
+      HasCustomRotationOffset: 0
+      CustomRotation: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
     StartEffects: []
     WhileEffects: []
     EntitieHitboxSize: 2
@@ -45,8 +69,15 @@ MonoBehaviour:
     Bounces: 5
     DestroyOnEntiteBounce: 0
     CollisionEffectsOnBounce: 1
-    CollisionParticleEffects:
-    - {fileID: 11400000, guid: 747459de57fd01a42aa6faa56aa4d4cd, type: 2}
+    CollisionCustomEffects:
+    - openInInspector: 0
+      FX: {fileID: 11400000, guid: 747459de57fd01a42aa6faa56aa4d4cd, type: 2}
+      HasCustomOffset: 0
+      CustomOffset: {x: 0, y: 0, z: 0}
+      HasCustomRotationOffset: 0
+      CustomRotation: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
     CollisionEffects:
     - {fileID: 11400000, guid: aec50c100cb0cf6458e03f5597e8c7c5, type: 2}
     DirectHit:

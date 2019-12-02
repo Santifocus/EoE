@@ -47,7 +47,7 @@ namespace EoE.Weapons
 
 			SetupCollider();
 
-			CreateParticles(info.ProjectileInfo[index].ParticleEffects, true);
+			CreateFX(info.ProjectileInfo[index].CustomEffects, true);
 		}
 		private void SetupCollider()
 		{
@@ -110,8 +110,11 @@ namespace EoE.Weapons
 		}
 		private void FixedUpdate()
 		{
-			if(!isRemenants)
+			if (!isRemenants)
+			{
 				transform.forward = body.velocity.normalized;
+				body.velocity = transform.forward * info.ProjectileInfo[index].FlightSpeed;
+			}
 		}
 		private void OnTriggerEnter(Collider other)
 		{
@@ -152,7 +155,7 @@ namespace EoE.Weapons
 			if (info.ProjectileInfo[index].CollisionEffectsOnBounce)
 			{
 				ActivateSpellEffects(info.ProjectileInfo[index].CollisionEffects);
-				CreateParticles(info.ProjectileInfo[index].CollisionParticleEffects);
+				CreateFX(info.ProjectileInfo[index].CollisionCustomEffects);
 			}
 		}
 		private void DirectTargetHit(Entitie hit)
@@ -223,14 +226,19 @@ namespace EoE.Weapons
 				return;
 
 			ActivateSpellEffects(info.ProjectileInfo[index].CollisionEffects);
-			CreateParticles(info.ProjectileInfo[index].CollisionParticleEffects);
+			CreateFX(info.ProjectileInfo[index].CollisionCustomEffects);
 			if (info.ProjectileInfo[index].CreatesRemenants)
 			{
 				isRemenants = true;
 				body.velocity = Vector3.zero;
 				StopBoundParticles();
 				ActivateSpellEffects(info.ProjectileInfo[index].Remenants.StartEffects);
-				CreateParticles(info.ProjectileInfo[index].Remenants.ParticleEffects, true);
+
+				for(int i = 0; i < info.ProjectileInfo[index].Remenants.ParticleEffects.Length; i++)
+				{
+					FXInstance instance = FXManager.PlayFX(info.ProjectileInfo[index].Remenants.ParticleEffects[i], transform, false);
+					boundEffects.Add(instance);
+				}
 
 				this.remainingLifeTime = info.ProjectileInfo[index].Remenants.Duration;
 
@@ -251,11 +259,18 @@ namespace EoE.Weapons
 			for (int i = 0; i < effects.Length; i++)
 				Entitie.ActivateSpellEffect(creator, effects[i], transform, info);
 		}
-		private void CreateParticles(ParticleEffect[] particles, bool bind = false)
+		private void CreateFX(CustomFXObject[] effects, bool bind = false)
 		{
-			for (int i = 0; i < particles.Length; i++)
+			for (int i = 0; i < effects.Length; i++)
 			{
-				FXInstance instance = FXManager.PlayFX(particles[i], transform, false);
+				FXInstance instance = FXManager.PlayFX(	effects[i].FX, 
+														transform, 
+														false, 
+														1, 
+														effects[i].HasCustomOffset ? ((Vector3?)effects[i].CustomOffset) : null,
+														effects[i].HasCustomRotationOffset ? ((Vector3?)effects[i].CustomRotation) : null,
+														effects[i].HasCustomScale ? ((Vector3?)effects[i].CustomScale) : null
+														);
 				if (bind)
 					boundEffects.Add(instance);
 			}

@@ -26,3 +26,5 @@ MonoBehaviour:
     TargetStat: 0
     DelayPerActivation: 0.5
     BaseDamage: 3
+  FXEffects:
+  - {fileID: 11400000, guid: 9e2e9642ad6963544a6c31cec64e0d4a, type: 2}
