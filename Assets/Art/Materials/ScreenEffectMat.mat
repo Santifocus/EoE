@@ -25,8 +25,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BlurPixelDistance: 2.5
-    - _BlurPower: 0.99999994
-    - _BlurRange: 5
+    - _BlurPower: 0
+    - _BlurRange: 0
     - _BorderDepth: 0
     - _BorderStrenght: 1
     - _Depth: 0
