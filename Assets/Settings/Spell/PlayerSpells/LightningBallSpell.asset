@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LightningBallSpell
   m_EditorClassIdentifier: 
   ManaCost: 25
-  BaseDamage: 35
+  BaseDamage: 15
   BaseKnockback: 0
   SpellCooldown: 2
   ContainedParts: -1
@@ -34,7 +34,7 @@ MonoBehaviour:
     WhileEffects: []
   StartInfo:
     CustomEffects:
-    - openInInspector: 0
+    - openInInspector: 1
       FX: {fileID: 11400000, guid: e2693ff5d8f1dab4f948eece6830a48b, type: 2}
       HasCustomOffset: 0
       CustomOffset: {x: 0, y: 0, z: 0}
@@ -70,7 +70,7 @@ MonoBehaviour:
     DestroyOnEntiteBounce: 0
     CollisionEffectsOnBounce: 1
     CollisionCustomEffects:
-    - openInInspector: 0
+    - openInInspector: 1
       FX: {fileID: 11400000, guid: 747459de57fd01a42aa6faa56aa4d4cd, type: 2}
       HasCustomOffset: 0
       CustomOffset: {x: 0, y: 0, z: 0}
