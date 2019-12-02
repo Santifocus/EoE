@@ -28,3 +28,4 @@ MonoBehaviour:
     BaseDamage: 3
   FXEffects:
   - {fileID: 11400000, guid: 9e2e9642ad6963544a6c31cec64e0d4a, type: 2}
+  - {fileID: 11400000, guid: c1167ff0528ad2f498298f5521247103, type: 2}
