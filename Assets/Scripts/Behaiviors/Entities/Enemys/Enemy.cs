@@ -229,7 +229,6 @@ namespace EoE.Entities
 				agent.angularSpeed = enemySettings.TurnSpeed;
 				agent.acceleration = enemySettings.MoveAcceleration;
 				agent.speed = curWalkSpeed;
-				Debug.Log(curWalkSpeed);
 			}
 		}
 		private bool CheckForPlayer()

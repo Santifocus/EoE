@@ -44,6 +44,14 @@ namespace EoE.Events
 			PlayerCausedDamageEvent?.Invoke(receiver, wasCrit);
 		}
 
+		//Player Soulcount changed
+		public delegate void PlayerSoulCountChanged();
+		public static PlayerSoulCountChanged PlayerSoulCountChangedEvent;
+		public static void PlayerSoulCountChangedInvoke()
+		{
+			PlayerSoulCountChangedEvent?.Invoke();
+		}
+
 		//Player Levelup
 		public delegate void PlayerLevelup();
 		public static PlayerLevelup PlayerLevelupEvent;

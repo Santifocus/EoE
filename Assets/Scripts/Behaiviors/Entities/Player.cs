@@ -1158,6 +1158,7 @@ namespace EoE.Entities
 			const int enumOffset = (int)TargetBaseStat.PhysicalDamage;
 
 			TotalSoulCount += amount;
+			EventManager.PlayerSoulCountChangedInvoke();
 			while (TotalSoulCount >= RequiredSoulsForLevel)
 			{
 				EntitieLevel++;
