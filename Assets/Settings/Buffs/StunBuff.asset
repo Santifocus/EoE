@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c475015d82123d4c9d421d67f39e273, type: 3}
   m_Name: StunBuff
   m_EditorClassIdentifier: 
-  Name: 
-  Quality: 1
+  Name: Stun
+  Quality: 0
   Permanent: 0
   BuffTime: 2
   Icon: {fileID: 21300000, guid: b8093cca8a5ef6c44acbddd2697a666f, type: 3}

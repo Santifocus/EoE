@@ -25,4 +25,5 @@ MonoBehaviour:
     ApplyMoveStun: 0
     Invincible: 0
   DOTs: []
-  FXEffects: []
+  FXEffects:
+  - {fileID: 11400000, guid: a011d9a7ab4db1e47893dbc30aa0bfca, type: 2}

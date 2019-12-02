@@ -538,12 +538,14 @@ namespace EoE.Entities
 					case TargetBaseStat.MoveSpeed:
 						{
 							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curWalkSpeed : buffBase.Effects[i].Amount;
+							change = Mathf.Max(-curWalkSpeed, change);
 							curWalkSpeed += change;
 							break;
 						}
-					case TargetBaseStat.JumpHeight:
+					case TargetBaseStat.JumpHeightMultiplier:
 						{
 							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curJumpPowerMultiplier : buffBase.Effects[i].Amount;
+							change = Mathf.Max(-curJumpPowerMultiplier, change);
 							curJumpPowerMultiplier += change;
 							break;
 						}
@@ -650,7 +652,7 @@ namespace EoE.Entities
 							curWalkSpeed -= change;
 							break;
 						}
-					case TargetBaseStat.JumpHeight:
+					case TargetBaseStat.JumpHeightMultiplier:
 						{
 							curJumpPowerMultiplier -= change;
 							break;
@@ -737,7 +739,6 @@ namespace EoE.Entities
 			if (curMana < spell.ManaCost || CastingSpell || CastingCooldown > 0)
 				return false;
 
-			ChangeMana(new ChangeInfo(this, CauseType.Magic, TargetStat.Mana, spell.ManaCost));
 			StartCoroutine(CastSpellC(spell));
 			return true;
 		}
@@ -872,9 +873,12 @@ namespace EoE.Entities
 				if (appliedStun)
 					appliedMoveStuns--;
 			}
+
+			//If the spell cast / shooting was canceled we jump here
 		StoppedSpell:;
 			CastingSpell = false;
 			CastingCooldown = spell.SpellCooldown;
+			ChangeMana(new ChangeInfo(this, CauseType.Magic, TargetStat.Mana, spell.ManaCost));
 			if (curParticles != null)
 			{
 				for (int i = 0; i < curParticles.Length; i++)

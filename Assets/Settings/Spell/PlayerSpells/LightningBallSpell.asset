@@ -22,7 +22,7 @@ MonoBehaviour:
   CastInfo:
     Duration: 1.2
     CustomEffects:
-    - openInInspector: 0
+    - openInInspector: 1
       FX: {fileID: 11400000, guid: 7862dc0c47048144d978bfc5b67aabf5, type: 2}
       HasCustomOffset: 0
       CustomOffset: {x: 0, y: 0, z: 0}
