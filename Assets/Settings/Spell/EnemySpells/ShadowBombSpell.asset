@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ShadowBombSpell
   m_EditorClassIdentifier: 
   ManaCost: 5
-  BaseDamage: 35
+  BaseDamage: 25
   BaseKnockback: 10
   SpellCooldown: 2
   ContainedParts: 5

@@ -17,20 +17,20 @@ MonoBehaviour:
   EntitieElement: 0
   PossibleDropsTable: {fileID: 0}
   SoulWorth: 10
-  BaseAttackDamage: 4
-  BaseMagicDamage: 2
-  BaseDefense: 0
+  BaseAttackDamage: 2
+  BaseMagicDamage: 1
+  BaseDefense: 1
   Health: 50
   DoHealthRegen: 1
-  HealthRegen: 8
+  HealthRegen: 1.5
   HealthRegenInCombatMultiplier: 0
   HealthRegenParticles: {fileID: 3894390344941758739, guid: 4fc32336d51ae934c9aa8f2a0a80d546,
     type: 3}
   HealthRegenParticlesOffset: {x: 0, y: 0, z: 0}
   Mana: 30
   DoManaRegen: 1
-  ManaRegen: 4
-  ManaRegenInCombatMultiplier: 0.5
+  ManaRegen: 0.05
+  ManaRegenInCombatMultiplier: 0.02
   WalkSpeed: 8
   RunSpeedMultiplicator: 1.25
   TurnSpeed: 540
@@ -57,7 +57,7 @@ MonoBehaviour:
   EnduranceRegenDelayAfterUse: 3
   JumpEnduranceCost: 4
   RunEnduranceCost: 3
-  JumpPower: {x: 0, y: 9, z: 12}
+  JumpPower: {x: 0, y: 9, z: 15}
   JumpImpulsePower: 2
   DodgePower: 4
   DodgeDuration: 0.15
@@ -69,7 +69,7 @@ MonoBehaviour:
   BlockingBuff: {fileID: 11400000, guid: 87a7d061072cff848981b0f42550401b, type: 2}
   StopBlockingInertia: 0.3
   InvincibleAfterHit: 1
-  InvincibleAfterHitTime: 2
+  InvincibleAfterHitTime: 1.5
   InvincibleModelFlashColor: {r: 1, g: 0, b: 0, a: 0.23137255}
   InvincibleModelFlashDelay: 0.2
   InvincibleModelFlashTime: 0.1
@@ -169,3 +169,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 214bf77e3d56f424c84ef37983b6e1f5, type: 2}
   EffectsOnPlayerDeath:
   - {fileID: 11400000, guid: 0cf11713d16b4034c873591e936d21cc, type: 2}
+  - {fileID: 11400000, guid: 48e1095a0bf75e6489c4d5149d54f972, type: 2}

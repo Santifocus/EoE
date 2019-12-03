@@ -65,7 +65,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f227c12f2c6511e49902a6b55f2a7d7d, type: 2}
   DamageNumberLifeTime: 1
   ShowRegenNumbers: 1
-  DamageNumberFlySpeed: 1
+  DamageNumberFlySpeed: 2
   DamageNumberRandomMovementPower: 0.125
   PhysicalDamageColors:
     serializedVersion: 2
@@ -209,10 +209,31 @@ MonoBehaviour:
     - 1
   - Row:
     - 1
+    - 0.5
+    - 1
+    - 2
+    - 1
+    - 1
+  - Row:
+    - 1
+    - 1
+    - 0.5
     - 1
     - 1
     - 1
+  - Row:
     - 1
+    - 0.25
+    - 1
+    - 0.5
+    - 1
+    - 1
+  - Row:
+    - 1
+    - 1
+    - 2
+    - 1
+    - 0.5
     - 1
   - Row:
     - 1
@@ -220,25 +241,4 @@ MonoBehaviour:
     - 1
     - 1
     - 1
-    - 1
-  - Row:
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-  - Row:
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-  - Row:
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
+    - 0.5

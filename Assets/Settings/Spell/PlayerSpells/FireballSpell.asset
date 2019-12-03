@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc89a2906f120d45877860a48c8c4e2, type: 3}
   m_Name: FireballSpell
   m_EditorClassIdentifier: 
-  ManaCost: 15
-  BaseDamage: 8
+  ManaCost: 20
+  BaseDamage: 7
   BaseKnockback: 10
   SpellCooldown: 3
   ContainedParts: -1

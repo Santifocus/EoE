@@ -17,10 +17,10 @@ MonoBehaviour:
   EntitieElement: 2
   PossibleDropsTable: {fileID: 11400000, guid: 6c863124784db984e93eb995e00bd42e, type: 2}
   SoulWorth: 2
-  BaseAttackDamage: 17
+  BaseAttackDamage: 18
   BaseMagicDamage: 3
   BaseDefense: 3
-  Health: 65
+  Health: 70
   DoHealthRegen: 0
   HealthRegen: 0
   HealthRegenInCombatMultiplier: 0.5
@@ -30,7 +30,7 @@ MonoBehaviour:
   DoManaRegen: 0
   ManaRegen: 0
   ManaRegenInCombatMultiplier: 0.5
-  WalkSpeed: 13
+  WalkSpeed: 10
   RunSpeedMultiplicator: 1.25
   TurnSpeed: 300
   InAirTurnSpeedMultiplier: 0.25
@@ -41,13 +41,13 @@ MonoBehaviour:
   AttackKnockBack: 3
   CritChance: 0
   PlayerTrackSpeed: 4
-  SightRange: 20
+  SightRange: 15
   FoundPlayerSightRange: 50
   SightAngle: 60
   FoundPlayerSightAngle: 120
-  ChaseInterest: 6
-  InvestigationTime: 10
-  WanderingFactor: 15
+  ChaseInterest: 5
+  InvestigationTime: 8
+  WanderingFactor: 18
   WanderingDelayMin: 1
   WanderingDelayMax: 5
   LookAroundDelayMin: 0.5
@@ -59,3 +59,4 @@ MonoBehaviour:
   BashAnnouncementDelay: -0.6
   BashAnnouncement:
   - {fileID: 11400000, guid: dd68d9db5e90b2f449f0f973e984a2a8, type: 2}
+  - {fileID: 11400000, guid: 867882950b2e6be4084d45bd5c865251, type: 2}
