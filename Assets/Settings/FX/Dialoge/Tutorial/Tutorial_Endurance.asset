@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
+  m_Name: Tutorial_Endurance
+  m_EditorClassIdentifier: 
+  TimeIn: 0
+  TimeOut: 0
+  FinishConditions:
+    OnParentDeath: 0
+    OnTimeout: 0
+    TimeStay: 1
+  parts:
+  - textColor: {r: 0, g: 0, b: 0, a: 0}
+    text: 'Take care of your '
+  - textColor: {r: 1, g: 0.0047169924, b: 0.85295177, a: 1}
+    text: Endurance Bar
+  - textColor: {r: 0, g: 0, b: 0, a: 0}
+    text: .Your character needs endurance to attack or dodge. If the bar gets empty,
+      you still can walk around.
