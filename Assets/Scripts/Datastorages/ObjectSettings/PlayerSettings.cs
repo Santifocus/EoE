@@ -4,9 +4,6 @@ namespace EoE.Information
 {
 	public class PlayerSettings : EntitieSettings
 	{
-		//Leveling settings
-		public LevelingSettings LevelSettings = null;
-
 		//Camera Settings
 		public float CameraToPlayerDistance = 7;
 		public Vector3 CameraAnchorOffset = new Vector3(0, 1.6f, 0);

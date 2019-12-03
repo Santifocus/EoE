@@ -9,6 +9,7 @@ namespace EoE.UI
 	{
 		protected override void OnPress()
 		{
+			Utils.EffectUtils.ResetScreenEffects();
 			SceneManager.LoadScene(ConstantCollector.MAIN_MENU_SCENE_INDEX);
 		}
 	}

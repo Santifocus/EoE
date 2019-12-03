@@ -60,7 +60,6 @@ namespace EoE.Information
 		}
 		protected override void StatSettingsArea()
 		{
-			ObjectField(new GUIContent("Level Settings", "The Level settings that should be applied to the Player."), ref (target as PlayerSettings).LevelSettings);
 			base.StatSettingsArea();
 			EnduranceSettingsArea();
 		}

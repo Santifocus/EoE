@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1df0c3a1fa7796949baee832d6eb62d5, type: 3}
+  m_Name: CrawlerLevelSettings
+  m_EditorClassIdentifier: 
+  curve:
+    a: 2
+    b: 8
+    c: 10
+  AttributePointsPerLevel: 1
+  SkillPointsPerLevel: 3
+  PerTenLevelsBasePoints: 1
+  RotationExtraPoints: 1
+  HealthPerSkillPoint: 10
+  ManaPerSkillPoint: 10
+  EndurancePerSkillPoint: 20
+  PhysicalDamagePerSkillPoint: 1
+  MagicDamagePerSkillPoint: 1
+  DefensePerSkillPoint: 1

@@ -29,6 +29,7 @@ namespace EoE.UI
 		[SerializeField] private TextMeshProUGUI atkDisplay = default;
 		[SerializeField] private TextMeshProUGUI mgaDisplay = default;
 		[SerializeField] private TextMeshProUGUI skillpointDisplay = default;
+		[SerializeField] private TextMeshProUGUI soulCountDisplay = default;
 
 		private bool playerModelSetup;
 		private Transform cameraAnchor;
@@ -74,6 +75,7 @@ namespace EoE.UI
 			mgaDisplay.text = Player.Instance.curMagicalDamage.ToString();
 
 			skillpointDisplay.text = Player.AvailableSkillPoints + " | " + Player.AvailableAtributePoints;
+			soulCountDisplay.text = Player.TotalSoulCount + " / " + Player.RequiredSoulsForLevel;
 		}
 		private void UpdateSprites()
 		{

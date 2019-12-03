@@ -40,7 +40,7 @@ namespace EoE.UI
 		}
 		public static LevelingMenuController Instance { get; private set; }
 		private PlayerSettings baseData => Player.PlayerSettings;
-		private Buff skillBuff => Player.LevelingPointsBuff;
+		private Buff skillBuff => Player.Instance.LevelingPointsBuff;
 		private int skillPoints
 		{ get => Player.AvailableSkillPoints; set => Player.AvailableSkillPoints = value; }
 		private int attributePoints

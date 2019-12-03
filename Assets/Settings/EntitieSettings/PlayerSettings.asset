@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EntitieMass: 1
   MassCenter: {x: 0, y: 0, z: 0}
-  EntitieElement: 0
+  EntitieElement: 1
   PossibleDropsTable: {fileID: 0}
+  LevelSettings: {fileID: 11400000, guid: f274dc43aa7e69e4db13a311b4ea6d9e, type: 2}
   SoulWorth: 10
   BaseAttackDamage: 3
   BaseMagicDamage: 1
@@ -38,7 +39,6 @@ MonoBehaviour:
   MoveAcceleration: 7
   NoMoveDeceleration: 5
   InAirAccelerationMultiplier: 0.3
-  LevelSettings: {fileID: 11400000, guid: f274dc43aa7e69e4db13a311b4ea6d9e, type: 2}
   CameraToPlayerDistance: 7
   CameraAnchorOffset: {x: 0, y: 1.6, z: 0}
   CameraAnchorOffsetWhenTargeting: {x: 1, y: 2, z: 0}

@@ -18,6 +18,7 @@ namespace EoE.Entities
 
 		//Inspector variables
 		public Collider coll = default;
+		public int StartLevel = 0;
 
 		//Stats
 		public int EntitieLevel { get; protected set; }
@@ -32,8 +33,8 @@ namespace EoE.Entities
 		public float curJumpPowerMultiplier { get; protected set; }
 
 		//Entitie states
-		[HideInInspector] public int invincible;
-		public bool Alive;
+		protected int invincible;
+		public bool Alive { get; protected set; }
 		public List<BuffInstance> nonPermanentBuffs { get; protected set; }
 		public List<BuffInstance> permanentBuffs { get; protected set; }
 		public EntitieState curStates;
@@ -71,6 +72,7 @@ namespace EoE.Entities
 
 		//Other
 		private EntitieStatDisplay statDisplay;
+		public Buff LevelingBaseBuff { get; protected set; }
 		#endregion
 		#region Basic Monobehaivior
 		protected virtual void Start()
@@ -119,6 +121,7 @@ namespace EoE.Entities
 				statDisplay = Instantiate(GameController.CurrentGameSettings.EntitieStatDisplayPrefab, GameController.Instance.enemyHealthBarStorage);
 				statDisplay.Setup();
 			}
+			LevelSetup();
 			entitieForceController = new ForceController();
 		}
 		private void ResetStats()
@@ -132,6 +135,38 @@ namespace EoE.Entities
 			curJumpPowerMultiplier = 1;
 			appliedMoveStuns = 0;
 		}
+
+		protected virtual void LevelSetup()
+		{
+			LevelingBaseBuff = ScriptableObject.CreateInstance<Buff>();
+			{
+				LevelingBaseBuff.Name = "LevelingBase";
+				LevelingBaseBuff.Quality = BuffType.Positive;
+				LevelingBaseBuff.Icon = null;
+				LevelingBaseBuff.BuffTime = 0;
+				LevelingBaseBuff.Permanent = true;
+				LevelingBaseBuff.DOTs = new DOT[0];
+			}
+
+			int incremtingStats = System.Enum.GetNames(typeof(TargetBaseStat)).Length;
+			LevelingBaseBuff.Effects = new Effect[incremtingStats];
+
+			for (int i = 0; i < incremtingStats; i++)
+			{
+				LevelingBaseBuff.Effects[i] =
+					new Effect
+					{
+						Amount = 0,
+						Percent = false,
+						TargetBaseStat = (TargetBaseStat)i
+					};
+			}
+
+			AddBuff(LevelingBaseBuff, this);
+			for (int i = 0; i < StartLevel; i++)
+				LevelUpEntitie();
+		}
+
 		private void GetColliderType()
 		{
 			if (!coll)
@@ -188,7 +223,8 @@ namespace EoE.Entities
 		#region State Control
 		private void EntitieStateControl()
 		{
-			CastingCooldown -= Time.deltaTime;
+			if(CastingCooldown > 0)
+				CastingCooldown -= Time.deltaTime;
 			if (combatEndCooldown > 0)
 			{
 				combatEndCooldown -= Time.deltaTime;
@@ -333,6 +369,21 @@ namespace EoE.Entities
 		{
 			curStates.Fighting = true;
 			combatEndCooldown = GameController.CurrentGameSettings.CombatCooldown;
+		}
+		protected virtual void LevelUpEntitie()
+		{
+			EntitieLevel++;
+			const int enumOffset = (int)TargetBaseStat.PhysicalDamage;
+
+			float baseRotationAmount = (EntitieLevel / 10) * SelfSettings.LevelSettings.PerTenLevelsBasePoints + 1;
+			int rotationIndex = (EntitieLevel + 1) % 3 + enumOffset;
+			for (int i = enumOffset; i < enumOffset + 3; i++)
+			{
+				LevelingBaseBuff.Effects[i].Amount += baseRotationAmount;
+				if (i == rotationIndex)
+					LevelingBaseBuff.Effects[i].Amount += SelfSettings.LevelSettings.RotationExtraPoints;
+			}
+			RecalculateBuffs();
 		}
 		protected virtual void Death()
 		{

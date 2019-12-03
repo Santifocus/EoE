@@ -30,6 +30,7 @@ namespace EoE
 
 			lifeTime = 0;
 			this.changeGradient = changeGradient;
+			transform.localEulerAngles = new Vector2(PlayerCameraController.CurRotation.y, PlayerCameraController.CurRotation.x);
 
 			Color curColor = GetCurrentColor(0);
 

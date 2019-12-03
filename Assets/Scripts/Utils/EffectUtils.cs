@@ -41,8 +41,11 @@ namespace EoE.Utils
 			AllSoundFXs = new List<SoundEffectInstance>();
 			AllParticleFXs = new List<ParticleEffectInstance>();
 
+			if (Gamepad.current != null)
+			{
+				Gamepad.current.SetMotorSpeeds(0, 0);
+			}
 			Instance.ResetScreenEffectMat();
-			Gamepad.current.SetMotorSpeeds(0, 0);
 		}
 		private void ResetScreenEffectMat()
 		{
@@ -58,7 +61,10 @@ namespace EoE.Utils
 		private void OnApplicationQuit()
 		{
 			ResetScreenEffectMat();
-			Gamepad.current.SetMotorSpeeds(0, 0);
+			if (Gamepad.current != null)
+			{
+				Gamepad.current.SetMotorSpeeds(0, 0);
+			}
 		}
 		#endregion
 		#region ScreenShake

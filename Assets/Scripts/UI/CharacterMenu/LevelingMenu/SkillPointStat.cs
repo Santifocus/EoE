@@ -65,7 +65,7 @@ namespace EoE.UI
 			curStatValue.text = curValue.ToString();
 
 			int notConfirmedPoints = LevelingMenuController.Instance[targetStat];
-			int curAppliedPoints = Mathf.RoundToInt(Player.LevelingPointsBuff.Effects[(int)targetStat].Amount / Player.PlayerSettings.LevelSettings[targetStat]);
+			int curAppliedPoints = Mathf.RoundToInt(Player.Instance.LevelingPointsBuff.Effects[(int)targetStat].Amount / Player.PlayerSettings.LevelSettings[targetStat]);
 			totalPoints.text = (curAppliedPoints + notConfirmedPoints).ToString();
 			if(curAppliedPoints != lastAppliedPoints)
 			{

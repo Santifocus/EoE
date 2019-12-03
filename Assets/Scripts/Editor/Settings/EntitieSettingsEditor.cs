@@ -73,6 +73,7 @@ namespace EoE.Information
 		protected virtual void StatSettingsArea()
 		{
 			EntitieSettings settings = target as EntitieSettings;
+			ObjectField(new GUIContent("Level Settings", "The Level settings that should be applied to the Entitie."), ref settings.LevelSettings);
 
 			//Health
 			FloatField(new GUIContent("Start Health", "With what health does this Entitie Spawn?"), ref settings.Health);

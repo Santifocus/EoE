@@ -29,11 +29,10 @@ namespace EoE.Entities
 		[SerializeField] private Transform rightHand = default;
 		[SerializeField] private Weapon equipedWeapon = default;
 		[SerializeField] private PlayerBuffDisplay buffDisplay = default;
-		[SerializeField] private TextMeshProUGUI soulCount = default;
 		[SerializeField] private TextMeshProUGUI levelDisplay = default;
 		[SerializeField] private CharacterController charController = default;
 
-		public TMPro.TextMeshProUGUI debugText = default;
+		public TextMeshProUGUI debugText = default;
 
 		//Endurance
 		public bool recentlyUsedEndurance { get; private set; }
@@ -108,8 +107,7 @@ namespace EoE.Entities
 		public static InventoryItem EquipedArmor;
 		public static bool MagicSelected { get; private set; }
 		#region Leveling
-		public static Buff LevelingBaseBuff;
-		public static Buff LevelingPointsBuff;
+		public Buff LevelingPointsBuff { get; private set; }
 		public static int TotalSoulCount { get; private set; }
 		public static int RequiredSoulsForLevel { get; private set; }
 		public static int AvailableSkillPoints;
@@ -118,10 +116,13 @@ namespace EoE.Entities
 
 		#endregion
 		#region Basic Monobehaivior
-		protected override void EntitieStart()
+		protected override void Start()
 		{
 			Instance = this;
-
+			base.Start();
+		}
+		protected override void EntitieStart()
+		{
 			SetupLevelingControl();
 
 			ChangeWeapon(equipedWeapon);
@@ -175,16 +176,6 @@ namespace EoE.Entities
 		}
 		private void SetupLevelingControl()
 		{
-			LevelingBaseBuff = ScriptableObject.CreateInstance<Buff>();
-			{
-				LevelingBaseBuff.Name = "LevelingBase";
-				LevelingBaseBuff.Quality = BuffType.Positive;
-				LevelingBaseBuff.Icon = null;
-				LevelingBaseBuff.BuffTime = 0;
-				LevelingBaseBuff.Permanent = true;
-				LevelingBaseBuff.DOTs = new DOT[0];
-			}
-
 			LevelingPointsBuff = ScriptableObject.CreateInstance<Buff>();
 			{
 				LevelingPointsBuff.Name = "LevelingSkillPoints";
@@ -197,12 +188,10 @@ namespace EoE.Entities
 
 			//Health, Mana, Endurance, PhysicalDamage, MagicalDamage, Defense
 			int incremtingStats = System.Enum.GetNames(typeof(TargetBaseStat)).Length;
-
-			LevelingBaseBuff.Effects = new Effect[incremtingStats];
 			LevelingPointsBuff.Effects = new Effect[incremtingStats];
 			for (int i = 0; i < incremtingStats; i++)
 			{
-				LevelingBaseBuff.Effects[i] = LevelingPointsBuff.Effects[i] =
+				LevelingPointsBuff.Effects[i] =
 					new Effect
 					{
 						Amount = 0,
@@ -211,16 +200,8 @@ namespace EoE.Entities
 					};
 			}
 
-			AddBuff(LevelingBaseBuff, this);
 			AddBuff(LevelingPointsBuff, this);
-
-			EntitieLevel = 0;
 			RequiredSoulsForLevel = PlayerSettings.LevelSettings.curve.GetRequiredSouls(EntitieLevel);
-			TotalSoulCount = 0;
-			AvailableSkillPoints = 0;
-			AvailableAtributePoints = 0;
-			//Safest way to ensure everyhting is correct is by adding 0 Souls to our current count
-			AddSouls(0);
 		}
 		private void SetupInventorys()
 		{
@@ -1154,33 +1135,24 @@ namespace EoE.Entities
 		#endregion
 		public void AddSouls(int amount)
 		{
-			const int startRotationAt = 1;
-			const int enumOffset = (int)TargetBaseStat.PhysicalDamage;
-
 			TotalSoulCount += amount;
 			EventManager.PlayerSoulCountChangedInvoke();
 			while (TotalSoulCount >= RequiredSoulsForLevel)
 			{
-				EntitieLevel++;
-				RequiredSoulsForLevel = PlayerSettings.LevelSettings.curve.GetRequiredSouls(EntitieLevel);
-				AvailableAtributePoints += PlayerSettings.LevelSettings.AttributePointsPerLevel;
-				AvailableSkillPoints += PlayerSettings.LevelSettings.SkillPointsPerLevel;
-
-				float baseRotationAmount = (EntitieLevel / 10) * PlayerSettings.LevelSettings.PerTenLevelsBasePoints + 1;
-				int rotationIndex = (startRotationAt + EntitieLevel) % 3 + enumOffset;
-				for (int i = enumOffset; i < enumOffset + 3; i++)
-				{
-					LevelingBaseBuff.Effects[i].Amount += baseRotationAmount;
-					if (i == rotationIndex)
-						LevelingBaseBuff.Effects[i].Amount += PlayerSettings.LevelSettings.RotationExtraPoints;
-				}
-				RecalculateBuffs();
-
-				//Inform all script that need the information that the player leveled
-				EventManager.PlayerLevelupInvoke();
+				LevelUpEntitie();
 			}
 			levelDisplay.text = (EntitieLevel + 1).ToString();
-			soulCount.text = TotalSoulCount + " / " + RequiredSoulsForLevel;
+		}
+		protected override void LevelUpEntitie()
+		{
+			base.LevelUpEntitie();
+			TotalSoulCount = System.Math.Max(TotalSoulCount, PlayerSettings.LevelSettings.curve.GetRequiredSouls(EntitieLevel - 1));
+			RequiredSoulsForLevel = PlayerSettings.LevelSettings.curve.GetRequiredSouls(EntitieLevel);
+			AvailableAtributePoints += PlayerSettings.LevelSettings.AttributePointsPerLevel;
+			AvailableSkillPoints += PlayerSettings.LevelSettings.SkillPointsPerLevel;
+
+			//Inform all script that need the information that the player leveled
+			EventManager.PlayerLevelupInvoke();
 		}
 		public float GetLeveledValue(TargetBaseStat stat)
 		{
