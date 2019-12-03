@@ -21,7 +21,7 @@ MonoBehaviour:
   BaseAttackDamage: 5
   BaseMagicDamage: 20
   BaseDefense: 3
-  Health: 55
+  Health: 60
   DoHealthRegen: 0
   HealthRegen: 0
   HealthRegenInCombatMultiplier: 0.5

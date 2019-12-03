@@ -16,7 +16,7 @@ MonoBehaviour:
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 10
-  ItemIcon: {fileID: 21300000, guid: 37d64b9f2bde8204ca32d33737e7271e, type: 3}
+  ItemIcon: {fileID: 21300000, guid: 03a8a9a9df71a594c942c860d740eb6a, type: 3}
   RemoveOnUse: 1
   UseCooldown: 2
   VFXEffectsOnUse:

@@ -16,7 +16,7 @@ MonoBehaviour:
   Quality: 2
   Permanent: 1
   BuffTime: 0
-  Icon: {fileID: 21300000, guid: 799750162dc2c5544a7bac42c74b5f69, type: 3}
+  Icon: {fileID: 21300000, guid: 5ea31f1d462ccd14297a5bb11769c153, type: 3}
   Effects:
   - TargetBaseStat: 5
     Percent: 1
@@ -32,3 +32,4 @@ MonoBehaviour:
     TargetStat: 2
     DelayPerActivation: 0.25
     BaseDamage: 5
+  FXEffects: []

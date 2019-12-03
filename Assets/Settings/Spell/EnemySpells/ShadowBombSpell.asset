@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ManaCost: 5
   BaseDamage: 20
-  BaseKnockback: 10
-  SpellCooldown: 5
+  BaseKnockback: 8
+  SpellCooldown: 1.5
   ContainedParts: 5
   MovementRestrictions: -1
   SubtractManaAtPart: 2

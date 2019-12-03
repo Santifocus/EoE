@@ -16,7 +16,7 @@ MonoBehaviour:
   Quality: 0
   Permanent: 0
   BuffTime: 5
-  Icon: {fileID: 21300000, guid: b0804e7e33309ad4c9c2db713bef5fb1, type: 3}
+  Icon: {fileID: 21300000, guid: 14b2a47444220c047bfba1f20f22f643, type: 3}
   Effects: []
   CustomEffects:
     ApplyMoveStun: 0
