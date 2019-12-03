@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc89a2906f120d45877860a48c8c4e2, type: 3}
   m_Name: FireballSpell
   m_EditorClassIdentifier: 
-  ManaCost: 20
-  BaseDamage: 7
+  ManaCost: 15
+  BaseDamage: 5
   BaseKnockback: 10
-  SpellCooldown: 3
+  SpellCooldown: 6
   ContainedParts: -1
   MovementRestrictions: -1
   SubtractManaAtPart: 2
@@ -50,7 +50,7 @@ MonoBehaviour:
     FallbackDirectionStyle: 1
     Direction: 1
     Duration: 10
-    FlightSpeed: 35
+    FlightSpeed: 40
     CreateOffsetToCaster: {x: 1, y: 0, z: 0}
     CustomEffects:
     - openInInspector: 1

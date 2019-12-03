@@ -17,9 +17,9 @@ MonoBehaviour:
   EntitieElement: 0
   PossibleDropsTable: {fileID: 0}
   SoulWorth: 10
-  BaseAttackDamage: 2
+  BaseAttackDamage: 3
   BaseMagicDamage: 1
-  BaseDefense: 1
+  BaseDefense: 2
   Health: 50
   DoHealthRegen: 1
   HealthRegen: 1.5
@@ -29,7 +29,7 @@ MonoBehaviour:
   HealthRegenParticlesOffset: {x: 0, y: 0, z: 0}
   Mana: 30
   DoManaRegen: 1
-  ManaRegen: 0.05
+  ManaRegen: 1
   ManaRegenInCombatMultiplier: 0.02
   WalkSpeed: 8
   RunSpeedMultiplicator: 1.25
@@ -51,19 +51,19 @@ MonoBehaviour:
   CameraBaseFOV: 60
   EnduranceBars: 4
   EndurancePerBar: 25
-  EnduranceRegen: 4
+  EnduranceRegen: 6
   LockedEnduranceRegenMutliplier: 0.5
-  EnduranceRegenInCombat: 0.5
-  EnduranceRegenDelayAfterUse: 3
-  JumpEnduranceCost: 4
-  RunEnduranceCost: 3
+  EnduranceRegenInCombat: 1
+  EnduranceRegenDelayAfterUse: 2
+  JumpEnduranceCost: 3
+  RunEnduranceCost: 5
   JumpPower: {x: 0, y: 9, z: 15}
   JumpImpulsePower: 2
   DodgePower: 4
   DodgeDuration: 0.15
   DodgeModelExistTime: 0.35
   DodgeCooldown: 0.3
-  DodgeEnduranceCost: 10
+  DodgeEnduranceCost: 5
   DodgeModelMaterial: {fileID: 2100000, guid: 11d51a887e999af408b3d408f575a218, type: 2}
   StartBlockingInertia: 0.3
   BlockingBuff: {fileID: 11400000, guid: 87a7d061072cff848981b0f42550401b, type: 2}

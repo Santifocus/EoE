@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc89a2906f120d45877860a48c8c4e2, type: 3}
   m_Name: FreezeSpell
   m_EditorClassIdentifier: 
-  ManaCost: 25
-  BaseDamage: 25
+  ManaCost: 20
+  BaseDamage: 15
   BaseKnockback: 12
   SpellCooldown: 2
   ContainedParts: 3

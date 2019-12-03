@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: ShadowBombSpell
   m_EditorClassIdentifier: 
   ManaCost: 5
-  BaseDamage: 25
+  BaseDamage: 20
   BaseKnockback: 10
-  SpellCooldown: 2
+  SpellCooldown: 5
   ContainedParts: 5
   MovementRestrictions: -1
   SubtractManaAtPart: 2
@@ -42,7 +42,7 @@ MonoBehaviour:
     FallbackDirectionStyle: 1
     Direction: 1
     Duration: 15
-    FlightSpeed: 30
+    FlightSpeed: 60
     CreateOffsetToCaster: {x: 0, y: 2, z: 0}
     CustomEffects:
     - openInInspector: 1

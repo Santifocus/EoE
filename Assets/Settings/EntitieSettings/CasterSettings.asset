@@ -30,9 +30,9 @@ MonoBehaviour:
   DoManaRegen: 1
   ManaRegen: 5
   ManaRegenInCombatMultiplier: 3
-  WalkSpeed: 10
+  WalkSpeed: 15
   RunSpeedMultiplicator: 1.25
-  TurnSpeed: 280
+  TurnSpeed: 350
   InAirTurnSpeedMultiplier: 0.25
   MoveAcceleration: 10
   NoMoveDeceleration: 15

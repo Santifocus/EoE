@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EntitieMass: 1
   MassCenter: {x: 0, y: 0, z: 0}
-  EntitieElement: 2
+  EntitieElement: 1
   PossibleDropsTable: {fileID: 11400000, guid: 6c863124784db984e93eb995e00bd42e, type: 2}
   SoulWorth: 1
-  BaseAttackDamage: 18
+  BaseAttackDamage: 22
   BaseMagicDamage: 3
-  BaseDefense: 3
+  BaseDefense: 5
   Health: 70
   DoHealthRegen: 0
   HealthRegen: 0
@@ -30,9 +30,9 @@ MonoBehaviour:
   DoManaRegen: 0
   ManaRegen: 0
   ManaRegenInCombatMultiplier: 0.5
-  WalkSpeed: 10
-  RunSpeedMultiplicator: 1.25
-  TurnSpeed: 300
+  WalkSpeed: 15
+  RunSpeedMultiplicator: 1.5
+  TurnSpeed: 400
   InAirTurnSpeedMultiplier: 0.25
   MoveAcceleration: 12
   NoMoveDeceleration: 15
@@ -54,7 +54,7 @@ MonoBehaviour:
   LookAroundDelayMax: 2
   AttackSpeed: 1
   BashSpeed: 40
-  BashDistance: 7
+  BashDistance: 9
   ForceTranslationMultiplier: 1.5
   BashAnnouncementDelay: -0.6
   BashAnnouncement:
