@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: LightningBallSpell
   m_EditorClassIdentifier: 
   ManaCost: 15
-  BaseDamage: 17
+  BaseDamage: 18
   BaseKnockback: 0
-  SpellCooldown: 2
+  SpellCooldown: 5
   ContainedParts: -1
   MovementRestrictions: -1
   SubtractManaAtPart: 2

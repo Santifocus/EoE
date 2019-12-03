@@ -17,7 +17,7 @@ MonoBehaviour:
   EntitieElement: 1
   PossibleDropsTable: {fileID: 11400000, guid: 6c863124784db984e93eb995e00bd42e, type: 2}
   SoulWorth: 1
-  BaseAttackDamage: 22
+  BaseAttackDamage: 20
   BaseMagicDamage: 3
   BaseDefense: 5
   Health: 70

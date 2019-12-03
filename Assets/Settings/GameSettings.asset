@@ -198,7 +198,7 @@ MonoBehaviour:
   DamageLevelAdd: 12
   DamageDivider: 10
   DefenseLevelAdd: 10
-  DefenseLevelDivider: 11
+  DefenseLevelDivider: 12
   EffectivenessMatrix:
   - Row:
     - 1

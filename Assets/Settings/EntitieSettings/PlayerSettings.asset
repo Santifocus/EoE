@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EntitieMass: 1
   MassCenter: {x: 0, y: 0, z: 0}
-  EntitieElement: 0
+  EntitieElement: 1
   PossibleDropsTable: {fileID: 0}
   SoulWorth: 10
   BaseAttackDamage: 3
