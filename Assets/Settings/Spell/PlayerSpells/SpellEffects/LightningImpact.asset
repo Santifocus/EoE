@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: LightningImpact
   m_EditorClassIdentifier: 
   AffectedTargets: 4
-  BaseEffectRadius: 4
-  ZeroOutDistance: 4
+  BaseEffectRadius: 3
+  ZeroOutDistance: 5
   HasMaximumHits: 0
   MaximumHits: 0
   DamageElement: 16
