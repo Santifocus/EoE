@@ -16,7 +16,7 @@ MonoBehaviour:
   MassCenter: {x: 0, y: 0, z: 0}
   EntitieElement: 4
   PossibleDropsTable: {fileID: 11400000, guid: d3bb8e598d9ed604b8fed58e3635e765, type: 2}
-  SoulWorth: 4
+  SoulWorth: 3
   BaseAttackDamage: 5
   BaseMagicDamage: 20
   BaseDefense: 3
