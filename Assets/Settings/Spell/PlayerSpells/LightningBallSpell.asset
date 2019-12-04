@@ -61,7 +61,7 @@ MonoBehaviour:
     FlightSpeed: 100
     CreateOffsetToCaster: {x: 1, y: 0, z: 0}
     CustomEffects:
-    - openInInspector: 0
+    - openInInspector: 1
       FX: {fileID: 11400000, guid: 2d9464ef70c8d5b47989f2acfbbe9a96, type: 2}
       HasCustomOffset: 0
       CustomOffset: {x: 0, y: 0, z: 0}
