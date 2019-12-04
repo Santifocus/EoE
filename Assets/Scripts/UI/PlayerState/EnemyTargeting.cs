@@ -39,7 +39,7 @@ namespace EoE.UI
 		}
 		private void Update()
 		{
-			isShown = Player.TargetedEntitie != null;
+			isShown = Player.Instance.TargetedEntitie != null;
 			bool changedColor = false;
 
 			if (isShown && !indicatorAnchor.gameObject.activeInHierarchy)
@@ -76,7 +76,7 @@ namespace EoE.UI
 		{
 			if (isShown)
 			{
-				Vector3 unclampedPos = PlayerCameraController.PlayerCamera.WorldToScreenPoint(Player.TargetedEntitie.actuallWorldPosition);
+				Vector3 unclampedPos = PlayerCameraController.PlayerCamera.WorldToScreenPoint(Player.Instance.TargetedEntitie.actuallWorldPosition);
 				Vector3 clampedPos = new Vector3(Mathf.Clamp(unclampedPos.x, 0, Screen.width), Mathf.Clamp(unclampedPos.y, 0, Screen.height), unclampedPos.z);
 				if (unclampedPos == clampedPos && !(unclampedPos.z < 0))
 				{

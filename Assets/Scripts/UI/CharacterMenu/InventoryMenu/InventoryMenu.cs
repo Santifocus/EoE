@@ -31,16 +31,16 @@ namespace EoE.UI
 		protected override void Start()
 		{
 			base.Start();
-			slots = new InventorySlot[Player.Inventory.Lenght];
-			for (int i = 0; i < Player.Inventory.Lenght; i++)
+			slots = new InventorySlot[Player.Instance.Inventory.Lenght];
+			for (int i = 0; i < Player.Instance.Inventory.Lenght; i++)
 			{
 				InventorySlot newSlot = Instantiate(slotPrefab, slotGrid.transform);
-				newSlot.Setup(Player.Inventory, i);
+				newSlot.Setup(Player.Instance.Inventory, i);
 				slots[i] = newSlot;
 			}
 
 			dropMenu.Setup(this);
-			Player.Inventory.InventoryChanged += UpdateAllSlots;
+			Player.Instance.Inventory.InventoryChanged += UpdateAllSlots;
 			UpdateAllSlots();
 		}
 		private void UpdateAllSlots()
@@ -71,7 +71,7 @@ namespace EoE.UI
 			if (dropMenuOpen)
 				return;
 
-			if (InputController.MenuEnter.Down && Player.Inventory[curSlotIndex] != null)
+			if (InputController.MenuEnter.Down && Player.Instance.Inventory[curSlotIndex] != null)
 				MenuEnter();
 			if (InputController.MenuBack.Down)
 				MenuBack();
@@ -159,7 +159,7 @@ namespace EoE.UI
 					return;
 				}
 
-				InventoryItem item = Player.Inventory[curSlotIndex];
+				InventoryItem item = Player.Instance.Inventory[curSlotIndex];
 				if (item == null)
 					return;
 
@@ -167,7 +167,7 @@ namespace EoE.UI
 				if (action == ItemAction.ItemActionType.Use)
 				{
 					if (target && item.useCooldown <= 0)
-						target.Use(item, Player.Instance, Player.Inventory);
+						target.Use(item, Player.Instance, Player.Instance.Inventory);
 					UpdateEquippedSlots();
 				}
 				else if (action == ItemAction.ItemActionType.Equip)
@@ -177,20 +177,28 @@ namespace EoE.UI
 						bool shouldBeEquipped = true;
 						if (target is WeaponItem)
 						{
+							if (Player.Instance.EquipedWeapon != null)
+								Player.Instance.EquipedWeapon.data.UnEquip(Player.Instance.EquipedWeapon, Player.Instance);
 							Player.Instance.EquipedWeapon = item;
 							shouldBeEquipped = !Player.Instance.MagicSelected;
 						}
 						else if (target is SpellItem)
 						{
+							if (Player.Instance.EquipedSpell != null)
+								Player.Instance.EquipedSpell.data.UnEquip(Player.Instance.EquipedSpell, Player.Instance);
 							Player.Instance.EquipedSpell = item;
 							shouldBeEquipped = Player.Instance.MagicSelected;
 						}
 						else if (target is ArmorItem)
 						{
+							if (Player.Instance.EquipedArmor != null)
+								Player.Instance.EquipedArmor.data.UnEquip(Player.Instance.EquipedArmor, Player.Instance);
 							Player.Instance.EquipedArmor = item;
 						}
 						else
 						{
+							if (Player.Instance.EquipedItem != null)
+								Player.Instance.EquipedItem.data.UnEquip(Player.Instance.EquipedItem, Player.Instance);
 							Player.Instance.EquipedItem = item;
 						}
 
@@ -208,7 +216,7 @@ namespace EoE.UI
 				}
 
 				//If from any of the action the stacksize was changed to 0 (which means null after inventory update) then we want to close the action menu
-				if (Player.Inventory[curSlotIndex] == null)
+				if (Player.Instance.Inventory[curSlotIndex] == null)
 					MenuBack();
 			}
 			else

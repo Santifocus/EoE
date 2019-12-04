@@ -42,9 +42,9 @@ namespace EoE.UI
 		private PlayerSettings baseData => Player.PlayerSettings;
 		private Buff skillBuff => Player.Instance.LevelingPointsBuff;
 		private int skillPoints
-		{ get => Player.AvailableSkillPoints; set => Player.AvailableSkillPoints = value; }
+		{ get => Player.Instance.AvailableSkillPoints; set => Player.Instance.AvailableSkillPoints = value; }
 		private int attributePoints
-		{ get => Player.AvailableAtributePoints; set => Player.AvailableAtributePoints = value; }
+		{ get => Player.Instance.AvailableAtributePoints; set => Player.Instance.AvailableAtributePoints = value; }
 
 		//Assigned Skillpoints
 		private int[] assignedSkillPoints;

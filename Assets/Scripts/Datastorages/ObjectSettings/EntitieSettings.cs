@@ -25,6 +25,7 @@ namespace EoE.Information
 		public float Health = 50;
 		public bool DoHealthRegen = false;
 		public float HealthRegen = 0;
+		public float HealthRegenCooldownAfterTakingDamage = 4;
 		public float HealthRegenInCombatMultiplier = 0.5f;
 
 		public GameObject HealthRegenParticles = null;

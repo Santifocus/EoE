@@ -145,13 +145,17 @@ namespace EoE.Information
 			Foldout(new GUIContent("Damage Calculation Base Values"), ref DamageCalculationValuesOpen);
 			if (DamageCalculationValuesOpen)
 			{
-				Header("((Level + " + settings.DamageLevelAdd + "[A]) * Damage) / " + settings.DamageDivider + "[B]", 1);
-				FloatField(new GUIContent("A"), ref settings.DamageLevelAdd, 1);
-				FloatField(new GUIContent("B"), ref settings.DamageDivider, 1);
+				Header("(({Level} + " + settings.PhysicalDamageLevelAdd + "[A]) * {Damage}) / " + settings.PhysicalDamageDivider + "[B]", 1);
+				FloatField(new GUIContent("A"), ref settings.PhysicalDamageLevelAdd, 1);
+				FloatField(new GUIContent("B"), ref settings.PhysicalDamageDivider, 1);
 
-				Header("((Level + " + settings.DefenseLevelAdd + "[C]) * Defense) / " + settings.DefenseLevelDivider + "[D]", 1);
-				FloatField(new GUIContent("C"), ref settings.DefenseLevelAdd, 1);
-				FloatField(new GUIContent("D"), ref settings.DefenseLevelDivider, 1);
+				Header("(({Level} + " + settings.PhysicalDefenseLevelAdd + "[C]) * {Defense}) / " + settings.PhysicalDefenseLevelDivider + "[D]", 1);
+				FloatField(new GUIContent("C"), ref settings.PhysicalDefenseLevelAdd, 1);
+				FloatField(new GUIContent("D"), ref settings.PhysicalDefenseLevelDivider, 1);
+
+				Header("(({Level} + " + settings.MagicDamageLevelAdd + "[E]) * {Damage}) / " + settings.MagicDamageDivider + "[F]", 1);
+				FloatField(new GUIContent("E"), ref settings.MagicDamageLevelAdd, 1);
+				FloatField(new GUIContent("F"), ref settings.MagicDamageDivider, 1);
 
 				GUILayout.Space(5);
 			}

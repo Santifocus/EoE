@@ -66,11 +66,14 @@ namespace EoE.Information
 		public float SpellEffectTickSpeed = 0.25f;
 
 		//Damage Calculation
-		public float DamageLevelAdd = 12;
-		public float DamageDivider = 10;
+		public float PhysicalDamageLevelAdd = 12;
+		public float PhysicalDamageDivider = 10;
 
-		public float DefenseLevelAdd = 10;
-		public float DefenseLevelDivider = 11;
+		public float PhysicalDefenseLevelAdd = 10;
+		public float PhysicalDefenseLevelDivider = 11;
+
+		public float MagicDamageLevelAdd = 3;
+		public float MagicDamageDivider = 6;
 
 		public ElementEffectivenessRow[] EffectivenessMatrix;
 

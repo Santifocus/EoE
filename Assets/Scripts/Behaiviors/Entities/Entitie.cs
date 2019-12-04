@@ -31,6 +31,7 @@ namespace EoE.Entities
 		public float curDefense { get; protected set; }
 		public float curWalkSpeed { get; protected set; }
 		public float curJumpPowerMultiplier { get; protected set; }
+		public float curTrueDamageDamageMultiplier { get; protected set; }
 
 		//Entitie states
 		protected int invincible;
@@ -38,6 +39,7 @@ namespace EoE.Entities
 		public List<BuffInstance> nonPermanentBuffs { get; protected set; }
 		public List<BuffInstance> permanentBuffs { get; protected set; }
 		public EntitieState curStates;
+		private float healthRegenCooldown;
 		private float healthRegenDelay;
 		private float combatEndCooldown;
 		protected Vector3? targetPosition = null;
@@ -140,6 +142,7 @@ namespace EoE.Entities
 			curDefense = SelfSettings.BaseDefense;
 			curWalkSpeed = SelfSettings.WalkSpeed;
 			curJumpPowerMultiplier = 1;
+			curTrueDamageDamageMultiplier = 1;
 		}
 		protected virtual void ResetStatValues()
 		{
@@ -256,13 +259,16 @@ namespace EoE.Entities
 		protected virtual void Regen()
 		{
 			healthRegenDelay -= Time.deltaTime;
+			if (healthRegenCooldown > 0)
+				healthRegenCooldown -= Time.deltaTime;
+
 			bool inCombat = curStates.Fighting;
 			//Health Regen
 			if (healthRegenDelay <= 0)
 			{
 				healthRegenDelay += GameController.CurrentGameSettings.SecondsPerEntitieHealthRegen;
 				bool regendHealth = false;
-				if (SelfSettings.DoHealthRegen && curHealth < curMaxHealth)
+				if (SelfSettings.DoHealthRegen && healthRegenCooldown <= 0 && curHealth < curMaxHealth)
 				{
 					float regenAmount = SelfSettings.HealthRegen * GameController.CurrentGameSettings.SecondsPerEntitieHealthRegen * (inCombat ? SelfSettings.HealthRegenInCombatMultiplier : 1);
 					if (regenAmount > 0)
@@ -299,7 +305,6 @@ namespace EoE.Entities
 					}
 					else
 					{
-
 						for (int i = 0; i < healthRegenParticleSystems.Length; i++)
 						{
 							healthRegenParticleSystems[i].Stop(true, ParticleSystemStopBehavior.StopEmitting);
@@ -334,7 +339,11 @@ namespace EoE.Entities
 			}
 
 			if (changeResult.finalChangeAmount > 0)
+			{
+				healthRegenCooldown = SelfSettings.HealthRegenCooldownAfterTakingDamage;
 				ReceivedHealthDamage(causedChange, changeResult);
+			}
+
 
 			//Below zero health means death
 			if (curHealth <= 0)
@@ -515,7 +524,7 @@ namespace EoE.Entities
 				invincible++;
 
 			if (this is Player)
-				Player.BuffDisplay.AddBuffIcon(newBuff);
+				Player.Instance.BuffDisplay.AddBuffIcon(newBuff);
 			else
 				statDisplay.AddBuffIcon(newBuff);
 
@@ -614,6 +623,13 @@ namespace EoE.Entities
 							curJumpPowerMultiplier += change;
 							break;
 						}
+					case TargetBaseStat.TrueDamageMultiplier:
+						{
+							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curTrueDamageDamageMultiplier : buffBase.Effects[i].Amount;
+							change = Mathf.Max(-curTrueDamageDamageMultiplier, change);
+							curTrueDamageDamageMultiplier += change;
+							break;
+						}
 				}
 
 				buffInstance.FlatChanges[i] = change;
@@ -632,7 +648,7 @@ namespace EoE.Entities
 				invincible--;
 
 			if (this is Player)
-				Player.BuffDisplay.RemoveBuffIcon(targetBuff);
+				Player.Instance.BuffDisplay.RemoveBuffIcon(targetBuff);
 			else
 				statDisplay.RemoveBuffIcon(targetBuff);
 
@@ -726,6 +742,11 @@ namespace EoE.Entities
 					case TargetBaseStat.JumpHeightMultiplier:
 						{
 							curJumpPowerMultiplier -= change;
+							break;
+						}
+					case TargetBaseStat.TrueDamageMultiplier:
+						{
+							curTrueDamageDamageMultiplier -= change;
 							break;
 						}
 				}
@@ -1114,7 +1135,7 @@ namespace EoE.Entities
 			for (int i = 0; i < targetCount; i++)
 			{
 				//Damage / Knockback
-				float damage = spellBase.BaseDamage * effect.DamageMultiplier * eligibleTargets[i].Multiplier;
+				float damage = (spellBase.BaseDamage + caster.curMagicalDamage) * effect.DamageMultiplier * eligibleTargets[i].Multiplier;
 				float? knockbackAmount = (baseKnockBack != 0) ? (float?)(baseKnockBack * eligibleTargets[i].Multiplier) : (null);
 
 				eligibleTargets[i].Target.ChangeHealth(new ChangeInfo(

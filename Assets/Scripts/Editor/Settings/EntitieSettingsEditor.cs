@@ -82,6 +82,7 @@ namespace EoE.Information
 			if (settings.DoHealthRegen)
 			{
 				FloatField(new GUIContent("Health Regen Amount", "How much Health should this Entitie regenerate? (Per Second)"), ref settings.HealthRegen, 1);
+				FloatField(new GUIContent("Health Regen Cooldown After Taking Damage", "After the Entitie took damage how long should health regen be stopped? (Per Second)"), ref settings.HealthRegenCooldownAfterTakingDamage, 1);
 				FloatField(new GUIContent("Health Regen In Combat Factor", "In combat regeneration will be multiplied by this amount."), ref settings.HealthRegenInCombatMultiplier, 1);
 
 				ObjectField(new GUIContent("Health Regen Particles", "The particles that will be played while this Entitie regens health."), ref settings.HealthRegenParticles);

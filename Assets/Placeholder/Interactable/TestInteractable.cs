@@ -43,7 +43,7 @@ namespace EoE.Entities
 		}
 		protected override void Interact()
 		{
-			if (Player.TotalSoulCount >= requiredSouls)
+			if (Player.Instance.TotalSoulCount >= requiredSouls)
 				StartCoroutine(ChangeState(!openState));
 			else if (shouldSendSoulCountInform)
 			{

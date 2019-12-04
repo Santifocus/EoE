@@ -29,8 +29,8 @@ namespace EoE.UI
 		private void Start()
 		{
 			EventManager.PlayerSoulCountChangedEvent += PlayerSoulCountChanged;
-			soulsToLevelup = Player.RequiredSoulsForLevel;
-			shownSoulCount = Player.TotalSoulCount;
+			soulsToLevelup = Player.Instance.RequiredSoulsForLevel;
+			shownSoulCount = Player.Instance.TotalSoulCount;
 			textAmount.text = Mathf.CeilToInt(shownSoulCount) + " / " + soulsToLevelup;
 		}
 		private void OnDestroy()
@@ -54,18 +54,18 @@ namespace EoE.UI
 
 				if (textTransition.trueState)
 				{
-					shownSoulCount = Mathf.Lerp(shownSoulCount, Player.TotalSoulCount, Time.unscaledDeltaTime * updateSoulCountSpeed);
+					shownSoulCount = Mathf.Lerp(shownSoulCount, Player.Instance.TotalSoulCount, Time.unscaledDeltaTime * updateSoulCountSpeed);
 					if(Mathf.CeilToInt(shownSoulCount) >= soulsToLevelup)
 					{
-						soulsToLevelup = Player.RequiredSoulsForLevel;
+						soulsToLevelup = Player.Instance.RequiredSoulsForLevel;
 					}
 					textAmount.text = Mathf.CeilToInt(shownSoulCount) + " / " + soulsToLevelup;
 				}
 			}
 			else if (!textTransition.trueState)
 			{
-				soulsToLevelup = Player.RequiredSoulsForLevel;
-				shownSoulCount = Player.TotalSoulCount;
+				soulsToLevelup = Player.Instance.RequiredSoulsForLevel;
+				shownSoulCount = Player.Instance.TotalSoulCount;
 				textAmount.text = Mathf.CeilToInt(shownSoulCount) + " / " + soulsToLevelup;
 			}
 			UpdateIconTransition();

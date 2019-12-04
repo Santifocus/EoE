@@ -16,7 +16,7 @@ namespace EoE.Entities
 		private InventoryItem containedItem;
 		protected override void Interact()
 		{
-			Player.Inventory.AddItem(containedItem);
+			Player.Instance.Inventory.AddItem(containedItem);
 			if (containedItem.stackSize == 0)
 			{
 				Destroy(infoDisplay.gameObject);

@@ -37,7 +37,7 @@ namespace EoE.Entities
 		{
 			//If the door is transitioning we cant interact with it
 			//We also check if the required soulcount is reached
-			if (transitioning || Player.TotalSoulCount < requiredSouls)
+			if (transitioning || Player.Instance.TotalSoulCount < requiredSouls)
 				return;
 
 			//First check if the player has the required items
@@ -49,10 +49,10 @@ namespace EoE.Entities
 					//First we check if the player has this particular item, if not we can stop here,
 					//If we find all items that should be removed then we can start removing them,
 					//If we are in the second iteration of the removing loop we can skip the contains check
-					if (remove || Player.Inventory.Contains(requiredItems[i].itemType, requiredItems[i].itemCount))
+					if (remove || Player.Instance.Inventory.Contains(requiredItems[i].itemType, requiredItems[i].itemCount))
 					{
 						if(remove)
-							Player.Inventory.RemoveStackSize(requiredItems[i].itemType, requiredItems[i].itemCount);
+							Player.Instance.Inventory.RemoveStackSize(requiredItems[i].itemType, requiredItems[i].itemCount);
 					}
 					else
 					{

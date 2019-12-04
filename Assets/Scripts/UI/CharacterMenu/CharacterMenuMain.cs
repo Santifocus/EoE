@@ -74,8 +74,8 @@ namespace EoE.UI
 			atkDisplay.text = Player.Instance.curPhysicalDamage.ToString();
 			mgaDisplay.text = Player.Instance.curMagicalDamage.ToString();
 
-			skillpointDisplay.text = Player.AvailableSkillPoints + " | " + Player.AvailableAtributePoints;
-			soulCountDisplay.text = Player.TotalSoulCount + " / " + Player.RequiredSoulsForLevel;
+			skillpointDisplay.text = Player.Instance.AvailableSkillPoints + " | " + Player.Instance.AvailableAtributePoints;
+			soulCountDisplay.text = Player.Instance.TotalSoulCount + " / " + Player.Instance.RequiredSoulsForLevel;
 		}
 		private void UpdateSprites()
 		{
