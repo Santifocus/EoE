@@ -5,7 +5,7 @@ namespace EoE.Information
 {
 	public class HealItem : Item
 	{
-		public override InUIUses Uses => InUIUses.Use | InUIUses.Equip;
+		public override InUIUses Uses => InUIUses.Use | InUIUses.Equip | InUIUses.Drop | InUIUses.Back;
 		public HealTargetInfo[] healEffects;
 		protected override bool OnUse(Entitie user)
 		{

@@ -36,5 +36,32 @@ namespace EoE.Information
 		[MenuItem("EoE/Buff")] public static void CreateBuff() => AssetCreator<Buff>("Settings", "Buffs");
 		[MenuItem("EoE/DropTable")] public static void CreateDropTable() => AssetCreator<DropTable>("Settings", "DropTables");
 		[MenuItem("EoE/LevelingSettings")] public static void CreateLevelingSettings() => AssetCreator<LevelingSettings>("Settings", "EntitieSettings", "LevelingSettings");
+
+		//Data Collectors
+		[MenuItem("EoE/DataCollection/Collect Items")] 
+		public static void CollectItemData() 
+		{
+			string[] itemCollectorGUID = AssetDatabase.FindAssets("t:ItemCollector");
+			if(itemCollectorGUID.Length == 0)
+			{
+				ItemCollector newCollector = AssetCreator<ItemCollector>("Settings", "Data Collection");
+				newCollector.CollectData();
+			}
+			else if(itemCollectorGUID.Length > 1)
+			{
+				UnityEngine.Debug.Log("Found more then 1 Item collector... Deleting all and creating new one.");
+				for (int i = 0; i < itemCollectorGUID.Length; i++)
+				{
+					AssetDatabase.DeleteAsset(AssetDatabase.GUIDToAssetPath(itemCollectorGUID[i]));
+				}
+				ItemCollector newCollector = AssetCreator<ItemCollector>("Settings", "Data Collection");
+				newCollector.CollectData();
+			}
+			else
+			{
+				ItemCollector itemCollector = (ItemCollector)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(itemCollectorGUID[0]), typeof(ItemCollector));
+				itemCollector.CollectData();
+			}
+		}
 	}
 }

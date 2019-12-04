@@ -13,11 +13,14 @@ MonoBehaviour:
   m_Name: ManaPotion
   m_EditorClassIdentifier: 
   ItemName: Mana Potion
+  SortingID: 1
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 10
   ItemIcon: {fileID: 21300000, guid: 03a8a9a9df71a594c942c860d740eb6a, type: 3}
   RemoveOnUse: 1
+  FXEffectsOnUse: []
+  FXEffectsWhenEquipped: []
   UseCooldown: 2
   FXEffectsOnUse:
   - {fileID: 11400000, guid: 8e3cc143b1345d94591b361a58ea09af, type: 2}

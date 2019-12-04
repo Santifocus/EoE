@@ -5,18 +5,21 @@ using UnityEngine;
 
 namespace EoE.Information
 {
-	[System.Flags] public enum InUIUses { Use = 1, Equip = 2}
+	[System.Flags] public enum InUIUses { Use = 1, Equip = 2, Drop = 4, Back = 8 }
 	public abstract class Item : ScriptableObject
 	{
 		public abstract InUIUses Uses { get; }
 		public string ItemName = "Item";
+		public int SortingID;
 		public GameObject ItemModel;
 		public int MaxStack = 1;
 		public Sprite ItemIcon;
 		public bool RemoveOnUse;
-		public float UseCooldown;
 		public FXObject[] FXEffectsOnUse;
 		public FXObject[] FXEffectsWhenEquipped;
+
+		public float curCooldown { get; set; }
+		public float UseCooldown;
 
 		public ItemDrop[] CreateItemDrop(Vector3 positon, int stackSize, bool stopVelocity)
 		{
@@ -26,7 +29,7 @@ namespace EoE.Information
 			{
 				ItemDrop baseObject = Instantiate(GameController.Instance.itemDropPrefab, Storage.DropStorage);
 				InventoryItem item = new InventoryItem(this, ((i == createdItemDrops.Length - 1) && (stackSize % MaxStack != 0) ? stackSize % MaxStack : MaxStack));
-				GameObject model = Instantiate(ItemModel, baseObject.transform);
+				Instantiate(ItemModel, baseObject.transform);
 
 				baseObject.transform.position = positon;
 				baseObject.SetupItemDrop(item, stopVelocity);
@@ -44,7 +47,7 @@ namespace EoE.Information
 			if (OnUse(user))
 			{
 				PlayEffects(user, FXEffectsOnUse);
-				originStack.useCooldown = UseCooldown;
+				curCooldown = UseCooldown;
 				if (RemoveOnUse)
 				{
 					origin.RemoveInventoryItem(originStack, 1);

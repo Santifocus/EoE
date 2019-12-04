@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: LightArmor
   m_EditorClassIdentifier: 
   ItemName: LightArmor
+  SortingID: 4
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 1
   ItemIcon: {fileID: 21300000, guid: f778a96a9b33a4f439365ce0388ccd47, type: 3}
   RemoveOnUse: 0
-  UseCooldown: 0
   FXEffectsOnUse: []
   FXEffectsWhenEquipped:
   - {fileID: 11400000, guid: 634714252dd985c4a9434e87dac6225a, type: 2}
+  UseCooldown: 0
   buffToApply: {fileID: 11400000, guid: 5a3a475bf7cc2e64ba47b51c2c83cc9d, type: 2}

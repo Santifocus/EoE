@@ -367,7 +367,7 @@ namespace EoE
 				isDirty = true;
 			return changed;
 		}
-		public static void AssetCreator<T>(params string[] pathParts) where T : ScriptableObject
+		public static T AssetCreator<T>(params string[] pathParts) where T : ScriptableObject
 		{
 			T asset = ScriptableObject.CreateInstance<T>();
 			string name = "/New " + typeof(T).Name;
@@ -392,6 +392,7 @@ namespace EoE
 			EditorGUIUtility.PingObject(asset);
 
 			Debug.Log("Created: '" + name.Substring(1) + "' at: Assets" + path + "/..");
+			return asset;
 		}
 	}
 }
