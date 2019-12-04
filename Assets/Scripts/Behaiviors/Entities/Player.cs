@@ -91,10 +91,10 @@ namespace EoE.Entities
 		public static Player Instance { get; private set; }
 		public override EntitieSettings SelfSettings => selfSettings;
 		public static PlayerSettings PlayerSettings => Instance.selfSettings;
-		public static Entitie TargetedEntitie;
-		public static PlayerBuffDisplay BuffDisplay => Instance.buffDisplay;
+		public Entitie TargetedEntitie;
+		public PlayerBuffDisplay BuffDisplay => Instance.buffDisplay;
 
-		public static Inventory Inventory;
+		public Inventory Inventory;
 
 		public InventoryItem EquipedItem;
 		public InventoryItem EquipedWeapon;
@@ -102,10 +102,10 @@ namespace EoE.Entities
 		public bool MagicSelected { get; private set; }
 		#region Leveling
 		public Buff LevelingPointsBuff { get; private set; }
-		public static int TotalSoulCount { get; private set; }
-		public static int RequiredSoulsForLevel { get; private set; }
-		public static int AvailableSkillPoints;
-		public static int AvailableAtributePoints;
+		public int TotalSoulCount { get; private set; }
+		public int RequiredSoulsForLevel { get; private set; }
+		public int AvailableSkillPoints;
+		public int AvailableAtributePoints;
 		#endregion
 
 		#endregion

@@ -42,9 +42,9 @@ namespace EoE
 			if (!Player.Instance.Alive)
 				return;
 
-			if (Player.TargetedEntitie)
+			if (Player.Instance.TargetedEntitie)
 			{
-				Vector3 dir = (Player.TargetedEntitie.actuallWorldPosition - transform.position).normalized;
+				Vector3 dir = (Player.Instance.TargetedEntitie.actuallWorldPosition - transform.position).normalized;
 				LookAtDirection(dir);
 			}
 
@@ -74,7 +74,7 @@ namespace EoE
 			float sinPart = Mathf.Sin((CurRotation.x + 90) * Mathf.Deg2Rad);
 			float cosPart = Mathf.Cos((CurRotation.x + 90) * Mathf.Deg2Rad);
 
-			Vector3 baseOffset = Player.TargetedEntitie ? playerSettigns.CameraAnchorOffsetWhenTargeting : playerSettigns.CameraAnchorOffset;
+			Vector3 baseOffset = Player.Instance.TargetedEntitie ? playerSettigns.CameraAnchorOffsetWhenTargeting : playerSettigns.CameraAnchorOffset;
 
 			Vector3 offset = baseOffset.x * new Vector3(sinPart, 0, cosPart) +
 				new Vector3(0, baseOffset.y, 0) +
@@ -106,7 +106,7 @@ namespace EoE
 
 		private void RotateCamera()
 		{
-			bool targeting = Player.TargetedEntitie;
+			bool targeting = Player.Instance.TargetedEntitie;
 			CurRotation.x %= 360;
 			TargetRotation.y = Mathf.Clamp(TargetRotation.y, targeting ? playerSettigns.CameraClampsWhenTargeting.x : playerSettigns.CameraVerticalAngleClamps.x, targeting ? playerSettigns.CameraClampsWhenTargeting.y : playerSettigns.CameraVerticalAngleClamps.y);
 			CurRotation = new Vector2(Mathf.LerpAngle(CurRotation.x, TargetRotation.x, Time.deltaTime * playerSettigns.CameraRotationSpeed), Mathf.LerpAngle(CurRotation.y, TargetRotation.y, Time.deltaTime * playerSettigns.CameraRotationSpeed));

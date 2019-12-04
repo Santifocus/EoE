@@ -22,7 +22,7 @@ namespace EoE.UI
 		private InventoryMenu parent;
 		private SelectedPart selectedPart;
 		private int curDropCount;
-		private int allowedMax => Player.Inventory[parent.curSlotIndex].stackSize;
+		private int allowedMax => Player.Instance.Inventory[parent.curSlotIndex].stackSize;
 
 		public void Setup(InventoryMenu parent)
 		{
@@ -77,10 +77,10 @@ namespace EoE.UI
 				bool fullyDropped = false;
 				if (selectedPart != SelectedPart.Cancel)
 				{
-					Player.Inventory[parent.curSlotIndex].data.CreateItemDrop(Player.Instance.actuallWorldPosition, curDropCount, true);
-					Player.Inventory[parent.curSlotIndex].stackSize -= curDropCount;
-					fullyDropped = Player.Inventory[parent.curSlotIndex].stackSize == 0;
-					Player.Inventory.ForceUpdate();
+					Player.Instance.Inventory[parent.curSlotIndex].data.CreateItemDrop(Player.Instance.actuallWorldPosition, curDropCount, true);
+					Player.Instance.Inventory[parent.curSlotIndex].stackSize -= curDropCount;
+					fullyDropped = Player.Instance.Inventory[parent.curSlotIndex].stackSize == 0;
+					Player.Instance.Inventory.ForceUpdate();
 				}
 				parent.HideDropMenu();
 				if (fullyDropped)

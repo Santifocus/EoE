@@ -195,10 +195,12 @@ MonoBehaviour:
     type: 3}
   ItemDropRandomVelocityStrenght: 2
   SpellEffectTickSpeed: 0.25
-  DamageLevelAdd: 12
-  DamageDivider: 10
-  DefenseLevelAdd: 10
-  DefenseLevelDivider: 12
+  PhysicalDamageLevelAdd: 12
+  PhysicalDamageDivider: 10
+  PhysicalDefenseLevelAdd: 10
+  PhysicalDefenseLevelDivider: 11
+  MagicDamageLevelAdd: 3
+  MagicDamageDivider: 6
   EffectivenessMatrix:
   - Row:
     - 1

@@ -56,20 +56,26 @@ namespace EoE.Information
 			public ChangeResult(ChangeInfo basis, Entitie receiver, bool createDamageNumber, bool fromRegen = false)
 			{
 				//Calculate the damage that we want to cause
-				if (basis.targetStat == TargetStat.Health && receiver != basis.attacker && basis.baseDamageAmount > 0)
+				finalChangeAmount = basis.baseDamageAmount;
+				if (basis.targetStat == TargetStat.Health && receiver != basis.attacker && finalChangeAmount > 0)
 				{
-					finalChangeAmount = (((basis.attacker ? basis.attacker.EntitieLevel : 1) + GameController.CurrentGameSettings.DamageLevelAdd) * basis.baseDamageAmount) / GameController.CurrentGameSettings.DamageDivider;
 					if (basis.cause == CauseType.Physical)
 					{
-						float defenseAmount = ((receiver.EntitieLevel + GameController.CurrentGameSettings.DefenseLevelAdd) * receiver.curDefense) / GameController.CurrentGameSettings.DefenseLevelDivider;
+						finalChangeAmount = (((basis.attacker ? basis.attacker.EntitieLevel : 0) + GameController.CurrentGameSettings.PhysicalDamageLevelAdd) * basis.baseDamageAmount) / GameController.CurrentGameSettings.PhysicalDamageDivider;
+						float defenseAmount = ((receiver.EntitieLevel + GameController.CurrentGameSettings.PhysicalDefenseLevelAdd) * receiver.curDefense) / GameController.CurrentGameSettings.PhysicalDefenseLevelDivider;
 						finalChangeAmount -= defenseAmount;
 					}
+					else if (basis.cause == CauseType.Magic)
+					{
+						finalChangeAmount = (((basis.attacker ? basis.attacker.EntitieLevel : 0) + GameController.CurrentGameSettings.MagicDamageLevelAdd) * basis.baseDamageAmount) / GameController.CurrentGameSettings.MagicDamageDivider;
+					}
+
+					//If the multiplications caused the final damage change from positive to negative we want to set it to zero
+					//This will prevent situations in which very weak attacks would heal the receiver
 					if (finalChangeAmount < 0)
+					{
 						finalChangeAmount = 0;
-				}
-				else
-				{
-					finalChangeAmount = basis.baseDamageAmount;
+					}
 				}
 
 				if (basis.cause != CauseType.Heal)
@@ -97,11 +103,19 @@ namespace EoE.Information
 
 				//We dont want to overheal, but will allow overkill for bettet VFX
 				if(basis.targetStat == TargetStat.Health)
+				{
+					//Change true damage based on the entities true damage multiplier
+					finalChangeAmount *= receiver.curTrueDamageDamageMultiplier;
 					finalChangeAmount = Mathf.Max(finalChangeAmount, -(receiver.curMaxHealth - receiver.curHealth));
+				}
 				else if(basis.targetStat == TargetStat.Mana)
+				{
 					finalChangeAmount = Mathf.Max(finalChangeAmount, -(receiver.curMaxMana - receiver.curMana));
+				}
 				else if(receiver is Player)
+				{
 					finalChangeAmount = Mathf.Max(finalChangeAmount, -((receiver as Player).curMaxEndurance - (receiver as Player).curEndurance));
+				}
 
 				//VFX for Player
 				//We dont want to send VFX if the Player caused himself damage
