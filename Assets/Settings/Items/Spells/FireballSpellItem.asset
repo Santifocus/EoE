@@ -20,6 +20,6 @@ MonoBehaviour:
   ItemIcon: {fileID: 21300000, guid: 5be58590323c8e8418ebb2781ce96950, type: 3}
   RemoveOnUse: 0
   FXEffectsOnUse: []
-  FXEffectsWhenEquipped: []
-  UseCooldown: 0
+  FXEffectsWhenEquipped:
+  - {fileID: 11400000, guid: 14caeaaac290abb42b3406dc40b51fc7, type: 2}
   targetSpell: {fileID: 11400000, guid: 0671c0a9f08b5a14e83b4da25a2b6c7a, type: 2}
