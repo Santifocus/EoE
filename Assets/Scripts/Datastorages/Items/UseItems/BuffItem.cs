@@ -5,6 +5,7 @@ namespace EoE.Information
 {
 	public class BuffItem : Item
 	{
+		public override InUIUses Uses => InUIUses.Use | InUIUses.Equip;
 		public Buff[] buffsToApply;
 		public bool stackable;
 

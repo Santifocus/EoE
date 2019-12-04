@@ -42,7 +42,7 @@ namespace EoE.UI
 					case TargetStat.Mana:
 						return player.curMaxMana;
 					case TargetStat.Endurance:
-						return player.trueEnduranceAmount;
+						return player.curMaxEndurance;
 					default:
 						return 1;
 				}

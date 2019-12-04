@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c475015d82123d4c9d421d67f39e273, type: 3}
+  m_Name: HeavyArmorBuff
+  m_EditorClassIdentifier: 
+  Name: HeavyArmorBuff
+  Quality: 2
+  Permanent: 1
+  BuffTime: 0
+  Icon: {fileID: 21300000, guid: f778a96a9b33a4f439365ce0388ccd47, type: 3}
+  Effects:
+  - TargetBaseStat: 6
+    Percent: 1
+    Amount: -20
+  - TargetBaseStat: 5
+    Percent: 0
+    Amount: 10
+  CustomEffects:
+    ApplyMoveStun: 0
+    Invincible: 0
+  DOTs: []
+  FXEffects: []

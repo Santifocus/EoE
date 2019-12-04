@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using EoE.Utils;
+using UnityEngine;
 
 namespace EoE.Information
 {
@@ -118,6 +119,7 @@ namespace EoE.Information
 					if (stackSize >= containedItems[i].stackSize)
 					{
 						stackSize -= containedItems[i].stackSize;
+						containedItems[i].OnRemove();
 						containedItems[i] = null;
 						changed = true;
 					}
@@ -143,6 +145,7 @@ namespace EoE.Information
 			{
 				if (containedItems[i] == item)
 				{
+					containedItems[i].OnRemove();
 					containedItems[i] = null;
 					InventoryChanged?.Invoke();
 					break;
@@ -157,7 +160,10 @@ namespace EoE.Information
 				{
 					containedItems[i].stackSize -= stackSize;
 					if (containedItems[i].stackSize <= 0)
+					{
+						containedItems[i].OnRemove();
 						containedItems[i] = null;
+					}
 					InventoryChanged?.Invoke();
 					break;
 				}
@@ -184,6 +190,7 @@ namespace EoE.Information
 
 			if (containedItems[index] != null)
 			{
+				containedItems[index].OnRemove();
 				containedItems[index] = null;
 				InventoryChanged?.Invoke();
 			}
@@ -193,7 +200,10 @@ namespace EoE.Information
 			for (int i = 0; i < Lenght; i++)
 			{
 				if (containedItems[i] != null)
+				{
+					containedItems[i].OnRemove();
 					containedItems[i] = null;
+				}
 			}
 			InventoryChanged?.Invoke();
 		}
@@ -204,6 +214,7 @@ namespace EoE.Information
 			{
 				if (containedItems[i] != null && containedItems[i].stackSize <= 0)
 				{
+					containedItems[i].OnRemove();
 					containedItems[i] = null;
 				}
 			}
@@ -245,11 +256,27 @@ namespace EoE.Information
 		public int stackSize;
 		public bool isEquiped;
 		public float useCooldown;
+		public FXInstance[] BoundFXInstances;
 
 		public InventoryItem(Item data, int stackSize = 1)
 		{
 			this.data = data;
 			this.stackSize = stackSize;
+		}
+		public void OnRemove()
+		{
+			StopBoundEffects();
+		}
+		public void StopBoundEffects()
+		{
+			if (BoundFXInstances != null)
+			{
+				for (int i = 0; i < BoundFXInstances.Length; i++)
+				{
+					BoundFXInstances[i].FinishFX();
+				}
+			}
+			BoundFXInstances = null;
 		}
 	}
 }

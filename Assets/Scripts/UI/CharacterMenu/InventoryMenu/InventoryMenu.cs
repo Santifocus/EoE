@@ -174,24 +174,28 @@ namespace EoE.UI
 				{
 					if (target)
 					{
+						bool shouldBeEquipped = true;
 						if (target is WeaponItem)
 						{
-							Player.EquipedWeapon = item;
+							Player.Instance.EquipedWeapon = item;
+							shouldBeEquipped = !Player.Instance.MagicSelected;
 						}
 						else if (target is SpellItem)
 						{
-							Player.EquipedSpell = item;
+							Player.Instance.EquipedSpell = item;
+							shouldBeEquipped = Player.Instance.MagicSelected;
 						}
 						else if (target is ArmorItem)
 						{
-							Player.EquipedArmor = item;
+							Player.Instance.EquipedArmor = item;
 						}
 						else
 						{
-							Player.EquipedItem = item;
+							Player.Instance.EquipedItem = item;
 						}
 
-						target.Equip(Player.Instance);
+						if(shouldBeEquipped)
+							target.Equip(item, Player.Instance);
 						UpdateEquippedSlots();
 					}
 				}
@@ -216,9 +220,9 @@ namespace EoE.UI
 		}
 		private void UpdateEquippedSlots()
 		{
-			if (Player.EquipedWeapon != null)
+			if (Player.Instance.EquipedWeapon != null)
 			{
-				equippedWeaponDisplay.sprite = Player.EquipedWeapon.data.ItemIcon;
+				equippedWeaponDisplay.sprite = Player.Instance.EquipedWeapon.data.ItemIcon;
 				equippedWeaponDisplay.color = Color.white;
 			}
 			else
@@ -227,9 +231,9 @@ namespace EoE.UI
 				equippedWeaponDisplay.color = Color.clear;
 			}
 
-			if (Player.EquipedSpell != null)
+			if (Player.Instance.EquipedSpell != null)
 			{
-				equippedSpellDisplay.sprite = Player.EquipedSpell.data.ItemIcon;
+				equippedSpellDisplay.sprite = Player.Instance.EquipedSpell.data.ItemIcon;
 				equippedSpellDisplay.color = Color.white;
 			}
 			else
@@ -238,9 +242,9 @@ namespace EoE.UI
 				equippedSpellDisplay.color = Color.clear;
 			}
 
-			if (Player.EquipedArmor != null)
+			if (Player.Instance.EquipedArmor != null)
 			{
-				equippedArmorDisplay.sprite = Player.EquipedArmor.data.ItemIcon;
+				equippedArmorDisplay.sprite = Player.Instance.EquipedArmor.data.ItemIcon;
 				equippedArmorDisplay.color = Color.white;
 			}
 			else
@@ -249,9 +253,9 @@ namespace EoE.UI
 				equippedArmorDisplay.color = Color.clear;
 			}
 
-			if (Player.EquipedItem != null)
+			if (Player.Instance.EquipedItem != null)
 			{
-				equippedItemDisplay.sprite = Player.EquipedItem.data.ItemIcon;
+				equippedItemDisplay.sprite = Player.Instance.EquipedItem.data.ItemIcon;
 				equippedItemDisplay.color = Color.white;
 			}
 			else

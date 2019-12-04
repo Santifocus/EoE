@@ -15,12 +15,12 @@ MonoBehaviour:
   TimeIn: 0
   TimeOut: 0
   FinishConditions:
-    OnParentDeath: 0
+    OnParentDeath: 1
     OnTimeout: 0
     TimeStay: 1
   ParticleMainObject: {fileID: 624324175698673959, guid: 415f825f579aa104385ce1f977e5bda1,
     type: 3}
-  OffsetToTarget: {x: 0, y: -1.5, z: 0}
+  OffsetToTarget: {x: 0, y: -0.35, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}
   FollowTarget: 1
   InheritRotationOfTarget: 1

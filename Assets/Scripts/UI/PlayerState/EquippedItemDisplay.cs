@@ -17,7 +17,7 @@ namespace EoE.UI
 		[SerializeField] private TextMeshProUGUI itemCountDisplay = default;
 
 		private InventoryItem lastTarget;
-		private InventoryItem curTarget => targetType == TargetItemType.Combat ? (Player.MagicSelected ? Player.EquipedSpell : Player.EquipedWeapon) : Player.EquipedItem;
+		private InventoryItem curTarget => targetType == TargetItemType.Combat ? (Player.Instance.MagicSelected ? Player.Instance.EquipedSpell : Player.Instance.EquipedWeapon) : Player.Instance.EquipedItem;
 
 		private float lastCooldown;
 		private int lastCount;
@@ -64,11 +64,11 @@ namespace EoE.UI
 		}
 		private void UpdateCooldown()
 		{
-			lastCooldown = (lastTarget == null) ? (0) : ((targetType == TargetItemType.Combat && Player.MagicSelected ? Mathf.Max(Player.Instance.CastingCooldown, lastTarget.useCooldown) : lastTarget.useCooldown));
+			lastCooldown = (lastTarget == null) ? (0) : ((targetType == TargetItemType.Combat && Player.Instance.MagicSelected ? Mathf.Max(Player.Instance.CastingCooldown, lastTarget.useCooldown) : lastTarget.useCooldown));
 		}
 		private float MaxCooldown()
 		{
-			if(targetType == TargetItemType.Combat && Player.MagicSelected)
+			if(targetType == TargetItemType.Combat && Player.Instance.MagicSelected)
 			{
 				return Mathf.Max(lastTarget.data.UseCooldown, (lastTarget.data as SpellItem).targetSpell.SpellCooldown);
 			}

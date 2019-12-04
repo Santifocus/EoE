@@ -190,7 +190,7 @@ MonoBehaviour:
   SkipDelayOnSpace: 1
   DelayToNextDialogue: 1
   CritDamageMultiplier: 2
-  SecondsPerEntititeRegen: 0.5
+  SecondsPerEntitieHealthRegen: 1
   SoulDropPrefab: {fileID: 4063212132472539359, guid: a354723b262e2cd4ab866dc03a384c10,
     type: 3}
   ItemDropRandomVelocityStrenght: 2

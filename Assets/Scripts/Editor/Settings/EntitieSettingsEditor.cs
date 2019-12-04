@@ -75,8 +75,9 @@ namespace EoE.Information
 			EntitieSettings settings = target as EntitieSettings;
 			ObjectField(new GUIContent("Level Settings", "The Level settings that should be applied to the Entitie."), ref settings.LevelSettings);
 
+			LineBreak();
 			//Health
-			FloatField(new GUIContent("Start Health", "With what health does this Entitie Spawn?"), ref settings.Health);
+			FloatField(new GUIContent("Health", "What base Health does the Entitie have?"), ref settings.Health);
 			BoolField(new GUIContent("Do Health Regen", "Should this Entitie Regen over time?"), ref settings.DoHealthRegen);
 			if (settings.DoHealthRegen)
 			{
@@ -87,9 +88,9 @@ namespace EoE.Information
 				Vector3Field(new GUIContent("Health Regen Particles Offset", "The regen particles will be displayed with this offset to the Entitie."), ref settings.HealthRegenParticlesOffset);
 			}
 
+			LineBreak();
 			//Mana
-			GUILayout.Space(5);
-			FloatField(new GUIContent("Mana", "Magic uses Mana. When a Entitie is out of Mana he cant use Magic anymore."), ref settings.Mana);
+			FloatField(new GUIContent("Mana", "What base Mana does the Entitie have."), ref settings.Mana);
 			BoolField(new GUIContent("Do Mana Regen", "Should this Entitie Regen over time?"), ref settings.DoManaRegen);
 			if (settings.DoManaRegen)
 			{
