@@ -17,12 +17,12 @@ namespace EoE.Information
 		public float CameraBaseFOV = 60;
 
 		//Endurance Settings
-		public int EnduranceBars = 4;
-		public float EndurancePerBar = 25;
-		public float EnduranceRegen = 5;
-		public float LockedEnduranceRegenMutliplier = 0.5f;
-		public float EnduranceRegenInCombat = 0.5f;
-		public float EnduranceRegenDelayAfterUse = 3;
+		public float Endurance = 100;
+		public bool DoEnduranceRegen = true;
+		public float EnduranceRegen = 6;
+		public float EnduranceRegenInCombatMultiplier = 0.5f;
+		public float EnduranceAfterUseCooldown = 3;
+		public float EnduranceRegenAfterUseMultiplier = 0.5f;
 
 		//Endurance Costs
 		public float JumpEnduranceCost = 4;

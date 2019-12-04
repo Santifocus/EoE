@@ -38,7 +38,7 @@ namespace EoE.Entities
 		public List<BuffInstance> nonPermanentBuffs { get; protected set; }
 		public List<BuffInstance> permanentBuffs { get; protected set; }
 		public EntitieState curStates;
-		private float regenTimer;
+		private float healthRegenDelay;
 		private float combatEndCooldown;
 		protected Vector3? targetPosition = null;
 
@@ -55,7 +55,7 @@ namespace EoE.Entities
 		private ParticleSystem[] healthRegenParticleSystems;
 
 		//Spell Casting
-		public bool CastingSpell { get; private set; }
+		public bool IsCasting { get; private set; }
 		public float CastingCooldown { get; private set; }
 
 		//Getter Helpers
@@ -69,6 +69,10 @@ namespace EoE.Entities
 		public virtual Vector3 curVelocity => new Vector3(impactForce.x, 0, impactForce.y) + entitieForceController.currentTotalForce;
 		public bool IsInvincible => invincible > 0;
 		public bool IsStunned => appliedMoveStuns > 0;
+
+		//Armor
+		public InventoryItem EquipedArmor;
+		public BuffInstance ArmorBuff;
 
 		//Other
 		private EntitieStatDisplay statDisplay;
@@ -108,34 +112,47 @@ namespace EoE.Entities
 		protected virtual void FullEntitieReset()
 		{
 			Alive = true;
-			ResetStats();
-			GetColliderType();
-			SetupHealingParticles();
 			curStates = new EntitieState();
-			intendedRotation = curRotation = transform.eulerAngles.y;
+			entitieForceController = new ForceController();
 
-			nonPermanentBuffs = new List<BuffInstance>();
-			permanentBuffs = new List<BuffInstance>();
 			if (!(this is Player))
 			{
 				statDisplay = Instantiate(GameController.CurrentGameSettings.EntitieStatDisplayPrefab, GameController.Instance.enemyHealthBarStorage);
 				statDisplay.Setup();
 			}
-			LevelSetup();
-			entitieForceController = new ForceController();
+
+			ResetStats();
+			ResetStatValues();
+			GetColliderType();
+			SetupHealingParticles();
+			BuffSetup();
+
+			appliedMoveStuns = 0;
+			invincible = 0;
+			intendedRotation = curRotation = transform.eulerAngles.y;
 		}
-		private void ResetStats()
+		protected virtual void ResetStats()
 		{
-			curMaxHealth = curHealth = SelfSettings.Health;
-			curMaxMana = curMana = SelfSettings.Mana;
+			curMaxHealth = SelfSettings.Health;
+			curMaxMana = SelfSettings.Mana;
 			curPhysicalDamage = SelfSettings.BaseAttackDamage;
 			curMagicalDamage = SelfSettings.BaseMagicDamage;
 			curDefense = SelfSettings.BaseDefense;
 			curWalkSpeed = SelfSettings.WalkSpeed;
 			curJumpPowerMultiplier = 1;
-			appliedMoveStuns = 0;
 		}
+		protected virtual void ResetStatValues()
+		{
+			curHealth = curMaxHealth;
+			curMana = curMaxMana;
+		}
+		private void BuffSetup()
+		{
+			nonPermanentBuffs = new List<BuffInstance>();
+			permanentBuffs = new List<BuffInstance>();
 
+			LevelSetup();
+		}
 		protected virtual void LevelSetup()
 		{
 			LevelingBaseBuff = ScriptableObject.CreateInstance<Buff>();
@@ -238,31 +255,32 @@ namespace EoE.Entities
 		}
 		protected virtual void Regen()
 		{
-			regenTimer += Time.deltaTime;
-			if (regenTimer >= GameController.CurrentGameSettings.SecondsPerEntititeRegen)
+			healthRegenDelay -= Time.deltaTime;
+			bool inCombat = curStates.Fighting;
+			//Health Regen
+			if (healthRegenDelay <= 0)
 			{
-				bool inCombat = curStates.Fighting;
-				regenTimer -= GameController.CurrentGameSettings.SecondsPerEntititeRegen;
+				healthRegenDelay += GameController.CurrentGameSettings.SecondsPerEntitieHealthRegen;
 				bool regendHealth = false;
 				if (SelfSettings.DoHealthRegen && curHealth < curMaxHealth)
 				{
-					float regenAmount = SelfSettings.HealthRegen * GameController.CurrentGameSettings.SecondsPerEntititeRegen * (inCombat ? SelfSettings.HealthRegenInCombatMultiplier : 1);
+					float regenAmount = SelfSettings.HealthRegen * GameController.CurrentGameSettings.SecondsPerEntitieHealthRegen * (inCombat ? SelfSettings.HealthRegenInCombatMultiplier : 1);
 					if (regenAmount > 0)
 					{
 						ChangeInfo basis = new ChangeInfo(this, CauseType.Heal, TargetStat.Health, -regenAmount);
 						ChangeInfo.ChangeResult regenResult = new ChangeInfo.ChangeResult(basis, this, true, true);
-						curHealth = Mathf.Min(curMaxHealth, curHealth - regenResult.finalChangeAmount);
+						curHealth = Mathf.Min(curHealth - regenResult.finalChangeAmount, curMaxHealth);
 
 						regendHealth = regenResult.finalChangeAmount < 0;
 					}
 				}
 				ControlRegenParticles(regendHealth);
-
-				if (SelfSettings.DoManaRegen && curMana < curMaxMana)
-				{
-					float regenAmount = SelfSettings.ManaRegen * GameController.CurrentGameSettings.SecondsPerEntititeRegen * (inCombat ? SelfSettings.ManaRegenInCombatMultiplier : 1);
-					curMana = Mathf.Min(curMaxMana, curMana + regenAmount);
-				}
+			}
+			//Mana Regen
+			if (SelfSettings.DoManaRegen && curMana < curMaxMana)
+			{
+				float regenAmount = SelfSettings.ManaRegen * Time.deltaTime * (inCombat ? SelfSettings.ManaRegenInCombatMultiplier : 1);
+				curMana = Mathf.Min(curMana + regenAmount, curMaxMana);
 			}
 		}
 		private void ControlRegenParticles(bool regendHealth)
@@ -490,6 +508,12 @@ namespace EoE.Entities
 			AddBuffEffect(newBuff, CalculateValue.Flat);
 			AddBuffEffect(newBuff, CalculateValue.Percent);
 
+			//Custom Buff Effects
+			if (buff.CustomEffects.ApplyMoveStun)
+				appliedMoveStuns++;
+			if (buff.CustomEffects.Invincible)
+				invincible++;
+
 			if (this is Player)
 				Player.BuffDisplay.AddBuffIcon(newBuff);
 			else
@@ -506,16 +530,6 @@ namespace EoE.Entities
 		private void AddBuffEffect(BuffInstance buffInstance, CalculateValue toCalculate = CalculateValue.Both, bool clampRequired = true)
 		{
 			Buff buffBase = buffInstance.Base;
-
-			//Custom buff Effects
-			//Apply only when either both flat and percent get calculated or only flat
-			if (toCalculate != CalculateValue.Percent)
-			{
-				if (buffInstance.Base.CustomEffects.ApplyMoveStun)
-					appliedMoveStuns++;
-				if (buffInstance.Base.CustomEffects.Invincible)
-					invincible++;
-			}
 
 			for (int i = 0; i < buffBase.Effects.Length; i++)
 			{
@@ -558,12 +572,12 @@ namespace EoE.Entities
 							if (player == null)
 								break;
 
-							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * player.trueEnduranceAmount : buffBase.Effects[i].Amount;
-							change = Mathf.Max(-(player.trueEnduranceAmount), change);
-							player.trueEnduranceAmount += change;
+							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * player.curMaxEndurance : buffBase.Effects[i].Amount;
+							change = Mathf.Max(-(player.curMaxEndurance), change);
+							player.curMaxEndurance += change;
 
 							if (clampRequired)
-								player.UpdateEnduranceStat();
+								player.ClampEndurance();
 							break;
 						}
 					case TargetBaseStat.PhysicalDamage:
@@ -610,6 +624,12 @@ namespace EoE.Entities
 			BuffInstance targetBuff = fromPermanent ? permanentBuffs[index] : nonPermanentBuffs[index];
 			RemoveBuffEffect(targetBuff);
 			targetBuff.OnRemove();
+
+			//Custom Buff Effects
+			if (targetBuff.Base.CustomEffects.ApplyMoveStun)
+				appliedMoveStuns--;
+			if (targetBuff.Base.CustomEffects.Invincible)
+				invincible--;
 
 			if (this is Player)
 				Player.BuffDisplay.RemoveBuffIcon(targetBuff);
@@ -678,9 +698,9 @@ namespace EoE.Entities
 							if (player == null)
 								break;
 
-							player.trueEnduranceAmount -= change;
+							player.curMaxEndurance -= change;
 							if (clampRequired)
-								player.UpdateEnduranceStat();
+								player.ClampEndurance();
 							break;
 						}
 					case TargetBaseStat.PhysicalDamage:
@@ -710,26 +730,11 @@ namespace EoE.Entities
 						}
 				}
 			}
-
-			//Custom buff Effects
-			if (buffInstance.Base.CustomEffects.ApplyMoveStun)
-				appliedMoveStuns--;
-			if (buffInstance.Base.CustomEffects.Invincible)
-				invincible--;
 		}
 		public void RecalculateBuffs()
 		{
-			//Remove all effects
-			curMaxHealth = SelfSettings.Health;
-			curMaxMana = SelfSettings.Mana;
-			if (this is Player)
-				(this as Player).trueEnduranceAmount = Player.PlayerSettings.EnduranceBars * Player.PlayerSettings.EndurancePerBar;
-			curPhysicalDamage = SelfSettings.BaseAttackDamage;
-			curMagicalDamage = SelfSettings.BaseMagicDamage;
-			curDefense = SelfSettings.BaseDefense;
-			curWalkSpeed = SelfSettings.WalkSpeed;
-			curJumpPowerMultiplier = 1;
-			appliedMoveStuns = 0;
+			//Reset to base stats
+			ResetStats();
 
 			//Now re-add them, so the values can be recalculated
 			//First add flat values and then percent
@@ -757,7 +762,7 @@ namespace EoE.Entities
 			if (curMana > curMaxMana)
 				curMana = curMaxMana;
 			if (this is Player)
-				(this as Player).UpdateEnduranceStat();
+				(this as Player).ClampEndurance();
 		}
 		private void PermanentBuffsControl()
 		{
@@ -787,7 +792,7 @@ namespace EoE.Entities
 		#region Spell Casting
 		public bool CastSpell(Spell spell)
 		{
-			if (curMana < spell.ManaCost || CastingSpell || CastingCooldown > 0)
+			if (curMana < spell.ManaCost || IsCasting || CastingCooldown > 0)
 				return false;
 
 			StartCoroutine(CastSpellC(spell));
@@ -795,7 +800,7 @@ namespace EoE.Entities
 		}
 		private IEnumerator CastSpellC(Spell spell)
 		{
-			CastingSpell = true;
+			IsCasting = true;
 			//Casting
 			FXInstance[] curParticles = null;
 			if (spell.ContainedParts.HasFlag(SpellPart.Cast))
@@ -927,7 +932,7 @@ namespace EoE.Entities
 
 			//If the spell cast / shooting was canceled we jump here
 		StoppedSpell:;
-			CastingSpell = false;
+			IsCasting = false;
 			CastingCooldown = spell.SpellCooldown;
 			ChangeMana(new ChangeInfo(this, CauseType.Magic, TargetStat.Mana, spell.ManaCost));
 			if (curParticles != null)

@@ -29,19 +29,14 @@ namespace EoE.Entities
 		[SerializeField] private Transform rightHand = default;
 		[SerializeField] private Weapon equipedWeapon = default;
 		[SerializeField] private PlayerBuffDisplay buffDisplay = default;
-		[SerializeField] private TextMeshProUGUI levelDisplay = default;
 		[SerializeField] private CharacterController charController = default;
 
 		public TextMeshProUGUI debugText = default;
 
 		//Endurance
-		public bool recentlyUsedEndurance { get; private set; }
-		public float curEndurance { get; private set; }
-		public float lockedEndurance { get; private set; }
-		public int totalEnduranceContainers { get; private set; }
-		[HideInInspector] public float trueEnduranceAmount;
+		public float curEndurance { get; set; }
+		public float curMaxEndurance { get; set; }
 		private float usedEnduranceCooldown;
-		public float useableEndurance => totalEnduranceContainers * PlayerSettings.EndurancePerBar;
 
 		//Dodge
 		public Transform modelTransform = default;
@@ -101,11 +96,10 @@ namespace EoE.Entities
 
 		public static Inventory Inventory;
 
-		public static InventoryItem EquipedItem;
-		public static InventoryItem EquipedWeapon;
-		public static InventoryItem EquipedSpell;
-		public static InventoryItem EquipedArmor;
-		public static bool MagicSelected { get; private set; }
+		public InventoryItem EquipedItem;
+		public InventoryItem EquipedWeapon;
+		public InventoryItem EquipedSpell;
+		public bool MagicSelected { get; private set; }
 		#region Leveling
 		public Buff LevelingPointsBuff { get; private set; }
 		public static int TotalSoulCount { get; private set; }
@@ -123,10 +117,7 @@ namespace EoE.Entities
 		}
 		protected override void EntitieStart()
 		{
-			SetupLevelingControl();
-
 			ChangeWeapon(equipedWeapon);
-			SetupEndurance();
 			SetupInventorys();
 		}
 		protected override void EntitieUpdate()
@@ -138,7 +129,6 @@ namespace EoE.Entities
 				return;
 			}
 
-			RegenEndurance();
 			MovementControl();
 			AttackControl();
 			TargetEnemyControl();
@@ -155,7 +145,7 @@ namespace EoE.Entities
 			CheckForFalling();
 			UpdateAcceleration();
 
-			if(!IsStunned)
+			if(!IsStunned && !IsCasting)
 				TurnControl();
 		}
 		#endregion
@@ -174,8 +164,23 @@ namespace EoE.Entities
 				heldWeapon.Setup();
 			}
 		}
-		private void SetupLevelingControl()
+		protected override void ResetStats()
 		{
+			base.ResetStats();
+			curMaxEndurance = PlayerSettings.Endurance;
+		}
+		protected override void ResetStatValues()
+		{
+			base.ResetStatValues();
+			curEndurance = curMaxEndurance;
+			EquipedItem = null;
+			EquipedWeapon = null;
+			EquipedSpell = null;
+			EquipedArmor = null;
+		}
+		protected override void LevelSetup()
+		{
+			base.LevelSetup();
 			LevelingPointsBuff = ScriptableObject.CreateInstance<Buff>();
 			{
 				LevelingPointsBuff.Name = "LevelingSkillPoints";
@@ -210,12 +215,6 @@ namespace EoE.Entities
 			Inventory = new Inventory(PlayerSettings.UseInventorySize);
 			Inventory.InventoryChanged += UpdateEquipedItems;
 		}
-		private void SetupEndurance()
-		{
-			trueEnduranceAmount = PlayerSettings.EnduranceBars * PlayerSettings.EndurancePerBar;
-			totalEnduranceContainers = PlayerSettings.EnduranceBars;
-			curEndurance = useableEndurance;
-		}
 		protected void PositionHeldWeapon()
 		{
 			Vector3 worldOffset = equipedWeapon.weaponHandleOffset.x * rightHand.right +
@@ -232,50 +231,27 @@ namespace EoE.Entities
 
 			if (changeResult.finalChangeAmount > 0)
 			{
-				recentlyUsedEndurance = true;
-				usedEnduranceCooldown = PlayerSettings.EnduranceRegenDelayAfterUse;
+				usedEnduranceCooldown = PlayerSettings.EnduranceAfterUseCooldown;
 			}
 
 			curEndurance -= changeResult.finalChangeAmount;
-			curEndurance = Mathf.Clamp(curEndurance, 0, useableEndurance);
+			ClampEndurance();
 		}
-		public void UpdateEnduranceStat()
+		public void ClampEndurance() => curEndurance = Mathf.Clamp(curEndurance, 0, curMaxEndurance);
+		protected override void Regen()
 		{
-			totalEnduranceContainers = (int)(trueEnduranceAmount / PlayerSettings.EndurancePerBar);
-			if (curEndurance > useableEndurance)
-				curEndurance = useableEndurance;
-		}
-		private void RegenEndurance()
-		{
-			if (recentlyUsedEndurance)
-			{
-				usedEnduranceCooldown -= Time.deltaTime;
-				if (usedEnduranceCooldown <= 0)
-				{
-					usedEnduranceCooldown = 0;
-					recentlyUsedEndurance = false;
-				}
-			}
+			base.Regen();
 
-			if (curEndurance < useableEndurance - PlayerSettings.EndurancePerBar)
+			if (PlayerSettings.DoEnduranceRegen && curEndurance < curMaxEndurance)
 			{
-				lockedEndurance += PlayerSettings.EnduranceRegen * PlayerSettings.LockedEnduranceRegenMutliplier * (curStates.Fighting ? PlayerSettings.EnduranceRegenInCombat : 1) * Time.deltaTime;
-				if(lockedEndurance > PlayerSettings.EndurancePerBar)
+				float enduranceRegenMultiplier = curStates.Fighting ? PlayerSettings.EnduranceRegenInCombatMultiplier : 1;
+				if (usedEnduranceCooldown > 0)
 				{
-					curEndurance += PlayerSettings.EndurancePerBar;
-					lockedEndurance -= PlayerSettings.EndurancePerBar;
+					usedEnduranceCooldown -= Time.deltaTime;
+					enduranceRegenMultiplier *= PlayerSettings.EnduranceRegenAfterUseMultiplier;
 				}
-			}
-			else
-			{
-				lockedEndurance = 0;
-			}
-
-			if (!recentlyUsedEndurance && curEndurance < useableEndurance)
-			{
-				curEndurance += PlayerSettings.EnduranceRegen * (curStates.Fighting ? PlayerSettings.EnduranceRegenInCombat : 1) * Time.deltaTime;
-				if (curEndurance > useableEndurance)
-					curEndurance = useableEndurance;
+				curEndurance += PlayerSettings.EnduranceRegen * enduranceRegenMultiplier * Time.deltaTime;
+				curEndurance = Mathf.Min(curEndurance, curMaxEndurance);
 			}
 		}
 		#endregion
@@ -796,6 +772,27 @@ namespace EoE.Entities
 			if (InputController.PhysicalMagicSwap.Down)
 			{
 				MagicSelected = !MagicSelected;
+
+				if (EquipedWeapon != null)
+				{
+					EquipedWeapon.isEquiped = !MagicSelected;
+					if (MagicSelected)
+						EquipedWeapon.data.UnEquip(EquipedWeapon, this);
+					else
+						EquipedWeapon.data.Equip(EquipedWeapon, this);
+				}
+
+				if(heldWeapon)
+					heldWeapon.gameObject.SetActive(!MagicSelected);
+
+				if (EquipedSpell != null)
+				{
+					EquipedSpell.isEquiped = MagicSelected;
+					if (MagicSelected)
+						EquipedSpell.data.Equip(EquipedSpell, this);
+					else
+						EquipedSpell.data.UnEquip(EquipedSpell, this);
+				}
 			}
 		}
 		private void UpdateEquipedItems()
@@ -861,9 +858,10 @@ namespace EoE.Entities
 					comboIndex = 0;
 				}
 			}
-			if (MagicSelected && EquipedSpell != null && InputController.Attack.Pressed)
+			if (MagicSelected && InputController.Attack.Pressed)
 			{
-				EquipedSpell.data.Use(EquipedSpell, this, Inventory);
+				if(EquipedSpell != null)
+					EquipedSpell.data.Use(EquipedSpell, this, Inventory);
 				return;
 			}
 			if (equipedWeapon == null || isCurrentlyAttacking || (!InputController.Attack.Pressed && !InputController.HeavyAttack.Pressed))
@@ -1141,7 +1139,6 @@ namespace EoE.Entities
 			{
 				LevelUpEntitie();
 			}
-			levelDisplay.text = (EntitieLevel + 1).ToString();
 		}
 		protected override void LevelUpEntitie()
 		{
@@ -1181,7 +1178,7 @@ namespace EoE.Entities
 					}
 				case TargetBaseStat.Endurance:
 					{
-						value += PlayerSettings.EnduranceBars * PlayerSettings.EndurancePerBar;
+						value += PlayerSettings.Endurance;
 						break;
 					}
 				case TargetBaseStat.PhysicalDamage:

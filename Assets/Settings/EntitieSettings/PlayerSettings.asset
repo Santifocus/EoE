@@ -49,12 +49,12 @@ MonoBehaviour:
   MaxEnemyTargetingDistance: 250
   CameraClampsWhenTargeting: {x: -30, y: 30}
   CameraBaseFOV: 60
-  EnduranceBars: 4
-  EndurancePerBar: 25
+  Endurance: 100
+  DoEnduranceRegen: 1
   EnduranceRegen: 6
-  LockedEnduranceRegenMutliplier: 0.5
-  EnduranceRegenInCombat: 1
-  EnduranceRegenDelayAfterUse: 2
+  EnduranceRegenInCombatMultiplier: 0.5
+  EnduranceAfterUseCooldown: 3
+  EnduranceRegenAfterUseMultiplier: 0.5
   JumpEnduranceCost: 3
   RunEnduranceCost: 5
   JumpPower: {x: 0, y: 9, z: 15}

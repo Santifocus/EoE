@@ -60,7 +60,7 @@ namespace EoE.Information
 
 		//Other
 		public float CritDamageMultiplier = 2;
-		public float SecondsPerEntititeRegen = 0.5f;
+		public float SecondsPerEntitieHealthRegen = 0.5f;
 		public SoulDrop SoulDropPrefab = default;
 		public float ItemDropRandomVelocityStrenght = 2;
 		public float SpellEffectTickSpeed = 0.25f;

@@ -101,7 +101,7 @@ namespace EoE.Information
 				else if(basis.targetStat == TargetStat.Mana)
 					finalChangeAmount = Mathf.Max(finalChangeAmount, -(receiver.curMaxMana - receiver.curMana));
 				else if(receiver is Player)
-					finalChangeAmount = Mathf.Max(finalChangeAmount, -((receiver as Player).useableEndurance - (receiver as Player).curEndurance));
+					finalChangeAmount = Mathf.Max(finalChangeAmount, -((receiver as Player).curMaxEndurance - (receiver as Player).curEndurance));
 
 				//VFX for Player
 				//We dont want to send VFX if the Player caused himself damage

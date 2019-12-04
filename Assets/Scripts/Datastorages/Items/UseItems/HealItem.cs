@@ -5,6 +5,7 @@ namespace EoE.Information
 {
 	public class HealItem : Item
 	{
+		public override InUIUses Uses => InUIUses.Use | InUIUses.Equip;
 		public HealTargetInfo[] healEffects;
 		protected override bool OnUse(Entitie user)
 		{
@@ -14,7 +15,7 @@ namespace EoE.Information
 				if (t == TargetStat.Endurance && !(user is Player))
 					continue;
 
-				float targetStatAmount = t == TargetStat.Health ? user.curMaxHealth : (t == TargetStat.Mana ? user.curMaxMana : (user as Player).useableEndurance);
+				float targetStatAmount = t == TargetStat.Health ? user.curMaxHealth : (t == TargetStat.Mana ? user.curMaxMana : (user as Player).curMaxEndurance);
 				float amount = healEffects[i].Percent ? (targetStatAmount * (healEffects[i].Amount / 100)) : healEffects[i].Amount;
 				amount *= -1;
 
