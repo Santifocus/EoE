@@ -5,7 +5,7 @@ namespace EoE.Information
 {
 	public class SpellItem : Item
 	{
-		public override InUIUses Uses => InUIUses.Equip;
+		public override InUIUses Uses => InUIUses.Equip | InUIUses.Drop | InUIUses.Back;
 		public Spell targetSpell;
 		protected override bool OnUse(Entitie user)
 		{

@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: HeavyArmor
   m_EditorClassIdentifier: 
   ItemName: HeavyArmor
+  SortingID: 5
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 1
   ItemIcon: {fileID: 21300000, guid: a1fcd1fc27f476846a96d93236150024, type: 3}
   RemoveOnUse: 0
-  UseCooldown: 0
   FXEffectsOnUse: []
   FXEffectsWhenEquipped: []
+  UseCooldown: 0
   buffToApply: {fileID: 11400000, guid: a27cb54fb6a890c4fb62f2273585252d, type: 2}

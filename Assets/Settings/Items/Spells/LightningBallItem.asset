@@ -13,11 +13,13 @@ MonoBehaviour:
   m_Name: LightningBallItem
   m_EditorClassIdentifier: 
   ItemName: Ball Lightning
+  SortingID: 7
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 1
   ItemIcon: {fileID: 21300000, guid: 4df9655d9313e9742a85150fd376a978, type: 3}
   RemoveOnUse: 0
+  FXEffectsOnUse: []
+  FXEffectsWhenEquipped: []
   UseCooldown: 0
-  VFXEffectsOnUse: []
   targetSpell: {fileID: 11400000, guid: 99b740798887aef4b9a012c9584a16c5, type: 2}

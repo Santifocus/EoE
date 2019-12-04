@@ -2,6 +2,7 @@
 using EoE.Entities;
 using EoE.Information;
 using EoE.Sounds;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,17 +17,26 @@ namespace EoE.UI
 		[SerializeField] private DropMenu dropMenu = default;
 
 		[SerializeField] private Image equippedWeaponDisplay = default;
-		[SerializeField] private Image equippedSpellDisplay = default;
 		[SerializeField] private Image equippedArmorDisplay = default;
-		[SerializeField] private Image equippedItemDisplay = default;
+		[SerializeField] private ItemEquipSlot[] equippedSpellDisplays = default;
+		[SerializeField] private ItemEquipSlot[] equippedItemDisplays = default;
+
+		[SerializeField] private string EquipText = "Equip";
+		[SerializeField] private string UnEquipText = "Unequip";
 
 		private InventorySlot[] slots;
 		private float navigationCooldown;
 
 		private bool actionMenuOpen;
-		public int curSlotIndex { get; private set; }
-		private int itemActionIndex;
+		private bool equipSlotsOpen;
+		private bool equippedItemsSelected;
 		private bool dropMenuOpen;
+
+		public int curSlotIndex { get; private set; }
+
+		private int itemActionIndex;
+		private int equipedSlotIndex;
+		private List<ItemAction> allowedActions = new List<ItemAction>();
 
 		protected override void Start()
 		{
@@ -53,7 +63,7 @@ namespace EoE.UI
 		protected override void ResetPage()
 		{
 			curSlotIndex = 0;
-			slots[0].SelectMenuItem();
+			SelectSlot(false);
 			actionMenuOpen = false;
 
 			if (dropMenuOpen)
@@ -84,29 +94,47 @@ namespace EoE.UI
 
 			int preSlotIndex = curSlotIndex;
 			int preActionIndex = itemActionIndex;
+			int preEquipIndex = equipedSlotIndex;
+
 			if (InputController.MenuRight.Active)
 			{
 				if (!actionMenuOpen)
-					curSlotIndex++;
+				{
+					if (!equipSlotsOpen)
+						curSlotIndex++;
+					else
+						equipedSlotIndex++;
+				}
 			}
 			else if (InputController.MenuLeft.Active)
 			{
 				if (!actionMenuOpen)
-					curSlotIndex--;
+				{
+					if (!equipSlotsOpen)
+						curSlotIndex--;
+					else
+						equipedSlotIndex--;
+				}
 			}
 			else if (InputController.MenuDown.Active)
 			{
-				if (!actionMenuOpen)
-					curSlotIndex += SlotsPerRow();
-				else
-					itemActionIndex++;
+				if (!equipSlotsOpen)
+				{
+					if (!actionMenuOpen)
+						curSlotIndex += SlotsPerRow();
+					else
+						itemActionIndex++;
+				}
 			}
 			else if (InputController.MenuUp.Active)
 			{
-				if (!actionMenuOpen)
-					curSlotIndex -= SlotsPerRow();
-				else
-					itemActionIndex--;
+				if (!equipSlotsOpen)
+				{
+					if (!actionMenuOpen)
+						curSlotIndex -= SlotsPerRow();
+					else
+						itemActionIndex--;
+				}
 			}
 
 			if (preSlotIndex != curSlotIndex)
@@ -119,22 +147,69 @@ namespace EoE.UI
 				//Check again in case we scrolled down on a one-line inventory (eg.: Size:6, Index: 4 -> 10 -> 4)
 				if (preSlotIndex != curSlotIndex)
 				{
-					PlayFeedback(true);
-					navigationCooldown = NAV_COOLDOWN;
-					slots[curSlotIndex].SelectMenuItem();
+					SelectSlot(true);
 				}
 			}
 
 			if (preActionIndex != itemActionIndex)
 			{
+				int maxIndex = allowedActions.Count;
 				if (itemActionIndex < 0)
-					itemActionIndex += itemActions.Length;
-				else if (itemActionIndex >= itemActions.Length)
-					itemActionIndex -= itemActions.Length;
+					itemActionIndex += maxIndex;
+				else if (itemActionIndex >= maxIndex)
+					itemActionIndex -= maxIndex;
 
 				navigationCooldown = NAV_COOLDOWN;
-				itemActions[itemActionIndex].SelectMenuItem();
+				allowedActions[preActionIndex].DeSelect();
+				allowedActions[itemActionIndex].Select();
 				PlayFeedback(true);
+			}
+
+			if(preEquipIndex != equipedSlotIndex)
+			{
+				int maxIndex = equippedItemsSelected ? equippedItemDisplays.Length : equippedSpellDisplays.Length;
+				if (equipedSlotIndex < 0)
+					equipedSlotIndex += maxIndex;
+				else if (equipedSlotIndex >= maxIndex)
+					equipedSlotIndex -= maxIndex;
+
+				navigationCooldown = NAV_COOLDOWN;
+				(equippedItemsSelected ? equippedItemDisplays : equippedSpellDisplays)[preEquipIndex].DeSelect();
+				(equippedItemsSelected ? equippedItemDisplays : equippedSpellDisplays)[equipedSlotIndex].Select();
+				PlayFeedback(true);
+			}
+		}
+		private void SelectSlot(bool feedBack)
+		{
+			if(feedBack)
+				PlayFeedback(true);
+			navigationCooldown = NAV_COOLDOWN;
+			slots[curSlotIndex].SelectMenuItem();
+			UpdateActionMenu();
+		}
+		private void UpdateActionMenu()
+		{
+			allowedActions = new List<ItemAction>(itemActions.Length);
+			InventoryItem item = Player.Instance.Inventory[curSlotIndex];
+			for(int i = 0; i < itemActions.Length; i++)
+			{
+				if (item != null)
+				{
+					bool allowed = (item.data.Uses | itemActions[i].actionType) == item.data.Uses;
+					if(allowed)
+					{
+						allowedActions.Add(itemActions[i]);
+					}
+					itemActions[i].SetAllowed(allowed);
+				}
+				else
+				{
+					itemActions[i].SetAllowed(false);
+				}
+
+				//Update equip text
+				if (itemActions[i].actionType == InUIUses.Equip)
+					itemActions[i].displayText = ((item != null) && item.isEquiped) ? UnEquipText : EquipText;
 			}
 		}
 		private void PlayFeedback(bool succesSound)
@@ -152,8 +227,8 @@ namespace EoE.UI
 		{
 			if (actionMenuOpen)
 			{
-				ItemAction.ItemActionType action = itemActions[itemActionIndex].actionType;
-				if (action == ItemAction.ItemActionType.Back)
+				InUIUses action = allowedActions[itemActionIndex].actionType;
+				if (action == InUIUses.Back)
 				{
 					MenuBack();
 					return;
@@ -164,50 +239,84 @@ namespace EoE.UI
 					return;
 
 				Item target = item.data;
-				if (action == ItemAction.ItemActionType.Use)
+				if (action == InUIUses.Use)
 				{
-					if (target && item.useCooldown <= 0)
+					if (target && item.data.curCooldown <= 0)
 						target.Use(item, Player.Instance, Player.Instance.Inventory);
 					UpdateEquippedSlots();
 				}
-				else if (action == ItemAction.ItemActionType.Equip)
+				else if (action == InUIUses.Equip)
 				{
 					if (target)
 					{
-						bool shouldBeEquipped = true;
-						if (target is WeaponItem)
+						bool unequip = item.isEquiped;
+						if (target is WeaponItem || target is ArmorItem)
 						{
-							if (Player.Instance.EquipedWeapon != null)
-								Player.Instance.EquipedWeapon.data.UnEquip(Player.Instance.EquipedWeapon, Player.Instance);
-							Player.Instance.EquipedWeapon = item;
-							shouldBeEquipped = !Player.Instance.MagicSelected;
+							if (target is WeaponItem)
+							{
+								if (Player.Instance.EquipedWeapon != null)
+								{
+									Player.Instance.EquipedWeapon.data.UnEquip(Player.Instance.EquipedWeapon, Player.Instance);
+									Player.Instance.EquipedWeapon.isEquiped = false;
+								}
+
+								if (!unequip)
+								{
+									Player.Instance.EquipedWeapon = item;
+									Player.Instance.EquipedWeapon.isEquiped = true;
+								}
+
+								if(!Player.Instance.MagicSelected)
+									target.Equip(item, Player.Instance);
+							}
+							else //target is ArmorItem
+							{
+								if (Player.Instance.EquipedArmor != null)
+								{
+									Player.Instance.EquipedArmor.isEquiped = false;
+									Player.Instance.EquipedArmor.data.UnEquip(Player.Instance.EquipedArmor, Player.Instance);
+								}
+
+								if (!unequip)
+								{
+									Player.Instance.EquipedArmor = item;
+									Player.Instance.EquipedArmor.isEquiped = true;
+								}
+
+								target.Equip(item, Player.Instance);
+							}
+							//TODO: NEED PLAYER SELECT UPDATE
 						}
-						else if (target is SpellItem)
+						else //(target is (SpellItem / Item / any other not mentioned type))
 						{
-							if (Player.Instance.EquipedSpell != null)
-								Player.Instance.EquipedSpell.data.UnEquip(Player.Instance.EquipedSpell, Player.Instance);
-							Player.Instance.EquipedSpell = item;
-							shouldBeEquipped = Player.Instance.MagicSelected;
-						}
-						else if (target is ArmorItem)
-						{
-							if (Player.Instance.EquipedArmor != null)
-								Player.Instance.EquipedArmor.data.UnEquip(Player.Instance.EquipedArmor, Player.Instance);
-							Player.Instance.EquipedArmor = item;
-						}
-						else
-						{
-							if (Player.Instance.EquipedItem != null)
-								Player.Instance.EquipedItem.data.UnEquip(Player.Instance.EquipedItem, Player.Instance);
-							Player.Instance.EquipedItem = item;
+							if (unequip)
+							{
+								InventoryItem[] targetArray = (target is SpellItem) ? Player.Instance.SelectableSpellItems : Player.Instance.SelectableItems;
+								for(int i = 0; i < targetArray.Length; i++)
+								{
+									if(targetArray[i] == item)
+									{
+										targetArray[i].data.UnEquip(targetArray[i], Player.Instance);
+										targetArray[i].isEquiped = false;
+										targetArray[i] = null;
+										//TODO: NEED PLAYER SELECT UPDATE
+										break;
+									}
+								}
+							}
+							else
+							{
+								actionMenuOpen = false;
+								equipSlotsOpen = true;
+								equippedItemsSelected = !(target is SpellItem);
+								(equippedItemsSelected ? equippedItemDisplays : equippedSpellDisplays)[equipedSlotIndex = 0].Select();
+							}
 						}
 
-						if(shouldBeEquipped)
-							target.Equip(item, Player.Instance);
 						UpdateEquippedSlots();
 					}
 				}
-				else if (action == ItemAction.ItemActionType.Drop)
+				else if (action == InUIUses.Drop)
 				{
 					if (target)
 					{
@@ -219,11 +328,36 @@ namespace EoE.UI
 				if (Player.Instance.Inventory[curSlotIndex] == null)
 					MenuBack();
 			}
+			else if (equipSlotsOpen)
+			{
+				InventoryItem[] targetArray = equippedItemsSelected ? Player.Instance.SelectableItems : Player.Instance.SelectableSpellItems;
+				if (targetArray[equipedSlotIndex] != null)
+				{
+					targetArray[equipedSlotIndex].isEquiped = false;
+					targetArray[equipedSlotIndex].data.UnEquip(targetArray[equipedSlotIndex], Player.Instance);
+				}
+
+				InventoryItem item = Player.Instance.Inventory[curSlotIndex];
+				targetArray[equipedSlotIndex] = item;
+				targetArray[equipedSlotIndex].isEquiped = true;
+
+				if(item == (equippedItemsSelected ? Player.Instance.EquipedItem : Player.Instance.EquipedSpell))
+				{
+					item.data.Equip(item, Player.Instance);
+				}
+
+				(equippedItemsSelected ? equippedItemDisplays : equippedSpellDisplays)[equipedSlotIndex].DeSelect();
+				equipSlotsOpen = actionMenuOpen = false;
+				SelectSlot(true);
+				UpdateEquippedSlots();
+			}
 			else
 			{
-				actionMenuOpen = true;
-				itemActionIndex = 0;
-				itemActions[0].SelectMenuItem();
+				if(allowedActions.Count > 0)
+				{
+					actionMenuOpen = true;
+					allowedActions[itemActionIndex = 0].Select();
+				}
 			}
 		}
 		private void UpdateEquippedSlots()
@@ -239,16 +373,6 @@ namespace EoE.UI
 				equippedWeaponDisplay.color = Color.clear;
 			}
 
-			if (Player.Instance.EquipedSpell != null)
-			{
-				equippedSpellDisplay.sprite = Player.Instance.EquipedSpell.data.ItemIcon;
-				equippedSpellDisplay.color = Color.white;
-			}
-			else
-			{
-				equippedSpellDisplay.sprite = null;
-				equippedSpellDisplay.color = Color.clear;
-			}
 
 			if (Player.Instance.EquipedArmor != null)
 			{
@@ -261,15 +385,32 @@ namespace EoE.UI
 				equippedArmorDisplay.color = Color.clear;
 			}
 
-			if (Player.Instance.EquipedItem != null)
+			for(int i = 0; i < equippedSpellDisplays.Length; i++)
 			{
-				equippedItemDisplay.sprite = Player.Instance.EquipedItem.data.ItemIcon;
-				equippedItemDisplay.color = Color.white;
+				if(Player.Instance.SelectableSpellItems[i] != null)
+				{
+					equippedSpellDisplays[i].sprite = Player.Instance.SelectableSpellItems[i].data.ItemIcon;
+					equippedSpellDisplays[i].color = Color.white;
+				}
+				else
+				{
+					equippedSpellDisplays[i].sprite = null;
+					equippedSpellDisplays[i].color = Color.clear;
+				}
 			}
-			else
+
+			for (int i = 0; i < equippedItemDisplays.Length; i++)
 			{
-				equippedItemDisplay.sprite = null;
-				equippedItemDisplay.color = Color.clear;
+				if (Player.Instance.SelectableItems[i] != null)
+				{
+					equippedItemDisplays[i].sprite = Player.Instance.SelectableItems[i].data.ItemIcon;
+					equippedItemDisplays[i].color = Color.white;
+				}
+				else
+				{
+					equippedItemDisplays[i].sprite = null;
+					equippedItemDisplays[i].color = Color.clear;
+				}
 			}
 		}
 		private void ShowDropMenu()
@@ -285,8 +426,17 @@ namespace EoE.UI
 		}
 		public void MenuBack()
 		{
-			slots[curSlotIndex].SelectMenuItem();
-			actionMenuOpen = false;
+			if (equipSlotsOpen)
+			{
+				(equippedItemsSelected ? equippedItemDisplays : equippedSpellDisplays)[equipedSlotIndex].DeSelect();
+				equipSlotsOpen = false;
+				actionMenuOpen = true;
+			}
+			else
+			{
+				SelectSlot(false);
+				actionMenuOpen = false;
+			}
 		}
 
 		protected override void DeactivatePage()

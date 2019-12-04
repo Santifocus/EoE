@@ -21,9 +21,13 @@ namespace EoE
 		[SerializeField] private SpellProjectile projectilePrefab = default;
 		public ItemDrop itemDropPrefab;
 
-		public Transform bgCanvas = default;
-		public Transform mainCanvas = default;
+		[SerializeField] private Transform bgCanvas = default;
+		[SerializeField] private Transform mainCanvas = default;
 		public Transform enemyHealthBarStorage = default;
+
+		[Space(10)]
+		[SerializeField] private ItemCollector itemCollector = default;
+		public static ItemCollector ItemCollection => Instance.itemCollector;
 
 		private void Start()
 		{

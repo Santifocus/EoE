@@ -21,6 +21,7 @@ namespace EoE.Entities
 		private const float IS_FALLING_THRESHOLD = -1;
 		private const float LANDED_VELOCITY_THRESHOLD = 0.5f;
 		private const float SWITCH_TARGET_COOLDOWN = 0.25f;
+		private const int SELECTABLE_ITEMS_AMOUNT = 4;
 
 		//Inspector variables
 		[Space(10)]
@@ -94,12 +95,24 @@ namespace EoE.Entities
 		public Entitie TargetedEntitie;
 		public PlayerBuffDisplay BuffDisplay => Instance.buffDisplay;
 
+		#region Items
 		public Inventory Inventory;
 
-		public InventoryItem EquipedItem;
+		//Weapon
 		public InventoryItem EquipedWeapon;
-		public InventoryItem EquipedSpell;
+
+		//Use Items
+		public InventoryItem[] SelectableItems;
+		public int selectedItemIndex { get; private set; }
+		public InventoryItem EquipedItem => SelectableItems[selectedItemIndex];
+
+		//Spell Items
+		public InventoryItem[] SelectableSpellItems;
 		public bool MagicSelected { get; private set; }
+		public int selectedSpellItemIndex { get; private set; }
+		public InventoryItem EquipedSpell => SelectableSpellItems[selectedSpellItemIndex];
+		#endregion
+
 		#region Leveling
 		public Buff LevelingPointsBuff { get; private set; }
 		public int TotalSoulCount { get; private set; }
@@ -132,10 +145,10 @@ namespace EoE.Entities
 			MovementControl();
 			AttackControl();
 			TargetEnemyControl();
+			UpdateItemCooldowns();
 			ItemUseControll();
 			BlockControl();
 			PositionHeldWeapon();
-			Inventory.UpdateCooldown();
 		}
 		protected override void EntitieFixedUpdate()
 		{
@@ -173,10 +186,13 @@ namespace EoE.Entities
 		{
 			base.ResetStatValues();
 			curEndurance = curMaxEndurance;
-			EquipedItem = null;
 			EquipedWeapon = null;
-			EquipedSpell = null;
 			EquipedArmor = null;
+
+			selectedItemIndex = 0;
+			SelectableItems = new InventoryItem[SELECTABLE_ITEMS_AMOUNT];
+			selectedSpellItemIndex = 0;
+			SelectableSpellItems = new InventoryItem[SELECTABLE_ITEMS_AMOUNT];
 		}
 		protected override void LevelSetup()
 		{
@@ -766,7 +782,7 @@ namespace EoE.Entities
 		{
 			if (InputController.UseItem.Down && EquipedItem != null)
 			{
-				if(EquipedItem.useCooldown <= 0)
+				if(EquipedItem.data.curCooldown <= 0)
 					EquipedItem.data.Use(EquipedItem, this, Inventory);
 			}
 			if (InputController.PhysicalMagicSwap.Down)
@@ -795,16 +811,32 @@ namespace EoE.Entities
 				}
 			}
 		}
+		private void UpdateItemCooldowns()
+		{
+			for(int i = 0; i < GameController.ItemCollection.Data.Length; i++)
+			{
+				if (GameController.ItemCollection.Data[i].curCooldown > 0)
+					GameController.ItemCollection.Data[i].curCooldown -= Time.deltaTime;
+			}
+		}
 		private void UpdateEquipedItems()
 		{
-			if (EquipedItem != null && EquipedItem.stackSize <= 0)
-				EquipedItem = null;
 			if (EquipedWeapon != null && EquipedWeapon.stackSize <= 0)
 				EquipedWeapon = null;
-			if (EquipedSpell != null && EquipedSpell.stackSize <= 0)
-				EquipedSpell = null;
 			if (EquipedArmor != null && EquipedArmor.stackSize <= 0)
 				EquipedArmor = null;
+
+			for(int i = 0; i < SELECTABLE_ITEMS_AMOUNT; i++)
+			{
+				if (SelectableItems[i] != null && SelectableItems[i].stackSize <= 0)
+				{
+					SelectableItems[i] = null;
+				}
+				if (SelectableSpellItems[i] != null && SelectableSpellItems[i].stackSize <= 0)
+				{
+					SelectableSpellItems[i] = null;
+				}
+			}
 		}
 		#endregion
 		#region BlockControl

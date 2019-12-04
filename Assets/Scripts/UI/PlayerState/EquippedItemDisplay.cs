@@ -41,7 +41,7 @@ namespace EoE.UI
 			if(newTarget != null)
 			{
 				//Update cooldowndisplay
-				if(lastCooldown > 0 && newTarget.useCooldown <= 0)
+				if(lastCooldown > 0 && newTarget.data.curCooldown <= 0)
 				{
 					StartCoroutine(BlinkIcon());
 				}
@@ -64,7 +64,7 @@ namespace EoE.UI
 		}
 		private void UpdateCooldown()
 		{
-			lastCooldown = (lastTarget == null) ? (0) : ((targetType == TargetItemType.Combat && Player.Instance.MagicSelected ? Mathf.Max(Player.Instance.CastingCooldown, lastTarget.useCooldown) : lastTarget.useCooldown));
+			lastCooldown = (lastTarget == null) ? (0) : ((targetType == TargetItemType.Combat && Player.Instance.MagicSelected ? Mathf.Max(Player.Instance.CastingCooldown, lastTarget.data.curCooldown) : lastTarget.data.curCooldown));
 		}
 		private float MaxCooldown()
 		{

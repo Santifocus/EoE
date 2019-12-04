@@ -5,7 +5,7 @@ namespace EoE.Information
 {
 	public class ArmorItem : Item
 	{
-		public override InUIUses Uses => InUIUses.Equip;
+		public override InUIUses Uses => InUIUses.Equip | InUIUses.Drop | InUIUses.Back;
 		[SerializeField] private Buff buffToApply = default;
 		protected override bool OnEquip(Entitie user)
 		{
