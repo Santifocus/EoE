@@ -27,3 +27,4 @@ MonoBehaviour:
   DOTs: []
   FXEffects:
   - {fileID: 11400000, guid: a011d9a7ab4db1e47893dbc30aa0bfca, type: 2}
+  - {fileID: 11400000, guid: 53564b75e4a434b43a218e87a11d8370, type: 2}

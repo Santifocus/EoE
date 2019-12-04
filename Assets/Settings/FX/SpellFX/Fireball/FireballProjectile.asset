@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FireballProjectile
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0
+  TimeOut: 1
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 0

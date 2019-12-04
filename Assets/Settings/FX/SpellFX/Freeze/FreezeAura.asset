@@ -23,4 +23,4 @@ MonoBehaviour:
   OffsetToTarget: {x: 0, y: -0.45, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}
   FollowTarget: 1
-  InheritRotationOfTarget: 1
+  InheritRotationOfTarget: 0
