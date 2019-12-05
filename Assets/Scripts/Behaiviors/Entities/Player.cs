@@ -108,7 +108,6 @@ namespace EoE.Entities
 
 		//Spell Items
 		public InventoryItem[] SelectableSpellItems;
-		public bool MagicSelected { get; private set; }
 		public int selectedSpellItemIndex { get; private set; }
 		public InventoryItem EquipedSpell => SelectableSpellItems[selectedSpellItemIndex];
 		#endregion
@@ -131,7 +130,7 @@ namespace EoE.Entities
 		protected override void EntitieStart()
 		{
 			ChangeWeapon(equipedWeapon);
-			SetupInventorys();
+			SetupInventory();
 		}
 		protected override void EntitieUpdate()
 		{
@@ -145,8 +144,7 @@ namespace EoE.Entities
 			MovementControl();
 			AttackControl();
 			TargetEnemyControl();
-			UpdateItemCooldowns();
-			ItemUseControll();
+			ItemControl();
 			BlockControl();
 			PositionHeldWeapon();
 		}
@@ -186,13 +184,6 @@ namespace EoE.Entities
 		{
 			base.ResetStatValues();
 			curEndurance = curMaxEndurance;
-			EquipedWeapon = null;
-			EquipedArmor = null;
-
-			selectedItemIndex = 0;
-			SelectableItems = new InventoryItem[SELECTABLE_ITEMS_AMOUNT];
-			selectedSpellItemIndex = 0;
-			SelectableSpellItems = new InventoryItem[SELECTABLE_ITEMS_AMOUNT];
 		}
 		protected override void LevelSetup()
 		{
@@ -224,12 +215,87 @@ namespace EoE.Entities
 			AddBuff(LevelingPointsBuff, this);
 			RequiredSoulsForLevel = PlayerSettings.LevelSettings.curve.GetRequiredSouls(EntitieLevel);
 		}
-		private void SetupInventorys()
+		private void SetupInventory()
 		{
-			MagicSelected = false;
-
-			Inventory = new Inventory(PlayerSettings.UseInventorySize);
+			Inventory = new Inventory(PlayerSettings.InventorySize);
 			Inventory.InventoryChanged += UpdateEquipedItems;
+
+			EquipedWeapon = null;
+			EquipedArmor = null;
+
+			selectedItemIndex = 0;
+			SelectableItems = new InventoryItem[SELECTABLE_ITEMS_AMOUNT];
+			selectedSpellItemIndex = 0;
+			SelectableSpellItems = new InventoryItem[SELECTABLE_ITEMS_AMOUNT];
+
+			for (int i = 0; i < PlayerSettings.StartItems.Length; i++)
+			{
+				//Add it to the inventory
+				List<int> targetSlots = Inventory.AddItem(new InventoryItem(PlayerSettings.StartItems[i].Item, PlayerSettings.StartItems[i].ItemCount));
+
+				//Force equipp
+				if (PlayerSettings.StartItems[i].ForceEquip)
+				{
+					InventoryItem targetItem = Inventory[targetSlots[targetSlots.Count - 1]];
+					targetItem.isEquiped = true;
+					//Find out what slot it belongs to, if it is a spell / normal item we try
+					//to put it in a open slot, if all slots are filled we put it in the first
+					if(PlayerSettings.StartItems[i].Item is WeaponItem)
+					{
+						EquipedWeapon = targetItem;
+					}
+					else if(PlayerSettings.StartItems[i].Item is ArmorItem)
+					{
+						EquipedArmor = targetItem;
+					}
+					else if(PlayerSettings.StartItems[i].Item is SpellItem)
+					{
+						bool added = false;
+
+						//Try to find a slot that is null and put the item there
+						for(int j = 0; j < SelectableSpellItems.Length; j++)
+						{
+							if(SelectableSpellItems[j] == null)
+							{
+								SelectableSpellItems[j] = targetItem;
+								added = true;
+								if (j == 0)
+									SelectableSpellItems[j].data.Equip(targetItem, this);
+								break;
+							}
+						}
+						//couldnt find a null slot, put it in the first one, (just a fallback)
+						if (!added && SelectableSpellItems.Length > 0)
+						{
+							SelectableSpellItems[0] = targetItem;
+							SelectableSpellItems[0].data.Equip(targetItem, this);
+						}
+					}
+					else
+					{
+						bool added = false;
+
+						//Try to find a slot that is null and put the item there
+						for (int j = 0; j < SelectableItems.Length; j++)
+						{
+							if (SelectableItems[j] == null)
+							{
+								SelectableItems[j] = targetItem;
+								added = true;
+								if (j == 0)
+									SelectableItems[j].data.Equip(targetItem, this);
+								break;
+							}
+						}
+						//couldnt find a null slot, put it in the first one, (just a fallback)
+						if (!added && SelectableItems.Length > 0)
+						{
+							SelectableItems[0] = targetItem;
+							SelectableItems[0].data.Equip(targetItem, this);
+						}
+					}
+				}
+			}
 		}
 		protected void PositionHeldWeapon()
 		{
@@ -777,39 +843,12 @@ namespace EoE.Entities
 			return possibleTargets;
 		}
 		#endregion
-		#region ItemUseControl
-		private void ItemUseControll()
+		#region ItemControl
+		private void ItemControl()
 		{
-			if (InputController.UseItem.Down && EquipedItem != null)
-			{
-				if(EquipedItem.data.curCooldown <= 0)
-					EquipedItem.data.Use(EquipedItem, this, Inventory);
-			}
-			if (InputController.PhysicalMagicSwap.Down)
-			{
-				MagicSelected = !MagicSelected;
-
-				if (EquipedWeapon != null)
-				{
-					EquipedWeapon.isEquiped = !MagicSelected;
-					if (MagicSelected)
-						EquipedWeapon.data.UnEquip(EquipedWeapon, this);
-					else
-						EquipedWeapon.data.Equip(EquipedWeapon, this);
-				}
-
-				if(heldWeapon)
-					heldWeapon.gameObject.SetActive(!MagicSelected);
-
-				if (EquipedSpell != null)
-				{
-					EquipedSpell.isEquiped = MagicSelected;
-					if (MagicSelected)
-						EquipedSpell.data.Equip(EquipedSpell, this);
-					else
-						EquipedSpell.data.UnEquip(EquipedSpell, this);
-				}
-			}
+			UpdateItemCooldowns();
+			ScrollItemControll();
+			ItemUseControl();
 		}
 		private void UpdateItemCooldowns()
 		{
@@ -819,6 +858,76 @@ namespace EoE.Entities
 					GameController.ItemCollection.Data[i].curCooldown -= Time.deltaTime;
 			}
 		}
+		private void ScrollItemControll()
+		{
+			int selectedItemIndexChange = InputController.ItemScrollUp.Down ? 1 : (InputController.ItemScrollDown.Down ? -1 : 0);
+			if (selectedItemIndexChange != 0)
+			{
+				int t = 0;
+				for (int i = 0; i < (SELECTABLE_ITEMS_AMOUNT - 1); i++)
+				{
+					t += selectedItemIndexChange;
+					int valIndex = ValidatedID(t + selectedItemIndex);
+					if (SelectableItems[valIndex] != null)
+					{
+						if (EquipedItem != null)
+							EquipedItem.data.UnEquip(EquipedItem, this);
+
+						selectedItemIndex = valIndex;
+						EquipedItem.data.Equip(EquipedItem, this);
+						break;
+					}
+				}
+			}
+
+			int selectedSpellIndexChange = InputController.MagicScrollUp.Down ? 1 : (InputController.MagicScrollDown.Down ? -1 : 0);
+			if (selectedSpellIndexChange != 0)
+			{
+				int t = 0;
+				for (int i = 0; i < (SELECTABLE_ITEMS_AMOUNT - 1); i++)
+				{
+					t += selectedSpellIndexChange;
+					int valIndex = ValidatedID(t + selectedSpellItemIndex);
+					if (SelectableSpellItems[valIndex] != null)
+					{
+						if (EquipedSpell != null)
+							EquipedSpell.data.UnEquip(EquipedSpell, this);
+
+						selectedSpellItemIndex = valIndex;
+						EquipedSpell.data.Equip(EquipedSpell, this);
+						break;
+					}
+				}
+			}
+
+			int ValidatedID(int id)
+			{
+				while (id < 0)
+					id += SELECTABLE_ITEMS_AMOUNT;
+				while (id >= SELECTABLE_ITEMS_AMOUNT)
+					id -= SELECTABLE_ITEMS_AMOUNT;
+
+				return id;
+			}
+		}
+		private void ItemUseControl()
+		{
+			if (InputController.Attack.Down && EquipedWeapon != null)
+			{
+				if (EquipedWeapon.data.curCooldown <= 0)
+					EquipedWeapon.data.Use(EquipedWeapon, this, Inventory);
+			}
+			else if (InputController.MagicCast.Down && EquipedSpell != null)
+			{
+				if (EquipedSpell.data.curCooldown <= 0)
+					EquipedSpell.data.Use(EquipedSpell, this, Inventory);
+			}
+			else if (InputController.UseItem.Down && EquipedItem != null)
+			{
+				if (EquipedItem.data.curCooldown <= 0)
+					EquipedItem.data.Use(EquipedItem, this, Inventory);
+			}
+		}
 		private void UpdateEquipedItems()
 		{
 			if (EquipedWeapon != null && EquipedWeapon.stackSize <= 0)
@@ -826,16 +935,66 @@ namespace EoE.Entities
 			if (EquipedArmor != null && EquipedArmor.stackSize <= 0)
 				EquipedArmor = null;
 
+			bool selectablesChanged = false;
 			for(int i = 0; i < SELECTABLE_ITEMS_AMOUNT; i++)
 			{
 				if (SelectableItems[i] != null && SelectableItems[i].stackSize <= 0)
 				{
+					selectablesChanged = true;
 					SelectableItems[i] = null;
 				}
 				if (SelectableSpellItems[i] != null && SelectableSpellItems[i].stackSize <= 0)
 				{
+					selectablesChanged = true;
 					SelectableSpellItems[i] = null;
 				}
+			}
+			if (selectablesChanged)
+				SelectectableItemsChanged();
+		}
+		public void SelectectableItemsChanged()
+		{
+			//If either the spell or Item selectables changed we want to check if we currently have nothing equipped
+			//if so, then we try to find item in the corrosponding array and equip, by doing this we can assure that when the player
+			//has 0 items in the selectable list he can have nothing equipped but the moment he puts one item into the array it will be equipped
+			//this is also used in case of the player using up one item, if that happens this function tries to jump to the next item
+
+			if (EquipedItem == null)
+			{
+				for (int i = 0; i < SELECTABLE_ITEMS_AMOUNT; i++)
+				{
+					int valIndex = ValidatedID(i + selectedItemIndex);
+					if (SelectableItems[valIndex] != null)
+					{
+						selectedItemIndex = valIndex;
+						EquipedItem.data.Equip(EquipedItem, this);
+						break;
+					}
+				}
+			}
+
+			if (EquipedSpell == null)
+			{
+				for (int i = 0; i < SELECTABLE_ITEMS_AMOUNT; i++)
+				{
+					int valIndex = ValidatedID(i + selectedSpellItemIndex);
+					if (SelectableSpellItems[valIndex] != null)
+					{
+						selectedSpellItemIndex = valIndex;
+						EquipedSpell.data.Equip(EquipedSpell, this);
+						break;
+					}
+				}
+			}
+
+			int ValidatedID(int id)
+			{
+				while (id < 0)
+					id += SELECTABLE_ITEMS_AMOUNT;
+				while (id >= SELECTABLE_ITEMS_AMOUNT)
+					id -= SELECTABLE_ITEMS_AMOUNT;
+
+				return id;
 			}
 		}
 		#endregion
@@ -890,12 +1049,7 @@ namespace EoE.Entities
 					comboIndex = 0;
 				}
 			}
-			if (MagicSelected && InputController.Attack.Pressed)
-			{
-				if(EquipedSpell != null)
-					EquipedSpell.data.Use(EquipedSpell, this, Inventory);
-				return;
-			}
+
 			if (equipedWeapon == null || isCurrentlyAttacking || (!InputController.Attack.Pressed && !InputController.HeavyAttack.Pressed))
 				return;
 

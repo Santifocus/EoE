@@ -1,4 +1,5 @@
 ﻿using EoE.Utils;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace EoE.Information
@@ -57,10 +58,11 @@ namespace EoE.Information
 			//If the remaining stack = 0 we can completly put the item into the inventory, if the stack changed the answer is capped, if it stayed the same the answer is Nothing
 			return remainingStack <= 0 ? InventoryAddability.Full : (remainingStack < item.stackSize ? InventoryAddability.Capped : InventoryAddability.Nothing);
 		}
-		public void AddItem(InventoryItem toAdd)
+		public List<int> AddItem(InventoryItem toAdd)
 		{
 			int remainingStack = toAdd.stackSize;
 			bool changed = false;
+			List<int> targetSlots = new List<int>();
 			//Try to add item to incomplete stacks
 			for (int i = 0; i < Lenght; i++)
 			{
@@ -69,7 +71,12 @@ namespace EoE.Information
 					continue;
 
 				int openStack = containedItems[i].data.MaxStack - containedItems[i].stackSize;
-				changed |= openStack > 0;
+
+				if(openStack > 0)
+				{
+					changed = true;
+					targetSlots.Add(i);
+				}
 
 				if (openStack >= remainingStack)
 				{
@@ -94,6 +101,7 @@ namespace EoE.Information
 					InventoryItem newItem = new InventoryItem(toAdd.data, size);
 					remainingStack -= size;
 					changed = true;
+					targetSlots.Add(i);
 
 					containedItems[i] = newItem;
 					if (remainingStack == 0)
@@ -108,6 +116,8 @@ namespace EoE.Information
 			toAdd.stackSize = remainingStack;
 			if (changed)
 				InventoryChanged?.Invoke();
+
+			return targetSlots;
 		}
 		public void RemoveStackSize(Item data, int stackSize)
 		{

@@ -137,10 +137,17 @@ MonoBehaviour:
   ReserveEnduranceBarColor: {r: 1, g: 1, b: 1, a: 1}
   ActiveEnduranceBarColor: {r: 1, g: 1, b: 1, a: 1}
   ReloadingEnduranceBarColor: {r: 0.4, g: 0.4, b: 0.4, a: 0.8}
-  UseInventorySize: 55
-  WeaponInventorySize: 8
-  SpellInventorySize: 8
-  ArmorInventorySize: 8
+  StartItems:
+  - Item: {fileID: 11400000, guid: cc8b9e7eb411f0f47863caffd0450432, type: 2}
+    ItemCount: 5
+    ForceEquip: 1
+  - Item: {fileID: 11400000, guid: 428f279ff073bb54c81150df9f36247e, type: 2}
+    ItemCount: 1
+    ForceEquip: 1
+  - Item: {fileID: 11400000, guid: f64f815518c407749858bddca8bf5ac0, type: 2}
+    ItemCount: 1
+    ForceEquip: 1
+  InventorySize: 55
   EffectsOnReceiveDamage:
   - {fileID: 11400000, guid: 11060c91c24341947a8c373d641e5c86, type: 2}
   - {fileID: 11400000, guid: 9d9557ec007fa904aa2d0ef9f1ea3489, type: 2}

@@ -26,7 +26,7 @@ namespace EoE.Controlls
 		public static Button PlayerMenu;
 
 		public static Button UseItem;
-		public static Button PhysicalMagicSwap;
+		public static Button MagicCast;
 
 		public static Button MagicScrollUp;
 		public static Button MagicScrollDown;
@@ -139,10 +139,10 @@ namespace EoE.Controlls
 			gameActions.UseItem.started += ctx => ButtonStarted(UseItem);
 			gameActions.UseItem.canceled += ctx => ButtonEnded(UseItem);
 
-			//PhysicalMagicSwap
-			PhysicalMagicSwap = new Button("PhysicalMagicSwap");
-			gameActions.PhysicalMagicSwap.started += ctx => ButtonStarted(PhysicalMagicSwap);
-			gameActions.PhysicalMagicSwap.canceled += ctx => ButtonEnded(PhysicalMagicSwap);
+			//MagicCast
+			MagicCast = new Button("MagicCast");
+			gameActions.MagicCast.started += ctx => ButtonStarted(MagicCast);
+			gameActions.MagicCast.canceled += ctx => ButtonEnded(MagicCast);
 
 			//MagicScrollUp
 			MagicScrollUp = new Button("MagicScrollUp");

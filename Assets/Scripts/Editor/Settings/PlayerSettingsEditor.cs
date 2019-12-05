@@ -14,6 +14,7 @@ namespace EoE.Information
 		private static bool IFramesSettingsOpen;
 		private static bool HUDSettingsOpen;
 		private static bool InventorySettingsOpen;
+		private static bool InventoryStartItemsOpen;
 
 		//VFXEffectArrays
 		private static bool ReceiveDamageOpen;
@@ -165,12 +166,21 @@ namespace EoE.Information
 			FoldoutHeader("Inventory Settings", ref InventorySettingsOpen);
 			if (InventorySettingsOpen)
 			{
-				IntField("Use Inventory Size", ref settings.UseInventorySize, 1);
-				IntField("Weapon Inventory Size", ref settings.WeaponInventorySize, 1);
-				IntField("Spell Inventory Size", ref settings.SpellInventorySize, 1);
-				IntField("Armor Inventory Size", ref settings.ArmorInventorySize, 1);
+				DrawArray(new GUIContent("Start Items"), DrawStartItem, ref settings.StartItems, ref InventoryStartItemsOpen, 1);
+				IntField("Use Inventory Size", ref settings.InventorySize, 1);
 			}
 			EndFoldoutHeader();
+		}
+		private bool DrawStartItem(int index, int offset, PlayerSettings.StartItem[] array)
+		{
+			bool changed = false;
+			if (array[index] == null)
+				array[index] = new PlayerSettings.StartItem();
+
+			changed |= ObjectField(new GUIContent("Start Item " + (index + 1)), ref array[index].Item, offset);
+			changed |= IntField(new GUIContent("Item Count"), ref array[index].ItemCount, offset);
+			changed |= BoolField(new GUIContent("Force Equip"), ref array[index].ForceEquip, offset);
+			return changed;
 		}
 		private void FXSettingsArea()
 		{

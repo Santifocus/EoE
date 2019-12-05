@@ -125,7 +125,7 @@ namespace EoE.Controlls
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""PhysicalMagicSwap"",
+                    ""name"": ""MagicCast"",
                     ""type"": ""Button"",
                     ""id"": ""e8dd7e70-0b0e-40f5-99bc-83374ae0d9b5"",
                     ""expectedControlType"": """",
@@ -305,14 +305,14 @@ namespace EoE.Controlls
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""PhysicalMagicSwap"",
+                    ""action"": ""MagicCast"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""a33f71bf-1ae9-497d-95af-01a19c82fa94"",
-                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""path"": ""<Gamepad>/dpad/up"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -323,7 +323,7 @@ namespace EoE.Controlls
                 {
                     ""name"": """",
                     ""id"": ""4897149c-a1de-472c-99de-abf3e56fa5bb"",
-                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""path"": ""<Gamepad>/dpad/down"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -334,7 +334,7 @@ namespace EoE.Controlls
                 {
                     ""name"": """",
                     ""id"": ""e29be8ff-5488-4cbf-85fe-5d5b3e76fbef"",
-                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""path"": ""<Gamepad>/dpad/right"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -345,7 +345,7 @@ namespace EoE.Controlls
                 {
                     ""name"": """",
                     ""id"": ""0dd94895-bef2-49e8-a56a-7dc080111be3"",
-                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""path"": ""<Gamepad>/dpad/left"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -645,7 +645,7 @@ namespace EoE.Controlls
             m_GameInput_Pause = m_GameInput.FindAction("Pause", throwIfNotFound: true);
             m_GameInput_PlayerMenu = m_GameInput.FindAction("PlayerMenu", throwIfNotFound: true);
             m_GameInput_UseItem = m_GameInput.FindAction("UseItem", throwIfNotFound: true);
-            m_GameInput_PhysicalMagicSwap = m_GameInput.FindAction("PhysicalMagicSwap", throwIfNotFound: true);
+            m_GameInput_MagicCast = m_GameInput.FindAction("MagicCast", throwIfNotFound: true);
             m_GameInput_MagicScrollUp = m_GameInput.FindAction("MagicScrollUp", throwIfNotFound: true);
             m_GameInput_MagicScrollDown = m_GameInput.FindAction("MagicScrollDown", throwIfNotFound: true);
             m_GameInput_ItemScrollUp = m_GameInput.FindAction("ItemScrollUp", throwIfNotFound: true);
@@ -725,7 +725,7 @@ namespace EoE.Controlls
         private readonly InputAction m_GameInput_Pause;
         private readonly InputAction m_GameInput_PlayerMenu;
         private readonly InputAction m_GameInput_UseItem;
-        private readonly InputAction m_GameInput_PhysicalMagicSwap;
+        private readonly InputAction m_GameInput_MagicCast;
         private readonly InputAction m_GameInput_MagicScrollUp;
         private readonly InputAction m_GameInput_MagicScrollDown;
         private readonly InputAction m_GameInput_ItemScrollUp;
@@ -747,7 +747,7 @@ namespace EoE.Controlls
             public InputAction @Pause => m_Wrapper.m_GameInput_Pause;
             public InputAction @PlayerMenu => m_Wrapper.m_GameInput_PlayerMenu;
             public InputAction @UseItem => m_Wrapper.m_GameInput_UseItem;
-            public InputAction @PhysicalMagicSwap => m_Wrapper.m_GameInput_PhysicalMagicSwap;
+            public InputAction @MagicCast => m_Wrapper.m_GameInput_MagicCast;
             public InputAction @MagicScrollUp => m_Wrapper.m_GameInput_MagicScrollUp;
             public InputAction @MagicScrollDown => m_Wrapper.m_GameInput_MagicScrollDown;
             public InputAction @ItemScrollUp => m_Wrapper.m_GameInput_ItemScrollUp;
@@ -800,9 +800,9 @@ namespace EoE.Controlls
                     UseItem.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnUseItem;
                     UseItem.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnUseItem;
                     UseItem.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnUseItem;
-                    PhysicalMagicSwap.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPhysicalMagicSwap;
-                    PhysicalMagicSwap.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPhysicalMagicSwap;
-                    PhysicalMagicSwap.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPhysicalMagicSwap;
+                    MagicCast.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicCast;
+                    MagicCast.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicCast;
+                    MagicCast.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicCast;
                     MagicScrollUp.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicScrollUp;
                     MagicScrollUp.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicScrollUp;
                     MagicScrollUp.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicScrollUp;
@@ -858,9 +858,9 @@ namespace EoE.Controlls
                     UseItem.started += instance.OnUseItem;
                     UseItem.performed += instance.OnUseItem;
                     UseItem.canceled += instance.OnUseItem;
-                    PhysicalMagicSwap.started += instance.OnPhysicalMagicSwap;
-                    PhysicalMagicSwap.performed += instance.OnPhysicalMagicSwap;
-                    PhysicalMagicSwap.canceled += instance.OnPhysicalMagicSwap;
+                    MagicCast.started += instance.OnMagicCast;
+                    MagicCast.performed += instance.OnMagicCast;
+                    MagicCast.canceled += instance.OnMagicCast;
                     MagicScrollUp.started += instance.OnMagicScrollUp;
                     MagicScrollUp.performed += instance.OnMagicScrollUp;
                     MagicScrollUp.canceled += instance.OnMagicScrollUp;
@@ -1005,7 +1005,7 @@ namespace EoE.Controlls
             void OnPause(InputAction.CallbackContext context);
             void OnPlayerMenu(InputAction.CallbackContext context);
             void OnUseItem(InputAction.CallbackContext context);
-            void OnPhysicalMagicSwap(InputAction.CallbackContext context);
+            void OnMagicCast(InputAction.CallbackContext context);
             void OnMagicScrollUp(InputAction.CallbackContext context);
             void OnMagicScrollDown(InputAction.CallbackContext context);
             void OnItemScrollUp(InputAction.CallbackContext context);

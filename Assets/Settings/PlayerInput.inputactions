@@ -110,7 +110,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "PhysicalMagicSwap",
+                    "name": "MagicCast",
                     "type": "Button",
                     "id": "e8dd7e70-0b0e-40f5-99bc-83374ae0d9b5",
                     "expectedControlType": "",
@@ -290,14 +290,14 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "PhysicalMagicSwap",
+                    "action": "MagicCast",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "a33f71bf-1ae9-497d-95af-01a19c82fa94",
-                    "path": "<Gamepad>/dpad/right",
+                    "path": "<Gamepad>/dpad/up",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -308,7 +308,7 @@
                 {
                     "name": "",
                     "id": "4897149c-a1de-472c-99de-abf3e56fa5bb",
-                    "path": "<Gamepad>/dpad/left",
+                    "path": "<Gamepad>/dpad/down",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -319,7 +319,7 @@
                 {
                     "name": "",
                     "id": "e29be8ff-5488-4cbf-85fe-5d5b3e76fbef",
-                    "path": "<Gamepad>/dpad/up",
+                    "path": "<Gamepad>/dpad/right",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -330,7 +330,7 @@
                 {
                     "name": "",
                     "id": "0dd94895-bef2-49e8-a56a-7dc080111be3",
-                    "path": "<Gamepad>/dpad/down",
+                    "path": "<Gamepad>/dpad/left",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

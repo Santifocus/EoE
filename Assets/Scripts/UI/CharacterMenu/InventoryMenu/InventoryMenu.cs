@@ -64,7 +64,7 @@ namespace EoE.UI
 		{
 			curSlotIndex = 0;
 			SelectSlot(false);
-			actionMenuOpen = false;
+			actionMenuOpen = dropMenuOpen = equipSlotsOpen = false;
 
 			if (dropMenuOpen)
 				HideDropMenu();
@@ -266,8 +266,6 @@ namespace EoE.UI
 									Player.Instance.EquipedWeapon.isEquiped = true;
 								}
 
-								if(!Player.Instance.MagicSelected)
-									target.Equip(item, Player.Instance);
 							}
 							else //target is ArmorItem
 							{
@@ -283,9 +281,8 @@ namespace EoE.UI
 									Player.Instance.EquipedArmor.isEquiped = true;
 								}
 
-								target.Equip(item, Player.Instance);
 							}
-							//TODO: NEED PLAYER SELECT UPDATE
+							target.Equip(item, Player.Instance);
 						}
 						else //(target is (SpellItem / Item / any other not mentioned type))
 						{
@@ -299,7 +296,6 @@ namespace EoE.UI
 										targetArray[i].data.UnEquip(targetArray[i], Player.Instance);
 										targetArray[i].isEquiped = false;
 										targetArray[i] = null;
-										//TODO: NEED PLAYER SELECT UPDATE
 										break;
 									}
 								}
@@ -350,6 +346,7 @@ namespace EoE.UI
 				equipSlotsOpen = actionMenuOpen = false;
 				SelectSlot(true);
 				UpdateEquippedSlots();
+				Player.Instance.SelectectableItemsChanged();
 			}
 			else
 			{

@@ -63,10 +63,8 @@ namespace EoE.Information
 		public Color ReloadingEnduranceBarColor = new Color(0.4f, 0.4f, 0.4f, 0.8f);
 
 		//Inventory
-		public int UseInventorySize = 24;
-		public int WeaponInventorySize = 8;
-		public int SpellInventorySize = 8;
-		public int ArmorInventorySize = 8;
+		public StartItem[] StartItems = new StartItem[0];
+		public int InventorySize = 24;
 
 		///FX
 		public FXObject[] EffectsOnReceiveDamage = default;
@@ -82,5 +80,13 @@ namespace EoE.Information
 		public FXObject[] EffectsOnPlayerDodge = default;
 		public FXObject[] EffectsOnEnemyKilled = default;
 		public FXObject[] EffectsOnPlayerDeath = default;
+
+		[System.Serializable]
+		public class StartItem
+		{
+			public Item Item;
+			public int ItemCount = 1;
+			public bool ForceEquip;
+		}
 	}
 }
