@@ -18,12 +18,13 @@ MonoBehaviour:
   PossibleDropsTable: {fileID: 11400000, guid: 6c863124784db984e93eb995e00bd42e, type: 2}
   LevelSettings: {fileID: 11400000, guid: 8872bc66ea135374daf83e0b036673d5, type: 2}
   SoulWorth: 1
-  BaseAttackDamage: 20
+  BaseAttackDamage: 18
   BaseMagicDamage: 3
-  BaseDefense: 5
+  BaseDefense: 4
   Health: 70
   DoHealthRegen: 0
   HealthRegen: 0
+  HealthRegenCooldownAfterTakingDamage: 4
   HealthRegenInCombatMultiplier: 0.5
   HealthRegenParticles: {fileID: 0}
   HealthRegenParticlesOffset: {x: 0, y: 0, z: 0}
