@@ -31,6 +31,7 @@ namespace EoE.Information
 		//Jumping
 		public Vector3 JumpPower = new Vector3(0, 10, 0);
 		public float JumpImpulsePower = 2.5f;
+		public float JumpBackwardMultiplier = 0.65f;
 
 		//Dodging
 		public float DodgePower = 1;
@@ -65,6 +66,10 @@ namespace EoE.Information
 		//Inventory
 		public StartItem[] StartItems = new StartItem[0];
 		public int InventorySize = 24;
+
+		//Animation
+		public float MaxSideTurn = 10;
+		public float SideTurnLerpSpeed = 1;
 
 		///FX
 		public FXObject[] EffectsOnReceiveDamage = default;

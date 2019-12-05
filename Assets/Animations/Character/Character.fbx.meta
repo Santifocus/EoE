@@ -191,8 +191,8 @@ ModelImporter:
       name: Hero_Land
       takeName: Hero_land
       internalID: 7794213585436756940
-      firstFrame: 0
-      lastFrame: 15
+      firstFrame: 13
+      lastFrame: 30
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

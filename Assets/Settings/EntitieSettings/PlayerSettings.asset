@@ -148,6 +148,8 @@ MonoBehaviour:
     ItemCount: 1
     ForceEquip: 1
   InventorySize: 55
+  MaxSideTurn: 15
+  SideTurnLerpSpeed: 3
   EffectsOnReceiveDamage:
   - {fileID: 11400000, guid: 11060c91c24341947a8c373d641e5c86, type: 2}
   - {fileID: 11400000, guid: 9d9557ec007fa904aa2d0ef9f1ea3489, type: 2}

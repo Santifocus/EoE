@@ -8,13 +8,13 @@ namespace EoE.Information
 	public class PlayerSettingsEditor : EntitieSettingsEditor
 	{
 		private static bool CameraSettingsOpen;
-		private static bool EnduranceSettingsOpen;
 		private static bool DodgeSettingsOpen;
 		private static bool BlockingSettingsOpen;
 		private static bool IFramesSettingsOpen;
 		private static bool HUDSettingsOpen;
 		private static bool InventorySettingsOpen;
 		private static bool InventoryStartItemsOpen;
+		private static bool AnimationSettingsOpen;
 
 		//VFXEffectArrays
 		private static bool ReceiveDamageOpen;
@@ -37,6 +37,7 @@ namespace EoE.Information
 			IFramesSettingsArea();
 			HUDSettingsArea();
 			InventorySettingsArea();
+			AnimationSettingsArea();
 			FXSettingsArea();
 		}
 
@@ -70,25 +71,26 @@ namespace EoE.Information
 
 			PlayerSettings settings = target as PlayerSettings;
 			GUILayout.Space(2);
-			Vector3Field(new GUIContent("Jump Power", "With which velocity does this Entitie jump? (X == Sideways, Y == Upward, Z == Foreward)"), ref settings.JumpPower);
-			FloatField(new GUIContent("Jump Impulse Power"), ref settings.JumpImpulsePower);
+			Vector3Field(new GUIContent("Jump Power", "With which velocity does this Entitie jump? (X == Sideways, Y == Upward, Z == Foreward)"), ref settings.JumpPower, 1);
+			FloatField(new GUIContent("Jump Impulse Power"), ref settings.JumpImpulsePower, 1);
+			FloatField(new GUIContent("Jump Backward Multiplier"), ref settings.JumpBackwardMultiplier, 1);
 		}
 		private void EnduranceSettingsArea()
 		{
 			PlayerSettings settings = target as PlayerSettings;
 			LineBreak();
 
-			FloatField(new GUIContent("Endurance", "What base Endurance does the Player have?"), ref settings.Endurance);
-			BoolField(new GUIContent("Do Endurance Regen", "Should the Player Regen Endurance over time?"), ref settings.DoEnduranceRegen);
+			FloatField(new GUIContent("Endurance", "What base Endurance does the Player have?"), ref settings.Endurance, 1);
+			BoolField(new GUIContent("Do Endurance Regen", "Should the Player Regen Endurance over time?"), ref settings.DoEnduranceRegen, 1);
 
 			if (settings.DoEnduranceRegen)
 			{
-				FloatField(new GUIContent("Endurance Regen", "How much Endurance should the Player regenerate? (Per Second)"), ref settings.EnduranceRegen, 1);
-				FloatField(new GUIContent("Endurance Regen In Combat Multiplier", "In combat regeneration will be multiplied by this amount."), ref settings.EnduranceRegenInCombatMultiplier, 1);
+				FloatField(new GUIContent("Endurance Regen", "How much Endurance should the Player regenerate? (Per Second)"), ref settings.EnduranceRegen, 2);
+				FloatField(new GUIContent("Endurance Regen In Combat Multiplier", "In combat regeneration will be multiplied by this amount."), ref settings.EnduranceRegenInCombatMultiplier, 2);
 				GUILayout.Space(3);
 
-				FloatField(new GUIContent("Endurance After Use Cooldown", "After the Player uses Endurance how long will there be a Regen muliplier active (See below)? (Per Second)"), ref settings.EnduranceAfterUseCooldown, 1);
-				FloatField(new GUIContent("Endurance Regen After Use Multiplier", "If the player recently used Endurance how will the Endurance regen multiplied? (Per Second)"), ref settings.EnduranceRegenAfterUseMultiplier, 1);
+				FloatField(new GUIContent("Endurance After Use Cooldown", "After the Player uses Endurance how long will there be a Regen muliplier active (See below)? (Per Second)"), ref settings.EnduranceAfterUseCooldown, 2);
+				FloatField(new GUIContent("Endurance Regen After Use Multiplier", "If the player recently used Endurance how will the Endurance regen multiplied? (Per Second)"), ref settings.EnduranceRegenAfterUseMultiplier, 2);
 			}
 		}
 		private void DodgeSettingsArea()
@@ -181,6 +183,18 @@ namespace EoE.Information
 			changed |= IntField(new GUIContent("Item Count"), ref array[index].ItemCount, offset);
 			changed |= BoolField(new GUIContent("Force Equip"), ref array[index].ForceEquip, offset);
 			return changed;
+		}
+		private void AnimationSettingsArea()
+		{
+			PlayerSettings settings = target as PlayerSettings;
+
+			FoldoutHeader("Animation Settings", ref AnimationSettingsOpen);
+			if (AnimationSettingsOpen)
+			{
+				FloatField(new GUIContent("Max Side Turn"), ref settings.MaxSideTurn, 1);
+				FloatField(new GUIContent("Side Turn Lerp Speed"), ref settings.SideTurnLerpSpeed, 1);
+			}
+			EndFoldoutHeader();
 		}
 		private void FXSettingsArea()
 		{

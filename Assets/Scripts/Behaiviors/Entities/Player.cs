@@ -147,6 +147,8 @@ namespace EoE.Entities
 			ItemControl();
 			BlockControl();
 			PositionHeldWeapon();
+
+			animationControl.SetBool("InCombat", curStates.Fighting);
 		}
 		protected override void EntitieFixedUpdate()
 		{
@@ -378,13 +380,16 @@ namespace EoE.Entities
 
 			//If the Player doesnt move intentionally but is in run mode, then stop the run mode
 			if (running && (!moving || isBlocking))
-				curStates.Running = running = false;
+				curStates.Running = false;
 
 			//Set all the animation states
-			animationControl.SetBool("Turning", turning);
-			animationControl.SetBool("Walking", !turning && curAcceleration > 0 && !(running && curAcceleration > RUN_ANIM_THRESHOLD));
-			animationControl.SetBool("Running", !turning && curAcceleration > 0 && (running && curAcceleration > RUN_ANIM_THRESHOLD));
-			animationControl.SetFloat("Runspeed", curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration);
+			float directionOffset = Vector3.Dot(controllDirection, transform.forward);
+			animationControl.SetBool("Walking", !turning && curAcceleration > 0);
+			int direction = directionOffset > 0 ? 1 : -1; 
+			animationControl.SetFloat("WalkSpeed", (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration * direction);
+
+			float newSideTurn = Mathf.LerpAngle(modelTransform.localEulerAngles.z, (1 - Mathf.Abs(directionOffset)) * PlayerSettings.MaxSideTurn * (InputController.PlayerMove.x < 0 ? 1 : -1) * curAcceleration, Time.deltaTime * PlayerSettings.SideTurnLerpSpeed);
+			modelTransform.localEulerAngles = new Vector3(0, 0, newSideTurn);
 		}
 		private void TurnControl()
 		{
@@ -487,13 +492,16 @@ namespace EoE.Entities
 		}
 		protected void Jump()
 		{
+			float directionOffset = Vector3.Dot(controllDirection, transform.forward);
+			float forwardMultiplier = Mathf.Lerp(PlayerSettings.JumpBackwardMultiplier, 1, (directionOffset + 1) / 2) * (directionOffset > 0 ? 1 : -1);
+
 			jumpVelocity = Mathf.Min(PlayerSettings.JumpPower.y * curJumpPowerMultiplier, PlayerSettings.JumpPower.y * curJumpPowerMultiplier);
-			Vector3 addedExtraForce = PlayerSettings.JumpPower.x * transform.right * curJumpPowerMultiplier + PlayerSettings.JumpPower.z * transform.forward * curJumpPowerMultiplier * (curStates.Running ? PlayerSettings.RunSpeedMultiplicator : 1);
+			Vector3 addedExtraForce = PlayerSettings.JumpPower.x * transform.right * curJumpPowerMultiplier + PlayerSettings.JumpPower.z * transform.forward * curJumpPowerMultiplier * (curStates.Running ? PlayerSettings.RunSpeedMultiplicator : 1) * forwardMultiplier;
 			impactForce += new Vector2(addedExtraForce.x, addedExtraForce.z) * curAcceleration;
 			verticalVelocity = 0;
 
 			jumpGroundCooldown = JUMP_GROUND_COOLDOWN;
-			animationControl.SetTrigger("JumpStart");
+			animationControl.SetTrigger("Jump");
 		}
 		private void CheckForFalling()
 		{
@@ -503,7 +511,7 @@ namespace EoE.Entities
 
 			//If so: we enable the falling animation and add extra velocity for a better looking fallcurve
 			curStates.Falling = falling;
-			animationControl.SetBool("IsFalling", falling);
+			animationControl.SetBool("Fall", falling);
 			if (falling)
 			{
 				ApplyGravity(GameController.CurrentGameSettings.WhenFallingExtraGravity);
@@ -577,6 +585,7 @@ namespace EoE.Entities
 			Vector3 appliedForce = controllDirection * curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration + curVelocity;
 
 			charController.Move(appliedForce * Time.fixedDeltaTime);
+			animationControl.SetBool("OnGround", charController.isGrounded);
 			ApplyGravity();
 		}
 		private void ApplyGravity(float scale = 1)
@@ -1078,8 +1087,6 @@ namespace EoE.Entities
 				lastAttackType = state;
 
 				(float animTime, float chargeDelay) = animationDelayLookup[anim];
-				animationControl.SetBool("Attack", true);
-				animationControl.SetTrigger(anim.ToString());
 
 				bool applyForceAfterCustomDelay = !targetAttack.velocityEffect.applyForceAfterAnimationCharge;
 				float forceApplyDelay = applyForceAfterCustomDelay ? targetAttack.velocityEffect.applyForceDelay : 0;
@@ -1131,7 +1138,6 @@ namespace EoE.Entities
 
 				isCurrentlyAttacking = false;
 				heldWeapon.Active = false;
-				animationControl.SetBool("Attack", false);
 
 				//Combo setup
 				comboTimer = comboDelay;
