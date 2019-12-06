@@ -65,6 +65,22 @@ namespace EoE
 			}
 			return false;
 		}
+		public static bool SliderField(string content, ref float curValue, float minValue, float maxValue, int offSet = 0) => SliderField(new GUIContent(content), ref curValue, minValue, maxValue, offSet);
+		public static bool SliderField(GUIContent content, ref float curValue, float minValue, float maxValue, int offSet = 0)
+		{
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(offSet * STANDARD_OFFSET);
+			float newValue = EditorGUILayout.Slider(content, curValue, minValue, maxValue);
+			EditorGUILayout.EndHorizontal();
+
+			if (newValue != curValue)
+			{
+				isDirty = true;
+				curValue = newValue;
+				return true;
+			}
+			return false;
+		}
 		public static bool DoubleField(string content, ref double curValue, int offSet = 0) => DoubleField(new GUIContent(content), ref curValue, offSet);
 		public static bool DoubleField(GUIContent content, ref double curValue, int offSet = 0)
 		{
@@ -174,6 +190,17 @@ namespace EoE
 				return true;
 			}
 			return false;
+		}
+		public static bool NullableVector3Field(string content, string valueContent, ref Vector3 curValue, ref bool hasValue, int offSet = 0) => NullableVector3Field(new GUIContent(content), new GUIContent(valueContent), ref curValue, ref hasValue, offSet);
+		public static bool NullableVector3Field(GUIContent hasValueContent, GUIContent valueContent, ref Vector3 curValue, ref bool hasValue, int offSet = 0)
+		{
+			bool changed = false;
+
+			changed |= BoolField(hasValueContent, ref hasValue, offSet);
+			if (hasValue)
+				changed |= Vector3Field(valueContent, ref curValue, offSet + 1);
+
+			return changed;
 		}
 		public static bool ColorField(string content, ref Color curValue, int offSet = 0) => ColorField(new GUIContent(content), ref curValue, offSet);
 		public static bool ColorField(GUIContent content, ref Color curValue, int offSet = 0)

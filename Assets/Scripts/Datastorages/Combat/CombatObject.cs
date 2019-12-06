@@ -72,6 +72,44 @@ namespace EoE.Combatery
 		}
 	}
 	[System.Serializable]
+	public class ProjectileData
+	{
+		//Execution info
+		public int ExecutionCount = 1;
+		public float DelayPerExecution = 0.2f;
+
+		//Direction
+		public InherritDirection DirectionStyle = InherritDirection.Target;
+		public InherritDirection FallbackDirectionStyle = InherritDirection.Local;
+		public DirectionBase Direction = DirectionBase.Forward;
+
+		//Flight
+		public float Duration = 15;
+		public float FlightSpeed = 25;
+		public Vector3 CreateOffsetToCaster = Vector3.forward;
+		public CustomFXObject[] CustomEffects = new CustomFXObject[0];
+		public EffectAOE[] StartEffects = new EffectAOE[0];
+		public EffectAOE[] WhileEffects = new EffectAOE[0];
+
+		//Collision
+		public float EntitieHitboxSize = 1;
+		public float TerrainHitboxSize = 0.5f;
+		public ColliderMask CollideMask = (ColliderMask)(-1);
+		public int Bounces = 0;
+		public bool DestroyOnEntiteBounce = true;
+		public bool CollisionEffectsOnBounce = true;
+
+		public CustomFXObject[] CollisionCustomEffects = new CustomFXObject[0];
+		public EffectAOE[] CollisionEffects = new EffectAOE[0];
+
+		//Direct hit
+		public EffectSingle DirectHit;
+
+		//Remenants
+		public bool CreatesRemenants = false;
+		public SpellRemenantsPart Remenants = new SpellRemenantsPart();
+	}
+	[System.Serializable]
 	public class CustomFXObject
 	{
 #if UNITY_EDITOR

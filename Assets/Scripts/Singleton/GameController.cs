@@ -13,12 +13,15 @@ namespace EoE
 	{
 		public static GameController Instance { get; private set; }
 		public static GameSettings CurrentGameSettings => Instance.gameSettings;
-		public static SpellProjectile ProjectilePrefab => Instance.projectilePrefab;
-		private static bool gameIsPaused;
+		public static Projectile ProjectilePrefab => Instance.projectilePrefab;
+		public static SoulDrop SoulDropPrefab => Instance.soulDropPrefab;
+		public static ItemCollector ItemCollection => Instance.itemCollector;
 		public static bool GameIsPaused { get => gameIsPaused; set => SetPauseGamestate(value); }
 
+		private static bool gameIsPaused;
 		[SerializeField] private GameSettings gameSettings = default;
-		[SerializeField] private SpellProjectile projectilePrefab = default;
+		[SerializeField] private Projectile projectilePrefab = default;
+		[SerializeField] private SoulDrop soulDropPrefab = default;
 		public ItemDrop itemDropPrefab;
 
 		[SerializeField] private Transform bgCanvas = default;
@@ -27,7 +30,6 @@ namespace EoE
 
 		[Space(10)]
 		[SerializeField] private ItemCollector itemCollector = default;
-		public static ItemCollector ItemCollection => Instance.itemCollector;
 
 		private void Start()
 		{

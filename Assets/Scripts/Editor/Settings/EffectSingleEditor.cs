@@ -24,7 +24,7 @@ namespace EoE.Information
 			BuffSettingsArea();
 
 			EffectSingle settings = target as EffectSingle;
-			ObjectArrayField<FXObject>(new GUIContent("Effects"), ref settings.Effects, ref EffectsArrayOpen, new GUIContent("Effect "));
+			DrawArray<CustomFXObject>(new GUIContent("Effects"), DrawCustomFXObject, ref settings.Effects, ref EffectsArrayOpen, 0, true);
 		}
 
 		private void BaseSettingsArea()
@@ -77,6 +77,29 @@ namespace EoE.Information
 				ObjectArrayField<Buff>(new GUIContent("Buffs To Apply"), ref settings.BuffsToApply, ref BuffArrayOpen, new GUIContent("Buff "), 1);
 			}
 			EndFoldoutHeader();
+		}
+		private bool DrawCustomFXObject(int index, int offset, CustomFXObject[] parentArray)
+		{
+			bool changed = false;
+			if (parentArray == null)
+			{
+				return false;
+			}
+			else if (parentArray[index] == null)
+			{
+				parentArray[index] = new CustomFXObject();
+			}
+
+			changed |= Foldout(new GUIContent("Effect " + index), ref parentArray[index].openInInspector, offset);
+			if (parentArray[index].openInInspector)
+			{
+				changed |= ObjectField<FXObject>("Effect", ref parentArray[index].FX, offset + 1);
+				changed |= NullableVector3Field(new GUIContent("Has Custom Offset"), new GUIContent("Custom Offset"), ref parentArray[index].CustomOffset, ref parentArray[index].HasCustomOffset, offset + 1);
+				changed |= NullableVector3Field(new GUIContent("Has Rotation Offset"), new GUIContent("Custom Rotation Offset"), ref parentArray[index].CustomRotation, ref parentArray[index].HasCustomRotationOffset, offset + 1);
+				changed |= NullableVector3Field(new GUIContent("Has Custom Scale"), new GUIContent("Custom Scale"), ref parentArray[index].CustomScale, ref parentArray[index].HasCustomScale, offset + 1);
+			}
+
+			return changed;
 		}
 	}
 }

@@ -61,7 +61,7 @@ namespace EoE.Information
 				FloatField(new GUIContent("Base Mana Cost"), ref settings.BaseManaCost, 1);
 				FloatField(new GUIContent("Base Endurance Cost"), ref settings.BaseEnduranceCost, 1);
 				FloatField(new GUIContent("Base Knockback"), ref settings.BaseKnockback, 1);
-				FloatField(new GUIContent("Base Crit Chance"), ref settings.BaseCritChance, 1);
+				SliderField(new GUIContent("Base Crit Chance"), ref settings.BaseCritChance, 0, 1, 1);
 
 				GUILayout.Space(4);
 				FloatField(new GUIContent("Spell Cooldown"), ref settings.SpellCooldown, 1);
@@ -108,7 +108,7 @@ namespace EoE.Information
 				return;
 
 			int preSize = settings.ProjectileInfo.Length;
-			DrawArray<SpellProjectilePart>(new GUIContent("Projectile Info"), DrawProjectileInfo, ref settings.ProjectileInfo, ref ProjectileHeaderOpen, 0, true);
+			DrawArray<ProjectileData>(new GUIContent("Projectile Info"), DrawProjectileInfo, ref settings.ProjectileInfo, ref ProjectileHeaderOpen, 0, true);
 			if(preSize != settings.ProjectileInfo.Length)
 			{
 				UpdateAllListSizes();
@@ -116,7 +116,7 @@ namespace EoE.Information
 				for(int i = 0; i < settings.ProjectileInfo.Length; i++)
 				{
 					if (settings.ProjectileInfo[i] == null)
-						settings.ProjectileInfo[i] = new SpellProjectilePart();
+						settings.ProjectileInfo[i] = new ProjectileData();
 				}
 
 				int delayNewSize = settings.ProjectileInfo.Length - 1;
@@ -160,7 +160,7 @@ namespace EoE.Information
 				old.Add(default);
 			}
 		}
-		private bool DrawProjectileInfo(int index, int offset, SpellProjectilePart[] parentArray)
+		private bool DrawProjectileInfo(int index, int offset, ProjectileData[] parentArray)
 		{
 			Spell settings = target as Spell;
 			bool changed = false;
@@ -306,24 +306,15 @@ namespace EoE.Information
 			if (parentArray[index].openInInspector)
 			{
 				changed |= ObjectField<FXObject>("Effect", ref parentArray[index].FX, offset + 1);
-				changed |= DrawNullableVector3(new GUIContent("Has Custom Offset"), new GUIContent("Custom Offset"), ref parentArray[index].HasCustomOffset, ref parentArray[index].CustomOffset, offset + 1);
-				changed |= DrawNullableVector3(new GUIContent("Has Rotation Offset"), new GUIContent("Custom Rotation Offset"), ref parentArray[index].HasCustomRotationOffset, ref parentArray[index].CustomRotation, offset + 1);
-				changed |= DrawNullableVector3(new GUIContent("Has Custom Scale"), new GUIContent("Custom Scale"), ref parentArray[index].HasCustomScale, ref parentArray[index].CustomScale, offset + 1);
+				changed |= NullableVector3Field(new GUIContent("Has Custom Offset"), new GUIContent("Custom Offset"), ref parentArray[index].CustomOffset, ref parentArray[index].HasCustomOffset, offset + 1);
+				changed |= NullableVector3Field(new GUIContent("Has Rotation Offset"), new GUIContent("Custom Rotation Offset"), ref parentArray[index].CustomRotation, ref parentArray[index].HasCustomRotationOffset, offset + 1);
+				changed |= NullableVector3Field(new GUIContent("Has Custom Scale"), new GUIContent("Custom Scale"), ref parentArray[index].CustomScale, ref parentArray[index].HasCustomScale, offset + 1);
 			}
 
 			return changed;
 		}
-		private bool DrawNullableVector3(GUIContent hasValueContent, GUIContent content, ref bool hasValue, ref Vector3 vector, int offset)
-		{
-			bool changed = false;
-			changed |= BoolField(hasValueContent, ref hasValue, offset);
-			if(hasValue)
-				changed |= Vector3Field(content, ref vector, offset + 1);
 
-			return changed;
-		}
-
-		private bool RemenantsInfoArea(int spellProjectileIndex, int offset, SpellProjectilePart[] parentArray)
+		private bool RemenantsInfoArea(int spellProjectileIndex, int offset, ProjectileData[] parentArray)
 		{
 			bool changed = false;
 

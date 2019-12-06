@@ -10,15 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ab78e7538a021446a2451566185bbde, type: 3}
-  m_Name: Sword
+  m_Name: 
   m_EditorClassIdentifier: 
-  Name: Sword
-  weaponAttackStyle: {fileID: 11400000, guid: 4219a793078923b4d8b60425a98febc2, type: 2}
-  weaponPrefab: {fileID: 4196563737272899717, guid: 18284dacf122148419232919f51c45c2,
-    type: 3}
-  weaponHandleOffset: {x: 0, y: 0, z: 1}
-  element: 1
-  baseAttackDamage: 5
-  baseEnduranceDrain: 5
-  baseKnockbackAmount: 5
-  baseCritChance: 0.1
+  BaseDamage: 10
+  BaseManaCost: 0
+  BaseEnduranceCost: 0
+  BaseKnockback: 0
+  BaseCritChance: 0
+  WeaponPrefab: {fileID: 0}
+  WeaponElement: 1
+  WeaponCauseType: 0
+  ContainedParts: -1
+  WeaponPositionOffset: {x: 0, y: 0, z: 0}
+  WeaponRotationOffset: {x: 0, y: 0, z: 0}
+  StandAttackStyle:
+    AttackSequences: []
+    SequenceMaxDelays: []
+  RunAttackStyle:
+    AttackSequences: []
+    SequenceMaxDelays: []
+  JumpAttackStyle:
+    AttackSequences: []
+    SequenceMaxDelays: []
+  RunJumpAttackStyle:
+    AttackSequences: []
+    SequenceMaxDelays: []
+  ComboEffects: []

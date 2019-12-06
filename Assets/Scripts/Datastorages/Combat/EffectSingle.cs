@@ -23,7 +23,7 @@ namespace EoE.Combatery
 		public BuffStackingStyle BuffStackStyle = BuffStackingStyle.Reapply;
 		public Buff[] BuffsToApply = new Buff[0];
 
-		public FXObject[] Effects = new FXObject[0];
+		public CustomFXObject[] Effects = new CustomFXObject[0];
 		#region Activation
 		public void ActivateEffectSingle(Entitie effectCauser, Entitie target, CombatObject infoBase, Vector3 forceDirection, Vector3 hitPoint)
 		{

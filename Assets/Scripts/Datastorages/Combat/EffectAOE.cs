@@ -29,7 +29,7 @@ namespace EoE.Combatery
 		public BuffStackingStyle BuffStackStyle = BuffStackingStyle.Reapply;
 		public Buff[] BuffsToApply = new Buff[0];
 
-		public FXObject[] Effects = new FXObject[0];
+		public CustomFXObject[] Effects = new CustomFXObject[0];
 
 		#region Activation
 		public void ActivateEffectAOE(Entitie effectCauser, Transform origin, CombatObject infoBase)
@@ -190,7 +190,7 @@ namespace EoE.Combatery
 				//FXEffects
 				for (int j = 0; j < Effects.Length; j++)
 				{
-					FXManager.PlayFX(Effects[j], eligibleTargets[i].Target.transform, eligibleTargets[i].Target is Player, eligibleTargets[i].Multiplier);
+					FXManager.PlayFX(Effects[j].FX, eligibleTargets[i].Target.transform, eligibleTargets[i].Target is Player, eligibleTargets[i].Multiplier);
 				}
 			}
 		}

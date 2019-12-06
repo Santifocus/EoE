@@ -430,9 +430,9 @@ namespace EoE.Entities
 		private void BuildDrops()
 		{
 			//Create souls drops
-			if (SelfSettings.SoulWorth > 0)
+			if ((SelfSettings.SoulWorth > 0) && !(this is Player))
 			{
-				SoulDrop newSoulDrop = Instantiate(GameController.CurrentGameSettings.SoulDropPrefab, Storage.DropStorage);
+				SoulDrop newSoulDrop = Instantiate(GameController.SoulDropPrefab, Storage.DropStorage);
 				newSoulDrop.transform.position = actuallWorldPosition;
 				newSoulDrop.Setup(SelfSettings.SoulWorth);
 			}
@@ -837,14 +837,7 @@ namespace EoE.Entities
 				curParticles = new FXInstance[spell.CastInfo.CustomEffects.Length];
 				for (int i = 0; i < spell.CastInfo.CustomEffects.Length; i++)
 				{
-					curParticles[i] = FXManager.PlayFX(	spell.CastInfo.CustomEffects[i].FX, 
-														transform, 
-														this is Player,
-														1,
-														spell.CastInfo.CustomEffects[i].HasCustomOffset ? ((Vector3?)spell.CastInfo.CustomEffects[i].CustomOffset) : (null),
-														spell.CastInfo.CustomEffects[i].HasCustomRotationOffset ? ((Vector3?)spell.CastInfo.CustomEffects[i].CustomRotation) : (null),
-														spell.CastInfo.CustomEffects[i].HasCustomScale ? ((Vector3?)spell.CastInfo.CustomEffects[i].CustomScale) : (null)
-														);
+					curParticles[i] = FXManager.PlayFX(spell.CastInfo.CustomEffects[i], transform, this is Player, 1);
 				}
 
 				float castTime = 0;
@@ -858,9 +851,9 @@ namespace EoE.Entities
 					if (appliedMoveStuns > (appliedStun ? 1 : 0))
 						goto StoppedSpell;
 
-					if (effectTick > GameController.CurrentGameSettings.SpellEffectTickSpeed)
+					if (effectTick > GameController.CurrentGameSettings.WhileEffectTickSpeed)
 					{
-						effectTick -= GameController.CurrentGameSettings.SpellEffectTickSpeed;
+						effectTick -= GameController.CurrentGameSettings.WhileEffectTickSpeed;
 						for (int i = 0; i < spell.CastInfo.WhileEffects.Length; i++)
 						{
 							spell.CastInfo.WhileEffects[i].ActivateEffectAOE(this, transform, spell);
@@ -891,14 +884,7 @@ namespace EoE.Entities
 				curParticles = new FXInstance[spell.StartInfo.CustomEffects.Length];
 				for (int i = 0; i < spell.StartInfo.CustomEffects.Length; i++)
 				{
-					curParticles[i] = FXManager.PlayFX(spell.StartInfo.CustomEffects[i].FX,
-														transform,
-														this is Player,
-														1,
-														spell.StartInfo.CustomEffects[i].HasCustomOffset ? ((Vector3?)spell.StartInfo.CustomEffects[i].CustomOffset) : (null),
-														spell.StartInfo.CustomEffects[i].HasCustomRotationOffset ? ((Vector3?)spell.StartInfo.CustomEffects[i].CustomRotation) : (null),
-														spell.StartInfo.CustomEffects[i].HasCustomScale ? ((Vector3?)spell.StartInfo.CustomEffects[i].CustomScale) : (null)
-														);
+					curParticles[i] = FXManager.PlayFX(spell.StartInfo.CustomEffects[i], transform, this is Player, 1);
 				}
 			}
 
@@ -921,7 +907,7 @@ namespace EoE.Entities
 				{
 					for(int j = 0; j < spell.ProjectileInfo[i].ExecutionCount; j++)
 					{
-						CreateSpellProjectile(spell, i);
+						CreateProjectile(spell, i);
 						if (j < spell.ProjectileInfo[i].ExecutionCount - 1)
 						{
 							float timer = 0;
@@ -964,9 +950,10 @@ namespace EoE.Entities
 				}
 			}
 		}
-		#region ProjectileControl
-		private SpellProjectile CreateSpellProjectile(Spell spellBase, int index)
+		#region ProjectileCreation
+		private Projectile CreateProjectile(Spell spellBase, int index)
 		{
+			//Calculate the spawnoffset
 			Vector3 spawnOffset = spellBase.ProjectileInfo[index].CreateOffsetToCaster.x * transform.right + spellBase.ProjectileInfo[index].CreateOffsetToCaster.y * transform.up + spellBase.ProjectileInfo[index].CreateOffsetToCaster.z * transform.forward;
 
 			//First find out what direction the projectile should fly
@@ -988,12 +975,7 @@ namespace EoE.Entities
 				direction = DirectionFromStyle(spellBase.ProjectileInfo[index].DirectionStyle);
 			}
 
-			//Now create the projectile prefab, and let it start flying
-			SpellProjectile projectile = Instantiate(GameController.ProjectilePrefab, Storage.ProjectileStorage);
-			projectile.Setup(spellBase, index, this, direction);
-			projectile.transform.position = actuallWorldPosition + spawnOffset;
-
-			return projectile;
+			return Projectile.CreateProjectile(spellBase, spellBase.ProjectileInfo[index], this, direction, actuallWorldPosition + spawnOffset);
 			Vector3 DirectionFromStyle(InherritDirection style)
 			{
 				if (style == InherritDirection.World)
