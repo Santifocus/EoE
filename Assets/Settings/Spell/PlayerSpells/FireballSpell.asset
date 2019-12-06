@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: FireballSpell
   m_EditorClassIdentifier: 
   ManaCost: 15
-  BaseDamage: 5
+  BaseDamage: 6
   BaseKnockback: 10
-  SpellCooldown: 6
+  SpellCooldown: 5
   ContainedParts: -1
   MovementRestrictions: -1
   SubtractManaAtPart: 2

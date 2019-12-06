@@ -162,7 +162,7 @@ PrefabInstance:
     - target: {fileID: 1646432962232639870, guid: 5f81d7ee648b5234dbde65ea2c49b2ae,
         type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 1.2
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1646432962232639870, guid: 5f81d7ee648b5234dbde65ea2c49b2ae,
         type: 3}
@@ -199,11 +199,26 @@ PrefabInstance:
       propertyPath: simulationSpeed
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1646432962232639870, guid: 5f81d7ee648b5234dbde65ea2c49b2ae,
+        type: 3}
+      propertyPath: RotationModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3349169720106995545, guid: 5f81d7ee648b5234dbde65ea2c49b2ae,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 14993f16c9b20c6409c29313bdf2eb5d, type: 2}
+    - target: {fileID: 3349169720106995545, guid: 5f81d7ee648b5234dbde65ea2c49b2ae,
+        type: 3}
+      propertyPath: m_RenderAlignment
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3349169720106995545, guid: 5f81d7ee648b5234dbde65ea2c49b2ae,
+        type: 3}
+      propertyPath: m_AllowRoll
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5f81d7ee648b5234dbde65ea2c49b2ae, type: 3}
 --- !u!4 &5748576920864337304 stripped
