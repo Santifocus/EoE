@@ -18,12 +18,12 @@ MonoBehaviour:
   PossibleDropsTable: {fileID: 0}
   LevelSettings: {fileID: 11400000, guid: f274dc43aa7e69e4db13a311b4ea6d9e, type: 2}
   SoulWorth: 10
-  BaseAttackDamage: 3
-  BaseMagicDamage: 1
+  BaseAttackDamage: 2
+  BaseMagicDamage: 2
   BaseDefense: 2
   Health: 50
   DoHealthRegen: 1
-  HealthRegen: 1.5
+  HealthRegen: 1.2
   HealthRegenCooldownAfterTakingDamage: 4
   HealthRegenInCombatMultiplier: 0
   HealthRegenParticles: {fileID: 3894390344941758739, guid: 4fc32336d51ae934c9aa8f2a0a80d546,
@@ -32,7 +32,7 @@ MonoBehaviour:
   Mana: 30
   DoManaRegen: 1
   ManaRegen: 1
-  ManaRegenInCombatMultiplier: 0.02
+  ManaRegenInCombatMultiplier: 0
   WalkSpeed: 8
   RunSpeedMultiplicator: 1.25
   TurnSpeed: 540
