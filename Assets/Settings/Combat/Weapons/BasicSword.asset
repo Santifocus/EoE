@@ -23,16 +23,16 @@ MonoBehaviour:
   ContainedParts: -1
   WeaponPositionOffset: {x: 0, y: 0, z: 0}
   WeaponRotationOffset: {x: 0, y: 0, z: 0}
-  StandAttackStyle:
-    AttackSequences: []
-    SequenceMaxDelays: []
-  RunAttackStyle:
-    AttackSequences: []
-    SequenceMaxDelays: []
-  JumpAttackStyle:
-    AttackSequences: []
-    SequenceMaxDelays: []
-  RunJumpAttackStyle:
-    AttackSequences: []
-    SequenceMaxDelays: []
+  StandAttackSequence:
+    AttackSequenceParts: []
+    PartsMaxDelays: []
+  RunAttackSequence:
+    AttackSequenceParts: []
+    PartsMaxDelays: []
+  JumpAttackSequence:
+    AttackSequenceParts: []
+    PartsMaxDelays: []
+  RunJumpAttackSequence:
+    AttackSequenceParts: []
+    PartsMaxDelays: []
   ComboEffects: []

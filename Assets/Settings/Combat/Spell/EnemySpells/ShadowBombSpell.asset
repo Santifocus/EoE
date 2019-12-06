@@ -80,7 +80,7 @@ MonoBehaviour:
     DestroyOnEntiteBounce: 1
     CollisionEffectsOnBounce: 1
     CollisionCustomEffects:
-    - openInInspector: 1
+    - openInInspector: 0
       FX: {fileID: 11400000, guid: 7f999a2e186ef064aa781c01f433f7fe, type: 2}
       HasCustomOffset: 0
       CustomOffset: {x: 0, y: 0, z: 0}
@@ -88,7 +88,7 @@ MonoBehaviour:
       CustomRotation: {x: 0, y: 0, z: 0}
       HasCustomScale: 0
       CustomScale: {x: 1, y: 1, z: 1}
-    - openInInspector: 1
+    - openInInspector: 0
       FX: {fileID: 11400000, guid: 358b0e77772331f4e81fea9466a884a1, type: 2}
       HasCustomOffset: 0
       CustomOffset: {x: 0, y: 0, z: 0}
