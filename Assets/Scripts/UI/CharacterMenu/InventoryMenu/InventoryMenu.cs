@@ -258,6 +258,7 @@ namespace EoE.UI
 								{
 									Player.Instance.EquipedWeapon.data.UnEquip(Player.Instance.EquipedWeapon, Player.Instance);
 									Player.Instance.EquipedWeapon.isEquiped = false;
+									Player.Instance.EquipedWeapon = null;
 								}
 
 								if (!unequip)
@@ -273,6 +274,7 @@ namespace EoE.UI
 								{
 									Player.Instance.EquipedArmor.isEquiped = false;
 									Player.Instance.EquipedArmor.data.UnEquip(Player.Instance.EquipedArmor, Player.Instance);
+									Player.Instance.EquipedArmor = null;
 								}
 
 								if (!unequip)
@@ -281,6 +283,8 @@ namespace EoE.UI
 									Player.Instance.EquipedArmor.isEquiped = true;
 								}
 
+								equipSlotsOpen = actionMenuOpen = false;
+								SelectSlot(true);
 							}
 							target.Equip(item, Player.Instance);
 						}
