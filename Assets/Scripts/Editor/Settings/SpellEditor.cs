@@ -1,4 +1,4 @@
-﻿using EoE.Weapons;
+﻿using EoE.Combatery;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -29,10 +29,6 @@ namespace EoE.Information
 		private List<bool> ProjectileFlightSettingsOpen = new List<bool>();
 		private List<bool> ProjectileCollisionSettingsOpen = new List<bool>();
 
-		private List<bool> ProjectileDirectHitSettingsOpen = new List<bool>();
-		private List<bool> ProjectileDirectHitBuffsOpen = new List<bool>();
-		private List<bool> ProjectileDirectHitEffectsOpen = new List<bool>();
-
 		private List<bool> ProjectileParticlesOpen = new List<bool>();
 		private List<bool> ProjectileStartEffectsOpen = new List<bool>();
 		private List<bool> ProjectileWhileEffectsOpen = new List<bool>();
@@ -61,9 +57,13 @@ namespace EoE.Information
 			FoldoutHeader("Base Info", ref BaseInfoOpen);
 			if (BaseInfoOpen)
 			{
-				FloatField(new GUIContent("Manacost"), ref settings.ManaCost, 1);
 				FloatField(new GUIContent("Base Damage"), ref settings.BaseDamage, 1);
+				FloatField(new GUIContent("Base Mana Cost"), ref settings.BaseManaCost, 1);
+				FloatField(new GUIContent("Base Endurance Cost"), ref settings.BaseEnduranceCost, 1);
 				FloatField(new GUIContent("Base Knockback"), ref settings.BaseKnockback, 1);
+				FloatField(new GUIContent("Base Crit Chance"), ref settings.BaseCritChance, 1);
+
+				GUILayout.Space(4);
 				FloatField(new GUIContent("Spell Cooldown"), ref settings.SpellCooldown, 1);
 
 				EnumFlagField(new GUIContent("ContainedParts"), ref settings.ContainedParts, 1);
@@ -74,7 +74,7 @@ namespace EoE.Information
 		private void CastInfoArea()
 		{
 			Spell settings = target as Spell;
-			if (!settings.HasPart(SpellPart.Cast))
+			if (!settings.HasSpellPart(SpellPart.Cast))
 				return;
 
 			FoldoutHeader("Cast Info", ref CastInfoOpen);
@@ -82,29 +82,29 @@ namespace EoE.Information
 			{
 				FloatField(new GUIContent("Duration"), ref settings.CastInfo.Duration, 1);
 				DrawArray<CustomFXObject>(new GUIContent("FX Effects"), DrawCustomFXObject, ref settings.CastInfo.CustomEffects, ref CastFXEffectsOpen, 1);
-				ObjectArrayField<SpellEffect>(new GUIContent("Start Effects"), ref settings.CastInfo.StartEffects, ref CastStartEffectsOpen, new GUIContent("Effect "), 1);
-				ObjectArrayField<SpellEffect>(new GUIContent("While Effects"), ref settings.CastInfo.WhileEffects, ref CastWhileEffectsOpen, new GUIContent("Effect "), 1);
+				ObjectArrayField<EffectAOE>(new GUIContent("Start Effects"), ref settings.CastInfo.StartEffects, ref CastStartEffectsOpen, new GUIContent("Effect "), 1);
+				ObjectArrayField<EffectAOE>(new GUIContent("While Effects"), ref settings.CastInfo.WhileEffects, ref CastWhileEffectsOpen, new GUIContent("Effect "), 1);
 			}
 			EndFoldoutHeader();
 		}
 		private void BeginningInfoArea()
 		{
 			Spell settings = target as Spell;
-			if (!settings.HasPart(SpellPart.Start))
+			if (!settings.HasSpellPart(SpellPart.Start))
 				return;
 
 			FoldoutHeader("Start Info", ref StartInfoOpem);
 			if (StartInfoOpem)
 			{
 				DrawArray<CustomFXObject>(new GUIContent("FX Effects"), DrawCustomFXObject, ref settings.StartInfo.CustomEffects, ref StartFXEffectsOpen, 1);
-				ObjectArrayField<SpellEffect>(new GUIContent("Start Effects"), ref settings.StartInfo.Effects, ref StartEffectsOpen, new GUIContent("Effect "), 1);
+				ObjectArrayField<EffectAOE>(new GUIContent("Start Effects"), ref settings.StartInfo.Effects, ref StartEffectsOpen, new GUIContent("Effect "), 1);
 			}
 			EndFoldoutHeader();
 		}
 		private void ProjectileInfoArea()
 		{
 			Spell settings = target as Spell;
-			if (!settings.HasPart(SpellPart.Projectile))
+			if (!settings.HasSpellPart(SpellPart.Projectile))
 				return;
 
 			int preSize = settings.ProjectileInfo.Length;
@@ -142,10 +142,6 @@ namespace EoE.Information
 			UpdateListSize(ProjectileDirectionSettingsOpen, size);
 			UpdateListSize(ProjectileFlightSettingsOpen, size);
 			UpdateListSize(ProjectileCollisionSettingsOpen, size);
-
-			UpdateListSize(ProjectileDirectHitSettingsOpen, size);
-			UpdateListSize(ProjectileDirectHitBuffsOpen, size);
-			UpdateListSize(ProjectileDirectHitEffectsOpen, size);
 
 			UpdateListSize(ProjectileParticlesOpen, size);
 			UpdateListSize(ProjectileStartEffectsOpen, size);
@@ -247,7 +243,7 @@ namespace EoE.Information
 						parentArray[index].TerrainHitboxSize = Mathf.Max(0, parentArray[index].TerrainHitboxSize);
 					}
 
-					if (((parentArray[index].CollideMask | SpellCollideMask.Terrain) == parentArray[index].CollideMask) &&
+					if (((parentArray[index].CollideMask | ColliderMask.Terrain) == parentArray[index].CollideMask) &&
 						FloatField(new GUIContent("Entitie Hitbox Size"), ref parentArray[index].EntitieHitboxSize, offset + 2))
 					{
 						changed = true;
@@ -274,36 +270,7 @@ namespace EoE.Information
 				}
 
 				//DirectHit
-				open = ProjectileDirectHitSettingsOpen[index];
-				Foldout(new GUIContent("Direct Hit settings"), ref open, offset + 1);
-				ProjectileDirectHitSettingsOpen[index] = open;
-				if (open)
-				{
-					EnumFlagField(new GUIContent("Affected Targets"), ref parentArray[index].DirectHit.AffectedTargets, offset + 2);
-
-					EnumField(new GUIContent("Damage Element"), ref parentArray[index].DirectHit.DamageElement, offset + 2);
-					FloatField(new GUIContent("Damage Multiplier"), ref parentArray[index].DirectHit.DamageMultiplier, offset + 2);
-					FloatField(new GUIContent("Crit Chance"), ref parentArray[index].DirectHit.CritChance, offset + 2);
-
-					GUILayout.Space(3);
-					FloatField(new GUIContent("Knockback Multiplier"), ref parentArray[index].DirectHit.KnockbackMultiplier, offset + 2);
-					EnumField(new GUIContent("Knockback Origin"), ref parentArray[index].DirectHit.KnockbackOrigin, offset + 2);
-					if(parentArray[index].DirectHit.KnockbackOrigin == EffectiveDirection.World)
-						EnumField(new GUIContent("Knockback Direction"), ref parentArray[index].DirectHit.KnockbackDirection, offset + 3);
-
-					GUILayout.Space(3);
-					EnumField(new GUIContent("Buff Stack Style"), ref parentArray[index].DirectHit.BuffStackStyle, offset + 2);
-
-					open = ProjectileDirectHitBuffsOpen[index];
-					ObjectArrayField<Buff>(new GUIContent("Buffs"), ref parentArray[index].DirectHit.BuffsToApply, ref open, new GUIContent("Buff "), offset + 2);
-					ProjectileDirectHitBuffsOpen[index] = open;
-
-					open = ProjectileDirectHitEffectsOpen[index];
-					ObjectArrayField<FXObject>(new GUIContent("Effects"), ref parentArray[index].DirectHit.Effects, ref open, new GUIContent("Effect "), offset + 2);
-					ProjectileDirectHitEffectsOpen[index] = open;
-
-					GUILayout.Space(5);
-				}
+				ObjectField(new GUIContent("Direct Hit Settings"), ref parentArray[index].DirectHit, offset + 1);
 
 				//Remenants
 				BoolField(new GUIContent("Creates Remenants"), ref parentArray[index].CreatesRemenants, offset + 1);

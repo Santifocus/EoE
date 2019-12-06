@@ -24,6 +24,7 @@ MonoBehaviour:
   Health: 60
   DoHealthRegen: 0
   HealthRegen: 0
+  HealthRegenCooldownAfterTakingDamage: 4
   HealthRegenInCombatMultiplier: 0.5
   HealthRegenParticles: {fileID: 0}
   HealthRegenParticlesOffset: {x: 0, y: 0, z: 0}

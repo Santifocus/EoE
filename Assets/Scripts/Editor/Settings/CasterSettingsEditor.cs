@@ -1,4 +1,4 @@
-﻿using EoE.Weapons;
+﻿using EoE.Combatery;
 using UnityEditor;
 using UnityEngine;
 using static EoE.EoEEditor;

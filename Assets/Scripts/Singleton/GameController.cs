@@ -2,7 +2,7 @@
 using System.Collections;
 using EoE.Entities;
 using EoE.Information;
-using EoE.Weapons;
+using EoE.Combatery;
 using UnityEngine;
 
 namespace EoE

@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace EoE.Weapons
+namespace EoE.Combatery
 {
 	[CustomEditor(typeof(Weapon), true), CanEditMultipleObjects]
 	public class WeaponEditor : Editor
@@ -10,11 +10,7 @@ namespace EoE.Weapons
 		{
 			DrawDefaultInspector();
 			Weapon t = target as Weapon;
-			if (!t.weaponAttackStyle)
-			{
-				EditorGUILayout.HelpBox("Weapon has no Attack-Style selected.", MessageType.Error);
-			}
-			if (!t.weaponPrefab)
+			if (!t.WeaponPrefab)
 			{
 				EditorGUILayout.HelpBox("Weapon has no Weapon Prefab selected.", MessageType.Error);
 			}

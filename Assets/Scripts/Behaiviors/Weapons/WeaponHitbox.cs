@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using EoE.Entities;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace EoE.Weapons
+namespace EoE.Combatery
 {
 	public class WeaponHitbox : MonoBehaviour
 	{
@@ -31,6 +32,7 @@ namespace EoE.Weapons
 				trail.enabled = false;
 			coll = GetComponent<Collider>();
 			coll.enabled = false;
+			Physics.IgnoreCollision(coll, Player.Instance.coll);
 		}
 
 		private void ChangeWeaponState(bool state)

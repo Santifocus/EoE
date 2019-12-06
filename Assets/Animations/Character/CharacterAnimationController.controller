@@ -61,22 +61,22 @@ AnimatorStateMachine:
     m_Position: {x: -190, y: 480, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 866254343233481706}
-    m_Position: {x: -390, y: 260, z: 0}
+    m_Position: {x: -390, y: 270, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 6668856081182707703}
-    m_Position: {x: -390, y: 310, z: 0}
+    m_Position: {x: -390, y: 320, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 6523326972260920756}
-    m_Position: {x: -390, y: 360, z: 0}
+    m_Position: {x: -390, y: 370, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4960870355590851170}
-    m_Position: {x: -60, y: -140, z: 0}
+    m_Position: {x: -60, y: -200, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -413783056317924689}
     m_Position: {x: 80, y: 480, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8768165782107317562}
-    m_Position: {x: -220, y: 20, z: 0}
+    m_Position: {x: -230, y: 0, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -160795245942810530}
     m_Position: {x: 250, y: 310, z: 0}
@@ -88,7 +88,7 @@ AnimatorStateMachine:
     m_Position: {x: -390, y: 190, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3850815207105972534}
-    m_Position: {x: 220, y: 190, z: 0}
+    m_Position: {x: 260, y: 190, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: -1952236472108051318}
@@ -102,8 +102,8 @@ AnimatorStateMachine:
   - {fileID: 7524624665314575620}
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: -30, y: 310, z: 0}
-  m_EntryPosition: {x: -40, y: 80, z: 0}
+  m_AnyStatePosition: {x: -40, y: 310, z: 0}
+  m_EntryPosition: {x: -40, y: 60, z: 0}
   m_ExitPosition: {x: -340, y: 660, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: 6678043176082404393}
@@ -410,73 +410,73 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: WalkSpeed
     m_Type: 1
     m_DefaultFloat: 1
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: AttackAnimationSpeed
     m_Type: 1
     m_DefaultFloat: 1
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: InCombat
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Jump
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Fall
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Attack1
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Attack2
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Attack3
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
-  - m_Name: DashAttack
+    m_Controller: {fileID: 9100000}
+  - m_Name: AttackDash
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: FightEnd
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: OnGround
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -729,7 +729,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: DashAttack
+    m_ConditionEvent: AttackDash
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 6166912306753672549}

@@ -4,21 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace EoE.Weapons
+namespace EoE.Combatery
 {
-	[System.Flags] public enum SpellCollideMask { Terrain = (1 << 0), Entities = (1 << 1) }
-	[System.Flags] public enum SpellTargetMask { Self = (1 << 0), Allied = (1 << 1), Enemy = (1 << 2) }
 	[System.Flags] public enum SpellPart { Cast = (1 << 0), Start = (1 << 1), Projectile = (1 << 2) }
 	[System.Flags] public enum SpellMovementRestrictionsMask { WhileCasting = (1 << 0), WhileShooting = (1 << 1) }
-	public enum EffectiveDirection { Local = 1, Center = 2, World = 4 }
-	public enum InherritDirection { Local = 1, Target = 2, World = 4}
-	public enum DirectionBase { Forward = 1, Right = 2, Up = 4, Back = 8, Left = 16, Down = 32 }
-	public enum BuffStackingStyle { Stack = 1, Reapply = 2, DoNothing = 4 }
-	public class Spell : ScriptableObject
+	public class Spell : CombatObject
 	{
-		public float ManaCost = 10;
-		public float BaseDamage = 10;
-		public float BaseKnockback = 0;
 		public float SpellCooldown = 3;
 
 		public SpellPart ContainedParts = (SpellPart)(-1);
@@ -31,59 +22,9 @@ namespace EoE.Weapons
 		public SpellProjectilePart[] ProjectileInfo = new SpellProjectilePart[0];
 		public float[] DelayToNextProjectile = new float[0];
 
-		public bool HasPart(SpellPart part)
+		public bool HasSpellPart(SpellPart part)
 		{
 			return ((int)ContainedParts | (int)part) == ((int)ContainedParts);
-		}
-		//Helper functions
-		public static bool IsAllowedEntitie(Entitie target, Entitie caster, SpellTargetMask mask)
-		{
-			bool isSelf = caster == target;
-			bool selfIsPlayer = caster is Player;
-			bool otherIsPlayer = target is Player;
-
-			//First rule out if the target is self
-			if (isSelf)
-			{
-				return HasMaskFlag(SpellTargetMask.Self);
-			}
-			else
-			{
-				//Now check if the compared entities are both of the same team ie NonPlayer & NonPlayer ( / Player & Player, not going to happen because its not multiplayer)
-				if (selfIsPlayer == otherIsPlayer)
-				{
-					return HasMaskFlag(SpellTargetMask.Allied);
-				}
-				else //Player & NonPlayer / NonPlayer & Player
-				{
-					return HasMaskFlag(SpellTargetMask.Enemy);
-				}
-			}
-
-			bool HasMaskFlag(SpellTargetMask flag)
-			{
-				return (flag | mask) == mask;
-			}
-		}
-		public static (Vector3Int, bool) EnumDirToDir(DirectionBase direction)
-		{
-			switch (direction)
-			{
-				case DirectionBase.Forward:
-					return (new Vector3Int(0, 0, 1), false);
-				case DirectionBase.Back:
-					return (new Vector3Int(0, 0, 1), true);
-				case DirectionBase.Right:
-					return (new Vector3Int(1, 0, 0), false);
-				case DirectionBase.Left:
-					return (new Vector3Int(1, 0, 0), true);
-				case DirectionBase.Up:
-					return (new Vector3Int(0, 1, 0), false);
-				case DirectionBase.Down:
-					return (new Vector3Int(0, 1, 0), true);
-				default:
-					return (new Vector3Int(0, 0, 1), false);
-			}
 		}
 	}
 
@@ -92,14 +33,14 @@ namespace EoE.Weapons
 	{
 		public float Duration = 3;
 		public CustomFXObject[] CustomEffects = new CustomFXObject[0];
-		public SpellEffect[] StartEffects = new SpellEffect[0];
-		public SpellEffect[] WhileEffects = new SpellEffect[0];
+		public EffectAOE[] StartEffects = new EffectAOE[0];
+		public EffectAOE[] WhileEffects = new EffectAOE[0];
 	}
 	[System.Serializable]
 	public class SpellBeginningPart
 	{
 		public CustomFXObject[] CustomEffects = new CustomFXObject[0];
-		public SpellEffect[] Effects = new SpellEffect[0];
+		public EffectAOE[] Effects = new EffectAOE[0];
 	}
 	[System.Serializable]
 	public class SpellProjectilePart
@@ -118,39 +59,22 @@ namespace EoE.Weapons
 		public float FlightSpeed = 25;
 		public Vector3 CreateOffsetToCaster = Vector3.forward;
 		public CustomFXObject[] CustomEffects = new CustomFXObject[0];
-		public SpellEffect[] StartEffects = new SpellEffect[0];
-		public SpellEffect[] WhileEffects = new SpellEffect[0];
+		public EffectAOE[] StartEffects = new EffectAOE[0];
+		public EffectAOE[] WhileEffects = new EffectAOE[0];
 
 		//Collision
 		public float EntitieHitboxSize = 1;
 		public float TerrainHitboxSize = 0.5f;
-		public SpellCollideMask CollideMask = (SpellCollideMask)(-1);
+		public ColliderMask CollideMask = (ColliderMask)(-1);
 		public int Bounces = 0;
 		public bool DestroyOnEntiteBounce = true;
 		public bool CollisionEffectsOnBounce = true;
 
 		public CustomFXObject[] CollisionCustomEffects = new CustomFXObject[0];
-		public SpellEffect[] CollisionEffects = new SpellEffect[0];
+		public EffectAOE[] CollisionEffects = new EffectAOE[0];
 
 		//Direct hit
-		public ProjectileDirectHit DirectHit = new ProjectileDirectHit();
-		[System.Serializable]
-		public class ProjectileDirectHit
-		{
-			public SpellTargetMask AffectedTargets = SpellTargetMask.Enemy;
-
-			public ElementType DamageElement = ElementType.None;
-			public float DamageMultiplier = 0;
-			public float CritChance = 0;
-
-			public float KnockbackMultiplier = 0;
-			public EffectiveDirection KnockbackOrigin = EffectiveDirection.Center;
-			public DirectionBase KnockbackDirection = DirectionBase.Forward;
-
-			public BuffStackingStyle BuffStackStyle = BuffStackingStyle.Reapply;
-			public Buff[] BuffsToApply = new Buff[0];
-			public FXObject[] Effects = new FXObject[0];
-		}
+		public EffectSingle DirectHit;
 
 		//Remenants
 		public bool CreatesRemenants = false;
@@ -161,25 +85,8 @@ namespace EoE.Weapons
 	{
 		public float Duration = 5;
 		public ParticleEffect[] ParticleEffects = new ParticleEffect[0];
-		public SpellEffect[] StartEffects = new SpellEffect[0];
-		public SpellEffect[] WhileEffects = new SpellEffect[0];
+		public EffectAOE[] StartEffects = new EffectAOE[0];
+		public EffectAOE[] WhileEffects = new EffectAOE[0];
 		public bool TryGroundRemenants = true;
-	}
-	[System.Serializable]
-	public class CustomFXObject
-	{
-#if UNITY_EDITOR
-		public bool openInInspector = false;
-#endif
-		public FXObject FX;
-		
-		public bool HasCustomOffset = false;
-		public Vector3 CustomOffset = Vector3.zero;
-
-		public bool HasCustomRotationOffset = false;
-		public Vector3 CustomRotation = Vector3.zero;
-
-		public bool HasCustomScale = false;
-		public Vector3 CustomScale = Vector3.one;
 	}
 }

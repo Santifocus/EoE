@@ -5,7 +5,7 @@ using TMPro;
 using EoE.Controlls;
 using EoE.Events;
 using EoE.Information;
-using EoE.Weapons;
+using EoE.Combatery;
 using EoE.Utils;
 
 namespace EoE.Entities
@@ -25,14 +25,13 @@ namespace EoE.Entities
 
 		//Inspector variables
 		[Space(10)]
+		public CharacterController charController = default;
+		public TextMeshProUGUI debugText = default;
+		public Transform weaponHoldPoint = default;
+
 		[SerializeField] private Animator animationControl = default;
 		[SerializeField] private PlayerSettings selfSettings = default;
-		[SerializeField] private Transform rightHand = default;
-		[SerializeField] private Weapon equipedWeapon = default;
 		[SerializeField] private PlayerBuffDisplay buffDisplay = default;
-		[SerializeField] private CharacterController charController = default;
-
-		public TextMeshProUGUI debugText = default;
 
 		//Endurance
 		public float curEndurance { get; set; }
@@ -58,30 +57,6 @@ namespace EoE.Entities
 
 		//Targeting
 		private float switchTargetTimer;
-
-		#region Physical Attack
-		//Attack
-		public Weapon PlayerWeapon { get => equipedWeapon; set => ChangeWeapon(value); }
-		[HideInInspector] public Attack activeAttack;
-		private WeaponController heldWeapon;
-		private AttackState lastAttackType;
-		private bool isCurrentlyAttacking;
-		private bool canceledAnimation;
-
-		//Combos
-		private float? comboTimer;
-		private int comboIndex;
-
-		//Attack animations
-		private Dictionary<AttackAnimation, (float, float)> animationDelayLookup = new Dictionary<AttackAnimation, (float, float)>()
-		{
-			{ AttackAnimation.Stab, (0.4f, 0.15f) },
-			{ AttackAnimation.ToLeftSlash, (0.533f, 0) },
-			{ AttackAnimation.TopDownSlash, (0.533f, 0) },
-			{ AttackAnimation.ToRightSlash, (0.533f, 0.22f) },
-			{ AttackAnimation.Uppercut, (0.533f, 0) },
-		};
-		#endregion
 
 		//Getter Helpers
 		public float jumpVelocity { get; private set; }
@@ -129,7 +104,6 @@ namespace EoE.Entities
 		}
 		protected override void EntitieStart()
 		{
-			ChangeWeapon(equipedWeapon);
 			SetupInventory();
 		}
 		protected override void EntitieUpdate()
@@ -142,17 +116,14 @@ namespace EoE.Entities
 			}
 
 			MovementControl();
-			AttackControl();
 			TargetEnemyControl();
 			ItemControl();
 			BlockControl();
-			PositionHeldWeapon();
 
 			animationControl.SetBool("InCombat", curStates.Fighting);
 		}
 		protected override void EntitieFixedUpdate()
 		{
-			PositionHeldWeapon();
 			CheckForLanding();
 			ApplyForces();
 			CheckForFalling();
@@ -163,20 +134,6 @@ namespace EoE.Entities
 		}
 		#endregion
 		#region Setups
-		private void ChangeWeapon(Weapon newWeapon)
-		{
-			if (heldWeapon)
-			{
-				Destroy(heldWeapon.gameObject);
-			}
-			equipedWeapon = newWeapon;
-
-			if (equipedWeapon != null)
-			{
-				heldWeapon = Instantiate(equipedWeapon.weaponPrefab);
-				heldWeapon.Setup();
-			}
-		}
 		protected override void ResetStats()
 		{
 			base.ResetStats();
@@ -298,14 +255,6 @@ namespace EoE.Entities
 					}
 				}
 			}
-		}
-		protected void PositionHeldWeapon()
-		{
-			Vector3 worldOffset = equipedWeapon.weaponHandleOffset.x * rightHand.right +
-										equipedWeapon.weaponHandleOffset.y * rightHand.up +
-										equipedWeapon.weaponHandleOffset.z * rightHand.forward;
-			heldWeapon.transform.position = rightHand.position + worldOffset;
-			heldWeapon.transform.rotation = rightHand.rotation;
 		}
 		#endregion
 		#region Endurance Control
@@ -657,7 +606,6 @@ namespace EoE.Entities
 			//Create a copy of the player model
 			Material dodgeMaterialInstance = Instantiate(PlayerSettings.DodgeModelMaterial);
 			Transform modelCopy = Instantiate(modelTransform, Storage.ParticleStorage);
-			WeaponController weaponCopy = Instantiate(heldWeapon, Storage.ParticleStorage);
 
 			modelCopy.transform.position = modelTransform.position;
 			modelCopy.transform.localScale = modelTransform.lossyScale;
@@ -667,14 +615,7 @@ namespace EoE.Entities
 			Color alphaPart = new Color(0, 0, 0, dodgeMaterialInstance.color.a);
 			baseColor.a = 0;
 
-			weaponCopy.enabled = false;
-			for (int i = 0; i < weaponCopy.weaponHitboxes.Length; i++)
-			{
-				weaponCopy.weaponHitboxes[i].enabled = false;
-			}
-
 			ApplyMaterialToAllChildren(modelCopy);
-			ApplyMaterialToAllChildren(weaponCopy.transform);
 
 			invincible++;
 			while (timer < PlayerSettings.DodgeModelExistTime)
@@ -688,7 +629,6 @@ namespace EoE.Entities
 			invincible--;
 
 			Destroy(modelCopy.gameObject);
-			Destroy(weaponCopy.gameObject);
 
 			for(int i = 0; i < dodgeEffects.Length; i++)
 			{
@@ -1046,211 +986,9 @@ namespace EoE.Entities
 			}
 		}
 		#endregion
-		#region Physical Attack Control
-		private void AttackControl()
-		{
-			if (comboTimer.HasValue)
-			{
-				comboTimer -= Time.deltaTime;
-				if (comboTimer.Value < 0)
-				{
-					comboTimer = null;
-					comboIndex = 0;
-				}
-			}
-
-			if (equipedWeapon == null || isCurrentlyAttacking || (!InputController.Attack.Pressed && !InputController.HeavyAttack.Pressed))
-				return;
-
-			int state = 0;
-			state += InputController.Attack.Pressed ? 0 : 4; //If we are here either heavy attack or normal attack was pressed
-			state += curStates.Running ? 1 : 0; //Running => Sprint attack
-			state += !charController.isGrounded ? 2 : 0; //In air => Jump attack
-
-			StartCoroutine(BeginAttack((AttackState)state));
-		}
-		public void CancelAttackAnimation()
-		{
-			if (isCurrentlyAttacking)
-				canceledAnimation = true;
-		}
-		private IEnumerator BeginAttack(AttackState state)
-		{
-			(Attack targetAttack, float? comboDelay) = PrepareTargetAttack(state);
-
-			activeAttack = targetAttack;
-			if (targetAttack != null)
-			{
-				AttackAnimation anim = targetAttack.animationInfo.animation;
-
-				isCurrentlyAttacking = true;
-				lastAttackType = state;
-
-				(float animTime, float chargeDelay) = animationDelayLookup[anim];
-
-				bool applyForceAfterCustomDelay = !targetAttack.velocityEffect.applyForceAfterAnimationCharge;
-				float forceApplyDelay = applyForceAfterCustomDelay ? targetAttack.velocityEffect.applyForceDelay : 0;
-
-				if (chargeDelay == 0)
-				{
-					if (!applyForceAfterCustomDelay)
-						ApplyAttackForces();
-					heldWeapon.Active = true;
-				}
-
-				if (applyForceAfterCustomDelay && forceApplyDelay == 0)
-				{
-					ApplyAttackForces();
-				}
-
-				while (animTime > 0 || activeAttack.animationInfo.haltAnimationTillCancel)
-				{
-					yield return new WaitForEndOfFrame();
-					animTime -= Time.deltaTime;
-
-					if (chargeDelay > 0)
-					{
-						chargeDelay -= Time.deltaTime;
-
-						if (chargeDelay <= 0)
-						{
-							if (targetAttack.velocityEffect.applyForceAfterAnimationCharge)
-								ApplyAttackForces();
-							heldWeapon.Active = true;
-						}
-					}
-
-					if (applyForceAfterCustomDelay && forceApplyDelay > 0)
-					{
-						forceApplyDelay -= Time.deltaTime;
-						if (forceApplyDelay <= 0)
-						{
-							ApplyAttackForces();
-						}
-					}
-
-					if (canceledAnimation || CheckForCancelCondition())
-					{
-						canceledAnimation = false;
-						break;
-					}
-				}
-
-				isCurrentlyAttacking = false;
-				heldWeapon.Active = false;
-
-				//Combo setup
-				comboTimer = comboDelay;
-				comboIndex = comboDelay.HasValue ? comboIndex + 1 : 0;
-			}
-		}
-		private (Attack, float?) PrepareTargetAttack(AttackState state)
-		{
-			int attackIndex = (int)state;
-			int innerIndex = state != lastAttackType ? 0 : comboIndex;
-			Attack style;
-			float? comboDelay = null;
-
-			style = equipedWeapon.weaponAttackStyle[attackIndex].attacks[innerIndex];
-			if (!style.enabled)
-			{
-				style = null;
-			}
-			else if (equipedWeapon.weaponAttackStyle[attackIndex].attacks.Length > innerIndex + 1)
-			{
-				comboDelay = equipedWeapon.weaponAttackStyle[attackIndex].delays[innerIndex];
-			}
-
-			//Find out if the player can afford the attack
-			if (style != null)
-			{
-				float cost = style.info.enduranceMultiplier * equipedWeapon.baseEnduranceDrain;
-				if (curEndurance >= cost)
-				{
-					ChangeEndurance(new ChangeInfo(this, CauseType.Magic, TargetStat.Endurance, cost));
-				}
-				else
-				{
-					style = null;
-					comboDelay = null;
-				}
-			}
-
-			return (style, comboDelay);
-		}
-		private bool CheckForCancelCondition()
-		{
-			int requiredGroundState = (int)activeAttack.animationInfo.cancelWhenOnGround - 1;
-			bool groundStateAchieved = (charController.isGrounded ? 0 : 1) == requiredGroundState;
-
-			if (groundStateAchieved && !activeAttack.animationInfo.bothStates)
-				return true;
-
-			if (!groundStateAchieved && activeAttack.animationInfo.bothStates)
-				return false;
-
-			int requiredSprintState = (int)activeAttack.animationInfo.cancelWhenSprinting - 1;
-			bool sprintStateAchieved = (curStates.Running ? 0 : 1) == requiredSprintState;
-
-			return (sprintStateAchieved && groundStateAchieved) || (!activeAttack.animationInfo.bothStates && sprintStateAchieved);
-		}
-		private void ApplyAttackForces()
-		{
-			AttackVelocityEffect effect = activeAttack.velocityEffect;
-
-			if (effect.velocityIntent == AttackVelocityIntent.Off)
-				return;
-			Vector3 velocity = Vector3.zero;
-
-			if (effect.useRightValue)
-			{
-				velocity += effect.rightValue * transform.right;
-			}
-			if (effect.useUpValue)
-			{
-				velocity += effect.upValue * transform.up;
-			}
-			if (effect.useForwardValue)
-			{
-				velocity += effect.forwardValue * transform.forward;
-			}
-
-			if (effect.velocityIntent == AttackVelocityIntent.Set)
-			{
-				curAcceleration = 0;
-
-				if (effect.ignoreVerticalVelocity)
-				{
-					impactForce = new Vector3(velocity.x, impactForce.y, velocity.z);
-				}
-				else
-				{
-					impactForce = new Vector2(velocity.x, velocity.z);
-					verticalVelocity = velocity.y;
-				}
-			}
-			else
-			{
-				curAcceleration = 0;
-
-				if (effect.ignoreVerticalVelocity)
-				{
-					impactForce += new Vector2(velocity.x, velocity.z);
-				}
-				else
-				{
-					impactForce += new Vector2(velocity.x, velocity.z);
-					verticalVelocity += velocity.y;
-				}
-			}
-		}
-		#endregion
 		#region StateControl
 		protected override void Death()
 		{
-			if (heldWeapon)
-				Destroy(heldWeapon.gameObject);
-
 			if (TargetedEntitie)
 				TargetedEntitie = null;
 			base.Death();

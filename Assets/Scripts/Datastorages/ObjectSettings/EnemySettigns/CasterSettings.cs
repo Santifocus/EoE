@@ -1,4 +1,4 @@
-﻿using EoE.Weapons;
+﻿using EoE.Combatery;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace EoE.Weapons
+namespace EoE.Combatery
 {
 	public class SpellProjectile : MonoBehaviour
 	{
@@ -53,7 +53,7 @@ namespace EoE.Weapons
 		{
 			Physics.IgnoreCollision(creator.coll, entitieColl);
 
-			if((info.ProjectileInfo[index].CollideMask | SpellCollideMask.Terrain) == info.ProjectileInfo[index].CollideMask)
+			if((info.ProjectileInfo[index].CollideMask | ColliderMask.Terrain) == info.ProjectileInfo[index].CollideMask)
 			{
 				terrainColl.radius = info.ProjectileInfo[index].TerrainHitboxSize;
 			}
@@ -62,7 +62,7 @@ namespace EoE.Weapons
 				terrainColl.enabled = false;
 			}
 
-			if ((info.ProjectileInfo[index].CollideMask | SpellCollideMask.Entities) == info.ProjectileInfo[index].CollideMask)
+			if ((info.ProjectileInfo[index].CollideMask | ColliderMask.Entities) == info.ProjectileInfo[index].CollideMask)
 			{
 				entitieColl.radius = entitieTriggerColl.radius = info.ProjectileInfo[index].EntitieHitboxSize;
 			}
@@ -122,9 +122,12 @@ namespace EoE.Weapons
 				return;
 
 			Entitie hit = other.GetComponent<Entitie>();
-			if (Spell.IsAllowedEntitie(hit, creator, info.ProjectileInfo[index].DirectHit.AffectedTargets))
+			if (info.ProjectileInfo[index].DirectHit != null)
 			{
-				DirectTargetHit(hit);
+				if (CombatObject.IsAllowedEntitie(hit, creator, info.ProjectileInfo[index].DirectHit.AffectedTargets))
+				{
+					DirectTargetHit(hit);
+				}
 			}
 		}
 		private void OnCollisionEnter(Collision collision)
@@ -160,10 +163,7 @@ namespace EoE.Weapons
 		}
 		private void DirectTargetHit(Entitie hit)
 		{
-			float damage = info.BaseDamage * info.ProjectileInfo[index].DirectHit.DamageMultiplier;
-			float knockback = info.BaseKnockback * info.ProjectileInfo[index].DirectHit.KnockbackMultiplier;
 			Vector3 knockbackDirection = transform.forward;
-
 			switch (info.ProjectileInfo[index].DirectHit.KnockbackOrigin)
 			{
 				case EffectiveDirection.Local:
@@ -175,50 +175,12 @@ namespace EoE.Weapons
 					}
 				case EffectiveDirection.World:
 					{
-						(Vector3Int, bool) dir = Spell.EnumDirToDir(info.ProjectileInfo[index].DirectHit.KnockbackDirection);
+						(Vector3Int, bool) dir = CombatObject.EnumDirToDir(info.ProjectileInfo[index].DirectHit.KnockbackDirection);
 						knockbackDirection = dir.Item1 * (dir.Item2 ? -1 : 1);
 						break;
 					}
 			}
-
-			//Apply damage
-			hit.ChangeHealth(new ChangeInfo(creator, 
-											CauseType.Magic, 
-											info.ProjectileInfo[index].DirectHit.DamageElement, 
-											TargetStat.Health, 
-											hit.coll.ClosestPoint(transform.position), 
-											knockbackDirection, 
-											damage, 
-											Random.value < info.ProjectileInfo[index].DirectHit.CritChance, 
-											knockback == 0 ? null : (float?)knockback));
-			//Give buffs
-			for (int i = 0; i < info.ProjectileInfo[index].DirectHit.BuffsToApply.Length; i++)
-			{
-				if (info.ProjectileInfo[index].DirectHit.BuffStackStyle == BuffStackingStyle.Stack)
-				{
-					hit.AddBuff(info.ProjectileInfo[index].DirectHit.BuffsToApply[i], creator);
-				}
-				else if (info.ProjectileInfo[index].DirectHit.BuffStackStyle == BuffStackingStyle.Reapply)
-				{
-					if (!(hit.TryReapplyBuff(info.ProjectileInfo[index].DirectHit.BuffsToApply[i], creator).Item1))
-					{
-						hit.AddBuff(info.ProjectileInfo[index].DirectHit.BuffsToApply[i], creator);
-					}
-				}
-				else //effect.BuffStackStyle == BuffStackingStyle.DoNothing
-				{
-					if (!(hit.HasBuffActive(info.ProjectileInfo[index].DirectHit.BuffsToApply[i], creator)))
-					{
-						hit.AddBuff(info.ProjectileInfo[index].DirectHit.BuffsToApply[i], creator);
-					}
-				}
-			}
-
-			//FX
-			for (int i = 0; i < info.ProjectileInfo[index].DirectHit.Effects.Length; i++)
-			{
-				FXManager.PlayFX(info.ProjectileInfo[index].DirectHit.Effects[i], hit.transform, hit is Player);
-			}
+			info.ProjectileInfo[index].DirectHit.ActivateEffectSingle(creator, hit, info, knockbackDirection, hit.coll.ClosestPoint(transform.position));
 		}
 		private void FinishProjectileFlight()
 		{
@@ -254,10 +216,10 @@ namespace EoE.Weapons
 				Destroy(gameObject);
 			}
 		}
-		private void ActivateSpellEffects(SpellEffect[] effects)
+		private void ActivateSpellEffects(EffectAOE[] effects)
 		{
 			for (int i = 0; i < effects.Length; i++)
-				Entitie.ActivateSpellEffect(creator, effects[i], transform, info);
+				effects[i].ActivateEffectAOE(creator, transform, info);
 		}
 		private void CreateFX(CustomFXObject[] effects, bool bind = false)
 		{

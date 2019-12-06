@@ -1,5 +1,5 @@
 ﻿using UnityEditor;
-using EoE.Weapons;
+using EoE.Combatery;
 using static EoE.EoEEditor;
 
 namespace EoE.Information
@@ -29,8 +29,10 @@ namespace EoE.Information
 		[MenuItem("EoE/FX/Sound/Effect")] public static void CreateSoundEffect() => AssetCreator<SoundEffect>("Settings", "FX");
 
 		//Combat
-		[MenuItem("EoE/Combat/Spell/Spell")] public static void CreateSpell() => AssetCreator<Spell>("Settings", "Spell");
-		[MenuItem("EoE/Combat/Spell/SpellEffect")] public static void CreateSpellEffect() => AssetCreator<SpellEffect>("Settings", "Spell", "SpellEffects");
+		[MenuItem("EoE/Combat/Spell")] public static void CreateSpell() => AssetCreator<Spell>("Settings", "Combat", "Spell");
+		[MenuItem("EoE/Combat/Weapon")] public static void CreateWeapon() => AssetCreator<Weapon>("Settings", "Combat", "Weapon");
+		[MenuItem("EoE/Combat/Effect/EffectSingle")] public static void CreateEffectSingle() => AssetCreator<EffectSingle>("Settings", "Combat");
+		[MenuItem("EoE/Combat/Effect/EffectAOE")] public static void CreateEffectAOE() => AssetCreator<EffectAOE>("Settings", "Combat");
 
 		//Other
 		[MenuItem("EoE/Buff")] public static void CreateBuff() => AssetCreator<Buff>("Settings", "Buffs");
