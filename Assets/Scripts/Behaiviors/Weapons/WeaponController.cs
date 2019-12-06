@@ -11,10 +11,8 @@ namespace EoE.Weapons
 		public WeaponHitbox[] weaponHitboxes;
 		private bool curActive;
 		public bool Active { get => curActive; set => ChangeWeaponState(value); }
-		private List<GameObject> hits;
 		public void Setup()
 		{
-			hits = new List<GameObject>();
 			for (int i = 0; i < weaponHitboxes.Length; i++)
 			{
 				weaponHitboxes[i].Setup(this);
@@ -22,27 +20,27 @@ namespace EoE.Weapons
 		}
 		private void ChangeWeaponState(bool state)
 		{
-			//Only reset the hit list when necessary
-			if (state)
-				hits = new List<GameObject>();
-
+			if(!state)
+			{
+				for(int i = 0; i < weaponHitboxes.Length; i++)
+				{
+					weaponHitboxes[i].ResetCollisionIgnores();
+				}
+			}
 			curActive = state;
 			for (int i = 0; i < weaponHitboxes.Length; i++)
 			{
 				weaponHitboxes[i].Active = state;
 			}
 		}
-		public void HitObject(Vector3 hitPos, GameObject hit)
+		public void HitObject(Vector3 hitPos, Collider hit)
 		{
-			for (int i = 0; i < hits.Count; i++)
+			for(int i = 0; i < weaponHitboxes.Length; i++)
 			{
-				if (hits[i] == hit)
-					return;
+				weaponHitboxes[i].IgnoreCollider(hit);
 			}
 
-			hits.Add(hit);
-
-			if (hit.layer == ConstantCollector.TERRAIN_LAYER)
+			if (hit.gameObject.layer == ConstantCollector.TERRAIN_LAYER)
 			{
 				if (!Player.Instance.activeAttack.animationInfo.penetrateTerrain)
 					Player.Instance.CancelAttackAnimation();
@@ -62,7 +60,7 @@ namespace EoE.Weapons
 				knockBackAmount = null;
 			Vector3 impactDirection = (hitEntitie.actuallWorldPosition - Player.Instance.transform.position).normalized;
 
-			hitEntitie.ChangeHealth(new Information.ChangeInfo(Player.Instance, Information.CauseType.Physical, Player.Instance.PlayerWeapon.element, TargetStat.Health, hitPos, impactDirection, damageAmount, wasCrit, knockBackAmount));
+			hitEntitie.ChangeHealth(new ChangeInfo(Player.Instance, CauseType.Physical, Player.Instance.PlayerWeapon.element, TargetStat.Health, hitPos, impactDirection, damageAmount, wasCrit, knockBackAmount));
 
 			if (!Player.Instance.activeAttack.animationInfo.penetrateEntities)
 				Player.Instance.CancelAttackAnimation();

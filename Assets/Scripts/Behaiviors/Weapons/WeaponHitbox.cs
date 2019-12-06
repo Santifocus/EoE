@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace EoE.Weapons
 {
@@ -10,13 +11,24 @@ namespace EoE.Weapons
 		private bool curActive;
 		private Collider coll;
 		public bool Active { get => curActive; set => ChangeWeaponState(value); }
+		private List<Collider> ignoredColliders = new List<Collider>();
+		private void OnValidate()
+		{
+			Collider[] allCollider = GetComponents<Collider>();
+			if (allCollider.Length > 1)
+			{
+				Debug.LogError("Cannot attach more than one collider to a single weapon hitbox!");
+				for(int i = 1; i < allCollider.Length; i++)
+				{
+					DestroyImmediate(allCollider[i]);
+				}
+			}
+		}
 		public void Setup(WeaponController controller)
 		{
 			this.controller = controller;
 			if (trail)
 				trail.enabled = false;
-			if (GetComponents<Collider>().Length > 1)
-				Debug.LogError("Cannot attach more than one collider to a single weapon hitbox!");
 			coll = GetComponent<Collider>();
 			coll.enabled = false;
 		}
@@ -29,9 +41,24 @@ namespace EoE.Weapons
 				trail.enabled = state;
 		}
 
-		private void OnTriggerEnter(Collider other)
+		public void IgnoreCollider(Collider other)
 		{
-			controller.HitObject(coll.bounds.center, other.gameObject);
+			Physics.IgnoreCollision(coll, other);
+			ignoredColliders.Add(other);
+		}
+
+		public void ResetCollisionIgnores()
+		{
+			for(int i = 0; i < ignoredColliders.Count; i++)
+			{
+				Physics.IgnoreCollision(coll, ignoredColliders[i], false);
+			}
+			ignoredColliders = new List<Collider>();
+		}
+
+		private void OnCollisionEnter(Collision collision)
+		{
+			controller.HitObject(collision.contacts[0].point, collision.collider);
 		}
 	}
 }

@@ -5,7 +5,6 @@ namespace EoE.Weapons
 {
 	public class Weapon : ScriptableObject
 	{
-		public string Name;
 		public AttackStyle weaponAttackStyle;
 		public WeaponController weaponPrefab;
 		public Vector3 weaponHandleOffset;
