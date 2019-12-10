@@ -10,24 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c475015d82123d4c9d421d67f39e273, type: 3}
-  m_Name: RageBuff
+  m_Name: DefenseBuff
   m_EditorClassIdentifier: 
-  Name: Rage Buff
+  Name: DefenseBuff
   Quality: 2
   Permanent: 0
   BuffTime: 10
-  Icon: {fileID: 21300000, guid: 070080759fd8a224d824f824f5c5afa3, type: 3}
+  Icon: {fileID: 21300000, guid: bb8829e2f5c16e04f947ff8fd3b5f049, type: 3}
   Effects:
-  - TargetBaseStat: 3
+  - TargetBaseStat: 5
     Percent: 0
-    Amount: 2
-  - TargetBaseStat: 6
-    Percent: 1
-    Amount: 10
+    Amount: 3
   CustomEffects:
     ApplyMoveStun: 0
     Invincible: 0
   DOTs: []
   FXEffects:
-  - {fileID: 11400000, guid: 2e8623e6ecdc1bb4aa68c44343ee4f86, type: 2}
   - {fileID: 11400000, guid: 73695c2c02100064bb6507ce4182b319, type: 2}
+  - {fileID: 11400000, guid: 3612b800a0e23c249a791ead6b6e15d2, type: 2}

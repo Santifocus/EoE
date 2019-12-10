@@ -23,7 +23,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3154eaf86a359724a9b1df91fbcf6f0e, type: 2}
   - {fileID: 11400000, guid: 410e71641ea32d249abb054fdfec4d1f, type: 2}
   FXEffectsWhenEquipped: []
-  UseCooldown: 2
+  UseCooldown: 5
   healEffects:
   - HealType: 2
     Percent: 0

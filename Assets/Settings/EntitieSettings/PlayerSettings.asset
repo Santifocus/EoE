@@ -145,13 +145,16 @@ MonoBehaviour:
     ItemCount: 1
     ForceEquip: 1
   - Item: {fileID: 11400000, guid: f64f815518c407749858bddca8bf5ac0, type: 2}
-    ItemCount: 1
+    ItemCount: 2
     ForceEquip: 1
   - Item: {fileID: 11400000, guid: bc3fa643281d1cf4d92b4a40f10da5b2, type: 2}
     ItemCount: 1
     ForceEquip: 0
   - Item: {fileID: 11400000, guid: 2ba98f01a544715419f24f7d4c8b7f7b, type: 2}
     ItemCount: 1
+    ForceEquip: 0
+  - Item: {fileID: 11400000, guid: a78e3ecaa7acbd04d95790fe55dba94c, type: 2}
+    ItemCount: 2
     ForceEquip: 0
   InventorySize: 55
   EffectsOnReceiveDamage:
