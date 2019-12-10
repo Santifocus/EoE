@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 99368300726595134}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_LocalScale: {x: 3.5, y: 3.5, z: 3.5}
   m_Children: []
   m_Father: {fileID: 1839400537385994013}
   m_RootOrder: 1
@@ -222,7 +222,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0.8812718, b: 0, a: 0.3137255}
+      maxColor: {r: 1, g: 0.8812718, b: 0, a: 0.8235294}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -981,10 +981,10 @@ ParticleSystem:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
-          time: 0
-          value: 0.84049034
-          inSlope: 0.4477937
-          outSlope: 0.4477937
+          time: 0.009048462
+          value: 0.8527622
+          inSlope: 0.41319203
+          outSlope: 0.41319203
           tangentMode: 34
           weightedMode: 0
           inWeight: 0
@@ -992,8 +992,8 @@ ParticleSystem:
         - serializedVersion: 3
           time: 0.24661043
           value: 0.95092094
-          inSlope: 0.4477937
-          outSlope: 0.4477937
+          inSlope: 0.41319203
+          outSlope: 0.41319203
           tangentMode: 34
           weightedMode: 0
           inWeight: 0.33333334
@@ -4798,8 +4798,8 @@ ParticleSystem:
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
-  looping: 0
-  prewarm: 0
+  looping: 1
+  prewarm: 1
   playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
@@ -4974,7 +4974,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0.9267906, b: 0, a: 0.32156864}
+      maxColor: {r: 1, g: 0.9742207, b: 0, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
