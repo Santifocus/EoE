@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: FreezeSpell
   m_EditorClassIdentifier: 
   ManaCost: 15
-  BaseDamage: 22
+  BaseDamage: 20
   BaseKnockback: 12
-  SpellCooldown: 5
+  SpellCooldown: 10
   ContainedParts: 3
   MovementRestrictions: 3
   SubtractManaAtPart: 2
