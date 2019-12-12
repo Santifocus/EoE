@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6012763415ced2a4684da0b169ee66eb, type: 3}
-  m_Name: New EffectSingle
+  m_Name: SwordHit
   m_EditorClassIdentifier: 
   AffectedTargets: 4
   DamageElement: 1
-  CauseType: 1
+  CauseType: 0
   DamageMultiplier: 1
-  CritChanceMultiplier: 0
+  CritChanceMultiplier: 1
   KnockbackMultiplier: 1
   KnockbackOrigin: 2
   KnockbackDirection: 1

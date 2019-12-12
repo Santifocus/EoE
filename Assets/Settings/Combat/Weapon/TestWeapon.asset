@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BaseDamage: 10
   BaseManaCost: 0
-  BaseEnduranceCost: 0
-  BaseKnockback: 0
+  BaseEnduranceCost: 3
+  BaseKnockback: 10
   BaseCritChance: 0
   WeaponPrefab: {fileID: 5533782398965989895, guid: 18284dacf122148419232919f51c45c2,
     type: 3}
@@ -28,8 +28,7 @@ MonoBehaviour:
     AttackSequenceParts:
     - AnimationTarget: 1
       AnimationMultiplicationType: 1
-      AnimationSpeedFlatValue: 1
-      AnimationSpeedCurveTimeframe: 2
+      AnimationSpeedFlatValue: 5
       AnimationSpeedCurve:
         serializedVersion: 2
         m_Curve:
@@ -54,14 +53,16 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+      AnimationSpeedCurveTimeframe: 2
+      AnimationSpeedCurveMultiplier: 1
       DamageMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
       KnockbackMultiplier: 1
       CritChanceMultiplier: 1
       CollisionMask: -1
-      StopOnCollisionMask: -1
-      DirectHit: {fileID: 0}
+      StopOnCollisionMask: 0
+      DirectHit: {fileID: 11400000, guid: b2224e95e2fd03742845a26029bcb0dc, type: 2}
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -70,9 +71,8 @@ MonoBehaviour:
       OnHitComboWorth: 1
       AttackEffects: []
     - AnimationTarget: 2
-      AnimationMultiplicationType: 2
-      AnimationSpeedFlatValue: 1
-      AnimationSpeedCurveTimeframe: 0.8
+      AnimationMultiplicationType: 1
+      AnimationSpeedFlatValue: 4
       AnimationSpeedCurve:
         serializedVersion: 2
         m_Curve:
@@ -86,47 +86,46 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0.028130665
         - serializedVersion: 3
-          time: 1
-          value: 2
-          inSlope: 5.118835
-          outSlope: 5.118835
+          time: 0.7254694
+          value: 1.7683955
+          inSlope: 6.0330286
+          outSlope: 6.0330286
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.027223468
+          inWeight: 0.027166076
+          outWeight: 0.09761762
+        - serializedVersion: 3
+          time: 1
+          value: 0.8
+          inSlope: -7.314202
+          outSlope: -7.314202
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.09379553
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+      AnimationSpeedCurveTimeframe: 0.8
+      AnimationSpeedCurveMultiplier: 1
       DamageMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
       KnockbackMultiplier: 1
       CritChanceMultiplier: 1
       CollisionMask: -1
-      StopOnCollisionMask: -1
-      DirectHit: {fileID: 0}
+      StopOnCollisionMask: 0
+      DirectHit: {fileID: 11400000, guid: b2224e95e2fd03742845a26029bcb0dc, type: 2}
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
       OverridenCauseType: 0
       ComboIncreaseMaxDelay: 1
       OnHitComboWorth: 1
-      AttackEffects:
-      - AtAnimationPoint: 0.3
-        ChanceToActivate: 1
-        ContainedEffectType: 1
-        ImpulseVelocity: 100
-        ImpulseVelocityFallOffTime: 0.25
-        ImpulseVelocityDirection: 1
-        ImpulseVelocityFallbackDirection: 1
-        ImpulseDirectionBase: 1
-        FXObjects: []
-        AOEEffects: []
-        ProjectileInfos: []
+      AttackEffects: []
     - AnimationTarget: 4
-      AnimationMultiplicationType: 2
-      AnimationSpeedFlatValue: 2
-      AnimationSpeedCurveTimeframe: 0.8
+      AnimationMultiplicationType: 1
+      AnimationSpeedFlatValue: 3
       AnimationSpeedCurve:
         serializedVersion: 2
         m_Curve:
@@ -151,14 +150,16 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+      AnimationSpeedCurveTimeframe: 0.8
+      AnimationSpeedCurveMultiplier: 1
       DamageMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
       KnockbackMultiplier: 1
       CritChanceMultiplier: 1
       CollisionMask: -1
-      StopOnCollisionMask: -1
-      DirectHit: {fileID: 0}
+      StopOnCollisionMask: 0
+      DirectHit: {fileID: 11400000, guid: b2224e95e2fd03742845a26029bcb0dc, type: 2}
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -167,20 +168,21 @@ MonoBehaviour:
       OnHitComboWorth: 1
       AttackEffects: []
     PartsMaxDelays:
-    - 0.25
-    - 0.25
+    - 0.2
+    - 0.2
   RunAttackSequence:
     AttackSequenceParts:
     - AnimationTarget: 1
       AnimationMultiplicationType: 1
       AnimationSpeedFlatValue: 1
-      AnimationSpeedCurveTimeframe: 2
       AnimationSpeedCurve:
         serializedVersion: 2
         m_Curve: []
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+      AnimationSpeedCurveTimeframe: 2
+      AnimationSpeedCurveMultiplier: 1
       DamageMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
@@ -202,13 +204,14 @@ MonoBehaviour:
     - AnimationTarget: 1
       AnimationMultiplicationType: 1
       AnimationSpeedFlatValue: 1
-      AnimationSpeedCurveTimeframe: 2
       AnimationSpeedCurve:
         serializedVersion: 2
         m_Curve: []
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+      AnimationSpeedCurveTimeframe: 2
+      AnimationSpeedCurveMultiplier: 1
       DamageMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
@@ -230,13 +233,14 @@ MonoBehaviour:
     - AnimationTarget: 1
       AnimationMultiplicationType: 1
       AnimationSpeedFlatValue: 1
-      AnimationSpeedCurveTimeframe: 2
       AnimationSpeedCurve:
         serializedVersion: 2
         m_Curve: []
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+      AnimationSpeedCurveTimeframe: 2
+      AnimationSpeedCurveMultiplier: 1
       DamageMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
