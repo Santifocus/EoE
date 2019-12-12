@@ -14,33 +14,10 @@ namespace EoE.Information
 		protected static bool VFXSettingsOpen;
 		protected override void CustomInspector()
 		{
-			FoldoutHeader("Base Settings", ref BaseSettingsOpen);
-			if (BaseSettingsOpen)
-			{
-				BaseSettingsArea();
-			}
-			EndFoldoutHeader();
-
-			FoldoutHeader("Combat Settings", ref CombatSettingsOpen);
-			if (CombatSettingsOpen)
-			{
-				CombatSettings();
-			}
-			EndFoldoutHeader();
-
-			FoldoutHeader("Stat Settings", ref StatSettingsOpen);
-			if (StatSettingsOpen)
-			{
-				StatSettingsArea();
-			}
-			EndFoldoutHeader();
-
-			FoldoutHeader("Movement Settings", ref MovementSettingsOpen);
-			if (MovementSettingsOpen)
-			{
-				MovementSettingsArea();
-			}
-			EndFoldoutHeader();
+			DrawInFoldoutHeader("Base Settings", ref BaseSettingsOpen, BaseSettingsArea);
+			DrawInFoldoutHeader("Combat Settings", ref CombatSettingsOpen, CombatSettings);
+			DrawInFoldoutHeader("Stat Settings", ref StatSettingsOpen, StatSettingsArea);
+			DrawInFoldoutHeader("Movement Settings", ref MovementSettingsOpen, MovementSettingsArea);
 		}
 
 		protected virtual void BaseSettingsArea()
@@ -75,7 +52,7 @@ namespace EoE.Information
 			EntitieSettings settings = target as EntitieSettings;
 			ObjectField(new GUIContent("Level Settings", "The Level settings that should be applied to the Entitie."), ref settings.LevelSettings, 1);
 
-			LineBreak();
+			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			//Health
 			FloatField(new GUIContent("Health", "What base Health does the Entitie have?"), ref settings.Health, 1);
 			BoolField(new GUIContent("Do Health Regen", "Should this Entitie Regen over time?"), ref settings.DoHealthRegen, 1);
@@ -90,7 +67,7 @@ namespace EoE.Information
 				Vector3Field(new GUIContent("Health Regen Particles Offset", "The regen particles will be displayed with this offset to the Entitie."), ref settings.HealthRegenParticlesOffset, 2);
 			}
 
-			LineBreak();
+			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			//Mana
 			FloatField(new GUIContent("Mana", "What base Mana does the Entitie have."), ref settings.Mana, 1);
 			BoolField(new GUIContent("Do Mana Regen", "Should this Entitie Regen over time?"), ref settings.DoManaRegen, 1);

@@ -32,8 +32,11 @@ namespace EoE.Combatery
 		public CustomFXObject[] Effects = new CustomFXObject[0];
 
 		#region Activation
-		public void ActivateEffectAOE(Entitie effectCauser, Transform origin, CombatObject infoBase)
+		public void ActivateEffectAOE(Entitie effectCauser, Transform origin, CombatObject infoBase, EffectOverrides effectOverrides = null)
 		{
+			ElementType effectElement = (effectOverrides == null) ? DamageElement : (effectOverrides.OverridenElement.HasValue ? effectOverrides.OverridenElement.Value : DamageElement);
+			CauseType effectCause = (effectOverrides == null) ? CauseType : (effectOverrides.OverridenCauseType.HasValue ? effectOverrides.OverridenCauseType.Value : CauseType);
+
 			//If the effect is not applying force based on its center we can find out the direction here
 			//so we dont have to recalculate it everytime a new eligible target is added
 			Vector3 localDirection = Vector3.up;
@@ -141,7 +144,7 @@ namespace EoE.Combatery
 
 			//Now we have to apply effects: Damage, Knockback, Buffs and FXEffects
 			int targetCount = HasMaximumHits ? System.Math.Min(eligibleTargets.Length, MaximumHits) : eligibleTargets.Length;
-			bool effectWasCrit = Random.value < (CritChanceMultiplier * infoBase.BaseCritChance);
+			bool effectWasCrit = Utils.Chance01(CritChanceMultiplier * infoBase.BaseCritChance * (effectOverrides == null ? 1 : effectOverrides.ExtraCritChanceMultiplier));
 
 			float casterBaseDamage = CauseType == CauseType.Physical ? (effectCauser.curPhysicalDamage) : (CauseType == CauseType.Magic ? effectCauser.curMagicalDamage : 0);
 			float baseKnockBack = KnockbackMultiplier * infoBase.BaseKnockback;
@@ -149,8 +152,8 @@ namespace EoE.Combatery
 			for (int i = 0; i < targetCount; i++)
 			{
 				//Damage / Knockback
-				float damage = (infoBase.BaseDamage + casterBaseDamage) * DamageMultiplier * eligibleTargets[i].Multiplier;
-				float? knockbackAmount = (baseKnockBack != 0) ? (float?)(baseKnockBack * eligibleTargets[i].Multiplier) : (null);
+				float damage = (infoBase.BaseDamage + casterBaseDamage) * DamageMultiplier * eligibleTargets[i].Multiplier * (effectOverrides == null ? 1 : effectOverrides.ExtraDamageMultiplier);
+				float? knockbackAmount = (baseKnockBack != 0) ? (float?)(baseKnockBack * eligibleTargets[i].Multiplier * (effectOverrides == null ? 1 : effectOverrides.ExtraKnockbackMultiplier)) : (null);
 
 				eligibleTargets[i].Target.ChangeHealth(new ChangeInfo(
 					effectCauser,

@@ -1,6 +1,5 @@
 ﻿using EoE.Entities;
 using EoE.Events;
-using EoE.Utils;
 using UnityEngine;
 
 namespace EoE.Information

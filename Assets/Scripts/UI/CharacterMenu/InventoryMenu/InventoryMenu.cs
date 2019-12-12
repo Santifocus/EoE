@@ -256,16 +256,17 @@ namespace EoE.UI
 							{
 								if (Player.Instance.EquipedWeapon != null)
 								{
-									Player.Instance.EquipedWeapon.data.UnEquip(Player.Instance.EquipedWeapon, Player.Instance);
 									Player.Instance.EquipedWeapon.isEquiped = false;
+									Player.Instance.EquipedWeapon.data.UnEquip(Player.Instance.EquipedWeapon, Player.Instance);
+									Player.Instance.EquipedWeapon = null;
 								}
 
 								if (!unequip)
 								{
 									Player.Instance.EquipedWeapon = item;
 									Player.Instance.EquipedWeapon.isEquiped = true;
+									target.Equip(Player.Instance.EquipedWeapon, Player.Instance);
 								}
-
 							}
 							else //target is ArmorItem
 							{
@@ -273,16 +274,16 @@ namespace EoE.UI
 								{
 									Player.Instance.EquipedArmor.isEquiped = false;
 									Player.Instance.EquipedArmor.data.UnEquip(Player.Instance.EquipedArmor, Player.Instance);
+									Player.Instance.EquipedArmor = null;
 								}
 
 								if (!unequip)
 								{
 									Player.Instance.EquipedArmor = item;
 									Player.Instance.EquipedArmor.isEquiped = true;
+									target.Equip(Player.Instance.EquipedArmor, Player.Instance);
 								}
-
 							}
-							target.Equip(item, Player.Instance);
 						}
 						else //(target is (SpellItem / Item / any other not mentioned type))
 						{
@@ -293,8 +294,8 @@ namespace EoE.UI
 								{
 									if(targetArray[i] == item)
 									{
-										targetArray[i].data.UnEquip(targetArray[i], Player.Instance);
 										targetArray[i].isEquiped = false;
+										targetArray[i].data.UnEquip(targetArray[i], Player.Instance);
 										targetArray[i] = null;
 										break;
 									}

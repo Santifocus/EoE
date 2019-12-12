@@ -1,6 +1,4 @@
 ﻿using EoE.Entities;
-using EoE.Information;
-using EoE.Utils;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -51,7 +49,7 @@ namespace EoE.Combatery
 			projectile.remainingLifeTime = info.Duration;
 
 			projectile.SetupCollider();
-			projectile.CreateFX(info.CustomEffects, true);
+			projectile.CreateFX(info.VisualStartEffects, true);
 
 			return projectile;
 		}
@@ -163,8 +161,8 @@ namespace EoE.Combatery
 
 			if (info.CollisionEffectsOnBounce)
 			{
-				ActivateSpellEffects(info.CollisionEffects);
-				CreateFX(info.CollisionCustomEffects);
+				ActivateSpellEffects(info.CollisionEffectsAOE);
+				CreateFX(info.VisualCollisionEffects);
 			}
 		}
 		private void DirectTargetHit(Entitie hit)
@@ -193,8 +191,8 @@ namespace EoE.Combatery
 			if (isDead || isRemenants)
 				return;
 
-			ActivateSpellEffects(info.CollisionEffects);
-			CreateFX(info.CollisionCustomEffects);
+			ActivateSpellEffects(info.CollisionEffectsAOE);
+			CreateFX(info.VisualCollisionEffects);
 			if (info.CreatesRemenants)
 			{
 				isRemenants = true;
@@ -202,9 +200,9 @@ namespace EoE.Combatery
 				StopBoundParticles();
 				ActivateSpellEffects(info.Remenants.StartEffects);
 
-				for(int i = 0; i < info.Remenants.ParticleEffects.Length; i++)
+				for(int i = 0; i < info.Remenants.VisualEffects.Length; i++)
 				{
-					FXInstance instance = FXManager.PlayFX(info.Remenants.ParticleEffects[i], transform, false);
+					FXInstance instance = FXManager.PlayFX(info.Remenants.VisualEffects[i], transform, false);
 					boundEffects.Add(instance);
 				}
 

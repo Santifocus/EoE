@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 
-namespace EoE.Utils
+namespace EoE
 {
-	public static class BaseUtils
+	public static class Utils
 	{
 		public static readonly float RootOfTwo = Mathf.Sqrt(2);
 		public static bool ChancePercent(float chance) => Chance01(chance / 100);
 		public static bool Chance01(float chance)
 		{
-			return Random.value < chance;
+			return Random.value <= chance;
 		}
 		public static float Polarize01(float value, int iterations = 1, bool smooth = false, bool noClamp = false)
 		{
@@ -26,15 +26,10 @@ namespace EoE.Utils
 			iterations--;
 			return iterations == 0 ? value : Polarize01(value, iterations);
 		}
-		public static bool DecreaseCooldown(ref float cooldown)
+		public static float SpringLerp(float curValue, float targetValue, ref float acceleration, float springStiffness, float lerpPoint)
 		{
-			cooldown -= Time.deltaTime;
-			return cooldown <= 0;
-		}
-		public static bool DecreaseFixedCooldown(ref float cooldown)
-		{
-			cooldown -= Time.fixedDeltaTime;
-			return cooldown <= 0;
+			acceleration = Mathf.Lerp(acceleration, (targetValue - curValue) * springStiffness, lerpPoint);
+			return curValue + acceleration;
 		}
 	}
 }

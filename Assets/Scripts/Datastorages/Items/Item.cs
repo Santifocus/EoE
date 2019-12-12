@@ -1,5 +1,4 @@
 ﻿using EoE.Entities;
-using EoE.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -68,7 +67,6 @@ namespace EoE.Information
 			{
 				originStack.StopBoundEffects();
 			}
-			OnUnEquip(user);
 		}
 		private FXInstance[] PlayEffects(Entitie user, FXObject[] effects)
 		{

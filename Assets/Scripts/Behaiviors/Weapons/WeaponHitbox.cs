@@ -6,61 +6,63 @@ namespace EoE.Combatery
 {
 	public class WeaponHitbox : MonoBehaviour
 	{
-		public TrailRenderer trail;
-
+		[SerializeField] private Collider coll = default;
 		private WeaponController controller;
-		private bool curActive;
-		private Collider coll;
-		public bool Active { get => curActive; set => ChangeWeaponState(value); }
-		private List<Collider> ignoredColliders = new List<Collider>();
-		private void OnValidate()
-		{
-			Collider[] allCollider = GetComponents<Collider>();
-			if (allCollider.Length > 1)
-			{
-				Debug.LogError("Cannot attach more than one collider to a single weapon hitbox!");
-				for(int i = 1; i < allCollider.Length; i++)
-				{
-					DestroyImmediate(allCollider[i]);
-				}
-			}
-		}
+		private Collider TerrainCollider;
+		private Collider EntitieCollider;
 		public void Setup(WeaponController controller)
 		{
 			this.controller = controller;
-			if (trail)
-				trail.enabled = false;
-			coll = GetComponent<Collider>();
+			SetupColliders();
+		}
+		private void SetupColliders()
+		{
 			coll.enabled = false;
-			Physics.IgnoreCollision(coll, Player.Instance.coll);
-		}
 
-		private void ChangeWeaponState(bool state)
-		{
-			coll.enabled = state;
-			curActive = state;
-			if (trail)
-				trail.enabled = state;
-		}
+			TerrainCollider = Instantiate(coll, transform);
+			EntitieCollider = Instantiate(coll, transform);
 
-		public void IgnoreCollider(Collider other)
-		{
-			Physics.IgnoreCollision(coll, other);
-			ignoredColliders.Add(other);
-		}
+			CleanCollider(TerrainCollider.gameObject);
+			CleanCollider(EntitieCollider.gameObject);
 
-		public void ResetCollisionIgnores()
+			TerrainCollider.gameObject.layer = ConstantCollector.TERRAIN_COLLIDING_LAYER;
+			EntitieCollider.gameObject.layer = ConstantCollector.ENTITIE_COLLIDING_LAYER;
+
+			Physics.IgnoreCollision(TerrainCollider, Player.Instance.coll);
+			Physics.IgnoreCollision(EntitieCollider, Player.Instance.coll);
+
+			TerrainCollider.isTrigger = EntitieCollider.isTrigger = false;
+		}
+		private void CleanCollider(GameObject target)
 		{
-			for(int i = 0; i < ignoredColliders.Count; i++)
+			//Remove all non collider components
+			Component[] allComponents = target.GetComponents<Component>();
+			for(int i = 0; i < allComponents.Length; i++)
 			{
-				Physics.IgnoreCollision(coll, ignoredColliders[i], false);
+				if(!(allComponents[i] is Collider || allComponents[i] is Transform))
+					Destroy(allComponents[i]);
 			}
-			ignoredColliders = new List<Collider>();
+			//Remove all children, destroy is called at the end of the frame so we can iterate throught with no worries
+			for(int i = 0; i < target.transform.childCount; i++)
+			{
+				Destroy(target.transform.GetChild(i).gameObject);
+			}
 		}
-
-		private void OnCollisionEnter(Collision collision)
+		public void SetColliderStyle(AttackStyle style)
 		{
-			controller.HitObject(collision.contacts[0].point, collision.collider);
+			TerrainCollider.enabled = style != null ? AttackStyle.HasCollisionMask(style.CollisionMask, ColliderMask.Terrain) : false;
+			EntitieCollider.enabled = style != null ? AttackStyle.HasCollisionMask(style.CollisionMask, ColliderMask.Entities) : false;
+		}
+		public void IgnoreCollision(Collider other, bool state)
+		{
+			if (!other)
+				return;
+			Physics.IgnoreCollision(TerrainCollider, other, state);
+			Physics.IgnoreCollision(EntitieCollider, other, state);
+		}
+		private void OnCollisionEnter(Collision collision)
+		{ 
+			controller.HitObject(collision.GetContact(0).point, collision.collider, collision.GetContact(0).normal * -1);
 		}
 	}
 }

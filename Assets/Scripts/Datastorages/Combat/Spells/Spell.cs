@@ -19,8 +19,7 @@ namespace EoE.Combatery
 		public SpellCastPart CastInfo = new SpellCastPart();
 		public SpellBeginningPart StartInfo = new SpellBeginningPart();
 
-		public ProjectileData[] ProjectileInfo = new ProjectileData[0];
-		public float[] DelayToNextProjectile = new float[0];
+		public ProjectileInfo[] ProjectileInfos = new ProjectileInfo[0];
 
 		public bool HasSpellPart(SpellPart part)
 		{
@@ -32,23 +31,14 @@ namespace EoE.Combatery
 	public class SpellCastPart
 	{
 		public float Duration = 3;
-		public CustomFXObject[] CustomEffects = new CustomFXObject[0];
+		public CustomFXObject[] VisualEffects = new CustomFXObject[0];
 		public EffectAOE[] StartEffects = new EffectAOE[0];
 		public EffectAOE[] WhileEffects = new EffectAOE[0];
 	}
 	[System.Serializable]
 	public class SpellBeginningPart
 	{
-		public CustomFXObject[] CustomEffects = new CustomFXObject[0];
+		public CustomFXObject[] VisualEffects = new CustomFXObject[0];
 		public EffectAOE[] Effects = new EffectAOE[0];
-	}
-	[System.Serializable]
-	public class SpellRemenantsPart
-	{
-		public float Duration = 5;
-		public ParticleEffect[] ParticleEffects = new ParticleEffect[0];
-		public EffectAOE[] StartEffects = new EffectAOE[0];
-		public EffectAOE[] WhileEffects = new EffectAOE[0];
-		public bool TryGroundRemenants = true;
 	}
 }

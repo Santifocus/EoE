@@ -23,88 +23,21 @@ MonoBehaviour:
   SubtractManaAtPart: 2
   CastInfo:
     Duration: 2.5
-    CustomEffects:
-    - openInInspector: 0
-      FX: {fileID: 11400000, guid: 2bd48134fcb3222429adde541c21e0a7, type: 2}
-      HasCustomOffset: 0
-      CustomOffset: {x: 0, y: 0, z: 0}
-      HasCustomRotationOffset: 0
-      CustomRotation: {x: 0, y: 0, z: 0}
-      HasCustomScale: 0
-      CustomScale: {x: 1, y: 1, z: 1}
-    - openInInspector: 0
-      FX: {fileID: 11400000, guid: 200cf9ce338398441a0a208d04331942, type: 2}
-      HasCustomOffset: 0
-      CustomOffset: {x: 0, y: 0, z: 0}
-      HasCustomRotationOffset: 0
-      CustomRotation: {x: 0, y: 0, z: 0}
+    VisualEffects:
+    - FX: {fileID: 11400000, guid: 2bd48134fcb3222429adde541c21e0a7, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
       HasCustomScale: 0
       CustomScale: {x: 1, y: 1, z: 1}
     StartEffects: []
     WhileEffects: []
   StartInfo:
-    CustomEffects: []
+    VisualEffects: []
     Effects: []
-  ProjectileInfo:
-  - ExecutionCount: 1
-    DelayPerExecution: 0.1
-    DirectionStyle: 2
-    FallbackDirectionStyle: 1
-    Direction: 1
-    Duration: 15
-    FlightSpeed: 60
-    CreateOffsetToCaster: {x: 0, y: 2, z: 0}
-    CustomEffects:
-    - openInInspector: 1
-      FX: {fileID: 11400000, guid: c39daf5a0f800724bb495b3c7063b211, type: 2}
-      HasCustomOffset: 0
-      CustomOffset: {x: 0, y: 0, z: 0}
-      HasCustomRotationOffset: 0
-      CustomRotation: {x: 0, y: 0, z: 0}
-      HasCustomScale: 0
-      CustomScale: {x: 1, y: 1, z: 1}
-    - openInInspector: 1
-      FX: {fileID: 11400000, guid: 35124558f5f93834394d86223bc0aa4c, type: 2}
-      HasCustomOffset: 0
-      CustomOffset: {x: 0, y: 0, z: 0}
-      HasCustomRotationOffset: 0
-      CustomRotation: {x: 0, y: 0, z: 0}
-      HasCustomScale: 0
-      CustomScale: {x: 1, y: 1, z: 1}
-    StartEffects: []
-    WhileEffects: []
-    EntitieHitboxSize: 1
-    TerrainHitboxSize: 0.25
-    CollideMask: -1
-    Bounces: 0
-    DestroyOnEntiteBounce: 1
-    CollisionEffectsOnBounce: 1
-    CollisionCustomEffects:
-    - openInInspector: 0
-      FX: {fileID: 11400000, guid: 7f999a2e186ef064aa781c01f433f7fe, type: 2}
-      HasCustomOffset: 0
-      CustomOffset: {x: 0, y: 0, z: 0}
-      HasCustomRotationOffset: 0
-      CustomRotation: {x: 0, y: 0, z: 0}
-      HasCustomScale: 0
-      CustomScale: {x: 1, y: 1, z: 1}
-    - openInInspector: 0
-      FX: {fileID: 11400000, guid: 358b0e77772331f4e81fea9466a884a1, type: 2}
-      HasCustomOffset: 0
-      CustomOffset: {x: 0, y: 0, z: 0}
-      HasCustomRotationOffset: 0
-      CustomRotation: {x: 0, y: 0, z: 0}
-      HasCustomScale: 0
-      CustomScale: {x: 1, y: 1, z: 1}
-    CollisionEffects:
-    - {fileID: 11400000, guid: ce6f43d2e85152341b701387b7b593a0, type: 2}
-    DirectHit: {fileID: 0}
-    CreatesRemenants: 0
-    Remenants:
-      Duration: 5
-      ParticleEffects:
-      - {fileID: 0}
-      StartEffects: []
-      WhileEffects: []
-      TryGroundRemenants: 1
-  DelayToNextProjectile: []
+  ProjectileInfos:
+  - Projectile: {fileID: 11400000, guid: 70ef7e6b30666ba45ab2d649706b9a7d, type: 2}
+    ExecutionDelay: 0
+    ExecutionCount: 1
+    ExecutionRepeatDelay: 0.2

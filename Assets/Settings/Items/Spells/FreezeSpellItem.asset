@@ -24,4 +24,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 53cbd187787d0e74e86d9b2eb2eb79f1, type: 2}
   - {fileID: 11400000, guid: f5fb6fec427744242897d3e6b103ac71, type: 2}
   UseCooldown: 0
-  targetSpell: {fileID: 11400000, guid: ac6d4f2b9cddec34c9d42ed76b3bbe50, type: 2}
+  TargetSpell: {fileID: 11400000, guid: ac6d4f2b9cddec34c9d42ed76b3bbe50, type: 2}

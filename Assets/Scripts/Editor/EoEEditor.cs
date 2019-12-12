@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using EoE.Combatery;
+using EoE.Information;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,8 +8,8 @@ namespace EoE
 {
 	public static class EoEEditor
 	{
-		private const string LINE_BREAK = "――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――";
-		private const float STANDARD_OFFSET = 15;
+		private const int LINE_HEIGHT = 2;
+		public const float STANDARD_OFFSET = 15;
 		public static bool isDirty;
 		public static void Header(string content, int offSet = 0, bool spaces = true, bool bold = true) => Header(new GUIContent(content), offSet, spaces, bold);
 		public static void Header(GUIContent content, int offSet = 0, bool spaces = true, bool bold = true)
@@ -26,12 +28,18 @@ namespace EoE
 			if (spaces)
 				GUILayout.Space(4);
 		}
-		public static void LineBreak()
+		public static void LineBreak(Color col, bool spaces = true)
 		{
-			EditorGUILayout.BeginHorizontal();
-			GUILayout.Space(-2 * STANDARD_OFFSET);
-			EditorGUILayout.LabelField(LINE_BREAK);
-			EditorGUILayout.EndHorizontal();
+			if (spaces)
+				GUILayout.Space(3);
+
+			Rect rect = EditorGUILayout.GetControlRect(false, LINE_HEIGHT);
+			rect.height = LINE_HEIGHT;
+			rect.x /= 2;
+			EditorGUI.DrawRect(rect, col);
+
+			if (spaces)
+				GUILayout.Space(3);
 		}
 		public static bool StringField(string content, ref string curValue, int offSet = 0) => StringField(new GUIContent(content), ref curValue, offSet);
 		public static bool StringField(GUIContent content, ref string curValue, int offSet = 0)
@@ -145,7 +153,17 @@ namespace EoE
 			}
 			return false;
 		}
-		public static bool FoldoutHeader(string content, ref bool curValue) => FoldoutHeader(new GUIContent(content), ref curValue);
+		public static bool FoldoutFromSerializedProperty(string content, SerializedProperty property, int offSet = 0) => FoldoutFromSerializedProperty(new GUIContent(content), property, offSet);
+		public static bool FoldoutFromSerializedProperty(GUIContent content, SerializedProperty property, int offSet = 0)
+		{
+			bool foldOutOpen = property.isExpanded;
+			if(Foldout(content, ref foldOutOpen, offSet))
+			{
+				property.isExpanded = foldOutOpen;
+				return true;
+			}
+			return false;
+		}
 		public static bool FoldoutHeader(GUIContent content, ref bool curValue)
 		{
 			bool newValue = EditorGUILayout.BeginFoldoutHeaderGroup(curValue, content);
@@ -157,6 +175,28 @@ namespace EoE
 				return true;
 			}
 			return false;
+		}
+		public static bool DrawInFoldoutHeader(string content, ref bool curValue, System.Func<bool> drawFunction) => DrawInFoldoutHeader(new GUIContent(content), ref curValue, drawFunction);
+		public static bool DrawInFoldoutHeader(GUIContent content, ref bool curValue, System.Func<bool> drawFunction)
+		{
+			bool changed = FoldoutHeader(content, ref curValue);
+			if (curValue)
+			{
+				changed |= drawFunction.Invoke();
+			}
+			EndFoldoutHeader();
+			return changed;
+		}
+		public static bool DrawInFoldoutHeader(string content, ref bool curValue, System.Action drawFunction) => DrawInFoldoutHeader(new GUIContent(content), ref curValue, drawFunction);
+		public static bool DrawInFoldoutHeader(GUIContent content, ref bool curValue, System.Action drawFunction)
+		{
+			bool changed = FoldoutHeader(content, ref curValue);
+			if (curValue)
+			{
+				drawFunction.Invoke();
+			}
+			EndFoldoutHeader();
+			return changed;
 		}
 		public static void EndFoldoutHeader() => EditorGUILayout.EndFoldoutHeaderGroup();
 		public static bool Vector2Field(string content, ref Vector2 curValue, int offSet = 0) => Vector2Field(new GUIContent(content), ref curValue, offSet);
@@ -191,17 +231,6 @@ namespace EoE
 			}
 			return false;
 		}
-		public static bool NullableVector3Field(string content, string valueContent, ref Vector3 curValue, ref bool hasValue, int offSet = 0) => NullableVector3Field(new GUIContent(content), new GUIContent(valueContent), ref curValue, ref hasValue, offSet);
-		public static bool NullableVector3Field(GUIContent hasValueContent, GUIContent valueContent, ref Vector3 curValue, ref bool hasValue, int offSet = 0)
-		{
-			bool changed = false;
-
-			changed |= BoolField(hasValueContent, ref hasValue, offSet);
-			if (hasValue)
-				changed |= Vector3Field(valueContent, ref curValue, offSet + 1);
-
-			return changed;
-		}
 		public static bool ColorField(string content, ref Color curValue, int offSet = 0) => ColorField(new GUIContent(content), ref curValue, offSet);
 		public static bool ColorField(GUIContent content, ref Color curValue, int offSet = 0)
 		{
@@ -217,6 +246,96 @@ namespace EoE
 				return true;
 			}
 			return false;
+		}
+		public static bool NullableVector3Field(string content, string valueContent, ref Vector3 curValue, ref bool hasValue, int offSet = 0) => NullableVector3Field(new GUIContent(content), new GUIContent(valueContent), ref curValue, ref hasValue, offSet);
+		public static bool NullableVector3Field(GUIContent hasValueContent, GUIContent valueContent, ref Vector3 curValue, ref bool hasValue, int offSet = 0)
+		{
+			bool changed = false;
+
+			changed |= BoolField(hasValueContent, ref hasValue, offSet);
+			if (hasValue)
+				changed |= Vector3Field(valueContent, ref curValue, offSet + 1);
+
+			return changed;
+		}
+		public static bool DrawCustomFXObjectArray(GUIContent content, ref CustomFXObject[] fxArray, SerializedProperty arrayProperty, int offSet = 0, bool asHeader = false)
+		{
+			bool changed = false;
+			bool open = arrayProperty.isExpanded;
+
+			if (asHeader)
+				changed |= FoldoutHeader(content, ref open);
+			else
+				changed |= Foldout(content, ref open, offSet);
+
+			if (open != arrayProperty.isExpanded)
+				arrayProperty.isExpanded = open;
+
+			if (open)
+			{
+				int arraySize = arrayProperty.arraySize;
+				for (int i = 0; i < arraySize; i++)
+				{
+					changed |= DrawCustomFXObject(new GUIContent((i + 1) + ". Effect"), fxArray[i], arrayProperty.GetArrayElementAtIndex(i), offSet + 1);
+				}
+
+				EditorGUILayout.BeginHorizontal();
+				GUILayout.Space((offSet + 1) * STANDARD_OFFSET);
+				int newSize = EditorGUILayout.DelayedIntField("Size", arraySize);
+				EditorGUILayout.EndHorizontal();
+
+				if (arraySize != newSize)
+				{
+					changed = isDirty = true;
+					CustomFXObject[] newArray = new CustomFXObject[newSize];
+					for (int i = 0; i < newSize; i++)
+					{
+						if (i < fxArray.Length)
+							newArray[i] = fxArray[i];
+						else
+							break;
+					}
+					fxArray = newArray;
+					arrayProperty.arraySize = newSize;
+				}
+			}
+
+			return changed;
+		}
+		public static bool DrawCustomFXObject(GUIContent content, CustomFXObject selfData, SerializedProperty selfProperty, int offSet)
+		{
+			bool changed = false;
+			if (selfData == null)
+			{
+				selfData = new CustomFXObject();
+			}
+
+			bool open = selfProperty.isExpanded;
+			changed |= Foldout(content, ref open, offSet);
+			if (open != selfProperty.isExpanded)
+				selfProperty.isExpanded = open;
+
+			if (open)
+			{
+				changed |= ObjectField<FXObject>("Effect", ref selfData.FX, offSet + 1);
+				changed |= NullableVector3Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.HasPositionOffset))),
+												new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.PositionOffset))),
+												ref selfData.PositionOffset,
+												ref selfData.HasPositionOffset,
+												offSet + 1);
+				changed |= NullableVector3Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.HasRotationOffset))),
+												new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.RotationOffset))),
+												ref selfData.RotationOffset,
+												ref selfData.HasRotationOffset,
+												offSet + 1);
+				changed |= NullableVector3Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.HasCustomScale))),
+												new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.CustomScale))),
+												ref selfData.CustomScale,
+												ref selfData.HasCustomScale,
+												offSet + 1);
+			}
+
+			return changed;
 		}
 		public static bool ObjectField<T>(string content, ref T curValue, int offSet = 0) where T : Object => ObjectField<T>(new GUIContent(content), ref curValue, offSet);
 		public static bool ObjectField<T>(GUIContent content, ref T curValue, int offSet = 0) where T : Object
@@ -235,7 +354,7 @@ namespace EoE
 			return false;
 		}
 		public static bool ObjectArrayField<T>(string content, ref T[] curValue, ref bool open, GUIContent objectContent = null, int offSet = 0) where T : Object => ObjectArrayField<T>(new GUIContent(content), ref curValue, ref open, objectContent, offSet);
-		public static bool ObjectArrayField<T>(GUIContent content, ref T[] curValue, ref bool open, GUIContent objectContent = null, int offSet = 0) where T : Object
+		public static bool ObjectArrayField<T>(GUIContent arrayHeader, ref T[] curValue, ref bool open, GUIContent objectContent = null, int offSet = 0) where T : Object
 		{
 			bool changed = false;
 			if(curValue == null)
@@ -244,7 +363,7 @@ namespace EoE
 				changed = true;
 			}
 
-			Foldout(content, ref open, offSet);
+			Foldout(arrayHeader, ref open, offSet);
 			if (open)
 			{
 				GUIContent targetContent = objectContent != null ? objectContent : new GUIContent("Element ");
@@ -254,9 +373,12 @@ namespace EoE
 				}
 
 				GUILayout.Space(1);
-				int newSize = curValue.Length;
-				bool sizeChanged = IntField("Size", ref newSize, offSet + 1);
-				if (sizeChanged)
+				EditorGUILayout.BeginHorizontal();
+				GUILayout.Space((offSet + 1) * STANDARD_OFFSET);
+				int newSize = EditorGUILayout.DelayedIntField("Size", curValue.Length);
+				EditorGUILayout.EndHorizontal();
+
+				if (newSize != curValue.Length)
 				{
 					changed = true;
 					T[] newArray = new T[newSize];
@@ -271,6 +393,53 @@ namespace EoE
 					curValue = newArray;
 				}
 			}
+			if (changed)
+				isDirty = true;
+			return changed;
+		}
+		public static bool DrawArray<T>(GUIContent arrayHeader, System.Func<int, int, T[], bool> elementBinding, ref T[] curValue, ref bool open, int offSet = 0, bool asHeader = false)
+		{
+			bool changed = false;
+			if (curValue == null)
+			{
+				curValue = new T[0];
+				changed = true;
+			}
+
+			if (asHeader)
+				changed |= FoldoutHeader(arrayHeader, ref open);
+			else
+				changed |= Foldout(arrayHeader, ref open, offSet);
+			if (open)
+			{
+				for (int i = 0; i < curValue.Length; i++)
+				{
+					changed |= (elementBinding?.Invoke(i, offSet + 1, curValue)) ?? false;
+				}
+
+				GUILayout.Space(3);
+				EditorGUILayout.BeginHorizontal();
+				GUILayout.Space((offSet + 1) * STANDARD_OFFSET);
+				int newSize = EditorGUILayout.DelayedIntField("Size", curValue.Length);
+				EditorGUILayout.EndHorizontal();
+
+				if (newSize != curValue.Length)
+				{
+					T[] newArray = new T[newSize];
+					for (int i = 0; i < newSize; i++)
+					{
+						if (i < curValue.Length)
+							newArray[i] = curValue[i];
+						else
+							break;
+					}
+
+					curValue = newArray;
+				}
+			}
+
+			if (asHeader)
+				EndFoldoutHeader();
 			if (changed)
 				isDirty = true;
 			return changed;
@@ -346,53 +515,6 @@ namespace EoE
 				return true;
 			}
 			return false;
-		}
-		public static bool DrawArray<T>(GUIContent arrayContent, System.Func<int, int, T[], bool> elementBinding, ref T[] curValue, ref bool open, int offSet = 0, bool asHeader = false)
-		{
-			bool changed = false;
-			if (curValue == null)
-			{
-				curValue = new T[0];
-				changed = true;
-			}
-
-			if (asHeader)
-				changed |= FoldoutHeader(arrayContent, ref open);
-			else
-				changed |= Foldout(arrayContent, ref open, offSet);
-			if (open)
-			{
-				for(int i = 0; i < curValue.Length; i++)
-				{
-					changed |= (elementBinding?.Invoke(i, offSet + 1, curValue)) ?? false;
-				}
-
-				GUILayout.Space(3);
-				EditorGUILayout.BeginHorizontal();
-				GUILayout.Space((offSet + 1) * STANDARD_OFFSET);
-				int newSize = EditorGUILayout.DelayedIntField("Size", curValue.Length);
-				EditorGUILayout.EndHorizontal();
-
-				if (newSize != curValue.Length)
-				{
-					T[] newArray = new T[newSize];
-					for (int i = 0; i < newSize; i++)
-					{
-						if (i < curValue.Length)
-							newArray[i] = curValue[i];
-						else
-							break;
-					}
-
-					curValue = newArray;
-				}
-			}
-
-			if (asHeader)
-				EndFoldoutHeader();
-			if (changed)
-				isDirty = true;
-			return changed;
 		}
 		public static T AssetCreator<T>(params string[] pathParts) where T : ScriptableObject
 		{

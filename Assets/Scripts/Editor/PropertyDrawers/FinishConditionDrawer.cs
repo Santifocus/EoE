@@ -8,26 +8,19 @@ namespace EoE.Information
 	[CustomPropertyDrawer(typeof(FinishConditions))]
 	public class FinishConditionDrawer : PropertyDrawer
 	{
-		private static bool open;
-		private bool timeOpen;
-		private const float indentSize = 15;
-		private float curIndentOff => EditorGUI.indentLevel * indentSize;
+		private bool TimeOpen(SerializedProperty property) => property.FindPropertyRelative("OnTimeout").boolValue;
+		private const float INDENT_WIDHT = 15;
+		private float curIndentOff => EditorGUI.indentLevel * INDENT_WIDHT;
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
-			// Using BeginProperty / EndProperty on the parent property means that
-			// prefab override logic works on the entire property.
 			EditorGUI.BeginProperty(position, label, property);
-
-			// Draw label
-			//position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
 			Rect foldOutRect = position;
-			if (open)
+			if (property.isExpanded)
 				foldOutRect.height = EditorGUIUtility.singleLineHeight;
 
-			open = EditorGUI.Foldout(foldOutRect, open, label, true);
-			timeOpen = property.FindPropertyRelative("OnTimeout").boolValue;
+			property.isExpanded = EditorGUI.Foldout(foldOutRect, property.isExpanded, label, true);
 
-			if (open)
+			if (property.isExpanded)
 			{
 				EditorGUI.indentLevel++;
 
@@ -36,16 +29,16 @@ namespace EoE.Information
 				int line = 1;
 
 				Rect onParentDeathRect = new Rect(curIndentOff, position.y + linePos * line++, position.width - curIndentOff, lineHeight);
-				EditorGUI.PropertyField(onParentDeathRect, property.FindPropertyRelative("OnParentDeath"), new GUIContent("OnParentDeath"));
+				EditorGUI.PropertyField(onParentDeathRect, property.FindPropertyRelative("OnParentDeath"));
 
 				Rect onTimeoutRect = new Rect(curIndentOff, position.y + linePos * line++, position.width - curIndentOff, lineHeight);
-				EditorGUI.PropertyField(onTimeoutRect, property.FindPropertyRelative("OnTimeout"), new GUIContent("OnTimeout"));
+				EditorGUI.PropertyField(onTimeoutRect, property.FindPropertyRelative("OnTimeout"));
 
-				if (timeOpen)
+				if (TimeOpen(property))
 				{
 					EditorGUI.indentLevel++;
 					Rect finishTimeRect = new Rect(curIndentOff, position.y + linePos * line++, position.width - curIndentOff + 15, lineHeight);
-					EditorGUI.PropertyField(finishTimeRect, property.FindPropertyRelative("TimeStay"), new GUIContent("TimeStay"));
+					EditorGUI.PropertyField(finishTimeRect, property.FindPropertyRelative("TimeStay"));
 					EditorGUI.indentLevel--;
 				}
 
@@ -61,8 +54,8 @@ namespace EoE.Information
 		}
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{
-			float mul = open ? 4 : 1;
-			mul += timeOpen && open ? 1 : 0;
+			float mul = property.isExpanded ? 4 : 1;
+			mul += TimeOpen(property) && property.isExpanded ? 1 : 0;
 			return EditorGUIUtility.singleLineHeight * mul + EditorGUIUtility.standardVerticalSpacing * (mul -1);
 		}
 	}

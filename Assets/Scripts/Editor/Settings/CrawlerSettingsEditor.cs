@@ -11,13 +11,7 @@ namespace EoE.Information
 		protected override void CustomInspector()
 		{
 			base.CustomInspector();
-
-			FoldoutHeader("FX Settings", ref VFXSettingsOpen);
-			if (VFXSettingsOpen)
-			{
-				FXSettingsArea();
-			}
-			EndFoldoutHeader();
+			DrawInFoldoutHeader("FX Settings", ref VFXSettingsOpen, FXSettingsArea);
 		}
 		protected override void CombatSettings()
 		{

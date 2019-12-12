@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using EoE.Events;
 using EoE.Information;
-using EoE.Utils;
 using EoE.UI;
 using EoE.Combatery;
 
@@ -79,7 +78,7 @@ namespace EoE
 		}
 		private void EnemyKilled(Entitie killed, Entitie killer)
 		{
-			if (killer is Player)
+			if (killer is Player && Player.Instance.Alive)
 			{
 				for (int i = 0; i < playerSettings.EffectsOnEnemyKilled.Length; i++)
 				{
@@ -115,8 +114,8 @@ namespace EoE
 							target,
 							allowScreenEffects,
 							multiplier,
-							customFX.HasCustomOffset ? ((Vector3?)customFX.CustomOffset) : null,
-							customFX.HasCustomRotationOffset ? ((Vector3?)customFX.CustomRotation) : null,
+							customFX.HasPositionOffset ? ((Vector3?)customFX.PositionOffset) : null,
+							customFX.HasRotationOffset ? ((Vector3?)customFX.RotationOffset) : null,
 							customFX.HasCustomScale ? ((Vector3?)customFX.CustomScale) : null
 							);
 		}

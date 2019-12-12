@@ -60,6 +60,7 @@ MonoBehaviour:
   RunEnduranceCost: 5
   JumpPower: {x: 0, y: 9, z: 15}
   JumpImpulsePower: 2
+  JumpBackwardMultiplier: 0.65
   DodgePower: 4
   DodgeDuration: 0.15
   DodgeModelExistTime: 0.35
@@ -144,12 +145,12 @@ MonoBehaviour:
   - Item: {fileID: 11400000, guid: 428f279ff073bb54c81150df9f36247e, type: 2}
     ItemCount: 1
     ForceEquip: 1
-  - Item: {fileID: 11400000, guid: f64f815518c407749858bddca8bf5ac0, type: 2}
+  - Item: {fileID: 11400000, guid: 4389e543531ad0d4c91543a950d48174, type: 2}
     ItemCount: 1
     ForceEquip: 1
   InventorySize: 55
-  MaxSideTurn: 15
-  SideTurnLerpSpeed: 3
+  MaxSideTurn: 9
+  SideTurnLerpSpeed: 10
   EffectsOnReceiveDamage:
   - {fileID: 11400000, guid: 11060c91c24341947a8c373d641e5c86, type: 2}
   - {fileID: 11400000, guid: 9d9557ec007fa904aa2d0ef9f1ea3489, type: 2}

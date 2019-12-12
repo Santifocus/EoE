@@ -28,11 +28,10 @@ MonoBehaviour:
   BuffStackStyle: 2
   BuffsToApply: []
   Effects:
-  - openInInspector: 0
-    FX: {fileID: 11400000, guid: e840a1eafcd96a047bbe880545aaa1d0, type: 2}
-    HasCustomOffset: 0
-    CustomOffset: {x: 0, y: 0, z: 0}
-    HasCustomRotationOffset: 0
-    CustomRotation: {x: 0, y: 0, z: 0}
+  - FX: {fileID: 11400000, guid: e840a1eafcd96a047bbe880545aaa1d0, type: 2}
+    HasPositionOffset: 0
+    PositionOffset: {x: 0, y: 0, z: 0}
+    HasRotationOffset: 0
+    RotationOffset: {x: 0, y: 0, z: 0}
     HasCustomScale: 0
     CustomScale: {x: 1, y: 1, z: 1}

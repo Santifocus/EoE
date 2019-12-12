@@ -114,6 +114,7 @@ namespace EoE.UI
 			modelRenderer.transform.localPosition = new Vector3(cameraToModelDistance.x, cameraToModelDistance.y, -cameraToModelDistance.z);
 			modelRenderer.targetTexture = targetTexture;
 			modelRenderer.Render();
+			modelRenderer.farClipPlane = cameraToModelDistance.z * 2;
 
 			modelDisplay.texture = targetTexture;
 

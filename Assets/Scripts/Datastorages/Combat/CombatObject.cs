@@ -70,58 +70,69 @@ namespace EoE.Combatery
 				return (flag | mask) == mask;
 			}
 		}
+		public static Vector3 CalculateDirection(InherritDirection directionStyle, InherritDirection fallbackDirectionStyle, DirectionBase direction, Entitie originEntitie, Vector3 originOffset)
+		{
+			Vector3 calculatedDirection;
+			(Vector3, bool) dirInfo = EnumDirToDir(direction);
+			if (directionStyle == InherritDirection.Target)
+			{
+				if (originEntitie.targetPosition.HasValue)
+				{
+					calculatedDirection = (originEntitie.targetPosition.Value - (originEntitie.actuallWorldPosition + originOffset)).normalized;
+				}
+				else
+				{
+					calculatedDirection = DirectionFromStyle(fallbackDirectionStyle);
+				}
+			}
+			else
+			{
+				calculatedDirection = DirectionFromStyle(directionStyle);
+			}
+			return calculatedDirection; 
+			Vector3 DirectionFromStyle(InherritDirection style)
+			{
+				if (style == InherritDirection.World)
+				{
+					return dirInfo.Item1 * (dirInfo.Item2 ? -1 : 1);
+				}
+				else //style == InherritDirection.Local
+				{
+					if (dirInfo.Item1 == new Vector3Int(0, 0, 1))
+					{
+						return originEntitie.transform.forward * (dirInfo.Item2 ? -1 : 1);
+					}
+					else if (dirInfo.Item1 == new Vector3Int(1, 0, 0))
+					{
+						return originEntitie.transform.right * (dirInfo.Item2 ? -1 : 1);
+					}
+					else //dir.Item1 == new Vector3Int(0, 1, 0)
+					{
+						return originEntitie.transform.up * (dirInfo.Item2 ? -1 : 1);
+					}
+				}
+			}
+		}
 	}
 	[System.Serializable]
-	public class ProjectileData
+	public class ProjectileInfo
 	{
-		//Execution info
+		public ProjectileData Projectile;
+
+		public float ExecutionDelay = 0.2f;
 		public int ExecutionCount = 1;
-		public float DelayPerExecution = 0.2f;
-
-		//Direction
-		public InherritDirection DirectionStyle = InherritDirection.Target;
-		public InherritDirection FallbackDirectionStyle = InherritDirection.Local;
-		public DirectionBase Direction = DirectionBase.Forward;
-
-		//Flight
-		public float Duration = 15;
-		public float FlightSpeed = 25;
-		public Vector3 CreateOffsetToCaster = Vector3.forward;
-		public CustomFXObject[] CustomEffects = new CustomFXObject[0];
-		public EffectAOE[] StartEffects = new EffectAOE[0];
-		public EffectAOE[] WhileEffects = new EffectAOE[0];
-
-		//Collision
-		public float EntitieHitboxSize = 1;
-		public float TerrainHitboxSize = 0.5f;
-		public ColliderMask CollideMask = (ColliderMask)(-1);
-		public int Bounces = 0;
-		public bool DestroyOnEntiteBounce = true;
-		public bool CollisionEffectsOnBounce = true;
-
-		public CustomFXObject[] CollisionCustomEffects = new CustomFXObject[0];
-		public EffectAOE[] CollisionEffects = new EffectAOE[0];
-
-		//Direct hit
-		public EffectSingle DirectHit;
-
-		//Remenants
-		public bool CreatesRemenants = false;
-		public SpellRemenantsPart Remenants = new SpellRemenantsPart();
+		public float ExecutionRepeatDelay = 0.2f;
 	}
 	[System.Serializable]
 	public class CustomFXObject
 	{
-#if UNITY_EDITOR
-		public bool openInInspector = false;
-#endif
 		public FXObject FX;
 
-		public bool HasCustomOffset = false;
-		public Vector3 CustomOffset = Vector3.zero;
+		public bool HasPositionOffset = false;
+		public Vector3 PositionOffset = Vector3.zero;
 
-		public bool HasCustomRotationOffset = false;
-		public Vector3 CustomRotation = Vector3.zero;
+		public bool HasRotationOffset = false;
+		public Vector3 RotationOffset = Vector3.zero;
 
 		public bool HasCustomScale = false;
 		public Vector3 CustomScale = Vector3.one;

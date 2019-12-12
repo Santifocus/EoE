@@ -147,7 +147,7 @@ namespace EoE.UI
 		private float GetMaxCooldown(InventoryItem target)
 		{
 			if(target.data is SpellItem)
-				return Mathf.Max(target.data.UseCooldown, (target.data as SpellItem).targetSpell.SpellCooldown);
+				return Mathf.Max(target.data.UseCooldown, (target.data as SpellItem).TargetSpell.SpellCooldown);
 			else
 				return target.data.UseCooldown;
 		}

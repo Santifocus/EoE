@@ -6,7 +6,6 @@ using EoE.Controlls;
 using EoE.Events;
 using EoE.Information;
 using EoE.Combatery;
-using EoE.Utils;
 
 namespace EoE.Entities
 {
@@ -28,8 +27,8 @@ namespace EoE.Entities
 		public CharacterController charController = default;
 		public TextMeshProUGUI debugText = default;
 		public Transform weaponHoldPoint = default;
+		public Animator animationControl = default;
 
-		[SerializeField] private Animator animationControl = default;
 		[SerializeField] private PlayerSettings selfSettings = default;
 		[SerializeField] private PlayerBuffDisplay buffDisplay = default;
 
@@ -119,6 +118,7 @@ namespace EoE.Entities
 			TargetEnemyControl();
 			ItemControl();
 			BlockControl();
+			JumpControl();
 
 			animationControl.SetBool("InCombat", curStates.Fighting);
 		}
@@ -129,7 +129,7 @@ namespace EoE.Entities
 			CheckForFalling();
 			UpdateAcceleration();
 
-			if(!IsStunned && !IsCasting)
+			if (!IsStunned || IsCasting)
 				TurnControl();
 		}
 		#endregion
@@ -202,10 +202,14 @@ namespace EoE.Entities
 					if(PlayerSettings.StartItems[i].Item is WeaponItem)
 					{
 						EquipedWeapon = targetItem;
+						targetItem.isEquiped = true;
+						targetItem.data.Equip(targetItem, this);
 					}
 					else if(PlayerSettings.StartItems[i].Item is ArmorItem)
 					{
 						EquipedArmor = targetItem;
+						targetItem.isEquiped = true;
+						targetItem.data.Equip(targetItem, this);
 					}
 					else if(PlayerSettings.StartItems[i].Item is SpellItem)
 					{
@@ -217,9 +221,12 @@ namespace EoE.Entities
 							if(SelectableSpellItems[j] == null)
 							{
 								SelectableSpellItems[j] = targetItem;
+								SelectableSpellItems[j].isEquiped = true;
 								added = true;
 								if (j == 0)
+								{
 									SelectableSpellItems[j].data.Equip(targetItem, this);
+								}
 								break;
 							}
 						}
@@ -227,6 +234,7 @@ namespace EoE.Entities
 						if (!added && SelectableSpellItems.Length > 0)
 						{
 							SelectableSpellItems[0] = targetItem;
+							SelectableSpellItems[0].isEquiped = true;
 							SelectableSpellItems[0].data.Equip(targetItem, this);
 						}
 					}
@@ -240,9 +248,12 @@ namespace EoE.Entities
 							if (SelectableItems[j] == null)
 							{
 								SelectableItems[j] = targetItem;
+								SelectableItems[j].isEquiped = true;
 								added = true;
 								if (j == 0)
+								{
 									SelectableItems[j].data.Equip(targetItem, this);
+								}
 								break;
 							}
 						}
@@ -250,6 +261,7 @@ namespace EoE.Entities
 						if (!added && SelectableItems.Length > 0)
 						{
 							SelectableItems[0] = targetItem;
+							SelectableItems[0].isEquiped = true;
 							SelectableItems[0].data.Equip(targetItem, this);
 						}
 					}
@@ -297,10 +309,11 @@ namespace EoE.Entities
 			if (IsStunned)
 			{
 				curAcceleration = 0;
-				curStates.Moving = curStates.Running = curStates.Turning = false;
+				curStates.Moving = curStates.Running = false;
+				curStates.Turning = IsCasting ? curStates.Turning : false;
 				return;
 			}
-			JumpControl();
+
 			PlayerMoveControl();
 			DodgeControl();
 		}
@@ -334,8 +347,8 @@ namespace EoE.Entities
 			//Set all the animation states
 			float directionOffset = Vector3.Dot(controllDirection, transform.forward);
 			animationControl.SetBool("Walking", !turning && curAcceleration > 0);
-			int direction = directionOffset > 0 ? 1 : -1; 
-			animationControl.SetFloat("WalkSpeed", (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration * direction);
+			animationControl.SetFloat("WalkDirection", directionOffset < 0 ? -1 : 1); 
+			animationControl.SetFloat("WalkSpeed", (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration);
 
 			float newSideTurn = Mathf.LerpAngle(modelTransform.localEulerAngles.z, (1 - Mathf.Abs(directionOffset)) * PlayerSettings.MaxSideTurn * (InputController.PlayerMove.x < 0 ? 1 : -1) * curAcceleration, Time.deltaTime * PlayerSettings.SideTurnLerpSpeed);
 			modelTransform.localEulerAngles = new Vector3(0, 0, newSideTurn);
@@ -360,14 +373,6 @@ namespace EoE.Entities
 
 			bool moving = inputDirection != Vector2.zero;
 			curStates.Moving = moving;
-
-			if (TargetedEntitie)
-			{
-				Vector3 direction = (TargetedEntitie.actuallWorldPosition - actuallWorldPosition).normalized;
-				float hAngle = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg -90;
-
-				intendedRotation = -hAngle;
-			}
 
 			//Is the player not trying to move? Then stop here
 			if (!moving)
@@ -682,6 +687,14 @@ namespace EoE.Entities
 		#region EnemyTargeting
 		private void TargetEnemyControl()
 		{
+			if (TargetedEntitie)
+			{
+				Vector3 direction = (TargetedEntitie.actuallWorldPosition - actuallWorldPosition).normalized;
+				float hAngle = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg - 90;
+
+				intendedRotation = -hAngle;
+			}
+
 			if (switchTargetTimer > 0)
 				switchTargetTimer -= Time.deltaTime;
 

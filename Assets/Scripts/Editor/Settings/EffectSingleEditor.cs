@@ -14,92 +14,49 @@ namespace EoE.Information
 		private static bool DamageSettingsOpen;
 		private static bool KnockbackSettingsOpen;
 		private static bool BuffSettingsOpen;
+
 		private static bool BuffArrayOpen;
 		private static bool EffectsArrayOpen;
 		protected override void CustomInspector()
 		{
-			BaseSettingsArea();
-			DamageSettingsArea();
-			KnockbackSettingsArea();
-			BuffSettingsArea();
+			DrawInFoldoutHeader(new GUIContent("Base Settings"), ref BaseSettingsOpen, BaseSettingsArea);
+			DrawInFoldoutHeader(new GUIContent("Damage Settings"), ref DamageSettingsOpen, DamageSettingsArea);
+			DrawInFoldoutHeader(new GUIContent("Knockback Settings"), ref KnockbackSettingsOpen, KnockbackSettingsArea);
+			DrawInFoldoutHeader(new GUIContent("Buff Settings"), ref BuffSettingsOpen, BuffSettingsArea);
 
 			EffectSingle settings = target as EffectSingle;
-			DrawArray<CustomFXObject>(new GUIContent("Effects"), DrawCustomFXObject, ref settings.Effects, ref EffectsArrayOpen, 0, true);
+			DrawCustomFXObjectArray(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effects))), ref settings.Effects, serializedObject.FindProperty(nameof(settings.Effects)), 0, true);
 		}
 
 		private void BaseSettingsArea()
 		{
 			EffectSingle settings = target as EffectSingle;
 
-			FoldoutHeader("Base Settings", ref BaseSettingsOpen);
-			if (BaseSettingsOpen)
-			{
-				EnumFlagField(new GUIContent("Affected Targets"), ref settings.AffectedTargets, 1);
-				EnumField(new GUIContent("Damage Element"), ref settings.DamageElement, 1);
-				EnumField(new GUIContent("Cause Type"), ref settings.CauseType, 1);
-			}
-			EndFoldoutHeader();
+			EnumFlagField(new GUIContent("Affected Targets"), ref settings.AffectedTargets, 1);
+			EnumField(new GUIContent("Damage Element"), ref settings.DamageElement, 1);
+			EnumField(new GUIContent("Cause Type"), ref settings.CauseType, 1);
 		}
 		private void DamageSettingsArea()
 		{
 			EffectSingle settings = target as EffectSingle;
-
-			FoldoutHeader("Damage", ref DamageSettingsOpen);
-			if (DamageSettingsOpen)
-			{
-				FloatField(new GUIContent("Crit Chance Multiplier"), ref settings.CritChanceMultiplier, 1);
-				FloatField(new GUIContent("Base Damage Multiplier"), ref settings.DamageMultiplier, 1);
-			}
-			EndFoldoutHeader();
+			FloatField(new GUIContent("Crit Chance Multiplier"), ref settings.CritChanceMultiplier, 1);
+			FloatField(new GUIContent("Base Damage Multiplier"), ref settings.DamageMultiplier, 1);
 		}
 		private void KnockbackSettingsArea()
 		{
-			EffectSingle settings = target as EffectSingle;
-
-			FoldoutHeader("Knockback", ref KnockbackSettingsOpen);
-			if (KnockbackSettingsOpen)
-			{
-				FloatField(new GUIContent("Base Knockback Multiplier"), ref settings.KnockbackMultiplier, 1);
-				EnumField(new GUIContent("Knockback Origin"), ref settings.KnockbackOrigin, 1);
-				if (settings.KnockbackOrigin != EffectiveDirection.Center)
-					EnumField(new GUIContent("Knockback Direction"), ref settings.KnockbackDirection, 1);
-				Vector3Field(new GUIContent("Knockback Axis Multiplier"), ref settings.KnockbackAxisMultiplier);
-			}
-			EndFoldoutHeader();
+			EffectSingle settings = target as EffectSingle; 
+			EditorGUILayout.HelpBox("Note: In some cases the direction will be overriden. For example Physicall combat Weapons apply knockback in the direction the Weapon was swung.", MessageType.Info);
+			FloatField(new GUIContent("Base Knockback Multiplier"), ref settings.KnockbackMultiplier, 1);
+			EnumField(new GUIContent("Knockback Origin"), ref settings.KnockbackOrigin, 1);
+			if (settings.KnockbackOrigin != EffectiveDirection.Center)
+				EnumField(new GUIContent("Knockback Direction"), ref settings.KnockbackDirection, 1);
+			Vector3Field(new GUIContent("Knockback Axis Multiplier"), ref settings.KnockbackAxisMultiplier, 1);
 		}
 		private void BuffSettingsArea()
 		{
 			EffectSingle settings = target as EffectSingle;
-			FoldoutHeader("Buffs", ref BuffSettingsOpen);
-			if (BuffSettingsOpen)
-			{
-				EnumField(new GUIContent("Buff Stack Style"), ref settings.BuffStackStyle, 1);
-				ObjectArrayField<Buff>(new GUIContent("Buffs To Apply"), ref settings.BuffsToApply, ref BuffArrayOpen, new GUIContent("Buff "), 1);
-			}
-			EndFoldoutHeader();
-		}
-		private bool DrawCustomFXObject(int index, int offset, CustomFXObject[] parentArray)
-		{
-			bool changed = false;
-			if (parentArray == null)
-			{
-				return false;
-			}
-			else if (parentArray[index] == null)
-			{
-				parentArray[index] = new CustomFXObject();
-			}
-
-			changed |= Foldout(new GUIContent("Effect " + index), ref parentArray[index].openInInspector, offset);
-			if (parentArray[index].openInInspector)
-			{
-				changed |= ObjectField<FXObject>("Effect", ref parentArray[index].FX, offset + 1);
-				changed |= NullableVector3Field(new GUIContent("Has Custom Offset"), new GUIContent("Custom Offset"), ref parentArray[index].CustomOffset, ref parentArray[index].HasCustomOffset, offset + 1);
-				changed |= NullableVector3Field(new GUIContent("Has Rotation Offset"), new GUIContent("Custom Rotation Offset"), ref parentArray[index].CustomRotation, ref parentArray[index].HasCustomRotationOffset, offset + 1);
-				changed |= NullableVector3Field(new GUIContent("Has Custom Scale"), new GUIContent("Custom Scale"), ref parentArray[index].CustomScale, ref parentArray[index].HasCustomScale, offset + 1);
-			}
-
-			return changed;
+			EnumField(new GUIContent("Buff Stack Style"), ref settings.BuffStackStyle, 1);
+			ObjectArrayField<Buff>(new GUIContent("Buffs To Apply"), ref settings.BuffsToApply, ref BuffArrayOpen, new GUIContent("Buff "), 1);
 		}
 	}
 }

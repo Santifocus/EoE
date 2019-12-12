@@ -1,7 +1,6 @@
 ﻿using EoE.Events;
 using EoE.Information;
 using EoE.UI;
-using EoE.Utils;
 using EoE.Combatery;
 using System.Collections;
 using System.Collections.Generic;
@@ -42,7 +41,7 @@ namespace EoE.Entities
 		private float healthRegenCooldown;
 		private float healthRegenDelay;
 		private float combatEndCooldown;
-		protected Vector3? targetPosition = null;
+		public Vector3? targetPosition = null;
 
 		//Velocity Control
 		protected int appliedMoveStuns;
@@ -443,7 +442,7 @@ namespace EoE.Entities
 
 			for (int i = 0; i < SelfSettings.PossibleDropsTable.PossibleDrops.Length; i++)
 			{
-				if (BaseUtils.Chance01(SelfSettings.PossibleDropsTable.PossibleDrops[i].DropChance))
+				if (Utils.Chance01(SelfSettings.PossibleDropsTable.PossibleDrops[i].DropChance))
 				{
 					int amount = Random.Range(SelfSettings.PossibleDropsTable.PossibleDrops[i].MinDropAmount, SelfSettings.PossibleDropsTable.PossibleDrops[i].MaxDropAmount + 1);
 					SelfSettings.PossibleDropsTable.PossibleDrops[i].Drop.CreateItemDrop(actuallWorldPosition, amount, false);
@@ -834,10 +833,10 @@ namespace EoE.Entities
 				{
 					spell.CastInfo.StartEffects[i].ActivateEffectAOE(this, transform, spell);
 				}
-				curParticles = new FXInstance[spell.CastInfo.CustomEffects.Length];
-				for (int i = 0; i < spell.CastInfo.CustomEffects.Length; i++)
+				curParticles = new FXInstance[spell.CastInfo.VisualEffects.Length];
+				for (int i = 0; i < spell.CastInfo.VisualEffects.Length; i++)
 				{
-					curParticles[i] = FXManager.PlayFX(spell.CastInfo.CustomEffects[i], transform, this is Player, 1);
+					curParticles[i] = FXManager.PlayFX(spell.CastInfo.VisualEffects[i], transform, this is Player, 1);
 				}
 
 				float castTime = 0;
@@ -881,10 +880,10 @@ namespace EoE.Entities
 				{
 					spell.StartInfo.Effects[i].ActivateEffectAOE(this, transform, spell);
 				}
-				curParticles = new FXInstance[spell.StartInfo.CustomEffects.Length];
-				for (int i = 0; i < spell.StartInfo.CustomEffects.Length; i++)
+				curParticles = new FXInstance[spell.StartInfo.VisualEffects.Length];
+				for (int i = 0; i < spell.StartInfo.VisualEffects.Length; i++)
 				{
-					curParticles[i] = FXManager.PlayFX(spell.StartInfo.CustomEffects[i], transform, this is Player, 1);
+					curParticles[i] = FXManager.PlayFX(spell.StartInfo.VisualEffects[i], transform, this is Player, 1);
 				}
 			}
 
@@ -903,34 +902,31 @@ namespace EoE.Entities
 				if (appliedStun)
 					appliedMoveStuns++;
 
-				for (int i = 0; i < spell.ProjectileInfo.Length; i++)
+				for (int i = 0; i < spell.ProjectileInfos.Length; i++)
 				{
-					for(int j = 0; j < spell.ProjectileInfo[i].ExecutionCount; j++)
+					float timer = 0;
+					while (timer < spell.ProjectileInfos[i].ExecutionDelay)
+					{
+						yield return new WaitForEndOfFrame();
+						timer += Time.deltaTime;
+						if (appliedMoveStuns > (appliedStun ? 1 : 0))
+							goto StoppedSpell;
+					}
+
+					for (int j = 0; j < spell.ProjectileInfos[i].ExecutionCount; j++)
 					{
 						CreateProjectile(spell, i);
-						if (j < spell.ProjectileInfo[i].ExecutionCount - 1)
+						if (j < spell.ProjectileInfos[i].ExecutionCount - 1)
 						{
-							float timer = 0;
-							while(timer < spell.ProjectileInfo[i].DelayPerExecution)
+							float repeatTimer = 0;
+							while(repeatTimer < spell.ProjectileInfos[i].ExecutionRepeatDelay)
 							{
 								yield return new WaitForEndOfFrame();
-								timer += Time.deltaTime;
+								repeatTimer += Time.deltaTime;
 								if (appliedMoveStuns > (appliedStun ? 1 : 0))
 									goto StoppedSpell;
 							}
 						}
-					}
-
-					if (i < spell.ProjectileInfo.Length - 1)
-					{
-						float timer = 0;
-						while (timer < spell.DelayToNextProjectile[i])
-						{
-							yield return new WaitForEndOfFrame();
-							timer += Time.deltaTime;
-							if (appliedMoveStuns > (appliedStun ? 1 : 0))
-								goto StoppedSpell;
-						} 
 					}
 				}
 				if (appliedStun)
@@ -954,50 +950,16 @@ namespace EoE.Entities
 		private Projectile CreateProjectile(Spell spellBase, int index)
 		{
 			//Calculate the spawnoffset
-			Vector3 spawnOffset = spellBase.ProjectileInfo[index].CreateOffsetToCaster.x * transform.right + spellBase.ProjectileInfo[index].CreateOffsetToCaster.y * transform.up + spellBase.ProjectileInfo[index].CreateOffsetToCaster.z * transform.forward;
+			Vector3 spawnOffset = spellBase.ProjectileInfos[index].Projectile.CreateOffsetToCaster.x * transform.right + spellBase.ProjectileInfos[index].Projectile.CreateOffsetToCaster.y * transform.up + spellBase.ProjectileInfos[index].Projectile.CreateOffsetToCaster.z * transform.forward;
 
 			//First find out what direction the projectile should fly
-			Vector3 direction;
-			(Vector3, bool) dirInfo = CombatObject.EnumDirToDir(spellBase.ProjectileInfo[index].Direction);
-			if (spellBase.ProjectileInfo[index].DirectionStyle == InherritDirection.Target)
-			{
-				if (targetPosition.HasValue)
-				{
-					direction = (targetPosition.Value - (actuallWorldPosition + spawnOffset)).normalized;
-				}
-				else
-				{
-					direction = DirectionFromStyle(spellBase.ProjectileInfo[index].FallbackDirectionStyle);
-				}
-			}
-			else
-			{
-				direction = DirectionFromStyle(spellBase.ProjectileInfo[index].DirectionStyle);
-			}
-
-			return Projectile.CreateProjectile(spellBase, spellBase.ProjectileInfo[index], this, direction, actuallWorldPosition + spawnOffset);
-			Vector3 DirectionFromStyle(InherritDirection style)
-			{
-				if (style == InherritDirection.World)
-				{
-					return dirInfo.Item1 * (dirInfo.Item2 ? -1 : 1);
-				}
-				else //style == InherritDirection.Local
-				{
-					if (dirInfo.Item1 == new Vector3Int(0, 0, 1))
-					{
-						return transform.forward * (dirInfo.Item2 ? -1 : 1);
-					}
-					else if (dirInfo.Item1 == new Vector3Int(1, 0, 0))
-					{
-						return transform.right * (dirInfo.Item2 ? -1 : 1);
-					}
-					else //dir.Item1 == new Vector3Int(0, 1, 0)
-					{
-						return transform.up * (dirInfo.Item2 ? -1 : 1);
-					}
-				}
-			}
+			Vector3 direction = CombatObject.CalculateDirection(spellBase.ProjectileInfos[index].Projectile.DirectionStyle, 
+																spellBase.ProjectileInfos[index].Projectile.FallbackDirectionStyle, 
+																spellBase.ProjectileInfos[index].Projectile.Direction, 
+																this, 
+																spawnOffset
+																);
+			return Projectile.CreateProjectile(spellBase, spellBase.ProjectileInfos[index].Projectile, this, direction, actuallWorldPosition + spawnOffset);
 		}
 		#endregion
 		#endregion

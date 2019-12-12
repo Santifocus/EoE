@@ -22,4 +22,4 @@ MonoBehaviour:
   FXEffectsOnUse: []
   FXEffectsWhenEquipped: []
   UseCooldown: 0
-  targetSpell: {fileID: 11400000, guid: 434c6572f91508a49927ea0dc469f2c7, type: 2}
+  TargetSpell: {fileID: 11400000, guid: 434c6572f91508a49927ea0dc469f2c7, type: 2}
