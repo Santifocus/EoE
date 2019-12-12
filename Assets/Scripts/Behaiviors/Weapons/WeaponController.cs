@@ -188,7 +188,7 @@ namespace EoE.Combatery
 					animationTimer += multiplier * Time.deltaTime;
 
 					//Check if we reached the collision activation point
-					bool shouldActiveState = totalTime > animationActivationDelay;
+					bool shouldActiveState = animationTimer > animationActivationDelay;
 					if (shouldActiveState != colliderActive)
 						ChangeWeaponState(shouldActiveState, ActiveAttackStyle);
 
