@@ -16,7 +16,7 @@ MonoBehaviour:
   BaseManaCost: 0
   BaseEnduranceCost: 3
   BaseKnockback: 10
-  BaseCritChance: 0
+  BaseCritChance: 0.1
   WeaponPrefab: {fileID: 5533782398965989895, guid: 18284dacf122148419232919f51c45c2,
     type: 3}
   WeaponElement: 1
@@ -27,34 +27,34 @@ MonoBehaviour:
   StandAttackSequence:
     AttackSequenceParts:
     - AnimationTarget: 1
-      AnimationMultiplicationType: 1
-      AnimationSpeedFlatValue: 5
+      AnimationMultiplicationType: 2
+      AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 1
-          outSlope: 1
-          tangentMode: 34
+          time: -0.12663269
+          value: 1.3310547
+          inSlope: 2
+          outSlope: 2
+          tangentMode: 0
           weightedMode: 0
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 1
-          outSlope: 1
-          tangentMode: 34
+          time: 0.08956909
+          value: 0.8747406
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
           weightedMode: 0
           inWeight: 0
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      AnimationSpeedCurveTimeframe: 2
-      AnimationSpeedCurveMultiplier: 1
+      AnimationSpeedCurveTimeframe: 0.8
+      AnimationSpeedCurveMultiplier: 2
       DamageMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
@@ -71,43 +71,34 @@ MonoBehaviour:
       OnHitComboWorth: 1
       AttackEffects: []
     - AnimationTarget: 2
-      AnimationMultiplicationType: 1
-      AnimationSpeedFlatValue: 4
+      AnimationMultiplicationType: 2
+      AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
-          time: 0
-          value: 0.55424917
-          inSlope: -2.924757
-          outSlope: -2.924757
+          time: 0.124620944
+          value: 1.5341715
+          inSlope: 0
+          outSlope: 0
           tangentMode: 0
           weightedMode: 0
           inWeight: 0
-          outWeight: 0.028130665
-        - serializedVersion: 3
-          time: 0.7254694
-          value: 1.7683955
-          inSlope: 6.0330286
-          outSlope: 6.0330286
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.027166076
-          outWeight: 0.09761762
+          outWeight: 0
         - serializedVersion: 3
           time: 1
-          value: 0.8
-          inSlope: -7.314202
-          outSlope: -7.314202
+          value: 2.0037842
+          inSlope: 5.118835
+          outSlope: 5.118835
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.09379553
+          inWeight: 0.027223468
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
       AnimationSpeedCurveTimeframe: 0.8
-      AnimationSpeedCurveMultiplier: 1
+      AnimationSpeedCurveMultiplier: 1.4
       DamageMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
@@ -124,14 +115,14 @@ MonoBehaviour:
       OnHitComboWorth: 1
       AttackEffects: []
     - AnimationTarget: 4
-      AnimationMultiplicationType: 1
-      AnimationSpeedFlatValue: 3
+      AnimationMultiplicationType: 2
+      AnimationSpeedFlatValue: 2
       AnimationSpeedCurve:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
-          time: 0
-          value: 0.55424917
+          time: 0.049999237
+          value: 1.2947658
           inSlope: -2.924757
           outSlope: -2.924757
           tangentMode: 0
@@ -139,8 +130,8 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0.028130665
         - serializedVersion: 3
-          time: 1
-          value: 2
+          time: 0.98031616
+          value: 1.8721695
           inSlope: 5.118835
           outSlope: 5.118835
           tangentMode: 0
@@ -151,7 +142,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       AnimationSpeedCurveTimeframe: 0.8
-      AnimationSpeedCurveMultiplier: 1
+      AnimationSpeedCurveMultiplier: 1.5
       DamageMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
