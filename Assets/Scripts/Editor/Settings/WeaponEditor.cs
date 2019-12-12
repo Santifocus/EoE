@@ -151,7 +151,7 @@ namespace EoE.Combatery
 				else
 				{
 					AnimationCurveField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AnimationSpeedCurve))), ref style.AnimationSpeedCurve, offSet + 1);
-					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AnimationSpeedCurveTimeframe))), ref style.AnimationSpeedCurveMultiplier, offSet + 1);
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AnimationSpeedCurveMultiplier))), ref style.AnimationSpeedCurveMultiplier, offSet + 1);
 					if (FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AnimationSpeedCurveTimeframe))), ref style.AnimationSpeedCurveTimeframe, offSet + 1))
 					{
 						style.AnimationSpeedCurveTimeframe = Mathf.Max(style.AnimationSpeedCurveTimeframe, 0);
