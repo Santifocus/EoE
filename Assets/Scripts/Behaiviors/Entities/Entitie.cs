@@ -484,17 +484,17 @@ namespace EoE.Entities
 			if (requiresRecalculate)
 				RecalculateBuffs();
 		}
-		public bool HasBuffActive(Buff buff, Entitie applier)
+		public int? HasBuffActive(Buff buff, Entitie applier)
 		{
 			List<BuffInstance> toSearch = buff.Permanent ? permanentBuffs : nonPermanentBuffs;
 			for (int i = 0; i < toSearch.Count; i++)
 			{
 				if (toSearch[i].Applier == applier && toSearch[i].Base == buff)
 				{
-					return true;
+					return i;
 				}
 			}
-			return false;
+			return null;
 		}
 		public (bool, BuffInstance) TryReapplyBuff(Buff buff, Entitie applier)
 		{

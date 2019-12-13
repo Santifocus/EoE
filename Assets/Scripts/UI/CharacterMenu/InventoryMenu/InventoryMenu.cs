@@ -284,6 +284,9 @@ namespace EoE.UI
 									target.Equip(Player.Instance.EquipedArmor, Player.Instance);
 								}
 							}
+
+							equipSlotsOpen = actionMenuOpen = false;
+							SelectSlot(true);
 						}
 						else //(target is (SpellItem / Item / any other not mentioned type))
 						{
@@ -297,6 +300,8 @@ namespace EoE.UI
 										targetArray[i].isEquiped = false;
 										targetArray[i].data.UnEquip(targetArray[i], Player.Instance);
 										targetArray[i] = null;
+										equipSlotsOpen = actionMenuOpen = false;
+										SelectSlot(true);
 										break;
 									}
 								}

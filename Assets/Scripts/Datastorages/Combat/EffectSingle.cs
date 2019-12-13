@@ -63,7 +63,7 @@ namespace EoE.Combatery
 				}
 				else //effect.BuffStackStyle == BuffStackingStyle.DoNothing
 				{
-					if (!(target.HasBuffActive(BuffsToApply[j], effectCauser)))
+					if (!(target.HasBuffActive(BuffsToApply[j], effectCauser).HasValue))
 					{
 						target.AddBuff(BuffsToApply[j], effectCauser);
 					}

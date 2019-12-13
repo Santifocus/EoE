@@ -183,7 +183,7 @@ namespace EoE.Combatery
 					}
 					else //effect.BuffStackStyle == BuffStackingStyle.DoNothing
 					{
-						if (!(eligibleTargets[i].Target.HasBuffActive(BuffsToApply[j], effectCauser)))
+						if (!(eligibleTargets[i].Target.HasBuffActive(BuffsToApply[j], effectCauser).HasValue))
 						{
 							eligibleTargets[i].Target.AddBuff(BuffsToApply[j], effectCauser);
 						}
