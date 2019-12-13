@@ -18,6 +18,7 @@ namespace EoE.Combatery
 			{ AttackAnimation.Attack3, (1.666f, 1.05f) },
 		};
 		public static WeaponController PlayerWeaponController;
+		public bool InAttackSequence { get; private set; }
 		public AttackStyle ActiveAttackStyle;
 
 		//Getter helper
@@ -29,7 +30,6 @@ namespace EoE.Combatery
 
 		//Behaivior controll
 		private bool colliderActive;
-		private bool inAttackSequence;
 		private bool wantsToBeginNextSequence;
 		private Weapon weaponInfo;
 		private List<Collider> ignoredColliders = new List<Collider>();
@@ -89,7 +89,10 @@ namespace EoE.Combatery
 		#endregion
 		public void StartAttack()
 		{
-			if(inAttackSequence)
+			if (Player.Instance.IsCasting)
+				return;
+
+			if(InAttackSequence)
 			{
 				wantsToBeginNextSequence = true;
 				return;
@@ -134,7 +137,7 @@ namespace EoE.Combatery
 		}
 		private IEnumerator Attack(AttackSequence targetSequence)
 		{
-			inAttackSequence = true;
+			InAttackSequence = true;
 			int curSequenceIndex = 0;
 			while (true)
 			{
@@ -242,7 +245,7 @@ namespace EoE.Combatery
 			ActiveAttackStyle = null;
 			Player.Instance.animationControl.SetTrigger("FightEnd");
 			ChangeWeaponState(false, null);
-			inAttackSequence = false;
+			InAttackSequence = false;
 		}
 		public void HitObject(Vector3 hitPos, Collider hit, Vector3 direction)
 		{

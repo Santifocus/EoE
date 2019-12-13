@@ -104,12 +104,12 @@ namespace EoE.Entities
 						lastConfirmedPlayerPos = player.actuallWorldPosition;
 						lastPlayerSpeed = player.curVelocity;
 						lastSeenPlayer = 0;
-					}
-				}
 
-				if (!prevInRange && PlayerInAttackRange)
-				{
-					PlayerJustEnteredAttackRangeBase();
+						if (!prevInRange && PlayerInAttackRange)
+						{
+							PlayerJustEnteredAttackRangeBase();
+						}
+					}
 				}
 
 				if (chasingPlayer)
@@ -127,7 +127,7 @@ namespace EoE.Entities
 			}
 			UpdateAgentSettings();
 
-			if (PlayerInAttackRange) 
+			if (PlayerInAttackRange && curStates.Fighting) 
 				InRangeBehaiviorBase();
 
 			if (IsStunned)
