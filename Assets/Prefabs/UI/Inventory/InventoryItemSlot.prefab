@@ -108,7 +108,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -5, y: 5}
+  m_AnchoredPosition: {x: -5, y: 10}
   m_SizeDelta: {x: -10, y: 25}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &2707668903921717128
@@ -149,7 +149,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -299,10 +299,10 @@ MonoBehaviour:
   stackDisplay: {fileID: 7139623960401301346}
   onSelectBackground: {fileID: 2497837412081876332}
   onNotSelectBackground: {fileID: 1775209242586679448}
-  weaponItemIcon: {fileID: 21300000, guid: cecff3dc8ed3ee84e8a28d2ca39a6862, type: 3}
-  armorItemIcon: {fileID: 21300000, guid: a1fcd1fc27f476846a96d93236150024, type: 3}
-  spellItemIcon: {fileID: 21300000, guid: 5be58590323c8e8418ebb2781ce96950, type: 3}
-  useItemIcon: {fileID: 21300000, guid: 070080759fd8a224d824f824f5c5afa3, type: 3}
+  weaponItemIcon: {fileID: 21300000, guid: 65f9eca028a76fe42a0602df019bfe0d, type: 3}
+  armorItemIcon: {fileID: 21300000, guid: 3c351b35e362c7249959d35b548c26f6, type: 3}
+  spellItemIcon: {fileID: 21300000, guid: 506e8b3f4cdd89042a9da07a1fbe5db5, type: 3}
+  useItemIcon: {fileID: 21300000, guid: b30e2073656a45f44b247f2e17bbd5bd, type: 3}
 --- !u!1 &4782314078622386491
 GameObject:
   m_ObjectHideFlags: 0
@@ -394,7 +394,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7064884210270985299
 RectTransform:
   m_ObjectHideFlags: 0
@@ -558,9 +558,9 @@ RectTransform:
   m_Father: {fileID: 7064884210270985299}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.65, y: 0}
-  m_AnchorMax: {x: 1, y: 0.35}
-  m_AnchoredPosition: {x: -5, y: 5}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 5, y: -5}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2374075387362391597
