@@ -26,6 +26,13 @@ MonoBehaviour:
     RotationOffset: {x: 0, y: 0, z: 0}
     HasCustomScale: 0
     CustomScale: {x: 1, y: 1, z: 1}
+  - FX: {fileID: 11400000, guid: 35124558f5f93834394d86223bc0aa4c, type: 2}
+    HasPositionOffset: 0
+    PositionOffset: {x: 0, y: 0, z: 0}
+    HasRotationOffset: 0
+    RotationOffset: {x: 0, y: 0, z: 0}
+    HasCustomScale: 0
+    CustomScale: {x: 1, y: 1, z: 1}
   StartEffects: []
   WhileEffects: []
   TerrainHitboxSize: 0.25
@@ -36,6 +43,13 @@ MonoBehaviour:
   CollisionEffectsOnBounce: 1
   VisualCollisionEffects:
   - FX: {fileID: 11400000, guid: 7f999a2e186ef064aa781c01f433f7fe, type: 2}
+    HasPositionOffset: 0
+    PositionOffset: {x: 0, y: 0, z: 0}
+    HasRotationOffset: 0
+    RotationOffset: {x: 0, y: 0, z: 0}
+    HasCustomScale: 0
+    CustomScale: {x: 1, y: 1, z: 1}
+  - FX: {fileID: 11400000, guid: 358b0e77772331f4e81fea9466a884a1, type: 2}
     HasPositionOffset: 0
     PositionOffset: {x: 0, y: 0, z: 0}
     HasRotationOffset: 0

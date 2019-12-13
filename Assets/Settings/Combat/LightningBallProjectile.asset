@@ -42,6 +42,13 @@ MonoBehaviour:
     RotationOffset: {x: 0, y: 0, z: 0}
     HasCustomScale: 0
     CustomScale: {x: 1, y: 1, z: 1}
+  - FX: {fileID: 11400000, guid: ce223436b84375541aa61b77745257f5, type: 2}
+    HasPositionOffset: 0
+    PositionOffset: {x: 0, y: 0, z: 0}
+    HasRotationOffset: 0
+    RotationOffset: {x: 0, y: 0, z: 0}
+    HasCustomScale: 0
+    CustomScale: {x: 1, y: 1, z: 1}
   CollisionEffectsAOE:
   - {fileID: 11400000, guid: 4c079fc557383274bb8addba276798b4, type: 2}
   DirectHit: {fileID: 0}
