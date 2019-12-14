@@ -15,9 +15,9 @@ MonoBehaviour:
   DirectionStyle: 2
   FallbackDirectionStyle: 1
   Direction: 32
-  Duration: 5
+  Duration: 0.1
   FlightSpeed: 1000
-  CreateOffsetToCaster: {x: 0, y: 3, z: 0}
+  CreateOffsetToCaster: {x: 0, y: 5, z: 0}
   VisualStartEffects:
   - FX: {fileID: 11400000, guid: 2d9464ef70c8d5b47989f2acfbbe9a96, type: 2}
     HasPositionOffset: 0
@@ -30,7 +30,7 @@ MonoBehaviour:
   WhileEffects: []
   TerrainHitboxSize: 0.5
   EntitieHitboxSize: 2.5
-  CollideMask: -1
+  CollideMask: 2
   Bounces: 0
   DestroyOnEntiteBounce: 0
   CollisionEffectsOnBounce: 1
