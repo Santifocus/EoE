@@ -148,6 +148,9 @@ MonoBehaviour:
   - Item: {fileID: 11400000, guid: 4389e543531ad0d4c91543a950d48174, type: 2}
     ItemCount: 1
     ForceEquip: 1
+  - Item: {fileID: 11400000, guid: e2175b767068abe49ad244c5541e84fd, type: 2}
+    ItemCount: 1
+    ForceEquip: 0
   InventorySize: 55
   MaxSideTurn: 9
   SideTurnLerpSpeed: 10
@@ -164,7 +167,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3c3f83d3e81eae144acbe5a6b02983d0, type: 2}
   - {fileID: 11400000, guid: e9a7041c1b96b544d9be0195facd23e7, type: 2}
   - {fileID: 11400000, guid: 6812b6ecf408ba8439c8e9f47922381b, type: 2}
-  - {fileID: 11400000, guid: e7eca44a4612acd40b0b90359694e612, type: 2}
+  - {fileID: 11400000, guid: 7dbb75a734c0a4e4ea505b8ee26c552d, type: 2}
   EffectsOnLevelup:
   - {fileID: 11400000, guid: 982aab948223d7044bfae67dc43bb77c, type: 2}
   - {fileID: 11400000, guid: 2a1f29303ceefa04d9d5508f74094d05, type: 2}
