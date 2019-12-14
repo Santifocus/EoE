@@ -17,7 +17,7 @@ MonoBehaviour:
   Direction: 1
   Duration: 10
   FlightSpeed: 2500
-  CreateOffsetToCaster: {x: 0, y: 50, z: 20}
+  CreateOffsetToCaster: {x: 0, y: 5, z: 0}
   VisualStartEffects:
   - FX: {fileID: 11400000, guid: 2d9464ef70c8d5b47989f2acfbbe9a96, type: 2}
     HasPositionOffset: 0
