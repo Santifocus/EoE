@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: LightArmor
   m_EditorClassIdentifier: 
   ItemName:
-    textColor: {r: 1, g: 1, b: 1, a: 1}
+    textColor: {r: 0.66415983, g: 0.6697992, b: 0.7075472, a: 1}
     text: Light Armor
-  ItemDescription: []
+  ItemDescription:
+  - textColor: {r: 1, g: 1, b: 1, a: 0}
+    text: Simple armor. Increases your movement speed.
   SortingID: 4
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}

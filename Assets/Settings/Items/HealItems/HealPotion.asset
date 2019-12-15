@@ -21,7 +21,7 @@ MonoBehaviour:
   - textColor: {r: 1, g: 0, b: 0, a: 1}
     text: '30 '
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: health on use.
+    text: HP on use.
   SortingID: 0
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}

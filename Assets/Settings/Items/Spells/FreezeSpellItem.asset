@@ -15,7 +15,9 @@ MonoBehaviour:
   ItemName:
     textColor: {r: 0.3254717, g: 0.92613274, b: 1, a: 1}
     text: Freeze Burst
-  ItemDescription: []
+  ItemDescription:
+  - textColor: {r: 1, g: 1, b: 1, a: 0}
+    text: Cast a Frostexplosion on your position, pushes enemys away and slows them.
   SortingID: 8
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}

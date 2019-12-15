@@ -15,7 +15,9 @@ MonoBehaviour:
   ItemName:
     textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Rage Herbs
-  ItemDescription: []
+  ItemDescription:
+  - textColor: {r: 1, g: 1, b: 1, a: 0}
+    text: Increases your damage and movement speed for 10 seconds.
   SortingID: 3
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}

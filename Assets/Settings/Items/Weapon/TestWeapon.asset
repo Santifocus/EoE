@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName:
     textColor: {r: 0.6981132, g: 0.6981132, b: 0.2272161, a: 1}
-    text: Sword
+    text: Rusty Sword
   ItemDescription:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: A simple and sturdy sword.
+    text: 'A simple and sturdy sword. '
+  - textColor: {r: 0.21681976, g: 1, b: 0, a: 1}
+    text: + 5 ATK.
   SortingID: 11
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
