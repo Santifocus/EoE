@@ -12,6 +12,7 @@ namespace EoE.UI
 		[SerializeField] private TextMeshProUGUI stackDisplay = default;
 		[SerializeField] private Image onSelectBackground = default;
 		[SerializeField] private Image onNotSelectBackground = default;
+		[SerializeField] private Image equippedIcon = default;
 
 		[Space(10)]
 		[SerializeField] private Sprite weaponItemIcon = default;
@@ -57,6 +58,7 @@ namespace EoE.UI
 
 			iconDisplay.gameObject.SetActive(!empty);
 			stackDisplay.gameObject.SetActive(!empty);
+			equippedIcon.gameObject.SetActive(!(empty || !targetInventory[inventoryIndex].isEquiped));
 		}
 
 		protected override void Select()

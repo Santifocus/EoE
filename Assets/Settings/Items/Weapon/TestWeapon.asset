@@ -12,7 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee899c0a2c8e9f34e89325bc7784ff48, type: 3}
   m_Name: TestWeapon
   m_EditorClassIdentifier: 
-  ItemName: TestWeapon
+  ItemName:
+    textColor: {r: 0.6981132, g: 0.6981132, b: 0.2272161, a: 1}
+    text: Sword
+  ItemDescription:
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: A simple and sturdy sword.
   SortingID: 11
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}

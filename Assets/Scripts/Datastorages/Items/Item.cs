@@ -1,4 +1,5 @@
 ﻿using EoE.Entities;
+using EoE.UI;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +9,8 @@ namespace EoE.Information
 	public abstract class Item : ScriptableObject
 	{
 		public abstract InUIUses Uses { get; }
-		public string ItemName = "Item";
+		public ColoredText ItemName = new ColoredText() { text = "Item", textColor = Color.white };
+		public ColoredText[] ItemDescription = new ColoredText[0];
 		public int SortingID;
 		public GameObject ItemModel;
 		public int MaxStack = 1;

@@ -15,6 +15,7 @@ namespace EoE.UI
 		[SerializeField] private GridLayoutGroup slotGrid = default;
 		[SerializeField] private ItemAction[] itemActions = default;
 		[SerializeField] private DropMenu dropMenu = default;
+		[SerializeField] private ItemDescriptionDisplay itemDescriptionDisplay = default;
 
 		[SerializeField] private Image equippedWeaponDisplay = default;
 		[SerializeField] private Image equippedArmorDisplay = default;
@@ -186,6 +187,7 @@ namespace EoE.UI
 			navigationCooldown = NAV_COOLDOWN;
 			slots[curSlotIndex].SelectMenuItem();
 			UpdateActionMenu();
+			itemDescriptionDisplay.SetItem(Player.Instance.Inventory[curSlotIndex] == null ? null : Player.Instance.Inventory[curSlotIndex].data);
 		}
 		private void UpdateActionMenu()
 		{
@@ -415,6 +417,7 @@ namespace EoE.UI
 					equippedItemDisplays[i].color = Color.clear;
 				}
 			}
+			UpdateAllSlots();
 		}
 		private void ShowDropMenu()
 		{

@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b68c3564075a204ab65946eb6308666, type: 3}
   m_Name: FireballSpellItem
   m_EditorClassIdentifier: 
-  ItemName: Fireball
+  ItemName:
+    textColor: {r: 0.3254717, g: 0.92613274, b: 1, a: 1}
+    text: Fireball
+  ItemDescription: []
   SortingID: 6
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}

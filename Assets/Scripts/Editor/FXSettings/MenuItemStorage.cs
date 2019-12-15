@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 using EoE.Combatery;
 using static EoE.EoEEditor;
+using UnityEngine.UI;
 
 namespace EoE.Information
 {

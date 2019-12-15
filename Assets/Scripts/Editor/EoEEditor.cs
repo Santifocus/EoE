@@ -153,14 +153,25 @@ namespace EoE
 			}
 			return false;
 		}
-		public static bool FoldoutFromSerializedProperty(string content, SerializedProperty property, int offSet = 0) => FoldoutFromSerializedProperty(new GUIContent(content), property, offSet);
-		public static bool FoldoutFromSerializedProperty(GUIContent content, SerializedProperty property, int offSet = 0)
+		public static bool FoldoutFromSerializedProperty(string content, SerializedProperty property, int offSet = 0, bool asHeader = false) => FoldoutFromSerializedProperty(new GUIContent(content), property, offSet, asHeader);
+		public static bool FoldoutFromSerializedProperty(GUIContent content, SerializedProperty property, int offSet = 0, bool asHeader = false)
 		{
 			bool foldOutOpen = property.isExpanded;
-			if(Foldout(content, ref foldOutOpen, offSet))
+			if (asHeader)
 			{
-				property.isExpanded = foldOutOpen;
-				return true;
+				if (FoldoutHeader(content, ref foldOutOpen))
+				{
+					property.isExpanded = foldOutOpen;
+					return true;
+				}
+			}
+			else
+			{
+				if (Foldout(content, ref foldOutOpen, offSet))
+				{
+					property.isExpanded = foldOutOpen;
+					return true;
+				}
 			}
 			return false;
 		}
@@ -274,15 +285,15 @@ namespace EoE
 			if (open)
 			{
 				int arraySize = arrayProperty.arraySize;
-				for (int i = 0; i < arraySize; i++)
-				{
-					changed |= DrawCustomFXObject(new GUIContent((i + 1) + ". Effect"), fxArray[i], arrayProperty.GetArrayElementAtIndex(i), offSet + 1);
-				}
-
 				EditorGUILayout.BeginHorizontal();
 				GUILayout.Space((offSet + 1) * STANDARD_OFFSET);
 				int newSize = EditorGUILayout.DelayedIntField("Size", arraySize);
 				EditorGUILayout.EndHorizontal();
+
+				for (int i = 0; i < arraySize; i++)
+				{
+					changed |= DrawCustomFXObject(new GUIContent((i + 1) + ". Effect"), fxArray[i], arrayProperty.GetArrayElementAtIndex(i), offSet + 1);
+				}
 
 				if (arraySize != newSize)
 				{
@@ -310,12 +321,9 @@ namespace EoE
 				selfData = new CustomFXObject();
 			}
 
-			bool open = selfProperty.isExpanded;
-			changed |= Foldout(content, ref open, offSet);
-			if (open != selfProperty.isExpanded)
-				selfProperty.isExpanded = open;
+			FoldoutFromSerializedProperty(content, selfProperty, offSet);
 
-			if (open)
+			if (selfProperty.isExpanded)
 			{
 				changed |= ObjectField<FXObject>("Effect", ref selfData.FX, offSet + 1);
 				changed |= NullableVector3Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.HasPositionOffset))),
@@ -366,17 +374,17 @@ namespace EoE
 			Foldout(arrayHeader, ref open, offSet);
 			if (open)
 			{
-				GUIContent targetContent = objectContent != null ? objectContent : new GUIContent("Element ");
-				for(int i = 0; i < curValue.Length; i++)
-				{
-					changed |= ObjectField(new GUIContent(targetContent.text + i, targetContent.tooltip), ref curValue[i], offSet + 1);
-				}
-
 				GUILayout.Space(1);
 				EditorGUILayout.BeginHorizontal();
 				GUILayout.Space((offSet + 1) * STANDARD_OFFSET);
 				int newSize = EditorGUILayout.DelayedIntField("Size", curValue.Length);
 				EditorGUILayout.EndHorizontal();
+
+				GUIContent targetContent = objectContent != null ? objectContent : new GUIContent("Element ");
+				for(int i = 0; i < curValue.Length; i++)
+				{
+					changed |= ObjectField(new GUIContent(targetContent.text + i, targetContent.tooltip), ref curValue[i], offSet + 1);
+				}
 
 				if (newSize != curValue.Length)
 				{
@@ -412,16 +420,16 @@ namespace EoE
 				changed |= Foldout(arrayHeader, ref open, offSet);
 			if (open)
 			{
-				for (int i = 0; i < curValue.Length; i++)
-				{
-					changed |= (elementBinding?.Invoke(i, offSet + 1, curValue)) ?? false;
-				}
-
-				GUILayout.Space(3);
+				GUILayout.Space(1);
 				EditorGUILayout.BeginHorizontal();
 				GUILayout.Space((offSet + 1) * STANDARD_OFFSET);
 				int newSize = EditorGUILayout.DelayedIntField("Size", curValue.Length);
 				EditorGUILayout.EndHorizontal();
+
+				for (int i = 0; i < curValue.Length; i++)
+				{
+					changed |= (elementBinding?.Invoke(i, offSet + 1, curValue)) ?? false;
+				}
 
 				if (newSize != curValue.Length)
 				{

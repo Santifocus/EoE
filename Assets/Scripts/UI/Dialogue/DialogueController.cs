@@ -163,4 +163,20 @@ namespace EoE.UI
 			}
 		}
 	}
+	[System.Serializable]
+	public struct ColoredText
+	{
+		private const string COLOR_CLOSER = "</color>";
+		public Color textColor;
+		public string text;
+
+		public override string ToString()
+		{
+			return ColorToColorOpener(textColor) + text + COLOR_CLOSER;
+		}
+		public static string ColorToColorOpener(Color col)
+		{
+			return "<color=#" + ColorUtility.ToHtmlStringRGBA(col) + ">";
+		}
+	}
 }

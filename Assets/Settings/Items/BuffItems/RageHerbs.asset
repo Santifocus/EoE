@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 864ce4b4956fd63469942aad9fe28094, type: 3}
   m_Name: RageHerbs
   m_EditorClassIdentifier: 
-  ItemName: Rage Herbs
+  ItemName:
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: Rage Herbs
+  ItemDescription: []
   SortingID: 3
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}

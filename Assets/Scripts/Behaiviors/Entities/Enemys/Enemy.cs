@@ -117,6 +117,11 @@ namespace EoE.Entities
 					targetPosition = Vector3.Lerp(targetPosition ?? GuessedPlayerPosition, GuessedPlayerPosition, Time.deltaTime * enemySettings.PlayerTrackSpeed);
 					if (GameController.CurrentGameSettings.IsDebugEnabled)
 						Debug.DrawLine(actuallWorldPosition, targetPosition.Value, Color.red, Time.deltaTime * 1.1f);
+
+					if (!prevInRange && PlayerInAttackRange)
+					{
+						PlayerJustEnteredAttackRangeBase();
+					}
 				}
 			}
 			else
@@ -127,7 +132,7 @@ namespace EoE.Entities
 			}
 			UpdateAgentSettings();
 
-			if (PlayerInAttackRange && curStates.Fighting) 
+			if (PlayerInAttackRange && chasingPlayer) 
 				InRangeBehaiviorBase();
 
 			if (IsStunned)

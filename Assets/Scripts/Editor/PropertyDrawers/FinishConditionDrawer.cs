@@ -11,6 +11,7 @@ namespace EoE.Information
 		private bool TimeOpen(SerializedProperty property) => property.FindPropertyRelative("OnTimeout").boolValue;
 		private const float INDENT_WIDHT = 15;
 		private float curIndentOff => EditorGUI.indentLevel * INDENT_WIDHT;
+		private static FinishConditions exampleInstance = new FinishConditions();
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
 			EditorGUI.BeginProperty(position, label, property);
@@ -29,16 +30,16 @@ namespace EoE.Information
 				int line = 1;
 
 				Rect onParentDeathRect = new Rect(curIndentOff, position.y + linePos * line++, position.width - curIndentOff, lineHeight);
-				EditorGUI.PropertyField(onParentDeathRect, property.FindPropertyRelative("OnParentDeath"));
+				EditorGUI.PropertyField(onParentDeathRect, property.FindPropertyRelative(nameof(exampleInstance.OnParentDeath)));
 
 				Rect onTimeoutRect = new Rect(curIndentOff, position.y + linePos * line++, position.width - curIndentOff, lineHeight);
-				EditorGUI.PropertyField(onTimeoutRect, property.FindPropertyRelative("OnTimeout"));
+				EditorGUI.PropertyField(onTimeoutRect, property.FindPropertyRelative(nameof(exampleInstance.OnTimeout)));
 
 				if (TimeOpen(property))
 				{
 					EditorGUI.indentLevel++;
 					Rect finishTimeRect = new Rect(curIndentOff, position.y + linePos * line++, position.width - curIndentOff + 15, lineHeight);
-					EditorGUI.PropertyField(finishTimeRect, property.FindPropertyRelative("TimeStay"));
+					EditorGUI.PropertyField(finishTimeRect, property.FindPropertyRelative(nameof(exampleInstance.TimeStay)));
 					EditorGUI.indentLevel--;
 				}
 

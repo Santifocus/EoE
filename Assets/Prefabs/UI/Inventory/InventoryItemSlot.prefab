@@ -300,6 +300,7 @@ MonoBehaviour:
   stackDisplay: {fileID: 7139623960401301346}
   onSelectBackground: {fileID: 2497837412081876332}
   onNotSelectBackground: {fileID: 1775209242586679448}
+  equippedIcon: {fileID: 5032531659954300947}
   weaponItemIcon: {fileID: 21300000, guid: 65f9eca028a76fe42a0602df019bfe0d, type: 3}
   armorItemIcon: {fileID: 21300000, guid: 3c351b35e362c7249959d35b548c26f6, type: 3}
   spellItemIcon: {fileID: 21300000, guid: 506e8b3f4cdd89042a9da07a1fbe5db5, type: 3}
@@ -469,7 +470,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7064884210270985299
 RectTransform:
   m_ObjectHideFlags: 0
