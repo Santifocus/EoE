@@ -16,7 +16,7 @@ MonoBehaviour:
     textColor: {r: 0.3254717, g: 0.92613274, b: 1, a: 1}
     text: Thunder Bolt
   ItemDescription:
-  - textColor: {r: 1, g: 1, b: 1, a: 0}
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Summons a powerful Thunderbolt on your position or on targeted enemy. Deals
       massive damage and stuns enemys.
   SortingID: 7

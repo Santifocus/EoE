@@ -19,19 +19,19 @@ MonoBehaviour:
     OnTimeout: 0
     TimeStay: 1
   parts:
-  - textColor: {r: 0, g: 0, b: 0, a: 0}
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
     text: Press
-  - textColor: {r: 1, g: 0, b: 0.8970642, a: 0}
+  - textColor: {r: 1, g: 0, b: 0.8970642, a: 1}
     text: RB
-  - textColor: {r: 0, g: 0, b: 0, a: 0}
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
     text: to switch into the Spellcast mode.
-  - textColor: {r: 0, g: 0, b: 0, a: 0}
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
     text: Cast the equiped Spell by pressing
-  - textColor: {r: 1, g: 0, b: 0.8980393, a: 0}
+  - textColor: {r: 1, g: 0, b: 0.8980393, a: 1}
     text: X
-  - textColor: {r: 0, g: 0, b: 0, a: 0}
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
     text: 'Press '
-  - textColor: {r: 1, g: 0, b: 0.8980393, a: 0}
+  - textColor: {r: 1, g: 0, b: 0.8980393, a: 1}
     text: 'RB '
-  - textColor: {r: 0, g: 0, b: 0, a: 0}
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
     text: again to switch back into Combat Mode.

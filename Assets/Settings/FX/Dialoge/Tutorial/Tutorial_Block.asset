@@ -19,9 +19,9 @@ MonoBehaviour:
     OnTimeout: 0
     TimeStay: 1
   parts:
-  - textColor: {r: 0, g: 0, b: 0, a: 0}
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
     text: You can block enemy attacks with
-  - textColor: {r: 1, g: 0, b: 0.8163533, a: 0}
+  - textColor: {r: 1, g: 0, b: 0.8163533, a: 1}
     text: RT
-  - textColor: {r: 0, g: 0, b: 0, a: 0}
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
     text: '. As long as you are blocking, you move slowly. '

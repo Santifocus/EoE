@@ -19,9 +19,9 @@ MonoBehaviour:
     OnTimeout: 0
     TimeStay: 1
   parts:
-  - textColor: {r: 0, g: 0, b: 0, a: 0}
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
     text: 'Casting Spells needs '
-  - textColor: {r: 1, g: 0, b: 0.95985556, a: 0}
+  - textColor: {r: 1, g: 0, b: 0.95985556, a: 1}
     text: Mana
-  - textColor: {r: 0, g: 0, b: 0, a: 0}
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
     text: . Take care of your Manabar! it regenerates very slowly.

@@ -16,7 +16,7 @@ MonoBehaviour:
     textColor: {r: 0.3254717, g: 0.92613274, b: 1, a: 1}
     text: Fireball
   ItemDescription:
-  - textColor: {r: 1, g: 1, b: 1, a: 0}
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Shoot 3 Fireballs in front of you or on targeted enemy and burn them to
       the grounds.
   SortingID: 6

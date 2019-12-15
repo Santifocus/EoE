@@ -19,9 +19,9 @@ MonoBehaviour:
     OnTimeout: 0
     TimeStay: 1
   parts:
-  - textColor: {r: 0, g: 0, b: 0, a: 0}
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
     text: Press
   - textColor: {r: 1, g: 0, b: 0.93979645, a: 1}
     text: A
-  - textColor: {r: 0, g: 0, b: 0, a: 0}
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
     text: to jump and get on higher terrain.

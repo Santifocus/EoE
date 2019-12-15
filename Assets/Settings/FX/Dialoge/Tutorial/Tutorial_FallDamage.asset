@@ -19,9 +19,9 @@ MonoBehaviour:
     OnTimeout: 0
     TimeStay: 1
   parts:
-  - textColor: {r: 0, g: 0, b: 0, a: 0}
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
     text: Watch Out! If you fall down from too high, you will
-  - textColor: {r: 1, g: 0, b: 0.9137182, a: 0}
+  - textColor: {r: 1, g: 0, b: 0.9137182, a: 1}
     text: receive damage
-  - textColor: {r: 0, g: 0, b: 0, a: 0}
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
     text: '!'

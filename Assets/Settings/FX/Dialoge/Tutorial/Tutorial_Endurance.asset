@@ -19,10 +19,10 @@ MonoBehaviour:
     OnTimeout: 0
     TimeStay: 1
   parts:
-  - textColor: {r: 0, g: 0, b: 0, a: 0}
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
     text: 'Take care of your '
   - textColor: {r: 1, g: 0.0047169924, b: 0.85295177, a: 1}
     text: Endurance Bar
-  - textColor: {r: 0, g: 0, b: 0, a: 0}
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
     text: .Your character needs endurance to attack or dodge. If the bar gets empty,
       you still can walk around.

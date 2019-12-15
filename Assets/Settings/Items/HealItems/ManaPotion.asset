@@ -16,11 +16,11 @@ MonoBehaviour:
     textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Mana Potion
   ItemDescription:
-  - textColor: {r: 1, g: 1, b: 1, a: 0}
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Heals you for
-  - textColor: {r: 0, g: 0.17029119, b: 1, a: 0}
+  - textColor: {r: 0, g: 0.17029119, b: 1, a: 1}
     text: 20
-  - textColor: {r: 1, g: 1, b: 1, a: 0}
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: MP on use.
   SortingID: 1
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,

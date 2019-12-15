@@ -19,13 +19,13 @@ MonoBehaviour:
     OnTimeout: 0
     TimeStay: 1
   parts:
-  - textColor: {r: 0, g: 0, b: 0, a: 0}
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
     text: You can target an enemy by pressing
-  - textColor: {r: 1, g: 0, b: 0.9094448, a: 0}
+  - textColor: {r: 1, g: 0, b: 0.9094448, a: 1}
     text: LT
-  - textColor: {r: 0, g: 0, b: 0, a: 0}
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
     text: . Switch the target by using the
-  - textColor: {r: 1, g: 0, b: 0.89104795, a: 0}
+  - textColor: {r: 1, g: 0, b: 0.89104795, a: 1}
     text: Right Control Stick
-  - textColor: {r: 0, g: 0, b: 0, a: 0}
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
     text: .

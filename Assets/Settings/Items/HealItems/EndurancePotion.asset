@@ -16,11 +16,11 @@ MonoBehaviour:
     textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Endurance Potion
   ItemDescription:
-  - textColor: {r: 1, g: 1, b: 1, a: 0}
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Heals you for
-  - textColor: {r: 0.99636734, g: 1, b: 0, a: 0}
+  - textColor: {r: 0.99636734, g: 1, b: 0, a: 1}
     text: '50 '
-  - textColor: {r: 1, g: 1, b: 1, a: 0}
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: endurance on use.
   SortingID: 2
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,

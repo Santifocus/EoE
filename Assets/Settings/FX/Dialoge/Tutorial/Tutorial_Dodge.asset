@@ -19,9 +19,9 @@ MonoBehaviour:
     OnTimeout: 0
     TimeStay: 1
   parts:
-  - textColor: {r: 0, g: 0, b: 0, a: 0}
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
     text: By pressing
-  - textColor: {r: 1, g: 0, b: 0.97479534, a: 0}
+  - textColor: {r: 1, g: 0, b: 0.97479534, a: 1}
     text: B
-  - textColor: {r: 0, g: 0, b: 0, a: 0}
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
     text: your character can dash to avoid enemy attacks.
