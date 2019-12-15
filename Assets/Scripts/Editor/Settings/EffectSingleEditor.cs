@@ -56,7 +56,7 @@ namespace EoE.Information
 		{
 			EffectSingle settings = target as EffectSingle;
 			EnumField(new GUIContent("Buff Stack Style"), ref settings.BuffStackStyle, 1);
-			ObjectArrayField<Buff>(new GUIContent("Buffs To Apply"), ref settings.BuffsToApply, ref BuffArrayOpen, new GUIContent("Buff "), 1);
+			ObjectArrayField<Buff>(new GUIContent("Buffs To Apply"), ref settings.BuffsToApply, ref BuffArrayOpen, new GUIContent(". Buff"), 1);
 		}
 	}
 }

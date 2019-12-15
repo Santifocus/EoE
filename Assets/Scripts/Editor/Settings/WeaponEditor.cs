@@ -32,27 +32,26 @@ namespace EoE.Combatery
 
 			if (settings.HasMaskFlag(AttackStyleParts.StandAttack))
 			{
-				DrawInFoldoutHeader(new GUIContent("Stand Attack Sequence"), ref StandAttackOpen, () => DrawAttackSequence(settings.StandAttackSequence, nameof(settings.StandAttackSequence)));
+				DrawInFoldoutHeader(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StandAttackSequence))), ref StandAttackOpen, () => DrawAttackSequence(settings.StandAttackSequence, nameof(settings.StandAttackSequence)));
 				GUILayout.Space(1);
 			}
 			if (settings.HasMaskFlag(AttackStyleParts.RunAttack))
 			{
-				DrawInFoldoutHeader(new GUIContent("Run Attack Sequence"), ref RunAttackOpen, () => DrawAttackSequence(settings.RunAttackSequence, nameof(settings.RunAttackSequence)));
+				DrawInFoldoutHeader(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.RunAttackSequence))), ref RunAttackOpen, () => DrawAttackSequence(settings.RunAttackSequence, nameof(settings.RunAttackSequence)));
 				GUILayout.Space(1);
 			}
 			if (settings.HasMaskFlag(AttackStyleParts.JumpAttack))
 			{
-				DrawInFoldoutHeader(new GUIContent("Jump Attack Sequence"), ref JumpAttackOpen, () => DrawAttackSequence(settings.JumpAttackSequence, nameof(settings.JumpAttackSequence)));
+				DrawInFoldoutHeader(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.JumpAttackSequence))), ref JumpAttackOpen, () => DrawAttackSequence(settings.JumpAttackSequence, nameof(settings.JumpAttackSequence)));
 				GUILayout.Space(1);
 			}
 			if (settings.HasMaskFlag(AttackStyleParts.RunJumpAttack))
 			{
-				DrawInFoldoutHeader(new GUIContent("Run Jump Attack Sequence"), ref RunJumpAttackOpen, () => DrawAttackSequence(settings.RunJumpAttackSequence, nameof(settings.RunJumpAttackSequence)));
+				DrawInFoldoutHeader(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.RunJumpAttackSequence))), ref RunJumpAttackOpen, () => DrawAttackSequence(settings.RunJumpAttackSequence, nameof(settings.RunJumpAttackSequence)));
 				GUILayout.Space(1);
 			}
 
-			if (settings.ContainedParts != 0)
-				EditorGUILayout.PropertyField(weapon.FindProperty("ComboEffects"), true);
+			ObjectField<ComboSet>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ComboEffects))), ref settings.ComboEffects);
 		}
 
 		private void BaseDataArea()
@@ -199,15 +198,13 @@ namespace EoE.Combatery
 				FoldoutFromSerializedProperty(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AttackEffects))), attackEffectsProperty, offSet + 1);
 				if (attackEffectsProperty.isExpanded)
 				{
+					int newSize = style.AttackEffects.Length;
+					DelayedIntField("Size", ref newSize, offSet + 2);
+
 					for (int i = 0; i < style.AttackEffects.Length; i++)
 					{
 						DrawAttackEffect(style.AttackEffects[i], attackEffectsProperty.GetArrayElementAtIndex(i), i, offSet + 2);
 					}
-
-					EditorGUILayout.BeginHorizontal();
-					GUILayout.Space((offSet + 2) * STANDARD_OFFSET);
-					int newSize = EditorGUILayout.DelayedIntField("Size", style.AttackEffects.Length);
-					EditorGUILayout.EndHorizontal();
 
 					if (style.AttackEffects.Length != newSize)
 					{
@@ -273,7 +270,7 @@ namespace EoE.Combatery
 				{
 					SerializedProperty aoeProperty = effectProperty.FindPropertyRelative(nameof(effect.AOEEffects));
 					bool aoeArrayOpen = aoeProperty.isExpanded;
-					ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(effect.AOEEffects))), ref effect.AOEEffects, ref aoeArrayOpen, new GUIContent("AOE "), offSet + 1);
+					ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(effect.AOEEffects))), ref effect.AOEEffects, ref aoeArrayOpen, new GUIContent(". AOE"), offSet + 1);
 					if (aoeProperty.isExpanded != aoeArrayOpen)
 						aoeProperty.isExpanded = aoeArrayOpen;
 
@@ -286,15 +283,13 @@ namespace EoE.Combatery
 					FoldoutFromSerializedProperty(new GUIContent("Projectile Settings"), projectileArrayProperty, offSet + 1);
 					if (projectileArrayProperty.isExpanded)
 					{
+						int newSize = effect.ProjectileInfos.Length;
+						DelayedIntField("Size", ref newSize, offSet + 2);
+
 						for (int i = 0; i < effect.ProjectileInfos.Length; i++)
 						{
 							DrawProjectileInfo(projectileArrayProperty.GetArrayElementAtIndex(i), effect.ProjectileInfos[i], i, offSet + 2);
 						}
-
-						EditorGUILayout.BeginHorizontal();
-						GUILayout.Space((offSet + 2) * STANDARD_OFFSET);
-						int newSize = EditorGUILayout.DelayedIntField("Size", effect.ProjectileInfos.Length);
-						EditorGUILayout.EndHorizontal();
 
 						if (effect.ProjectileInfos.Length != newSize)
 						{

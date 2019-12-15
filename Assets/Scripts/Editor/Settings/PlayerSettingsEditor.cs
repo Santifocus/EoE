@@ -166,11 +166,11 @@ namespace EoE.Information
 		{
 			PlayerSettings settings = target as PlayerSettings;
 
-			ObjectArrayField(new GUIContent("Effects On Receive Damage"), ref settings.EffectsOnReceiveDamage, ref ReceiveDamageOpen, new GUIContent("Effect "), 1);
-			ObjectArrayField(new GUIContent("Effects On Receive Knockback"), ref settings.EffectsOnReceiveKnockback, ref ReceiveKnockbackOpen, new GUIContent("Effect "), 1);
-			ObjectArrayField(new GUIContent("Effects On Cause Damage"), ref settings.EffectsOnCauseDamage, ref CauseDamageOpen, new GUIContent("Effect "), 1);
-			ObjectArrayField(new GUIContent("Effects On Cause Crit"), ref settings.EffectsOnCauseCrit, ref CauseCritOpen, new GUIContent("Effect "), 1);
-			ObjectArrayField(new GUIContent("Effects On Levelup"), ref settings.EffectsOnLevelup, ref LevelUpOpen, new GUIContent("Effect "), 1);
+			ObjectArrayField(new GUIContent("Effects On Receive Damage"), ref settings.EffectsOnReceiveDamage, ref ReceiveDamageOpen, new GUIContent(". Effect"), 1);
+			ObjectArrayField(new GUIContent("Effects On Receive Knockback"), ref settings.EffectsOnReceiveKnockback, ref ReceiveKnockbackOpen, new GUIContent(". Effect"), 1);
+			ObjectArrayField(new GUIContent("Effects On Cause Damage"), ref settings.EffectsOnCauseDamage, ref CauseDamageOpen, new GUIContent(". Effect"), 1);
+			ObjectArrayField(new GUIContent("Effects On Cause Crit"), ref settings.EffectsOnCauseCrit, ref CauseCritOpen, new GUIContent(". Effect"), 1);
+			ObjectArrayField(new GUIContent("Effects On Levelup"), ref settings.EffectsOnLevelup, ref LevelUpOpen, new GUIContent(". Effect"), 1);
 
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 
@@ -178,7 +178,7 @@ namespace EoE.Information
 			{
 				settings.EffectsHealthThreshold = Mathf.Clamp01(settings.EffectsHealthThreshold);
 			}
-			ObjectArrayField(new GUIContent("Effects On Damage When Below Threshold"), ref settings.EffectsOnDamageWhenBelowThreshold, ref LowHealthThresholdOpen, new GUIContent("Effect "), 1);
+			ObjectArrayField(new GUIContent("Effects On Damage When Below Threshold"), ref settings.EffectsOnDamageWhenBelowThreshold, ref LowHealthThresholdOpen, new GUIContent(". Effect"), 1);
 
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 
@@ -186,13 +186,13 @@ namespace EoE.Information
 			{
 				settings.EffectsHealthThreshold = Mathf.Clamp01(settings.EffectsHealthThreshold);
 			}
-			ObjectArrayField(new GUIContent("Effects On Player Landing"), ref settings.EffectsOnPlayerLanding, ref OnPlayerLandingOpen, new GUIContent("Effect "), 1);
+			ObjectArrayField(new GUIContent("Effects On Player Landing"), ref settings.EffectsOnPlayerLanding, ref OnPlayerLandingOpen, new GUIContent(". Effect"), 1);
 
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 
-			ObjectArrayField(new GUIContent("Effects On Player Dodge"), ref settings.EffectsOnPlayerDodge, ref OnPlayerDodgeOpen, new GUIContent("Effect "), 1);
-			ObjectArrayField(new GUIContent("Effects On Enemy Killed"), ref settings.EffectsOnEnemyKilled, ref OnEnemyKilledOpen, new GUIContent("Effect "), 1);
-			ObjectArrayField(new GUIContent("Effects On Player Death"), ref settings.EffectsOnPlayerDeath, ref OnPlayerDeathOpen, new GUIContent("Effect "), 1);
+			ObjectArrayField(new GUIContent("Effects On Player Dodge"), ref settings.EffectsOnPlayerDodge, ref OnPlayerDodgeOpen, new GUIContent(". Effect"), 1);
+			ObjectArrayField(new GUIContent("Effects On Enemy Killed"), ref settings.EffectsOnEnemyKilled, ref OnEnemyKilledOpen, new GUIContent(". Effect"), 1);
+			ObjectArrayField(new GUIContent("Effects On Player Death"), ref settings.EffectsOnPlayerDeath, ref OnPlayerDeathOpen, new GUIContent(". Effect"), 1);
 		}
 	}
 }

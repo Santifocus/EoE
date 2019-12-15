@@ -1,5 +1,6 @@
 ﻿using EoE.Combatery;
 using EoE.Entities;
+using EoE.UI;
 using UnityEngine;
 
 namespace EoE.Information
@@ -27,6 +28,7 @@ namespace EoE.Information
 		{
 			if (WeaponController.PlayerWeaponController)
 				Destroy(WeaponController.PlayerWeaponController.gameObject);
+			ComboDisplayController.Instance.StopCombo();
 			return true;
 		}
 	}

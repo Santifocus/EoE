@@ -9,7 +9,7 @@ namespace EoE
 	public static class EoEEditor
 	{
 		private const int LINE_HEIGHT = 2;
-		public const float STANDARD_OFFSET = 15;
+		private const float STANDARD_OFFSET = 15;
 		public static bool isDirty;
 		public static void Header(string content, int offSet = 0, bool spaces = true, bool bold = true) => Header(new GUIContent(content), offSet, spaces, bold);
 		public static void Header(GUIContent content, int offSet = 0, bool spaces = true, bool bold = true)
@@ -111,6 +111,22 @@ namespace EoE
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Space(offSet * STANDARD_OFFSET);
 			int newValue = EditorGUILayout.IntField(content, curValue);
+			EditorGUILayout.EndHorizontal();
+
+			if (newValue != curValue)
+			{
+				isDirty = true;
+				curValue = newValue;
+				return true;
+			}
+			return false;
+		}
+		public static bool DelayedIntField(string content, ref int curValue, int offSet = 0) => DelayedIntField(new GUIContent(content), ref curValue, offSet);
+		public static bool DelayedIntField(GUIContent content, ref int curValue, int offSet = 0)
+		{
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(offSet * STANDARD_OFFSET);
+			int newValue = EditorGUILayout.DelayedIntField(content, curValue);
 			EditorGUILayout.EndHorizontal();
 
 			if (newValue != curValue)
@@ -284,18 +300,15 @@ namespace EoE
 
 			if (open)
 			{
-				int arraySize = arrayProperty.arraySize;
-				EditorGUILayout.BeginHorizontal();
-				GUILayout.Space((offSet + 1) * STANDARD_OFFSET);
-				int newSize = EditorGUILayout.DelayedIntField("Size", arraySize);
-				EditorGUILayout.EndHorizontal();
+				int newSize = fxArray.Length;
+				DelayedIntField("Size", ref newSize, offSet + 1);
 
-				for (int i = 0; i < arraySize; i++)
+				for (int i = 0; i < arrayProperty.arraySize; i++)
 				{
 					changed |= DrawCustomFXObject(new GUIContent((i + 1) + ". Effect"), fxArray[i], arrayProperty.GetArrayElementAtIndex(i), offSet + 1);
 				}
 
-				if (arraySize != newSize)
+				if (arrayProperty.arraySize != newSize)
 				{
 					changed = isDirty = true;
 					CustomFXObject[] newArray = new CustomFXObject[newSize];
@@ -374,16 +387,13 @@ namespace EoE
 			Foldout(arrayHeader, ref open, offSet);
 			if (open)
 			{
-				GUILayout.Space(1);
-				EditorGUILayout.BeginHorizontal();
-				GUILayout.Space((offSet + 1) * STANDARD_OFFSET);
-				int newSize = EditorGUILayout.DelayedIntField("Size", curValue.Length);
-				EditorGUILayout.EndHorizontal();
+				int newSize = curValue.Length;
+				DelayedIntField("Size", ref newSize, offSet + 1);
 
-				GUIContent targetContent = objectContent != null ? objectContent : new GUIContent("Element ");
+				GUIContent targetContent = objectContent != null ? objectContent : new GUIContent(". Element");
 				for(int i = 0; i < curValue.Length; i++)
 				{
-					changed |= ObjectField(new GUIContent(targetContent.text + i, targetContent.tooltip), ref curValue[i], offSet + 1);
+					changed |= ObjectField(new GUIContent((i + 1) + targetContent.text, targetContent.tooltip), ref curValue[i], offSet + 1);
 				}
 
 				if (newSize != curValue.Length)
@@ -420,11 +430,8 @@ namespace EoE
 				changed |= Foldout(arrayHeader, ref open, offSet);
 			if (open)
 			{
-				GUILayout.Space(1);
-				EditorGUILayout.BeginHorizontal();
-				GUILayout.Space((offSet + 1) * STANDARD_OFFSET);
-				int newSize = EditorGUILayout.DelayedIntField("Size", curValue.Length);
-				EditorGUILayout.EndHorizontal();
+				int newSize = curValue.Length;
+				DelayedIntField("Size", ref newSize, offSet + 1);
 
 				for (int i = 0; i < curValue.Length; i++)
 				{
@@ -464,7 +471,6 @@ namespace EoE
 			GUILayout.Space(offSet * STANDARD_OFFSET);
 			newValue = EditorGUILayout.GradientField(content, newValue);
 			EditorGUILayout.EndHorizontal();
-
 
 			if (!newValue.Equals(curValue))
 			{

@@ -59,14 +59,14 @@ namespace EoE.Information
 			{
 				SerializedProperty startEffectsProperty = serializedObject.FindProperty(nameof(settings.CastInfo)).FindPropertyRelative(nameof(settings.CastInfo.StartEffects));
 				open = startEffectsProperty.isExpanded;
-				ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CastInfo.StartEffects))), ref settings.CastInfo.StartEffects, ref open, new GUIContent("Effect "), 1);
+				ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CastInfo.StartEffects))), ref settings.CastInfo.StartEffects, ref open, new GUIContent(". Effect"), 1);
 				if (open != startEffectsProperty.isExpanded)
 					startEffectsProperty.isExpanded = open;
 			}
 			{
 				SerializedProperty whileEffectsProperty = serializedObject.FindProperty(nameof(settings.CastInfo)).FindPropertyRelative(nameof(settings.CastInfo.WhileEffects));
 				open = whileEffectsProperty.isExpanded;
-				ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CastInfo.WhileEffects))), ref settings.CastInfo.WhileEffects, ref open, new GUIContent("Effect "), 1);
+				ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CastInfo.WhileEffects))), ref settings.CastInfo.WhileEffects, ref open, new GUIContent(". Effect"), 1);
 				if (open != whileEffectsProperty.isExpanded)
 					whileEffectsProperty.isExpanded = open;
 			}
@@ -83,7 +83,7 @@ namespace EoE.Information
 
 			SerializedProperty startEffectsProperty = serializedObject.FindProperty(nameof(settings.StartInfo)).FindPropertyRelative(nameof(settings.StartInfo.Effects));
 			bool open = startEffectsProperty.isExpanded;
-			ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartInfo.Effects))), ref settings.StartInfo.Effects, ref open, new GUIContent("Effect "), 1);
+			ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartInfo.Effects))), ref settings.StartInfo.Effects, ref open, new GUIContent(". Effect"), 1);
 			if (open != startEffectsProperty.isExpanded)
 				startEffectsProperty.isExpanded = open;
 
@@ -93,15 +93,13 @@ namespace EoE.Information
 		private void ProjectileInfoArea(SerializedProperty projectileArrayProperty)
 		{
 			Spell settings = target as Spell;
-			for(int i = 0; i < settings.ProjectileInfos.Length; i++)
+			int newSize = settings.ProjectileInfos.Length;
+			DelayedIntField("Size", ref newSize, 1);
+
+			for (int i = 0; i < settings.ProjectileInfos.Length; i++)
 			{
 				DrawProjectileInfo(projectileArrayProperty.GetArrayElementAtIndex(i), settings.ProjectileInfos[i], i, 1);
 			}
-
-			EditorGUILayout.BeginHorizontal();
-			GUILayout.Space(STANDARD_OFFSET);
-			int newSize = EditorGUILayout.DelayedIntField("Size", settings.ProjectileInfos.Length);
-			EditorGUILayout.EndHorizontal();
 
 			if (settings.ProjectileInfos.Length != newSize)
 			{
@@ -122,7 +120,7 @@ namespace EoE.Information
 		{
 			if(info == null)
 			{
-
+				info = new ProjectileInfo();
 			}
 			FoldoutFromSerializedProperty(new GUIContent((index + 1) + ". Projectile Info"), projectileProperty, offSet);
 			if (projectileProperty.isExpanded)

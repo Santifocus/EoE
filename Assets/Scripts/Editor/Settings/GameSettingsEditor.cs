@@ -106,7 +106,7 @@ namespace EoE.Information
 			FloatField(new GUIContent("Item Drop Random Velocity Strenght"), ref settings.ItemDropRandomVelocityStrenght, 1);
 
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
-			ObjectArrayField(new GUIContent("Global Sounds"), ref settings.globalSounds, ref GlobalSoundsOpen, new GUIContent("Sound "), 1);
+			ObjectArrayField(new GUIContent("Global Sounds"), ref settings.globalSounds, ref GlobalSoundsOpen, new GUIContent(". Sound"), 1);
 		}
 
 		private void EffectivenessMatrixArea()

@@ -44,7 +44,7 @@ namespace EoE.Combatery
 		public AttackSequence JumpAttackSequence = new AttackSequence();
 		public AttackSequence RunJumpAttackSequence = new AttackSequence();
 
-		public ComboInfo[] ComboEffects = new ComboInfo[0];
+		public ComboSet ComboEffects;
 
 		public bool HasMaskFlag(AttackStyleParts flag)
 		{
@@ -203,19 +203,5 @@ namespace EoE.Combatery
 		{
 			return (flag | ContainedEffectType) == ContainedEffectType;
 		}
-	}
-	[System.Serializable]
-	public class ComboInfo
-	{
-		public int RequiredComboCount = 1;
-		public ComboEffect Effect = new ComboEffect();
-	}
-	[System.Serializable]
-	public class ComboEffect
-	{
-		//Text settings
-		public bool AffectText = false;
-		public Gradient TextColor = new Gradient();
-		public float ColorScrollSpeed = 1;
 	}
 }

@@ -61,7 +61,7 @@ namespace EoE.Combatery
 			{
 				SerializedProperty startEffectsOpen = serializedObject.FindProperty(nameof(settings.StartEffects));
 				open = startEffectsOpen.isExpanded;
-				ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartEffects))), ref settings.StartEffects, ref open, new GUIContent("Effect "), 1);
+				ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartEffects))), ref settings.StartEffects, ref open, new GUIContent(". Effect"), 1);
 				if (open != startEffectsOpen.isExpanded)
 					startEffectsOpen.isExpanded = open;
 			}
@@ -69,7 +69,7 @@ namespace EoE.Combatery
 			{
 				SerializedProperty whileEffectsOpen = serializedObject.FindProperty(nameof(settings.WhileEffects));
 				open = whileEffectsOpen.isExpanded;
-				ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WhileEffects))), ref settings.WhileEffects, ref open, new GUIContent("Effect "), 1);
+				ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WhileEffects))), ref settings.WhileEffects, ref open, new GUIContent(". Effect"), 1);
 				if (open != whileEffectsOpen.isExpanded)
 					whileEffectsOpen.isExpanded = open;
 			}
@@ -97,7 +97,7 @@ namespace EoE.Combatery
 			//AOE Effects
 			SerializedProperty collisionEffectsAOEProperty = serializedObject.FindProperty(nameof(settings.CollisionEffectsAOE));
 			bool collisionEffectsAOEOpen = collisionEffectsAOEProperty.isExpanded;
-			ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CollisionEffectsAOE))), ref settings.CollisionEffectsAOE, ref collisionEffectsAOEOpen, new GUIContent("Effect "), 1);
+			ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CollisionEffectsAOE))), ref settings.CollisionEffectsAOE, ref collisionEffectsAOEOpen, new GUIContent(". Effect"), 1);
 			if (collisionEffectsAOEOpen != collisionEffectsAOEProperty.isExpanded)
 				collisionEffectsAOEProperty.isExpanded = collisionEffectsAOEOpen;
 
@@ -123,7 +123,7 @@ namespace EoE.Combatery
 				{
 					SerializedProperty startEffectsOpen = serializedObject.FindProperty(nameof(settings.Remenants)).FindPropertyRelative(nameof(settings.Remenants.StartEffects));
 					open = startEffectsOpen.isExpanded;
-					ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Remenants.StartEffects))), ref settings.Remenants.StartEffects, ref open, new GUIContent("Effect "), 2);
+					ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Remenants.StartEffects))), ref settings.Remenants.StartEffects, ref open, new GUIContent(". Effect"), 2);
 					if (open != startEffectsOpen.isExpanded)
 						startEffectsOpen.isExpanded = open;
 				}
@@ -131,7 +131,7 @@ namespace EoE.Combatery
 				{
 					SerializedProperty whileEffectsOpen = serializedObject.FindProperty(nameof(settings.Remenants)).FindPropertyRelative(nameof(settings.Remenants.WhileEffects));
 					open = whileEffectsOpen.isExpanded;
-					ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Remenants.WhileEffects))), ref settings.Remenants.WhileEffects, ref open, new GUIContent("Effect "), 2);
+					ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Remenants.WhileEffects))), ref settings.Remenants.WhileEffects, ref open, new GUIContent(". Effect"), 2);
 					if (open != whileEffectsOpen.isExpanded)
 						whileEffectsOpen.isExpanded = open;
 				}

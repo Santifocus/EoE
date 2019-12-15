@@ -11,36 +11,39 @@ namespace EoE.Information
 		{
 			for (int i = 0; i < healEffects.Length; i++)
 			{
-				TargetStat t = healEffects[i].HealType;
-				if (t == TargetStat.Endurance && !(user is Player))
-					continue;
-
-				float targetStatAmount = t == TargetStat.Health ? user.curMaxHealth : (t == TargetStat.Mana ? user.curMaxMana : (user as Player).curMaxEndurance);
-				float amount = healEffects[i].Percent ? (targetStatAmount * (healEffects[i].Amount / 100)) : healEffects[i].Amount;
-				amount *= -1;
-
-				if (t == TargetStat.Health)
-				{
-					user.ChangeHealth(new ChangeInfo(user, amount > 0 ? CauseType.Magic : CauseType.Heal, t, amount));
-				}
-				else if (t == TargetStat.Mana)
-				{
-					user.ChangeMana(new ChangeInfo(user, amount > 0 ? CauseType.Magic : CauseType.Heal, t, amount));
-				}
-				else //t == HealTargetType.Endurance
-				{
-					(user as Player).ChangeEndurance(new ChangeInfo(user, amount > 0 ? CauseType.Magic : CauseType.Heal, t, amount));
-				}
-			}
+				healEffects[i].Activate(user);
+		}
 			return true;
 		}
+	}
+	[System.Serializable]
+	public class HealTargetInfo
+	{
+		public TargetStat HealType;
+		public bool Percent;
+		public float Amount;
 
-		[System.Serializable]
-		public class HealTargetInfo
+		public void Activate(Entitie user)
 		{
-			public TargetStat HealType;
-			public bool Percent;
-			public float Amount;
+			if (HealType == TargetStat.Endurance && !(user is Player))
+				return;
+
+			float targetStatAmount = HealType == TargetStat.Health ? user.curMaxHealth : (HealType == TargetStat.Mana ? user.curMaxMana : (user as Player).curMaxEndurance);
+			float amount = Percent ? (targetStatAmount * (Amount / 100)) : Amount;
+			amount *= -1;
+
+			if (HealType == TargetStat.Health)
+			{
+				user.ChangeHealth(new ChangeInfo(user, amount > 0 ? CauseType.Magic : CauseType.Heal, HealType, amount));
+			}
+			else if (HealType == TargetStat.Mana)
+			{
+				user.ChangeMana(new ChangeInfo(user, amount > 0 ? CauseType.Magic : CauseType.Heal, HealType, amount));
+			}
+			else //t == HealTargetType.Endurance
+			{
+				(user as Player).ChangeEndurance(new ChangeInfo(user, amount > 0 ? CauseType.Magic : CauseType.Heal, HealType, amount));
+			}
 		}
 	}
 }

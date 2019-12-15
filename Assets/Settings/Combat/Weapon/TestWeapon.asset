@@ -67,7 +67,7 @@ MonoBehaviour:
       OverridenElement: 1
       OverrideCauseType: 0
       OverridenCauseType: 0
-      ComboIncreaseMaxDelay: 1
+      ComboIncreaseMaxDelay: 3
       OnHitComboWorth: 1
       AttackEffects: []
     - AnimationTarget: 2
@@ -111,8 +111,8 @@ MonoBehaviour:
       OverridenElement: 1
       OverrideCauseType: 0
       OverridenCauseType: 0
-      ComboIncreaseMaxDelay: 1
-      OnHitComboWorth: 1
+      ComboIncreaseMaxDelay: 4
+      OnHitComboWorth: 2
       AttackEffects: []
     - AnimationTarget: 4
       AnimationMultiplicationType: 2
@@ -155,8 +155,8 @@ MonoBehaviour:
       OverridenElement: 1
       OverrideCauseType: 0
       OverridenCauseType: 0
-      ComboIncreaseMaxDelay: 1
-      OnHitComboWorth: 1
+      ComboIncreaseMaxDelay: 3
+      OnHitComboWorth: 4
       AttackEffects: []
     PartsMaxDelays:
     - 0.2
@@ -248,4 +248,4 @@ MonoBehaviour:
       OnHitComboWorth: 1
       AttackEffects: []
     PartsMaxDelays: []
-  ComboEffects: []
+  ComboEffects: {fileID: 11400000, guid: 4e7be449530b2d44fb6413e980a881e2, type: 2}

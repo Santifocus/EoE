@@ -1,5 +1,6 @@
 ﻿using EoE.Entities;
 using EoE.Information;
+using EoE.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,11 +29,18 @@ namespace EoE.Combatery
 		//Inspector variables
 		[SerializeField] private WeaponHitbox[] weaponHitboxes = default;
 
-		//Behaivior controll
+		//Behaivior Control
 		private bool colliderActive;
 		private bool wantsToBeginNextSequence;
 		private Weapon weaponInfo;
 		private List<Collider> ignoredColliders = new List<Collider>();
+
+		//Combo Control
+		private int curCombo;
+		private float timeToNextCombo;
+		private List<FXInstance> comboBoundFX = new List<FXInstance>();
+		private List<BuffInstance> comboBoundBuffs = new List<BuffInstance>();
+
 		#endregion
 		#region Setups
 		public void Setup(Weapon weaponInfo)
@@ -43,6 +51,7 @@ namespace EoE.Combatery
 			{
 				weaponHitboxes[i].Setup(this);
 			}
+			ComboDisplayController.Instance.ResetCombo(weaponInfo.ComboEffects);
 			FollowPlayer();
 		}
 		private void ChangeWeaponState(bool state, AttackStyle style)
@@ -60,6 +69,20 @@ namespace EoE.Combatery
 				}
 			}
 			ignoredColliders = new List<Collider>();
+		}
+		#endregion
+		#region BasicMonobehaivior
+		private void Update()
+		{
+			if (timeToNextCombo > 0)
+			{
+				timeToNextCombo -= Time.deltaTime;
+				if(timeToNextCombo <= 0)
+				{
+					timeToNextCombo = 0;
+					ComboFinish();
+				}
+			}
 		}
 		#endregion
 		#region FollowPlayer
@@ -275,7 +298,7 @@ namespace EoE.Combatery
 																		direction,
 																		hitPos,
 																		overrides);
-					ComboUpdate();
+					ComboHit(hitEntitie, direction, hitPos);
 				}
 			}
 			else
@@ -284,9 +307,70 @@ namespace EoE.Combatery
 			}
 		}
 
-		private void ComboUpdate()
+		private void ComboHit(Entitie hitEntitie, Vector3 direction, Vector3 hitPos)
 		{
+			int newComboAmount = curCombo + ActiveAttackStyle.OnHitComboWorth;
+			timeToNextCombo = ActiveAttackStyle.ComboIncreaseMaxDelay;
 
+			for(int i = 0; i < weaponInfo.ComboEffects.ComboData.Length; i++)
+			{
+				if(	curCombo < weaponInfo.ComboEffects.ComboData[i].RequiredComboCount &&
+					newComboAmount >= weaponInfo.ComboEffects.ComboData[i].RequiredComboCount)
+				{
+					if (weaponInfo.ComboEffects.ComboData[i].Effect.OverrideTextColor)
+					{
+						ComboDisplayController.Instance.OverrideColorSettings(weaponInfo.ComboEffects.ComboData[i].Effect.TextColor, weaponInfo.ComboEffects.ComboData[i].Effect.ColorScrollSpeed);
+					}
+					if (weaponInfo.ComboEffects.ComboData[i].Effect.OverrideTextPunch)
+					{
+						ComboDisplayController.Instance.OverridePunchSettings(weaponInfo.ComboEffects.ComboData[i].Effect.TextPunch, weaponInfo.ComboEffects.ComboData[i].Effect.PunchResetSpeed);
+					}
+
+					//Single / AOE effects
+					if (weaponInfo.ComboEffects.ComboData[i].Effect.EffectOnTarget != null)
+						weaponInfo.ComboEffects.ComboData[i].Effect.EffectOnTarget.ActivateEffectSingle(Player.Instance, hitEntitie, weaponInfo, direction, hitPos);
+					if(weaponInfo.ComboEffects.ComboData[i].Effect.EffectAOE != null)
+						weaponInfo.ComboEffects.ComboData[i].Effect.EffectAOE.ActivateEffectAOE(Player.Instance, Player.Instance.transform, weaponInfo);
+
+					//Heal effects
+					for(int j = 0; j < weaponInfo.ComboEffects.ComboData[i].Effect.HealEffects.Length; j++)
+					{
+						weaponInfo.ComboEffects.ComboData[i].Effect.HealEffects[j].Activate(Player.Instance);
+					}
+
+					//FX
+					for(int j = 0; j < weaponInfo.ComboEffects.ComboData[i].Effect.EffectsTillComboEnds.Length; j++)
+					{
+						comboBoundFX.Add(FXManager.PlayFX(weaponInfo.ComboEffects.ComboData[i].Effect.EffectsTillComboEnds[j], Player.Instance.transform, true));
+					}
+
+					//Buffs
+					for (int j = 0; j < weaponInfo.ComboEffects.ComboData[i].Effect.BuffsTillComboEnds.Length; j++)
+					{
+						comboBoundBuffs.Add(Player.Instance.AddBuff(weaponInfo.ComboEffects.ComboData[i].Effect.BuffsTillComboEnds[j], Player.Instance));
+					}
+				}
+			}
+
+			//Update the cached amount and inform the UI about the change
+			curCombo = newComboAmount;
+			ComboDisplayController.Instance.SetCombo(curCombo);
+		}
+		private void ComboFinish()
+		{
+			curCombo = 0;
+			for(int i = 0; i < comboBoundFX.Count; i++)
+			{
+				comboBoundFX[i].FinishFX();
+			}
+			comboBoundFX = new List<FXInstance>();
+
+			for (int i = 0; i < comboBoundBuffs.Count; i++)
+			{
+				Player.Instance.RemoveBuff(comboBoundBuffs[i]);
+			}
+			comboBoundBuffs = new List<BuffInstance>();
+			ComboDisplayController.Instance.ResetCombo(weaponInfo.ComboEffects);
 		}
 
 		private void SetAnimationSpeed(float speed) => Player.Instance.animationControl.SetFloat("AttackAnimationSpeed", speed);

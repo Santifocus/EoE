@@ -27,7 +27,7 @@ namespace EoE.Information
 		{
 			CrawlerSettings settings = target as CrawlerSettings;
 			FloatField(new GUIContent("Bash Announcement Delay", "If 'Bash Start' = T, then the BashAnnouncement will be played at 'T + Delay'"), ref settings.BashAnnouncementDelay);
-			ObjectArrayField(new GUIContent("Bash Announcement", "The particles that will be shown when the BashAnnouncement is played."), ref settings.BashAnnouncement, ref AnnouncementFXOpen, new GUIContent("Effect "));
+			ObjectArrayField(new GUIContent("Bash Announcement", "The particles that will be shown when the BashAnnouncement is played."), ref settings.BashAnnouncement, ref AnnouncementFXOpen, new GUIContent(". Effect"));
 		}
 	}
 }
