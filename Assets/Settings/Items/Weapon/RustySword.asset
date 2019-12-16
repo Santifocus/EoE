@@ -24,7 +24,7 @@ MonoBehaviour:
   ItemIcon: {fileID: 21300000, guid: cecff3dc8ed3ee84e8a28d2ca39a6862, type: 3}
   FXEffectsOnUse: []
   FXEffectsWhenEquipped: []
-  AllowHoldUse: 1
+  AllowHoldUse: 0
   UseCooldown: 0
   RemoveOnUse: 0
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,

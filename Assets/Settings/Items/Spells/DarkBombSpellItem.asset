@@ -15,14 +15,17 @@ MonoBehaviour:
   ItemName:
     textColor: {r: 0.3254717, g: 0.92613274, b: 1, a: 1}
     text: Dark Bomb
-  ItemDescription: []
+  ItemDescription:
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: 
   SortingID: 9
+  ItemIcon: {fileID: 21300000, guid: 1d017a4066fbcb74fb8b66dffbd891d0, type: 3}
+  FXEffectsOnUse: []
+  FXEffectsWhenEquipped: []
+  AllowHoldUse: 0
+  UseCooldown: 0
+  RemoveOnUse: 1
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 5
-  ItemIcon: {fileID: 21300000, guid: 1d017a4066fbcb74fb8b66dffbd891d0, type: 3}
-  RemoveOnUse: 1
-  FXEffectsOnUse: []
-  FXEffectsWhenEquipped: []
-  UseCooldown: 0
   TargetSpell: {fileID: 11400000, guid: 434c6572f91508a49927ea0dc469f2c7, type: 2}
