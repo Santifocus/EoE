@@ -32,8 +32,8 @@ namespace EoE.Information
 		public float EnemyMinimumInvestigationArea = 10;
 
 		//Visuals
-		public ParticleSystem HitEntitieParticles = default;
-		public ParticleSystem HitTerrainParticles = default;
+		public GameObject HitEntitieParticles = default;
+		public GameObject HitTerrainParticles = default;
 
 		public EntitieStatDisplay EntitieStatDisplayPrefab = default;
 		public float EnemeyHealthBarLerpSpeed = 4;

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ab78e7538a021446a2451566185bbde, type: 3}
-  m_Name: TestWeapon
+  m_Name: BaseSword
   m_EditorClassIdentifier: 
   BaseDamage: 5
   BaseManaCost: 0
@@ -143,7 +143,7 @@ MonoBehaviour:
         m_RotationOrder: 4
       AnimationSpeedCurveTimeframe: 0.8
       AnimationSpeedCurveMultiplier: 1.5
-      DamageMultiplier: 1
+      DamageMultiplier: 3.5
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
       KnockbackMultiplier: 1

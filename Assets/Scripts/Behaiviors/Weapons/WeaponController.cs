@@ -59,7 +59,7 @@ namespace EoE.Combatery
 			colliderActive = state;
 			for (int i = 0; i < weaponHitboxes.Length; i++)
 			{
-				weaponHitboxes[i].SetColliderStyle(style);
+				weaponHitboxes[i].SetColliderStyle(state ? style : null);
 				if (!state)
 				{
 					for(int j = 0; j < ignoredColliders.Count; j++)
@@ -186,7 +186,6 @@ namespace EoE.Combatery
 				float animationTimer = 0;
 				float animationPoint = 0;
 				ChangeWeaponState(false, null);
-				Player.Instance.animationControl.SetTrigger(ActiveAttackStyle.AnimationTarget.ToString());
 
 				float multiplier;
 				if (ActiveAttackStyle.AnimationMultiplicationType == MultiplicationType.FlatValue)
@@ -195,9 +194,10 @@ namespace EoE.Combatery
 				}
 				else
 				{
-					multiplier = ActiveAttackStyle.AnimationSpeedCurve.Evaluate(0 / ActiveAttackStyle.AnimationSpeedCurveTimeframe) * ActiveAttackStyle.AnimationSpeedCurveMultiplier;
+					multiplier = ActiveAttackStyle.AnimationSpeedCurve.Evaluate(0) * ActiveAttackStyle.AnimationSpeedCurveMultiplier;
 				}
 				SetAnimationSpeed(multiplier);
+				Player.Instance.animationControl.SetTrigger(ActiveAttackStyle.AnimationTarget.ToString());
 				do
 				{
 					yield return new WaitForEndOfFrame();
@@ -208,7 +208,7 @@ namespace EoE.Combatery
 					//Find the current animationSpeed multiplier
 					if(ActiveAttackStyle.AnimationMultiplicationType == MultiplicationType.Curve)
 					{
-						multiplier = ActiveAttackStyle.AnimationSpeedCurve.Evaluate(totalTime / ActiveAttackStyle.AnimationSpeedCurveTimeframe) * ActiveAttackStyle.AnimationSpeedCurveMultiplier;
+						multiplier = ActiveAttackStyle.AnimationSpeedCurve.Evaluate(Mathf.Clamp01(totalTime / ActiveAttackStyle.AnimationSpeedCurveTimeframe)) * ActiveAttackStyle.AnimationSpeedCurveMultiplier;
 						SetAnimationSpeed(multiplier);
 					}
 					animationTimer += multiplier * Time.deltaTime;
@@ -216,7 +216,16 @@ namespace EoE.Combatery
 					//Check if we reached the collision activation point
 					bool shouldActiveState = animationTimer > animationActivationDelay;
 					if (shouldActiveState != colliderActive)
+					{
 						ChangeWeaponState(shouldActiveState, ActiveAttackStyle);
+					}
+
+					//Debug
+					if(GameController.CurrentGameSettings.IsDebugEnabled && shouldActiveState)
+					{
+						Debug.DrawLine(transform.position - Vector3.up / 3, transform.position + Vector3.up / 3, Color.green, 1);
+						Debug.DrawLine(transform.position - Vector3.right / 3, transform.position + Vector3.right / 3, Color.cyan, 1);
+					}
 
 					//Check if we crossed any attack event point
 					float newAnimationPoint = animationTimer / animationTime;
@@ -265,10 +274,8 @@ namespace EoE.Combatery
 				//If the player did not try to start the next sequence in the given delay we stop here
 				break;
 			}
-			ActiveAttackStyle = null;
 			Player.Instance.animationControl.SetTrigger("FightEnd");
-			ChangeWeaponState(false, null);
-			InAttackSequence = false;
+			ChangeWeaponState(InAttackSequence = false, ActiveAttackStyle = null);
 		}
 		public void HitObject(Vector3 hitPos, Collider hit, Vector3 direction)
 		{
@@ -299,12 +306,20 @@ namespace EoE.Combatery
 																		hitPos,
 																		overrides);
 					ComboHit(hitEntitie, direction, hitPos);
+					CreateParticles(GameController.CurrentGameSettings.HitEntitieParticles, hitPos, direction);
 				}
 			}
 			else
 			{
-
+				CreateParticles(GameController.CurrentGameSettings.HitTerrainParticles, hitPos, direction);
 			}
+		}
+		private void CreateParticles(GameObject prefab, Vector3 hitPos, Vector3 direction)
+		{
+			GameObject newParticleSystem = Instantiate(prefab, Storage.ParticleStorage);
+			newParticleSystem.transform.forward = direction;
+			newParticleSystem.transform.position = hitPos;
+			EffectUtils.FadeAndDestroyParticles(newParticleSystem, 1);
 		}
 
 		private void ComboHit(Entitie hitEntitie, Vector3 direction, Vector3 hitPos)

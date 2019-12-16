@@ -854,6 +854,54 @@ namespace EoE
 				Destroy(particleTransform.gameObject);
 			}
 		}
+		#region FadeParticleSystem
+		public static void FadeAndDestroyParticles(GameObject target, float? delay)
+		{
+			Instance.StartCoroutine(Instance.FadeAndDestroyParticlesC(target, delay));
+		}
+		private IEnumerator FadeAndDestroyParticlesC(GameObject target, float? baseDelay)
+		{
+			if (baseDelay.HasValue)
+				yield return new WaitForSeconds(baseDelay.Value);
+
+			if (!target)
+				goto FadeFinished;
+
+			ParticleSystem[] particleSystems = target.GetComponentsInChildren<ParticleSystem>();
+			for (int i = 0; i < particleSystems.Length; i++)
+			{
+				particleSystems[i].Stop(true, ParticleSystemStopBehavior.StopEmitting);
+			}
+
+			while (true)
+			{
+				yield return new WaitForEndOfFrame();
+				if (!target)
+					goto FadeFinished;
+
+				if (GameController.GameIsPaused)
+					continue;
+
+				bool foundParticle = false;
+				for (int i = 0; i < particleSystems.Length; i++)
+				{
+					if (particleSystems[i].particleCount > 0)
+					{
+						foundParticle = true;
+						break;
+					}
+				}
+
+				if (!foundParticle)
+					break;
+			}
+
+			Destroy(target);
+
+		//We can jump to this in case of external removal of the target
+		FadeFinished:;
+		}
+		#endregion
 		#endregion
 		#region Entitie Text
 		public static void CreateDamageNumber(Vector3 startPosition, Gradient colors, Vector3 numberVelocity, float damage, bool wasCrit, float overrideScale = 1)
