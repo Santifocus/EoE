@@ -9,19 +9,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 864ce4b4956fd63469942aad9fe28094, type: 3}
-  m_Name: Grapes_of_Stamina
+  m_Script: {fileID: 11500000, guid: 943f6c1bb4ab1e346adf9d15310d236d, type: 3}
+  m_Name: GrapesOfStamina
   m_EditorClassIdentifier: 
-  ItemName: Grapes of Stamina
+  ItemName:
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: Grapes of Stamina
+  ItemDescription: []
   SortingID: 0
-  ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
-    type: 3}
-  MaxStack: 1
   ItemIcon: {fileID: 21300000, guid: 3f90011e70eb4f243ab88be664cc21b5, type: 3}
-  RemoveOnUse: 1
   FXEffectsOnUse: []
   FXEffectsWhenEquipped: []
   UseCooldown: 0
-  buffsToApply:
+  RemoveOnUse: 1
+  ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
+    type: 3}
+  MaxStack: 1
+  HealEffects: []
+  BuffsToApply:
   - {fileID: 11400000, guid: 1f67880d271b56d41912eb2821573c4e, type: 2}
-  stackable: 0
+  StackingStyle: 2

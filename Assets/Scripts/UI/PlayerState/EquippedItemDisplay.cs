@@ -11,7 +11,7 @@ namespace EoE.UI
 	public class EquippedItemDisplay : MonoBehaviour
 	{
 		private const int DISPLAYED_ITEMS = 3;
-		private enum TargetItemType { Spell, Use }
+		private enum TargetItemType { Spell, Consumable }
 		[SerializeField] private TargetItemType targetType = default;
 
 		[SerializeField] private Image flashBorder = default;
@@ -43,7 +43,7 @@ namespace EoE.UI
 			for(int i = 0; i < targetDisplays.Length; i++)
 			{
 				targetDisplays[i].OriginalColor = targetDisplays[i].ItemIconDisplay.color;
-				targetDisplays[i].ItemIconDisplay.color = Color.clear;
+				targetDisplays[i].ItemCooldownDisplay.color = targetDisplays[i].ItemIconDisplay.color = Color.clear;
 			}
 		}
 

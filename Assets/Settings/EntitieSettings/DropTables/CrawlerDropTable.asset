@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: CrawlerDropTable
   m_EditorClassIdentifier: 
   PossibleDrops:
-  - Drop: {fileID: 11400000, guid: bc3fa643281d1cf4d92b4a40f10da5b2, type: 2}
+  - Drop: {fileID: 11400000, guid: 85a6ee9ea6326894bafdefc197d83d4f, type: 2}
     MinDropAmount: 1
     MaxDropAmount: 3
     DropChance: 1
-  - Drop: {fileID: 11400000, guid: cc8b9e7eb411f0f47863caffd0450432, type: 2}
+  - Drop: {fileID: 11400000, guid: 1ec4255c5af55d54e938534910d3ed61, type: 2}
     MinDropAmount: 1
     MaxDropAmount: 2
     DropChance: 1
