@@ -24,11 +24,15 @@ namespace EoE
 		[SerializeField] private SoulDrop soulDropPrefab = default;
 		public ItemDrop itemDropPrefab;
 
+		public Transform BGCanvas => bgCanvas;
 		[SerializeField] private Transform bgCanvas = default;
+		public Transform MainCanvas => mainCanvas;
 		[SerializeField] private Transform mainCanvas = default;
-		public Transform enemyHealthBarStorage = default;
+		public Transform MenuCanvas => menuCanvas;
+		[SerializeField] private Transform menuCanvas = default;
 
 		[Space(10)]
+		public Transform enemyHealthBarStorage = default;
 		[SerializeField] private ItemCollector itemCollector = default;
 
 		private void Start()

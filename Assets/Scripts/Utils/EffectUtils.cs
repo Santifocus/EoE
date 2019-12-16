@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using EoE.Information;
 using EoE.Sounds;
 using EoE.Entities;
+using UnityEngine.UI;
 
 namespace EoE
 {
@@ -38,6 +39,7 @@ namespace EoE
 			AllTimeDilationsEffects = new List<TimeDilationInstance>();
 			AllTintScreenEffects = new List<ScreenTintInstance>();
 			AllCameraFOVWarpEffects = new List<CameraFOVWarpInstance>();
+			AllCustomUIs = new List<CustomUIInstance>();
 			AllSoundFXs = new List<SoundEffectInstance>();
 			AllParticleFXs = new List<ParticleEffectInstance>();
 
@@ -631,12 +633,85 @@ namespace EoE
 			}
 		}
 		#endregion
-		#region CameraDisattach
-		private class CameraDisattachmentInstance : FXInstance
+		#region CustomUI
+		private static List<CustomUIInstance> AllCustomUIs = new List<CustomUIInstance>();
+		private Coroutine CustomUICoroutine = null;
+		public static FXInstance PlayCustomUI(CustomUI info, float multiplier)
+		{
+			Transform parent = info.CanvasTarget == CanvasTarget.Background ? GameController.Instance.BGCanvas : (info.CanvasTarget == CanvasTarget.Main ? GameController.Instance.MainCanvas : GameController.Instance.MenuCanvas);
+			CustomUIInstance newCustomUI = new CustomUIInstance(info, parent);
+			newCustomUI.BaseSetup(multiplier, parent);
+			AllCustomUIs.Add(newCustomUI);
+
+			if (Instance.CustomUICoroutine == null)
+			{
+				Instance.CustomUICoroutine = Instance.StartCoroutine(Instance.CustomUIC());
+			}
+
+			return newCustomUI;
+		}
+		private IEnumerator CustomUIC()
+		{
+			while (AllCustomUIs.Count > 0)
+			{
+				yield return new WaitForFixedUpdate();
+				if (GameController.GameIsPaused)
+					continue;
+
+				for (int i = 0; i < AllCustomUIs.Count; i++)
+				{
+					AllCustomUIs[i].Update(Time.fixedDeltaTime);
+					if (AllCustomUIs[i].ShouldBeRemoved && AllCustomUIs[i].AllowedToRemove())
+					{
+						AllCustomUIs[i].OnRemove();
+						AllCustomUIs.RemoveAt(i);
+						i--;
+					}
+				}
+			}
+
+			CustomUICoroutine = null;
+		}
+		private class CustomUIInstance : FXInstance
 		{
 			public override FXType Type => FXType.Player;
-			public override FXObject BaseInfo => CameraDisattachmentInfo;
-			private CameraDisattachment CameraDisattachmentInfo;
+
+			public override FXObject BaseInfo => CustomUIInfo;
+			public CustomUI CustomUIInfo;
+			private GameObject mainObject;
+			private Graphic[] containedGraphics;
+			private float[] containedBaseAlphas;
+			private float curMultiplier = -1;
+			public CustomUIInstance(CustomUI CustomUIInfo, Transform parent)
+			{
+				this.CustomUIInfo = CustomUIInfo;
+
+				mainObject = Instantiate(CustomUIInfo.UIPrefabObject, parent);
+				containedGraphics = mainObject.GetComponentsInChildren<Graphic>();
+				containedBaseAlphas = new float[containedGraphics.Length];
+				for (int i = 0; i < containedBaseAlphas.Length; i++)
+				{
+					containedBaseAlphas[i] = containedGraphics[i].color.a;
+				}
+				mainObject.transform.SetSiblingIndex(CustomUIInfo.CustomChildIndex);
+				InternalUpdate();
+			}
+			protected override void InternalUpdate()
+			{
+				float newMultiplier = GetCurMultiplier();
+				if(curMultiplier != newMultiplier)
+				{
+					curMultiplier = newMultiplier;
+					for (int i = 0; i < containedGraphics.Length; i++)
+					{
+						containedGraphics[i].color = new Color(containedGraphics[i].color.r, containedGraphics[i].color.g, containedGraphics[i].color.b, containedBaseAlphas[i] * curMultiplier);
+					}
+				}
+			}
+			public override void OnRemove()
+			{
+				Destroy(mainObject);
+			}
 		}
 		#endregion
 		#region SingleSound
@@ -779,21 +854,21 @@ namespace EoE
 
 			private ParticleSystem[] containedSystems;
 			private float[] emissionBasis;
-			private float lastMultiplier = -1;
+			private float curMultiplier = -1;
 
 			private Vector3 positionOffset;
 			private Vector3 rotationOffset;
 
-			public ParticleEffectInstance(ParticleEffect ParticleInfo, Transform particleTransform, ParticleSystem[] containedSystems, Vector3? positionOffset, Vector3? rotationOffset)
+			public ParticleEffectInstance(ParticleEffect ParticleEffectInfo, Transform particleTransform, ParticleSystem[] containedSystems, Vector3? positionOffset, Vector3? rotationOffset)
 			{
-				this.ParticleEffectInfo = ParticleInfo;
+				this.ParticleEffectInfo = ParticleEffectInfo;
 				this.particleTransform = particleTransform;
 
 				this.containedSystems = containedSystems;
 				emissionBasis = new float[containedSystems.Length];
 
-				this.positionOffset = positionOffset ?? ParticleInfo.OffsetToTarget;
-				this.rotationOffset = rotationOffset ?? ParticleInfo.RotationOffset;
+				this.positionOffset = positionOffset ?? ParticleEffectInfo.OffsetToTarget;
+				this.rotationOffset = rotationOffset ?? ParticleEffectInfo.RotationOffset;
 
 				for (int i = 0; i < containedSystems.Length; i++)
 				{
@@ -818,9 +893,9 @@ namespace EoE
 			private void UpdateEmission()
 			{
 				float newMultiplier = GetCurMultiplier();
-				if (newMultiplier != lastMultiplier)
+				if (newMultiplier != curMultiplier)
 				{
-					lastMultiplier = newMultiplier;
+					curMultiplier = newMultiplier;
 					if (currentState == FXState.End && Mathf.RoundToInt(newMultiplier * 100) == 0)
 					{
 						for (int i = 0; i < containedSystems.Length; i++)
