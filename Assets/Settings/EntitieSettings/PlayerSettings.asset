@@ -32,7 +32,7 @@ MonoBehaviour:
   Mana: 30
   DoManaRegen: 1
   ManaRegen: 1
-  ManaRegenInCombatMultiplier: 0
+  ManaRegenInCombatMultiplier: 0.2
   WalkSpeed: 8
   RunSpeedMultiplicator: 1.35
   TurnSpeed: 540
@@ -58,8 +58,8 @@ MonoBehaviour:
   EnduranceRegenAfterUseMultiplier: 0.5
   JumpEnduranceCost: 3
   RunEnduranceCost: 5
-  JumpPower: {x: 0, y: 9, z: 15}
-  JumpImpulsePower: 2
+  JumpPower: {x: 0, y: 10, z: 15}
+  JumpImpulsePower: 3
   JumpBackwardMultiplier: 0.65
   DodgePower: 4
   DodgeDuration: 0.15

@@ -19,14 +19,15 @@ MonoBehaviour:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Damages nearby enemys with the power of light.
   SortingID: 0
-  ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
-    type: 3}
-  MaxStack: 1
   ItemIcon: {fileID: 21300000, guid: 379f33fcdee889d4db54b6c4696d9385, type: 3}
-  RemoveOnUse: 0
   FXEffectsOnUse: []
   FXEffectsWhenEquipped:
   - {fileID: 11400000, guid: 797857c90675254498ef08db978fcfbe, type: 2}
   - {fileID: 11400000, guid: 550e1bfda472a8e46a4f01df1ca9a882, type: 2}
+  AllowHoldUse: 0
   UseCooldown: 0
+  RemoveOnUse: 0
+  ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
+    type: 3}
+  MaxStack: 1
   TargetSpell: {fileID: 11400000, guid: 9c73cac9cf3ee5f488b93e883a29e5e1, type: 2}
