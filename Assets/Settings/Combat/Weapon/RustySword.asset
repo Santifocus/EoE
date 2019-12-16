@@ -190,7 +190,7 @@ MonoBehaviour:
       CritChanceMultiplier: 1
       CollisionMask: -1
       StopOnCollisionMask: 0
-      DirectHit: {fileID: 11400000, guid: b2224e95e2fd03742845a26029bcb0dc, type: 2}
+      DirectHit: {fileID: 11400000, guid: 265e6994fdfd23549bf67df632fcc179, type: 2}
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -324,7 +324,7 @@ MonoBehaviour:
       CritChanceMultiplier: 1
       CollisionMask: -1
       StopOnCollisionMask: -1
-      DirectHit: {fileID: 11400000, guid: b2224e95e2fd03742845a26029bcb0dc, type: 2}
+      DirectHit: {fileID: 11400000, guid: bfb7e1ecec740634fb4282d888a3b9ed, type: 2}
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -391,7 +391,7 @@ MonoBehaviour:
       CritChanceMultiplier: 1
       CollisionMask: -1
       StopOnCollisionMask: -1
-      DirectHit: {fileID: 11400000, guid: b2224e95e2fd03742845a26029bcb0dc, type: 2}
+      DirectHit: {fileID: 11400000, guid: bfb7e1ecec740634fb4282d888a3b9ed, type: 2}
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
