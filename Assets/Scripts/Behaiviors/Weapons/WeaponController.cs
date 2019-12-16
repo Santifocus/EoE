@@ -20,7 +20,7 @@ namespace EoE.Combatery
 		};
 		public static WeaponController PlayerWeaponController;
 		public bool InAttackSequence { get; private set; }
-		public AttackStyle ActiveAttackStyle;
+		public AttackStyle ActiveAttackStyle { get; private set; }
 
 		//Getter helper
 		private bool PlayerRunning => Player.Instance.curStates.Running;
@@ -28,6 +28,7 @@ namespace EoE.Combatery
 
 		//Inspector variables
 		[SerializeField] private WeaponHitbox[] weaponHitboxes = default;
+		[SerializeField] private GameObject[] objectsToActivateOnActive = default;
 
 		//Behaivior Control
 		private bool colliderActive;
@@ -52,6 +53,7 @@ namespace EoE.Combatery
 				weaponHitboxes[i].Setup(this);
 			}
 			ComboDisplayController.Instance.ResetCombo(weaponInfo.ComboEffects);
+			ChangeWeaponState(false, null);
 			FollowPlayer();
 		}
 		private void ChangeWeaponState(bool state, AttackStyle style)
@@ -67,6 +69,10 @@ namespace EoE.Combatery
 						weaponHitboxes[i].IgnoreCollision(ignoredColliders[j], false);
 					}
 				}
+			}
+			for (int i = 0; i < objectsToActivateOnActive.Length; i++)
+			{
+				objectsToActivateOnActive[i].SetActive(state);
 			}
 			ignoredColliders = new List<Collider>();
 		}

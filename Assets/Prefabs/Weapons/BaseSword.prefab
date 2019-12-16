@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8049748948004881917}
   - component: {fileID: 5533782398965989895}
   m_Layer: 0
-  m_Name: SwordController
+  m_Name: BaseSword
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,34 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fd59c7effc85fe4b803c4d8686edd9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActiveAttackStyle:
-    AnimationTarget: 1
-    AnimationMultiplicationType: 1
-    AnimationSpeedFlatValue: 1
-    AnimationSpeedCurveTimeframe: 2
-    AnimationSpeedCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    DamageMultiplier: 1
-    ManaCostMultiplier: 1
-    EnduranceCostMultiplier: 1
-    KnockbackMultiplier: 1
-    CritChanceMultiplier: 1
-    CollisionMask: -1
-    StopOnCollisionMask: -1
-    DirectHit: {fileID: 0}
-    OverrideElement: 0
-    OverridenElement: 1
-    OverrideCauseType: 0
-    OverridenCauseType: 0
-    ComboIncreaseMaxDelay: 1
-    OnHitComboWorth: 1
-    AttackEffects: []
   weaponHitboxes:
   - {fileID: 2820046996984904547}
+  trailsToActivate: []
+  objectsToActivateOnActive: []
 --- !u!1 &3099203484363175592
 GameObject:
   m_ObjectHideFlags: 0
