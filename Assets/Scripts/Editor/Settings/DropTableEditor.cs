@@ -5,21 +5,12 @@ using static EoE.EoEEditor;
 namespace EoE.Information
 {
 	[CustomEditor(typeof(DropTable), true), CanEditMultipleObjects]
-	public class DropTableEditor : Editor
+	public class DropTableEditor : ObjectSettingEditor
 	{
 
 		private static bool tableOpen;
 		private bool[] innerFoldouts;
-		public override void OnInspectorGUI()
-		{
-			CustomInspector();
-			if (isDirty)
-			{
-				isDirty = false;
-				EditorUtility.SetDirty(target);
-			}
-		}
-		protected virtual void CustomInspector()
+		protected override void CustomInspector()
 		{
 			DropTable table = target as DropTable;
 
