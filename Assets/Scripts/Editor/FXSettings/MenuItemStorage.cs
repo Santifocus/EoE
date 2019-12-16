@@ -72,5 +72,50 @@ namespace EoE.Information
 				itemCollector.CollectData();
 			}
 		}
+		[MenuItem("EoE/RepairConsumables")]
+		public static void RepairConsumables()
+		{
+			string[] buffItemsGUIDS = AssetDatabase.FindAssets("t:BuffItem");
+			string[] healItemsGUIDS = AssetDatabase.FindAssets("t:HealItem");
+
+			for (int i = 0; i < buffItemsGUIDS.Length; i++)
+			{
+				BuffItem buffItem = (BuffItem)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(buffItemsGUIDS[i]), typeof(BuffItem));
+				ConsumableItem newConsumable = AssetCreator<ConsumableItem>("Settings", "Items");
+
+				newConsumable.ItemName = buffItem.ItemName;
+				newConsumable.ItemDescription = buffItem.ItemDescription;
+				newConsumable.SortingID = buffItem.SortingID;
+				newConsumable.ItemModel = buffItem.ItemModel;
+				newConsumable.MaxStack = buffItem.MaxStack;
+				newConsumable.ItemIcon = buffItem.ItemIcon;
+				newConsumable.RemoveOnUse = buffItem.RemoveOnUse;
+				newConsumable.FXEffectsOnUse = buffItem.FXEffectsOnUse;
+				newConsumable.FXEffectsWhenEquipped = buffItem.FXEffectsWhenEquipped;
+				newConsumable.UseCooldown = buffItem.UseCooldown;
+
+				newConsumable.BuffsToApply = buffItem.buffsToApply;
+				newConsumable.StackingStyle = buffItem.stackable ? BuffStackingStyle.Stack : BuffStackingStyle.Reapply;
+			}
+
+			for (int i = 0; i < healItemsGUIDS.Length; i++)
+			{
+				HealItem healItem = (HealItem)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(healItemsGUIDS[i]), typeof(HealItem));
+				ConsumableItem newConsumable = AssetCreator<ConsumableItem>("Settings", "Items");
+
+				newConsumable.ItemName = healItem.ItemName;
+				newConsumable.ItemDescription = healItem.ItemDescription;
+				newConsumable.SortingID = healItem.SortingID;
+				newConsumable.ItemModel = healItem.ItemModel;
+				newConsumable.MaxStack = healItem.MaxStack;
+				newConsumable.ItemIcon = healItem.ItemIcon;
+				newConsumable.RemoveOnUse = healItem.RemoveOnUse;
+				newConsumable.FXEffectsOnUse = healItem.FXEffectsOnUse;
+				newConsumable.FXEffectsWhenEquipped = healItem.FXEffectsWhenEquipped;
+				newConsumable.UseCooldown = healItem.UseCooldown;
+
+				newConsumable.HealEffects = healItem.healEffects;
+			}
+		}
 	}
 }

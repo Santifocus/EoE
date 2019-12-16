@@ -9,7 +9,6 @@ namespace EoE.Combatery
 	public enum EffectiveDirection { Local = 1, Center = 2, World = 4 }
 	public enum InherritDirection { Local = 1, Target = 2, World = 4 }
 	public enum DirectionBase { Forward = 1, Right = 2, Up = 4, Back = 8, Left = 16, Down = 32 }
-	public enum BuffStackingStyle { Stack = 1, Reapply = 2, DoNothing = 4 }
 	[System.Flags] public enum TargetMask { Self = (1 << 0), Allied = (1 << 1), Enemy = (1 << 2) }
 	[System.Flags] public enum ColliderMask { Terrain = (1 << 0), Entities = (1 << 1) }
 	public class CombatObject : ScriptableObject
