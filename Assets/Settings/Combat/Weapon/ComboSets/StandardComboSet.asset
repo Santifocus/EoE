@@ -79,7 +79,7 @@ MonoBehaviour:
         m_NumAlphaKeys: 2
       ColorScrollSpeed: 2
       OverrideTextPunch: 1
-      TextPunch: 60
+      TextPunch: 150
       PunchResetSpeed: 0.5
       EffectOnTarget: {fileID: 0}
       EffectAOE: {fileID: 0}
@@ -120,7 +120,7 @@ MonoBehaviour:
         m_NumAlphaKeys: 2
       ColorScrollSpeed: 3
       OverrideTextPunch: 1
-      TextPunch: 100
+      TextPunch: 300
       PunchResetSpeed: 0.5
       EffectOnTarget: {fileID: 11400000, guid: 675729bc8b0983b4c9029cfb6b566fb3, type: 2}
       EffectAOE: {fileID: 0}
