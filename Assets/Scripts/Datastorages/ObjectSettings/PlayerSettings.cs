@@ -68,8 +68,9 @@ namespace EoE.Information
 		public int InventorySize = 24;
 
 		//Animation
-		public float MaxSideTurn = 10;
-		public float SideTurnLerpSpeed = 1;
+		public float MaxModelTilt = 10;
+		public float SideTurnLerpSpeed = 10;
+		public float SpringLerpStiffness = 1;
 
 		///FX
 		public FXObject[] EffectsOnReceiveDamage = default;

@@ -13,8 +13,7 @@ namespace EoE.Entities
 	{
 		#region Fields
 		//Constants
-		private const float RUN_ANIM_THRESHOLD = 0.75f;
-		private const float NON_TURNING_THRESHOLD = 60;
+		private const float NON_TURNING_THRESHOLD = 30;
 		private const float LERP_TURNING_AREA = 0.5f;
 		private const float JUMP_GROUND_COOLDOWN = 0.2f;
 		private const float IS_FALLING_THRESHOLD = -1;
@@ -49,10 +48,15 @@ namespace EoE.Entities
 
 		//Velocity
 		private Vector3 controllDirection;
+		private Vector3 curMoveVelocity => controllDirection * curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
 		private float intendedAcceleration;
 		private float curAcceleration;
 		private float jumpGroundCooldown;
 		private float lastFallVelocity;
+
+		//Animation
+		private Vector2 curModelTilt;
+		private Vector2 curSpringLerpAcceleration;
 
 		//Targeting
 		private float switchTargetTimer;
@@ -68,7 +72,6 @@ namespace EoE.Entities
 		public static PlayerSettings PlayerSettings => Instance.selfSettings;
 		public Entitie TargetedEntitie;
 		public PlayerBuffDisplay BuffDisplay => Instance.buffDisplay;
-
 		#region Items
 		public Inventory Inventory;
 
@@ -85,7 +88,6 @@ namespace EoE.Entities
 		public int selectedSpellItemIndex { get; private set; }
 		public InventoryItem EquipedSpell => SelectableSpellItems[selectedSpellItemIndex];
 		#endregion
-
 		#region Leveling
 		public Buff LevelingPointsBuff { get; private set; }
 		public int TotalSoulCount { get; private set; }
@@ -304,7 +306,7 @@ namespace EoE.Entities
 		private void MovementControl()
 		{
 			CameraControl();
-			UpdateWalkingAnimations();
+			MovementAnimationControl();
 
 			if (IsStunned)
 			{
@@ -333,8 +335,7 @@ namespace EoE.Entities
 				PlayerCameraController.TargetRotation += newMoveDistance;
 			}
 		}
-		#region Walking
-		private void UpdateWalkingAnimations()
+		private void MovementAnimationControl()
 		{
 			bool turning = curStates.Turning;
 			bool moving = curStates.Moving;
@@ -345,24 +346,46 @@ namespace EoE.Entities
 				curStates.Running = false;
 
 			//Set all the animation states
-			float directionOffset = Vector3.Dot(controllDirection, transform.forward);
 			animationControl.SetBool("Walking", !turning && curAcceleration > 0);
-			animationControl.SetFloat("WalkDirection", directionOffset < 0 ? -1 : 1); 
-			animationControl.SetFloat("WalkSpeed", (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration);
 
-			float newSideTurn = Mathf.LerpAngle(modelTransform.localEulerAngles.z, (1 - Mathf.Abs(directionOffset)) * PlayerSettings.MaxSideTurn * (InputController.PlayerMove.x < 0 ? 1 : -1) * curAcceleration, Time.deltaTime * PlayerSettings.SideTurnLerpSpeed);
-			modelTransform.localEulerAngles = new Vector3(0, 0, newSideTurn);
+			//Model tilt
+			Vector2 forward = new Vector2(transform.forward.x, transform.forward.z);
+			Vector2 right = new Vector2(transform.right.x, transform.right.z);
+			Vector3 moveVelocity = curMoveVelocity;
+
+			float velocity = new Vector2(moveVelocity.x, moveVelocity.z).magnitude;
+			float maxVelocity = curWalkSpeed * SelfSettings.RunSpeedMultiplicator;
+			Vector2 velocityDirection = (velocity > 0) ? (new Vector2(moveVelocity.x, moveVelocity.z) / velocity) : (new Vector2(transform.forward.x, transform.forward.z));
+			float normalizedMoveVelocity = (velocity / maxVelocity);
+
+			float targetTiltAngle = normalizedMoveVelocity * PlayerSettings.MaxModelTilt;
+			Vector2 targetTilt = velocityDirection * targetTiltAngle;
+			targetTilt = targetTilt.x * right * -1 + targetTilt.y * forward;
+
+			curModelTilt = new Vector2(	Utils.SpringLerp(curModelTilt.x, targetTilt.x, ref curSpringLerpAcceleration.x, PlayerSettings.SpringLerpStiffness, PlayerSettings.SideTurnLerpSpeed * Time.deltaTime),
+										Utils.SpringLerp(curModelTilt.y, targetTilt.y, ref curSpringLerpAcceleration.y, PlayerSettings.SpringLerpStiffness, PlayerSettings.SideTurnLerpSpeed * Time.deltaTime)
+										);
+			modelTransform.localEulerAngles = new Vector3(curModelTilt.y, 0, curModelTilt.x);
+
+			//Move direction
+			float forwardValue = Vector2.Dot(velocityDirection, forward);
+			int xMultiplier = Vector2.Dot(velocityDirection, right) > 0 ? 1 : -1;
+
+			animationControl.SetFloat("ZMove", forwardValue * normalizedMoveVelocity);
+			animationControl.SetFloat("XMove", (1 - Mathf.Abs(forwardValue)) * xMultiplier * normalizedMoveVelocity);
 		}
+		#region Walking
+		float thing;
 		private void TurnControl()
 		{
 			float turnAmount = Time.fixedDeltaTime * SelfSettings.TurnSpeed * (charController.isGrounded ? 1 : SelfSettings.InAirTurnSpeedMultiplier);
-			float normalizedDif = Mathf.Abs(curRotation - intendedRotation) / NON_TURNING_THRESHOLD;
+			float normalizedDif = Mathf.Abs(Mathf.DeltaAngle(curRotation, intendedRotation)) / NON_TURNING_THRESHOLD;
 			turnAmount *= Mathf.Min(normalizedDif * LERP_TURNING_AREA, 1);
 			curRotation = Mathf.MoveTowardsAngle(curRotation, intendedRotation, turnAmount);
 
 			curStates.Turning = normalizedDif > 1;
 
-			transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,
+			transform.localEulerAngles = new Vector3(	transform.localEulerAngles.x,
 														curRotation,
 														transform.localEulerAngles.z);
 		}
@@ -407,13 +430,19 @@ namespace EoE.Entities
 			float intendedControl = Mathf.Min(1, inputDirection.magnitude);
 			intendedAcceleration = intendedControl * (running ? PlayerSettings.RunSpeedMultiplicator : 1);
 
-			//Rotate the input direction base on the camera direction
-			float cosDir = Mathf.Cos((-PlayerCameraController.CurRotation.x) * Mathf.Deg2Rad);
-			float sinDir = Mathf.Sin((-PlayerCameraController.CurRotation.x) * Mathf.Deg2Rad);
-			float newX = (inputDirection.x * cosDir) - (inputDirection.y * sinDir);
-			float newZ = (inputDirection.x * sinDir) + (inputDirection.y * cosDir);
-			//Now set the controll direction to the rotated direction, normalize by dividing with the intended speed
-			controllDirection = new Vector3(newX, 0, newZ) / intendedControl;
+			//Make the movement relative to the camera
+			Vector3 camForward = PlayerCameraController.Instance.transform.forward;
+			camForward.y = 0;
+			camForward = camForward.normalized;
+
+			Vector3 camRight = PlayerCameraController.Instance.transform.right;
+			camRight.y = 0;
+			camRight = camRight.normalized;
+
+			controllDirection = inputDirection.y * camForward + inputDirection.x * camRight;
+
+			if(GameController.CurrentGameSettings.IsDebugEnabled)
+				Debug.DrawLine(transform.position, transform.position + controllDirection * 2, Color.green, Time.unscaledDeltaTime * 0.99f);
 
 			if (!TargetedEntitie)
 				intendedRotation = -(Mathf.Atan2(controllDirection.z, controllDirection.x) * Mathf.Rad2Deg - 90);
@@ -536,7 +565,7 @@ namespace EoE.Entities
 		}
 		private void ApplyForces()
 		{
-			Vector3 appliedForce = controllDirection * curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration + curVelocity;
+			Vector3 appliedForce = curMoveVelocity + curVelocity;
 
 			charController.Move(appliedForce * Time.fixedDeltaTime);
 			animationControl.SetBool("OnGround", charController.isGrounded);

@@ -159,8 +159,9 @@ namespace EoE.Information
 		{
 			PlayerSettings settings = target as PlayerSettings;
 
-			FloatField(new GUIContent("Max Side Turn"), ref settings.MaxSideTurn, 1);
+			FloatField(new GUIContent("Max Side Turn"), ref settings.MaxModelTilt, 1);
 			FloatField(new GUIContent("Side Turn Lerp Speed"), ref settings.SideTurnLerpSpeed, 1);
+			FloatField(new GUIContent("Spring Lerp Stiffness"), ref settings.SpringLerpStiffness, 1);
 		}
 		private void FXSettingsArea()
 		{

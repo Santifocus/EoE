@@ -42,7 +42,7 @@ MonoBehaviour:
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
   ColorScrollSpeed: 1
-  TextPunch: 40
+  TextPunch: 50
   PunchResetSpeed: 0.5
   ComboData:
   - RequiredComboCount: 4
@@ -79,7 +79,7 @@ MonoBehaviour:
         m_NumAlphaKeys: 2
       ColorScrollSpeed: 2
       OverrideTextPunch: 1
-      TextPunch: 150
+      TextPunch: 75
       PunchResetSpeed: 0.5
       EffectOnTarget: {fileID: 0}
       EffectAOE: {fileID: 0}
@@ -120,7 +120,7 @@ MonoBehaviour:
         m_NumAlphaKeys: 2
       ColorScrollSpeed: 3
       OverrideTextPunch: 1
-      TextPunch: 300
+      TextPunch: 100
       PunchResetSpeed: 0.5
       EffectOnTarget: {fileID: 11400000, guid: 675729bc8b0983b4c9029cfb6b566fb3, type: 2}
       EffectAOE: {fileID: 0}

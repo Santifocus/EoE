@@ -47,7 +47,6 @@ namespace EoE
 				Vector3 dir = (Player.Instance.TargetedEntitie.actuallWorldPosition - transform.position).normalized;
 				LookAtDirection(dir);
 			}
-
 			curOffset = Vector3.Lerp(curOffset, GetOffset(), Time.deltaTime * 3);
 			transform.position = Player.Instance.transform.position + curOffset;
 			transform.eulerAngles = new Vector3(CurRotation.y, CurRotation.x, 0);

@@ -18,14 +18,29 @@ MonoBehaviour:
   BaseKnockback: 5
   BaseCritChance: 0
   SpellCooldown: 1
-  ContainedParts: 2
+  ContainedParts: 1
   MovementRestrictions: -1
   SubtractManaAtPart: 2
   CastInfo:
-    Duration: 0
-    VisualEffects: []
+    Duration: 1
+    VisualEffects:
+    - FX: {fileID: 11400000, guid: d51ee1224ea2f3545a6d3018c4b11c1e, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 11400000, guid: ffdc619f8d38f5c4cb13da2be8aa7ce9, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
     StartEffects: []
-    WhileEffects: []
+    WhileEffects:
+    - {fileID: 11400000, guid: ba44429a7ba4fd840a9133d6e8c55966, type: 2}
   StartInfo:
     VisualEffects:
     - FX: {fileID: 11400000, guid: d51ee1224ea2f3545a6d3018c4b11c1e, type: 2}

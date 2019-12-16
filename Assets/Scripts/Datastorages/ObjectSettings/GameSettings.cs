@@ -62,7 +62,7 @@ namespace EoE.Information
 		public float CritDamageMultiplier = 2;
 		public float SecondsPerEntitieHealthRegen = 0.5f;
 		public float ItemDropRandomVelocityStrenght = 2;
-		public float WhileEffectTickSpeed = 0.25f;
+		public float WhileEffectTickSpeed = 0.1f;
 
 		//Damage Calculation
 		public float PhysicalDamageLevelAdd = 12;
