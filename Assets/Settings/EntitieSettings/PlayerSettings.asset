@@ -18,12 +18,12 @@ MonoBehaviour:
   PossibleDropsTable: {fileID: 0}
   LevelSettings: {fileID: 11400000, guid: f274dc43aa7e69e4db13a311b4ea6d9e, type: 2}
   SoulWorth: 10
-  BaseAttackDamage: 3
-  BaseMagicDamage: 1
+  BaseAttackDamage: 2
+  BaseMagicDamage: 2
   BaseDefense: 2
   Health: 50
   DoHealthRegen: 1
-  HealthRegen: 1.5
+  HealthRegen: 1.2
   HealthRegenCooldownAfterTakingDamage: 4
   HealthRegenInCombatMultiplier: 0
   HealthRegenParticles: {fileID: 3894390344941758739, guid: 4fc32336d51ae934c9aa8f2a0a80d546,
@@ -32,7 +32,7 @@ MonoBehaviour:
   Mana: 30
   DoManaRegen: 1
   ManaRegen: 1
-  ManaRegenInCombatMultiplier: 0.2
+  ManaRegenInCombatMultiplier: 0
   WalkSpeed: 8
   RunSpeedMultiplicator: 1.25
   TurnSpeed: 540
@@ -140,23 +140,32 @@ MonoBehaviour:
   ReloadingEnduranceBarColor: {r: 0.4, g: 0.4, b: 0.4, a: 0.8}
   StartItems:
   - Item: {fileID: 11400000, guid: cc8b9e7eb411f0f47863caffd0450432, type: 2}
-    ItemCount: 5
+    ItemCount: 2
     ForceEquip: 1
   - Item: {fileID: 11400000, guid: 428f279ff073bb54c81150df9f36247e, type: 2}
     ItemCount: 1
     ForceEquip: 1
-  - Item: {fileID: 11400000, guid: 4389e543531ad0d4c91543a950d48174, type: 2}
-    ItemCount: 1
+  - Item: {fileID: 11400000, guid: f64f815518c407749858bddca8bf5ac0, type: 2}
+    ItemCount: 2
     ForceEquip: 1
-  - Item: {fileID: 11400000, guid: e2175b767068abe49ad244c5541e84fd, type: 2}
+  - Item: {fileID: 11400000, guid: bc3fa643281d1cf4d92b4a40f10da5b2, type: 2}
     ItemCount: 1
     ForceEquip: 0
-  - Item: {fileID: 11400000, guid: f8b0ecbc61980774a811b21215e17673, type: 2}
+  - Item: {fileID: 11400000, guid: 2ba98f01a544715419f24f7d4c8b7f7b, type: 2}
     ItemCount: 1
-    ForceEquip: 1
-  - Item: {fileID: 11400000, guid: 24bf8e4451a0cc84589f3c9af971978e, type: 2}
+    ForceEquip: 0
+  - Item: {fileID: 11400000, guid: a78e3ecaa7acbd04d95790fe55dba94c, type: 2}
+    ItemCount: 2
+    ForceEquip: 0
+  - Item: {fileID: 11400000, guid: f758bae0ead779246ac34fc963f96bec, type: 2}
     ItemCount: 1
-    ForceEquip: 1
+    ForceEquip: 0
+  - Item: {fileID: 11400000, guid: 1a37c0596dbbb0b4c91c3e28e8673bc9, type: 2}
+    ItemCount: 1
+    ForceEquip: 0
+  - Item: {fileID: 11400000, guid: 243de547318aa704196afa70614aadec, type: 2}
+    ItemCount: 1
+    ForceEquip: 0
   InventorySize: 55
   MaxModelTilt: 8
   SideTurnLerpSpeed: 13

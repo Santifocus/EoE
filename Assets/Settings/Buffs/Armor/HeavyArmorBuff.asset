@@ -21,9 +21,9 @@ MonoBehaviour:
   - TargetBaseStat: 6
     Percent: 1
     Amount: -20
-  - TargetBaseStat: 8
-    Percent: 1
-    Amount: -50
+  - TargetBaseStat: 5
+    Percent: 0
+    Amount: 4
   CustomEffects:
     ApplyMoveStun: 0
     Invincible: 0

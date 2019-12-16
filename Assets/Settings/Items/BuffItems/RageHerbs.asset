@@ -26,7 +26,7 @@ MonoBehaviour:
   RemoveOnUse: 1
   FXEffectsOnUse: []
   FXEffectsWhenEquipped: []
-  UseCooldown: 5
+  UseCooldown: 10
   buffsToApply:
   - {fileID: 11400000, guid: 52ad545648cc419459d1ce15ab20ed2f, type: 2}
   stackable: 1
