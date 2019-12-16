@@ -47,7 +47,7 @@ MonoBehaviour:
   CameraRotationSpeed: 7
   CameraVerticalAngleClamps: {x: -50, y: 50}
   CameraExtraZoomOnVertical: 0.5
-  MaxEnemyTargetingDistance: 250
+  MaxEnemyTargetingDistance: 80
   CameraClampsWhenTargeting: {x: -30, y: 30}
   CameraBaseFOV: 60
   Endurance: 100
@@ -60,6 +60,7 @@ MonoBehaviour:
   RunEnduranceCost: 5
   JumpPower: {x: 0, y: 9, z: 15}
   JumpImpulsePower: 2
+  JumpBackwardMultiplier: 0.65
   DodgePower: 4
   DodgeDuration: 0.15
   DodgeModelExistTime: 0.35
@@ -138,34 +139,13 @@ MonoBehaviour:
   ActiveEnduranceBarColor: {r: 1, g: 1, b: 1, a: 1}
   ReloadingEnduranceBarColor: {r: 0.4, g: 0.4, b: 0.4, a: 0.8}
   StartItems:
-  - Item: {fileID: 11400000, guid: cc8b9e7eb411f0f47863caffd0450432, type: 2}
-    ItemCount: 2
-    ForceEquip: 1
-  - Item: {fileID: 11400000, guid: 428f279ff073bb54c81150df9f36247e, type: 2}
+  - Item: {fileID: 11400000, guid: 4389e543531ad0d4c91543a950d48174, type: 2}
     ItemCount: 1
     ForceEquip: 1
-  - Item: {fileID: 11400000, guid: f64f815518c407749858bddca8bf5ac0, type: 2}
-    ItemCount: 2
-    ForceEquip: 1
-  - Item: {fileID: 11400000, guid: bc3fa643281d1cf4d92b4a40f10da5b2, type: 2}
-    ItemCount: 1
-    ForceEquip: 0
-  - Item: {fileID: 11400000, guid: 2ba98f01a544715419f24f7d4c8b7f7b, type: 2}
-    ItemCount: 1
-    ForceEquip: 0
-  - Item: {fileID: 11400000, guid: a78e3ecaa7acbd04d95790fe55dba94c, type: 2}
-    ItemCount: 2
-    ForceEquip: 0
-  - Item: {fileID: 11400000, guid: f758bae0ead779246ac34fc963f96bec, type: 2}
-    ItemCount: 1
-    ForceEquip: 0
-  - Item: {fileID: 11400000, guid: 1a37c0596dbbb0b4c91c3e28e8673bc9, type: 2}
-    ItemCount: 1
-    ForceEquip: 0
-  - Item: {fileID: 11400000, guid: 243de547318aa704196afa70614aadec, type: 2}
-    ItemCount: 1
-    ForceEquip: 0
   InventorySize: 55
+  MaxModelTilt: 8
+  SideTurnLerpSpeed: 13
+  SpringLerpStiffness: 0.15
   EffectsOnReceiveDamage:
   - {fileID: 11400000, guid: 11060c91c24341947a8c373d641e5c86, type: 2}
   - {fileID: 11400000, guid: 9d9557ec007fa904aa2d0ef9f1ea3489, type: 2}
@@ -174,12 +154,12 @@ MonoBehaviour:
   EffectsOnReceiveKnockback:
   - {fileID: 11400000, guid: b09700b6216eb874aab8d980440f121b, type: 2}
   EffectsOnCauseDamage:
-  - {fileID: 11400000, guid: e7eca44a4612acd40b0b90359694e612, type: 2}
+  - {fileID: 11400000, guid: 597bda602a9441346a2e721049c28c87, type: 2}
   EffectsOnCauseCrit:
   - {fileID: 11400000, guid: 3c3f83d3e81eae144acbe5a6b02983d0, type: 2}
   - {fileID: 11400000, guid: e9a7041c1b96b544d9be0195facd23e7, type: 2}
   - {fileID: 11400000, guid: 6812b6ecf408ba8439c8e9f47922381b, type: 2}
-  - {fileID: 11400000, guid: e7eca44a4612acd40b0b90359694e612, type: 2}
+  - {fileID: 11400000, guid: 7dbb75a734c0a4e4ea505b8ee26c552d, type: 2}
   EffectsOnLevelup:
   - {fileID: 11400000, guid: 982aab948223d7044bfae67dc43bb77c, type: 2}
   - {fileID: 11400000, guid: 2a1f29303ceefa04d9d5508f74094d05, type: 2}

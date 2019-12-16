@@ -1,5 +1,5 @@
 ﻿using EoE.Entities;
-using EoE.Utils;
+using EoE.UI;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,18 +8,27 @@ namespace EoE.Information
 	[System.Flags] public enum InUIUses { Use = 1, Equip = 2, Drop = 4, Back = 8 }
 	public abstract class Item : ScriptableObject
 	{
-		public abstract InUIUses Uses { get; }
-		public string ItemName = "Item";
+		[Header("UI Data")]
+		public ColoredText ItemName = new ColoredText() { text = "Item", textColor = Color.white };
+		public ColoredText[] ItemDescription = new ColoredText[0];
 		public int SortingID;
-		public GameObject ItemModel;
-		public int MaxStack = 1;
 		public Sprite ItemIcon;
-		public bool RemoveOnUse;
+
+		[Space(5)]
+		[Header("Effects")]
 		public FXObject[] FXEffectsOnUse;
 		public FXObject[] FXEffectsWhenEquipped;
 
-		public float curCooldown { get; set; }
+		[Space(5)]
+		[Header("Other")]
 		public float UseCooldown;
+		public bool RemoveOnUse;
+		public GameObject ItemModel;
+		public int MaxStack = 1;
+
+		//Internal
+		public float curCooldown { get; set; }
+		public abstract InUIUses Uses { get; }
 
 		public ItemDrop[] CreateItemDrop(Vector3 positon, int stackSize, bool stopVelocity)
 		{
@@ -68,7 +77,6 @@ namespace EoE.Information
 			{
 				originStack.StopBoundEffects();
 			}
-			OnUnEquip(user);
 		}
 		private FXInstance[] PlayEffects(Entitie user, FXObject[] effects)
 		{

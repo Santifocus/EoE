@@ -38,6 +38,11 @@ namespace EoE.UI
 		private Vector2 curRotation;
 		private Vector2 targetRotation;
 
+		protected override void Start()
+		{
+			SetupPlayerModel();
+			base.Start();
+		}
 		private void Update()
 		{
 			if (!ActivePage || !playerModelSetup)
@@ -95,7 +100,7 @@ namespace EoE.UI
 			//Setup Playermodel
 			playerModel = Instantiate(Player.Instance.modelTransform, Storage.EntitieStorage);
 			SetLayerForAllChildren(playerModel);
-			playerModel.transform.position = Vector3.zero;
+			playerModel.transform.position = Player.Instance.modelTransform.localPosition;
 			playerModel.transform.localEulerAngles = new Vector3(0, 180, 0);
 
 			//Config the animator
@@ -109,6 +114,7 @@ namespace EoE.UI
 			modelRenderer.transform.localPosition = new Vector3(cameraToModelDistance.x, cameraToModelDistance.y, -cameraToModelDistance.z);
 			modelRenderer.targetTexture = targetTexture;
 			modelRenderer.Render();
+			modelRenderer.farClipPlane = cameraToModelDistance.z * 2;
 
 			modelDisplay.texture = targetTexture;
 

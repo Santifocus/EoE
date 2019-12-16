@@ -78,13 +78,7 @@ namespace EoE.Information
 						if (table.PossibleDrops[i].MaxDropAmount < table.PossibleDrops[i].MinDropAmount)
 							table.PossibleDrops[i].MinDropAmount = table.PossibleDrops[i].MaxDropAmount;
 					}
-					if (FloatField(new GUIContent("Drop Chance", "What is the chance to drop this Drop? (0 = 0%; 1 = 100%)"), ref table.PossibleDrops[i].DropChance, 2))
-					{
-						if (table.PossibleDrops[i].DropChance < 0)
-							table.PossibleDrops[i].DropChance = 0;
-						if (table.PossibleDrops[i].DropChance > 1)
-							table.PossibleDrops[i].DropChance = 1;
-					}
+					SliderField(new GUIContent("Drop Chance", "What is the chance to drop this Drop? (0 = 0%; 1 = 100%)"), ref table.PossibleDrops[i].DropChance, 0, 1, 2);
 				}
 
 			}

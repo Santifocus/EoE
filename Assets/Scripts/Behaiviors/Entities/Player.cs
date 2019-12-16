@@ -5,8 +5,7 @@ using TMPro;
 using EoE.Controlls;
 using EoE.Events;
 using EoE.Information;
-using EoE.Weapons;
-using EoE.Utils;
+using EoE.Combatery;
 
 namespace EoE.Entities
 {
@@ -14,8 +13,7 @@ namespace EoE.Entities
 	{
 		#region Fields
 		//Constants
-		private const float RUN_ANIM_THRESHOLD = 0.75f;
-		private const float NON_TURNING_THRESHOLD = 60;
+		private const float NON_TURNING_THRESHOLD = 30;
 		private const float LERP_TURNING_AREA = 0.5f;
 		private const float JUMP_GROUND_COOLDOWN = 0.2f;
 		private const float IS_FALLING_THRESHOLD = -1;
@@ -25,14 +23,13 @@ namespace EoE.Entities
 
 		//Inspector variables
 		[Space(10)]
-		[SerializeField] private Animator animationControl = default;
-		[SerializeField] private PlayerSettings selfSettings = default;
-		[SerializeField] private Transform rightHand = default;
-		[SerializeField] private Weapon equipedWeapon = default;
-		[SerializeField] private PlayerBuffDisplay buffDisplay = default;
-		[SerializeField] private CharacterController charController = default;
-
+		public CharacterController charController = default;
 		public TextMeshProUGUI debugText = default;
+		public Transform weaponHoldPoint = default;
+		public Animator animationControl = default;
+
+		[SerializeField] private PlayerSettings selfSettings = default;
+		[SerializeField] private PlayerBuffDisplay buffDisplay = default;
 
 		//Endurance
 		public float curEndurance { get; set; }
@@ -51,37 +48,18 @@ namespace EoE.Entities
 
 		//Velocity
 		private Vector3 controllDirection;
+		private Vector3 curMoveVelocity => controllDirection * curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
 		private float intendedAcceleration;
 		private float curAcceleration;
 		private float jumpGroundCooldown;
 		private float lastFallVelocity;
 
+		//Animation
+		private Vector2 curModelTilt;
+		private Vector2 curSpringLerpAcceleration;
+
 		//Targeting
 		private float switchTargetTimer;
-
-		#region Physical Attack
-		//Attack
-		public Weapon PlayerWeapon { get => equipedWeapon; set => ChangeWeapon(value); }
-		[HideInInspector] public Attack activeAttack;
-		private WeaponController heldWeapon;
-		private AttackState lastAttackType;
-		private bool isCurrentlyAttacking;
-		private bool canceledAnimation;
-
-		//Combos
-		private float? comboTimer;
-		private int comboIndex;
-
-		//Attack animations
-		private Dictionary<AttackAnimation, (float, float)> animationDelayLookup = new Dictionary<AttackAnimation, (float, float)>()
-		{
-			{ AttackAnimation.Stab, (0.4f, 0.15f) },
-			{ AttackAnimation.ToLeftSlash, (0.533f, 0) },
-			{ AttackAnimation.TopDownSlash, (0.533f, 0) },
-			{ AttackAnimation.ToRightSlash, (0.533f, 0.22f) },
-			{ AttackAnimation.Uppercut, (0.533f, 0) },
-		};
-		#endregion
 
 		//Getter Helpers
 		public float jumpVelocity { get; private set; }
@@ -94,7 +72,6 @@ namespace EoE.Entities
 		public static PlayerSettings PlayerSettings => Instance.selfSettings;
 		public Entitie TargetedEntitie;
 		public PlayerBuffDisplay BuffDisplay => Instance.buffDisplay;
-
 		#region Items
 		public Inventory Inventory;
 
@@ -111,7 +88,6 @@ namespace EoE.Entities
 		public int selectedSpellItemIndex { get; private set; }
 		public InventoryItem EquipedSpell => SelectableSpellItems[selectedSpellItemIndex];
 		#endregion
-
 		#region Leveling
 		public Buff LevelingPointsBuff { get; private set; }
 		public int TotalSoulCount { get; private set; }
@@ -129,7 +105,6 @@ namespace EoE.Entities
 		}
 		protected override void EntitieStart()
 		{
-			ChangeWeapon(equipedWeapon);
 			SetupInventory();
 		}
 		protected override void EntitieUpdate()
@@ -142,39 +117,25 @@ namespace EoE.Entities
 			}
 
 			MovementControl();
-			AttackControl();
 			TargetEnemyControl();
 			ItemControl();
 			BlockControl();
-			PositionHeldWeapon();
+			JumpControl();
+
+			animationControl.SetBool("InCombat", curStates.Fighting);
 		}
 		protected override void EntitieFixedUpdate()
 		{
-			PositionHeldWeapon();
 			CheckForLanding();
 			ApplyForces();
 			CheckForFalling();
 			UpdateAcceleration();
 
-			if(!IsStunned && !IsCasting)
+			if (!IsStunned || IsCasting)
 				TurnControl();
 		}
 		#endregion
 		#region Setups
-		private void ChangeWeapon(Weapon newWeapon)
-		{
-			if (heldWeapon)
-			{
-				Destroy(heldWeapon.gameObject);
-			}
-			equipedWeapon = newWeapon;
-
-			if (equipedWeapon != null)
-			{
-				heldWeapon = Instantiate(equipedWeapon.weaponPrefab);
-				heldWeapon.Setup();
-			}
-		}
 		protected override void ResetStats()
 		{
 			base.ResetStats();
@@ -243,10 +204,14 @@ namespace EoE.Entities
 					if(PlayerSettings.StartItems[i].Item is WeaponItem)
 					{
 						EquipedWeapon = targetItem;
+						targetItem.isEquiped = true;
+						targetItem.data.Equip(targetItem, this);
 					}
 					else if(PlayerSettings.StartItems[i].Item is ArmorItem)
 					{
 						EquipedArmor = targetItem;
+						targetItem.isEquiped = true;
+						targetItem.data.Equip(targetItem, this);
 					}
 					else if(PlayerSettings.StartItems[i].Item is SpellItem)
 					{
@@ -258,9 +223,12 @@ namespace EoE.Entities
 							if(SelectableSpellItems[j] == null)
 							{
 								SelectableSpellItems[j] = targetItem;
+								SelectableSpellItems[j].isEquiped = true;
 								added = true;
 								if (j == 0)
+								{
 									SelectableSpellItems[j].data.Equip(targetItem, this);
+								}
 								break;
 							}
 						}
@@ -268,6 +236,7 @@ namespace EoE.Entities
 						if (!added && SelectableSpellItems.Length > 0)
 						{
 							SelectableSpellItems[0] = targetItem;
+							SelectableSpellItems[0].isEquiped = true;
 							SelectableSpellItems[0].data.Equip(targetItem, this);
 						}
 					}
@@ -281,9 +250,12 @@ namespace EoE.Entities
 							if (SelectableItems[j] == null)
 							{
 								SelectableItems[j] = targetItem;
+								SelectableItems[j].isEquiped = true;
 								added = true;
 								if (j == 0)
+								{
 									SelectableItems[j].data.Equip(targetItem, this);
+								}
 								break;
 							}
 						}
@@ -291,19 +263,12 @@ namespace EoE.Entities
 						if (!added && SelectableItems.Length > 0)
 						{
 							SelectableItems[0] = targetItem;
+							SelectableItems[0].isEquiped = true;
 							SelectableItems[0].data.Equip(targetItem, this);
 						}
 					}
 				}
 			}
-		}
-		protected void PositionHeldWeapon()
-		{
-			Vector3 worldOffset = equipedWeapon.weaponHandleOffset.x * rightHand.right +
-										equipedWeapon.weaponHandleOffset.y * rightHand.up +
-										equipedWeapon.weaponHandleOffset.z * rightHand.forward;
-			heldWeapon.transform.position = rightHand.position + worldOffset;
-			heldWeapon.transform.rotation = rightHand.rotation;
 		}
 		#endregion
 		#region Endurance Control
@@ -341,15 +306,16 @@ namespace EoE.Entities
 		private void MovementControl()
 		{
 			CameraControl();
-			UpdateWalkingAnimations();
+			MovementAnimationControl();
 
 			if (IsStunned)
 			{
 				curAcceleration = 0;
-				curStates.Moving = curStates.Running = curStates.Turning = false;
+				curStates.Moving = curStates.Running = false;
+				curStates.Turning = IsCasting ? curStates.Turning : false;
 				return;
 			}
-			JumpControl();
+
 			PlayerMoveControl();
 			DodgeControl();
 		}
@@ -369,8 +335,7 @@ namespace EoE.Entities
 				PlayerCameraController.TargetRotation += newMoveDistance;
 			}
 		}
-		#region Walking
-		private void UpdateWalkingAnimations()
+		private void MovementAnimationControl()
 		{
 			bool turning = curStates.Turning;
 			bool moving = curStates.Moving;
@@ -378,24 +343,49 @@ namespace EoE.Entities
 
 			//If the Player doesnt move intentionally but is in run mode, then stop the run mode
 			if (running && (!moving || isBlocking))
-				curStates.Running = running = false;
+				curStates.Running = false;
 
 			//Set all the animation states
-			animationControl.SetBool("Turning", turning);
-			animationControl.SetBool("Walking", !turning && curAcceleration > 0 && !(running && curAcceleration > RUN_ANIM_THRESHOLD));
-			animationControl.SetBool("Running", !turning && curAcceleration > 0 && (running && curAcceleration > RUN_ANIM_THRESHOLD));
-			animationControl.SetFloat("Runspeed", curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration);
+			animationControl.SetBool("Walking", !turning && curAcceleration > 0);
+
+			//Model tilt
+			Vector2 forward = new Vector2(transform.forward.x, transform.forward.z);
+			Vector2 right = new Vector2(transform.right.x, transform.right.z);
+			Vector3 moveVelocity = curMoveVelocity;
+
+			float velocity = new Vector2(moveVelocity.x, moveVelocity.z).magnitude;
+			float maxVelocity = curWalkSpeed * SelfSettings.RunSpeedMultiplicator;
+			Vector2 velocityDirection = (velocity > 0) ? (new Vector2(moveVelocity.x, moveVelocity.z) / velocity) : (new Vector2(transform.forward.x, transform.forward.z));
+			float normalizedMoveVelocity = (velocity / maxVelocity);
+
+			float targetTiltAngle = normalizedMoveVelocity * PlayerSettings.MaxModelTilt;
+			Vector2 targetTilt = velocityDirection * targetTiltAngle;
+			targetTilt = targetTilt.x * right * -1 + targetTilt.y * forward;
+
+			curModelTilt = new Vector2(	Utils.SpringLerp(curModelTilt.x, targetTilt.x, ref curSpringLerpAcceleration.x, PlayerSettings.SpringLerpStiffness, PlayerSettings.SideTurnLerpSpeed * Time.deltaTime),
+										Utils.SpringLerp(curModelTilt.y, targetTilt.y, ref curSpringLerpAcceleration.y, PlayerSettings.SpringLerpStiffness, PlayerSettings.SideTurnLerpSpeed * Time.deltaTime)
+										);
+			modelTransform.localEulerAngles = new Vector3(curModelTilt.y, 0, curModelTilt.x);
+
+			//Move direction
+			float forwardValue = Vector2.Dot(velocityDirection, forward);
+			int xMultiplier = Vector2.Dot(velocityDirection, right) > 0 ? 1 : -1;
+
+			animationControl.SetFloat("ZMove", forwardValue * normalizedMoveVelocity);
+			animationControl.SetFloat("XMove", (1 - Mathf.Abs(forwardValue)) * xMultiplier * normalizedMoveVelocity);
 		}
+		#region Walking
+		float thing;
 		private void TurnControl()
 		{
 			float turnAmount = Time.fixedDeltaTime * SelfSettings.TurnSpeed * (charController.isGrounded ? 1 : SelfSettings.InAirTurnSpeedMultiplier);
-			float normalizedDif = Mathf.Abs(curRotation - intendedRotation) / NON_TURNING_THRESHOLD;
+			float normalizedDif = Mathf.Abs(Mathf.DeltaAngle(curRotation, intendedRotation)) / NON_TURNING_THRESHOLD;
 			turnAmount *= Mathf.Min(normalizedDif * LERP_TURNING_AREA, 1);
 			curRotation = Mathf.MoveTowardsAngle(curRotation, intendedRotation, turnAmount);
 
 			curStates.Turning = normalizedDif > 1;
 
-			transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,
+			transform.localEulerAngles = new Vector3(	transform.localEulerAngles.x,
 														curRotation,
 														transform.localEulerAngles.z);
 		}
@@ -406,14 +396,6 @@ namespace EoE.Entities
 
 			bool moving = inputDirection != Vector2.zero;
 			curStates.Moving = moving;
-
-			if (TargetedEntitie)
-			{
-				Vector3 direction = (TargetedEntitie.actuallWorldPosition - actuallWorldPosition).normalized;
-				float hAngle = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg -90;
-
-				intendedRotation = -hAngle;
-			}
 
 			//Is the player not trying to move? Then stop here
 			if (!moving)
@@ -448,13 +430,19 @@ namespace EoE.Entities
 			float intendedControl = Mathf.Min(1, inputDirection.magnitude);
 			intendedAcceleration = intendedControl * (running ? PlayerSettings.RunSpeedMultiplicator : 1);
 
-			//Rotate the input direction base on the camera direction
-			float cosDir = Mathf.Cos((-PlayerCameraController.CurRotation.x) * Mathf.Deg2Rad);
-			float sinDir = Mathf.Sin((-PlayerCameraController.CurRotation.x) * Mathf.Deg2Rad);
-			float newX = (inputDirection.x * cosDir) - (inputDirection.y * sinDir);
-			float newZ = (inputDirection.x * sinDir) + (inputDirection.y * cosDir);
-			//Now set the controll direction to the rotated direction, normalize by dividing with the intended speed
-			controllDirection = new Vector3(newX, 0, newZ) / intendedControl;
+			//Make the movement relative to the camera
+			Vector3 camForward = PlayerCameraController.Instance.transform.forward;
+			camForward.y = 0;
+			camForward = camForward.normalized;
+
+			Vector3 camRight = PlayerCameraController.Instance.transform.right;
+			camRight.y = 0;
+			camRight = camRight.normalized;
+
+			controllDirection = inputDirection.y * camForward + inputDirection.x * camRight;
+
+			if(GameController.CurrentGameSettings.IsDebugEnabled)
+				Debug.DrawLine(transform.position, transform.position + controllDirection * 2, Color.green, Time.unscaledDeltaTime * 0.99f);
 
 			if (!TargetedEntitie)
 				intendedRotation = -(Mathf.Atan2(controllDirection.z, controllDirection.x) * Mathf.Rad2Deg - 90);
@@ -487,13 +475,16 @@ namespace EoE.Entities
 		}
 		protected void Jump()
 		{
+			float directionOffset = Vector3.Dot(controllDirection, transform.forward);
+			float forwardMultiplier = Mathf.Lerp(PlayerSettings.JumpBackwardMultiplier, 1, (directionOffset + 1) / 2) * (directionOffset > 0 ? 1 : -1);
+
 			jumpVelocity = Mathf.Min(PlayerSettings.JumpPower.y * curJumpPowerMultiplier, PlayerSettings.JumpPower.y * curJumpPowerMultiplier);
-			Vector3 addedExtraForce = PlayerSettings.JumpPower.x * transform.right * curJumpPowerMultiplier + PlayerSettings.JumpPower.z * transform.forward * curJumpPowerMultiplier * (curStates.Running ? PlayerSettings.RunSpeedMultiplicator : 1);
+			Vector3 addedExtraForce = PlayerSettings.JumpPower.x * transform.right * curJumpPowerMultiplier + PlayerSettings.JumpPower.z * transform.forward * curJumpPowerMultiplier * (curStates.Running ? PlayerSettings.RunSpeedMultiplicator : 1) * forwardMultiplier;
 			impactForce += new Vector2(addedExtraForce.x, addedExtraForce.z) * curAcceleration;
 			verticalVelocity = 0;
 
 			jumpGroundCooldown = JUMP_GROUND_COOLDOWN;
-			animationControl.SetTrigger("JumpStart");
+			animationControl.SetTrigger("Jump");
 		}
 		private void CheckForFalling()
 		{
@@ -503,7 +494,7 @@ namespace EoE.Entities
 
 			//If so: we enable the falling animation and add extra velocity for a better looking fallcurve
 			curStates.Falling = falling;
-			animationControl.SetBool("IsFalling", falling);
+			animationControl.SetBool("Fall", falling);
 			if (falling)
 			{
 				ApplyGravity(GameController.CurrentGameSettings.WhenFallingExtraGravity);
@@ -574,9 +565,10 @@ namespace EoE.Entities
 		}
 		private void ApplyForces()
 		{
-			Vector3 appliedForce = controllDirection * curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration + curVelocity;
+			Vector3 appliedForce = curMoveVelocity + curVelocity;
 
 			charController.Move(appliedForce * Time.fixedDeltaTime);
+			animationControl.SetBool("OnGround", charController.isGrounded);
 			ApplyGravity();
 		}
 		private void ApplyGravity(float scale = 1)
@@ -648,7 +640,6 @@ namespace EoE.Entities
 			//Create a copy of the player model
 			Material dodgeMaterialInstance = Instantiate(PlayerSettings.DodgeModelMaterial);
 			Transform modelCopy = Instantiate(modelTransform, Storage.ParticleStorage);
-			WeaponController weaponCopy = Instantiate(heldWeapon, Storage.ParticleStorage);
 
 			modelCopy.transform.position = modelTransform.position;
 			modelCopy.transform.localScale = modelTransform.lossyScale;
@@ -658,14 +649,7 @@ namespace EoE.Entities
 			Color alphaPart = new Color(0, 0, 0, dodgeMaterialInstance.color.a);
 			baseColor.a = 0;
 
-			weaponCopy.enabled = false;
-			for (int i = 0; i < weaponCopy.weaponHitboxes.Length; i++)
-			{
-				weaponCopy.weaponHitboxes[i].enabled = false;
-			}
-
 			ApplyMaterialToAllChildren(modelCopy);
-			ApplyMaterialToAllChildren(weaponCopy.transform);
 
 			invincible++;
 			while (timer < PlayerSettings.DodgeModelExistTime)
@@ -679,7 +663,6 @@ namespace EoE.Entities
 			invincible--;
 
 			Destroy(modelCopy.gameObject);
-			Destroy(weaponCopy.gameObject);
 
 			for(int i = 0; i < dodgeEffects.Length; i++)
 			{
@@ -733,6 +716,14 @@ namespace EoE.Entities
 		#region EnemyTargeting
 		private void TargetEnemyControl()
 		{
+			if (TargetedEntitie)
+			{
+				Vector3 direction = (TargetedEntitie.actuallWorldPosition - actuallWorldPosition).normalized;
+				float hAngle = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg - 90;
+
+				intendedRotation = -hAngle;
+			}
+
 			if (switchTargetTimer > 0)
 				switchTargetTimer -= Time.deltaTime;
 
@@ -1037,214 +1028,9 @@ namespace EoE.Entities
 			}
 		}
 		#endregion
-		#region Physical Attack Control
-		private void AttackControl()
-		{
-			if (comboTimer.HasValue)
-			{
-				comboTimer -= Time.deltaTime;
-				if (comboTimer.Value < 0)
-				{
-					comboTimer = null;
-					comboIndex = 0;
-				}
-			}
-
-			if (equipedWeapon == null || isCurrentlyAttacking || (!InputController.Attack.Pressed && !InputController.HeavyAttack.Pressed))
-				return;
-
-			int state = 0;
-			state += InputController.Attack.Pressed ? 0 : 4; //If we are here either heavy attack or normal attack was pressed
-			state += curStates.Running ? 1 : 0; //Running => Sprint attack
-			state += !charController.isGrounded ? 2 : 0; //In air => Jump attack
-
-			StartCoroutine(BeginAttack((AttackState)state));
-		}
-		public void CancelAttackAnimation()
-		{
-			if (isCurrentlyAttacking)
-				canceledAnimation = true;
-		}
-		private IEnumerator BeginAttack(AttackState state)
-		{
-			(Attack targetAttack, float? comboDelay) = PrepareTargetAttack(state);
-
-			activeAttack = targetAttack;
-			if (targetAttack != null)
-			{
-				AttackAnimation anim = targetAttack.animationInfo.animation;
-
-				isCurrentlyAttacking = true;
-				lastAttackType = state;
-
-				(float animTime, float chargeDelay) = animationDelayLookup[anim];
-				animationControl.SetBool("Attack", true);
-				animationControl.SetTrigger(anim.ToString());
-
-				bool applyForceAfterCustomDelay = !targetAttack.velocityEffect.applyForceAfterAnimationCharge;
-				float forceApplyDelay = applyForceAfterCustomDelay ? targetAttack.velocityEffect.applyForceDelay : 0;
-
-				if (chargeDelay == 0)
-				{
-					if (!applyForceAfterCustomDelay)
-						ApplyAttackForces();
-					heldWeapon.Active = true;
-				}
-
-				if (applyForceAfterCustomDelay && forceApplyDelay == 0)
-				{
-					ApplyAttackForces();
-				}
-
-				while (animTime > 0 || activeAttack.animationInfo.haltAnimationTillCancel)
-				{
-					yield return new WaitForEndOfFrame();
-					animTime -= Time.deltaTime;
-
-					if (chargeDelay > 0)
-					{
-						chargeDelay -= Time.deltaTime;
-
-						if (chargeDelay <= 0)
-						{
-							if (targetAttack.velocityEffect.applyForceAfterAnimationCharge)
-								ApplyAttackForces();
-							heldWeapon.Active = true;
-						}
-					}
-
-					if (applyForceAfterCustomDelay && forceApplyDelay > 0)
-					{
-						forceApplyDelay -= Time.deltaTime;
-						if (forceApplyDelay <= 0)
-						{
-							ApplyAttackForces();
-						}
-					}
-
-					if (canceledAnimation || CheckForCancelCondition())
-					{
-						canceledAnimation = false;
-						break;
-					}
-				}
-
-				isCurrentlyAttacking = false;
-				heldWeapon.Active = false;
-				animationControl.SetBool("Attack", false);
-
-				//Combo setup
-				comboTimer = comboDelay;
-				comboIndex = comboDelay.HasValue ? comboIndex + 1 : 0;
-			}
-		}
-		private (Attack, float?) PrepareTargetAttack(AttackState state)
-		{
-			int attackIndex = (int)state;
-			int innerIndex = state != lastAttackType ? 0 : comboIndex;
-			Attack style;
-			float? comboDelay = null;
-
-			style = equipedWeapon.weaponAttackStyle[attackIndex].attacks[innerIndex];
-			if (!style.enabled)
-			{
-				style = null;
-			}
-			else if (equipedWeapon.weaponAttackStyle[attackIndex].attacks.Length > innerIndex + 1)
-			{
-				comboDelay = equipedWeapon.weaponAttackStyle[attackIndex].delays[innerIndex];
-			}
-
-			//Find out if the player can afford the attack
-			if (style != null)
-			{
-				float cost = style.info.enduranceMultiplier * equipedWeapon.baseEnduranceDrain;
-				if (curEndurance >= cost)
-				{
-					ChangeEndurance(new ChangeInfo(this, CauseType.Magic, TargetStat.Endurance, cost));
-				}
-				else
-				{
-					style = null;
-					comboDelay = null;
-				}
-			}
-
-			return (style, comboDelay);
-		}
-		private bool CheckForCancelCondition()
-		{
-			int requiredGroundState = (int)activeAttack.animationInfo.cancelWhenOnGround - 1;
-			bool groundStateAchieved = (charController.isGrounded ? 0 : 1) == requiredGroundState;
-
-			if (groundStateAchieved && !activeAttack.animationInfo.bothStates)
-				return true;
-
-			if (!groundStateAchieved && activeAttack.animationInfo.bothStates)
-				return false;
-
-			int requiredSprintState = (int)activeAttack.animationInfo.cancelWhenSprinting - 1;
-			bool sprintStateAchieved = (curStates.Running ? 0 : 1) == requiredSprintState;
-
-			return (sprintStateAchieved && groundStateAchieved) || (!activeAttack.animationInfo.bothStates && sprintStateAchieved);
-		}
-		private void ApplyAttackForces()
-		{
-			AttackVelocityEffect effect = activeAttack.velocityEffect;
-
-			if (effect.velocityIntent == AttackVelocityIntent.Off)
-				return;
-			Vector3 velocity = Vector3.zero;
-
-			if (effect.useRightValue)
-			{
-				velocity += effect.rightValue * transform.right;
-			}
-			if (effect.useUpValue)
-			{
-				velocity += effect.upValue * transform.up;
-			}
-			if (effect.useForwardValue)
-			{
-				velocity += effect.forwardValue * transform.forward;
-			}
-
-			if (effect.velocityIntent == AttackVelocityIntent.Set)
-			{
-				curAcceleration = 0;
-
-				if (effect.ignoreVerticalVelocity)
-				{
-					impactForce = new Vector3(velocity.x, impactForce.y, velocity.z);
-				}
-				else
-				{
-					impactForce = new Vector2(velocity.x, velocity.z);
-					verticalVelocity = velocity.y;
-				}
-			}
-			else
-			{
-				curAcceleration = 0;
-
-				if (effect.ignoreVerticalVelocity)
-				{
-					impactForce += new Vector2(velocity.x, velocity.z);
-				}
-				else
-				{
-					impactForce += new Vector2(velocity.x, velocity.z);
-					verticalVelocity += velocity.y;
-				}
-			}
-		}
-		#endregion
 		#region StateControl
 		protected override void Death()
 		{
-			if (heldWeapon)
-				Destroy(heldWeapon.gameObject);
-
 			if (TargetedEntitie)
 				TargetedEntitie = null;
 			base.Death();

@@ -16,5 +16,10 @@ namespace EoE.Information
 			user.ArmorBuff = user.AddBuff(buffToApply, user);
 			return true;
 		}
+		protected override bool OnUnEquip(Entitie user)
+		{
+			user.RemoveBuff(user.ArmorBuff);
+			return true;
+		}
 	}
 }

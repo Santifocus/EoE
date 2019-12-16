@@ -104,12 +104,12 @@ namespace EoE.Entities
 						lastConfirmedPlayerPos = player.actuallWorldPosition;
 						lastPlayerSpeed = player.curVelocity;
 						lastSeenPlayer = 0;
-					}
-				}
 
-				if (!prevInRange && PlayerInAttackRange)
-				{
-					PlayerJustEnteredAttackRangeBase();
+						if (!prevInRange && PlayerInAttackRange)
+						{
+							PlayerJustEnteredAttackRangeBase();
+						}
+					}
 				}
 
 				if (chasingPlayer)
@@ -117,6 +117,11 @@ namespace EoE.Entities
 					targetPosition = Vector3.Lerp(targetPosition ?? GuessedPlayerPosition, GuessedPlayerPosition, Time.deltaTime * enemySettings.PlayerTrackSpeed);
 					if (GameController.CurrentGameSettings.IsDebugEnabled)
 						Debug.DrawLine(actuallWorldPosition, targetPosition.Value, Color.red, Time.deltaTime * 1.1f);
+
+					if (!prevInRange && PlayerInAttackRange)
+					{
+						PlayerJustEnteredAttackRangeBase();
+					}
 				}
 			}
 			else
@@ -127,7 +132,7 @@ namespace EoE.Entities
 			}
 			UpdateAgentSettings();
 
-			if (PlayerInAttackRange) 
+			if (PlayerInAttackRange && chasingPlayer) 
 				InRangeBehaiviorBase();
 
 			if (IsStunned)

@@ -1,8 +1,7 @@
 ﻿using EoE.Events;
 using EoE.Information;
 using EoE.UI;
-using EoE.Utils;
-using EoE.Weapons;
+using EoE.Combatery;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -42,7 +41,7 @@ namespace EoE.Entities
 		private float healthRegenCooldown;
 		private float healthRegenDelay;
 		private float combatEndCooldown;
-		protected Vector3? targetPosition = null;
+		public Vector3? targetPosition = null;
 
 		//Velocity Control
 		protected int appliedMoveStuns;
@@ -430,9 +429,9 @@ namespace EoE.Entities
 		private void BuildDrops()
 		{
 			//Create souls drops
-			if (SelfSettings.SoulWorth > 0)
+			if ((SelfSettings.SoulWorth > 0) && !(this is Player))
 			{
-				SoulDrop newSoulDrop = Instantiate(GameController.CurrentGameSettings.SoulDropPrefab, Storage.DropStorage);
+				SoulDrop newSoulDrop = Instantiate(GameController.SoulDropPrefab, Storage.DropStorage);
 				newSoulDrop.transform.position = actuallWorldPosition;
 				newSoulDrop.Setup(SelfSettings.SoulWorth);
 			}
@@ -443,7 +442,7 @@ namespace EoE.Entities
 
 			for (int i = 0; i < SelfSettings.PossibleDropsTable.PossibleDrops.Length; i++)
 			{
-				if (BaseUtils.Chance01(SelfSettings.PossibleDropsTable.PossibleDrops[i].DropChance))
+				if (Utils.Chance01(SelfSettings.PossibleDropsTable.PossibleDrops[i].DropChance))
 				{
 					int amount = Random.Range(SelfSettings.PossibleDropsTable.PossibleDrops[i].MinDropAmount, SelfSettings.PossibleDropsTable.PossibleDrops[i].MaxDropAmount + 1);
 					SelfSettings.PossibleDropsTable.PossibleDrops[i].Drop.CreateItemDrop(actuallWorldPosition, amount, false);
@@ -485,17 +484,17 @@ namespace EoE.Entities
 			if (requiresRecalculate)
 				RecalculateBuffs();
 		}
-		public bool HasBuffActive(Buff buff, Entitie applier)
+		public int? HasBuffActive(Buff buff, Entitie applier)
 		{
 			List<BuffInstance> toSearch = buff.Permanent ? permanentBuffs : nonPermanentBuffs;
 			for (int i = 0; i < toSearch.Count; i++)
 			{
 				if (toSearch[i].Applier == applier && toSearch[i].Base == buff)
 				{
-					return true;
+					return i;
 				}
 			}
-			return false;
+			return null;
 		}
 		public (bool, BuffInstance) TryReapplyBuff(Buff buff, Entitie applier)
 		{
@@ -813,7 +812,7 @@ namespace EoE.Entities
 		#region Spell Casting
 		public bool CastSpell(Spell spell)
 		{
-			if (curMana < spell.ManaCost || IsCasting || CastingCooldown > 0)
+			if (curMana < spell.BaseManaCost || IsCasting || CastingCooldown > 0)
 				return false;
 
 			StartCoroutine(CastSpellC(spell));
@@ -832,19 +831,12 @@ namespace EoE.Entities
 
 				for(int i = 0; i < spell.CastInfo.StartEffects.Length; i++)
 				{
-					ActivateSpellEffect(this, spell.CastInfo.StartEffects[i], transform, spell);
+					spell.CastInfo.StartEffects[i].ActivateEffectAOE(this, transform, spell);
 				}
-				curParticles = new FXInstance[spell.CastInfo.CustomEffects.Length];
-				for (int i = 0; i < spell.CastInfo.CustomEffects.Length; i++)
+				curParticles = new FXInstance[spell.CastInfo.VisualEffects.Length];
+				for (int i = 0; i < spell.CastInfo.VisualEffects.Length; i++)
 				{
-					curParticles[i] = FXManager.PlayFX(	spell.CastInfo.CustomEffects[i].FX, 
-														transform, 
-														this is Player,
-														1,
-														spell.CastInfo.CustomEffects[i].HasCustomOffset ? ((Vector3?)spell.CastInfo.CustomEffects[i].CustomOffset) : (null),
-														spell.CastInfo.CustomEffects[i].HasCustomRotationOffset ? ((Vector3?)spell.CastInfo.CustomEffects[i].CustomRotation) : (null),
-														spell.CastInfo.CustomEffects[i].HasCustomScale ? ((Vector3?)spell.CastInfo.CustomEffects[i].CustomScale) : (null)
-														);
+					curParticles[i] = FXManager.PlayFX(spell.CastInfo.VisualEffects[i], transform, this is Player, 1);
 				}
 
 				float castTime = 0;
@@ -858,12 +850,12 @@ namespace EoE.Entities
 					if (appliedMoveStuns > (appliedStun ? 1 : 0))
 						goto StoppedSpell;
 
-					if (effectTick > GameController.CurrentGameSettings.SpellEffectTickSpeed)
+					if (effectTick > GameController.CurrentGameSettings.WhileEffectTickSpeed)
 					{
-						effectTick -= GameController.CurrentGameSettings.SpellEffectTickSpeed;
+						effectTick -= GameController.CurrentGameSettings.WhileEffectTickSpeed;
 						for (int i = 0; i < spell.CastInfo.WhileEffects.Length; i++)
 						{
-							ActivateSpellEffect(this, spell.CastInfo.WhileEffects[i], transform, spell);
+							spell.CastInfo.WhileEffects[i].ActivateEffectAOE(this, transform, spell);
 						}
 					}
 				}
@@ -886,19 +878,12 @@ namespace EoE.Entities
 			{
 				for (int i = 0; i < spell.StartInfo.Effects.Length; i++)
 				{
-					ActivateSpellEffect(this, spell.StartInfo.Effects[i], transform, spell);
+					spell.StartInfo.Effects[i].ActivateEffectAOE(this, transform, spell);
 				}
-				curParticles = new FXInstance[spell.StartInfo.CustomEffects.Length];
-				for (int i = 0; i < spell.StartInfo.CustomEffects.Length; i++)
+				curParticles = new FXInstance[spell.StartInfo.VisualEffects.Length];
+				for (int i = 0; i < spell.StartInfo.VisualEffects.Length; i++)
 				{
-					curParticles[i] = FXManager.PlayFX(spell.StartInfo.CustomEffects[i].FX,
-														transform,
-														this is Player,
-														1,
-														spell.StartInfo.CustomEffects[i].HasCustomOffset ? ((Vector3?)spell.StartInfo.CustomEffects[i].CustomOffset) : (null),
-														spell.StartInfo.CustomEffects[i].HasCustomRotationOffset ? ((Vector3?)spell.StartInfo.CustomEffects[i].CustomRotation) : (null),
-														spell.StartInfo.CustomEffects[i].HasCustomScale ? ((Vector3?)spell.StartInfo.CustomEffects[i].CustomScale) : (null)
-														);
+					curParticles[i] = FXManager.PlayFX(spell.StartInfo.VisualEffects[i], transform, this is Player, 1);
 				}
 			}
 
@@ -917,34 +902,31 @@ namespace EoE.Entities
 				if (appliedStun)
 					appliedMoveStuns++;
 
-				for (int i = 0; i < spell.ProjectileInfo.Length; i++)
+				for (int i = 0; i < spell.ProjectileInfos.Length; i++)
 				{
-					for(int j = 0; j < spell.ProjectileInfo[i].ExecutionCount; j++)
+					float timer = 0;
+					while (timer < spell.ProjectileInfos[i].ExecutionDelay)
 					{
-						CreateSpellProjectile(spell, i);
-						if (j < spell.ProjectileInfo[i].ExecutionCount - 1)
+						yield return new WaitForEndOfFrame();
+						timer += Time.deltaTime;
+						if (appliedMoveStuns > (appliedStun ? 1 : 0))
+							goto StoppedSpell;
+					}
+
+					for (int j = 0; j < spell.ProjectileInfos[i].ExecutionCount; j++)
+					{
+						CreateProjectile(spell, i);
+						if (j < spell.ProjectileInfos[i].ExecutionCount - 1)
 						{
-							float timer = 0;
-							while(timer < spell.ProjectileInfo[i].DelayPerExecution)
+							float repeatTimer = 0;
+							while(repeatTimer < spell.ProjectileInfos[i].ExecutionRepeatDelay)
 							{
 								yield return new WaitForEndOfFrame();
-								timer += Time.deltaTime;
+								repeatTimer += Time.deltaTime;
 								if (appliedMoveStuns > (appliedStun ? 1 : 0))
 									goto StoppedSpell;
 							}
 						}
-					}
-
-					if (i < spell.ProjectileInfo.Length - 1)
-					{
-						float timer = 0;
-						while (timer < spell.DelayToNextProjectile[i])
-						{
-							yield return new WaitForEndOfFrame();
-							timer += Time.deltaTime;
-							if (appliedMoveStuns > (appliedStun ? 1 : 0))
-								goto StoppedSpell;
-						} 
 					}
 				}
 				if (appliedStun)
@@ -955,7 +937,7 @@ namespace EoE.Entities
 		StoppedSpell:;
 			IsCasting = false;
 			CastingCooldown = spell.SpellCooldown;
-			ChangeMana(new ChangeInfo(this, CauseType.Magic, TargetStat.Mana, spell.ManaCost));
+			ChangeMana(new ChangeInfo(this, CauseType.Magic, TargetStat.Mana, spell.BaseManaCost));
 			if (curParticles != null)
 			{
 				for (int i = 0; i < curParticles.Length; i++)
@@ -964,227 +946,20 @@ namespace EoE.Entities
 				}
 			}
 		}
-		#region ProjectileControl
-		private SpellProjectile CreateSpellProjectile(Spell spellBase, int index)
+		#region ProjectileCreation
+		private Projectile CreateProjectile(Spell spellBase, int index)
 		{
-			Vector3 spawnOffset = spellBase.ProjectileInfo[index].CreateOffsetToCaster.x * transform.right + spellBase.ProjectileInfo[index].CreateOffsetToCaster.y * transform.up + spellBase.ProjectileInfo[index].CreateOffsetToCaster.z * transform.forward;
+			//Calculate the spawnoffset
+			Vector3 spawnOffset = spellBase.ProjectileInfos[index].Projectile.CreateOffsetToCaster.x * transform.right + spellBase.ProjectileInfos[index].Projectile.CreateOffsetToCaster.y * transform.up + spellBase.ProjectileInfos[index].Projectile.CreateOffsetToCaster.z * transform.forward;
 
 			//First find out what direction the projectile should fly
-			Vector3 direction;
-			(Vector3, bool) dirInfo = Spell.EnumDirToDir(spellBase.ProjectileInfo[index].Direction);
-			if (spellBase.ProjectileInfo[index].DirectionStyle == InherritDirection.Target)
-			{
-				if (targetPosition.HasValue)
-				{
-					direction = (targetPosition.Value - (actuallWorldPosition + spawnOffset)).normalized;
-				}
-				else
-				{
-					direction = DirectionFromStyle(spellBase.ProjectileInfo[index].FallbackDirectionStyle);
-				}
-			}
-			else
-			{
-				direction = DirectionFromStyle(spellBase.ProjectileInfo[index].DirectionStyle);
-			}
-
-			//Now create the projectile prefab, and let it start flying
-			SpellProjectile projectile = Instantiate(GameController.ProjectilePrefab, Storage.ProjectileStorage);
-			projectile.Setup(spellBase, index, this, direction);
-			projectile.transform.position = actuallWorldPosition + spawnOffset;
-
-			return projectile;
-			Vector3 DirectionFromStyle(InherritDirection style)
-			{
-				if (style == InherritDirection.World)
-				{
-					return dirInfo.Item1 * (dirInfo.Item2 ? -1 : 1);
-				}
-				else //style == InherritDirection.Local
-				{
-					if (dirInfo.Item1 == new Vector3Int(0, 0, 1))
-					{
-						return transform.forward * (dirInfo.Item2 ? -1 : 1);
-					}
-					else if (dirInfo.Item1 == new Vector3Int(1, 0, 0))
-					{
-						return transform.right * (dirInfo.Item2 ? -1 : 1);
-					}
-					else //dir.Item1 == new Vector3Int(0, 1, 0)
-					{
-						return transform.up * (dirInfo.Item2 ? -1 : 1);
-					}
-				}
-			}
-		}
-		#endregion
-		#region SpellActivation
-		//Here is where the magic literally happens
-		public static void ActivateSpellEffect(Entitie caster, SpellEffect effect, Transform origin, Spell spellBase)
-		{
-			//If the effect is not applying force based on its center we can find out the direction here
-			//so we dont have to recalculate it everytime a new eligible target is added
-			Vector3 localDirection = Vector3.up;
-			if (effect.KnockbackOrigin != EffectiveDirection.Center)
-			{
-				(Vector3Int, bool) dirInfo = Spell.EnumDirToDir(effect.KnockbackDirection);
-				if (effect.KnockbackOrigin == EffectiveDirection.World)
-				{
-					localDirection = dirInfo.Item1 * (dirInfo.Item2 ? -1 : 1);
-				}
-				else //effect.KnockbackDirection == EffectiveDirection.Local
-				{
-					if (dirInfo.Item1 == new Vector3Int(0, 0, 1))
-					{
-						localDirection = origin.forward * (dirInfo.Item2 ? -1 : 1);
-					}
-					else if (dirInfo.Item1 == new Vector3Int(1, 0, 0))
-					{
-						localDirection = origin.right * (dirInfo.Item2 ? -1 : 1);
-					}
-					else //dir.Item1 == new Vector3Int(0, 1, 0)
-					{
-						localDirection = origin.up * (dirInfo.Item2 ? -1 : 1);
-					}
-				}
-			}
-
-			//First find the targets that are eligible
-			float innerSphereDist = effect.BaseEffectRadius * effect.BaseEffectRadius;
-			float outerSphereDist = effect.ZeroOutDistance * effect.ZeroOutDistance;
-
-			//In order to dodge using a list so we dont spam the garbage collector we first find out how many entities will be added
-			//And then build a array with that size, for that we could use Linq aswell but this methode is faster (probably)
-			int requiredCapacity = 0;
-			for (int i = 0; i < AllEntities.Count; i++)
-			{
-				if ((AllEntities[i].actuallWorldPosition - origin.position).sqrMagnitude < outerSphereDist)
-				{
-					//Check if this entitie should be a targetable entitie
-					if (Spell.IsAllowedEntitie(AllEntities[i], caster, effect.AffectedTargets))
-						requiredCapacity++;
-				}
-			}
-			CollectedEntitieData[] eligibleTargets = new CollectedEntitieData[requiredCapacity];
-
-			int addedEntities = 0;
-			for (int i = 0; i < AllEntities.Count; i++)
-			{
-				Vector3 dif = AllEntities[i].actuallWorldPosition - origin.position;
-				float sqrDist = dif.sqrMagnitude;
-
-				//Generally onbly allow to keep going if the distance is smaller then the other sphere distance
-				if (sqrDist < outerSphereDist)
-				{
-					//Check if this entitie should be a targetable entitie
-					if (!Spell.IsAllowedEntitie(AllEntities[i], caster, effect.AffectedTargets))
-						continue;
-
-					CollectedEntitieData data = new CollectedEntitieData()
-					{
-						Target = AllEntities[i],
-						SqrDist = sqrDist
-					};
-
-					//If the target is in the outer sphere and we want to normalize the direction based on the center
-					//then we can save one square root by only calculating it in the multiplier calculation
-					float? distance = null;
-
-					//Calculate the multiplier
-					if (sqrDist <= innerSphereDist)
-					{
-						//Max is 1 and inner sphere will always be max
-						data.Multiplier = 1;
-					}
-					else //(sqrDist < outerSphereDist) && (sqrDist > innerSphereDist)
-					{
-						distance = Mathf.Sqrt(sqrDist);
-						float outerDistance = distance.Value - effect.BaseEffectRadius;
-						//The divider will never be zero because of previous if statements so we dont have to catch it
-						data.Multiplier = outerDistance / (effect.ZeroOutDistance - effect.BaseEffectRadius);
-					}
-
-					//Now find out in what direction we want to apply forces
-					if(effect.KnockbackOrigin == EffectiveDirection.Center)
-					{
-						if (!distance.HasValue)
-							distance = Mathf.Sqrt(sqrDist);
-
-						data.ApplyDirection = (distance.Value > 0) ? (dif / distance.Value) : (Vector3.up);
-					}
-					else//effect.KnockbackDirection == EffectiveDirection.Local || effect.KnockbackDirection == EffectiveDirection.World
-					{
-						data.ApplyDirection = localDirection;
-					}
-					eligibleTargets[addedEntities] = data;
-					addedEntities++;
-				}
-			}
-
-			//If there is a limited amount of hits we sort based on distance and later we only use the first 'effect.MaximumHits' results in the list
-			if ((effect.HasMaximumHits) && (eligibleTargets.Length > effect.MaximumHits))
-			{
-				System.Array.Sort(eligibleTargets, (x, y) => x.SqrDist.CompareTo(y.SqrDist));
-			}
-
-			//Now we have to apply effects: Damage, Knockback, Buffs and FXEffects
-			int targetCount = effect.HasMaximumHits ? System.Math.Min(eligibleTargets.Length, effect.MaximumHits) : eligibleTargets.Length;
-			bool effectWasCrit = Random.value < effect.CritChance;
-			float baseKnockBack = effect.KnockbackMultiplier * spellBase.BaseKnockback;
-
-			for (int i = 0; i < targetCount; i++)
-			{
-				//Damage / Knockback
-				float damage = (spellBase.BaseDamage + caster.curMagicalDamage) * effect.DamageMultiplier * eligibleTargets[i].Multiplier;
-				float? knockbackAmount = (baseKnockBack != 0) ? (float?)(baseKnockBack * eligibleTargets[i].Multiplier) : (null);
-
-				eligibleTargets[i].Target.ChangeHealth(new ChangeInfo(
-					caster, 
-					CauseType.Magic, 
-					effect.DamageElement, 
-					TargetStat.Health, 
-					eligibleTargets[i].Target.actuallWorldPosition,
-					eligibleTargets[i].ApplyDirection, 
-					damage, 
-					effectWasCrit, 
-					knockbackAmount));
-
-				//Buffs
-				for(int j = 0; j < effect.BuffsToApply.Length; j++)
-				{
-					if(effect.BuffStackStyle == BuffStackingStyle.Stack)
-					{
-						eligibleTargets[i].Target.AddBuff(effect.BuffsToApply[j], caster);
-					}
-					else if (effect.BuffStackStyle == BuffStackingStyle.Reapply)
-					{
-						if (!(eligibleTargets[i].Target.TryReapplyBuff(effect.BuffsToApply[j], caster).Item1))
-						{
-							eligibleTargets[i].Target.AddBuff(effect.BuffsToApply[j], caster);
-						}
-					}
-					else //effect.BuffStackStyle == BuffStackingStyle.DoNothing
-					{
-						if (!(eligibleTargets[i].Target.HasBuffActive(effect.BuffsToApply[j], caster)))
-						{
-							eligibleTargets[i].Target.AddBuff(effect.BuffsToApply[j], caster);
-						}
-					}
-				}
-
-				//FXEffects
-				for (int j = 0; j < effect.Effects.Length; j++)
-				{
-					FXManager.PlayFX(effect.Effects[j], eligibleTargets[i].Target.transform, eligibleTargets[i].Target is Player, eligibleTargets[i].Multiplier);
-				}
-			}
-		}
-		private struct CollectedEntitieData
-		{
-			public Entitie Target;
-			public float Multiplier;
-			public float SqrDist;
-			public Vector3 ApplyDirection;
+			Vector3 direction = CombatObject.CalculateDirection(spellBase.ProjectileInfos[index].Projectile.DirectionStyle, 
+																spellBase.ProjectileInfos[index].Projectile.FallbackDirectionStyle, 
+																spellBase.ProjectileInfos[index].Projectile.Direction, 
+																this, 
+																spawnOffset
+																);
+			return Projectile.CreateProjectile(spellBase, spellBase.ProjectileInfos[index].Projectile, this, direction, actuallWorldPosition + spawnOffset);
 		}
 		#endregion
 		#endregion

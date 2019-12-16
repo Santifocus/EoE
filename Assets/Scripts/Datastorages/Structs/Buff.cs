@@ -1,5 +1,4 @@
 ﻿using EoE.Entities;
-using EoE.Utils;
 using UnityEngine;
 
 namespace EoE.Information

@@ -6,7 +6,7 @@ using EoE.Information;
 using EoE.Sounds;
 using EoE.Entities;
 
-namespace EoE.Utils
+namespace EoE
 {
 	public class EffectUtils : MonoBehaviour
 	{
@@ -631,6 +631,14 @@ namespace EoE.Utils
 			}
 		}
 		#endregion
+		#region CameraDisattach
+		private class CameraDisattachmentInstance : FXInstance
+		{
+			public override FXType Type => FXType.Player;
+			public override FXObject BaseInfo => CameraDisattachmentInfo;
+			private CameraDisattachment CameraDisattachmentInfo;
+		}
+		#endregion
 		#region SingleSound
 		private static List<SoundEffectInstance> AllSoundFXs = new List<SoundEffectInstance>();
 		private Coroutine SoundFXCoroutine = null;
@@ -875,9 +883,9 @@ namespace EoE.Utils
 					continue;
 
 				bool foundParticle = false;
-				for(int i = 0; i < particleSystems.Length; i++)
+				for (int i = 0; i < particleSystems.Length; i++)
 				{
-					if(particleSystems[i].particleCount > 0)
+					if (particleSystems[i].particleCount > 0)
 					{
 						foundParticle = true;
 						break;
@@ -890,8 +898,8 @@ namespace EoE.Utils
 
 			Destroy(target);
 
-			//We can jump to this in case of external removal of the target
-			FadeFinished:;
+		//We can jump to this in case of external removal of the target
+		FadeFinished:;
 		}
 		#endregion
 		#endregion

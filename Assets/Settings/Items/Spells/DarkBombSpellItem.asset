@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b68c3564075a204ab65946eb6308666, type: 3}
   m_Name: DarkBombSpellItem
   m_EditorClassIdentifier: 
-  ItemName: Dark Bomb
+  ItemName:
+    textColor: {r: 0.3254717, g: 0.92613274, b: 1, a: 1}
+    text: Dark Bomb
+  ItemDescription: []
   SortingID: 9
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
@@ -22,4 +25,4 @@ MonoBehaviour:
   FXEffectsOnUse: []
   FXEffectsWhenEquipped: []
   UseCooldown: 0
-  targetSpell: {fileID: 11400000, guid: 434c6572f91508a49927ea0dc469f2c7, type: 2}
+  TargetSpell: {fileID: 11400000, guid: 434c6572f91508a49927ea0dc469f2c7, type: 2}
