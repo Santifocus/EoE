@@ -69,6 +69,7 @@ namespace EoE.Information
 			{
 				ItemCollector itemCollector = (ItemCollector)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(itemCollectorGUID[0]), typeof(ItemCollector));
 				itemCollector.CollectData();
+				EditorUtility.SetDirty(itemCollector);
 			}
 		}
 	}
