@@ -964,7 +964,7 @@ namespace EoE.Entities
 		#endregion
 		#endregion
 		#region Helper Functions
-		protected bool CheckIfCanSeeEntitie(Entitie target, bool lowPriority = false)
+		protected bool CheckIfCanSeeEntitie(Transform eye, Entitie target, bool lowPriority = false)
 		{
 			//First we check the middle and corners of the entitie
 			//Middle
@@ -995,11 +995,11 @@ namespace EoE.Entities
 
 			bool CheckPointVisible(Vector3 endPos)
 			{
-				Vector3 dif = endPos - PlayerCameraController.PlayerCamera.transform.position;
+				Vector3 dif = endPos - eye.transform.position;
 				float dist = dif.magnitude;
 				Vector3 direction = dif / dist;
 
-				return !Physics.Raycast(PlayerCameraController.PlayerCamera.transform.position, direction, dist, ConstantCollector.TERRAIN_LAYER_MASK);
+				return !Physics.Raycast(eye.transform.position, direction, dist, ConstantCollector.TERRAIN_LAYER_MASK);
 			}
 			Vector3[] GetBoundPoints()
 			{
@@ -1023,7 +1023,7 @@ namespace EoE.Entities
 			Vector3 GetRandomPointInBounds()
 			{
 				return target.coll.bounds.center +
-					new Vector3(target.coll.bounds.extents.x * (Random.value - 0.5f) * 2,
+					new Vector3(	target.coll.bounds.extents.x * (Random.value - 0.5f) * 2,
 									target.coll.bounds.extents.y * (Random.value - 0.5f) * 2,
 									target.coll.bounds.extents.z * (Random.value - 0.5f) * 2);
 			}

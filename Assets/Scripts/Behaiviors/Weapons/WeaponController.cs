@@ -11,6 +11,7 @@ namespace EoE.Combatery
 	public class WeaponController : MonoBehaviour
 	{
 		#region Fields
+		private const float COMBO_WAIT_THRESHOLD = 0.65f;
 		//Static info
 		private static readonly Dictionary<AttackAnimation, (float, float)> animationDelayLookup = new Dictionary<AttackAnimation, (float, float)>()
 		{
@@ -37,6 +38,7 @@ namespace EoE.Combatery
 		private List<Collider> ignoredColliders = new List<Collider>();
 
 		//Combo Control
+		private float curAttackAnimationPoint = 0;
 		private int curCombo;
 		private float timeToNextCombo;
 		private List<FXInstance> comboBoundFX = new List<FXInstance>();
@@ -123,7 +125,8 @@ namespace EoE.Combatery
 
 			if(InAttackSequence)
 			{
-				wantsToBeginNextSequence = true;
+				if(curAttackAnimationPoint > COMBO_WAIT_THRESHOLD)
+					wantsToBeginNextSequence = true;
 				return;
 			}
 
@@ -198,8 +201,8 @@ namespace EoE.Combatery
 				float totalTime = 0;
 				float animationTime = animationDelayLookup[ActiveAttackStyle.AnimationTarget].Item1;
 				float animationActivationDelay = animationDelayLookup[ActiveAttackStyle.AnimationTarget].Item2;
-				float animationTimer = 0;
-				float animationPoint = 0;
+				float animationTimer = 0; 
+				curAttackAnimationPoint = 0;
 				ChangeWeaponState(false, null);
 
 				float multiplier;
@@ -244,9 +247,9 @@ namespace EoE.Combatery
 
 					//Check if we crossed any attack event point
 					float newAnimationPoint = animationTimer / animationTime;
-					float smallerPoint = Mathf.Min(newAnimationPoint, animationPoint);
-					float biggerPoint = Mathf.Max(newAnimationPoint, animationPoint);
-					animationPoint = newAnimationPoint;
+					float smallerPoint = Mathf.Min(newAnimationPoint, curAttackAnimationPoint);
+					float biggerPoint = Mathf.Max(newAnimationPoint, curAttackAnimationPoint);
+					curAttackAnimationPoint = newAnimationPoint;
 					for(int i = 0; i < ActiveAttackStyle.AttackEffects.Length; i++)
 					{
 						float point = ActiveAttackStyle.AttackEffects[i].AtAnimationPoint;
@@ -259,7 +262,7 @@ namespace EoE.Combatery
 						}
 					}
 
-				} while (((animationPoint > 0 || multiplier > 0) && (animationPoint < 1)) || GameController.GameIsPaused);
+				} while (((curAttackAnimationPoint > 0 || multiplier > 0) && (curAttackAnimationPoint < 1)) || GameController.GameIsPaused);
 
 				if (curSequenceIndex >= targetSequence.AttackSequenceParts.Length - 1)
 				{

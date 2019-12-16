@@ -744,7 +744,7 @@ namespace EoE.Entities
 					//If there is none, then the targetEntitie will stay null
 					for (int i = 0; i < possibleTargets.Count; i++)
 					{
-						if (CheckIfCanSeeEntitie(possibleTargets[i].Item1))
+						if (CheckIfCanSeeEntitie(PlayerCameraController.PlayerCamera.transform, possibleTargets[i].Item1))
 						{
 							TargetedEntitie = possibleTargets[i].Item1;
 							//We found a target so we stop here
@@ -787,7 +787,7 @@ namespace EoE.Entities
 
 					for (int i = 0; i < screenTargets.Count; i++)
 					{
-						if (CheckIfCanSeeEntitie(screenTargets[i].Item1))
+						if (CheckIfCanSeeEntitie(PlayerCameraController.PlayerCamera.transform, screenTargets[i].Item1))
 						{
 							TargetedEntitie = screenTargets[i].Item1;
 							//We found a target so we stop here

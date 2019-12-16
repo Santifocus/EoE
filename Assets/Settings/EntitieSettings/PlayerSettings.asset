@@ -33,8 +33,8 @@ MonoBehaviour:
   DoManaRegen: 1
   ManaRegen: 1
   ManaRegenInCombatMultiplier: 0.2
-  WalkSpeed: 6
-  RunSpeedMultiplicator: 1.5
+  WalkSpeed: 8
+  RunSpeedMultiplicator: 1.35
   TurnSpeed: 540
   InAirTurnSpeedMultiplier: 0.5
   MoveAcceleration: 4
@@ -47,7 +47,7 @@ MonoBehaviour:
   CameraRotationSpeed: 7
   CameraVerticalAngleClamps: {x: -50, y: 50}
   CameraExtraZoomOnVertical: 0.5
-  MaxEnemyTargetingDistance: 80
+  MaxEnemyTargetingDistance: 160
   CameraClampsWhenTargeting: {x: -30, y: 30}
   CameraBaseFOV: 60
   Endurance: 100
@@ -148,7 +148,7 @@ MonoBehaviour:
   InventorySize: 55
   MaxModelTilt: 10
   SideTurnLerpSpeed: 13
-  SpringLerpStiffness: 0.15
+  SpringLerpStiffness: 0.125
   WalkAnimationLerpSpeed: 4
   EffectsOnReceiveDamage:
   - {fileID: 11400000, guid: 11060c91c24341947a8c373d641e5c86, type: 2}

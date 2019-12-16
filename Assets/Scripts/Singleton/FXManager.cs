@@ -147,6 +147,10 @@ namespace EoE
 				{
 					return EffectUtils.WarpCameraFOV(effect as CameraFOVWarp, multiplier);
 				}
+				else if (effect is CustomUI)
+				{
+					return EffectUtils.PlayCustomUI(effect as CustomUI, multiplier);
+				}
 				else if (effect is DialogueInput)
 				{
 					DialogueController.CreateAndShowDialogue(effect as DialogueInput);
