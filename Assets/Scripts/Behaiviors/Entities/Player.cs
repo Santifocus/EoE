@@ -375,7 +375,6 @@ namespace EoE.Entities
 			animationControl.SetFloat("XMove", (1 - Mathf.Abs(forwardValue)) * xMultiplier * normalizedMoveVelocity);
 		}
 		#region Walking
-		float thing;
 		private void TurnControl()
 		{
 			float turnAmount = Time.fixedDeltaTime * SelfSettings.TurnSpeed * (charController.isGrounded ? 1 : SelfSettings.InAirTurnSpeedMultiplier);
@@ -871,7 +870,7 @@ namespace EoE.Entities
 				}
 			}
 
-			int selectedSpellIndexChange = InputController.MagicScrollUp.Down ? 1 : (InputController.MagicScrollDown.Down ? -1 : 0);
+			int selectedSpellIndexChange = IsCasting ? 0 : (InputController.MagicScrollUp.Down ? 1 : (InputController.MagicScrollDown.Down ? -1 : 0));
 			if (selectedSpellIndexChange != 0)
 			{
 				int t = 0;
