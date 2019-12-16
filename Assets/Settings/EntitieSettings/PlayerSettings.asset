@@ -154,7 +154,7 @@ MonoBehaviour:
   EffectsOnReceiveKnockback:
   - {fileID: 11400000, guid: b09700b6216eb874aab8d980440f121b, type: 2}
   EffectsOnCauseDamage:
-  - {fileID: 11400000, guid: e7eca44a4612acd40b0b90359694e612, type: 2}
+  - {fileID: 11400000, guid: 597bda602a9441346a2e721049c28c87, type: 2}
   EffectsOnCauseCrit:
   - {fileID: 11400000, guid: 3c3f83d3e81eae144acbe5a6b02983d0, type: 2}
   - {fileID: 11400000, guid: e9a7041c1b96b544d9be0195facd23e7, type: 2}

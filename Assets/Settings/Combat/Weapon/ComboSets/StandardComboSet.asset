@@ -125,5 +125,12 @@ MonoBehaviour:
       EffectOnTarget: {fileID: 11400000, guid: 675729bc8b0983b4c9029cfb6b566fb3, type: 2}
       EffectAOE: {fileID: 0}
       HealEffects: []
-      EffectsTillComboEnds: []
+      EffectsTillComboEnds:
+      - FX: {fileID: 11400000, guid: 7dbb75a734c0a4e4ea505b8ee26c552d, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
       BuffsTillComboEnds: []
