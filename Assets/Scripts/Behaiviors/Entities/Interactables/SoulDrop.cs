@@ -95,7 +95,7 @@ namespace EoE.Entities
 
 		private void Update()
 		{
-			if (isTarget)
+			if (isTarget && Player.Instance.Alive)
 			{
 				colorTime += Time.deltaTime / textColorCycleTime;
 				float point = (Mathf.Sin(colorTime * Mathf.PI) + 1) / 2;
