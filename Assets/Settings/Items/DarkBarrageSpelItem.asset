@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b68c3564075a204ab65946eb6308666, type: 3}
-  m_Name: SacredCircleSpellItem
+  m_Name: DarkBarrageSpelItem
   m_EditorClassIdentifier: 
   ItemName:
-    textColor: {r: 0, g: 0.9301295, b: 1, a: 1}
-    text: SacredCircle
+    textColor: {r: 0, g: 0.9388051, b: 1, a: 1}
+    text: Dark Barrage
   ItemDescription:
-  - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Damages nearby enemys with the power of light.
+  - textColor: {r: 1, g: 1, b: 1, a: 0}
+    text: Dark Magic with massive firerate
   SortingID: 0
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 1
-  ItemIcon: {fileID: 21300000, guid: 379f33fcdee889d4db54b6c4696d9385, type: 3}
+  ItemIcon: {fileID: 21300000, guid: 1133ba8a6cfd5774688b1b14a1454ef9, type: 3}
   RemoveOnUse: 0
   FXEffectsOnUse: []
   FXEffectsWhenEquipped:
-  - {fileID: 11400000, guid: 797857c90675254498ef08db978fcfbe, type: 2}
-  - {fileID: 11400000, guid: 550e1bfda472a8e46a4f01df1ca9a882, type: 2}
+  - {fileID: 11400000, guid: c8fc971a186953d44a1cd89a44f1a313, type: 2}
+  - {fileID: 11400000, guid: 9a1cdfbe58dab6e4c8226f045e10b764, type: 2}
   UseCooldown: 0
-  TargetSpell: {fileID: 11400000, guid: 9c73cac9cf3ee5f488b93e883a29e5e1, type: 2}
+  TargetSpell: {fileID: 11400000, guid: 2bf3e07a9c203664f9639b798540215f, type: 2}
