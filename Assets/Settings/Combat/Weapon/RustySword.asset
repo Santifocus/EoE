@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ab78e7538a021446a2451566185bbde, type: 3}
-  m_Name: BaseSword
+  m_Name: RustySword
   m_EditorClassIdentifier: 
   BaseDamage: 5
   BaseManaCost: 0
@@ -22,11 +22,13 @@ MonoBehaviour:
   WeaponElement: 1
   WeaponCauseType: 0
   ContainedParts: 1
+  FallBackPart: 1
   WeaponPositionOffset: {x: 0, y: 0, z: 1}
   WeaponRotationOffset: {x: 0, y: 0, z: 0}
   StandAttackSequence:
     AttackSequenceParts:
     - AnimationTarget: 1
+      StopMovement: 0
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:
@@ -71,6 +73,7 @@ MonoBehaviour:
       OnHitComboWorth: 1
       AttackEffects: []
     - AnimationTarget: 2
+      StopMovement: 0
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:
@@ -115,6 +118,7 @@ MonoBehaviour:
       OnHitComboWorth: 2
       AttackEffects: []
     - AnimationTarget: 4
+      StopMovement: 1
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 2
       AnimationSpeedCurve:
@@ -164,6 +168,7 @@ MonoBehaviour:
   RunAttackSequence:
     AttackSequenceParts:
     - AnimationTarget: 1
+      StopMovement: 0
       AnimationMultiplicationType: 1
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:
@@ -193,6 +198,7 @@ MonoBehaviour:
   JumpAttackSequence:
     AttackSequenceParts:
     - AnimationTarget: 1
+      StopMovement: 0
       AnimationMultiplicationType: 1
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:
@@ -222,6 +228,7 @@ MonoBehaviour:
   RunJumpAttackSequence:
     AttackSequenceParts:
     - AnimationTarget: 1
+      StopMovement: 0
       AnimationMultiplicationType: 1
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:

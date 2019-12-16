@@ -7,20 +7,21 @@ namespace EoE.Combatery
 {
 	public enum MultiplicationType { FlatValue = 1, Curve = 2 }
 	[System.Flags] public enum AttackEffectType { ImpulseVelocity = (1 << 0), FX = (1 << 1), AOE = (1 << 2), CreateProjectile = (1 << 3) }
-	[System.Flags] public enum AttackStyleParts { StandAttack = (1 << 0), RunAttack = (1 << 1), JumpAttack = (1 << 2), RunJumpAttack = (1 << 3) }
+	[System.Flags] public enum AttackStylePart { StandAttack = (1 << 0), RunAttack = (1 << 1), JumpAttack = (1 << 2), RunJumpAttack = (1 << 3) }
+	public enum AttackStylePartFallback { None = (0), StandAttack = (1 << 0), RunAttack = (1 << 1), JumpAttack = (1 << 2), RunJumpAttack = (1 << 3) }
 	public class Weapon : CombatObject
 	{
-		public AttackSequence this[AttackStyleParts part]
+		public AttackSequence this[AttackStylePart part]
 		{
 			get
 			{
 				switch (part)
 				{
-					case AttackStyleParts.RunAttack:
+					case AttackStylePart.RunAttack:
 						return RunAttackSequence;
-					case AttackStyleParts.JumpAttack:
+					case AttackStylePart.JumpAttack:
 						return JumpAttackSequence;
-					case AttackStyleParts.RunJumpAttack:
+					case AttackStylePart.RunJumpAttack:
 						return RunJumpAttackSequence;
 					default: //AttackStyleParts.StandAttack 
 						return StandAttackSequence;
@@ -32,7 +33,8 @@ namespace EoE.Combatery
 		public WeaponController WeaponPrefab;
 		public ElementType WeaponElement = ElementType.None;
 		public CauseType WeaponCauseType = CauseType.Physical;
-		public AttackStyleParts ContainedParts = (AttackStyleParts)(-1);
+		public AttackStylePart ContainedParts = (AttackStylePart)(-1);
+		public AttackStylePartFallback FallBackPart = AttackStylePartFallback.StandAttack;
 
 		//Offsets
 		public Vector3 WeaponPositionOffset;
@@ -46,7 +48,7 @@ namespace EoE.Combatery
 
 		public ComboSet ComboEffects;
 
-		public bool HasMaskFlag(AttackStyleParts flag)
+		public bool HasMaskFlag(AttackStylePart flag)
 		{
 			return (flag | ContainedParts) == ContainedParts;
 		}
@@ -62,6 +64,7 @@ namespace EoE.Combatery
 	{
 		//Animation Settings
 		public AttackAnimation AnimationTarget = AttackAnimation.Attack1;
+		public bool StopMovement;
 
 		public MultiplicationType AnimationMultiplicationType = MultiplicationType.FlatValue;
 		public float AnimationSpeedFlatValue = 1;

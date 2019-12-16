@@ -71,6 +71,7 @@ namespace EoE.Information
 		public float MaxModelTilt = 10;
 		public float SideTurnLerpSpeed = 10;
 		public float SpringLerpStiffness = 1;
+		public float WalkAnimationLerpSpeed = 4;
 
 		///FX
 		public FXObject[] EffectsOnReceiveDamage = default;

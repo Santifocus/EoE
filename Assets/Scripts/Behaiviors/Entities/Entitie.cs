@@ -44,7 +44,7 @@ namespace EoE.Entities
 		public Vector3? targetPosition = null;
 
 		//Velocity Control
-		protected int appliedMoveStuns;
+		public int AppliedMoveStuns { get; set; }
 		protected Vector2 impactForce;
 
 		protected float curRotation;
@@ -69,7 +69,7 @@ namespace EoE.Entities
 		public ForceController entitieForceController;
 		public virtual Vector3 curVelocity => new Vector3(impactForce.x, 0, impactForce.y) + entitieForceController.currentTotalForce;
 		public bool IsInvincible => invincible > 0;
-		public bool IsStunned => appliedMoveStuns > 0;
+		public bool IsStunned => AppliedMoveStuns > 0;
 
 		//Armor
 		public InventoryItem EquipedArmor;
@@ -128,7 +128,7 @@ namespace EoE.Entities
 			SetupHealingParticles();
 			BuffSetup();
 
-			appliedMoveStuns = 0;
+			AppliedMoveStuns = 0;
 			invincible = 0;
 			intendedRotation = curRotation = transform.eulerAngles.y;
 		}
@@ -518,7 +518,7 @@ namespace EoE.Entities
 
 			//Custom Buff Effects
 			if (buff.CustomEffects.ApplyMoveStun)
-				appliedMoveStuns++;
+				AppliedMoveStuns++;
 			if (buff.CustomEffects.Invincible)
 				invincible++;
 
@@ -642,7 +642,7 @@ namespace EoE.Entities
 
 			//Custom Buff Effects
 			if (targetBuff.Base.CustomEffects.ApplyMoveStun)
-				appliedMoveStuns--;
+				AppliedMoveStuns--;
 			if (targetBuff.Base.CustomEffects.Invincible)
 				invincible--;
 
@@ -827,7 +827,7 @@ namespace EoE.Entities
 			{
 				bool appliedStun = spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting);
 				if (appliedStun)
-					appliedMoveStuns++;
+					AppliedMoveStuns++;
 
 				for(int i = 0; i < spell.CastInfo.StartEffects.Length; i++)
 				{
@@ -847,7 +847,7 @@ namespace EoE.Entities
 					castTime += Time.deltaTime;
 					effectTick += Time.deltaTime;
 
-					if (appliedMoveStuns > (appliedStun ? 1 : 0))
+					if (AppliedMoveStuns > (appliedStun ? 1 : 0))
 						goto StoppedSpell;
 
 					if (effectTick > GameController.CurrentGameSettings.WhileEffectTickSpeed)
@@ -861,7 +861,7 @@ namespace EoE.Entities
 				}
 
 				if (appliedStun)
-					appliedMoveStuns--;
+					AppliedMoveStuns--;
 			}
 
 			if(curParticles != null)
@@ -900,7 +900,7 @@ namespace EoE.Entities
 			{
 				bool appliedStun = spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileShooting);
 				if (appliedStun)
-					appliedMoveStuns++;
+					AppliedMoveStuns++;
 
 				for (int i = 0; i < spell.ProjectileInfos.Length; i++)
 				{
@@ -909,7 +909,7 @@ namespace EoE.Entities
 					{
 						yield return new WaitForEndOfFrame();
 						timer += Time.deltaTime;
-						if (appliedMoveStuns > (appliedStun ? 1 : 0))
+						if (AppliedMoveStuns > (appliedStun ? 1 : 0))
 							goto StoppedSpell;
 					}
 
@@ -923,14 +923,14 @@ namespace EoE.Entities
 							{
 								yield return new WaitForEndOfFrame();
 								repeatTimer += Time.deltaTime;
-								if (appliedMoveStuns > (appliedStun ? 1 : 0))
+								if (AppliedMoveStuns > (appliedStun ? 1 : 0))
 									goto StoppedSpell;
 							}
 						}
 					}
 				}
 				if (appliedStun)
-					appliedMoveStuns--;
+					AppliedMoveStuns--;
 			}
 
 			//If the spell cast / shooting was canceled we jump here

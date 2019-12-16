@@ -21,6 +21,7 @@ namespace EoE.Information
 
 		[Space(5)]
 		[Header("Other")]
+		public bool AllowHoldUse;
 		public float UseCooldown;
 		public bool RemoveOnUse;
 		public GameObject ItemModel;

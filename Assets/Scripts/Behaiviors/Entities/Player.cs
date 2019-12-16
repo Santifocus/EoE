@@ -57,6 +57,7 @@ namespace EoE.Entities
 		//Animation
 		private Vector2 curModelTilt;
 		private Vector2 curSpringLerpAcceleration;
+		private Vector2 curAnimationDirection;
 
 		//Targeting
 		private float switchTargetTimer;
@@ -371,8 +372,11 @@ namespace EoE.Entities
 			float forwardValue = Vector2.Dot(velocityDirection, forward);
 			int xMultiplier = Vector2.Dot(velocityDirection, right) > 0 ? 1 : -1;
 
-			animationControl.SetFloat("ZMove", forwardValue * normalizedMoveVelocity);
-			animationControl.SetFloat("XMove", (1 - Mathf.Abs(forwardValue)) * xMultiplier * normalizedMoveVelocity);
+			curAnimationDirection = Vector2.Lerp(curAnimationDirection, new Vector2(forwardValue * normalizedMoveVelocity, (1 - Mathf.Abs(forwardValue)) * xMultiplier * normalizedMoveVelocity), Time.deltaTime * PlayerSettings.WalkAnimationLerpSpeed);
+
+			animationControl.SetFloat("ZMove", curAnimationDirection.x);
+			animationControl.SetFloat("XMove", curAnimationDirection.y);
+			animationControl.SetFloat("CurWalkSpeed", normalizedMoveVelocity);
 		}
 		#region Walking
 		private void TurnControl()
@@ -902,17 +906,17 @@ namespace EoE.Entities
 		}
 		private void ItemUseControl()
 		{
-			if (InputController.Attack.Down && EquipedWeapon != null)
+			if (EquipedWeapon != null && (InputController.Attack.Down || (EquipedWeapon.data.AllowHoldUse && InputController.Attack.Pressed)))
 			{
 				if (EquipedWeapon.data.curCooldown <= 0)
 					EquipedWeapon.data.Use(EquipedWeapon, this, Inventory);
 			}
-			else if (InputController.MagicCast.Down && EquipedSpell != null)
+			else if (EquipedSpell != null && (InputController.MagicCast.Down || (EquipedSpell.data.AllowHoldUse && InputController.MagicCast.Pressed)))
 			{
 				if (EquipedSpell.data.curCooldown <= 0)
 					EquipedSpell.data.Use(EquipedSpell, this, Inventory);
 			}
-			else if (InputController.UseItem.Down && EquipedItem != null)
+			else if (EquipedItem != null && (InputController.UseItem.Down || (EquipedItem.data.AllowHoldUse && InputController.UseItem.Pressed)))
 			{
 				if (EquipedItem.data.curCooldown <= 0)
 					EquipedItem.data.Use(EquipedItem, this, Inventory);

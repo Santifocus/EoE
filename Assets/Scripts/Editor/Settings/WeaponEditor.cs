@@ -30,22 +30,22 @@ namespace EoE.Combatery
 
 			SerializedObject weapon = new SerializedObject(target);
 
-			if (settings.HasMaskFlag(AttackStyleParts.StandAttack))
+			if (settings.HasMaskFlag(AttackStylePart.StandAttack))
 			{
 				DrawInFoldoutHeader(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StandAttackSequence))), ref StandAttackOpen, () => DrawAttackSequence(settings.StandAttackSequence, nameof(settings.StandAttackSequence)));
 				GUILayout.Space(1);
 			}
-			if (settings.HasMaskFlag(AttackStyleParts.RunAttack))
+			if (settings.HasMaskFlag(AttackStylePart.RunAttack))
 			{
 				DrawInFoldoutHeader(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.RunAttackSequence))), ref RunAttackOpen, () => DrawAttackSequence(settings.RunAttackSequence, nameof(settings.RunAttackSequence)));
 				GUILayout.Space(1);
 			}
-			if (settings.HasMaskFlag(AttackStyleParts.JumpAttack))
+			if (settings.HasMaskFlag(AttackStylePart.JumpAttack))
 			{
 				DrawInFoldoutHeader(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.JumpAttackSequence))), ref JumpAttackOpen, () => DrawAttackSequence(settings.JumpAttackSequence, nameof(settings.JumpAttackSequence)));
 				GUILayout.Space(1);
 			}
-			if (settings.HasMaskFlag(AttackStyleParts.RunJumpAttack))
+			if (settings.HasMaskFlag(AttackStylePart.RunJumpAttack))
 			{
 				DrawInFoldoutHeader(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.RunJumpAttackSequence))), ref RunJumpAttackOpen, () => DrawAttackSequence(settings.RunJumpAttackSequence, nameof(settings.RunJumpAttackSequence)));
 				GUILayout.Space(1);
@@ -68,7 +68,14 @@ namespace EoE.Combatery
 			ObjectField<WeaponController>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WeaponPrefab))), ref settings.WeaponPrefab, 1);
 			EnumField<ElementType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WeaponElement))), ref settings.WeaponElement, 1);
 			EnumFlagField<CauseType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WeaponCauseType))), ref settings.WeaponCauseType, 1);
-			EnumFlagField<AttackStyleParts>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ContainedParts))), ref settings.ContainedParts, 1);
+			EnumFlagField<AttackStylePart>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ContainedParts))), ref settings.ContainedParts, 1);
+			EnumFlagField<AttackStylePartFallback>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.FallBackPart))), ref settings.FallBackPart, 1);
+
+			if (!settings.HasMaskFlag((AttackStylePart)settings.FallBackPart))
+			{
+				settings.FallBackPart = AttackStylePartFallback.None;
+				isDirty = true;
+			}
 
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			Vector3Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WeaponPositionOffset))), ref settings.WeaponPositionOffset, 1);
@@ -138,7 +145,9 @@ namespace EoE.Combatery
 				//Animation
 				Header("Animation Settings", offSet);
 				EnumField<AttackAnimation>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AnimationTarget))), ref style.AnimationTarget, offSet + 1);
+				BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.StopMovement))), ref style.StopMovement, offSet + 1);
 
+				LineBreak(new Color(0.25f, 0.25f, 0.65f, 0.25f));
 				EnumField<MultiplicationType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AnimationMultiplicationType))), ref style.AnimationMultiplicationType, offSet + 1);
 				if(style.AnimationMultiplicationType == MultiplicationType.FlatValue)
 				{

@@ -33,12 +33,12 @@ MonoBehaviour:
   DoManaRegen: 1
   ManaRegen: 1
   ManaRegenInCombatMultiplier: 0
-  WalkSpeed: 8
-  RunSpeedMultiplicator: 1.25
+  WalkSpeed: 6
+  RunSpeedMultiplicator: 1.5
   TurnSpeed: 540
   InAirTurnSpeedMultiplier: 0.5
-  MoveAcceleration: 7
-  NoMoveDeceleration: 5
+  MoveAcceleration: 4
+  NoMoveDeceleration: 3
   InAirAccelerationMultiplier: 0.3
   CameraToPlayerDistance: 7
   CameraAnchorOffset: {x: 0, y: 1.6, z: 0}
@@ -142,10 +142,14 @@ MonoBehaviour:
   - Item: {fileID: 11400000, guid: 4389e543531ad0d4c91543a950d48174, type: 2}
     ItemCount: 1
     ForceEquip: 1
+  - Item: {fileID: 11400000, guid: 24bf8e4451a0cc84589f3c9af971978e, type: 2}
+    ItemCount: 1
+    ForceEquip: 1
   InventorySize: 55
-  MaxModelTilt: 8
+  MaxModelTilt: 10
   SideTurnLerpSpeed: 13
   SpringLerpStiffness: 0.15
+  WalkAnimationLerpSpeed: 4
   EffectsOnReceiveDamage:
   - {fileID: 11400000, guid: 11060c91c24341947a8c373d641e5c86, type: 2}
   - {fileID: 11400000, guid: 9d9557ec007fa904aa2d0ef9f1ea3489, type: 2}

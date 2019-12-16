@@ -126,33 +126,39 @@ namespace EoE.Combatery
 				wantsToBeginNextSequence = true;
 				return;
 			}
-			//Check if we just want to dash
-			//TODO
-
 
 			//Find out what attacksequence the player should start
 			//Then check if that sequence is enabled and the player has enougth resources
 			int mask = (PlayerRunning ? 1 : 0) + (PlayerInAir ? 2 : 0);
-			AttackStyleParts part;
+			AttackStylePart part;
 			switch (mask)
 			{
 				case 1:
-					part = AttackStyleParts.RunAttack;
+					part = AttackStylePart.RunAttack;
 					break;
 				case 2:
-					part = AttackStyleParts.JumpAttack;
+					part = AttackStylePart.JumpAttack;
 					break;
 				case 3:
-					part = AttackStyleParts.RunJumpAttack;
+					part = AttackStylePart.RunJumpAttack;
 					break;
 				default: //0
-					part = AttackStyleParts.StandAttack;
+					part = AttackStylePart.StandAttack;
 					break;
 			}
 
 			//Check the flags
 			if (!weaponInfo.HasMaskFlag(part))
-				return;
+			{
+				if (weaponInfo.FallBackPart == AttackStylePartFallback.None)
+				{
+					return;
+				}
+				else
+				{
+					part = (AttackStylePart)weaponInfo.FallBackPart;
+				}
+			}
 
 			//Check Costs 
 			AttackSequence targetSequence = weaponInfo[part];
@@ -171,6 +177,9 @@ namespace EoE.Combatery
 			while (true)
 			{
 				ActiveAttackStyle = targetSequence.AttackSequenceParts[curSequenceIndex];
+
+				if (ActiveAttackStyle.StopMovement)
+					Player.Instance.AppliedMoveStuns++;
 
 				//First check if this attack sequence is allowed if not we stop the while loop here
 				float enduranceCost = weaponInfo.BaseEnduranceCost * ActiveAttackStyle.EnduranceCostMultiplier;
@@ -220,17 +229,17 @@ namespace EoE.Combatery
 					animationTimer += multiplier * Time.deltaTime;
 
 					//Check if we reached the collision activation point
-					bool shouldActiveState = animationTimer > animationActivationDelay;
-					if (shouldActiveState != colliderActive)
+					bool shouldState = animationTimer > animationActivationDelay;
+					if (shouldState != colliderActive)
 					{
-						ChangeWeaponState(shouldActiveState, ActiveAttackStyle);
+						ChangeWeaponState(shouldState, ActiveAttackStyle);
 					}
 
 					//Debug
-					if(GameController.CurrentGameSettings.IsDebugEnabled && shouldActiveState)
+					if(GameController.CurrentGameSettings.IsDebugEnabled && shouldState)
 					{
-						Debug.DrawLine(transform.position - Vector3.up / 3, transform.position + Vector3.up / 3, Color.green, 1);
-						Debug.DrawLine(transform.position - Vector3.right / 3, transform.position + Vector3.right / 3, Color.cyan, 1);
+						Debug.DrawLine(transform.position - Vector3.up / 4, transform.position + Vector3.up / 4, Color.green / 2, 1);
+						Debug.DrawLine(transform.position - Vector3.right / 4, transform.position + Vector3.right / 4, Color.cyan / 2, 1);
 					}
 
 					//Check if we crossed any attack event point
@@ -274,12 +283,18 @@ namespace EoE.Combatery
 				{
 					curSequenceIndex++;
 					wantsToBeginNextSequence = false;
+
+					if (ActiveAttackStyle.StopMovement)
+						Player.Instance.AppliedMoveStuns--;
 					continue;
 				}
 
 				//If the player did not try to start the next sequence in the given delay we stop here
 				break;
 			}
+			if (ActiveAttackStyle.StopMovement)
+				Player.Instance.AppliedMoveStuns--;
+
 			Player.Instance.animationControl.SetTrigger("FightEnd");
 			ChangeWeaponState(InAttackSequence = false, ActiveAttackStyle = null);
 		}
