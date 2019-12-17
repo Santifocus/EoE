@@ -75,69 +75,6 @@ MonoBehaviour:
   InvincibleModelFlashColor: {r: 1, g: 0, b: 0, a: 0.23137255}
   InvincibleModelFlashDelay: 0.2
   InvincibleModelFlashTime: 0.1
-  StatTextUpdateSpeed: 0.5
-  EnduranceBarLerpSpeed: 5
-  HealthTextColors:
-    serializedVersion: 2
-    key0: {r: 1, g: 0, b: 0, a: 1}
-    key1: {r: 1, g: 0.70534384, b: 0.0047169924, a: 1}
-    key2: {r: 0.034243107, g: 1, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 16384
-    ctime2: 52428
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_NumColorKeys: 3
-    m_NumAlphaKeys: 2
-  ManaTextColors:
-    serializedVersion: 2
-    key0: {r: 1, g: 0, b: 0, a: 1}
-    key1: {r: 1, g: 1, b: 0, a: 1}
-    key2: {r: 0, g: 1, b: 1, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 16384
-    ctime2: 52428
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_NumColorKeys: 3
-    m_NumAlphaKeys: 2
-  ReserveEnduranceBarColor: {r: 1, g: 1, b: 1, a: 1}
-  ActiveEnduranceBarColor: {r: 1, g: 1, b: 1, a: 1}
-  ReloadingEnduranceBarColor: {r: 0.4, g: 0.4, b: 0.4, a: 0.8}
   StartItems:
   - Item: {fileID: 11400000, guid: 4389e543531ad0d4c91543a950d48174, type: 2}
     ItemCount: 1
@@ -150,13 +87,6 @@ MonoBehaviour:
   SideTurnLerpSpeed: 13
   SpringLerpStiffness: 0.125
   WalkAnimationLerpSpeed: 4
-  EffectsOnReceiveDamage:
-  - {fileID: 11400000, guid: 11060c91c24341947a8c373d641e5c86, type: 2}
-  - {fileID: 11400000, guid: 9d9557ec007fa904aa2d0ef9f1ea3489, type: 2}
-  - {fileID: 11400000, guid: 910d3349e1560ab4ba7478fa7a8e8876, type: 2}
-  - {fileID: 11400000, guid: 232ec3e310d97c14da2bad4c274560ee, type: 2}
-  EffectsOnReceiveKnockback:
-  - {fileID: 11400000, guid: b09700b6216eb874aab8d980440f121b, type: 2}
   EffectsOnCauseDamage:
   - {fileID: 11400000, guid: 597bda602a9441346a2e721049c28c87, type: 2}
   EffectsOnCauseCrit:
@@ -164,20 +94,28 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e9a7041c1b96b544d9be0195facd23e7, type: 2}
   - {fileID: 11400000, guid: 6812b6ecf408ba8439c8e9f47922381b, type: 2}
   - {fileID: 11400000, guid: 7dbb75a734c0a4e4ea505b8ee26c552d, type: 2}
+  EffectsOnEnemyKilled:
+  - {fileID: 11400000, guid: 214bf77e3d56f424c84ef37983b6e1f5, type: 2}
   EffectsOnLevelup:
   - {fileID: 11400000, guid: 982aab948223d7044bfae67dc43bb77c, type: 2}
   - {fileID: 11400000, guid: 2a1f29303ceefa04d9d5508f74094d05, type: 2}
-  EffectsHealthThreshold: 0.3
-  EffectsOnDamageWhenBelowThreshold:
-  - {fileID: 11400000, guid: 668a809c73c04d648ae6ae4e123f2f21, type: 2}
+  EffectsWhileWalk: []
+  EffectsWhileRun: []
+  EffectsOnJump: []
   PlayerLandingVelocityThreshold: 7
   EffectsOnPlayerLanding:
   - {fileID: 11400000, guid: ba451c2b316cc054ba26cb958cbb7f1a, type: 2}
   EffectsOnPlayerDodge:
   - {fileID: 11400000, guid: 16c048efcd73fc94fb2bd95baaa20137, type: 2}
-  - {fileID: 0}
-  EffectsOnEnemyKilled:
-  - {fileID: 11400000, guid: 214bf77e3d56f424c84ef37983b6e1f5, type: 2}
+  EffectsOnReceiveDamage:
+  - {fileID: 11400000, guid: 11060c91c24341947a8c373d641e5c86, type: 2}
+  - {fileID: 11400000, guid: 9d9557ec007fa904aa2d0ef9f1ea3489, type: 2}
+  - {fileID: 11400000, guid: 910d3349e1560ab4ba7478fa7a8e8876, type: 2}
+  - {fileID: 11400000, guid: 232ec3e310d97c14da2bad4c274560ee, type: 2}
+  EffectsOnReceiveKnockback:
+  - {fileID: 11400000, guid: b09700b6216eb874aab8d980440f121b, type: 2}
+  EffectsHealthThreshold: 0.3
+  EffectsWhileHealthBelowThreshold: []
   EffectsOnPlayerDeath:
   - {fileID: 11400000, guid: 0cf11713d16b4034c873591e936d21cc, type: 2}
   - {fileID: 11400000, guid: 48e1095a0bf75e6489c4d5149d54f972, type: 2}

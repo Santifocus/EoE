@@ -738,6 +738,7 @@ namespace EoE.Entities
 			//Create a copy of the player model
 			Material dodgeMaterialInstance = Instantiate(PlayerSettings.DodgeModelMaterial);
 			Transform modelCopy = Instantiate(modelTransform, Storage.ParticleStorage);
+			Transform weaponCopy = WeaponController.PlayerWeaponController.CloneModel().transform;
 
 			modelCopy.transform.position = modelTransform.position;
 			modelCopy.transform.localScale = modelTransform.lossyScale;
@@ -748,6 +749,7 @@ namespace EoE.Entities
 			baseColor.a = 0;
 
 			ApplyMaterialToAllChildren(modelCopy);
+			ApplyMaterialToAllChildren(weaponCopy);
 
 			invincible++;
 			while (timer < PlayerSettings.DodgeModelExistTime)
@@ -761,6 +763,7 @@ namespace EoE.Entities
 			invincible--;
 
 			Destroy(modelCopy.gameObject);
+			Destroy(weaponCopy.gameObject);
 
 			for(int i = 0; i < dodgeEffects.Length; i++)
 			{
@@ -775,6 +778,8 @@ namespace EoE.Entities
 					Renderer rend = parent.GetComponent<Renderer>();
 					if (rend)
 					{
+						rend.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+						rend.receiveShadows = false;
 						Material[] newMats = new Material[rend.materials.Length];
 						for (int i = 0; i < newMats.Length; i++)
 						{
@@ -800,6 +805,8 @@ namespace EoE.Entities
 					if (!rend)
 						continue;
 
+					rend.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+					rend.receiveShadows = false;
 					Material[] newMats = new Material[rend.materials.Length];
 					for (int j = 0; j < newMats.Length; j++)
 					{

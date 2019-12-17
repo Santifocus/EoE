@@ -18,5 +18,5 @@ MonoBehaviour:
     OnParentDeath: 0
     OnTimeout: 0
     TimeStay: 1
-  Intensity: 1
+  Intensity: 0.5
   BlurDistance: 6

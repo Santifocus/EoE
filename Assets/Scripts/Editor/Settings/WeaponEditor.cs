@@ -20,10 +20,6 @@ namespace EoE.Combatery
 			if (!settings.WeaponPrefab)
 			{
 				EditorGUILayout.HelpBox("Weapon has no Weapon Prefab selected.", MessageType.Error);
-				if(GUILayout.Button("Create Weapon Controller"))
-				{
-					MenuItemStorage.CreateWeaponController();
-				}
 			}
 			DrawInFoldoutHeader("Base Data", ref BaseDataOpen, BaseDataArea);
 			GUILayout.Space(1);
