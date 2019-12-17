@@ -32,5 +32,4 @@ MonoBehaviour:
     TargetStat: 2
     DelayPerActivation: 0.25
     BaseDamage: 5
-  FXEffects:
-  - {fileID: 0}
+  FXEffects: []
