@@ -17,7 +17,6 @@ namespace EoE
 		{
 			Instance = this;
 			EventManager.PlayerTookDamageEvent += PlayerTookDamage;
-			EventManager.PlayerLandedEvent += PlayerLanded;
 			EventManager.PlayerCausedDamageEvent += PlayerCausedDamage;
 			EventManager.PlayerLevelupEvent += PlayerLevelUp;
 			EventManager.EntitieDiedEvent += EnemyKilled;
@@ -26,7 +25,6 @@ namespace EoE
 		private void OnDestroy()
 		{
 			EventManager.PlayerTookDamageEvent -= PlayerTookDamage;
-			EventManager.PlayerLandedEvent -= PlayerLanded;
 			EventManager.PlayerCausedDamageEvent -= PlayerCausedDamage;
 			EventManager.PlayerLevelupEvent -= PlayerLevelUp;
 			EventManager.EntitieDiedEvent -= EnemyKilled;
@@ -40,14 +38,6 @@ namespace EoE
 				{
 					PlayFX(playerSettings.EffectsOnReceiveDamage[i], Player.Instance.transform, true);
 				}
-
-				if ((Player.Instance.curHealth - causedDamage) / Player.Instance.curMaxHealth < playerSettings.EffectsHealthThreshold)
-				{
-					for (int i = 0; i < playerSettings.EffectsOnDamageWhenBelowThreshold.Length; i++)
-					{
-						PlayFX(playerSettings.EffectsOnDamageWhenBelowThreshold[i], Player.Instance.transform, true);
-					}
-				}
 			}
 
 			if (knockBack.HasValue)
@@ -58,16 +48,6 @@ namespace EoE
 				}
 			}
 
-		}
-		private void PlayerLanded(float velocity)
-		{
-			if (velocity > playerSettings.PlayerLandingVelocityThreshold)
-			{
-				for (int i = 0; i < playerSettings.EffectsOnPlayerLanding.Length; i++)
-				{
-					PlayFX(playerSettings.EffectsOnPlayerLanding[i], Player.Instance.transform, true);
-				}
-			}
 		}
 		private void PlayerLevelUp()
 		{

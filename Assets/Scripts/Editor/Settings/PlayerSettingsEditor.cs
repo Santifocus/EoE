@@ -17,16 +17,8 @@ namespace EoE.Information
 
 		private static bool InventoryStartItemsOpen;
 		//VFXEffectArrays
-		private static bool ReceiveDamageOpen;
-		private static bool ReceiveKnockbackOpen;
-		private static bool CauseDamageOpen;
-		private static bool CauseCritOpen;
-		private static bool LevelUpOpen;
-		private static bool OnPlayerLandingOpen;
-		private static bool OnPlayerDodgeOpen;
-		private static bool OnEnemyKilledOpen;
-		private static bool OnPlayerDeathOpen;
-		private static bool LowHealthThresholdOpen;
+		private static bool OnLandingEffectsOpen;
+		private static bool OnHealthCriticalEffectsOpen;
 
 		protected override void CustomInspector()
 		{
@@ -167,33 +159,34 @@ namespace EoE.Information
 		{
 			PlayerSettings settings = target as PlayerSettings;
 
-			ObjectArrayField(new GUIContent("Effects On Receive Damage"), ref settings.EffectsOnReceiveDamage, ref ReceiveDamageOpen, new GUIContent(". Effect"), 1);
-			ObjectArrayField(new GUIContent("Effects On Receive Knockback"), ref settings.EffectsOnReceiveKnockback, ref ReceiveKnockbackOpen, new GUIContent(". Effect"), 1);
-			ObjectArrayField(new GUIContent("Effects On Cause Damage"), ref settings.EffectsOnCauseDamage, ref CauseDamageOpen, new GUIContent(". Effect"), 1);
-			ObjectArrayField(new GUIContent("Effects On Cause Crit"), ref settings.EffectsOnCauseCrit, ref CauseCritOpen, new GUIContent(". Effect"), 1);
-			ObjectArrayField(new GUIContent("Effects On Levelup"), ref settings.EffectsOnLevelup, ref LevelUpOpen, new GUIContent(". Effect"), 1);
+			Header("On Player Attacking");
+			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnCauseDamage))), ref settings.EffectsOnCauseDamage, serializedObject.FindProperty(nameof(settings.EffectsOnCauseDamage)), new GUIContent(". Effect"), 1);
+			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnCauseCrit))), ref settings.EffectsOnCauseCrit, serializedObject.FindProperty(nameof(settings.EffectsOnCauseCrit)), new GUIContent(". Effect"), 1);
+			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnEnemyKilled))), ref settings.EffectsOnEnemyKilled, serializedObject.FindProperty(nameof(settings.EffectsOnEnemyKilled)), new GUIContent(". Effect"), 1);
+			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnLevelup))), ref settings.EffectsOnLevelup, serializedObject.FindProperty(nameof(settings.EffectsOnLevelup)), new GUIContent(". Effect"), 1);
 
-			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
-
-			if (FloatField(new GUIContent("Effects Health Threshold", "The effects in the 'Effects On Damage When Below Threshold' will only be played when the player is below this (Health / MaxHealth) Threshold. (0 - 1)"), ref settings.EffectsHealthThreshold, 1))
+			Header("On Player Movement");
+			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsWhileWalk))), ref settings.EffectsWhileWalk, serializedObject.FindProperty(nameof(settings.EffectsWhileWalk)), new GUIContent(". Effect"), 1);
+			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsWhileRun))), ref settings.EffectsWhileRun, serializedObject.FindProperty(nameof(settings.EffectsWhileRun)), new GUIContent(". Effect"), 1);
+			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnJump))), ref settings.EffectsOnJump, serializedObject.FindProperty(nameof(settings.EffectsOnJump)), new GUIContent(". Effect"), 1);
+			Foldout(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnPlayerLanding))), ref OnLandingEffectsOpen, 1);
+			if (OnLandingEffectsOpen)
 			{
-				settings.EffectsHealthThreshold = Mathf.Clamp01(settings.EffectsHealthThreshold);
+				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.PlayerLandingVelocityThreshold))), ref settings.PlayerLandingVelocityThreshold, 2);
+				ObjectArrayField<FXObject>(new GUIContent("Effects"), ref settings.EffectsOnPlayerLanding, serializedObject.FindProperty(nameof(settings.EffectsOnPlayerLanding)), new GUIContent(". Effect"), 2);
 			}
-			ObjectArrayField(new GUIContent("Effects On Damage When Below Threshold"), ref settings.EffectsOnDamageWhenBelowThreshold, ref LowHealthThresholdOpen, new GUIContent(". Effect"), 1);
+			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnPlayerDodge))), ref settings.EffectsOnPlayerDodge, serializedObject.FindProperty(nameof(settings.EffectsOnPlayerDodge)), new GUIContent(". Effect"), 1);
 
-			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
-
-			if (FloatField(new GUIContent("Player Landing Velocity Threshold", "The player must land with this or a higher velocity to trigger the on land effects."), ref settings.PlayerLandingVelocityThreshold, 1))
+			Header("On Player Receiving Damage");
+			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnReceiveDamage))), ref settings.EffectsOnReceiveDamage, serializedObject.FindProperty(nameof(settings.EffectsOnReceiveDamage)), new GUIContent(". Effect"), 1);
+			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnReceiveKnockback))), ref settings.EffectsOnReceiveKnockback, serializedObject.FindProperty(nameof(settings.EffectsOnReceiveKnockback)), new GUIContent(". Effect"), 1);
+			Foldout(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsWhileHealthBelowThreshold))), ref OnHealthCriticalEffectsOpen, 1);
+			if (OnHealthCriticalEffectsOpen)
 			{
-				settings.EffectsHealthThreshold = Mathf.Clamp01(settings.EffectsHealthThreshold);
+				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsHealthThreshold))), ref settings.EffectsHealthThreshold, 2);
+				ObjectArrayField<FXObject>(new GUIContent("Effects"), ref settings.EffectsWhileHealthBelowThreshold, serializedObject.FindProperty(nameof(settings.EffectsWhileHealthBelowThreshold)), new GUIContent(". Effect"), 2);
 			}
-			ObjectArrayField(new GUIContent("Effects On Player Landing"), ref settings.EffectsOnPlayerLanding, ref OnPlayerLandingOpen, new GUIContent(". Effect"), 1);
-
-			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
-
-			ObjectArrayField(new GUIContent("Effects On Player Dodge"), ref settings.EffectsOnPlayerDodge, ref OnPlayerDodgeOpen, new GUIContent(". Effect"), 1);
-			ObjectArrayField(new GUIContent("Effects On Enemy Killed"), ref settings.EffectsOnEnemyKilled, ref OnEnemyKilledOpen, new GUIContent(". Effect"), 1);
-			ObjectArrayField(new GUIContent("Effects On Player Death"), ref settings.EffectsOnPlayerDeath, ref OnPlayerDeathOpen, new GUIContent(". Effect"), 1);
+			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnPlayerDeath))), ref settings.EffectsOnPlayerDeath, serializedObject.FindProperty(nameof(settings.EffectsOnPlayerDeath)), new GUIContent(". Effect"), 1);
 		}
 	}
 }

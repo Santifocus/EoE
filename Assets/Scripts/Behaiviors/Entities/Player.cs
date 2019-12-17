@@ -52,12 +52,17 @@ namespace EoE.Entities
 		private float intendedAcceleration;
 		private float curAcceleration;
 		private float jumpGroundCooldown;
+		private bool lastOnGroundState = true;
 		private float lastFallVelocity;
 
-		//Animation
+		//Feedback
 		private Vector2 curModelTilt;
 		private Vector2 curSpringLerpAcceleration;
 		private Vector2 curAnimationDirection;
+
+		private FXInstance[] PlayerWalkingBoundEffects;
+		private FXInstance[] PlayerRunningBoundEffects;
+		private FXInstance[] HealthBelowThresholdBoundEffects;
 
 		//Targeting
 		private float switchTargetTimer;
@@ -307,7 +312,7 @@ namespace EoE.Entities
 		private void MovementControl()
 		{
 			CameraControl();
-			MovementAnimationControl();
+			PlayerFeedbackControl();
 
 			if (IsStunned)
 			{
@@ -336,7 +341,7 @@ namespace EoE.Entities
 				PlayerCameraController.TargetRotation += newMoveDistance;
 			}
 		}
-		private void MovementAnimationControl()
+		private void PlayerFeedbackControl()
 		{
 			bool turning = curStates.Turning;
 			bool moving = curStates.Moving;
@@ -377,6 +382,79 @@ namespace EoE.Entities
 			animationControl.SetFloat("ZMove", curAnimationDirection.x);
 			animationControl.SetFloat("XMove", curAnimationDirection.y);
 			animationControl.SetFloat("CurWalkSpeed", normalizedMoveVelocity);
+
+			///Control FX
+			//Health critical effects
+			bool curBelowHealthThreshold = HealthBelowThresholdBoundEffects != null;
+			bool newBelowHealthThresholdState = (curHealth / curMaxHealth) < PlayerSettings.EffectsHealthThreshold;
+			if(newBelowHealthThresholdState != curBelowHealthThreshold)
+			{
+				//Health fell below threshold
+				if (newBelowHealthThresholdState)
+				{
+					HealthBelowThresholdBoundEffects = new FXInstance[PlayerSettings.EffectsWhileHealthBelowThreshold.Length];
+					for(int i = 0; i < HealthBelowThresholdBoundEffects.Length; i++)
+					{
+						HealthBelowThresholdBoundEffects[i] = FXManager.PlayFX(PlayerSettings.EffectsWhileHealthBelowThreshold[i], transform, true);
+					}
+				}
+				else //Health went above threshold
+				{
+					for(int i = 0; i < HealthBelowThresholdBoundEffects.Length; i++)
+					{
+						HealthBelowThresholdBoundEffects[i].FinishFX();
+					}
+					HealthBelowThresholdBoundEffects = null;
+				}
+			}
+
+			//Walk effects
+			bool curWalkingEffectsOn = PlayerWalkingBoundEffects != null;
+			bool newWalkingEffectsOn = (!turning && curAcceleration > 0) && !running;
+			if(curWalkingEffectsOn != newWalkingEffectsOn)
+			{
+				//Player started walking or stopped running and kept walking
+				if (newWalkingEffectsOn)
+				{
+					PlayerWalkingBoundEffects = new FXInstance[PlayerSettings.EffectsWhileWalk.Length];
+					for (int i = 0; i < PlayerWalkingBoundEffects.Length; i++)
+					{
+						PlayerWalkingBoundEffects[i] = FXManager.PlayFX(PlayerSettings.EffectsWhileWalk[i], transform, true);
+					}
+				}
+				else //Player stopped walking or started running
+				{
+					for (int i = 0; i < PlayerWalkingBoundEffects.Length; i++)
+					{
+						PlayerWalkingBoundEffects[i].FinishFX();
+					}
+					PlayerWalkingBoundEffects = null;
+				}
+			}
+
+			//Run effects
+			bool curRunningEffectsOn = PlayerRunningBoundEffects != null;
+			bool newRunningEffectsOn = running;
+			if (curRunningEffectsOn != newRunningEffectsOn)
+			{
+				//Player started running
+				if (newRunningEffectsOn)
+				{
+					PlayerRunningBoundEffects = new FXInstance[PlayerSettings.EffectsWhileRun.Length];
+					for (int i = 0; i < PlayerRunningBoundEffects.Length; i++)
+					{
+						PlayerRunningBoundEffects[i] = FXManager.PlayFX(PlayerSettings.EffectsWhileRun[i], transform, true);
+					}
+				}
+				else //Player stopped running
+				{
+					for (int i = 0; i < PlayerRunningBoundEffects.Length; i++)
+					{
+						PlayerRunningBoundEffects[i].FinishFX();
+					}
+					PlayerRunningBoundEffects = null;
+				}
+			}
 		}
 		#region Walking
 		private void TurnControl()
@@ -488,6 +566,11 @@ namespace EoE.Entities
 
 			jumpGroundCooldown = JUMP_GROUND_COOLDOWN;
 			animationControl.SetTrigger("Jump");
+
+			for(int i = 0; i < PlayerSettings.EffectsOnJump.Length; i++)
+			{
+				FXManager.PlayFX(PlayerSettings.EffectsOnJump[i], transform, true);
+			}
 		}
 		private void CheckForFalling()
 		{
@@ -505,17 +588,29 @@ namespace EoE.Entities
 		}
 		private void CheckForLanding()
 		{
-			//Check if we landed
+			bool newOnGroundState = charController.isGrounded;
 			float velDif = curVelocity.y - lastFallVelocity;
-			if (velDif > LANDED_VELOCITY_THRESHOLD && jumpGroundCooldown <= 0) //We stopped falling for a certain amount, and we didnt change velocity because we just jumped
+			//Check if the grounded state changed
+			if((newOnGroundState != lastOnGroundState))
 			{
-				Landed(velDif);
+				lastOnGroundState = newOnGroundState;
+				//Did the ground state change from false to true?
+				//Then if we reached a certain velocity we count this is landing
+				if(newOnGroundState && velDif > LANDED_VELOCITY_THRESHOLD)
+					Landed(velDif);
 			}
 			lastFallVelocity = curVelocity.y;
 		}
 		private void Landed(float velDif)
 		{
-			EventManager.PlayerLandedInvoke(velDif);
+			//Create FX
+			if (velDif > PlayerSettings.PlayerLandingVelocityThreshold)
+			{
+				for (int i = 0; i < PlayerSettings.EffectsOnPlayerLanding.Length; i++)
+				{
+					FXManager.PlayFX(PlayerSettings.EffectsOnPlayerLanding[i], transform, true);
+				}
+			}
 
 			float velocityMultiplier = 0;
 			if (velDif > GameController.CurrentGameSettings.GroundHitVelocityLossMinThreshold)

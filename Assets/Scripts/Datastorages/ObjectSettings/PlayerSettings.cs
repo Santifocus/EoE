@@ -74,18 +74,25 @@ namespace EoE.Information
 		public float WalkAnimationLerpSpeed = 4;
 
 		///FX
-		public FXObject[] EffectsOnReceiveDamage = default;
-		public FXObject[] EffectsOnReceiveKnockback = default;
+		//On Player do attack
 		public FXObject[] EffectsOnCauseDamage = default;
 		public FXObject[] EffectsOnCauseCrit = default;
+		public FXObject[] EffectsOnEnemyKilled = default;
 		public FXObject[] EffectsOnLevelup = default;
-		public float EffectsHealthThreshold = 0.3f;
-		public FXObject[] EffectsOnDamageWhenBelowThreshold = default;
 
+		//Player Movement
+		public FXObject[] EffectsWhileWalk = default;
+		public FXObject[] EffectsWhileRun = default;
+		public FXObject[] EffectsOnJump = default;
 		public float PlayerLandingVelocityThreshold = 5f;
 		public FXObject[] EffectsOnPlayerLanding = default;
 		public FXObject[] EffectsOnPlayerDodge = default;
-		public FXObject[] EffectsOnEnemyKilled = default;
+
+		//On Player receive attack
+		public FXObject[] EffectsOnReceiveDamage = default;
+		public FXObject[] EffectsOnReceiveKnockback = default;
+		public float EffectsHealthThreshold = 0.3f;
+		public FXObject[] EffectsWhileHealthBelowThreshold = default;
 		public FXObject[] EffectsOnPlayerDeath = default;
 
 		[System.Serializable]
