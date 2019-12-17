@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3f99014803e0b847b46eafc212b1761, type: 3}
-  m_Name: PlayerDodgeBlur
+  m_Script: {fileID: 11500000, guid: f01d21cfe84eb5e4985cab77ea31a332, type: 3}
+  m_Name: CritHealthTint
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0.01
+  TimeOut: 2
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 0
-    TimeStay: 1
-  Intensity: 1
-  BlurDistance: 2
+    TimeStay: 0
+  TintColor: {r: 1, g: 0.026315786, b: 0, a: 0.15294118}
+  Dominance: 2

@@ -34,7 +34,7 @@ MonoBehaviour:
   ManaRegen: 1
   ManaRegenInCombatMultiplier: 0.2
   WalkSpeed: 8
-  RunSpeedMultiplicator: 1.35
+  RunSpeedMultiplicator: 1.5
   TurnSpeed: 540
   InAirTurnSpeedMultiplier: 0.5
   MoveAcceleration: 6
@@ -61,7 +61,7 @@ MonoBehaviour:
   JumpPower: {x: 0, y: 10, z: 15}
   JumpImpulsePower: 3
   JumpBackwardMultiplier: 0.65
-  DodgePower: 4
+  DodgePower: 5
   DodgeDuration: 0.15
   DodgeModelExistTime: 0.35
   DodgeCooldown: 0.3
@@ -150,13 +150,6 @@ MonoBehaviour:
   SideTurnLerpSpeed: 13
   SpringLerpStiffness: 0.125
   WalkAnimationLerpSpeed: 4
-  EffectsOnReceiveDamage:
-  - {fileID: 11400000, guid: 11060c91c24341947a8c373d641e5c86, type: 2}
-  - {fileID: 11400000, guid: 9d9557ec007fa904aa2d0ef9f1ea3489, type: 2}
-  - {fileID: 11400000, guid: 910d3349e1560ab4ba7478fa7a8e8876, type: 2}
-  - {fileID: 11400000, guid: 232ec3e310d97c14da2bad4c274560ee, type: 2}
-  EffectsOnReceiveKnockback:
-  - {fileID: 11400000, guid: b09700b6216eb874aab8d980440f121b, type: 2}
   EffectsOnCauseDamage:
   - {fileID: 11400000, guid: 597bda602a9441346a2e721049c28c87, type: 2}
   EffectsOnCauseCrit:
@@ -164,20 +157,39 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e9a7041c1b96b544d9be0195facd23e7, type: 2}
   - {fileID: 11400000, guid: 6812b6ecf408ba8439c8e9f47922381b, type: 2}
   - {fileID: 11400000, guid: 7dbb75a734c0a4e4ea505b8ee26c552d, type: 2}
+  EffectsOnEnemyKilled:
+  - {fileID: 11400000, guid: 214bf77e3d56f424c84ef37983b6e1f5, type: 2}
   EffectsOnLevelup:
   - {fileID: 11400000, guid: 982aab948223d7044bfae67dc43bb77c, type: 2}
   - {fileID: 11400000, guid: 2a1f29303ceefa04d9d5508f74094d05, type: 2}
-  EffectsHealthThreshold: 0.3
-  EffectsOnDamageWhenBelowThreshold:
-  - {fileID: 11400000, guid: 668a809c73c04d648ae6ae4e123f2f21, type: 2}
-  PlayerLandingVelocityThreshold: 7
+  EffectsWhileWalk:
+  - {fileID: 11400000, guid: 0ca21d7cb4541c24185b997c58ef29a8, type: 2}
+  EffectsWhileRun:
+  - {fileID: 11400000, guid: 760364c3cb2adab46a51192839a050f3, type: 2}
+  - {fileID: 11400000, guid: 0b517f1942c86fb4c81dd0b2013c1fc0, type: 2}
+  EffectsOnJump:
+  - {fileID: 11400000, guid: 81bcb4243c5d7bf409682cb56f2f128e, type: 2}
+  PlayerLandingVelocityThreshold: 2
   EffectsOnPlayerLanding:
   - {fileID: 11400000, guid: ba451c2b316cc054ba26cb958cbb7f1a, type: 2}
+  - {fileID: 11400000, guid: b16188df833539c4391e686f9ab8b6a5, type: 2}
   EffectsOnPlayerDodge:
   - {fileID: 11400000, guid: 16c048efcd73fc94fb2bd95baaa20137, type: 2}
-  - {fileID: 0}
-  EffectsOnEnemyKilled:
-  - {fileID: 11400000, guid: 214bf77e3d56f424c84ef37983b6e1f5, type: 2}
+  - {fileID: 11400000, guid: 83283d5fa89550943ae53abf369f6351, type: 2}
+  - {fileID: 11400000, guid: a1a241ff7cc72544e9475b9495c7ee11, type: 2}
+  EffectsOnReceiveDamage:
+  - {fileID: 11400000, guid: 11060c91c24341947a8c373d641e5c86, type: 2}
+  - {fileID: 11400000, guid: 9d9557ec007fa904aa2d0ef9f1ea3489, type: 2}
+  - {fileID: 11400000, guid: 910d3349e1560ab4ba7478fa7a8e8876, type: 2}
+  - {fileID: 11400000, guid: 232ec3e310d97c14da2bad4c274560ee, type: 2}
+  EffectsOnReceiveKnockback:
+  - {fileID: 11400000, guid: b09700b6216eb874aab8d980440f121b, type: 2}
+  EffectsHealthThreshold: 0.25
+  EffectsWhileHealthBelowThreshold:
+  - {fileID: 11400000, guid: 668a809c73c04d648ae6ae4e123f2f21, type: 2}
+  - {fileID: 11400000, guid: 7aa331681cd145e4284a37d550c55ff6, type: 2}
+  - {fileID: 11400000, guid: ee4aace1166a0f44ebd9d6698f930e53, type: 2}
+  - {fileID: 11400000, guid: 7747171802ae3cc4a8b50a7c44f986f7, type: 2}
   EffectsOnPlayerDeath:
   - {fileID: 11400000, guid: 0cf11713d16b4034c873591e936d21cc, type: 2}
   - {fileID: 11400000, guid: 48e1095a0bf75e6489c4d5149d54f972, type: 2}
