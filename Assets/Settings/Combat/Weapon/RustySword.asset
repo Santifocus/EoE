@@ -384,7 +384,7 @@ MonoBehaviour:
         m_RotationOrder: 4
       AnimationSpeedCurveTimeframe: 2
       AnimationSpeedCurveMultiplier: 2
-      DamageMultiplier: 2
+      DamageMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1.5
       KnockbackMultiplier: 5
