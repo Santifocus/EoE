@@ -83,9 +83,9 @@ MonoBehaviour:
     ItemCount: 1
     ForceEquip: 1
   InventorySize: 55
-  MaxModelTilt: 10
+  MaxModelTilt: 8
   SideTurnLerpSpeed: 13
-  SpringLerpStiffness: 0.125
+  SpringLerpStiffness: 0.1
   WalkAnimationLerpSpeed: 4
   EffectsOnCauseDamage:
   - {fileID: 11400000, guid: 597bda602a9441346a2e721049c28c87, type: 2}
@@ -130,3 +130,5 @@ MonoBehaviour:
   EffectsOnPlayerDeath:
   - {fileID: 11400000, guid: 0cf11713d16b4034c873591e936d21cc, type: 2}
   - {fileID: 11400000, guid: 48e1095a0bf75e6489c4d5149d54f972, type: 2}
+  EffectsOnItemPickup: []
+  EffectsOnSoulsPickup: []

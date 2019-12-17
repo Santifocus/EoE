@@ -15,7 +15,17 @@ namespace EoE.Entities
 		private InventoryItem containedItem;
 		protected override void Interact()
 		{
+			int preStacksize = containedItem.stackSize;
 			Player.Instance.Inventory.AddItem(containedItem);
+
+			if(preStacksize != containedItem.stackSize)
+			{
+				for (int i = 0; i < Player.PlayerSettings.EffectsOnItemPickup.Length; i++)
+				{
+					FXManager.PlayFX(Player.PlayerSettings.EffectsOnItemPickup[i], transform, true);
+				}
+			}
+
 			if (containedItem.stackSize == 0)
 			{
 				Destroy(infoDisplay.gameObject);

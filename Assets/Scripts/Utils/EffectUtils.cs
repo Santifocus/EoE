@@ -884,7 +884,7 @@ namespace EoE
 
 					if (ParticleEffectInfo.InheritRotationOfTarget)
 					{
-						particleTransform.transform.forward = parent.transform.forward;
+						particleTransform.rotation = Quaternion.Lerp(particleTransform.rotation, parent.transform.rotation, Time.fixedDeltaTime * ParticleEffectInfo.RotationInheritLerpSpeed);
 						particleTransform.transform.eulerAngles += rotationOffset;
 					}
 				}

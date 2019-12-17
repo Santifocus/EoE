@@ -169,6 +169,10 @@ namespace EoE.Information
 				ObjectArrayField<FXObject>(new GUIContent("Effects"), ref settings.EffectsWhileHealthBelowThreshold, serializedObject.FindProperty(nameof(settings.EffectsWhileHealthBelowThreshold)), new GUIContent(". Effect"), 2);
 			}
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnPlayerDeath))), ref settings.EffectsOnPlayerDeath, serializedObject.FindProperty(nameof(settings.EffectsOnPlayerDeath)), new GUIContent(". Effect"), 1);
+
+			Header("On Player Actions");
+			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnItemPickup))), ref settings.EffectsOnItemPickup, serializedObject.FindProperty(nameof(settings.EffectsOnItemPickup)), new GUIContent(". Effect"), 1);
+			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnSoulsPickup))), ref settings.EffectsOnSoulsPickup, serializedObject.FindProperty(nameof(settings.EffectsOnSoulsPickup)), new GUIContent(". Effect"), 1);
 		}
 	}
 }

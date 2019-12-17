@@ -23,8 +23,8 @@ MonoBehaviour:
   WeaponCauseType: 0
   ContainedParts: -1
   FallBackPart: 1
-  WeaponPositionOffset: {x: 0, y: 0, z: 1}
-  WeaponRotationOffset: {x: 0, y: 0, z: 0}
+  WeaponPositionOffset: {x: 0, y: 0, z: 1.05}
+  WeaponRotationOffset: {x: 0, y: 0, z: 25}
   StandAttackSequence:
     AttackSequenceParts:
     - AnimationTarget: 1

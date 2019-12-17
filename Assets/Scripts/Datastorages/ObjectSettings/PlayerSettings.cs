@@ -85,6 +85,10 @@ namespace EoE.Information
 		public FXObject[] EffectsWhileHealthBelowThreshold = default;
 		public FXObject[] EffectsOnPlayerDeath = default;
 
+		//Player actions
+		public FXObject[] EffectsOnItemPickup = default;
+		public FXObject[] EffectsOnSoulsPickup = default;
+
 		[System.Serializable]
 		public class StartItem
 		{

@@ -16,5 +16,7 @@ namespace EoE.Information
 		public bool FollowTarget = false;
 		[Tooltip("When enabled, this effect will inherit the rotation of the target it is following, otherwise the rotation stays as it was when it spawned.")]
 		public bool InheritRotationOfTarget = false;
+		[Tooltip("If this Effect should inherit rotation, then based on this value the rotation will be lerped (Higher == faster).")]
+		public float RotationInheritLerpSpeed = 4;
 	}
 }

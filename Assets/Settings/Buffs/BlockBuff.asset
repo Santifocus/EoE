@@ -28,8 +28,9 @@ MonoBehaviour:
     ApplyMoveStun: 0
     Invincible: 0
   DOTs:
-  - Element: 0
+  - Element: 1
     TargetStat: 2
     DelayPerActivation: 0.25
     BaseDamage: 5
-  FXEffects: []
+  FXEffects:
+  - {fileID: 0}

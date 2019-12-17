@@ -410,7 +410,7 @@ namespace EoE.Entities
 
 			//Walk effects
 			bool curWalkingEffectsOn = PlayerWalkingBoundEffects != null;
-			bool newWalkingEffectsOn = (!turning && curAcceleration > 0) && !running;
+			bool newWalkingEffectsOn = (!turning && curAcceleration > 0) && (!running) && (charController.isGrounded);
 			if(curWalkingEffectsOn != newWalkingEffectsOn)
 			{
 				//Player started walking or stopped running and kept walking
@@ -434,7 +434,7 @@ namespace EoE.Entities
 
 			//Run effects
 			bool curRunningEffectsOn = PlayerRunningBoundEffects != null;
-			bool newRunningEffectsOn = running;
+			bool newRunningEffectsOn = (running) && (charController.isGrounded);
 			if (curRunningEffectsOn != newRunningEffectsOn)
 			{
 				//Player started running
