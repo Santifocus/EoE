@@ -36,10 +36,6 @@ namespace EoE.Information
 		[MenuItem("EoE/Combat/Spell")] public static void CreateSpell() => AssetCreator<Spell>("Settings", "Combat", "Spell");
 		[MenuItem("EoE/Combat/Physical/Weapon")] public static void CreateWeapon() => AssetCreator<Weapon>("Settings", "Combat", "Weapon");
 		[MenuItem("EoE/Combat/Physical/ComboSet")] public static void CreateComboSet() => AssetCreator<ComboSet>("Settings", "Combat", "Weapon", "ComboSets");
-		[MenuItem("EoE/Combat/Physical/Weapon Controller")] public static void CreateWeaponController()
-		{
-			UnityEngine.Debug.LogError("Not implemented!");
-		}
 
 		//Other
 		[MenuItem("EoE/Buff")] public static void CreateBuff() => AssetCreator<Buff>("Settings", "Buffs");

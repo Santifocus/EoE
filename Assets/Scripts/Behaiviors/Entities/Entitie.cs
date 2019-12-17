@@ -812,7 +812,7 @@ namespace EoE.Entities
 		#region Spell Casting
 		public bool CastSpell(Spell spell)
 		{
-			if (curMana < spell.BaseManaCost || IsCasting || CastingCooldown > 0)
+			if (curMana < spell.BaseManaCost || IsCasting || CastingCooldown > 0 || (this is Player && WeaponController.PlayerWeaponController.InAttackSequence))
 				return false;
 
 			StartCoroutine(CastSpellC(spell));

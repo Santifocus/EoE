@@ -23,10 +23,6 @@ namespace EoE.Combatery
 		public bool InAttackSequence { get; private set; }
 		public AttackStyle ActiveAttackStyle { get; private set; }
 
-		//Getter helper
-		private bool PlayerRunning => Player.Instance.curStates.Running;
-		private bool PlayerInAir => !Player.Instance.charController.isGrounded;
-
 		//Inspector variables
 		[SerializeField] private WeaponHitbox[] weaponHitboxes = default;
 		[SerializeField] private GameObject[] objectsToActivateOnActive = default;
@@ -77,6 +73,31 @@ namespace EoE.Combatery
 				objectsToActivateOnActive[i].SetActive(state);
 			}
 			ignoredColliders = new List<Collider>();
+		}
+		public GameObject CloneModel()
+		{
+			WeaponController clone = Instantiate(this, Storage.ParticleStorage);
+
+			//deactivate behaiviors
+			clone.enabled = false;
+			for(int i = 0; i < clone.weaponHitboxes.Length; i++)
+			{
+				clone.weaponHitboxes[i].enabled = false;
+			}
+
+			//deactivate all custom objects
+			for (int i = 0; i < clone.objectsToActivateOnActive.Length; i++)
+			{
+				clone.objectsToActivateOnActive[i].SetActive(false);
+			}
+
+			//Set layers to default
+			clone.gameObject.layer = 0;
+			for (int i = 0; i < clone.transform.childCount; i++)
+			{
+				clone.transform.GetChild(i).gameObject.layer = 0;
+			}
+			return clone.gameObject;
 		}
 		#endregion
 		#region BasicMonobehaivior
@@ -132,7 +153,7 @@ namespace EoE.Combatery
 
 			//Find out what attacksequence the player should start
 			//Then check if that sequence is enabled and the player has enougth resources
-			int mask = (PlayerRunning ? 1 : 0) + (PlayerInAir ? 2 : 0);
+			int mask = ((Player.Instance.curStates.Running) ? 1 : 0) + ((!Player.Instance.charController.isGrounded) ? 2 : 0);
 			AttackStylePart part;
 			switch (mask)
 			{
@@ -150,7 +171,8 @@ namespace EoE.Combatery
 					break;
 			}
 
-			//Check the flags
+			//Check the flag, if the attempted flag doesnt exist we check for a fallback
+			//if there is none we stop this attempt
 			if (!weaponInfo.HasMaskFlag(part))
 			{
 				if (weaponInfo.FallBackPart == AttackStylePartFallback.None)
@@ -163,15 +185,8 @@ namespace EoE.Combatery
 				}
 			}
 
-			//Check Costs 
-			AttackSequence targetSequence = weaponInfo[part];
-			float enduranceCost = weaponInfo.BaseEnduranceCost * targetSequence.AttackSequenceParts[0].EnduranceCostMultiplier;
-			float manaCost = weaponInfo.BaseManaCost * targetSequence.AttackSequenceParts[0].ManaCostMultiplier;
-			if ((Player.Instance.curEndurance >= enduranceCost) && (Player.Instance.curMana >= manaCost))
-			{
-				//Start the attack
-				StartCoroutine(Attack(targetSequence));
-			}
+			//Start the attack
+			StartCoroutine(Attack(weaponInfo[part]));
 		}
 		private IEnumerator Attack(AttackSequence targetSequence)
 		{
@@ -196,6 +211,7 @@ namespace EoE.Combatery
 				{
 					break;
 				}
+
 
 				//Setup timers and blend variables
 				float totalTime = 0;

@@ -53,16 +53,6 @@ namespace EoE.Information
 		public float InvincibleModelFlashDelay = 0.4f;
 		public float InvincibleModelFlashTime = 0.4f;
 
-		//UI
-		public float StatTextUpdateSpeed = 1;
-		public float EnduranceBarLerpSpeed = 5;
-		public Gradient HealthTextColors = new Gradient();
-		public Gradient ManaTextColors = new Gradient();
-
-		public Color ReserveEnduranceBarColor = new Color(0.65f, 0.325f, 0, 1);
-		public Color ActiveEnduranceBarColor = new Color(1, 0.5f, 0, 1);
-		public Color ReloadingEnduranceBarColor = new Color(0.4f, 0.4f, 0.4f, 0.8f);
-
 		//Inventory
 		public StartItem[] StartItems = new StartItem[0];
 		public int InventorySize = 24;

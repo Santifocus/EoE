@@ -11,7 +11,6 @@ namespace EoE.Information
 		private static bool DodgeSettingsOpen;
 		private static bool BlockingSettingsOpen;
 		private static bool IFramesSettingsOpen;
-		private static bool HUDSettingsOpen;
 		private static bool InventorySettingsOpen;
 		private static bool AnimationSettingsOpen;
 
@@ -27,7 +26,6 @@ namespace EoE.Information
 			DrawInFoldoutHeader(new GUIContent("Dodge Settings"), ref DodgeSettingsOpen, DodgeSettingsArea);
 			DrawInFoldoutHeader(new GUIContent("Blocking Settings"), ref BlockingSettingsOpen, BlockingSettingsArea);
 			DrawInFoldoutHeader(new GUIContent("IFrames Settings"), ref IFramesSettingsOpen, IFramesSettingsArea);
-			DrawInFoldoutHeader(new GUIContent("HUD Settings"), ref HUDSettingsOpen, HUDSettingsArea);
 			DrawInFoldoutHeader(new GUIContent("Inventory Settings"), ref InventorySettingsOpen, InventorySettingsArea);
 			DrawInFoldoutHeader(new GUIContent("Animation Settings"), ref AnimationSettingsOpen, AnimationSettingsArea);
 			DrawInFoldoutHeader(new GUIContent("FX Settings"), ref VFXSettingsOpen, FXSettingsArea);
@@ -113,22 +111,6 @@ namespace EoE.Information
 				FloatField(new GUIContent("Invincible Model Flash Time", "How long does a model color flash last?"), ref settings.InvincibleModelFlashTime, 2);
 			}
 		}
-		private void HUDSettingsArea()
-		{
-			PlayerSettings settings = target as PlayerSettings;
-
-			FloatField(new GUIContent("Stat Text Update Speed", "How fast should the Stat text display update its number? Depending on the current difference between actuall health and displayed health the update speed increases."), ref settings.StatTextUpdateSpeed, 1);
-			FloatField(new GUIContent("Endurance Bar Lerp Speed", "How fast should the Endurance bar(s) lerp to the actuall Endurance amount. (In 1/X Seconds)"), ref settings.EnduranceBarLerpSpeed, 1);
-
-			GUILayout.Space(5);
-			GradientField(new GUIContent("Health Text Colors", "Gradient Start == No Health, Gradient End == Full Health"), ref settings.HealthTextColors, 1);
-			GradientField(new GUIContent("Mana Text Colors", "Gradient Start == No Mana, Gradient End == Full Mana"), ref settings.ManaTextColors, 1);
-
-			GUILayout.Space(5);
-			ColorField("Reserved Endurance Bar Color", ref settings.ReserveEnduranceBarColor, 1);
-			ColorField("Active Endurance Bar Color", ref settings.ActiveEnduranceBarColor, 1);
-			ColorField("Reloading Endurance Bar Color", ref settings.ReloadingEnduranceBarColor, 1);
-		}
 		private void InventorySettingsArea()
 		{
 			PlayerSettings settings = target as PlayerSettings;
@@ -183,7 +165,7 @@ namespace EoE.Information
 			Foldout(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsWhileHealthBelowThreshold))), ref OnHealthCriticalEffectsOpen, 1);
 			if (OnHealthCriticalEffectsOpen)
 			{
-				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsHealthThreshold))), ref settings.EffectsHealthThreshold, 2);
+				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsHealthThreshold))), ref settings.EffectsHealthThreshold, 0, 1, 2);
 				ObjectArrayField<FXObject>(new GUIContent("Effects"), ref settings.EffectsWhileHealthBelowThreshold, serializedObject.FindProperty(nameof(settings.EffectsWhileHealthBelowThreshold)), new GUIContent(". Effect"), 2);
 			}
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnPlayerDeath))), ref settings.EffectsOnPlayerDeath, serializedObject.FindProperty(nameof(settings.EffectsOnPlayerDeath)), new GUIContent(". Effect"), 1);
