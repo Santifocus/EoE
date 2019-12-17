@@ -37,7 +37,7 @@ MonoBehaviour:
   RunSpeedMultiplicator: 1.35
   TurnSpeed: 540
   InAirTurnSpeedMultiplier: 0.5
-  MoveAcceleration: 4
+  MoveAcceleration: 6
   NoMoveDeceleration: 3
   InAirAccelerationMultiplier: 0.3
   CameraToPlayerDistance: 7
@@ -52,10 +52,10 @@ MonoBehaviour:
   CameraBaseFOV: 60
   Endurance: 100
   DoEnduranceRegen: 1
-  EnduranceRegen: 6
-  EnduranceRegenInCombatMultiplier: 0.5
-  EnduranceAfterUseCooldown: 3
-  EnduranceRegenAfterUseMultiplier: 0.5
+  EnduranceRegen: 7
+  EnduranceRegenInCombatMultiplier: 0.75
+  EnduranceAfterUseCooldown: 1.5
+  EnduranceRegenAfterUseMultiplier: 0.2
   JumpEnduranceCost: 3
   RunEnduranceCost: 5
   JumpPower: {x: 0, y: 10, z: 15}
@@ -65,7 +65,7 @@ MonoBehaviour:
   DodgeDuration: 0.15
   DodgeModelExistTime: 0.35
   DodgeCooldown: 0.3
-  DodgeEnduranceCost: 5
+  DodgeEnduranceCost: 8
   DodgeModelMaterial: {fileID: 2100000, guid: 11d51a887e999af408b3d408f575a218, type: 2}
   StartBlockingInertia: 0.3
   BlockingBuff: {fileID: 11400000, guid: 87a7d061072cff848981b0f42550401b, type: 2}
