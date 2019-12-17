@@ -55,7 +55,7 @@ MonoBehaviour:
   LookAroundDelayMin: 0.5
   LookAroundDelayMax: 2
   AttackSpeed: 1
-  BashSpeed: 40
+  BashSpeed: 35
   BashDistance: 9
   ForceTranslationMultiplier: 1.5
   BashAnnouncementDelay: -0.6

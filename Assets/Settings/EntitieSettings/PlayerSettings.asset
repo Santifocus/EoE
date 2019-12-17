@@ -42,12 +42,12 @@ MonoBehaviour:
   InAirAccelerationMultiplier: 0.3
   CameraToPlayerDistance: 7
   CameraAnchorOffset: {x: 0, y: 1.6, z: 0}
-  CameraAnchorOffsetWhenTargeting: {x: 1, y: 2, z: 0}
+  CameraAnchorOffsetWhenTargeting: {x: 2, y: 1, z: 0}
   CameraRotationPower: {x: 200, y: -75}
   CameraRotationSpeed: 7
   CameraVerticalAngleClamps: {x: -50, y: 50}
-  CameraExtraZoomOnVertical: 0.5
-  MaxEnemyTargetingDistance: 160
+  CameraExtraZoomOnVertical: 0.8
+  MaxEnemyTargetingDistance: 60
   CameraClampsWhenTargeting: {x: -30, y: 30}
   CameraBaseFOV: 60
   Endurance: 100
@@ -175,6 +175,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ba451c2b316cc054ba26cb958cbb7f1a, type: 2}
   EffectsOnPlayerDodge:
   - {fileID: 11400000, guid: 16c048efcd73fc94fb2bd95baaa20137, type: 2}
+  - {fileID: 0}
   EffectsOnEnemyKilled:
   - {fileID: 11400000, guid: 214bf77e3d56f424c84ef37983b6e1f5, type: 2}
   EffectsOnPlayerDeath:
