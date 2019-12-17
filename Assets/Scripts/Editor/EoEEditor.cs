@@ -375,6 +375,16 @@ namespace EoE
 			return false;
 		}
 		public static bool ObjectArrayField<T>(string content, ref T[] curValue, ref bool open, GUIContent objectContent = null, int offSet = 0) where T : Object => ObjectArrayField<T>(new GUIContent(content), ref curValue, ref open, objectContent, offSet);
+		public static bool ObjectArrayField<T>(string content, ref T[] curValue, SerializedProperty property, GUIContent objectContent = null, int offSet = 0) where T : Object => ObjectArrayField<T>(new GUIContent(content), ref curValue, property, objectContent, offSet);
+		public static bool ObjectArrayField<T>(GUIContent content, ref T[] curValue, SerializedProperty property, GUIContent objectContent = null, int offSet = 0) where T : Object
+		{
+			bool changed = false;
+			bool open = property.isExpanded;
+			changed = ObjectArrayField<T>(content, ref curValue, ref open, objectContent, offSet);
+			if (open != property.isExpanded)
+				property.isExpanded = open;
+			return changed;
+		}
 		public static bool ObjectArrayField<T>(GUIContent arrayHeader, ref T[] curValue, ref bool open, GUIContent objectContent = null, int offSet = 0) where T : Object
 		{
 			bool changed = false;
