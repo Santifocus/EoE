@@ -1,6 +1,5 @@
 ﻿using EoE.Entities;
 using EoE.UI;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace EoE.Information

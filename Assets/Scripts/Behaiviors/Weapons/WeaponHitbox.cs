@@ -1,5 +1,4 @@
 ﻿using EoE.Entities;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace EoE.Combatery
@@ -37,13 +36,13 @@ namespace EoE.Combatery
 		{
 			//Remove all non collider components
 			Component[] allComponents = target.GetComponents<Component>();
-			for(int i = 0; i < allComponents.Length; i++)
+			for (int i = 0; i < allComponents.Length; i++)
 			{
-				if(!(allComponents[i] is Collider || allComponents[i] is Transform))
+				if (!(allComponents[i] is Collider || allComponents[i] is Transform))
 					Destroy(allComponents[i]);
 			}
 			//Remove all children, destroy is called at the end of the frame so we can iterate throught with no worries
-			for(int i = 0; i < target.transform.childCount; i++)
+			for (int i = 0; i < target.transform.childCount; i++)
 			{
 				Destroy(target.transform.GetChild(i).gameObject);
 			}
@@ -61,7 +60,7 @@ namespace EoE.Combatery
 			Physics.IgnoreCollision(EntitieCollider, other, state);
 		}
 		private void OnCollisionEnter(Collision collision)
-		{ 
+		{
 			controller.HitObject(collision.GetContact(0).point, collision.collider, collision.GetContact(0).normal * -1);
 		}
 	}

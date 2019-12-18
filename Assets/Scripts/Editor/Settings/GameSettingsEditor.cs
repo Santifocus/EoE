@@ -154,7 +154,7 @@ namespace EoE.Information
 			for (int x = 0; x < elementCount; x++)
 			{
 				GUILayout.FlexibleSpace();
-				GUILayout.Label(new GUIContent(((ElementType)(1<<x)).ToString(), "RECEIVER"), GUILayout.Width(labelWidht));
+				GUILayout.Label(new GUIContent(((ElementType)(1 << x)).ToString(), "RECEIVER"), GUILayout.Width(labelWidht));
 			}
 			GUILayout.EndHorizontal();
 

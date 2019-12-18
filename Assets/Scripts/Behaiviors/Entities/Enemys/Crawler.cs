@@ -13,6 +13,7 @@ namespace EoE.Entities
 		private ForceController.OnForceDelete bashFinish;
 		private bool chargingBash;
 		private bool bashing;
+		private bool canceledBash;
 		private ForceController.SingleForce bashForce;
 
 		//Getter helper
@@ -66,16 +67,28 @@ namespace EoE.Entities
 		{
 			chargingBash = true;
 			behaviorSimpleStop = true;
+			canceledBash = false;
 
-			GameController.BeginDelayedCall(() => AnnounceBash(), settings.AttackSpeed + settings.BashAnnouncementDelay, TimeType.ScaledDeltaTime, new System.Func<bool>(() => this), OnDelayConditionNotMet.Cancel);
+			GameController.BeginDelayedCall(() => AnnounceBash(), settings.AttackSpeed + settings.BashAnnouncementDelay, TimeType.ScaledDeltaTime, new System.Func<bool>(() => (this && !canceledBash)), OnDelayConditionNotMet.Cancel);
 
 			float timer = 0;
 			while (timer < settings.AttackSpeed)
 			{
 				yield return new WaitForEndOfFrame();
 				timer += Time.deltaTime;
+				if(IsStunned)
+				{
+					canceledBash = true;
+					goto CanceledBash;
+				}
 			}
 
+			StartCombat();
+			bashing = true;
+			AppliedMoveStuns++;
+			bashForce = entitieForceController.ApplyForce(transform.forward * settings.BashSpeed, settings.BashSpeed / settings.BashDistance, false, bashFinish);
+
+			CanceledBash:;
 			//Disable and enable so OnCollisionEnter can be called with a fresh calculation,
 			//this is needed for the situation in which the player is touching the enemy
 			coll.enabled = false;
@@ -83,15 +96,10 @@ namespace EoE.Entities
 
 			chargingBash = false;
 			behaviorSimpleStop = false;
-
-			StartCombat();
-			bashing = true;
-			AppliedMoveStuns++;
-			bashForce = entitieForceController.ApplyForce(transform.forward * settings.BashSpeed, settings.BashSpeed / settings.BashDistance, false, bashFinish);
 		}
 		private void AnnounceBash()
 		{
-			for(int i = 0; i < settings.BashAnnouncement.Length; i++)
+			for (int i = 0; i < settings.BashAnnouncement.Length; i++)
 			{
 				FXManager.PlayFX(settings.BashAnnouncement[i], transform, false);
 			}

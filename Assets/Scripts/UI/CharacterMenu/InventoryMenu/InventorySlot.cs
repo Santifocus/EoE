@@ -38,15 +38,15 @@ namespace EoE.UI
 				iconDisplay.sprite = targetInventory[inventoryIndex].data.ItemIcon;
 				stackDisplay.text = targetInventory[inventoryIndex].stackSize.ToString();
 
-				if(targetInventory[inventoryIndex].data is WeaponItem)
+				if (targetInventory[inventoryIndex].data is WeaponItem)
 				{
 					itemTypeDisplay.sprite = weaponItemIcon;
 				}
-				else if(targetInventory[inventoryIndex].data is ArmorItem)
+				else if (targetInventory[inventoryIndex].data is ArmorItem)
 				{
 					itemTypeDisplay.sprite = armorItemIcon;
 				}
-				else if(targetInventory[inventoryIndex].data is SpellItem)
+				else if (targetInventory[inventoryIndex].data is SpellItem)
 				{
 					itemTypeDisplay.sprite = spellItemIcon;
 				}

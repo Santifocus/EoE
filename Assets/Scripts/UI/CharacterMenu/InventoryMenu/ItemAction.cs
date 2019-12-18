@@ -1,6 +1,6 @@
 ﻿using EoE.Information;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 namespace EoE.UI
 {

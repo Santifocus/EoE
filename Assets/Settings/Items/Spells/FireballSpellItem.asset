@@ -13,21 +13,19 @@ MonoBehaviour:
   m_Name: FireballSpellItem
   m_EditorClassIdentifier: 
   ItemName:
-    textColor: {r: 0.3254717, g: 0.92613274, b: 1, a: 1}
-    text: Fireball
-  ItemDescription:
-  - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Shoot 3 Fireballs in front of you or on targeted enemy and burn them to
-      the grounds.
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: Item
+  ItemDescription: []
   SortingID: 6
-  ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
-    type: 3}
-  MaxStack: 1
   ItemIcon: {fileID: 21300000, guid: 5be58590323c8e8418ebb2781ce96950, type: 3}
-  RemoveOnUse: 0
   FXEffectsOnUse: []
   FXEffectsWhenEquipped:
   - {fileID: 11400000, guid: 14caeaaac290abb42b3406dc40b51fc7, type: 2}
   - {fileID: 11400000, guid: f4224c356d0585c4a9a49f0199a90bba, type: 2}
+  AllowHoldUse: 0
   UseCooldown: 0
+  RemoveOnUse: 0
+  ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
+    type: 3}
+  MaxStack: 1
   TargetSpell: {fileID: 11400000, guid: 0671c0a9f08b5a14e83b4da25a2b6c7a, type: 2}

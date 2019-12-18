@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using EoE.Entities;
+﻿using EoE.Entities;
 using UnityEngine;
 
 namespace EoE.Information
@@ -21,7 +19,7 @@ namespace EoE.Information
 		protected override bool OnUse(Entitie user)
 		{
 			//Activate Healeffects
-			for(int i = 0; i < HealEffects.Length; i++)
+			for (int i = 0; i < HealEffects.Length; i++)
 			{
 				HealEffects[i].Activate(user);
 			}

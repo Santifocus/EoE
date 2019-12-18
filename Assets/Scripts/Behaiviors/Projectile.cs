@@ -1,5 +1,4 @@
 ﻿using EoE.Entities;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -57,7 +56,7 @@ namespace EoE.Combatery
 		{
 			Physics.IgnoreCollision(creator.coll, entitieColl);
 
-			if((info.CollideMask | ColliderMask.Terrain) == info.CollideMask)
+			if ((info.CollideMask | ColliderMask.Terrain) == info.CollideMask)
 			{
 				terrainColl.radius = info.TerrainHitboxSize;
 			}
@@ -100,7 +99,7 @@ namespace EoE.Combatery
 				}
 			}
 
-			if(remainingLifeTime < 0)
+			if (remainingLifeTime < 0)
 			{
 				if (isRemenants)
 				{
@@ -139,7 +138,7 @@ namespace EoE.Combatery
 			if (bounceCooldown > 0 || isRemenants)
 				return;
 
-			if((info.DestroyOnEntiteBounce) && (collision.gameObject.layer == ConstantCollector.ENTITIE_LAYER))
+			if ((info.DestroyOnEntiteBounce) && (collision.gameObject.layer == ConstantCollector.ENTITIE_LAYER))
 			{
 				FinishProjectileFlight();
 				return;
@@ -200,7 +199,7 @@ namespace EoE.Combatery
 				StopBoundParticles();
 				ActivateSpellEffects(info.Remenants.StartEffects);
 
-				for(int i = 0; i < info.Remenants.VisualEffects.Length; i++)
+				for (int i = 0; i < info.Remenants.VisualEffects.Length; i++)
 				{
 					FXInstance instance = FXManager.PlayFX(info.Remenants.VisualEffects[i], transform, false);
 					boundEffects.Add(instance);

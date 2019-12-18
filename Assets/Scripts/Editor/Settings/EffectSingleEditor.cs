@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using EoE.Combatery;
 using UnityEditor;
+using UnityEngine;
 using static EoE.EoEEditor;
-using EoE.Combatery;
 
 namespace EoE.Information
 {
@@ -44,7 +42,7 @@ namespace EoE.Information
 		}
 		private void KnockbackSettingsArea()
 		{
-			EffectSingle settings = target as EffectSingle; 
+			EffectSingle settings = target as EffectSingle;
 			EditorGUILayout.HelpBox("Note: In some cases the direction will be overriden. For example Physicall combat Weapons apply knockback in the direction the Weapon was swung.", MessageType.Info);
 			FloatField(new GUIContent("Base Knockback Multiplier"), ref settings.KnockbackMultiplier, 1);
 			EnumField(new GUIContent("Knockback Origin"), ref settings.KnockbackOrigin, 1);

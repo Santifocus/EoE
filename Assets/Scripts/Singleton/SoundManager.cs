@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace EoE.Sounds
 {
@@ -34,7 +32,7 @@ namespace EoE.Sounds
 			{
 				for (int j = 0; j < soundHashes.Length; j++)
 				{
-					if(i != j && soundHashes[i] == soundHashes[j])
+					if (i != j && soundHashes[i] == soundHashes[j])
 					{
 						Debug.LogError("Global sounds Nr. " + i + " & Nr. " + j + "have identical names (" + GameController.CurrentGameSettings.globalSounds[i].soundName + "). This is not permitted and will cause Errors.");
 					}
@@ -46,11 +44,11 @@ namespace EoE.Sounds
 		public static void SetSoundState(string soundName, bool state)
 		{
 			int hash = soundName.GetHashCode();
-			for(int i = 0; i < Instance.soundHashes.Length; i++)
+			for (int i = 0; i < Instance.soundHashes.Length; i++)
 			{
 				if (hash == Instance.soundHashes[i])
 				{
-					if(state)
+					if (state)
 						Instance.soundPlayers[i].Play();
 					else
 						Instance.soundPlayers[i].Stop();

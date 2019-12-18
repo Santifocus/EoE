@@ -71,7 +71,7 @@ namespace EoE.Information
 
 				int openStack = containedItems[i].data.MaxStack - containedItems[i].stackSize;
 
-				if(openStack > 0)
+				if (openStack > 0)
 				{
 					changed = true;
 					targetSlots.Add(i);
@@ -121,7 +121,7 @@ namespace EoE.Information
 		public void RemoveStackSize(Item data, int stackSize)
 		{
 			bool changed = false;
-			for (int i = Lenght -1; i >= 0; i--)
+			for (int i = Lenght - 1; i >= 0; i--)
 			{
 				if (containedItems[i] != null && containedItems[i].data == data)
 				{
@@ -142,8 +142,8 @@ namespace EoE.Information
 				}
 			}
 
-			//We make a goto jump point here in case we succesfully remove the fullstack
-			FullyRemovedStack:;
+		//We make a goto jump point here in case we succesfully remove the fullstack
+		FullyRemovedStack:;
 
 			if (changed)
 				InventoryChanged?.Invoke();
@@ -180,9 +180,9 @@ namespace EoE.Information
 		}
 		public bool Contains(Item type, int stack = 1)
 		{
-			for(int i = 0; i < Lenght; i++)
+			for (int i = 0; i < Lenght; i++)
 			{
-				if(containedItems[i] != null && containedItems[i].data == type)
+				if (containedItems[i] != null && containedItems[i].data == type)
 				{
 					stack -= containedItems[i].stackSize;
 					if (stack <= 0)

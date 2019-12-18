@@ -1,7 +1,4 @@
-﻿using EoE.Entities;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace EoE.Information
 {
@@ -10,7 +7,7 @@ namespace EoE.Information
 		[SerializeField] private DropData[] itemsToSpawn = new DropData[0];
 		private void Start()
 		{
-			for(int i = 0; i < itemsToSpawn.Length; i++)
+			for (int i = 0; i < itemsToSpawn.Length; i++)
 			{
 				itemsToSpawn[i].targetItem.CreateItemDrop(transform.position, itemsToSpawn[i].spawnAmount, itemsToSpawn[i].stopVelocity);
 			}

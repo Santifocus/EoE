@@ -1,11 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
+﻿using EoE.Combatery;
 using EoE.Controlls;
 using EoE.Events;
 using EoE.Information;
-using EoE.Combatery;
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
 
 namespace EoE.Entities
 {
@@ -207,26 +207,26 @@ namespace EoE.Entities
 					targetItem.isEquiped = true;
 					//Find out what slot it belongs to, if it is a spell / normal item we try
 					//to put it in a open slot, if all slots are filled we put it in the first
-					if(PlayerSettings.StartItems[i].Item is WeaponItem)
+					if (PlayerSettings.StartItems[i].Item is WeaponItem)
 					{
 						EquipedWeapon = targetItem;
 						targetItem.isEquiped = true;
 						targetItem.data.Equip(targetItem, this);
 					}
-					else if(PlayerSettings.StartItems[i].Item is ArmorItem)
+					else if (PlayerSettings.StartItems[i].Item is ArmorItem)
 					{
 						EquipedArmor = targetItem;
 						targetItem.isEquiped = true;
 						targetItem.data.Equip(targetItem, this);
 					}
-					else if(PlayerSettings.StartItems[i].Item is SpellItem)
+					else if (PlayerSettings.StartItems[i].Item is SpellItem)
 					{
 						bool added = false;
 
 						//Try to find a slot that is null and put the item there
-						for(int j = 0; j < SelectableSpellItems.Length; j++)
+						for (int j = 0; j < SelectableSpellItems.Length; j++)
 						{
-							if(SelectableSpellItems[j] == null)
+							if (SelectableSpellItems[j] == null)
 							{
 								SelectableSpellItems[j] = targetItem;
 								SelectableSpellItems[j].isEquiped = true;
@@ -368,7 +368,7 @@ namespace EoE.Entities
 			Vector2 targetTilt = velocityDirection * targetTiltAngle;
 			targetTilt = targetTilt.x * right * -1 + targetTilt.y * forward;
 
-			curModelTilt = new Vector2(	Utils.SpringLerp(curModelTilt.x, targetTilt.x, ref curSpringLerpAcceleration.x, PlayerSettings.SpringLerpStiffness, PlayerSettings.SideTurnLerpSpeed * Time.deltaTime),
+			curModelTilt = new Vector2(Utils.SpringLerp(curModelTilt.x, targetTilt.x, ref curSpringLerpAcceleration.x, PlayerSettings.SpringLerpStiffness, PlayerSettings.SideTurnLerpSpeed * Time.deltaTime),
 										Utils.SpringLerp(curModelTilt.y, targetTilt.y, ref curSpringLerpAcceleration.y, PlayerSettings.SpringLerpStiffness, PlayerSettings.SideTurnLerpSpeed * Time.deltaTime)
 										);
 			modelTransform.localEulerAngles = new Vector3(curModelTilt.y, 0, curModelTilt.x);
@@ -387,20 +387,20 @@ namespace EoE.Entities
 			//Health critical effects
 			bool curBelowHealthThreshold = HealthBelowThresholdBoundEffects != null;
 			bool newBelowHealthThresholdState = (curHealth / curMaxHealth) < PlayerSettings.EffectsHealthThreshold;
-			if(newBelowHealthThresholdState != curBelowHealthThreshold)
+			if (newBelowHealthThresholdState != curBelowHealthThreshold)
 			{
 				//Health fell below threshold
 				if (newBelowHealthThresholdState)
 				{
 					HealthBelowThresholdBoundEffects = new FXInstance[PlayerSettings.EffectsWhileHealthBelowThreshold.Length];
-					for(int i = 0; i < HealthBelowThresholdBoundEffects.Length; i++)
+					for (int i = 0; i < HealthBelowThresholdBoundEffects.Length; i++)
 					{
 						HealthBelowThresholdBoundEffects[i] = FXManager.PlayFX(PlayerSettings.EffectsWhileHealthBelowThreshold[i], transform, true);
 					}
 				}
 				else //Health went above threshold
 				{
-					for(int i = 0; i < HealthBelowThresholdBoundEffects.Length; i++)
+					for (int i = 0; i < HealthBelowThresholdBoundEffects.Length; i++)
 					{
 						HealthBelowThresholdBoundEffects[i].FinishFX();
 					}
@@ -411,7 +411,7 @@ namespace EoE.Entities
 			//Walk effects
 			bool curWalkingEffectsOn = PlayerWalkingBoundEffects != null;
 			bool newWalkingEffectsOn = (!turning && curAcceleration > 0) && (!running) && (charController.isGrounded);
-			if(curWalkingEffectsOn != newWalkingEffectsOn)
+			if (curWalkingEffectsOn != newWalkingEffectsOn)
 			{
 				//Player started walking or stopped running and kept walking
 				if (newWalkingEffectsOn)
@@ -466,7 +466,7 @@ namespace EoE.Entities
 
 			curStates.Turning = normalizedDif > 1;
 
-			transform.localEulerAngles = new Vector3(	transform.localEulerAngles.x,
+			transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,
 														curRotation,
 														transform.localEulerAngles.z);
 		}
@@ -522,7 +522,7 @@ namespace EoE.Entities
 
 			controllDirection = inputDirection.y * camForward + inputDirection.x * camRight;
 
-			if(GameController.CurrentGameSettings.IsDebugEnabled)
+			if (GameController.CurrentGameSettings.IsDebugEnabled)
 				Debug.DrawLine(transform.position, transform.position + controllDirection * 2, Color.green, Time.unscaledDeltaTime * 0.99f);
 
 			if (!TargetedEntitie)
@@ -567,7 +567,7 @@ namespace EoE.Entities
 			jumpGroundCooldown = JUMP_GROUND_COOLDOWN;
 			animationControl.SetTrigger("Jump");
 
-			for(int i = 0; i < PlayerSettings.EffectsOnJump.Length; i++)
+			for (int i = 0; i < PlayerSettings.EffectsOnJump.Length; i++)
 			{
 				FXManager.PlayFX(PlayerSettings.EffectsOnJump[i], transform, true);
 			}
@@ -591,12 +591,12 @@ namespace EoE.Entities
 			bool newOnGroundState = charController.isGrounded;
 			float velDif = curVelocity.y - lastFallVelocity;
 			//Check if the grounded state changed
-			if((newOnGroundState != lastOnGroundState))
+			if ((newOnGroundState != lastOnGroundState))
 			{
 				lastOnGroundState = newOnGroundState;
 				//Did the ground state change from false to true?
 				//Then if we reached a certain velocity we count this is landing
-				if(newOnGroundState && velDif > LANDED_VELOCITY_THRESHOLD)
+				if (newOnGroundState && velDif > LANDED_VELOCITY_THRESHOLD)
 					Landed(velDif);
 			}
 			lastFallVelocity = curVelocity.y;
@@ -765,7 +765,7 @@ namespace EoE.Entities
 			Destroy(modelCopy.gameObject);
 			Destroy(weaponCopy.gameObject);
 
-			for(int i = 0; i < dodgeEffects.Length; i++)
+			for (int i = 0; i < dodgeEffects.Length; i++)
 			{
 				dodgeEffects[i].FinishFX();
 			}
@@ -948,7 +948,7 @@ namespace EoE.Entities
 		}
 		private void UpdateItemCooldowns()
 		{
-			for(int i = 0; i < GameController.ItemCollection.Data.Length; i++)
+			for (int i = 0; i < GameController.ItemCollection.Data.Length; i++)
 			{
 				if (GameController.ItemCollection.Data[i].curCooldown > 0)
 					GameController.ItemCollection.Data[i].curCooldown -= Time.deltaTime;
@@ -1032,7 +1032,7 @@ namespace EoE.Entities
 				EquipedArmor = null;
 
 			bool selectablesChanged = false;
-			for(int i = 0; i < SELECTABLE_ITEMS_AMOUNT; i++)
+			for (int i = 0; i < SELECTABLE_ITEMS_AMOUNT; i++)
 			{
 				if (SelectableItems[i] != null && SelectableItems[i].stackSize <= 0)
 				{
@@ -1099,11 +1099,11 @@ namespace EoE.Entities
 		{
 			float manaCost = 0;
 			float enduranceCost = 0;
-			for(int i = 0; i < PlayerSettings.BlockingBuff.DOTs.Length; i++)
+			for (int i = 0; i < PlayerSettings.BlockingBuff.DOTs.Length; i++)
 			{
 				if (PlayerSettings.BlockingBuff.DOTs[i].TargetStat == TargetStat.Mana)
 					manaCost += PlayerSettings.BlockingBuff.DOTs[i].BaseDamage;
-				else if(PlayerSettings.BlockingBuff.DOTs[i].TargetStat == TargetStat.Endurance)
+				else if (PlayerSettings.BlockingBuff.DOTs[i].TargetStat == TargetStat.Endurance)
 					enduranceCost += PlayerSettings.BlockingBuff.DOTs[i].BaseDamage;
 			}
 			manaCost *= Time.deltaTime;
@@ -1121,7 +1121,7 @@ namespace EoE.Entities
 					}
 				}
 			}
-			else if(isBlocking)
+			else if (isBlocking)
 			{
 				blockingTimer -= Time.deltaTime;
 				if (blockingTimer < PlayerSettings.StartBlockingInertia - PlayerSettings.StopBlockingInertia)
@@ -1143,7 +1143,7 @@ namespace EoE.Entities
 		#region IFrames
 		protected override void ReceivedHealthDamage(ChangeInfo baseChange, ChangeInfo.ChangeResult resultInfo)
 		{
-			if(baseChange.attacker != this && baseChange.cause != CauseType.DOT)
+			if (baseChange.attacker != this && baseChange.cause != CauseType.DOT)
 			{
 				if (PlayerSettings.InvincibleAfterHit)
 				{
@@ -1170,19 +1170,19 @@ namespace EoE.Entities
 				baseColors[i] = targetRenderers[i].material.color;
 			}
 
-			while((remainingInvincibleTime ?? 0) > 0)
+			while ((remainingInvincibleTime ?? 0) > 0)
 			{
 				yield return new WaitForEndOfFrame();
 				remainingInvincibleTime -= Time.deltaTime;
 				flashTimer += Time.deltaTime;
 
-				if(flashTimer > PlayerSettings.InvincibleModelFlashDelay)
+				if (flashTimer > PlayerSettings.InvincibleModelFlashDelay)
 				{
 					if (!flashOn)
 					{
 						FlashMaterials();
 					}
-					if(flashTimer > PlayerSettings.InvincibleModelFlashDelay + PlayerSettings.InvincibleModelFlashTime)
+					if (flashTimer > PlayerSettings.InvincibleModelFlashDelay + PlayerSettings.InvincibleModelFlashTime)
 					{
 						UnFlashMaterials();
 						flashTimer -= PlayerSettings.InvincibleModelFlashDelay + PlayerSettings.InvincibleModelFlashTime;

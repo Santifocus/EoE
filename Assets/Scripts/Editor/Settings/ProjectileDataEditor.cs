@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using EoE.Information;
 using UnityEditor;
-using EoE.Information;
+using UnityEngine;
 using static EoE.EoEEditor;
 
 namespace EoE.Combatery

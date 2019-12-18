@@ -39,14 +39,14 @@ namespace EoE.Information
 			this.DOTCooldowns = new float[Base.DOTs.Length];
 
 			BoundEffects = new FXInstance[Base.FXEffects != null ? Base.FXEffects.Length : 0];
-			for(int i = 0; i < BoundEffects.Length; i++)
+			for (int i = 0; i < BoundEffects.Length; i++)
 			{
 				BoundEffects[i] = FXManager.PlayFX(Base.FXEffects[i], Target.transform, Target is Player);
 			}
 		}
 		public void OnRemove()
 		{
-			for(int i = 0; i < BoundEffects.Length; i++)
+			for (int i = 0; i < BoundEffects.Length; i++)
 			{
 				BoundEffects[i].FinishFX();
 			}

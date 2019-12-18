@@ -62,7 +62,7 @@ namespace EoE.Combatery
 				weaponHitboxes[i].SetColliderStyle(state ? style : null);
 				if (!state)
 				{
-					for(int j = 0; j < ignoredColliders.Count; j++)
+					for (int j = 0; j < ignoredColliders.Count; j++)
 					{
 						weaponHitboxes[i].IgnoreCollision(ignoredColliders[j], false);
 					}
@@ -80,7 +80,7 @@ namespace EoE.Combatery
 
 			//deactivate behaiviors
 			clone.enabled = false;
-			for(int i = 0; i < clone.weaponHitboxes.Length; i++)
+			for (int i = 0; i < clone.weaponHitboxes.Length; i++)
 			{
 				clone.weaponHitboxes[i].enabled = false;
 			}
@@ -106,7 +106,7 @@ namespace EoE.Combatery
 			if (timeToNextCombo > 0)
 			{
 				timeToNextCombo -= Time.deltaTime;
-				if(timeToNextCombo <= 0)
+				if (timeToNextCombo <= 0)
 				{
 					timeToNextCombo = 0;
 					ComboFinish();
@@ -131,7 +131,7 @@ namespace EoE.Combatery
 				return;
 			}
 
-			Vector3 worldOffset =	weaponInfo.WeaponPositionOffset.x * Player.Instance.weaponHoldPoint.right +
+			Vector3 worldOffset = weaponInfo.WeaponPositionOffset.x * Player.Instance.weaponHoldPoint.right +
 									weaponInfo.WeaponPositionOffset.y * Player.Instance.weaponHoldPoint.up +
 									weaponInfo.WeaponPositionOffset.z * Player.Instance.weaponHoldPoint.forward;
 
@@ -144,9 +144,9 @@ namespace EoE.Combatery
 			if (Player.Instance.IsCasting)
 				return;
 
-			if(InAttackSequence)
+			if (InAttackSequence)
 			{
-				if(curAttackAnimationPoint > COMBO_WAIT_THRESHOLD)
+				if (curAttackAnimationPoint > COMBO_WAIT_THRESHOLD)
 					wantsToBeginNextSequence = true;
 				return;
 			}
@@ -217,7 +217,7 @@ namespace EoE.Combatery
 				float totalTime = 0;
 				float animationTime = animationDelayLookup[ActiveAttackStyle.AnimationTarget].Item1;
 				float animationActivationDelay = animationDelayLookup[ActiveAttackStyle.AnimationTarget].Item2;
-				float animationTimer = 0; 
+				float animationTimer = 0;
 				curAttackAnimationPoint = 0;
 				ChangeWeaponState(false, null);
 
@@ -240,7 +240,7 @@ namespace EoE.Combatery
 
 					totalTime += Time.deltaTime;
 					//Find the current animationSpeed multiplier
-					if(ActiveAttackStyle.AnimationMultiplicationType == MultiplicationType.Curve)
+					if (ActiveAttackStyle.AnimationMultiplicationType == MultiplicationType.Curve)
 					{
 						multiplier = ActiveAttackStyle.AnimationSpeedCurve.Evaluate(Mathf.Clamp01(totalTime / ActiveAttackStyle.AnimationSpeedCurveTimeframe)) * ActiveAttackStyle.AnimationSpeedCurveMultiplier;
 						SetAnimationSpeed(multiplier);
@@ -255,10 +255,10 @@ namespace EoE.Combatery
 					}
 
 					//Debug
-					if(GameController.CurrentGameSettings.IsDebugEnabled && shouldState)
+					if (GameController.CurrentGameSettings.IsDebugEnabled && shouldState)
 					{
-						Debug.DrawLine(transform.position - Vector3.up / 4, transform.position + Vector3.up / 4, Color.green / 2, 1);
-						Debug.DrawLine(transform.position - Vector3.right / 4, transform.position + Vector3.right / 4, Color.cyan / 2, 1);
+						Debug.DrawLine(transform.position - Vector3.up / 4, transform.position + Vector3.up / 4, Color.green / 1.5f, 1.5f);
+						Debug.DrawLine(transform.position - Vector3.right / 4, transform.position + Vector3.right / 4, Color.cyan / 1.5f, 1.5f);
 					}
 
 					//Check if we crossed any attack event point
@@ -266,12 +266,12 @@ namespace EoE.Combatery
 					float smallerPoint = Mathf.Min(newAnimationPoint, curAttackAnimationPoint);
 					float biggerPoint = Mathf.Max(newAnimationPoint, curAttackAnimationPoint);
 					curAttackAnimationPoint = newAnimationPoint;
-					for(int i = 0; i < ActiveAttackStyle.AttackEffects.Length; i++)
+					for (int i = 0; i < ActiveAttackStyle.AttackEffects.Length; i++)
 					{
 						float point = ActiveAttackStyle.AttackEffects[i].AtAnimationPoint;
 						if ((point >= smallerPoint) && (point < biggerPoint))
 						{
-							if(Utils.Chance01(ActiveAttackStyle.AttackEffects[i].ChanceToActivate))
+							if (Utils.Chance01(ActiveAttackStyle.AttackEffects[i].ChanceToActivate))
 							{
 								ActiveAttackStyle.AttackEffects[i].ActivateEffect(Player.Instance, weaponInfo);
 							}
@@ -324,8 +324,8 @@ namespace EoE.Combatery
 				weaponHitboxes[i].IgnoreCollision(hit, true);
 			}
 			ignoredColliders.Add(hit);
-			
-			if(hit.gameObject.layer == ConstantCollector.ENTITIE_LAYER)
+
+			if (hit.gameObject.layer == ConstantCollector.ENTITIE_LAYER)
 			{
 				Entitie hitEntitie = hit.gameObject.GetComponent<Entitie>();
 				if (ActiveAttackStyle.DirectHit)
@@ -339,7 +339,7 @@ namespace EoE.Combatery
 						OverridenCauseType = ActiveAttackStyle.OverrideCauseType ? ((CauseType?)ActiveAttackStyle.OverridenCauseType) : null
 					};
 
-					ActiveAttackStyle.DirectHit.ActivateEffectSingle(	Player.Instance,
+					ActiveAttackStyle.DirectHit.ActivateEffectSingle(Player.Instance,
 																		hitEntitie,
 																		weaponInfo,
 																		direction,
@@ -367,9 +367,9 @@ namespace EoE.Combatery
 			int newComboAmount = curCombo + ActiveAttackStyle.OnHitComboWorth;
 			timeToNextCombo = ActiveAttackStyle.ComboIncreaseMaxDelay;
 
-			for(int i = 0; i < weaponInfo.ComboEffects.ComboData.Length; i++)
+			for (int i = 0; i < weaponInfo.ComboEffects.ComboData.Length; i++)
 			{
-				if(	curCombo < weaponInfo.ComboEffects.ComboData[i].RequiredComboCount &&
+				if (curCombo < weaponInfo.ComboEffects.ComboData[i].RequiredComboCount &&
 					newComboAmount >= weaponInfo.ComboEffects.ComboData[i].RequiredComboCount)
 				{
 					if (weaponInfo.ComboEffects.ComboData[i].Effect.OverrideTextColor)
@@ -384,17 +384,17 @@ namespace EoE.Combatery
 					//Single / AOE effects
 					if (weaponInfo.ComboEffects.ComboData[i].Effect.EffectOnTarget != null)
 						weaponInfo.ComboEffects.ComboData[i].Effect.EffectOnTarget.ActivateEffectSingle(Player.Instance, hitEntitie, weaponInfo, direction, hitPos);
-					if(weaponInfo.ComboEffects.ComboData[i].Effect.EffectAOE != null)
+					if (weaponInfo.ComboEffects.ComboData[i].Effect.EffectAOE != null)
 						weaponInfo.ComboEffects.ComboData[i].Effect.EffectAOE.ActivateEffectAOE(Player.Instance, Player.Instance.transform, weaponInfo);
 
 					//Heal effects
-					for(int j = 0; j < weaponInfo.ComboEffects.ComboData[i].Effect.HealEffects.Length; j++)
+					for (int j = 0; j < weaponInfo.ComboEffects.ComboData[i].Effect.HealEffects.Length; j++)
 					{
 						weaponInfo.ComboEffects.ComboData[i].Effect.HealEffects[j].Activate(Player.Instance);
 					}
 
 					//FX
-					for(int j = 0; j < weaponInfo.ComboEffects.ComboData[i].Effect.EffectsTillComboEnds.Length; j++)
+					for (int j = 0; j < weaponInfo.ComboEffects.ComboData[i].Effect.EffectsTillComboEnds.Length; j++)
 					{
 						comboBoundFX.Add(FXManager.PlayFX(weaponInfo.ComboEffects.ComboData[i].Effect.EffectsTillComboEnds[j], Player.Instance.transform, true));
 					}
@@ -414,7 +414,7 @@ namespace EoE.Combatery
 		private void ComboFinish()
 		{
 			curCombo = 0;
-			for(int i = 0; i < comboBoundFX.Count; i++)
+			for (int i = 0; i < comboBoundFX.Count; i++)
 			{
 				comboBoundFX[i].FinishFX();
 			}

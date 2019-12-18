@@ -132,7 +132,7 @@ namespace EoE.Entities
 			}
 			UpdateAgentSettings();
 
-			if (PlayerInAttackRange && chasingPlayer) 
+			if (PlayerInAttackRange && chasingPlayer)
 				InRangeBehaiviorBase();
 
 			if (IsStunned)
@@ -264,7 +264,7 @@ namespace EoE.Entities
 		{
 			if (!state)
 				agent.velocity = Vector3.zero;
-			if(agent.isStopped == state)
+			if (agent.isStopped == state)
 				agent.isStopped = !state;
 		}
 		private bool WanderAround()
@@ -339,13 +339,13 @@ namespace EoE.Entities
 			StartCombat();
 			PlayerJustEnteredAttackRange();
 		}
-		protected virtual void PlayerJustEnteredAttackRange(){ }
+		protected virtual void PlayerJustEnteredAttackRange() { }
 		private void InRangeBehaiviorBase()
 		{
 			StartCombat();
 			InRangeBehaivior();
 		}
-		protected virtual void InRangeBehaivior(){}
+		protected virtual void InRangeBehaivior() { }
 		#endregion
 		#region Helper Functions
 		protected Vector3? GetRandomNavmeshPoint(float radius, Vector3 origin)

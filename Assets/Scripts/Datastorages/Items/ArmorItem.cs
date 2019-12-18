@@ -9,7 +9,7 @@ namespace EoE.Information
 		[SerializeField] private Buff buffToApply = default;
 		protected override bool OnEquip(Entitie user)
 		{
-			if(user.ArmorBuff != null)
+			if (user.ArmorBuff != null)
 			{
 				user.RemoveBuff(user.ArmorBuff);
 			}

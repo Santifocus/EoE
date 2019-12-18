@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using EoE.Combatery;
 using TMPro;
-using EoE.Information;
-using EoE.Combatery;
+using UnityEngine;
 
 namespace EoE.UI
 {
@@ -54,7 +51,7 @@ namespace EoE.UI
 			}
 
 			//Update punch time
-			if(punchTime > 0)
+			if (punchTime > 0)
 			{
 				punchTime -= Time.deltaTime;
 				if (punchTime < 0)
@@ -82,7 +79,7 @@ namespace EoE.UI
 		private void UpdateText()
 		{
 			comboDisplay.color = curTextColor.Evaluate(textColorScroll);
-			if(curPunchResetTime == 0)
+			if (curPunchResetTime == 0)
 			{
 				comboDisplay.fontSize = baseTextSize;
 			}

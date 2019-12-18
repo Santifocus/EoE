@@ -1,10 +1,9 @@
 ﻿using EoE.Entities;
 using EoE.Information;
 using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 namespace EoE.UI
 {
@@ -40,7 +39,7 @@ namespace EoE.UI
 			flashMaxFlashAlpha = flashBorder.color.a;
 			flashBorder.color = new Color(flashBorder.color.r, flashBorder.color.g, flashBorder.color.b, 0);
 
-			for(int i = 0; i < targetDisplays.Length; i++)
+			for (int i = 0; i < targetDisplays.Length; i++)
 			{
 				targetDisplays[i].OriginalColor = targetDisplays[i].ItemIconDisplay.color;
 				targetDisplays[i].ItemCooldownDisplay.color = targetDisplays[i].ItemIconDisplay.color = Color.clear;
@@ -50,7 +49,7 @@ namespace EoE.UI
 		private void Update()
 		{
 			//Update displays
-			for(int i = 0; i < 3; i++)
+			for (int i = 0; i < 3; i++)
 			{
 				UpdateDisplay(i);
 			}
@@ -62,13 +61,13 @@ namespace EoE.UI
 			int targetIndex = ValidateID(curIndex + index - 1);
 			InventoryItem target = (targetType == TargetItemType.Spell) ? Player.Instance.SelectableSpellItems[targetIndex] : Player.Instance.SelectableItems[targetIndex];
 
-			if(targets[index].Item1 != target)
+			if (targets[index].Item1 != target)
 			{
 				targets[index].Item1 = target;
 
-				targetDisplays[index].ItemIconDisplay.sprite =		targetDisplays[index].ItemCooldownDisplay.sprite = (target == null) ? null : target.data.ItemIcon;
-				targetDisplays[index].ItemIconDisplay.color =		(target == null) ? Color.clear : targetDisplays[index].OriginalColor;
-				targetDisplays[index].ItemCooldownDisplay.color =	(target == null) ? Color.clear : Color.black;
+				targetDisplays[index].ItemIconDisplay.sprite = targetDisplays[index].ItemCooldownDisplay.sprite = (target == null) ? null : target.data.ItemIcon;
+				targetDisplays[index].ItemIconDisplay.color = (target == null) ? Color.clear : targetDisplays[index].OriginalColor;
+				targetDisplays[index].ItemCooldownDisplay.color = (target == null) ? Color.clear : Color.black;
 
 				if (targetDisplays[index].ItemCountDisplay)
 					targetDisplays[index].ItemCountDisplay.gameObject.SetActive(target != null);
@@ -76,7 +75,7 @@ namespace EoE.UI
 				targets[index].Item2 = GetCurCooldown(target);
 			}
 
-			if(target != null)
+			if (target != null)
 			{
 				//If the cooldown of the item just reached 0:
 				//inform the player that the cooldown went to zero via feedback
@@ -89,7 +88,7 @@ namespace EoE.UI
 
 				//Update cooldowndisplay
 				float maxCooldown = GetMaxCooldown(target);
-				if(maxCooldown > 0)
+				if (maxCooldown > 0)
 				{
 					targetDisplays[index].ItemCooldownDisplay.fillAmount = Mathf.Clamp01(lastCooldown / maxCooldown);
 				}
@@ -99,7 +98,7 @@ namespace EoE.UI
 				}
 
 				//Update count
-				if((targetDisplays[index].ItemCountDisplay) && (targets[index].Item3 != target.stackSize))
+				if ((targetDisplays[index].ItemCountDisplay) && (targets[index].Item3 != target.stackSize))
 				{
 					targets[index].Item3 = target.stackSize;
 					targetDisplays[index].ItemCountDisplay.text = target.stackSize.ToString();
@@ -146,7 +145,7 @@ namespace EoE.UI
 		}
 		private float GetMaxCooldown(InventoryItem target)
 		{
-			if(target.data is SpellItem)
+			if (target.data is SpellItem)
 				return Mathf.Max(target.data.UseCooldown, (target.data as SpellItem).TargetSpell.SpellCooldown);
 			else
 				return target.data.UseCooldown;

@@ -67,7 +67,7 @@ namespace EoE.UI
 			int notConfirmedPoints = LevelingMenuController.Instance[targetStat];
 			int curAppliedPoints = Mathf.RoundToInt(Player.Instance.LevelingPointsBuff.Effects[(int)targetStat].Amount / Player.PlayerSettings.LevelSettings[targetStat]);
 			totalPoints.text = (curAppliedPoints + notConfirmedPoints).ToString();
-			if(curAppliedPoints != lastAppliedPoints)
+			if (curAppliedPoints != lastAppliedPoints)
 			{
 				lastAppliedPoints = curAppliedPoints;
 				StartCoroutine(ChangedCurrent());
@@ -89,7 +89,7 @@ namespace EoE.UI
 
 		private IEnumerator ChangedCurrent()
 		{
-			for(int i = 0; i < recentlyChangedFlashCount; i++)
+			for (int i = 0; i < recentlyChangedFlashCount; i++)
 			{
 				yield return new WaitForSecondsRealtime(recentlyChangedFlashTime);
 				totalPoints.color = recentlyChangedCurColor;

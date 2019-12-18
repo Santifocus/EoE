@@ -13,20 +13,19 @@ MonoBehaviour:
   m_Name: FreezeSpellItem
   m_EditorClassIdentifier: 
   ItemName:
-    textColor: {r: 0.3254717, g: 0.92613274, b: 1, a: 1}
-    text: Freeze Burst
-  ItemDescription:
-  - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Cast a Frostexplosion on your position, pushes enemys away and slows them.
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: Item
+  ItemDescription: []
   SortingID: 8
-  ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
-    type: 3}
-  MaxStack: 1
   ItemIcon: {fileID: 21300000, guid: 1b6cf7414d1c45a4c8edeffe46bda78e, type: 3}
-  RemoveOnUse: 0
   FXEffectsOnUse: []
   FXEffectsWhenEquipped:
   - {fileID: 11400000, guid: 53cbd187787d0e74e86d9b2eb2eb79f1, type: 2}
   - {fileID: 11400000, guid: f5fb6fec427744242897d3e6b103ac71, type: 2}
+  AllowHoldUse: 0
   UseCooldown: 0
+  RemoveOnUse: 0
+  ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
+    type: 3}
+  MaxStack: 1
   TargetSpell: {fileID: 11400000, guid: ac6d4f2b9cddec34c9d42ed76b3bbe50, type: 2}

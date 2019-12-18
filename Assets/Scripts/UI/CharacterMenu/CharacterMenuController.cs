@@ -59,7 +59,7 @@ namespace EoE.UI
 
 				menuPages[curMenuIndex].ShowPage(LeftScreen, pageScrollTime, pageFinishSlide);
 
-				if(LeftScrollFadeC != null)
+				if (LeftScrollFadeC != null)
 					StopCoroutine(LeftScrollFadeC);
 				LeftScrollFadeC = StartCoroutine(FadeTrigger(leftScrollImage));
 			}
@@ -89,7 +89,7 @@ namespace EoE.UI
 			target.color = Color.white;
 			float timer = 0;
 
-			while(timer < scrollImageFadeTime)
+			while (timer < scrollImageFadeTime)
 			{
 				yield return new WaitForEndOfFrame();
 				timer += Time.unscaledDeltaTime;

@@ -1,8 +1,7 @@
-﻿using System.Collections;
+﻿using EoE.Information;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Reflection;
-using EoE.Information;
 
 namespace EoE.UI
 {
@@ -35,7 +34,7 @@ namespace EoE.UI
 		public static void CreateAndShowDialogue(DialogueInput info)
 		{
 			(string, Color)[] parts = new (string, Color)[info.parts.Length];
-			for(int i = 0; i < parts.Length; i++)
+			for (int i = 0; i < parts.Length; i++)
 			{
 				parts[i] = (info.parts[i].text, info.parts[i].textColor);
 			}

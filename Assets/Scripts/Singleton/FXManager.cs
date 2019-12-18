@@ -1,11 +1,9 @@
-﻿using EoE.Entities;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using EoE.Combatery;
+using EoE.Entities;
 using EoE.Events;
 using EoE.Information;
 using EoE.UI;
-using EoE.Combatery;
+using UnityEngine;
 
 namespace EoE
 {
@@ -90,7 +88,7 @@ namespace EoE
 		}
 		public static FXInstance PlayFX(CustomFXObject customFX, Transform target, bool allowScreenEffects, float multiplier = 1)
 		{
-			return PlayFX(	customFX.FX,
+			return PlayFX(customFX.FX,
 							target,
 							allowScreenEffects,
 							multiplier,
