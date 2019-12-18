@@ -28,6 +28,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8e3cc143b1345d94591b361a58ea09af, type: 2}
   - {fileID: 11400000, guid: 3154eaf86a359724a9b1df91fbcf6f0e, type: 2}
   FXEffectsWhenEquipped: []
+  AllowHoldUse: 0
   UseCooldown: 5
   RemoveOnUse: 1
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,

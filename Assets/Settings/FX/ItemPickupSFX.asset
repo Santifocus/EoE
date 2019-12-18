@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aa0729519a808d449bdb777d2d35538b, type: 3}
-  m_Name: PickUPItem
+  m_Name: ItemPickupSFX
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0

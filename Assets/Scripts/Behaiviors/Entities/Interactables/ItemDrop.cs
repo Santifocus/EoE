@@ -19,9 +19,19 @@ namespace EoE.Entities
 
 			if (preStacksize != containedItem.stackSize)
 			{
-				for (int i = 0; i < Player.PlayerSettings.EffectsOnItemPickup.Length; i++)
+				for (int i = 0; i < EffectsOnInteract.Length; i++)
 				{
-					FXManager.PlayFX(Player.PlayerSettings.EffectsOnItemPickup[i], transform, true);
+					if (EffectsOnInteract[i] is Notification)
+					{
+						(string, string)[] replaceInstructions = new (string, string)[2]
+						{
+							("{Name}", containedItem.data.ItemName.text.ToString()),
+							("{Amount}", (preStacksize - containedItem.stackSize).ToString())
+						};
+						FXManager.PlayFX((EffectsOnInteract[i] as Notification).CreateInstructedNotification(replaceInstructions), transform, true);
+						continue;
+					}
+					FXManager.PlayFX(EffectsOnInteract[i], transform, true);
 				}
 			}
 

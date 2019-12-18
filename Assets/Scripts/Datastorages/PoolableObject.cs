@@ -7,6 +7,7 @@ namespace EoE
 	{
 		PoolableObject<T> SelfPool { get; set; }
 		void ReturnToPool();
+		void Created();
 	}
 	public class PoolableObject<T> where T : MonoBehaviour, IPoolableObject<T>
 	{
@@ -47,6 +48,7 @@ namespace EoE
 				newObject.gameObject.SetActive(false);
 				newObject.SelfPool = this;
 
+				newObject.Created();
 				InActiveObjects.Enqueue(newObject);
 			}
 		}

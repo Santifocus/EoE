@@ -129,6 +129,10 @@ namespace EoE
 				{
 					return EffectUtils.PlayCustomUI(effect as CustomUI, multiplier);
 				}
+				else if(effect is Notification)
+				{
+					return EffectUtils.PlayNotification(effect as Notification, multiplier);
+				}
 				else if (effect is DialogueInput)
 				{
 					DialogueController.CreateAndShowDialogue(effect as DialogueInput);

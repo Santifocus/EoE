@@ -220,7 +220,7 @@ namespace EoE
 			bool changed = FoldoutHeader(content, ref curValue);
 			if (curValue)
 			{
-				drawFunction.Invoke();
+				drawFunction?.Invoke();
 			}
 			EndFoldoutHeader();
 			return changed;

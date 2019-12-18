@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using EoE.Information;
+using UnityEngine;
 
 namespace EoE.Entities
 {
@@ -8,6 +9,7 @@ namespace EoE.Entities
 		protected bool isTarget { get; private set; }
 		public bool IsInteractable => canBeInteracted;
 		protected bool canBeInteracted;
+		[SerializeField] protected FXObject[] EffectsOnInteract = default;
 		public void MarkAsInteractTargetBase()
 		{
 			isTarget = true;

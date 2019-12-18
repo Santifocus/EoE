@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using EoE.Information;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -44,9 +45,18 @@ namespace EoE.Entities
 			Player.Instance.AddSouls(soulCount);
 			infoSign.gameObject.SetActive(false);
 
-			for (int i = 0; i < Player.PlayerSettings.EffectsOnSoulsPickup.Length; i++)
+			for (int i = 0; i < EffectsOnInteract.Length; i++)
 			{
-				FXManager.PlayFX(Player.PlayerSettings.EffectsOnSoulsPickup[i], transform, true);
+				if (EffectsOnInteract[i] is Notification)
+				{
+					(string, string)[] replaceInstructions = new (string, string)[1]
+					{
+						("{Amount}", soulCount.ToString())
+					};
+					FXManager.PlayFX((EffectsOnInteract[i] as Notification).CreateInstructedNotification(replaceInstructions), transform, true);
+					continue;
+				}
+				FXManager.PlayFX(EffectsOnInteract[i], transform, true);
 			}
 
 			StartCoroutine(FadeAway());

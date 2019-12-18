@@ -4922,6 +4922,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2044fa5e3864f9409f0a94154061611, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EffectsOnInteract:
+  - {fileID: 11400000, guid: 51d7dbe4fc4221242938576fd5981e8a, type: 2}
+  - {fileID: 11400000, guid: 53e7d5f845e8dd84ebbe448a62732c2c, type: 2}
   infoSign: {fileID: 4063212133673701822}
   colorOverTime:
     serializedVersion: 2

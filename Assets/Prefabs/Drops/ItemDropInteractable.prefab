@@ -58,12 +58,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7a2cd31dbd120245af76e72a27d1892, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EffectsOnInteract:
+  - {fileID: 11400000, guid: a8d3585c9c7214d429e67e9d3a22c189, type: 2}
+  - {fileID: 11400000, guid: 3a59f6e26931f804481b37ed1679ab5a, type: 2}
   body: {fileID: 877910255125148309}
   infoDisplayPrefab: {fileID: 1853090253180107011, guid: d2b701e839218634dbde96bd4ef15d33,
     type: 3}
   infoDisplayOffset: {x: 0, y: 2, z: 0}
   amountColor: {r: 1, g: 0, b: 0, a: 1}
-  itemNameColor: {r: 0, g: 1, b: 1, a: 1}
 --- !u!54 &877910255125148309
 Rigidbody:
   m_ObjectHideFlags: 0

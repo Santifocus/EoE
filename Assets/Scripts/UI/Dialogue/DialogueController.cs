@@ -165,7 +165,7 @@ namespace EoE.UI
 	[System.Serializable]
 	public struct ColoredText
 	{
-		private const string COLOR_CLOSER = "</color>";
+		public const string COLOR_CLOSER = "</color>";
 		public Color textColor;
 		public string text;
 

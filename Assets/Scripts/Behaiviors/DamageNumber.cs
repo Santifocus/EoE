@@ -110,5 +110,7 @@ namespace EoE
 		{
 			SelfPool.ReturnPoolObject(this);
 		}
+
+		public void Created() { }
 	}
 }

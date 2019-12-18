@@ -1,6 +1,7 @@
 ﻿using EoE.Entities;
 using EoE.Information;
 using EoE.Sounds;
+using EoE.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace EoE
 	public class EffectUtils : MonoBehaviour
 	{
 		#region Fields
+		private const string INVALID_INSTRUCTION_MESSAGE = "{Invalid Replace Instruction}";
 		private static EffectUtils Instance;
 		[SerializeField] private Material screenEffectMaterial = default;
 		[SerializeField] private Transform cameraShakeCore = default;
@@ -642,6 +644,66 @@ namespace EoE
 			}
 		}
 		#endregion
+		#region Notification
+		private static List<NotificationInstance> AllNotifications = new List<NotificationInstance>();
+		private Coroutine NotificationCoroutine = null;
+		public static FXInstance PlayNotification(Notification info, float multiplier)
+		{
+			NotificationInstance newNotification = new NotificationInstance(info);
+			newNotification.BaseSetup(multiplier, Player.Instance.transform);
+			AllNotifications.Add(newNotification);
+
+			if (Instance.NotificationCoroutine == null)
+			{
+				Instance.NotificationCoroutine = Instance.StartCoroutine(Instance.NotificationC());
+			}
+
+			return newNotification;
+		}
+		private IEnumerator NotificationC()
+		{
+			while (AllNotifications.Count > 0)
+			{
+				yield return new WaitForFixedUpdate();
+				if (GameController.GameIsPaused)
+					continue;
+
+				for (int i = 0; i < AllNotifications.Count; i++)
+				{
+					AllNotifications[i].Update(Time.deltaTime);
+					if (AllNotifications[i].ShouldBeRemoved && AllNotifications[i].AllowedToRemove())
+					{
+						AllNotifications[i].OnRemove();
+						AllNotifications.RemoveAt(i);
+						i--;
+					}
+				}
+			}
+
+			NotificationCoroutine = null;
+		}
+		private class NotificationInstance : FXInstance
+		{
+			public override FXType Type => FXType.Player;
+
+			public override FXObject BaseInfo => NotificationInfo;
+			private Notification NotificationInfo;
+			private NotificationDisplay notifcationObject;
+			public NotificationInstance(Notification NotificationInfo)
+			{
+				this.NotificationInfo = NotificationInfo;
+				notifcationObject = NotificationController.Instance.AddNotification(NotificationInfo);
+			}
+			protected override void InternalUpdate()
+			{
+				notifcationObject.AlphaMultiplier = GetCurMultiplier();
+			}
+			public override void OnRemove()
+			{
+				NotificationController.Instance.RemoveNotification(notifcationObject);
+			}
+		}
+		#endregion
 		#region CustomUI
 		private static List<CustomUIInstance> AllCustomUIs = new List<CustomUIInstance>();
 		private Coroutine CustomUICoroutine = null;
@@ -669,7 +731,7 @@ namespace EoE
 
 				for (int i = 0; i < AllCustomUIs.Count; i++)
 				{
-					AllCustomUIs[i].Update(Time.fixedDeltaTime);
+					AllCustomUIs[i].Update(Time.deltaTime);
 					if (AllCustomUIs[i].ShouldBeRemoved && AllCustomUIs[i].AllowedToRemove())
 					{
 						AllCustomUIs[i].OnRemove();
@@ -1033,13 +1095,14 @@ namespace EoE
 		private float baseMultiplier;
 
 		protected FXState currentState { get; private set; }
+		protected float timeStepMultiplier = 1;
 		private float passedTime;
 		private float stateMultiplier;
 
 		public void Update(float timeStep)
 		{
 			if (!ShouldBeRemoved)
-				passedTime += timeStep;
+				passedTime += timeStep * timeStepMultiplier;
 			if (BaseInfo.FinishConditions.OnParentDeath && !parent)
 				FinishFX();
 
