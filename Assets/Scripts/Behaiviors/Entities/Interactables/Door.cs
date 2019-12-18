@@ -1,6 +1,5 @@
 ﻿using EoE.Information;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace EoE.Entities
@@ -51,7 +50,7 @@ namespace EoE.Entities
 					//If we are in the second iteration of the removing loop we can skip the contains check
 					if (remove || Player.Instance.Inventory.Contains(requiredItems[i].itemType, requiredItems[i].itemCount))
 					{
-						if(remove)
+						if (remove)
 							Player.Instance.Inventory.RemoveStackSize(requiredItems[i].itemType, requiredItems[i].itemCount);
 					}
 					else

@@ -1,7 +1,7 @@
-﻿using EoE.Events;
+﻿using EoE.Combatery;
+using EoE.Events;
 using EoE.Information;
 using EoE.UI;
-using EoE.Combatery;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -242,7 +242,7 @@ namespace EoE.Entities
 		#region State Control
 		private void EntitieStateControl()
 		{
-			if(CastingCooldown > 0)
+			if (CastingCooldown > 0)
 				CastingCooldown -= Time.deltaTime;
 			if (combatEndCooldown > 0)
 			{
@@ -829,7 +829,7 @@ namespace EoE.Entities
 				if (appliedStun)
 					AppliedMoveStuns++;
 
-				for(int i = 0; i < spell.CastInfo.StartEffects.Length; i++)
+				for (int i = 0; i < spell.CastInfo.StartEffects.Length; i++)
 				{
 					spell.CastInfo.StartEffects[i].ActivateEffectAOE(this, transform, spell);
 				}
@@ -841,7 +841,7 @@ namespace EoE.Entities
 
 				float castTime = 0;
 				float effectTick = 0;
-				while(castTime < spell.CastInfo.Duration)
+				while (castTime < spell.CastInfo.Duration)
 				{
 					yield return new WaitForEndOfFrame();
 					castTime += Time.deltaTime;
@@ -864,9 +864,9 @@ namespace EoE.Entities
 					AppliedMoveStuns--;
 			}
 
-			if(curParticles != null)
+			if (curParticles != null)
 			{
-				for(int i = 0; i < curParticles.Length; i++)
+				for (int i = 0; i < curParticles.Length; i++)
 				{
 					curParticles[i].FinishFX();
 				}
@@ -919,7 +919,7 @@ namespace EoE.Entities
 						if (j < spell.ProjectileInfos[i].ExecutionCount - 1)
 						{
 							float repeatTimer = 0;
-							while(repeatTimer < spell.ProjectileInfos[i].ExecutionRepeatDelay)
+							while (repeatTimer < spell.ProjectileInfos[i].ExecutionRepeatDelay)
 							{
 								yield return new WaitForEndOfFrame();
 								repeatTimer += Time.deltaTime;
@@ -933,7 +933,7 @@ namespace EoE.Entities
 					AppliedMoveStuns--;
 			}
 
-			//If the spell cast / shooting was canceled we jump here
+		//If the spell cast / shooting was canceled we jump here
 		StoppedSpell:;
 			IsCasting = false;
 			CastingCooldown = spell.SpellCooldown;
@@ -953,10 +953,10 @@ namespace EoE.Entities
 			Vector3 spawnOffset = spellBase.ProjectileInfos[index].Projectile.CreateOffsetToCaster.x * transform.right + spellBase.ProjectileInfos[index].Projectile.CreateOffsetToCaster.y * transform.up + spellBase.ProjectileInfos[index].Projectile.CreateOffsetToCaster.z * transform.forward;
 
 			//First find out what direction the projectile should fly
-			Vector3 direction = CombatObject.CalculateDirection(spellBase.ProjectileInfos[index].Projectile.DirectionStyle, 
-																spellBase.ProjectileInfos[index].Projectile.FallbackDirectionStyle, 
-																spellBase.ProjectileInfos[index].Projectile.Direction, 
-																this, 
+			Vector3 direction = CombatObject.CalculateDirection(spellBase.ProjectileInfos[index].Projectile.DirectionStyle,
+																spellBase.ProjectileInfos[index].Projectile.FallbackDirectionStyle,
+																spellBase.ProjectileInfos[index].Projectile.Direction,
+																this,
 																spawnOffset
 																);
 			return Projectile.CreateProjectile(spellBase, spellBase.ProjectileInfos[index].Projectile, this, direction, actuallWorldPosition + spawnOffset);
@@ -1023,7 +1023,7 @@ namespace EoE.Entities
 			Vector3 GetRandomPointInBounds()
 			{
 				return target.coll.bounds.center +
-					new Vector3(	target.coll.bounds.extents.x * (Random.value - 0.5f) * 2,
+					new Vector3(target.coll.bounds.extents.x * (Random.value - 0.5f) * 2,
 									target.coll.bounds.extents.y * (Random.value - 0.5f) * 2,
 									target.coll.bounds.extents.z * (Random.value - 0.5f) * 2);
 			}

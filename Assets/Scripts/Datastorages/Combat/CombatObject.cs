@@ -1,7 +1,5 @@
 ﻿using EoE.Entities;
 using EoE.Information;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace EoE.Combatery
@@ -88,7 +86,7 @@ namespace EoE.Combatery
 			{
 				calculatedDirection = DirectionFromStyle(directionStyle);
 			}
-			return calculatedDirection; 
+			return calculatedDirection;
 			Vector3 DirectionFromStyle(InherritDirection style)
 			{
 				if (style == InherritDirection.World)

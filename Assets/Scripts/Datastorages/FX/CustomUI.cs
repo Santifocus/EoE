@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace EoE.Information
 {
-		public enum CanvasTarget { Background = 1, Main = 2, Menu = 3 }
+	public enum CanvasTarget { Background = 1, Main = 2, Menu = 3 }
 	public class CustomUI : FXObject
 	{
 		[Tooltip("The UI Paremt that will be created on the canvas.")]

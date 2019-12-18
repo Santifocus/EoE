@@ -143,7 +143,7 @@ namespace EoE.Combatery
 			}
 			if (HasMaskFlag(AttackEffectType.AOE))
 			{
-				for(int i = 0; i < AOEEffects.Length; i++)
+				for (int i = 0; i < AOEEffects.Length; i++)
 				{
 					AOEEffects[i].ActivateEffectAOE(activator, activator.transform, baseObject);
 				}
@@ -192,10 +192,10 @@ namespace EoE.Combatery
 			Vector3 spawnOffset = data.CreateOffsetToCaster.x * activator.transform.right + data.CreateOffsetToCaster.y * activator.transform.up + data.CreateOffsetToCaster.z * activator.transform.forward;
 
 			//First find out what direction the projectile should fly
-			Vector3 direction = CombatObject.CalculateDirection(data.DirectionStyle, 
-																data.FallbackDirectionStyle, 
-																data.Direction, 
-																activator, 
+			Vector3 direction = CombatObject.CalculateDirection(data.DirectionStyle,
+																data.FallbackDirectionStyle,
+																data.Direction,
+																activator,
 																spawnOffset
 																);
 			return Projectile.CreateProjectile(baseObject, data, activator, direction, activator.actuallWorldPosition + spawnOffset);

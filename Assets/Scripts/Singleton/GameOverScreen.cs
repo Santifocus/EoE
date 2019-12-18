@@ -1,7 +1,6 @@
 ﻿using EoE.Controlls;
 using EoE.Events;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,7 +38,7 @@ namespace EoE.UI
 		{
 			if (fadingIn)
 			{
-				if(InputController.MenuRight.Down || InputController.MenuLeft.Down || InputController.MenuEnter.Down)
+				if (InputController.MenuRight.Down || InputController.MenuLeft.Down || InputController.MenuEnter.Down)
 				{
 					navigationCooldown = NAV_COOLDOWN * 2;
 					StopAllCoroutines();
@@ -49,7 +48,7 @@ namespace EoE.UI
 				return;
 			}
 
-			if(navigationCooldown > 0)
+			if (navigationCooldown > 0)
 			{
 				navigationCooldown -= Time.deltaTime;
 				return;
@@ -81,7 +80,7 @@ namespace EoE.UI
 		{
 			fadingIn = true;
 			alphaValues = new float[fadeInComponents.Length];
-			for(int i = 0; i < fadeInComponents.Length; i++)
+			for (int i = 0; i < fadeInComponents.Length; i++)
 			{
 				Color col = fadeInComponents[i].color;
 				alphaValues[i] = col.a;
@@ -89,13 +88,13 @@ namespace EoE.UI
 			}
 
 			float timer = 0;
-			while(timer < fadeInTime)
+			while (timer < fadeInTime)
 			{
 				yield return new WaitForEndOfFrame();
 				timer += Time.deltaTime;
 
 				float point = timer / fadeInTime;
-				for(int i  = 0; i < fadeInComponents.Length; i++)
+				for (int i = 0; i < fadeInComponents.Length; i++)
 				{
 					Color col = fadeInComponents[i].color;
 					fadeInComponents[i].color = new Color(col.r, col.g, col.b, point * alphaValues[i]);

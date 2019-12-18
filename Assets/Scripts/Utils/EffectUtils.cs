@@ -1,10 +1,10 @@
-﻿using System.Collections;
+﻿using EoE.Entities;
+using EoE.Information;
+using EoE.Sounds;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using EoE.Information;
-using EoE.Sounds;
-using EoE.Entities;
 using UnityEngine.UI;
 
 namespace EoE
@@ -92,7 +92,7 @@ namespace EoE
 			{
 				yield return new WaitForEndOfFrame();
 				if (GameController.GameIsPaused)
-						continue;
+					continue;
 
 				timeTillNextShake -= Time.deltaTime;
 				if (timeTillNextShake <= 0)
@@ -144,8 +144,8 @@ namespace EoE
 				cameraShakeCore.localPosition = (Random.value - 0.5f) * cameraShakeCore.transform.right * axisIntensity.x +
 												(Random.value - 0.5f) * cameraShakeCore.transform.up * axisIntensity.y +
 												(Random.value - 0.5f) * cameraShakeCore.transform.forward * axisIntensity.z;
-				cameraShakeCore.localEulerAngles = new Vector3((Random.value - 0.5f) * angleIntensity.x, 
-																(Random.value - 0.5f) * angleIntensity.y, 
+				cameraShakeCore.localEulerAngles = new Vector3((Random.value - 0.5f) * angleIntensity.x,
+																(Random.value - 0.5f) * angleIntensity.y,
 																(Random.value - 0.5f) * angleIntensity.z);
 			}
 		}
@@ -428,7 +428,7 @@ namespace EoE
 
 				//First get the total dominance level, and add passed time
 				int dominanceCount = 0;
-				for(int i = 0; i < AllTintScreenEffects.Count; i++)
+				for (int i = 0; i < AllTintScreenEffects.Count; i++)
 				{
 					AllTintScreenEffects[i].Update(Time.deltaTime);
 					if (AllTintScreenEffects[i].ShouldBeRemoved && AllTintScreenEffects[i].AllowedToRemove())
@@ -581,37 +581,46 @@ namespace EoE
 		}
 		private IEnumerator WarpCameraFOVC()
 		{
-			while(AllCameraFOVWarpEffects.Count > 0)
+			while (true)
 			{
 				yield return new WaitForEndOfFrame();
 				if (GameController.GameIsPaused)
 					continue;
 
-				HighestCameraFOVWarpDominanceIndex = -1;
-				int targetIndex = 0;
-				for (int i = 0; i < AllCameraFOVWarpEffects.Count; i++)
+				if (AllCameraFOVWarpEffects.Count > 0)
 				{
-					AllCameraFOVWarpEffects[i].Update(Time.deltaTime);
-					if (AllCameraFOVWarpEffects[i].ShouldBeRemoved && AllCameraFOVWarpEffects[i].AllowedToRemove())
+					HighestCameraFOVWarpDominanceIndex = -1;
+					int targetIndex = 0;
+					for (int i = 0; i < AllCameraFOVWarpEffects.Count; i++)
 					{
-						AllCameraFOVWarpEffects[i].OnRemove();
-						AllCameraFOVWarpEffects.RemoveAt(i);
-						i--;
-					}
-					else
-					{
-						if (HighestCameraFOVWarpDominanceIndex < AllCameraFOVWarpEffects[i].DominanceIndex)
+						AllCameraFOVWarpEffects[i].Update(Time.deltaTime);
+						if (AllCameraFOVWarpEffects[i].ShouldBeRemoved && AllCameraFOVWarpEffects[i].AllowedToRemove())
 						{
-							HighestCameraFOVWarpDominanceIndex = AllCameraFOVWarpEffects[i].DominanceIndex;
-							targetIndex = i;
+							AllCameraFOVWarpEffects[i].OnRemove();
+							AllCameraFOVWarpEffects.RemoveAt(i);
+							i--;
+						}
+						else
+						{
+							if (HighestCameraFOVWarpDominanceIndex < AllCameraFOVWarpEffects[i].DominanceIndex)
+							{
+								HighestCameraFOVWarpDominanceIndex = AllCameraFOVWarpEffects[i].DominanceIndex;
+								targetIndex = i;
+							}
 						}
 					}
+
+					if (AllCameraFOVWarpEffects.Count == 0)
+						continue;
+
+					PlayerCameraController.CameraFOV = Mathf.Lerp(PlayerCameraController.CameraFOV, AllCameraFOVWarpEffects[targetIndex].GetFOV(), LERP_FOV_SPEED * Time.deltaTime);
 				}
-
-				if (AllCameraFOVWarpEffects.Count == 0)
-					continue;
-
-				PlayerCameraController.CameraFOV = Mathf.Lerp(PlayerCameraController.CameraFOV, AllCameraFOVWarpEffects[targetIndex].GetFOV(), LERP_FOV_SPEED * Time.deltaTime);
+				else
+				{
+					PlayerCameraController.CameraFOV = Mathf.Lerp(PlayerCameraController.CameraFOV, Player.PlayerSettings.CameraBaseFOV, LERP_FOV_SPEED * Time.deltaTime * 1.5f);
+					if (Mathf.Abs(PlayerCameraController.CameraFOV - Player.PlayerSettings.CameraBaseFOV) < 0.01f)
+						break;
+				}
 			}
 			PlayerCameraController.CameraFOV = Player.PlayerSettings.CameraBaseFOV;
 			CameraFOVWarpCoroutine = null;
@@ -699,7 +708,7 @@ namespace EoE
 			protected override void InternalUpdate()
 			{
 				float newMultiplier = GetCurMultiplier();
-				if(curMultiplier != newMultiplier)
+				if (curMultiplier != newMultiplier)
 				{
 					curMultiplier = newMultiplier;
 					for (int i = 0; i < containedGraphics.Length; i++)
@@ -731,7 +740,7 @@ namespace EoE
 			newSoundFX.BaseSetup(multiplier, target);
 			AllSoundFXs.Add(newSoundFX);
 
-			if(Instance.SoundFXCoroutine == null)
+			if (Instance.SoundFXCoroutine == null)
 			{
 				Instance.SoundFXCoroutine = Instance.StartCoroutine(Instance.SoundFXC());
 			}
@@ -740,7 +749,7 @@ namespace EoE
 		}
 		private IEnumerator SoundFXC()
 		{
-			while(AllSoundFXs.Count > 0)
+			while (AllSoundFXs.Count > 0)
 			{
 				yield return new WaitForFixedUpdate();
 				if (GameController.GameIsPaused)
@@ -805,9 +814,9 @@ namespace EoE
 			}
 
 			ParticleSystem[] containedSystems = mainObject.GetComponentsInChildren<ParticleSystem>();
-			for(int i = 0; i < containedSystems.Length; i++)
+			for (int i = 0; i < containedSystems.Length; i++)
 			{
-				if(containedSystems[i].isPlaying)
+				if (containedSystems[i].isPlaying)
 					containedSystems[i].Stop();
 				containedSystems[i].Play();
 			}
@@ -816,7 +825,7 @@ namespace EoE
 			newParticleFX.BaseSetup(multiplier, parent);
 			AllParticleFXs.Add(newParticleFX);
 
-			if(Instance.ParticleFXCoroutine == null)
+			if (Instance.ParticleFXCoroutine == null)
 			{
 				Instance.ParticleFXCoroutine = Instance.StartCoroutine(Instance.ParticleFXC());
 			}
@@ -824,13 +833,13 @@ namespace EoE
 		}
 		private IEnumerator ParticleFXC()
 		{
-			while(AllParticleFXs.Count > 0)
+			while (AllParticleFXs.Count > 0)
 			{
 				yield return new WaitForFixedUpdate();
 				if (GameController.GameIsPaused)
 					continue;
 
-				for(int i = 0; i < AllParticleFXs.Count; i++)
+				for (int i = 0; i < AllParticleFXs.Count; i++)
 				{
 					AllParticleFXs[i].Update(Time.fixedDeltaTime);
 					if (AllParticleFXs[i].ShouldBeRemoved && AllParticleFXs[i].AllowedToRemove())
@@ -1025,12 +1034,12 @@ namespace EoE
 
 		public void Update(float timeStep)
 		{
-			if(!ShouldBeRemoved)
+			if (!ShouldBeRemoved)
 				passedTime += timeStep;
 			if (BaseInfo.FinishConditions.OnParentDeath && !parent)
 				FinishFX();
 
-			if(currentState == FXState.Start && passedTime > BaseInfo.TimeIn)
+			if (currentState == FXState.Start && passedTime > BaseInfo.TimeIn)
 			{
 				passedTime -= BaseInfo.TimeIn;
 				currentState = FXState.Stay;
@@ -1042,23 +1051,23 @@ namespace EoE
 				currentState = FXState.End;
 			}
 
-			if (currentState == FXState.End && !ShouldBeRemoved) 
+			if (currentState == FXState.End && !ShouldBeRemoved)
 			{
 				if (passedTime > BaseInfo.TimeOut)
 				{
 					ShouldBeRemoved = true;
 					passedTime = BaseInfo.TimeOut;
-				} 
+				}
 			}
 
-			if(currentState == FXState.Start)
+			if (currentState == FXState.Start)
 			{
 				if (BaseInfo.TimeIn > 0)
 					stateMultiplier = passedTime / BaseInfo.TimeIn;
 				else
 					stateMultiplier = 1;
 			}
-			else if(currentState == FXState.Stay)
+			else if (currentState == FXState.Stay)
 			{
 				stateMultiplier = 1;
 			}

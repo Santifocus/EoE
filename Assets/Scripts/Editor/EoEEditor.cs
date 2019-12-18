@@ -388,7 +388,7 @@ namespace EoE
 		public static bool ObjectArrayField<T>(GUIContent arrayHeader, ref T[] curValue, ref bool open, GUIContent objectContent = null, int offSet = 0) where T : Object
 		{
 			bool changed = false;
-			if(curValue == null)
+			if (curValue == null)
 			{
 				curValue = new T[0];
 				changed = true;
@@ -401,7 +401,7 @@ namespace EoE
 				DelayedIntField("Size", ref newSize, offSet + 1);
 
 				GUIContent targetContent = objectContent != null ? objectContent : new GUIContent(". Element");
-				for(int i = 0; i < curValue.Length; i++)
+				for (int i = 0; i < curValue.Length; i++)
 				{
 					changed |= ObjectField(new GUIContent((i + 1) + targetContent.text, targetContent.tooltip), ref curValue[i], offSet + 1);
 				}
@@ -410,7 +410,7 @@ namespace EoE
 				{
 					changed = true;
 					T[] newArray = new T[newSize];
-					for(int i = 0; i < newSize; i++)
+					for (int i = 0; i < newSize; i++)
 					{
 						if (i < curValue.Length)
 							newArray[i] = curValue[i];
@@ -546,10 +546,10 @@ namespace EoE
 			string name = "/New " + typeof(T).Name;
 			string path = "";
 
-			for(int i = 0; i < pathParts.Length; i++)
+			for (int i = 0; i < pathParts.Length; i++)
 			{
 				path += "/" + pathParts[i];
-				if(!Directory.Exists(Application.dataPath + path))
+				if (!Directory.Exists(Application.dataPath + path))
 				{
 					Directory.CreateDirectory(Application.dataPath + path);
 				}

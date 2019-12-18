@@ -1,5 +1,4 @@
 ﻿using EoE.Combatery;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using static EoE.EoEEditor;
@@ -13,7 +12,7 @@ namespace EoE.Information
 		private static bool CastInfoOpen;
 		private static bool StartSettingsOpen;
 
-		protected override void CustomInspector() 
+		protected override void CustomInspector()
 		{
 			Spell settings = target as Spell;
 
@@ -118,7 +117,7 @@ namespace EoE.Information
 		}
 		private void DrawProjectileInfo(SerializedProperty projectileProperty, ProjectileInfo info, int index, int offSet)
 		{
-			if(info == null)
+			if (info == null)
 			{
 				info = new ProjectileInfo();
 			}

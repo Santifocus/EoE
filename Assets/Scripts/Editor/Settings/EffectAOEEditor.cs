@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using EoE.Combatery;
 using UnityEditor;
+using UnityEngine;
 using static EoE.EoEEditor;
-using EoE.Combatery;
 
 namespace EoE.Information
 {

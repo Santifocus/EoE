@@ -1,7 +1,6 @@
 ﻿using EoE.Information;
-using EoE.UI;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 namespace EoE.Entities
 {
@@ -18,7 +17,7 @@ namespace EoE.Entities
 			int preStacksize = containedItem.stackSize;
 			Player.Instance.Inventory.AddItem(containedItem);
 
-			if(preStacksize != containedItem.stackSize)
+			if (preStacksize != containedItem.stackSize)
 			{
 				for (int i = 0; i < Player.PlayerSettings.EffectsOnItemPickup.Length; i++)
 				{

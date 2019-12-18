@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
+﻿using EoE.Entities;
 using EoE.Events;
-using EoE.Entities;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace EoE.UI
 {
@@ -44,10 +42,10 @@ namespace EoE.UI
 		}
 		private void Update()
 		{
-			if(delayTillHide > 0)
+			if (delayTillHide > 0)
 			{
 				delayTillHide -= Time.unscaledDeltaTime;
-				if(delayTillHide <= 0)
+				if (delayTillHide <= 0)
 				{
 					textTransition.ChangeTransitionState(false);
 				}
@@ -55,7 +53,7 @@ namespace EoE.UI
 				if (textTransition.trueState)
 				{
 					shownSoulCount = Mathf.Lerp(shownSoulCount, Player.Instance.TotalSoulCount, Time.unscaledDeltaTime * updateSoulCountSpeed);
-					if(Mathf.CeilToInt(shownSoulCount) >= soulsToLevelup)
+					if (Mathf.CeilToInt(shownSoulCount) >= soulsToLevelup)
 					{
 						soulsToLevelup = Player.Instance.RequiredSoulsForLevel;
 					}

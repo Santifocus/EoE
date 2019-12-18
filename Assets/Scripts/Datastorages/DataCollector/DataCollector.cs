@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -15,7 +14,7 @@ namespace EoE.Information
 		{
 			string[] foundAssetsGUIDs = AssetDatabase.FindAssets("t:" + typeof(T).Name.ToLower());
 			List<T> allFoundData = new List<T>(foundAssetsGUIDs.Length);
-			for(int i = 0; i < foundAssetsGUIDs.Length; i++)
+			for (int i = 0; i < foundAssetsGUIDs.Length; i++)
 			{
 				allFoundData.Add((T)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(foundAssetsGUIDs[i]), typeof(T)));
 			}

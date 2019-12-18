@@ -1,5 +1,4 @@
-﻿using EoE.Entities;
-using EoE.Sounds;
+﻿using EoE.Sounds;
 using EoE.UI;
 using UnityEngine;
 

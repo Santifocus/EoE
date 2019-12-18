@@ -1,8 +1,8 @@
-﻿using UnityEngine;
-using UnityEditor;
-using EoE.Information;
-using static EoE.EoEEditor;
+﻿using EoE.Information;
 using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
+using static EoE.EoEEditor;
 
 namespace EoE.Combatery
 {
@@ -80,7 +80,7 @@ namespace EoE.Combatery
 		private void DrawAttackSequence(AttackSequence sequence, string sequenceName)
 		{
 			SerializedProperty sequenceArray = serializedObject.FindProperty(sequenceName).FindPropertyRelative(nameof(sequence.AttackSequenceParts));
-			for(int i = 0; i < sequence.AttackSequenceParts.Length; i++)
+			for (int i = 0; i < sequence.AttackSequenceParts.Length; i++)
 			{
 				DrawAttackStyle(sequence.AttackSequenceParts[i], sequenceArray.GetArrayElementAtIndex(i), i, 1);
 				if (i < sequence.AttackSequenceParts.Length - 1)
@@ -145,7 +145,7 @@ namespace EoE.Combatery
 
 				LineBreak(new Color(0.25f, 0.25f, 0.65f, 0.25f));
 				EnumField<MultiplicationType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AnimationMultiplicationType))), ref style.AnimationMultiplicationType, offSet + 1);
-				if(style.AnimationMultiplicationType == MultiplicationType.FlatValue)
+				if (style.AnimationMultiplicationType == MultiplicationType.FlatValue)
 				{
 					if (FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AnimationSpeedFlatValue))), ref style.AnimationSpeedFlatValue, offSet + 1))
 					{
@@ -181,10 +181,10 @@ namespace EoE.Combatery
 				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 				Header("Override Settings", offSet);
 				BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.OverrideElement))), ref style.OverrideElement, offSet + 1);
-				if(style.OverrideElement)
+				if (style.OverrideElement)
 					EnumField<ElementType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.OverridenElement))), ref style.OverridenElement, offSet + 2);
 				BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.OverrideCauseType))), ref style.OverrideCauseType, offSet + 1);
-				if(style.OverrideCauseType)
+				if (style.OverrideCauseType)
 					EnumField<CauseType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.OverridenCauseType))), ref style.OverridenCauseType, offSet + 2);
 
 				//Combo
@@ -315,7 +315,7 @@ namespace EoE.Combatery
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1), false);
 				}
 			}
-			
+
 			string IndexToName()
 			{
 				return (index + 1) + ". Effect";
@@ -331,7 +331,7 @@ namespace EoE.Combatery
 				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(info.ExecutionDelay))), ref info.ExecutionDelay, offSet + 1);
 
 				IntField(new GUIContent(ObjectNames.NicifyVariableName(nameof(info.ExecutionCount))), ref info.ExecutionCount, offSet + 1);
-				if(info.ExecutionCount > 1)
+				if (info.ExecutionCount > 1)
 					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(info.ExecutionRepeatDelay))), ref info.ExecutionRepeatDelay, offSet + 1);
 			}
 		}

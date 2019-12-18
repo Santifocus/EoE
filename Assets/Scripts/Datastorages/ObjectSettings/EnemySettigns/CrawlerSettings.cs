@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace EoE.Information
+﻿namespace EoE.Information
 {
 	public class CrawlerSettings : EnemySettings
 	{

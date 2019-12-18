@@ -1,7 +1,6 @@
-﻿using UnityEditor;
-using EoE.Combatery;
+﻿using EoE.Combatery;
+using UnityEditor;
 using static EoE.EoEEditor;
-using UnityEngine;
 
 namespace EoE.Information
 {
@@ -43,16 +42,16 @@ namespace EoE.Information
 		[MenuItem("EoE/LevelingSettings")] public static void CreateLevelingSettings() => AssetCreator<LevelingSettings>("Settings", "EntitieSettings", "LevelingSettings");
 
 		//Data Collectors
-		[MenuItem("EoE/DataCollection/Collect Items")] 
-		public static void CollectItemData() 
+		[MenuItem("EoE/DataCollection/Collect Items")]
+		public static void CollectItemData()
 		{
 			string[] itemCollectorGUID = AssetDatabase.FindAssets("t:ItemCollector");
-			if(itemCollectorGUID.Length == 0)
+			if (itemCollectorGUID.Length == 0)
 			{
 				ItemCollector newCollector = AssetCreator<ItemCollector>("Settings", "Data Collection");
 				newCollector.CollectData();
 			}
-			else if(itemCollectorGUID.Length > 1)
+			else if (itemCollectorGUID.Length > 1)
 			{
 				UnityEngine.Debug.Log("Found more then 1 Item collector... Deleting all and creating new one.");
 				for (int i = 0; i < itemCollectorGUID.Length; i++)

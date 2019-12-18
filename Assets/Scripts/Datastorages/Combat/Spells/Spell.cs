@@ -1,10 +1,4 @@
-﻿using EoE.Entities;
-using EoE.Information;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace EoE.Combatery
+﻿namespace EoE.Combatery
 {
 	[System.Flags] public enum SpellPart { Cast = (1 << 0), Start = (1 << 1), Projectile = (1 << 2) }
 	[System.Flags] public enum SpellMovementRestrictionsMask { WhileCasting = (1 << 0), WhileShooting = (1 << 1) }

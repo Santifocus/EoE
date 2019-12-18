@@ -1,9 +1,9 @@
 ﻿using EoE.Controlls;
 using EoE.Entities;
 using EoE.Information;
-using UnityEngine;
-using TMPro;
 using EoE.Sounds;
+using TMPro;
+using UnityEngine;
 
 namespace EoE.UI
 {
@@ -66,7 +66,7 @@ namespace EoE.UI
 		{
 			curNavigationCooldown = 0;
 			navigationIndex = 0;
-			if(menuItems.Length > 0)
+			if (menuItems.Length > 0)
 				menuItems[navigationIndex].SelectMenuItem();
 			UpdateDisplay();
 			ResetAssignedSkillPoints(false);
@@ -162,9 +162,9 @@ namespace EoE.UI
 		}
 		public void GotoConfirmation()
 		{
-			for(int i = 0; i < menuItems.Length; i++)
+			for (int i = 0; i < menuItems.Length; i++)
 			{
-				if(menuItems[i] is AcceptResetButton)
+				if (menuItems[i] is AcceptResetButton)
 				{
 					menuItems[i].SelectMenuItem();
 					break;
@@ -175,7 +175,7 @@ namespace EoE.UI
 		{
 			if (assignedAttributePointCount + assignedSkillPointCount == 0)
 			{
-				if(feedback)
+				if (feedback)
 					PlayFeedback(false);
 				return false;
 			}

@@ -16,7 +16,7 @@ namespace EoE
 			float curIndentOff = System.Math.Max(1, EditorGUI.indentLevel) * 15;
 			float colorFieldWidht = 100;
 			float textFieldWidht = position.width - curIndentOff - colorFieldWidht;
-			
+
 			SerializedProperty curTextProperty = property.FindPropertyRelative(nameof(exampleInstance.text));
 			Rect textRect = new Rect(curIndentOff, position.y, textFieldWidht, lineHeight);
 			curTextProperty.stringValue = EditorGUI.TextField(textRect, label, curTextProperty.stringValue);

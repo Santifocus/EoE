@@ -1,8 +1,6 @@
 ﻿using EoE.Information;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 namespace EoE.UI
 {
@@ -11,9 +9,9 @@ namespace EoE.UI
 		private const string COLOR_CLOSER = "</color>";
 		[SerializeField] private TextMeshProUGUI itemNameText = default;
 		[SerializeField] private TextMeshProUGUI itemDescriptionText = default;
-        public void SetItem(Item target)
+		public void SetItem(Item target)
 		{
-			if(target == null)
+			if (target == null)
 			{
 				itemNameText.text = "";
 				itemDescriptionText.text = "";
@@ -23,7 +21,7 @@ namespace EoE.UI
 			itemNameText.text = ColorToColorOpener(target.ItemName.textColor) + target.ItemName.text + COLOR_CLOSER;
 
 			string descriptionText = "";
-			for(int i = 0; i < target.ItemDescription.Length; i++)
+			for (int i = 0; i < target.ItemDescription.Length; i++)
 			{
 				descriptionText += target.ItemDescription[i];
 			}

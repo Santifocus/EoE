@@ -56,7 +56,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       AnimationSpeedCurveTimeframe: 0.8
-      AnimationSpeedCurveMultiplier: 2
+      AnimationSpeedCurveMultiplier: 1.3
       DamageMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
@@ -119,7 +119,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       AnimationSpeedCurveTimeframe: 0.8
-      AnimationSpeedCurveMultiplier: 1.4
+      AnimationSpeedCurveMultiplier: 1.2
       DamageMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
@@ -183,9 +183,9 @@ MonoBehaviour:
         m_RotationOrder: 4
       AnimationSpeedCurveTimeframe: 0.8
       AnimationSpeedCurveMultiplier: 1.5
-      DamageMultiplier: 2
+      DamageMultiplier: 1.8
       ManaCostMultiplier: 1
-      EnduranceCostMultiplier: 1.2
+      EnduranceCostMultiplier: 2
       KnockbackMultiplier: 1
       CritChanceMultiplier: 1
       CollisionMask: -1
@@ -198,7 +198,7 @@ MonoBehaviour:
       ComboIncreaseMaxDelay: 3
       OnHitComboWorth: 1
       AttackEffects:
-      - AtAnimationPoint: 0.35
+      - AtAnimationPoint: 0.55
         ChanceToActivate: 1
         ContainedEffectType: 2
         ImpulseVelocity: 5
@@ -295,28 +295,28 @@ MonoBehaviour:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
-          time: 0.017951965
+          time: 0
           value: 1.5494843
-          inSlope: -0.05033943
-          outSlope: -0.05033943
-          tangentMode: 34
+          inSlope: 0.0056241527
+          outSlope: 0.0056241527
+          tangentMode: 0
           weightedMode: 0
           inWeight: 0
-          outWeight: 0.33333334
+          outWeight: 0.095466584
         - serializedVersion: 3
-          time: 1.0058136
-          value: 1.4997559
-          inSlope: -0.05033943
-          outSlope: -0.05033943
-          tangentMode: 34
+          time: 1
+          value: 0.8
+          inSlope: -2.2526708
+          outSlope: -2.2526708
+          tangentMode: 0
           weightedMode: 0
-          inWeight: 0.33333334
+          inWeight: 0.023722649
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      AnimationSpeedCurveTimeframe: 2
-      AnimationSpeedCurveMultiplier: 2
+      AnimationSpeedCurveTimeframe: 0.5
+      AnimationSpeedCurveMultiplier: 1.8
       DamageMultiplier: 1.2
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
@@ -332,7 +332,7 @@ MonoBehaviour:
       ComboIncreaseMaxDelay: 1
       OnHitComboWorth: 1
       AttackEffects:
-      - AtAnimationPoint: 0.35
+      - AtAnimationPoint: 0.3
         ChanceToActivate: 1
         ContainedEffectType: 2
         ImpulseVelocity: 5
@@ -383,7 +383,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       AnimationSpeedCurveTimeframe: 2
-      AnimationSpeedCurveMultiplier: 2
+      AnimationSpeedCurveMultiplier: 1.5
       DamageMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1.5
@@ -391,7 +391,7 @@ MonoBehaviour:
       CritChanceMultiplier: 1
       CollisionMask: -1
       StopOnCollisionMask: -1
-      DirectHit: {fileID: 11400000, guid: bfb7e1ecec740634fb4282d888a3b9ed, type: 2}
+      DirectHit: {fileID: 11400000, guid: ef39d8966b001e245a7f7d4cf21cef44, type: 2}
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -415,6 +415,17 @@ MonoBehaviour:
           RotationOffset: {x: 0, y: 0, z: 0}
           HasCustomScale: 0
           CustomScale: {x: 1, y: 1, z: 1}
+        AOEEffects: []
+        ProjectileInfos: []
+      - AtAnimationPoint: 0.6
+        ChanceToActivate: 1
+        ContainedEffectType: 0
+        ImpulseVelocity: 5
+        ImpulseVelocityFallOffTime: 0.5
+        ImpulseVelocityDirection: 2
+        ImpulseVelocityFallbackDirection: 1
+        ImpulseDirectionBase: 1
+        FXObjects: []
         AOEEffects: []
         ProjectileInfos: []
     PartsMaxDelays: []

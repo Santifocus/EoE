@@ -1,9 +1,8 @@
-﻿using System.Collections;
+﻿using EoE.Information;
 using System.Collections.Generic;
-using EoE.Information;
-using static EoE.EoEEditor;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
+using static EoE.EoEEditor;
 
 namespace EoE.Combatery
 {
@@ -48,9 +47,9 @@ namespace EoE.Combatery
 				{
 					bool needsResort = false;
 					int lastComboCount = -1;
-					for(int i = 0; i < settings.ComboData.Length; i++)
+					for (int i = 0; i < settings.ComboData.Length; i++)
 					{
-						if(lastComboCount > settings.ComboData[i].RequiredComboCount)
+						if (lastComboCount > settings.ComboData[i].RequiredComboCount)
 						{
 							needsResort = true;
 							break;

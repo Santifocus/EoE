@@ -42,12 +42,12 @@ MonoBehaviour:
   InAirAccelerationMultiplier: 0.3
   CameraToPlayerDistance: 7
   CameraAnchorOffset: {x: 0, y: 1.6, z: 0}
-  CameraAnchorOffsetWhenTargeting: {x: 2, y: 1, z: 0}
+  CameraAnchorOffsetWhenTargeting: {x: 2, y: 2, z: 0}
   CameraRotationPower: {x: 200, y: -75}
   CameraRotationSpeed: 7
   CameraVerticalAngleClamps: {x: -50, y: 50}
   CameraExtraZoomOnVertical: 0.8
-  MaxEnemyTargetingDistance: 60
+  MaxEnemyTargetingDistance: 180
   CameraClampsWhenTargeting: {x: -30, y: 30}
   CameraBaseFOV: 60
   Endurance: 100

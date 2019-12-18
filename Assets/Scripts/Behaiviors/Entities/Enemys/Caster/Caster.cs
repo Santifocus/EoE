@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using EoE.Information;
-using EoE.Combatery;
-using UnityEngine;
+﻿using EoE.Information;
 
 namespace EoE.Entities
 {

@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEditor;
 
 namespace EoE.Information
 {
@@ -57,7 +55,7 @@ namespace EoE.Information
 		{
 			float mul = property.isExpanded ? 4 : 1;
 			mul += TimeOpen(property) && property.isExpanded ? 1 : 0;
-			return EditorGUIUtility.singleLineHeight * mul + EditorGUIUtility.standardVerticalSpacing * (mul -1);
+			return EditorGUIUtility.singleLineHeight * mul + EditorGUIUtility.standardVerticalSpacing * (mul - 1);
 		}
 	}
 }

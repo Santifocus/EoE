@@ -37,7 +37,7 @@ namespace EoE.Entities
 		}
 		private void OnCollisionStay(Collision collision)
 		{
-			
+
 		}
 		private void OnTriggerStay(Collider other)
 		{

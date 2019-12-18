@@ -101,17 +101,17 @@ namespace EoE.Information
 				}
 
 				//We dont want to overheal, but will allow overkill for bettet VFX
-				if(basis.targetStat == TargetStat.Health)
+				if (basis.targetStat == TargetStat.Health)
 				{
 					//Change true damage based on the entities true damage multiplier
 					finalChangeAmount *= receiver.curTrueDamageDamageMultiplier;
 					finalChangeAmount = Mathf.Max(finalChangeAmount, -(receiver.curMaxHealth - receiver.curHealth));
 				}
-				else if(basis.targetStat == TargetStat.Mana)
+				else if (basis.targetStat == TargetStat.Mana)
 				{
 					finalChangeAmount = Mathf.Max(finalChangeAmount, -(receiver.curMaxMana - receiver.curMana));
 				}
-				else if(receiver is Player)
+				else if (receiver is Player)
 				{
 					finalChangeAmount = Mathf.Max(finalChangeAmount, -((receiver as Player).curMaxEndurance - (receiver as Player).curEndurance));
 				}
@@ -125,7 +125,7 @@ namespace EoE.Information
 						EventManager.PlayerCausedDamageInvoke(receiver, basis.wasCritical);
 					}
 
-					if(receiver is Player && (finalChangeAmount > 0 || causedKnockback.HasValue) && !receiver.IsInvincible)
+					if (receiver is Player && (finalChangeAmount > 0 || causedKnockback.HasValue) && !receiver.IsInvincible)
 					{
 						EventManager.PlayerTookDamageInvoke(finalChangeAmount, (basis.knockbackAmount / receiver.SelfSettings.EntitieMass) * (basis.wasCritical ? GameController.CurrentGameSettings.CritDamageMultiplier : 1));
 					}

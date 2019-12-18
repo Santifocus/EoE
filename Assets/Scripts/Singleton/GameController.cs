@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections;
+﻿using EoE.Combatery;
 using EoE.Entities;
 using EoE.Information;
-using EoE.Combatery;
+using System;
+using System.Collections;
 using UnityEngine;
 
 namespace EoE
 {
-	public enum OnDelayConditionNotMet { ContinueTimerAndInvokeWhenMet, StopTimerTillMet, ResetTimer, Cancel}
-	public enum TimeType { ScaledDeltaTime, FixedDeltaTime, Realtime}
+	public enum OnDelayConditionNotMet { ContinueTimerAndInvokeWhenMet, StopTimerTillMet, ResetTimer, Cancel }
+	public enum TimeType { ScaledDeltaTime, FixedDeltaTime, Realtime }
 	public class GameController : MonoBehaviour
 	{
 		public static GameController Instance { get; private set; }
@@ -123,8 +123,8 @@ namespace EoE
 
 			call?.Invoke();
 
-			//If we canceled the whole operation because the condition was not met and the condition behaivior was cancel then we jump here
-			Canceled:;
+		//If we canceled the whole operation because the condition was not met and the condition behaivior was cancel then we jump here
+		Canceled:;
 		}
 		private bool IsConditionMet(Func<bool> condition)
 		{
