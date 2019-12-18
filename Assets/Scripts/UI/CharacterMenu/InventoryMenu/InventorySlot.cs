@@ -8,9 +8,17 @@ namespace EoE.UI
 	public class InventorySlot : CMenuItem
 	{
 		[SerializeField] private Image iconDisplay = default;
+		[SerializeField] private Image itemTypeDisplay = default;
 		[SerializeField] private TextMeshProUGUI stackDisplay = default;
 		[SerializeField] private Image onSelectBackground = default;
 		[SerializeField] private Image onNotSelectBackground = default;
+		[SerializeField] private Image equippedIcon = default;
+
+		[Space(10)]
+		[SerializeField] private Sprite weaponItemIcon = default;
+		[SerializeField] private Sprite armorItemIcon = default;
+		[SerializeField] private Sprite spellItemIcon = default;
+		[SerializeField] private Sprite useItemIcon = default;
 
 		private int inventoryIndex;
 		private Inventory targetInventory;
@@ -29,10 +37,28 @@ namespace EoE.UI
 			{
 				iconDisplay.sprite = targetInventory[inventoryIndex].data.ItemIcon;
 				stackDisplay.text = targetInventory[inventoryIndex].stackSize.ToString();
+
+				if(targetInventory[inventoryIndex].data is WeaponItem)
+				{
+					itemTypeDisplay.sprite = weaponItemIcon;
+				}
+				else if(targetInventory[inventoryIndex].data is ArmorItem)
+				{
+					itemTypeDisplay.sprite = armorItemIcon;
+				}
+				else if(targetInventory[inventoryIndex].data is SpellItem)
+				{
+					itemTypeDisplay.sprite = spellItemIcon;
+				}
+				else
+				{
+					itemTypeDisplay.sprite = useItemIcon;
+				}
 			}
 
 			iconDisplay.gameObject.SetActive(!empty);
 			stackDisplay.gameObject.SetActive(!empty);
+			equippedIcon.gameObject.SetActive(!(empty || !targetInventory[inventoryIndex].isEquiped));
 		}
 
 		protected override void Select()

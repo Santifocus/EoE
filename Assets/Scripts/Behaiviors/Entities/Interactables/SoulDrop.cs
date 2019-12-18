@@ -44,6 +44,11 @@ namespace EoE.Entities
 			Player.Instance.AddSouls(soulCount);
 			infoSign.gameObject.SetActive(false);
 
+			for(int i = 0; i < Player.PlayerSettings.EffectsOnSoulsPickup.Length; i++)
+			{
+				FXManager.PlayFX(Player.PlayerSettings.EffectsOnSoulsPickup[i], transform, true);
+			}
+
 			StartCoroutine(FadeAway());
 		}
 		private IEnumerator FadeIn()
@@ -95,7 +100,7 @@ namespace EoE.Entities
 
 		private void Update()
 		{
-			if (isTarget)
+			if (isTarget && Player.Instance.Alive)
 			{
 				colorTime += Time.deltaTime / textColorCycleTime;
 				float point = (Mathf.Sin(colorTime * Mathf.PI) + 1) / 2;

@@ -9,7 +9,7 @@ namespace EoE.UI
 	{
 		protected override void OnPress()
 		{
-			Utils.EffectUtils.ResetScreenEffects();
+			EffectUtils.ResetScreenEffects();
 			SceneManager.LoadScene(ConstantCollector.GAME_SCENE_INDEX);
 		}
 	}

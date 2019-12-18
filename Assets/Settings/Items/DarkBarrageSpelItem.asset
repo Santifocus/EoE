@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b68c3564075a204ab65946eb6308666, type: 3}
+  m_Name: DarkBarrageSpelItem
+  m_EditorClassIdentifier: 
+  ItemName:
+    textColor: {r: 0, g: 0.9388051, b: 1, a: 1}
+    text: Dark Barrage
+  ItemDescription:
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: Dark Magic with massive firerate
+  SortingID: 0
+  ItemIcon: {fileID: 21300000, guid: 1133ba8a6cfd5774688b1b14a1454ef9, type: 3}
+  FXEffectsOnUse: []
+  FXEffectsWhenEquipped:
+  - {fileID: 11400000, guid: c8fc971a186953d44a1cd89a44f1a313, type: 2}
+  - {fileID: 11400000, guid: 9a1cdfbe58dab6e4c8226f045e10b764, type: 2}
+  AllowHoldUse: 1
+  UseCooldown: 0.3
+  RemoveOnUse: 0
+  ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
+    type: 3}
+  MaxStack: 1
+  TargetSpell: {fileID: 11400000, guid: 2bf3e07a9c203664f9639b798540215f, type: 2}

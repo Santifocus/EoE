@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c052f7ecb05a74341bdaa4bcfc91d92f, type: 3}
   m_Name: HighSpeedFOV
   m_EditorClassIdentifier: 
-  TimeIn: 0.1
-  TimeOut: 0.1
+  TimeIn: 0.2
+  TimeOut: 0.4
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 0
     TimeStay: 0.2
-  TargetFOV: 80
+  TargetFOV: 70
   Dominance: 1
   OverwriteOtherFOVWarps: 0

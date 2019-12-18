@@ -1,6 +1,5 @@
 ﻿using EoE.Entities;
 using EoE.Events;
-using EoE.Utils;
 using UnityEngine;
 
 namespace EoE.Information
@@ -117,7 +116,7 @@ namespace EoE.Information
 					finalChangeAmount = Mathf.Max(finalChangeAmount, -((receiver as Player).curMaxEndurance - (receiver as Player).curEndurance));
 				}
 
-				//VFX for Player
+				//FX for Player
 				//We dont want to send VFX if the Player caused himself damage
 				if (basis.targetStat == TargetStat.Health && basis.cause != CauseType.DOT)
 				{
@@ -126,7 +125,7 @@ namespace EoE.Information
 						EventManager.PlayerCausedDamageInvoke(receiver, basis.wasCritical);
 					}
 
-					if(receiver is Player && (finalChangeAmount > 0 || causedKnockback.HasValue))
+					if(receiver is Player && (finalChangeAmount > 0 || causedKnockback.HasValue) && !receiver.IsInvincible)
 					{
 						EventManager.PlayerTookDamageInvoke(finalChangeAmount, (basis.knockbackAmount / receiver.SelfSettings.EntitieMass) * (basis.wasCritical ? GameController.CurrentGameSettings.CritDamageMultiplier : 1));
 					}
@@ -164,14 +163,15 @@ namespace EoE.Information
 								break;
 						}
 					}
+					float sizeMultiplier = finalChangeAmount < 0 ? 1 : (Mathf.Clamp((finalChangeAmount / receiver.curMaxHealth) * 8, 0.75f, 4));
 
 					EffectUtils.CreateDamageNumber(
 						basis.impactPosition ?? receiver.actuallWorldPosition,
 						colors,
-						forceDirection * GameController.CurrentGameSettings.DamageNumberFlySpeed * (basis.wasCritical ? 2 : 1),
+						forceDirection * GameController.CurrentGameSettings.DamageNumberFlySpeed * sizeMultiplier,
 						Mathf.Abs(finalChangeAmount),
 						basis.wasCritical,
-						basis.wasCritical ? 2 : 1);
+						sizeMultiplier);
 				}
 			}
 		}

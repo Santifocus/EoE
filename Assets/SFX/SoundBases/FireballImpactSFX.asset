@@ -19,5 +19,5 @@ MonoBehaviour:
   priority: 128
   pitch: 1
   volume: 0.6
-  spatialBlend: 0
+  spatialBlend: 0.9
   scaleStyle: 0

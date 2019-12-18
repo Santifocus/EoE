@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: PlayerDodgeBlur
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0.2
+  TimeOut: 0.01
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 0
     TimeStay: 1
   Intensity: 1
-  BlurDistance: 6
+  BlurDistance: 2

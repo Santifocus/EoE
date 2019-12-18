@@ -32,39 +32,40 @@ MonoBehaviour:
   Mana: 30
   DoManaRegen: 1
   ManaRegen: 1
-  ManaRegenInCombatMultiplier: 0
+  ManaRegenInCombatMultiplier: 0.2
   WalkSpeed: 8
-  RunSpeedMultiplicator: 1.25
+  RunSpeedMultiplicator: 1.5
   TurnSpeed: 540
   InAirTurnSpeedMultiplier: 0.5
-  MoveAcceleration: 7
-  NoMoveDeceleration: 5
+  MoveAcceleration: 6
+  NoMoveDeceleration: 3
   InAirAccelerationMultiplier: 0.3
   CameraToPlayerDistance: 7
   CameraAnchorOffset: {x: 0, y: 1.6, z: 0}
-  CameraAnchorOffsetWhenTargeting: {x: 1, y: 2, z: 0}
+  CameraAnchorOffsetWhenTargeting: {x: 2, y: 1, z: 0}
   CameraRotationPower: {x: 200, y: -75}
   CameraRotationSpeed: 7
   CameraVerticalAngleClamps: {x: -50, y: 50}
-  CameraExtraZoomOnVertical: 0.5
-  MaxEnemyTargetingDistance: 250
+  CameraExtraZoomOnVertical: 0.8
+  MaxEnemyTargetingDistance: 60
   CameraClampsWhenTargeting: {x: -30, y: 30}
   CameraBaseFOV: 60
   Endurance: 100
   DoEnduranceRegen: 1
-  EnduranceRegen: 6
-  EnduranceRegenInCombatMultiplier: 0.5
-  EnduranceAfterUseCooldown: 3
-  EnduranceRegenAfterUseMultiplier: 0.5
+  EnduranceRegen: 7
+  EnduranceRegenInCombatMultiplier: 0.75
+  EnduranceAfterUseCooldown: 1.5
+  EnduranceRegenAfterUseMultiplier: 0.2
   JumpEnduranceCost: 3
   RunEnduranceCost: 5
-  JumpPower: {x: 0, y: 9, z: 15}
-  JumpImpulsePower: 2
-  DodgePower: 4
+  JumpPower: {x: 0, y: 10, z: 15}
+  JumpImpulsePower: 3
+  JumpBackwardMultiplier: 0.65
+  DodgePower: 5
   DodgeDuration: 0.15
   DodgeModelExistTime: 0.35
   DodgeCooldown: 0.3
-  DodgeEnduranceCost: 5
+  DodgeEnduranceCost: 8
   DodgeModelMaterial: {fileID: 2100000, guid: 11d51a887e999af408b3d408f575a218, type: 2}
   StartBlockingInertia: 0.3
   BlockingBuff: {fileID: 11400000, guid: 87a7d061072cff848981b0f42550401b, type: 2}
@@ -74,98 +75,45 @@ MonoBehaviour:
   InvincibleModelFlashColor: {r: 1, g: 0, b: 0, a: 0.23137255}
   InvincibleModelFlashDelay: 0.2
   InvincibleModelFlashTime: 0.1
-  StatTextUpdateSpeed: 0.5
-  EnduranceBarLerpSpeed: 5
-  HealthTextColors:
-    serializedVersion: 2
-    key0: {r: 1, g: 0, b: 0, a: 1}
-    key1: {r: 1, g: 0.70534384, b: 0.0047169924, a: 1}
-    key2: {r: 0.034243107, g: 1, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 16384
-    ctime2: 52428
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_NumColorKeys: 3
-    m_NumAlphaKeys: 2
-  ManaTextColors:
-    serializedVersion: 2
-    key0: {r: 1, g: 0, b: 0, a: 1}
-    key1: {r: 1, g: 1, b: 0, a: 1}
-    key2: {r: 0, g: 1, b: 1, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 16384
-    ctime2: 52428
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_NumColorKeys: 3
-    m_NumAlphaKeys: 2
-  ReserveEnduranceBarColor: {r: 1, g: 1, b: 1, a: 1}
-  ActiveEnduranceBarColor: {r: 1, g: 1, b: 1, a: 1}
-  ReloadingEnduranceBarColor: {r: 0.4, g: 0.4, b: 0.4, a: 0.8}
   StartItems:
-  - Item: {fileID: 11400000, guid: cc8b9e7eb411f0f47863caffd0450432, type: 2}
-    ItemCount: 2
-    ForceEquip: 1
-  - Item: {fileID: 11400000, guid: 428f279ff073bb54c81150df9f36247e, type: 2}
+  - Item: {fileID: 11400000, guid: 4389e543531ad0d4c91543a950d48174, type: 2}
     ItemCount: 1
     ForceEquip: 1
-  - Item: {fileID: 11400000, guid: f64f815518c407749858bddca8bf5ac0, type: 2}
-    ItemCount: 2
+  - Item: {fileID: 11400000, guid: 24bf8e4451a0cc84589f3c9af971978e, type: 2}
+    ItemCount: 1
     ForceEquip: 1
-  - Item: {fileID: 11400000, guid: bc3fa643281d1cf4d92b4a40f10da5b2, type: 2}
-    ItemCount: 1
-    ForceEquip: 0
-  - Item: {fileID: 11400000, guid: 2ba98f01a544715419f24f7d4c8b7f7b, type: 2}
-    ItemCount: 1
-    ForceEquip: 0
-  - Item: {fileID: 11400000, guid: a78e3ecaa7acbd04d95790fe55dba94c, type: 2}
-    ItemCount: 2
-    ForceEquip: 0
-  - Item: {fileID: 11400000, guid: f758bae0ead779246ac34fc963f96bec, type: 2}
-    ItemCount: 1
-    ForceEquip: 0
-  - Item: {fileID: 11400000, guid: 1a37c0596dbbb0b4c91c3e28e8673bc9, type: 2}
-    ItemCount: 1
-    ForceEquip: 0
-  - Item: {fileID: 11400000, guid: 243de547318aa704196afa70614aadec, type: 2}
-    ItemCount: 1
-    ForceEquip: 0
   InventorySize: 55
+  MaxModelTilt: 8
+  SideTurnLerpSpeed: 13
+  SpringLerpStiffness: 0.1
+  WalkAnimationLerpSpeed: 4
+  EffectsOnCauseDamage:
+  - {fileID: 11400000, guid: 597bda602a9441346a2e721049c28c87, type: 2}
+  EffectsOnCauseCrit:
+  - {fileID: 11400000, guid: 3c3f83d3e81eae144acbe5a6b02983d0, type: 2}
+  - {fileID: 11400000, guid: e9a7041c1b96b544d9be0195facd23e7, type: 2}
+  - {fileID: 11400000, guid: 6812b6ecf408ba8439c8e9f47922381b, type: 2}
+  - {fileID: 11400000, guid: 7dbb75a734c0a4e4ea505b8ee26c552d, type: 2}
+  EffectsOnEnemyKilled:
+  - {fileID: 11400000, guid: 214bf77e3d56f424c84ef37983b6e1f5, type: 2}
+  EffectsOnLevelup:
+  - {fileID: 11400000, guid: 982aab948223d7044bfae67dc43bb77c, type: 2}
+  - {fileID: 11400000, guid: 2a1f29303ceefa04d9d5508f74094d05, type: 2}
+  EffectsWhileWalk:
+  - {fileID: 11400000, guid: 0ca21d7cb4541c24185b997c58ef29a8, type: 2}
+  EffectsWhileRun:
+  - {fileID: 11400000, guid: 760364c3cb2adab46a51192839a050f3, type: 2}
+  - {fileID: 11400000, guid: 0b517f1942c86fb4c81dd0b2013c1fc0, type: 2}
+  EffectsOnJump:
+  - {fileID: 11400000, guid: 81bcb4243c5d7bf409682cb56f2f128e, type: 2}
+  PlayerLandingVelocityThreshold: 2
+  EffectsOnPlayerLanding:
+  - {fileID: 11400000, guid: ba451c2b316cc054ba26cb958cbb7f1a, type: 2}
+  - {fileID: 11400000, guid: b16188df833539c4391e686f9ab8b6a5, type: 2}
+  EffectsOnPlayerDodge:
+  - {fileID: 11400000, guid: 16c048efcd73fc94fb2bd95baaa20137, type: 2}
+  - {fileID: 11400000, guid: 83283d5fa89550943ae53abf369f6351, type: 2}
+  - {fileID: 11400000, guid: a1a241ff7cc72544e9475b9495c7ee11, type: 2}
   EffectsOnReceiveDamage:
   - {fileID: 11400000, guid: 11060c91c24341947a8c373d641e5c86, type: 2}
   - {fileID: 11400000, guid: 9d9557ec007fa904aa2d0ef9f1ea3489, type: 2}
@@ -173,26 +121,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 232ec3e310d97c14da2bad4c274560ee, type: 2}
   EffectsOnReceiveKnockback:
   - {fileID: 11400000, guid: b09700b6216eb874aab8d980440f121b, type: 2}
-  EffectsOnCauseDamage:
-  - {fileID: 11400000, guid: e7eca44a4612acd40b0b90359694e612, type: 2}
-  EffectsOnCauseCrit:
-  - {fileID: 11400000, guid: 3c3f83d3e81eae144acbe5a6b02983d0, type: 2}
-  - {fileID: 11400000, guid: e9a7041c1b96b544d9be0195facd23e7, type: 2}
-  - {fileID: 11400000, guid: 6812b6ecf408ba8439c8e9f47922381b, type: 2}
-  - {fileID: 11400000, guid: e7eca44a4612acd40b0b90359694e612, type: 2}
-  EffectsOnLevelup:
-  - {fileID: 11400000, guid: 982aab948223d7044bfae67dc43bb77c, type: 2}
-  - {fileID: 11400000, guid: 2a1f29303ceefa04d9d5508f74094d05, type: 2}
-  EffectsHealthThreshold: 0.3
-  EffectsOnDamageWhenBelowThreshold:
+  EffectsHealthThreshold: 0.25
+  EffectsWhileHealthBelowThreshold:
   - {fileID: 11400000, guid: 668a809c73c04d648ae6ae4e123f2f21, type: 2}
-  PlayerLandingVelocityThreshold: 7
-  EffectsOnPlayerLanding:
-  - {fileID: 11400000, guid: ba451c2b316cc054ba26cb958cbb7f1a, type: 2}
-  EffectsOnPlayerDodge:
-  - {fileID: 11400000, guid: 16c048efcd73fc94fb2bd95baaa20137, type: 2}
-  EffectsOnEnemyKilled:
-  - {fileID: 11400000, guid: 214bf77e3d56f424c84ef37983b6e1f5, type: 2}
+  - {fileID: 11400000, guid: 7aa331681cd145e4284a37d550c55ff6, type: 2}
+  - {fileID: 11400000, guid: ee4aace1166a0f44ebd9d6698f930e53, type: 2}
+  - {fileID: 11400000, guid: 7747171802ae3cc4a8b50a7c44f986f7, type: 2}
   EffectsOnPlayerDeath:
   - {fileID: 11400000, guid: 0cf11713d16b4034c873591e936d21cc, type: 2}
   - {fileID: 11400000, guid: 48e1095a0bf75e6489c4d5149d54f972, type: 2}
+  EffectsOnItemPickup:
+  - {fileID: 11400000, guid: a8d3585c9c7214d429e67e9d3a22c189, type: 2}
+  EffectsOnSoulsPickup:
+  - {fileID: 11400000, guid: 53e7d5f845e8dd84ebbe448a62732c2c, type: 2}

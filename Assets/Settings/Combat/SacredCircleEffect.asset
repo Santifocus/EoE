@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d48d880dbea44d44bbeaa9acf2a8452b, type: 3}
+  m_Name: SacredCircleEffect
+  m_EditorClassIdentifier: 
+  AffectedTargets: 4
+  DamageElement: 32
+  CauseType: 1
+  BaseEffectRadius: 5
+  ZeroOutDistance: 5
+  HasMaximumHits: 0
+  MaximumHits: 0
+  DamageMultiplier: 0.3
+  CritChanceMultiplier: 0
+  KnockbackMultiplier: 1
+  KnockbackOrigin: 2
+  KnockbackDirection: 1
+  KnockbackAxisMultiplier: {x: 1, y: 1, z: 1}
+  BuffStackStyle: 2
+  BuffsToApply: []
+  Effects: []

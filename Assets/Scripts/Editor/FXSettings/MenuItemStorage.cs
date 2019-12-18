@@ -1,14 +1,14 @@
 ﻿using UnityEditor;
-using EoE.Weapons;
+using EoE.Combatery;
 using static EoE.EoEEditor;
+using UnityEngine;
 
 namespace EoE.Information
 {
 	public static class MenuItemStorage
 	{
 		//Items
-		[MenuItem("EoE/Item/BuffItem")] public static void CreateBuffItem() => AssetCreator<BuffItem>("Settings", "Items");
-		[MenuItem("EoE/Item/HealItem")] public static void CreateHealItem() => AssetCreator<HealItem>("Settings", "Items");
+		[MenuItem("EoE/Item/ConsumableItem")] public static void CreateBuffItem() => AssetCreator<ConsumableItem>("Settings", "Items");
 		[MenuItem("EoE/Item/WeaponItem")] public static void CreateWeaponItem() => AssetCreator<WeaponItem>("Settings", "Items");
 		[MenuItem("EoE/Item/SpellItem")] public static void CreateSpellItem() => AssetCreator<SpellItem>("Settings", "Items");
 		[MenuItem("EoE/Item/ArmorItem")] public static void CreateArmorItem() => AssetCreator<ArmorItem>("Settings", "Items");
@@ -23,18 +23,23 @@ namespace EoE.Information
 		[MenuItem("EoE/FX/ParticleEffect")] public static void CreateParticleEffect() => AssetCreator<ParticleEffect>("Settings", "FX");
 		[MenuItem("EoE/FX/CameraFOVWarp")] public static void CreateCameraFOVWarp() => AssetCreator<CameraFOVWarp>("Settings", "FX");
 		[MenuItem("EoE/FX/DialogueInput")] public static void CreateDialogueInput() => AssetCreator<DialogueInput>("Settings", "FX");
+		[MenuItem("EoE/FX/CustomUI")] public static void CreateCustomUI() => AssetCreator<CustomUI>("Settings", "FX");
 
 		//SFX
 		[MenuItem("EoE/FX/Sound/Base")] public static void CreateSound() => AssetCreator<Sounds.Sound>("SFX", "SoundBases");
 		[MenuItem("EoE/FX/Sound/Effect")] public static void CreateSoundEffect() => AssetCreator<SoundEffect>("Settings", "FX");
 
 		//Combat
-		[MenuItem("EoE/Combat/Spell/Spell")] public static void CreateSpell() => AssetCreator<Spell>("Settings", "Spell");
-		[MenuItem("EoE/Combat/Spell/SpellEffect")] public static void CreateSpellEffect() => AssetCreator<SpellEffect>("Settings", "Spell", "SpellEffects");
+		[MenuItem("EoE/Combat/ProjectileData")] public static void CreateProjectileData() => AssetCreator<ProjectileData>("Settings", "Combat");
+		[MenuItem("EoE/Combat/Effect/EffectSingle")] public static void CreateEffectSingle() => AssetCreator<EffectSingle>("Settings", "Combat");
+		[MenuItem("EoE/Combat/Effect/EffectAOE")] public static void CreateEffectAOE() => AssetCreator<EffectAOE>("Settings", "Combat");
+		[MenuItem("EoE/Combat/Spell")] public static void CreateSpell() => AssetCreator<Spell>("Settings", "Combat", "Spell");
+		[MenuItem("EoE/Combat/Physical/Weapon")] public static void CreateWeapon() => AssetCreator<Weapon>("Settings", "Combat", "Weapon");
+		[MenuItem("EoE/Combat/Physical/ComboSet")] public static void CreateComboSet() => AssetCreator<ComboSet>("Settings", "Combat", "Weapon", "ComboSets");
 
 		//Other
 		[MenuItem("EoE/Buff")] public static void CreateBuff() => AssetCreator<Buff>("Settings", "Buffs");
-		[MenuItem("EoE/DropTable")] public static void CreateDropTable() => AssetCreator<DropTable>("Settings", "DropTables");
+		[MenuItem("EoE/DropTable")] public static void CreateDropTable() => AssetCreator<DropTable>("Settings", "EntitieSettings", "DropTables");
 		[MenuItem("EoE/LevelingSettings")] public static void CreateLevelingSettings() => AssetCreator<LevelingSettings>("Settings", "EntitieSettings", "LevelingSettings");
 
 		//Data Collectors
@@ -61,6 +66,7 @@ namespace EoE.Information
 			{
 				ItemCollector itemCollector = (ItemCollector)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(itemCollectorGUID[0]), typeof(ItemCollector));
 				itemCollector.CollectData();
+				EditorUtility.SetDirty(itemCollector);
 			}
 		}
 	}

@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: ChurchMusic
   m_EditorClassIdentifier: 
   soundName: ChurchMusic
-  clip: {fileID: 8300000, guid: 4649271617dfa934f9a0a2e239e0bbbd, type: 3}
+  clip: {fileID: 8300000, guid: a8310e6e03aebb2478ca054625cc0786, type: 3}
   audioGroup: {fileID: 24300002, guid: b8b319c0096b4d34196070be7e374c0c, type: 2}
   Loop: 1
-  priority: 160
+  priority: 0
   pitch: 1
-  volume: 0.5
+  volume: 0.65
   spatialBlend: 0
   scaleStyle: 1

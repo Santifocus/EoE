@@ -1,0 +1,421 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ab78e7538a021446a2451566185bbde, type: 3}
+  m_Name: RustySword
+  m_EditorClassIdentifier: 
+  BaseDamage: 5
+  BaseManaCost: 0
+  BaseEnduranceCost: 4
+  BaseKnockback: 10
+  BaseCritChance: 0.1
+  WeaponPrefab: {fileID: 5533782398965989895, guid: 18284dacf122148419232919f51c45c2,
+    type: 3}
+  WeaponElement: 1
+  WeaponCauseType: 0
+  ContainedParts: -1
+  FallBackPart: 1
+  WeaponPositionOffset: {x: 0, y: 0, z: 1.05}
+  WeaponRotationOffset: {x: 0, y: 0, z: 25}
+  StandAttackSequence:
+    AttackSequenceParts:
+    - AnimationTarget: 1
+      StopMovement: 0
+      AnimationMultiplicationType: 2
+      AnimationSpeedFlatValue: 1
+      AnimationSpeedCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: -0.12663269
+          value: 1.3310547
+          inSlope: 2
+          outSlope: 2
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.08956909
+          value: 0.8747406
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AnimationSpeedCurveTimeframe: 0.8
+      AnimationSpeedCurveMultiplier: 2
+      DamageMultiplier: 1
+      ManaCostMultiplier: 1
+      EnduranceCostMultiplier: 1
+      KnockbackMultiplier: 1
+      CritChanceMultiplier: 1
+      CollisionMask: -1
+      StopOnCollisionMask: 0
+      DirectHit: {fileID: 11400000, guid: b2224e95e2fd03742845a26029bcb0dc, type: 2}
+      OverrideElement: 0
+      OverridenElement: 1
+      OverrideCauseType: 0
+      OverridenCauseType: 0
+      ComboIncreaseMaxDelay: 3
+      OnHitComboWorth: 1
+      AttackEffects:
+      - AtAnimationPoint: 0.1
+        ChanceToActivate: 1
+        ContainedEffectType: 2
+        ImpulseVelocity: 5
+        ImpulseVelocityFallOffTime: 0.5
+        ImpulseVelocityDirection: 2
+        ImpulseVelocityFallbackDirection: 1
+        ImpulseDirectionBase: 1
+        FXObjects:
+        - FX: {fileID: 11400000, guid: 570ad84cc1492cb43a4cce2162e3b9f9, type: 2}
+          HasPositionOffset: 0
+          PositionOffset: {x: 0, y: 0, z: 0}
+          HasRotationOffset: 0
+          RotationOffset: {x: 0, y: 0, z: 0}
+          HasCustomScale: 0
+          CustomScale: {x: 1, y: 1, z: 1}
+        AOEEffects: []
+        ProjectileInfos: []
+    - AnimationTarget: 2
+      StopMovement: 0
+      AnimationMultiplicationType: 2
+      AnimationSpeedFlatValue: 1
+      AnimationSpeedCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0.124620944
+          value: 1.5341715
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 2.0037842
+          inSlope: 5.118835
+          outSlope: 5.118835
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.027223468
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AnimationSpeedCurveTimeframe: 0.8
+      AnimationSpeedCurveMultiplier: 1.4
+      DamageMultiplier: 1
+      ManaCostMultiplier: 1
+      EnduranceCostMultiplier: 1
+      KnockbackMultiplier: 1
+      CritChanceMultiplier: 1
+      CollisionMask: -1
+      StopOnCollisionMask: 0
+      DirectHit: {fileID: 11400000, guid: b2224e95e2fd03742845a26029bcb0dc, type: 2}
+      OverrideElement: 0
+      OverridenElement: 1
+      OverrideCauseType: 0
+      OverridenCauseType: 0
+      ComboIncreaseMaxDelay: 4
+      OnHitComboWorth: 1
+      AttackEffects:
+      - AtAnimationPoint: 0.1
+        ChanceToActivate: 1
+        ContainedEffectType: 2
+        ImpulseVelocity: 5
+        ImpulseVelocityFallOffTime: 0.5
+        ImpulseVelocityDirection: 2
+        ImpulseVelocityFallbackDirection: 1
+        ImpulseDirectionBase: 1
+        FXObjects:
+        - FX: {fileID: 11400000, guid: 570ad84cc1492cb43a4cce2162e3b9f9, type: 2}
+          HasPositionOffset: 0
+          PositionOffset: {x: 0, y: 0, z: 0}
+          HasRotationOffset: 0
+          RotationOffset: {x: 0, y: 0, z: 0}
+          HasCustomScale: 0
+          CustomScale: {x: 1, y: 1, z: 1}
+        AOEEffects: []
+        ProjectileInfos: []
+    - AnimationTarget: 4
+      StopMovement: 1
+      AnimationMultiplicationType: 2
+      AnimationSpeedFlatValue: 2
+      AnimationSpeedCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0.049999237
+          value: 1.2947658
+          inSlope: -2.924757
+          outSlope: -2.924757
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.028130665
+        - serializedVersion: 3
+          time: 0.98031616
+          value: 1.8721695
+          inSlope: 5.118835
+          outSlope: 5.118835
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.027223468
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AnimationSpeedCurveTimeframe: 0.8
+      AnimationSpeedCurveMultiplier: 1.5
+      DamageMultiplier: 2
+      ManaCostMultiplier: 1
+      EnduranceCostMultiplier: 1.2
+      KnockbackMultiplier: 1
+      CritChanceMultiplier: 1
+      CollisionMask: -1
+      StopOnCollisionMask: 0
+      DirectHit: {fileID: 11400000, guid: 265e6994fdfd23549bf67df632fcc179, type: 2}
+      OverrideElement: 0
+      OverridenElement: 1
+      OverrideCauseType: 0
+      OverridenCauseType: 0
+      ComboIncreaseMaxDelay: 3
+      OnHitComboWorth: 1
+      AttackEffects:
+      - AtAnimationPoint: 0.35
+        ChanceToActivate: 1
+        ContainedEffectType: 2
+        ImpulseVelocity: 5
+        ImpulseVelocityFallOffTime: 0.5
+        ImpulseVelocityDirection: 2
+        ImpulseVelocityFallbackDirection: 1
+        ImpulseDirectionBase: 1
+        FXObjects:
+        - FX: {fileID: 11400000, guid: 33f4078c8a5dd4a44907009cea54301e, type: 2}
+          HasPositionOffset: 0
+          PositionOffset: {x: 0, y: 0, z: 0}
+          HasRotationOffset: 0
+          RotationOffset: {x: 0, y: 0, z: 0}
+          HasCustomScale: 0
+          CustomScale: {x: 1, y: 1, z: 1}
+        AOEEffects: []
+        ProjectileInfos: []
+    PartsMaxDelays:
+    - 0.2
+    - 0.2
+  RunAttackSequence:
+    AttackSequenceParts:
+    - AnimationTarget: 2
+      StopMovement: 0
+      AnimationMultiplicationType: 2
+      AnimationSpeedFlatValue: 1
+      AnimationSpeedCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: -0.095832825
+          value: 0.59198
+          inSlope: 2
+          outSlope: 2
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1.0166626
+          value: 0.66509247
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AnimationSpeedCurveTimeframe: 2
+      AnimationSpeedCurveMultiplier: 2
+      DamageMultiplier: 1.2
+      ManaCostMultiplier: 1
+      EnduranceCostMultiplier: 1
+      KnockbackMultiplier: 1
+      CritChanceMultiplier: 1
+      CollisionMask: -1
+      StopOnCollisionMask: -1
+      DirectHit: {fileID: 11400000, guid: b2224e95e2fd03742845a26029bcb0dc, type: 2}
+      OverrideElement: 0
+      OverridenElement: 1
+      OverrideCauseType: 0
+      OverridenCauseType: 0
+      ComboIncreaseMaxDelay: 1
+      OnHitComboWorth: 1
+      AttackEffects:
+      - AtAnimationPoint: 0.1
+        ChanceToActivate: 1
+        ContainedEffectType: 2
+        ImpulseVelocity: 5
+        ImpulseVelocityFallOffTime: 0.5
+        ImpulseVelocityDirection: 2
+        ImpulseVelocityFallbackDirection: 1
+        ImpulseDirectionBase: 1
+        FXObjects:
+        - FX: {fileID: 11400000, guid: 570ad84cc1492cb43a4cce2162e3b9f9, type: 2}
+          HasPositionOffset: 0
+          PositionOffset: {x: 0, y: 0, z: 0}
+          HasRotationOffset: 0
+          RotationOffset: {x: 0, y: 0, z: 0}
+          HasCustomScale: 0
+          CustomScale: {x: 1, y: 1, z: 1}
+        AOEEffects: []
+        ProjectileInfos: []
+    PartsMaxDelays: []
+  JumpAttackSequence:
+    AttackSequenceParts:
+    - AnimationTarget: 4
+      StopMovement: 0
+      AnimationMultiplicationType: 2
+      AnimationSpeedFlatValue: 1
+      AnimationSpeedCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0.017951965
+          value: 1.5494843
+          inSlope: -0.05033943
+          outSlope: -0.05033943
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1.0058136
+          value: 1.4997559
+          inSlope: -0.05033943
+          outSlope: -0.05033943
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AnimationSpeedCurveTimeframe: 2
+      AnimationSpeedCurveMultiplier: 2
+      DamageMultiplier: 1.2
+      ManaCostMultiplier: 1
+      EnduranceCostMultiplier: 1
+      KnockbackMultiplier: 1
+      CritChanceMultiplier: 1
+      CollisionMask: -1
+      StopOnCollisionMask: -1
+      DirectHit: {fileID: 11400000, guid: bfb7e1ecec740634fb4282d888a3b9ed, type: 2}
+      OverrideElement: 0
+      OverridenElement: 1
+      OverrideCauseType: 0
+      OverridenCauseType: 0
+      ComboIncreaseMaxDelay: 1
+      OnHitComboWorth: 1
+      AttackEffects:
+      - AtAnimationPoint: 0.35
+        ChanceToActivate: 1
+        ContainedEffectType: 2
+        ImpulseVelocity: 5
+        ImpulseVelocityFallOffTime: 0.5
+        ImpulseVelocityDirection: 2
+        ImpulseVelocityFallbackDirection: 1
+        ImpulseDirectionBase: 1
+        FXObjects:
+        - FX: {fileID: 11400000, guid: 570ad84cc1492cb43a4cce2162e3b9f9, type: 2}
+          HasPositionOffset: 0
+          PositionOffset: {x: 0, y: 0, z: 0}
+          HasRotationOffset: 0
+          RotationOffset: {x: 0, y: 0, z: 0}
+          HasCustomScale: 0
+          CustomScale: {x: 1, y: 1, z: 1}
+        AOEEffects: []
+        ProjectileInfos: []
+    PartsMaxDelays:
+    - 0
+  RunJumpAttackSequence:
+    AttackSequenceParts:
+    - AnimationTarget: 4
+      StopMovement: 0
+      AnimationMultiplicationType: 2
+      AnimationSpeedFlatValue: 1
+      AnimationSpeedCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0.0033043437
+          value: 1.5786912
+          inSlope: -0.038626704
+          outSlope: -0.038626704
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1.0031738
+          value: 1.5400696
+          inSlope: -0.038626704
+          outSlope: -0.038626704
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AnimationSpeedCurveTimeframe: 2
+      AnimationSpeedCurveMultiplier: 2
+      DamageMultiplier: 1
+      ManaCostMultiplier: 1
+      EnduranceCostMultiplier: 1.5
+      KnockbackMultiplier: 5
+      CritChanceMultiplier: 1
+      CollisionMask: -1
+      StopOnCollisionMask: -1
+      DirectHit: {fileID: 11400000, guid: bfb7e1ecec740634fb4282d888a3b9ed, type: 2}
+      OverrideElement: 0
+      OverridenElement: 1
+      OverrideCauseType: 0
+      OverridenCauseType: 0
+      ComboIncreaseMaxDelay: 1
+      OnHitComboWorth: 1
+      AttackEffects:
+      - AtAnimationPoint: 0.35
+        ChanceToActivate: 1
+        ContainedEffectType: 3
+        ImpulseVelocity: 10
+        ImpulseVelocityFallOffTime: 0.5
+        ImpulseVelocityDirection: 2
+        ImpulseVelocityFallbackDirection: 1
+        ImpulseDirectionBase: 1
+        FXObjects:
+        - FX: {fileID: 11400000, guid: 33f4078c8a5dd4a44907009cea54301e, type: 2}
+          HasPositionOffset: 0
+          PositionOffset: {x: 0, y: 0, z: 0}
+          HasRotationOffset: 0
+          RotationOffset: {x: 0, y: 0, z: 0}
+          HasCustomScale: 0
+          CustomScale: {x: 1, y: 1, z: 1}
+        AOEEffects: []
+        ProjectileInfos: []
+    PartsMaxDelays: []
+  ComboEffects: {fileID: 11400000, guid: 4e7be449530b2d44fb6413e980a881e2, type: 2}

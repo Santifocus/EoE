@@ -30,70 +30,43 @@ namespace EoE.Information
 		{
 			BoolField(new GUIContent("Enable Debug"), ref (target as GameSettings).debugEnabledInternal);
 
-			FoldoutHeader("Entitie Velocity Settings", ref EntititeVelocitySettingsOpen);
-			if (EntititeVelocitySettingsOpen)
-				EntitieVelocityArea();
-			EndFoldoutHeader();
-
-			FoldoutHeader("Basic Behaivior Settings", ref BasicBehaiviorOpen);
-			if (BasicBehaiviorOpen)
-				BasicBehaiviorArea();
-			EndFoldoutHeader();
-
-			FoldoutHeader("Visual Settings", ref VisualsSettingsOpen);
-			if (VisualsSettingsOpen)
-				VisualsSettingsArea();
-			EndFoldoutHeader();
-
-			FoldoutHeader("Damage Number Settings", ref DamageNumberSettingsOpen);
-			if (DamageNumberSettingsOpen)
-				DamageNumberSettingsArea();
-			EndFoldoutHeader();
-
-			FoldoutHeader("Dialogue Settings Settings", ref DialogueSettingsOpen);
-			if (DialogueSettingsOpen)
-				DialogueSettingsArea();
-			EndFoldoutHeader();
-
-			FoldoutHeader("Other Settings", ref OtherSettingsOpen);
-			if (OtherSettingsOpen)
-				OtherSettingsArea();
-			EndFoldoutHeader();
-
-			FoldoutHeader("Damage Calculation Settings", ref DamageCalculationsOpen);
-			if (DamageCalculationsOpen)
-				EffectivenessMatrixArea();
-			EndFoldoutHeader();
+			DrawInFoldoutHeader("Entitie Velocity Settings", ref EntititeVelocitySettingsOpen, EntitieVelocityArea);
+			DrawInFoldoutHeader("Basic Behaivior Settings", ref BasicBehaiviorOpen, BasicBehaiviorArea);
+			DrawInFoldoutHeader("Visual Settings", ref VisualsSettingsOpen, VisualsSettingsArea);
+			DrawInFoldoutHeader("Damage Number Settings", ref DamageNumberSettingsOpen, DamageNumberSettingsArea);
+			DrawInFoldoutHeader("Dialogue Settings Settings", ref DialogueSettingsOpen, DialogueSettingsArea);
+			DrawInFoldoutHeader("Other Settings", ref OtherSettingsOpen, OtherSettingsArea);
+			DrawInFoldoutHeader("Damage Calculation Settings", ref DamageCalculationsOpen, EffectivenessMatrixArea);
 		}
 
 		private void EntitieVelocityArea()
 		{
 			GameSettings settings = target as GameSettings;
 
-			FloatField(new GUIContent("When Falling Extra Velocity", "When Entities fall then how much velocity (multiplicative) should be added to the normal gravity?"), ref settings.WhenFallingExtraGravity);
-			AnimationCurveField(new GUIContent("Fall Damage curve", "When en Entitie hits the ground how much damage should it receive based on velocity. X-Axis == FallVelocity, Y-Axis == Damage"), ref settings.FallDamageCurve);
-			FloatField(new GUIContent("Ground Hit Velocity Loss", "When an Entitie hits the ground "), ref settings.GroundHitVelocityLoss);
-			FloatField(new GUIContent("GroundHitVelocityLossMinThreshold"), ref settings.GroundHitVelocityLossMinThreshold);
-			FloatField(new GUIContent("GroundHitVelocityLossMaxThreshold"), ref settings.GroundHitVelocityLossMaxThreshold);
+			FloatField(new GUIContent("When Falling Extra Velocity", "When Entities fall then how much velocity (multiplicative) should be added to the normal gravity?"), ref settings.WhenFallingExtraGravity, 1);
+			AnimationCurveField(new GUIContent("Fall Damage curve", "When en Entitie hits the ground how much damage should it receive based on velocity. X-Axis == FallVelocity, Y-Axis == Damage"), ref settings.FallDamageCurve, 1);
+			FloatField(new GUIContent("Ground Hit Velocity Loss", "When an Entitie hits the ground "), ref settings.GroundHitVelocityLoss, 1);
+			FloatField(new GUIContent("GroundHitVelocityLossMinThreshold"), ref settings.GroundHitVelocityLossMinThreshold, 1);
+			FloatField(new GUIContent("GroundHitVelocityLossMaxThreshold"), ref settings.GroundHitVelocityLossMaxThreshold, 1);
 		}
 
 		private void BasicBehaiviorArea()
 		{
 			GameSettings settings = target as GameSettings;
 
-			FloatField(new GUIContent("Idle Movement Urgency", "When a Enemy is idle, at how much of his max speed should the Enemy move? (0 == None, 0.5 == Half, 1 == Max)"), ref settings.IdleMovementUrgency);
-			FloatField(new GUIContent("Enemy Minimum Investigation Area", "After losing sight of the player, the Enemy first tries to guess where the player is for a set time, after that it will check the close area, the distance the Enemy checks either its 'WanderingFactor' or this value, whichever is bigger."), ref settings.EnemyMinimumInvestigationArea);
-			FloatField(new GUIContent("Combat Cooldown", "After a Entitie encounters an Enemy how long does a Entitie have to be out of combat before it will be counted as 'Out of Combat'?"), ref settings.CombatCooldown);
+			FloatField(new GUIContent("Idle Movement Urgency", "When a Enemy is idle, at how much of his max speed should the Enemy move? (0 == None, 0.5 == Half, 1 == Max)"), ref settings.IdleMovementUrgency, 1);
+			FloatField(new GUIContent("Enemy Minimum Investigation Area", "After losing sight of the player, the Enemy first tries to guess where the player is for a set time, after that it will check the close area, the distance the Enemy checks either its 'WanderingFactor' or this value, whichever is bigger."), ref settings.EnemyMinimumInvestigationArea, 1);
+			FloatField(new GUIContent("Combat Cooldown", "After a Entitie encounters an Enemy how long does a Entitie have to be out of combat before it will be counted as 'Out of Combat'?"), ref settings.CombatCooldown, 1);
 		}
 
 		private void VisualsSettingsArea()
 		{
 			GameSettings settings = target as GameSettings;
 
-			ObjectField("Enemy Health Bar Prefab", ref settings.EntitieStatDisplayPrefab);
-			FloatField(new GUIContent("Enemey Health Bar Lerp Speed", "How fast should the Healthbar value of Enemy healthbars lerp?"), ref settings.EnemeyHealthBarLerpSpeed);
-			ObjectField("Hit Entitie Particles", ref settings.HitEntitieParticles);
-			ObjectField("Hit Terrain Particles", ref settings.HitTerrainParticles);
+			ObjectField("Enemy Health Bar Prefab", ref settings.EntitieStatDisplayPrefab, 1);
+			FloatField(new GUIContent("Enemey Health Bar Lerp Speed", "How fast should the Healthbar value of Enemy healthbars lerp?"), ref settings.EnemeyHealthBarLerpSpeed, 1);
+			ObjectField("Hit Entitie Particles", ref settings.HitEntitieParticles, 1);
+			ObjectField("Hit Terrain Particles", ref settings.HitTerrainParticles, 1);
 
 		}
 
@@ -101,40 +74,40 @@ namespace EoE.Information
 		{
 			GameSettings settings = target as GameSettings;
 
-			FloatField(new GUIContent("Damage Number Lifetime", "After a damage number spawned, how long until it disapears? (In Seconds)"), ref settings.DamageNumberLifeTime);
-			BoolField(new GUIContent("Show Regen Numbers"), ref settings.ShowRegenNumbers);
-			FloatField(new GUIContent("Damage Number Fly Speed"), ref settings.DamageNumberFlySpeed);
-			FloatField(new GUIContent("Damage Number Random Movement Power", "Damage numbers will get a pseudo random velocity added and multiplied by this number."), ref settings.DamageNumberRandomMovementPower);
+			FloatField(new GUIContent("Damage Number Lifetime", "After a damage number spawned, how long until it disapears? (In Seconds)"), ref settings.DamageNumberLifeTime, 1);
+			BoolField(new GUIContent("Show Regen Numbers"), ref settings.ShowRegenNumbers, 1);
+			FloatField(new GUIContent("Damage Number Fly Speed"), ref settings.DamageNumberFlySpeed, 1);
+			FloatField(new GUIContent("Damage Number Random Movement Power", "Damage numbers will get a pseudo random velocity added and multiplied by this number."), ref settings.DamageNumberRandomMovementPower, 1);
 
-			GUILayout.Space(4);
-			GradientField(new GUIContent("Physical Damage Colors"), ref settings.PhysicalDamageColors);
-			GradientField(new GUIContent("Magical Damage Color"), ref settings.MagicalDamageColors);
-			GradientField(new GUIContent("Heal Colors"), ref settings.HealColors);
-			GradientField(new GUIContent("Standard Text Color"), ref settings.StandardTextColor);
+			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
+			GradientField(new GUIContent("Physical Damage Colors"), ref settings.PhysicalDamageColors, 1);
+			GradientField(new GUIContent("Magical Damage Color"), ref settings.MagicalDamageColors, 1);
+			GradientField(new GUIContent("Heal Colors"), ref settings.HealColors, 1);
+			GradientField(new GUIContent("Standard Text Color"), ref settings.StandardTextColor, 1);
 		}
 
 		private void DialogueSettingsArea()
 		{
 			GameSettings settings = target as GameSettings;
 
-			ObjectField(new GUIContent("Dialogue Box Prefab"), ref settings.DialogueBoxPrefab);
-			FloatField(new GUIContent("Show Dialogue Base Delay", "When a dialogue request is sent this is the minumum delay until the DialogBox appears."), ref settings.ShowDialogueBaseDelay);
-			FloatField(new GUIContent("Dialogue Delay Per Letter", "When the dialogue box displays a text every letter will take this time to show itself."), ref settings.DialogueDelayPerLetter);
-			BoolField(new GUIContent("Skip Delay On Space", "Should the delay of spaces be ignored?."), ref settings.SkipDelayOnSpace);
-			FloatField(new GUIContent("Delay To Next Dialogue", "After a dialogue finishes what time should be waited until it will be cleared or the next one starts to show?"), ref settings.DelayToNextDialogue);
+			ObjectField(new GUIContent("Dialogue Box Prefab"), ref settings.DialogueBoxPrefab, 1);
+			FloatField(new GUIContent("Show Dialogue Base Delay", "When a dialogue request is sent this is the minumum delay until the DialogBox appears."), ref settings.ShowDialogueBaseDelay, 1);
+			FloatField(new GUIContent("Dialogue Delay Per Letter", "When the dialogue box displays a text every letter will take this time to show itself."), ref settings.DialogueDelayPerLetter, 1);
+			BoolField(new GUIContent("Skip Delay On Space", "Should the delay of spaces be ignored?."), ref settings.SkipDelayOnSpace, 1);
+			FloatField(new GUIContent("Delay To Next Dialogue", "After a dialogue finishes what time should be waited until it will be cleared or the next one starts to show?"), ref settings.DelayToNextDialogue, 1);
 		}
 
 		private void OtherSettingsArea()
 		{
 			GameSettings settings = target as GameSettings;
 
-			FloatField(new GUIContent("Seconds Per Entitie Health Regen", "How many seconds for each regeneration cyle? This will not change the amount of healing only the frequency. (In Seconds)"), ref settings.SecondsPerEntitieHealthRegen);
-			FloatField(new GUIContent("Crit Damage Multiplier", "If a ability / attack was counted as criticall for much should the damage be multiplied?"), ref settings.CritDamageMultiplier);
-			ObjectField(new GUIContent("Soul Drop Prefab", "The prefab that will be spawned when an Entite dies and drops souls."), ref settings.SoulDropPrefab);
-			FloatField(new GUIContent("Item Drop Random Velocity Strenght"), ref settings.ItemDropRandomVelocityStrenght);
+			FloatField(new GUIContent("Seconds Per Entitie Health Regen", "How many seconds for each regeneration cyle? This will not change the amount of healing only the frequency. (In Seconds)"), ref settings.SecondsPerEntitieHealthRegen, 1);
+			FloatField(new GUIContent("Crit Damage Multiplier", "If a ability / attack was counted as criticall for much should the damage be multiplied?"), ref settings.CritDamageMultiplier, 1);
+			FloatField(new GUIContent("Item Drop Random Velocity Strenght"), ref settings.ItemDropRandomVelocityStrenght, 1);
+			FloatField(new GUIContent("WhileEffectTickSpeed"), ref settings.WhileEffectTickSpeed, 1);
 
-			GUILayout.Space(3);
-			ObjectArrayField(new GUIContent("Global Sounds"), ref settings.globalSounds, ref GlobalSoundsOpen, new GUIContent("Sound "));
+			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
+			ObjectArrayField(new GUIContent("Global Sounds"), ref settings.globalSounds, ref GlobalSoundsOpen, new GUIContent(". Sound"), 1);
 		}
 
 		private void EffectivenessMatrixArea()
@@ -142,22 +115,22 @@ namespace EoE.Information
 			GameSettings settings = target as GameSettings;
 
 			//Damage Calculation Values
-			Foldout(new GUIContent("Damage Calculation Base Values"), ref DamageCalculationValuesOpen);
+			Foldout(new GUIContent("Damage Calculation Base Values"), ref DamageCalculationValuesOpen, 1);
 			if (DamageCalculationValuesOpen)
 			{
-				Header("(({Level} + " + settings.PhysicalDamageLevelAdd + "[A]) * {Damage}) / " + settings.PhysicalDamageDivider + "[B]", 1);
-				FloatField(new GUIContent("A"), ref settings.PhysicalDamageLevelAdd, 1);
-				FloatField(new GUIContent("B"), ref settings.PhysicalDamageDivider, 1);
+				Header("(({Level} + " + settings.PhysicalDamageLevelAdd + "[A]) * {Damage}) / " + settings.PhysicalDamageDivider + "[B]", 2);
+				FloatField(new GUIContent("A"), ref settings.PhysicalDamageLevelAdd, 2);
+				FloatField(new GUIContent("B"), ref settings.PhysicalDamageDivider, 2);
 
-				Header("(({Level} + " + settings.PhysicalDefenseLevelAdd + "[C]) * {Defense}) / " + settings.PhysicalDefenseLevelDivider + "[D]", 1);
-				FloatField(new GUIContent("C"), ref settings.PhysicalDefenseLevelAdd, 1);
-				FloatField(new GUIContent("D"), ref settings.PhysicalDefenseLevelDivider, 1);
+				Header("(({Level} + " + settings.PhysicalDefenseLevelAdd + "[C]) * {Defense}) / " + settings.PhysicalDefenseLevelDivider + "[D]", 2);
+				FloatField(new GUIContent("C"), ref settings.PhysicalDefenseLevelAdd, 2);
+				FloatField(new GUIContent("D"), ref settings.PhysicalDefenseLevelDivider, 2);
 
-				Header("(({Level} + " + settings.MagicDamageLevelAdd + "[E]) * {Damage}) / " + settings.MagicDamageDivider + "[F]", 1);
-				FloatField(new GUIContent("E"), ref settings.MagicDamageLevelAdd, 1);
-				FloatField(new GUIContent("F"), ref settings.MagicDamageDivider, 1);
+				Header("(({Level} + " + settings.MagicDamageLevelAdd + "[E]) * {Damage}) / " + settings.MagicDamageDivider + "[F]", 2);
+				FloatField(new GUIContent("E"), ref settings.MagicDamageLevelAdd, 2);
+				FloatField(new GUIContent("F"), ref settings.MagicDamageDivider, 2);
 
-				GUILayout.Space(5);
+				LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			}
 			//Effectiveness matrix
 			int elementCount = System.Enum.GetNames(typeof(ElementType)).Length;

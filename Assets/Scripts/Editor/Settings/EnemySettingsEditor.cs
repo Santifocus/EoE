@@ -13,26 +13,9 @@ namespace EoE.Information
 		protected override void CustomInspector()
 		{
 			base.CustomInspector();
-			FoldoutHeader("Player Chasing Settings", ref PlayerChasingSettingsOpen);
-			if (PlayerChasingSettingsOpen)
-			{
-				PlayerChasingArea();
-			}
-			EndFoldoutHeader();
-
-			FoldoutHeader("Wander Settings", ref WanderSettingsOpen);
-			if (WanderSettingsOpen)
-			{
-				WanderSettingsArea();
-			}
-			EndFoldoutHeader();
-
-			FoldoutHeader("Look Around Settings", ref LookAroundSettingsgOpen);
-			if (LookAroundSettingsgOpen)
-			{
-				LookAroundSettingsArea();
-			}
-			EndFoldoutHeader();
+			DrawInFoldoutHeader("Player Chasing Settings", ref PlayerChasingSettingsOpen, PlayerChasingArea);
+			DrawInFoldoutHeader("Wander Settings", ref WanderSettingsOpen, WanderSettingsArea);
+			DrawInFoldoutHeader("Look Around Settings", ref LookAroundSettingsgOpen, LookAroundSettingsArea);
 		}
 		protected override void CombatSettings()
 		{

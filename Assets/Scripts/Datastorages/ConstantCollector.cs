@@ -7,6 +7,9 @@
 		public const int WEAPON_LAYER = 10;
 		public const int PROJECTILE_LAYER = 11;
 
+		public const int TERRAIN_COLLIDING_LAYER = 15;
+		public const int ENTITIE_COLLIDING_LAYER = 16;
+
 		public const int TERRAIN_LAYER_MASK = 1 << TERRAIN_LAYER;
 		public const int ENTITIE_LAYER_MASK = 1 << ENTITIE_LAYER;
 		public const int WEAPON_LAYER_MASK = 1 << WEAPON_LAYER;

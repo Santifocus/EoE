@@ -99,17 +99,17 @@ namespace EoE.Entities
 				if (curStates.Fighting)
 				{
 					chasingPlayer = true;
-					if (CheckIfCanSeeEntitie(player, true))
+					if (CheckIfCanSeeEntitie(transform, player, true))
 					{
 						lastConfirmedPlayerPos = player.actuallWorldPosition;
 						lastPlayerSpeed = player.curVelocity;
 						lastSeenPlayer = 0;
-					}
-				}
 
-				if (!prevInRange && PlayerInAttackRange)
-				{
-					PlayerJustEnteredAttackRangeBase();
+						if (!prevInRange && PlayerInAttackRange)
+						{
+							PlayerJustEnteredAttackRangeBase();
+						}
+					}
 				}
 
 				if (chasingPlayer)
@@ -117,6 +117,11 @@ namespace EoE.Entities
 					targetPosition = Vector3.Lerp(targetPosition ?? GuessedPlayerPosition, GuessedPlayerPosition, Time.deltaTime * enemySettings.PlayerTrackSpeed);
 					if (GameController.CurrentGameSettings.IsDebugEnabled)
 						Debug.DrawLine(actuallWorldPosition, targetPosition.Value, Color.red, Time.deltaTime * 1.1f);
+
+					if (!prevInRange && PlayerInAttackRange)
+					{
+						PlayerJustEnteredAttackRangeBase();
+					}
 				}
 			}
 			else
@@ -127,7 +132,7 @@ namespace EoE.Entities
 			}
 			UpdateAgentSettings();
 
-			if (PlayerInAttackRange) 
+			if (PlayerInAttackRange && chasingPlayer) 
 				InRangeBehaiviorBase();
 
 			if (IsStunned)
@@ -236,7 +241,7 @@ namespace EoE.Entities
 			if (!Player.Instance.Alive)
 				return false;
 
-			Vector3 dif = Player.Instance.actuallWorldPosition - actuallWorldPosition;
+			Vector3 dif = player.actuallWorldPosition - actuallWorldPosition;
 			float sqrDist = dif.sqrMagnitude;
 			float sqrSightDist = chasingPlayer ? enemySettings.FoundPlayerSightRange : enemySettings.SightRange;
 			sqrSightDist *= sqrSightDist;
@@ -253,7 +258,7 @@ namespace EoE.Entities
 				return false;
 
 			//Lastly we do a Low priority check if this entitie can see any part of the player
-			return CheckIfCanSeeEntitie(Player.Instance, true);
+			return CheckIfCanSeeEntitie(transform, player, true);
 		}
 		protected void SetAgentState(bool state)
 		{

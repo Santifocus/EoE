@@ -2,7 +2,7 @@
 using System.Collections;
 using EoE.Entities;
 using EoE.Information;
-using EoE.Weapons;
+using EoE.Combatery;
 using UnityEngine;
 
 namespace EoE
@@ -13,21 +13,27 @@ namespace EoE
 	{
 		public static GameController Instance { get; private set; }
 		public static GameSettings CurrentGameSettings => Instance.gameSettings;
-		public static SpellProjectile ProjectilePrefab => Instance.projectilePrefab;
-		private static bool gameIsPaused;
+		public static Projectile ProjectilePrefab => Instance.projectilePrefab;
+		public static SoulDrop SoulDropPrefab => Instance.soulDropPrefab;
+		public static ItemCollector ItemCollection => Instance.itemCollector;
 		public static bool GameIsPaused { get => gameIsPaused; set => SetPauseGamestate(value); }
 
+		private static bool gameIsPaused;
 		[SerializeField] private GameSettings gameSettings = default;
-		[SerializeField] private SpellProjectile projectilePrefab = default;
+		[SerializeField] private Projectile projectilePrefab = default;
+		[SerializeField] private SoulDrop soulDropPrefab = default;
 		public ItemDrop itemDropPrefab;
 
+		public Transform BGCanvas => bgCanvas;
 		[SerializeField] private Transform bgCanvas = default;
+		public Transform MainCanvas => mainCanvas;
 		[SerializeField] private Transform mainCanvas = default;
-		public Transform enemyHealthBarStorage = default;
+		public Transform MenuCanvas => menuCanvas;
+		[SerializeField] private Transform menuCanvas = default;
 
 		[Space(10)]
+		public Transform enemyHealthBarStorage = default;
 		[SerializeField] private ItemCollector itemCollector = default;
-		public static ItemCollector ItemCollection => Instance.itemCollector;
 
 		private void Start()
 		{

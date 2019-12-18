@@ -11,12 +11,21 @@ namespace EoE.Entities
 		[SerializeField] private TextMeshPro infoDisplayPrefab = default;
 		[SerializeField] private Vector3 infoDisplayOffset = new Vector3(0, 2, 0);
 		[SerializeField] private Color amountColor = Color.red;
-		[SerializeField] private Color itemNameColor = Color.cyan;
 		private TextMeshPro infoDisplay;
 		private InventoryItem containedItem;
 		protected override void Interact()
 		{
+			int preStacksize = containedItem.stackSize;
 			Player.Instance.Inventory.AddItem(containedItem);
+
+			if(preStacksize != containedItem.stackSize)
+			{
+				for (int i = 0; i < Player.PlayerSettings.EffectsOnItemPickup.Length; i++)
+				{
+					FXManager.PlayFX(Player.PlayerSettings.EffectsOnItemPickup[i], transform, true);
+				}
+			}
+
 			if (containedItem.stackSize == 0)
 			{
 				Destroy(infoDisplay.gameObject);
@@ -59,8 +68,7 @@ namespace EoE.Entities
 			infoDisplay.gameObject.SetActive(false);
 
 			string amountColHex = ColorUtility.ToHtmlStringRGBA(amountColor);
-			string nameColHex = ColorUtility.ToHtmlStringRGBA(itemNameColor);
-			infoDisplay.text = "Pick up <color=#" + amountColHex + ">" + containedItem.stackSize + "x </color><color=#" + nameColHex + ">" + containedItem.data.ItemName + "</color>[A]";
+			infoDisplay.text = "Pick up <color=#" + amountColHex + ">" + containedItem.stackSize + "x </color>" + containedItem.data.ItemName + "[A]";
 		}
 	}
 }

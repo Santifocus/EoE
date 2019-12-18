@@ -1,5 +1,4 @@
-﻿using EoE.Utils;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace EoE.Information

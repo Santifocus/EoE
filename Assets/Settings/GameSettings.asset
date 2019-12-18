@@ -53,8 +53,10 @@ MonoBehaviour:
   CombatCooldown: 5
   IdleMovementUrgency: 0.5
   EnemyMinimumInvestigationArea: 10
-  HitEntitieParticles: {fileID: 0}
-  HitTerrainParticles: {fileID: 0}
+  HitEntitieParticles: {fileID: 5613424165658157339, guid: acabb441da6e305419f76f495652f36f,
+    type: 3}
+  HitTerrainParticles: {fileID: 1857673866051879923, guid: f9fe722d9325bd746a25f57f4ca800d5,
+    type: 3}
   EntitieStatDisplayPrefab: {fileID: 2494207287049978237, guid: ee388195767cec3429b9391e9fbd39e5,
     type: 3}
   EnemeyHealthBarLerpSpeed: 3
@@ -191,10 +193,8 @@ MonoBehaviour:
   DelayToNextDialogue: 1
   CritDamageMultiplier: 2
   SecondsPerEntitieHealthRegen: 1
-  SoulDropPrefab: {fileID: 4063212132472539359, guid: a354723b262e2cd4ab866dc03a384c10,
-    type: 3}
   ItemDropRandomVelocityStrenght: 2
-  SpellEffectTickSpeed: 0.25
+  WhileEffectTickSpeed: 0.1
   PhysicalDamageLevelAdd: 12
   PhysicalDamageDivider: 10
   PhysicalDefenseLevelAdd: 10

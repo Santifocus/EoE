@@ -31,6 +31,7 @@ namespace EoE.Information
 		//Jumping
 		public Vector3 JumpPower = new Vector3(0, 10, 0);
 		public float JumpImpulsePower = 2.5f;
+		public float JumpBackwardMultiplier = 0.65f;
 
 		//Dodging
 		public float DodgePower = 1;
@@ -52,34 +53,41 @@ namespace EoE.Information
 		public float InvincibleModelFlashDelay = 0.4f;
 		public float InvincibleModelFlashTime = 0.4f;
 
-		//UI
-		public float StatTextUpdateSpeed = 1;
-		public float EnduranceBarLerpSpeed = 5;
-		public Gradient HealthTextColors = new Gradient();
-		public Gradient ManaTextColors = new Gradient();
-
-		public Color ReserveEnduranceBarColor = new Color(0.65f, 0.325f, 0, 1);
-		public Color ActiveEnduranceBarColor = new Color(1, 0.5f, 0, 1);
-		public Color ReloadingEnduranceBarColor = new Color(0.4f, 0.4f, 0.4f, 0.8f);
-
 		//Inventory
 		public StartItem[] StartItems = new StartItem[0];
 		public int InventorySize = 24;
 
+		//Animation
+		public float MaxModelTilt = 10;
+		public float SideTurnLerpSpeed = 10;
+		public float SpringLerpStiffness = 1;
+		public float WalkAnimationLerpSpeed = 4;
+
 		///FX
-		public FXObject[] EffectsOnReceiveDamage = default;
-		public FXObject[] EffectsOnReceiveKnockback = default;
+		//On Player do attack
 		public FXObject[] EffectsOnCauseDamage = default;
 		public FXObject[] EffectsOnCauseCrit = default;
+		public FXObject[] EffectsOnEnemyKilled = default;
 		public FXObject[] EffectsOnLevelup = default;
-		public float EffectsHealthThreshold = 0.3f;
-		public FXObject[] EffectsOnDamageWhenBelowThreshold = default;
 
+		//Player Movement
+		public FXObject[] EffectsWhileWalk = default;
+		public FXObject[] EffectsWhileRun = default;
+		public FXObject[] EffectsOnJump = default;
 		public float PlayerLandingVelocityThreshold = 5f;
 		public FXObject[] EffectsOnPlayerLanding = default;
 		public FXObject[] EffectsOnPlayerDodge = default;
-		public FXObject[] EffectsOnEnemyKilled = default;
+
+		//On Player receive attack
+		public FXObject[] EffectsOnReceiveDamage = default;
+		public FXObject[] EffectsOnReceiveKnockback = default;
+		public float EffectsHealthThreshold = 0.3f;
+		public FXObject[] EffectsWhileHealthBelowThreshold = default;
 		public FXObject[] EffectsOnPlayerDeath = default;
+
+		//Player actions
+		public FXObject[] EffectsOnItemPickup = default;
+		public FXObject[] EffectsOnSoulsPickup = default;
 
 		[System.Serializable]
 		public class StartItem

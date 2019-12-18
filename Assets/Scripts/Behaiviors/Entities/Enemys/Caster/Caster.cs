@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using EoE.Information;
-using EoE.Weapons;
+using EoE.Combatery;
 using UnityEngine;
 
 namespace EoE.Entities

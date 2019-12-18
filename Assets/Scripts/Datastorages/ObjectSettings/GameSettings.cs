@@ -32,8 +32,8 @@ namespace EoE.Information
 		public float EnemyMinimumInvestigationArea = 10;
 
 		//Visuals
-		public ParticleSystem HitEntitieParticles = default;
-		public ParticleSystem HitTerrainParticles = default;
+		public GameObject HitEntitieParticles = default;
+		public GameObject HitTerrainParticles = default;
 
 		public EntitieStatDisplay EntitieStatDisplayPrefab = default;
 		public float EnemeyHealthBarLerpSpeed = 4;
@@ -61,9 +61,8 @@ namespace EoE.Information
 		//Other
 		public float CritDamageMultiplier = 2;
 		public float SecondsPerEntitieHealthRegen = 0.5f;
-		public SoulDrop SoulDropPrefab = default;
 		public float ItemDropRandomVelocityStrenght = 2;
-		public float SpellEffectTickSpeed = 0.25f;
+		public float WhileEffectTickSpeed = 0.1f;
 
 		//Damage Calculation
 		public float PhysicalDamageLevelAdd = 12;

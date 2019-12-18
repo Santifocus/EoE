@@ -5,21 +5,12 @@ using static EoE.EoEEditor;
 namespace EoE.Information
 {
 	[CustomEditor(typeof(DropTable), true), CanEditMultipleObjects]
-	public class DropTableEditor : Editor
+	public class DropTableEditor : ObjectSettingEditor
 	{
 
 		private static bool tableOpen;
 		private bool[] innerFoldouts;
-		public override void OnInspectorGUI()
-		{
-			CustomInspector();
-			if (isDirty)
-			{
-				isDirty = false;
-				EditorUtility.SetDirty(target);
-			}
-		}
-		protected virtual void CustomInspector()
+		protected override void CustomInspector()
 		{
 			DropTable table = target as DropTable;
 
@@ -78,13 +69,7 @@ namespace EoE.Information
 						if (table.PossibleDrops[i].MaxDropAmount < table.PossibleDrops[i].MinDropAmount)
 							table.PossibleDrops[i].MinDropAmount = table.PossibleDrops[i].MaxDropAmount;
 					}
-					if (FloatField(new GUIContent("Drop Chance", "What is the chance to drop this Drop? (0 = 0%; 1 = 100%)"), ref table.PossibleDrops[i].DropChance, 2))
-					{
-						if (table.PossibleDrops[i].DropChance < 0)
-							table.PossibleDrops[i].DropChance = 0;
-						if (table.PossibleDrops[i].DropChance > 1)
-							table.PossibleDrops[i].DropChance = 1;
-					}
+					SliderField(new GUIContent("Drop Chance", "What is the chance to drop this Drop? (0 = 0%; 1 = 100%)"), ref table.PossibleDrops[i].DropChance, 0, 1, 2);
 				}
 
 			}

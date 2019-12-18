@@ -153,10 +153,12 @@ MonoBehaviour:
   gameSettings: {fileID: 11400000, guid: eb894c191e0767e428687e3c68a86e59, type: 2}
   projectilePrefab: {fileID: 7949894643786082984, guid: b161c93739aa6b94b9bc8bb2974557a7,
     type: 3}
+  soulDropPrefab: {fileID: 0}
   itemDropPrefab: {fileID: 877910255125148308, guid: dc9c93ad228c9d745a7fd655bc5c04c8,
     type: 3}
   bgCanvas: {fileID: 0}
   mainCanvas: {fileID: 0}
+  menuCanvas: {fileID: 0}
   enemyHealthBarStorage: {fileID: 0}
   itemCollector: {fileID: 11400000, guid: 8195ca2d28774f043a33ef21d87805a5, type: 2}
 --- !u!4 &438301068
@@ -198,34 +200,50 @@ MonoBehaviour:
   octaves: 4
   noiseZoom: 10
   coloring:
-    serializedVersion: 2
-    key0: {r: 0.5528756, g: 0.5849056, b: 0.12967247, a: 1}
-    key1: {r: 0.039888572, g: 0.3301887, b: 0, a: 1}
-    key2: {r: 0.039888572, g: 0.3301887, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 52428
-    ctime2: 52428
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
+    key0:
+      r: 0.5528756
+      g: 0.5849056
+      b: 0.12967247
+      a: 1
+    key1:
+      r: 0.039888572
+      g: 0.3301887
+      b: 0
+      a: 1
+    key2:
+      r: 0.039888572
+      g: 0.3301887
+      b: 0
+      a: 0
+    key3:
+      r: 0
+      g: 0
+      b: 0
+      a: 0
+    key4:
+      r: 0
+      g: 0
+      b: 0
+      a: 0
+    key5:
+      r: 0
+      g: 0
+      b: 0
+      a: 0
+    key6:
+      r: 0
+      g: 0
+      b: 0
+      a: 0
+    key7:
+      r: 0
+      g: 0
+      b: 0
+      a: 0
     m_Mode: 0
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
+  generatedTexture: {fileID: 0}
 --- !u!1 &626571011
 GameObject:
   m_ObjectHideFlags: 0
