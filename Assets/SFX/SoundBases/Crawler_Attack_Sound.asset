@@ -20,4 +20,4 @@ MonoBehaviour:
   pitch: 1
   volume: 0.597
   spatialBlend: 0
-  scaleStyle: 0
+  scaleStyle: 2

@@ -10,28 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6012763415ced2a4684da0b169ee66eb, type: 3}
-  m_Name: Combo3Hit
+  m_Name: SwordJumpRunAttack
   m_EditorClassIdentifier: 
   AffectedTargets: 4
   DamageElement: 1
   CauseType: 0
   DamageMultiplier: 1
   CritChanceMultiplier: 0
-  KnockbackMultiplier: 4
-  KnockbackOrigin: 2
-  KnockbackDirection: 1
+  KnockbackMultiplier: 1.5
+  KnockbackOrigin: 1
+  KnockbackDirection: 8
   KnockbackAxisMultiplier: {x: 1, y: 1, z: 1}
   BuffStackStyle: 2
-  BuffsToApply:
-  - {fileID: 11400000, guid: cfd21ec5a60866b4fa90b111fc6bc2b4, type: 2}
+  BuffsToApply: []
   Effects:
-  - FX: {fileID: 11400000, guid: 9d4857f9764135b4fbc8971098614985, type: 2}
-    HasPositionOffset: 0
-    PositionOffset: {x: 0, y: 0, z: 0}
-    HasRotationOffset: 0
-    RotationOffset: {x: 0, y: 0, z: 0}
-    HasCustomScale: 0
-    CustomScale: {x: 1, y: 1, z: 1}
   - FX: {fileID: 11400000, guid: e7eca44a4612acd40b0b90359694e612, type: 2}
     HasPositionOffset: 0
     PositionOffset: {x: 0, y: 0, z: 0}
@@ -39,7 +31,14 @@ MonoBehaviour:
     RotationOffset: {x: 0, y: 0, z: 0}
     HasCustomScale: 0
     CustomScale: {x: 1, y: 1, z: 1}
-  - FX: {fileID: 11400000, guid: 6812b6ecf408ba8439c8e9f47922381b, type: 2}
+  - FX: {fileID: 11400000, guid: 890a12e06bd6bf14c9ad0d29b8d70ec1, type: 2}
+    HasPositionOffset: 0
+    PositionOffset: {x: 0, y: 0, z: 0}
+    HasRotationOffset: 0
+    RotationOffset: {x: 0, y: 0, z: 0}
+    HasCustomScale: 0
+    CustomScale: {x: 1, y: 1, z: 1}
+  - FX: {fileID: 11400000, guid: 3fe6d223cb316ca4b9f86f9282358986, type: 2}
     HasPositionOffset: 0
     PositionOffset: {x: 0, y: 0, z: 0}
     HasRotationOffset: 0
