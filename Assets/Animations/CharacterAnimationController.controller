@@ -253,7 +253,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Hero_Walk
-  m_Speed: 1
+  m_Speed: 0.55
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 7221343634567309521}
@@ -378,7 +378,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Hero_Fall
-  m_Speed: 1
+  m_Speed: 0.4
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1557793078584351296}
@@ -406,7 +406,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Hero_Jump
-  m_Speed: 1
+  m_Speed: 0.4
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -3291765764221394671}
@@ -767,7 +767,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Hero_Aktiv_Idle
-  m_Speed: 1
+  m_Speed: 0.4
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -4654704809493611563}
@@ -902,7 +902,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Hero_Passiv_Idle
-  m_Speed: 0.5
+  m_Speed: 0.2
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -7180328291497626162}
@@ -1051,7 +1051,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Hero_Idle_Transition_Step
-  m_Speed: 1
+  m_Speed: 0.4
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 6836111481938553102}
