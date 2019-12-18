@@ -848,7 +848,11 @@ namespace EoE.Entities
 					effectTick += Time.deltaTime;
 
 					if (AppliedMoveStuns > (appliedStun ? 1 : 0))
+					{
+						if(appliedStun)
+							AppliedMoveStuns--;
 						goto StoppedSpell;
+					}
 
 					if (effectTick > GameController.CurrentGameSettings.WhileEffectTickSpeed)
 					{
@@ -868,7 +872,8 @@ namespace EoE.Entities
 			{
 				for (int i = 0; i < curParticles.Length; i++)
 				{
-					curParticles[i].FinishFX();
+					if(curParticles[i] != null)
+						curParticles[i].FinishFX();
 				}
 				curParticles = null;
 			}
@@ -891,7 +896,8 @@ namespace EoE.Entities
 			{
 				for (int i = 0; i < curParticles.Length; i++)
 				{
-					curParticles[i].FinishFX();
+					if (curParticles[i] != null)
+						curParticles[i].FinishFX();
 				}
 			}
 
@@ -910,7 +916,11 @@ namespace EoE.Entities
 						yield return new WaitForEndOfFrame();
 						timer += Time.deltaTime;
 						if (AppliedMoveStuns > (appliedStun ? 1 : 0))
+						{
+							if (appliedStun)
+								AppliedMoveStuns--;
 							goto StoppedSpell;
+						}
 					}
 
 					for (int j = 0; j < spell.ProjectileInfos[i].ExecutionCount; j++)
@@ -924,7 +934,11 @@ namespace EoE.Entities
 								yield return new WaitForEndOfFrame();
 								repeatTimer += Time.deltaTime;
 								if (AppliedMoveStuns > (appliedStun ? 1 : 0))
+								{
+									if (appliedStun)
+										AppliedMoveStuns--;
 									goto StoppedSpell;
+								}
 							}
 						}
 					}
@@ -942,7 +956,8 @@ namespace EoE.Entities
 			{
 				for (int i = 0; i < curParticles.Length; i++)
 				{
-					curParticles[i].FinishFX();
+					if (curParticles[i] != null)
+						curParticles[i].FinishFX();
 				}
 			}
 		}

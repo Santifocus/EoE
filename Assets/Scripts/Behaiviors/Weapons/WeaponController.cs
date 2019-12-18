@@ -191,6 +191,7 @@ namespace EoE.Combatery
 		private IEnumerator Attack(AttackSequence targetSequence)
 		{
 			InAttackSequence = true;
+			Player.Instance.animationControl.SetBool("InFight", true);
 			int curSequenceIndex = 0;
 			while (true)
 			{
@@ -328,7 +329,7 @@ namespace EoE.Combatery
 				Player.Instance.AppliedMoveStuns--;
 
 			SetAnimationSpeed(1);
-			Player.Instance.animationControl.SetTrigger("FightEnd");
+			Player.Instance.animationControl.SetBool("InFight", false);
 			ChangeWeaponState(InAttackSequence = false, ActiveAttackStyle = null);
 		}
 		public void HitObject(Vector3 hitPos, Collider hit, Vector3 direction)

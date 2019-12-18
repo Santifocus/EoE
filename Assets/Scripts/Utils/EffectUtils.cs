@@ -788,12 +788,16 @@ namespace EoE
 			{
 				if (SoundEffectInfo.FollowTarget && parent)
 				{
-					soundPlayer.transform.position = parent.position + SoundEffectInfo.OffsetToTarget;
+					soundPlayer.transform.position = parent.position + positionOffset;
 				}
 				soundPlayer.FadePoint = GetCurMultiplier();
 
 				if (soundPlayer.FullyStopped)
 					FinishFX();
+			}
+			public override void OnRemove()
+			{
+				Destroy(soundPlayer.gameObject);
 			}
 		}
 		#endregion

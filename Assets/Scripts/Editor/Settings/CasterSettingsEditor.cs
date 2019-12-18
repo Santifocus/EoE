@@ -14,7 +14,7 @@ namespace EoE.Information
 			CasterSettings settings = target as CasterSettings;
 			base.CombatSettings();
 
-			ObjectField<Spell>(new GUIContent("Spell"), ref settings.CasterAttack);
+			ObjectField<Spell>(new GUIContent("Spell"), ref settings.CasterAttack, 1);
 		}
 	}
 }

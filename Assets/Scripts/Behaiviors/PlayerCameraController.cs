@@ -42,12 +42,7 @@ namespace EoE
 			if (!Player.Instance.Alive)
 				return;
 
-			if (Player.Instance.TargetedEntitie)
-			{
-				Vector3 dir = (Player.Instance.TargetedEntitie.actuallWorldPosition - transform.position).normalized;
-				LookAtDirection(dir);
-			}
-			curOffset = Vector3.Lerp(curOffset, GetOffset(), Time.deltaTime * 3);
+			curOffset = Vector3.Lerp(curOffset, GetOffset(), Time.deltaTime * 5);
 			transform.position = Player.Instance.transform.position + curOffset;
 			transform.eulerAngles = new Vector3(CurRotation.y, CurRotation.x, 0);
 
@@ -59,6 +54,12 @@ namespace EoE
 			else
 			{
 				playerCamera.transform.localPosition = new Vector3(0, 0, Mathf.Lerp(playerCamera.transform.localPosition.z, camDist, Time.deltaTime * 3));
+			}
+
+			if (Player.Instance.TargetedEntitie)
+			{
+				Vector3 dir = (Player.Instance.TargetedEntitie.actuallWorldPosition - transform.position).normalized;
+				LookAtDirection(dir);
 			}
 		}
 		public void LookAtDirection(Vector3 direction)
@@ -75,9 +76,9 @@ namespace EoE
 
 			Vector3 baseOffset = Player.Instance.TargetedEntitie ? playerSettigns.CameraAnchorOffsetWhenTargeting : playerSettigns.CameraAnchorOffset;
 
-			Vector3 offset = baseOffset.x * new Vector3(sinPart, 0, cosPart) +
-				new Vector3(0, baseOffset.y, 0) +
-				baseOffset.z * new Vector3(cosPart, 0, sinPart);
+			Vector3 offset =	baseOffset.x	*	new Vector3(sinPart, 0, cosPart) +
+								1				*	new Vector3(0, baseOffset.y, 0) +
+								baseOffset.z	*	new Vector3(cosPart, 0, sinPart);
 
 			return offset;
 		}
