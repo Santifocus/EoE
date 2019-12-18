@@ -104,6 +104,7 @@ MonoBehaviour:
   EffectsWhileRun:
   - {fileID: 11400000, guid: 760364c3cb2adab46a51192839a050f3, type: 2}
   - {fileID: 11400000, guid: 0b517f1942c86fb4c81dd0b2013c1fc0, type: 2}
+  - {fileID: 11400000, guid: 634714252dd985c4a9434e87dac6225a, type: 2}
   EffectsOnJump:
   - {fileID: 11400000, guid: 81bcb4243c5d7bf409682cb56f2f128e, type: 2}
   PlayerLandingVelocityThreshold: 2

@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ee899c0a2c8e9f34e89325bc7784ff48, type: 3}
-  m_Name: RustySword
+  m_Name: UsedSword
   m_EditorClassIdentifier: 
   ItemName:
     textColor: {r: 0.6981132, g: 0.6981132, b: 0.2272161, a: 1}
-    text: Rusty Sword
+    text: Used Sword
   ItemDescription:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: 'A simple and sturdy sword. '

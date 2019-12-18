@@ -16,11 +16,8 @@ MonoBehaviour:
   Quality: 2
   Permanent: 1
   BuffTime: 0
-  Icon: {fileID: 21300000, guid: f778a96a9b33a4f439365ce0388ccd47, type: 3}
+  Icon: {fileID: 0}
   Effects:
-  - TargetBaseStat: 6
-    Percent: 1
-    Amount: 20
   - TargetBaseStat: 5
     Percent: 0
     Amount: 1
