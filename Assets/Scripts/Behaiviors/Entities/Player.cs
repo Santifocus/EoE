@@ -623,11 +623,14 @@ namespace EoE.Entities
 			curAcceleration *= 1 - velocityMultiplier;
 			impactForce *= 1 - velocityMultiplier;
 
-			//Check if there is any fall damage to give
-			float damageAmount = GameController.CurrentGameSettings.FallDamageCurve.Evaluate(velDif);
+			if (jumpGroundCooldown <= 0)
+			{
+				//Check if there is any fall damage to give
+				float damageAmount = GameController.CurrentGameSettings.FallDamageCurve.Evaluate(velDif);
 
-			if (damageAmount > 0)
-				ChangeHealth(new ChangeInfo(null, CauseType.Physical, ElementType.None, TargetStat.Health, actuallWorldPosition, Vector3.up, damageAmount, false));
+				if (damageAmount > 0)
+					ChangeHealth(new ChangeInfo(null, CauseType.Physical, ElementType.None, TargetStat.Health, actuallWorldPosition, Vector3.up, damageAmount, false));
+			}
 		}
 		#endregion
 		#endregion

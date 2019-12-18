@@ -581,37 +581,46 @@ namespace EoE
 		}
 		private IEnumerator WarpCameraFOVC()
 		{
-			while (AllCameraFOVWarpEffects.Count > 0)
+			while (true)
 			{
 				yield return new WaitForEndOfFrame();
 				if (GameController.GameIsPaused)
 					continue;
 
-				HighestCameraFOVWarpDominanceIndex = -1;
-				int targetIndex = 0;
-				for (int i = 0; i < AllCameraFOVWarpEffects.Count; i++)
+				if (AllCameraFOVWarpEffects.Count > 0)
 				{
-					AllCameraFOVWarpEffects[i].Update(Time.deltaTime);
-					if (AllCameraFOVWarpEffects[i].ShouldBeRemoved && AllCameraFOVWarpEffects[i].AllowedToRemove())
+					HighestCameraFOVWarpDominanceIndex = -1;
+					int targetIndex = 0;
+					for (int i = 0; i < AllCameraFOVWarpEffects.Count; i++)
 					{
-						AllCameraFOVWarpEffects[i].OnRemove();
-						AllCameraFOVWarpEffects.RemoveAt(i);
-						i--;
-					}
-					else
-					{
-						if (HighestCameraFOVWarpDominanceIndex < AllCameraFOVWarpEffects[i].DominanceIndex)
+						AllCameraFOVWarpEffects[i].Update(Time.deltaTime);
+						if (AllCameraFOVWarpEffects[i].ShouldBeRemoved && AllCameraFOVWarpEffects[i].AllowedToRemove())
 						{
-							HighestCameraFOVWarpDominanceIndex = AllCameraFOVWarpEffects[i].DominanceIndex;
-							targetIndex = i;
+							AllCameraFOVWarpEffects[i].OnRemove();
+							AllCameraFOVWarpEffects.RemoveAt(i);
+							i--;
+						}
+						else
+						{
+							if (HighestCameraFOVWarpDominanceIndex < AllCameraFOVWarpEffects[i].DominanceIndex)
+							{
+								HighestCameraFOVWarpDominanceIndex = AllCameraFOVWarpEffects[i].DominanceIndex;
+								targetIndex = i;
+							}
 						}
 					}
+
+					if (AllCameraFOVWarpEffects.Count == 0)
+						continue;
+
+					PlayerCameraController.CameraFOV = Mathf.Lerp(PlayerCameraController.CameraFOV, AllCameraFOVWarpEffects[targetIndex].GetFOV(), LERP_FOV_SPEED * Time.deltaTime);
 				}
-
-				if (AllCameraFOVWarpEffects.Count == 0)
-					continue;
-
-				PlayerCameraController.CameraFOV = Mathf.Lerp(PlayerCameraController.CameraFOV, AllCameraFOVWarpEffects[targetIndex].GetFOV(), LERP_FOV_SPEED * Time.deltaTime);
+				else
+				{
+					PlayerCameraController.CameraFOV = Mathf.Lerp(PlayerCameraController.CameraFOV, Player.PlayerSettings.CameraBaseFOV, LERP_FOV_SPEED * Time.deltaTime * 1.5f);
+					if (Mathf.Abs(PlayerCameraController.CameraFOV - Player.PlayerSettings.CameraBaseFOV) < 0.01f)
+						break;
+				}
 			}
 			PlayerCameraController.CameraFOV = Player.PlayerSettings.CameraBaseFOV;
 			CameraFOVWarpCoroutine = null;
