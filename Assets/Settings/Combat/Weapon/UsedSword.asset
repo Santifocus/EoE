@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BaseDamage: 5
   BaseManaCost: 0
-  BaseEnduranceCost: 4
+  BaseEnduranceCost: 3
   BaseKnockback: 10
   BaseCritChance: 0.1
   WeaponPrefab: {fileID: 5533782398965989895, guid: 18284dacf122148419232919f51c45c2,
@@ -251,7 +251,7 @@ MonoBehaviour:
         m_RotationOrder: 4
       AnimationSpeedCurveTimeframe: 2
       AnimationSpeedCurveMultiplier: 2
-      DamageMultiplier: 1.2
+      DamageMultiplier: 0.9
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
       KnockbackMultiplier: 1
@@ -384,9 +384,9 @@ MonoBehaviour:
         m_RotationOrder: 4
       AnimationSpeedCurveTimeframe: 2
       AnimationSpeedCurveMultiplier: 1.5
-      DamageMultiplier: 1
+      DamageMultiplier: 1.4
       ManaCostMultiplier: 1
-      EnduranceCostMultiplier: 1.5
+      EnduranceCostMultiplier: 1.4
       KnockbackMultiplier: 5
       CritChanceMultiplier: 1
       CollisionMask: -1
