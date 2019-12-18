@@ -295,27 +295,27 @@ MonoBehaviour:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
-          time: 0.017951965
+          time: 0
           value: 1.5494843
-          inSlope: -0.05033943
-          outSlope: -0.05033943
-          tangentMode: 34
+          inSlope: 0.0056241527
+          outSlope: 0.0056241527
+          tangentMode: 0
           weightedMode: 0
           inWeight: 0
-          outWeight: 0.33333334
+          outWeight: 0.095466584
         - serializedVersion: 3
-          time: 1.0058136
-          value: 1.4997559
-          inSlope: -0.05033943
-          outSlope: -0.05033943
-          tangentMode: 34
+          time: 1
+          value: 0.8
+          inSlope: -2.2526708
+          outSlope: -2.2526708
+          tangentMode: 0
           weightedMode: 0
-          inWeight: 0.33333334
+          inWeight: 0.023722649
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      AnimationSpeedCurveTimeframe: 2
+      AnimationSpeedCurveTimeframe: 0.5
       AnimationSpeedCurveMultiplier: 2
       DamageMultiplier: 1.2
       ManaCostMultiplier: 1

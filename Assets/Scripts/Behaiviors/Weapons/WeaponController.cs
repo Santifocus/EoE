@@ -17,7 +17,7 @@ namespace EoE.Combatery
 		{
 			{ AttackAnimation.Attack1, (0.333f, 0.2f) },
 			{ AttackAnimation.Attack2, (0.5f, 0.22f) },
-			{ AttackAnimation.Attack3, (0.833f, 0.583f) },
+			{ AttackAnimation.Attack3, (1f, 0.6f) },
 		};
 		public static WeaponController PlayerWeaponController;
 		public bool InAttackSequence { get; private set; }
@@ -228,8 +228,9 @@ namespace EoE.Combatery
 				}
 				else
 				{
-					multiplier = ActiveAttackStyle.AnimationSpeedCurve.Evaluate(0) * ActiveAttackStyle.AnimationSpeedCurveMultiplier;
+					multiplier = ActiveAttackStyle.AnimationSpeedCurve.Evaluate(1) * ActiveAttackStyle.AnimationSpeedCurveMultiplier;
 				}
+				multiplier = Mathf.Round(multiplier * 10) / 10;
 				SetAnimationSpeed(multiplier);
 				Player.Instance.animationControl.SetTrigger(ActiveAttackStyle.AnimationTarget.ToString());
 				do
@@ -239,16 +240,18 @@ namespace EoE.Combatery
 						continue;
 
 					totalTime += Time.deltaTime;
+					animationTimer += multiplier * Time.deltaTime;
+
 					//Find the current animationSpeed multiplier
 					if (ActiveAttackStyle.AnimationMultiplicationType == MultiplicationType.Curve)
 					{
 						multiplier = ActiveAttackStyle.AnimationSpeedCurve.Evaluate(Mathf.Clamp01(totalTime / ActiveAttackStyle.AnimationSpeedCurveTimeframe)) * ActiveAttackStyle.AnimationSpeedCurveMultiplier;
+						multiplier = Mathf.Round(multiplier * 10) / 10;
 						SetAnimationSpeed(multiplier);
 					}
-					animationTimer += multiplier * Time.deltaTime;
 
 					//Check if we reached the collision activation point
-					bool shouldState = animationTimer > animationActivationDelay;
+					bool shouldState = animationTimer >= animationActivationDelay;
 					if (shouldState != colliderActive)
 					{
 						ChangeWeaponState(shouldState, ActiveAttackStyle);
@@ -258,6 +261,7 @@ namespace EoE.Combatery
 					if (GameController.CurrentGameSettings.IsDebugEnabled && shouldState)
 					{
 						Debug.DrawLine(transform.position - Vector3.up / 4, transform.position + Vector3.up / 4, Color.green / 1.5f, 1.5f);
+						Debug.DrawLine(transform.position - Vector3.forward / 4, transform.position + Vector3.forward / 4, Color.yellow / 1.5f, 1.5f);
 						Debug.DrawLine(transform.position - Vector3.right / 4, transform.position + Vector3.right / 4, Color.cyan / 1.5f, 1.5f);
 					}
 
@@ -279,6 +283,14 @@ namespace EoE.Combatery
 					}
 
 				} while (((curAttackAnimationPoint > 0 || multiplier > 0) && (curAttackAnimationPoint < 1)) || GameController.GameIsPaused);
+
+				//Debug for attackstyle end
+				if (GameController.CurrentGameSettings.IsDebugEnabled)
+				{
+					Debug.DrawLine(transform.position - Vector3.up / 2, transform.position + Vector3.up / 2, Color.red, 1.75f);
+					Debug.DrawLine(transform.position - Vector3.forward / 2, transform.position + Vector3.forward / 2, Color.white, 1.75f);
+					Debug.DrawLine(transform.position - Vector3.right / 2, transform.position + Vector3.right / 2, Color.magenta, 1.75f);
+				}
 
 				if (curSequenceIndex >= targetSequence.AttackSequenceParts.Length - 1)
 				{
@@ -311,9 +323,11 @@ namespace EoE.Combatery
 				//If the player did not try to start the next sequence in the given delay we stop here
 				break;
 			}
+
 			if (ActiveAttackStyle.StopMovement)
 				Player.Instance.AppliedMoveStuns--;
 
+			SetAnimationSpeed(1);
 			Player.Instance.animationControl.SetTrigger("FightEnd");
 			ChangeWeaponState(InAttackSequence = false, ActiveAttackStyle = null);
 		}
