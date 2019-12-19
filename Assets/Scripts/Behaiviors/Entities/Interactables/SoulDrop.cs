@@ -11,7 +11,7 @@ namespace EoE.Entities
 		[SerializeField] private TextMeshPro infoSign = default;
 		[SerializeField] private Gradient colorOverTime = default;
 		[SerializeField] private Rigidbody body = default;
-		[SerializeField] private MeshRenderer sphereRenderer = default;
+		[SerializeField] private GameObject mainParticles = default;
 		[SerializeField] private ParticleSystem soulParticles = default;
 
 		[Space(10)]
@@ -38,7 +38,9 @@ namespace EoE.Entities
 
 			string amountColHex = ColorUtility.ToHtmlStringRGBA(amountColor);
 			infoSign.text = "Free <color=#" + amountColHex + ">" + soulCount + "</color> Souls. [A]";
-			StartCoroutine(FadeIn());
+
+			infoSign.gameObject.SetActive(isTarget);
+			canBeInteracted = true;
 		}
 		protected override void Interact()
 		{
@@ -61,27 +63,6 @@ namespace EoE.Entities
 
 			StartCoroutine(FadeAway());
 		}
-		private IEnumerator FadeIn()
-		{
-			float timer = 0;
-			float timePerPuls = fadeInTime / pulsateCount;
-
-			while (timer < fadeInTime)
-			{
-				yield return new WaitForEndOfFrame();
-				timer += Time.deltaTime;
-
-				float point = Mathf.Sin(timer / timePerPuls * Mathf.PI);
-
-				float scale = timer / fadeInTime * finallSphereSize + point * pulsateStrenght;
-				sphereRenderer.transform.localScale = scale * Vector3.one;
-				sphereRenderer.material.color = pulsateColorGradient.Evaluate((point + 1) / 2);
-			}
-			sphereRenderer.transform.localScale = finallSphereSize * Vector3.one;
-			infoSign.gameObject.SetActive(isTarget);
-
-			canBeInteracted = true;
-		}
 		private IEnumerator FadeAway()
 		{
 			infoSign.gameObject.SetActive(false);
@@ -91,20 +72,24 @@ namespace EoE.Entities
 			ParticleSystem.EmissionModule em = soulParticles.emission;
 			em.rateOverTime = soulCount / fadeOutTime;
 			soulParticles.Play();
+			EffectUtils.FadeAndDestroyParticles(mainParticles, 0);
+			bool emissionDisabled = false;
 
-			while (timer < fadeOutTime)
+			while (timer < fadeOutTime || mainParticles)
 			{
+				if(timer >= fadeOutTime && !emissionDisabled)
+				{
+					emissionDisabled = true;
+					em.rateOverTime = 0;
+				}
+
 				yield return new WaitForEndOfFrame();
 				timer += Time.deltaTime;
-
-				float scale = (1 - timer / fadeOutTime) * finallSphereSize;
-				sphereRenderer.transform.localScale = scale * Vector3.one;
 			}
-			em.rateOverTime = 0;
+			if (!emissionDisabled)
+				em.rateOverTime = 0;
+
 			ParticleSystem.MainModule mm = soulParticles.main;
-
-			sphereRenderer.transform.localScale = Vector3.zero;
-
 			Destroy(gameObject, mm.startLifetime.constantMax * 1.1f);
 		}
 

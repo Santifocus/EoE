@@ -79,7 +79,9 @@ namespace EoE
 					{
 						//Did we fail the condition and the behavior is cancel? jump out of the loop to the end without invoking the call
 						if (conditionBehaivior == OnDelayConditionNotMet.Cancel)
+						{
 							goto Canceled;
+						}
 
 						//The 2 other cases both will cause the loop to stay here until the condition is met
 						yield return new WaitUntil(condition);

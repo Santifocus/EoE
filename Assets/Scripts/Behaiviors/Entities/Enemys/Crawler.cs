@@ -32,7 +32,7 @@ namespace EoE.Entities
 		}
 		private void TryForBash()
 		{
-			if (!chargingBash)
+			if (!chargingBash && !bashing)
 			{
 				bool allowedToBash = true;
 
