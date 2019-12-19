@@ -45,7 +45,7 @@ MonoBehaviour:
   TextPunch: 50
   PunchResetSpeed: 0.5
   ComboData:
-  - RequiredComboCount: 4
+  - RequiredComboCount: 5
     Effect:
       OverrideTextColor: 1
       TextColor:
