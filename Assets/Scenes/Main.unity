@@ -6532,7 +6532,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &531628748
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14072,7 +14072,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1022813894
 RectTransform:
   m_ObjectHideFlags: 0
@@ -30917,12 +30917,12 @@ GameObject:
   - component: {fileID: 2124851605}
   - component: {fileID: 2124851604}
   m_Layer: 0
-  m_Name: ConfirmGenerateCanvas (1)
+  m_Name: ConfirmDestroyCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2124851603
 RectTransform:
   m_ObjectHideFlags: 0
