@@ -131,7 +131,3 @@ MonoBehaviour:
   EffectsOnPlayerDeath:
   - {fileID: 11400000, guid: 0cf11713d16b4034c873591e936d21cc, type: 2}
   - {fileID: 11400000, guid: 48e1095a0bf75e6489c4d5149d54f972, type: 2}
-  EffectsOnItemPickup:
-  - {fileID: 11400000, guid: a8d3585c9c7214d429e67e9d3a22c189, type: 2}
-  EffectsOnSoulsPickup:
-  - {fileID: 11400000, guid: 53e7d5f845e8dd84ebbe448a62732c2c, type: 2}
