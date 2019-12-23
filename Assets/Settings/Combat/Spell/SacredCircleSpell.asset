@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc89a2906f120d45877860a48c8c4e2, type: 3}
   m_Name: SacredCircleSpell
   m_EditorClassIdentifier: 
-  BaseDamage: 20
+  BaseDamage: 14
   BaseManaCost: 10
   BaseEnduranceCost: 0
   BaseKnockback: 5
