@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName:
     textColor: {r: 0, g: 0.9388051, b: 1, a: 1}
-    text: Dark Barrage
+    text: Shadow Ring
   ItemDescription:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Dark Magic with massive firerate
   SortingID: 0
-  ItemIcon: {fileID: 21300000, guid: 1133ba8a6cfd5774688b1b14a1454ef9, type: 3}
+  ItemIcon: {fileID: 21300000, guid: c5e5c289c5639b94ab3ff3ef314a151e, type: 3}
   FXEffectsOnUse: []
   FXEffectsWhenEquipped:
   - {fileID: 11400000, guid: c8fc971a186953d44a1cd89a44f1a313, type: 2}

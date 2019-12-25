@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName:
     textColor: {r: 0, g: 0.9301295, b: 1, a: 1}
-    text: SacredCircle
+    text: Light Ring
   ItemDescription:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Damages nearby enemys with the power of light.
   SortingID: 0
-  ItemIcon: {fileID: 21300000, guid: 379f33fcdee889d4db54b6c4696d9385, type: 3}
+  ItemIcon: {fileID: 21300000, guid: 374d407a75a57a54fa1459f7011ce8ff, type: 3}
   FXEffectsOnUse: []
   FXEffectsWhenEquipped:
   - {fileID: 11400000, guid: 797857c90675254498ef08db978fcfbe, type: 2}

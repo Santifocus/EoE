@@ -88,6 +88,13 @@ MonoBehaviour:
           RotationOffset: {x: 0, y: 0, z: 0}
           HasCustomScale: 0
           CustomScale: {x: 1, y: 1, z: 1}
+        - FX: {fileID: 11400000, guid: 39ac2fcf652e44c479d1f9b66c082d6d, type: 2}
+          HasPositionOffset: 0
+          PositionOffset: {x: 0, y: 0, z: 0}
+          HasRotationOffset: 0
+          RotationOffset: {x: 0, y: 0, z: 0}
+          HasCustomScale: 0
+          CustomScale: {x: 1, y: 1, z: 1}
         AOEEffects: []
         ProjectileInfos: []
     - AnimationTarget: 2
@@ -151,6 +158,13 @@ MonoBehaviour:
           RotationOffset: {x: 0, y: 0, z: 0}
           HasCustomScale: 0
           CustomScale: {x: 1, y: 1, z: 1}
+        - FX: {fileID: 11400000, guid: 37f86251f341af245a90869520ab23cd, type: 2}
+          HasPositionOffset: 0
+          PositionOffset: {x: 0, y: 0, z: 0}
+          HasRotationOffset: 0
+          RotationOffset: {x: 0, y: 0, z: 0}
+          HasCustomScale: 0
+          CustomScale: {x: 1, y: 1, z: 1}
         AOEEffects: []
         ProjectileInfos: []
     - AnimationTarget: 4
@@ -208,6 +222,13 @@ MonoBehaviour:
         ImpulseDirectionBase: 1
         FXObjects:
         - FX: {fileID: 11400000, guid: 33f4078c8a5dd4a44907009cea54301e, type: 2}
+          HasPositionOffset: 0
+          PositionOffset: {x: 0, y: 0, z: 0}
+          HasRotationOffset: 0
+          RotationOffset: {x: 0, y: 0, z: 0}
+          HasCustomScale: 0
+          CustomScale: {x: 1, y: 1, z: 1}
+        - FX: {fileID: 11400000, guid: 23c16a61dfc8b00419a8dd7863a8cf4e, type: 2}
           HasPositionOffset: 0
           PositionOffset: {x: 0, y: 0, z: 0}
           HasRotationOffset: 0
@@ -282,6 +303,13 @@ MonoBehaviour:
           RotationOffset: {x: 0, y: 0, z: 0}
           HasCustomScale: 0
           CustomScale: {x: 1, y: 1, z: 1}
+        - FX: {fileID: 11400000, guid: 39ac2fcf652e44c479d1f9b66c082d6d, type: 2}
+          HasPositionOffset: 0
+          PositionOffset: {x: 0, y: 0, z: 0}
+          HasRotationOffset: 0
+          RotationOffset: {x: 0, y: 0, z: 0}
+          HasCustomScale: 0
+          CustomScale: {x: 1, y: 1, z: 1}
         AOEEffects: []
         ProjectileInfos: []
     PartsMaxDelays: []
@@ -342,6 +370,13 @@ MonoBehaviour:
         ImpulseDirectionBase: 1
         FXObjects:
         - FX: {fileID: 11400000, guid: 570ad84cc1492cb43a4cce2162e3b9f9, type: 2}
+          HasPositionOffset: 0
+          PositionOffset: {x: 0, y: 0, z: 0}
+          HasRotationOffset: 0
+          RotationOffset: {x: 0, y: 0, z: 0}
+          HasCustomScale: 0
+          CustomScale: {x: 1, y: 1, z: 1}
+        - FX: {fileID: 11400000, guid: 37f86251f341af245a90869520ab23cd, type: 2}
           HasPositionOffset: 0
           PositionOffset: {x: 0, y: 0, z: 0}
           HasRotationOffset: 0
@@ -415,17 +450,13 @@ MonoBehaviour:
           RotationOffset: {x: 0, y: 0, z: 0}
           HasCustomScale: 0
           CustomScale: {x: 1, y: 1, z: 1}
-        AOEEffects: []
-        ProjectileInfos: []
-      - AtAnimationPoint: 0.6
-        ChanceToActivate: 1
-        ContainedEffectType: 0
-        ImpulseVelocity: 5
-        ImpulseVelocityFallOffTime: 0.5
-        ImpulseVelocityDirection: 2
-        ImpulseVelocityFallbackDirection: 1
-        ImpulseDirectionBase: 1
-        FXObjects: []
+        - FX: {fileID: 11400000, guid: 23c16a61dfc8b00419a8dd7863a8cf4e, type: 2}
+          HasPositionOffset: 0
+          PositionOffset: {x: 0, y: 0, z: 0}
+          HasRotationOffset: 0
+          RotationOffset: {x: 0, y: 0, z: 0}
+          HasCustomScale: 0
+          CustomScale: {x: 1, y: 1, z: 1}
         AOEEffects: []
         ProjectileInfos: []
     PartsMaxDelays: []
