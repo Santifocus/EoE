@@ -13,7 +13,6 @@ namespace EoE.Entities
 		private ForceController.OnForceDelete bashFinish;
 		private bool chargingBash;
 		private bool bashing;
-		private bool canceledBash;
 		private ForceController.SingleForce bashForce;
 
 		//Getter helper
@@ -67,9 +66,8 @@ namespace EoE.Entities
 		{
 			chargingBash = true;
 			behaviorSimpleStop = true;
-			canceledBash = false;
 
-			GameController.BeginDelayedCall(() => AnnounceBash(), settings.AttackSpeed + settings.BashAnnouncementDelay, TimeType.ScaledDeltaTime, new System.Func<bool>(() => (this && !canceledBash)), OnDelayConditionNotMet.Cancel);
+			Coroutine bashAnnouncement = GameController.BeginDelayedCall(() => AnnounceBash(), settings.AttackSpeed + settings.BashAnnouncementDelay, TimeType.ScaledDeltaTime, new System.Func<bool>(() => this), OnDelayConditionNotMet.Cancel);
 
 			float timer = 0;
 			while (timer < settings.AttackSpeed)
@@ -78,7 +76,7 @@ namespace EoE.Entities
 				timer += Time.deltaTime;
 				if(IsStunned)
 				{
-					canceledBash = true;
+					GameController.Instance.StopCoroutine(bashAnnouncement);
 					goto CanceledBash;
 				}
 			}

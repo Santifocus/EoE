@@ -1,5 +1,6 @@
 ﻿using EoE.Controlls;
 using EoE.Entities;
+using EoE.Information;
 using TMPro;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ namespace EoE.UI
 {
 	public class DropMenu : MonoBehaviour
 	{
+		private const float NAV_COOLDOWN = 0.15f;
 		private enum SelectedPart { Drop, Cancel, Count }
 
 		[SerializeField] private TextMeshProUGUI dropCount = default;
@@ -23,6 +25,7 @@ namespace EoE.UI
 		private SelectedPart selectedPart;
 		private int curDropCount;
 		private int allowedMax => Player.Instance.Inventory[parent.curSlotIndex].stackSize;
+		private float navigationCooldown;
 
 		public void Setup(InventoryMenu parent)
 		{
@@ -36,62 +39,87 @@ namespace EoE.UI
 
 			gameObject.SetActive(true);
 			UpdateSelectedState();
+			navigationCooldown = NAV_COOLDOWN * 2;
 		}
 		private void Update()
 		{
-			int sideInput = InputController.MenuRight.Down ? 1 : (InputController.MenuLeft.Down ? -1 : 0);
-			if (sideInput != 0)
+			if (navigationCooldown > 0)
+				navigationCooldown -= Time.unscaledDeltaTime;
+
+			if (navigationCooldown <= 0)
 			{
-				if (selectedPart == SelectedPart.Count)
+				bool noInput = false;
+				int sideInput = InputController.MenuRight.Down ? 1 : (InputController.MenuLeft.Down ? -1 : 0);
+				if (sideInput != 0)
 				{
-					curDropCount += sideInput;
+					if (selectedPart == SelectedPart.Count)
+					{
+						curDropCount += sideInput;
 
-					if (curDropCount > allowedMax)
-						curDropCount = 1;
-					else if (curDropCount == 0)
-						curDropCount = allowedMax;
+						if (curDropCount > allowedMax)
+							curDropCount = 1;
+						else if (curDropCount == 0)
+							curDropCount = allowedMax;
 
-					dropCount.text = curDropCount.ToString();
+						dropCount.text = curDropCount.ToString();
+					}
+					else
+					{
+						if (selectedPart == SelectedPart.Cancel)
+							selectedPart = SelectedPart.Drop;
+						else
+							selectedPart = SelectedPart.Cancel;
+
+						UpdateSelectedState();
+					}
+					navigationCooldown = NAV_COOLDOWN;
 				}
-				else
+				else if (InputController.MenuUp.Down || InputController.MenuDown.Down)
 				{
-					if (selectedPart == SelectedPart.Cancel)
+					if (selectedPart == SelectedPart.Count)
 						selectedPart = SelectedPart.Drop;
 					else
-						selectedPart = SelectedPart.Cancel;
+						selectedPart = SelectedPart.Count;
 
 					UpdateSelectedState();
+					navigationCooldown = NAV_COOLDOWN;
 				}
-			}
-			else if (InputController.MenuUp.Down || InputController.MenuDown.Down)
-			{
-				if (selectedPart == SelectedPart.Count)
-					selectedPart = SelectedPart.Drop;
+				else if (InputController.MenuEnter.Down)
+				{
+					bool fullyDropped = false;
+					InventoryItem targetItem = Player.Instance.Inventory[parent.curSlotIndex];
+					if (selectedPart != SelectedPart.Cancel)
+					{
+						targetItem.data.CreateItemDrop(Player.Instance.actuallWorldPosition, curDropCount, true);
+						targetItem.stackSize -= curDropCount;
+						fullyDropped = targetItem.stackSize == 0;
+						Player.Instance.Inventory.ForceUpdate();
+					}
+					parent.HideDropMenu();
+					if (fullyDropped)
+					{
+						if(targetItem.isEquiped)
+							targetItem.data.UnEquip(targetItem, Player.Instance);
+						parent.MenuBack();
+					}
+				}
+				else if (InputController.MenuBack.Down)
+				{
+					parent.HideDropMenu();
+				}
 				else
-					selectedPart = SelectedPart.Count;
-
-				UpdateSelectedState();
-			}
-			else if (InputController.MenuEnter.Down)
-			{
-				bool fullyDropped = false;
-				if (selectedPart != SelectedPart.Cancel)
 				{
-					Player.Instance.Inventory[parent.curSlotIndex].data.CreateItemDrop(Player.Instance.actuallWorldPosition, curDropCount, true);
-					Player.Instance.Inventory[parent.curSlotIndex].stackSize -= curDropCount;
-					fullyDropped = Player.Instance.Inventory[parent.curSlotIndex].stackSize == 0;
-					Player.Instance.Inventory.ForceUpdate();
+					noInput = true;
 				}
-				parent.HideDropMenu();
-				if (fullyDropped)
+				if (!noInput)
 				{
-					parent.MenuBack();
+					PlayFeedback(true);
 				}
 			}
-			else if (InputController.MenuBack.Down)
-			{
-				parent.HideDropMenu();
-			}
+		}
+		private void PlayFeedback(bool succesSound)
+		{
+			Sounds.SoundManager.SetSoundState(succesSound ? ConstantCollector.MENU_NAV_SOUND : ConstantCollector.FAILED_MENU_NAV_SOUND, true);
 		}
 		private void UpdateSelectedState()
 		{

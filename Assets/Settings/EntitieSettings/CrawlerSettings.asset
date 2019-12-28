@@ -17,7 +17,7 @@ MonoBehaviour:
   EntitieElement: 4
   PossibleDropsTable: {fileID: 11400000, guid: 6c863124784db984e93eb995e00bd42e, type: 2}
   LevelSettings: {fileID: 11400000, guid: 8872bc66ea135374daf83e0b036673d5, type: 2}
-  SoulWorth: 1
+  ExperienceWorth: 1
   BaseAttackDamage: 13
   BaseMagicDamage: 3
   BaseDefense: 3

@@ -8,6 +8,7 @@ namespace EoE.Combatery
 	public enum MultiplicationType { FlatValue = 1, Curve = 2 }
 	[System.Flags] public enum AttackEffectType { ImpulseVelocity = (1 << 0), FX = (1 << 1), AOE = (1 << 2), CreateProjectile = (1 << 3) }
 	[System.Flags] public enum AttackStylePart { StandAttack = (1 << 0), RunAttack = (1 << 1), JumpAttack = (1 << 2), RunJumpAttack = (1 << 3) }
+	[System.Flags] public enum AttackChargeEffectMask { Damage = (1 << 0), Knockback = (1 << 1), CritChance = (1 << 2), ComboWorth = (1 << 3) }
 	public enum AttackStylePartFallback { None = (0), StandAttack = (1 << 0), RunAttack = (1 << 1), JumpAttack = (1 << 2), RunJumpAttack = (1 << 3) }
 	public class Weapon : CombatObject
 	{
@@ -73,6 +74,10 @@ namespace EoE.Combatery
 		public float AnimationSpeedCurveTimeframe = 2;
 		public float AnimationSpeedCurveMultiplier = 1;
 
+		//Charge settings
+		public bool NeedsCharging = false;
+		public AttackChargeSettings ChargeSettings = new AttackChargeSettings();
+
 		//Base multipliers
 		public float DamageMultiplier = 1;
 		public float ManaCostMultiplier = 1;
@@ -101,6 +106,29 @@ namespace EoE.Combatery
 		public static bool HasCollisionMask(ColliderMask collisionMask, ColliderMask flag)
 		{
 			return (flag | collisionMask) == collisionMask;
+		}
+	}
+	[System.Serializable]
+	public class AttackChargeSettings
+	{
+		public AttackChargeEffectMask EffectMask = AttackChargeEffectMask.Damage | AttackChargeEffectMask.Knockback;
+
+		public float AnimationChargeStartpoint = 0.1f;
+		public float ChargeTime = 1;
+		public float StartCharge = 0;
+		public bool ApplyMoveStunWhileCharging = false;
+		public bool WaitAtFullChargeForRelease = true;
+		public float MinRequiredCharge = 0.1f;
+
+		//FX
+		public CustomFXObject[] FXObjects = new CustomFXObject[0];
+		public CustomFXObject[] FXObjectsWithMutliplier = new CustomFXObject[0];
+
+		//Buffs
+		public Buff[] BuffOnUserWhileCharging = new Buff[0];
+		public bool HasMaskFlag(AttackChargeEffectMask flag)
+		{
+			return (flag | EffectMask) == EffectMask;
 		}
 	}
 	[System.Serializable]

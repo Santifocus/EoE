@@ -26,19 +26,19 @@ namespace EoE.Information
 			LevelingSettings settings = target as LevelingSettings;
 
 			Header("Curve: (x^2 * a) + (x * b) + (c)", 1, false);
-			if (IntField(new GUIContent("Test Level", "Input a level to find out what amount of souls is required to reach it."), ref testInput, 1) || needsToCalculateTestValue)
+			if (IntField(new GUIContent("Test Level", "Input a level to find out what amount of Experience that is required to reach it."), ref testInput, 1) || needsToCalculateTestValue)
 			{
 				needsToCalculateTestValue = false;
-				testOutput = settings.curve.GetRequiredSouls(testInput).ToString();
+				testOutput = settings.curve.GetRequiredExperience(testInput).ToString();
 			}
-			Header("Required Souls: " + testOutput, 1, false, false);
+			Header("Required Experience: " + testOutput, 1, false, false);
 
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			bool changed = false;
 			changed |= DoubleField(new GUIContent("A", "Value of a in (x^2) * a."), ref settings.curve.a, 1);
 			changed |= DoubleField(new GUIContent("B", "Value of b in x * b."), ref settings.curve.b, 1);
 			changed |= DoubleField(new GUIContent("C", "Value of c."), ref settings.curve.c, 1);
-			Header("Souls(x) = (x^2 * " + settings.curve.a + ") + (x * " + settings.curve.b + ") + (" + settings.curve.c + ")", 1, false);
+			Header("Experience(x) = (x^2 * " + settings.curve.a + ") + (x * " + settings.curve.b + ") + (" + settings.curve.c + ")", 1, false);
 			if (changed)
 				needsToCalculateTestValue = true;
 

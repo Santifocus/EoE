@@ -14,7 +14,7 @@ namespace EoE.Information
 		public ElementType EntitieElement = ElementType.None;
 		public DropTable PossibleDropsTable = null;
 		public LevelingSettings LevelSettings = null;
-		public int SoulWorth = 10;
+		public int ExperienceWorth = 10;
 
 		//Basic Combat Data
 		public float BaseAttackDamage = 4;

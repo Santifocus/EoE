@@ -36,6 +36,8 @@ namespace EoE.Information
 			PlayerSettings settings = target as PlayerSettings;
 
 			FloatField(new GUIContent("Camera to Player Distance", "How far from the Player should the camera be?"), ref settings.CameraToPlayerDistance, 1);
+			FloatField(new GUIContent("Camera Y Lerp Speed"), ref settings.CameraYLerpSpeed, 1);
+			FloatField(new GUIContent("Camera Y Lerp Sring Stiffness"), ref settings.CameraYLerpSringStiffness, 1);
 			Vector3Field(new GUIContent("Camera Anchor Offset", "The anchor off the camera will be offset by this amount."), ref settings.CameraAnchorOffset, 1);
 			Vector3Field(new GUIContent("Camera Anchor Offset When Targeting", "The anchor off the camera will be offset by this amount when the player is targeting something."), ref settings.CameraAnchorOffsetWhenTargeting, 1);
 			Vector2Field(new GUIContent("Camera Rotation Power", "The amount of rotation that will be added when the player tries to rotate the camera."), ref settings.CameraRotationPower, 1);
@@ -134,8 +136,8 @@ namespace EoE.Information
 			PlayerSettings settings = target as PlayerSettings;
 
 			FloatField(new GUIContent("Max Side Turn"), ref settings.MaxModelTilt, 1);
-			FloatField(new GUIContent("Side Turn Lerp Speed"), ref settings.SideTurnLerpSpeed, 1);
-			FloatField(new GUIContent("Spring Lerp Stiffness"), ref settings.SpringLerpStiffness, 1);
+			FloatField(new GUIContent("Side Turn Lerp Speed"), ref settings.SideTurnSpringLerpSpeed, 1);
+			FloatField(new GUIContent("Spring Lerp Stiffness"), ref settings.SideTurnLerpSpringStiffness, 1);
 		}
 		private void FXSettingsArea()
 		{

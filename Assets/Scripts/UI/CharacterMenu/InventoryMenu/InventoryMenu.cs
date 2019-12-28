@@ -1,21 +1,23 @@
 ﻿using EoE.Controlls;
 using EoE.Entities;
 using EoE.Information;
-using EoE.Sounds;
-using System.Collections.Generic;
+using EoE.Sounds;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using EoE.Events;
 
 namespace EoE.UI
 {
 	public class InventoryMenu : CharacterMenuPage
 	{
-		private const float NAV_COOLDOWN = 0.15f;
 		[SerializeField] private InventorySlot slotPrefab = default;
 		[SerializeField] private GridLayoutGroup slotGrid = default;
 		[SerializeField] private ItemAction[] itemActions = default;
 		[SerializeField] private DropMenu dropMenu = default;
 		[SerializeField] private ItemDescriptionDisplay itemDescriptionDisplay = default;
+		[SerializeField] private TextMeshProUGUI currencyDisplay = default;
 
 		[SerializeField] private Image equippedWeaponDisplay = default;
 		[SerializeField] private Image equippedArmorDisplay = default;
@@ -42,8 +44,8 @@ namespace EoE.UI
 		protected override void Start()
 		{
 			base.Start();
-			slots = new InventorySlot[Player.Instance.Inventory.Lenght];
-			for (int i = 0; i < Player.Instance.Inventory.Lenght; i++)
+			slots = new InventorySlot[Player.Instance.Inventory.Length];
+			for (int i = 0; i < Player.Instance.Inventory.Length; i++)
 			{
 				InventorySlot newSlot = Instantiate(slotPrefab, slotGrid.transform);
 				newSlot.Setup(Player.Instance.Inventory, i);
@@ -52,6 +54,7 @@ namespace EoE.UI
 
 			dropMenu.Setup(this);
 			Player.Instance.Inventory.InventoryChanged += UpdateAllSlots;
+			EventManager.PlayerCurrencyChangedEvent += UpdateCurrencyDisplay;
 			UpdateAllSlots();
 		}
 		private void UpdateAllSlots()
@@ -70,6 +73,7 @@ namespace EoE.UI
 			if (dropMenuOpen)
 				HideDropMenu();
 			UpdateEquippedSlots();
+			UpdateCurrencyDisplay();
 		}
 		private void Update()
 		{
@@ -221,11 +225,10 @@ namespace EoE.UI
 		private int SlotsPerRow()
 		{
 			float slotWidht = slotGrid.cellSize.x + slotGrid.spacing.x;
-			float gridWidht = (slotGrid.transform as RectTransform).rect.width - slotGrid.padding.horizontal + slotGrid.spacing.x; //Have to add cellspacing once
+			float gridWidht = (slotGrid.transform as RectTransform).rect.width - slotGrid.padding.horizontal + slotGrid.spacing.x;
 
 			return Mathf.FloorToInt(gridWidht / slotWidht);
 		}
-
 		private void MenuEnter()
 		{
 			if (actionMenuOpen)
@@ -396,7 +399,6 @@ namespace EoE.UI
 					equippedSpellDisplays[i].color = Color.clear;
 				}
 			}
-
 			for (int i = 0; i < equippedItemDisplays.Length; i++)
 			{
 				if (Player.Instance.SelectableItems[i] != null)
@@ -437,12 +439,21 @@ namespace EoE.UI
 				actionMenuOpen = false;
 			}
 		}
-
+		private void UpdateCurrencyDisplay()
+		{
+			currencyDisplay.text = Player.Instance.CurrentCurrencyAmount.ToString();
+		}
 		protected override void DeactivatePage()
 		{
 			if (equipSlotsOpen)
 				(equippedItemsSelected ? equippedItemDisplays : equippedSpellDisplays)[equipedSlotIndex].DeSelect();
 			gameObject.SetActive(false);
+			dropMenu.Hide();
+		}
+		private void OnDestroy()
+		{
+			Player.Instance.Inventory.InventoryChanged -= UpdateAllSlots;
+			EventManager.PlayerCurrencyChangedEvent -= UpdateCurrencyDisplay;
 		}
 	}
 }

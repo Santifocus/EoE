@@ -162,8 +162,7 @@ namespace EoE.Entities
 				//Find a path
 				Vector3? destination = GetClosestPointOnNavmesh(lastConfirmedPlayerPos);
 
-				//TODO: Give a natural behaivior for when the Enemy cant reach the player but sees him
-				if (destination.HasValue && agent.CalculatePath(destination.Value, curPath) && curPath.status != NavMeshPathStatus.PathInvalid)
+				if (destination.HasValue && agent.enabled && agent.CalculatePath(destination.Value, curPath) && curPath.status != NavMeshPathStatus.PathInvalid)
 				{
 					agent.SetPath(curPath);
 					agent.stoppingDistance = enemySettings.AttackRange * 0.95f;
@@ -264,7 +263,7 @@ namespace EoE.Entities
 		{
 			if (!state)
 				agent.velocity = Vector3.zero;
-			if (agent.isStopped == state)
+			if (agent.enabled && agent.isStopped == state)
 				agent.isStopped = !state;
 		}
 		private bool WanderAround()

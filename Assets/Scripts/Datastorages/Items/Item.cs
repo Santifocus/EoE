@@ -25,6 +25,7 @@ namespace EoE.Information
 		public bool RemoveOnUse;
 		public GameObject ItemModel;
 		public int MaxStack = 1;
+		public int ItemWorth = 10;
 
 		//Internal
 		public float curCooldown { get; set; }

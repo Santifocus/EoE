@@ -850,7 +850,8 @@ namespace EoE
 			{
 				if (SoundEffectInfo.FollowTarget && parent)
 				{
-					soundPlayer.transform.position = parent.position + positionOffset;
+					Vector3 localOffset = positionOffset.x * soundPlayer.transform.right + positionOffset.y * soundPlayer.transform.up + positionOffset.z * soundPlayer.transform.forward;
+					soundPlayer.transform.position = parent.position + localOffset;
 				}
 				soundPlayer.FadePoint = GetCurMultiplier();
 
@@ -955,13 +956,13 @@ namespace EoE
 			{
 				if (ParticleEffectInfo.FollowTarget && parent)
 				{
-					particleTransform.position = parent.position + positionOffset;
-
 					if (ParticleEffectInfo.InheritRotationOfTarget)
 					{
 						particleTransform.rotation = Quaternion.Lerp(particleTransform.rotation, parent.transform.rotation, Time.fixedDeltaTime * ParticleEffectInfo.RotationInheritLerpSpeed);
 						particleTransform.transform.eulerAngles += rotationOffset;
 					}
+					Vector3 localOffset = positionOffset.x * particleTransform.right + positionOffset.y * particleTransform.up + positionOffset.z * particleTransform.forward;
+					particleTransform.position = parent.position + localOffset;
 				}
 				UpdateEmission();
 			}
@@ -1090,9 +1091,9 @@ namespace EoE
 		public abstract FXType Type { get; }
 		public abstract FXObject BaseInfo { get; }
 		public bool ShouldBeRemoved { get; private set; }
+		public float baseMultiplier;
 
 		protected Transform parent;
-		private float baseMultiplier;
 
 		protected FXState currentState { get; private set; }
 		protected float timeStepMultiplier = 1;

@@ -21,7 +21,7 @@ namespace EoE.Entities
 
 		[Space(10)]
 		[Header("Requirements")]
-		[SerializeField] private int requiredSouls = 0;
+		[SerializeField] private int requiredExperience = 0;
 		[SerializeField] private RequiredItem[] requiredItems = default;
 
 		private bool transitioning;
@@ -35,8 +35,8 @@ namespace EoE.Entities
 		protected override void Interact()
 		{
 			//If the door is transitioning we cant interact with it
-			//We also check if the required soulcount is reached
-			if (transitioning || Player.Instance.TotalSoulCount < requiredSouls)
+			//We also check if the required Experience is reached
+			if (transitioning || Player.Instance.TotalExperience < requiredExperience)
 				return;
 
 			//First check if the player has the required items

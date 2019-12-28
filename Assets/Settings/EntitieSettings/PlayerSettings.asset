@@ -17,7 +17,7 @@ MonoBehaviour:
   EntitieElement: 1
   PossibleDropsTable: {fileID: 0}
   LevelSettings: {fileID: 11400000, guid: f274dc43aa7e69e4db13a311b4ea6d9e, type: 2}
-  SoulWorth: 10
+  ExperienceWorth: 10
   BaseAttackDamage: 2
   BaseMagicDamage: 2
   BaseDefense: 2
@@ -41,8 +41,10 @@ MonoBehaviour:
   NoMoveDeceleration: 3
   InAirAccelerationMultiplier: 0.3
   CameraToPlayerDistance: 7
-  CameraAnchorOffset: {x: 0, y: 1.6, z: 0}
-  CameraAnchorOffsetWhenTargeting: {x: 2, y: 2, z: 0}
+  CameraYLerpSpeed: 15
+  CameraYLerpSringStiffness: 0.3
+  CameraAnchorOffset: {x: 0, y: 1.4, z: 0}
+  CameraAnchorOffsetWhenTargeting: {x: 1.4, y: 1.7, z: 0}
   CameraRotationPower: {x: 200, y: -75}
   CameraRotationSpeed: 7
   CameraVerticalAngleClamps: {x: -50, y: 50}
@@ -59,7 +61,7 @@ MonoBehaviour:
   JumpEnduranceCost: 3
   RunEnduranceCost: 5
   JumpPower: {x: 0, y: 10, z: 15}
-  JumpImpulsePower: 3
+  JumpImpulsePower: 1.75
   JumpBackwardMultiplier: 0.65
   DodgePower: 5
   DodgeDuration: 0.15
@@ -79,13 +81,13 @@ MonoBehaviour:
   - Item: {fileID: 11400000, guid: 4389e543531ad0d4c91543a950d48174, type: 2}
     ItemCount: 1
     ForceEquip: 1
-  - Item: {fileID: 11400000, guid: 24bf8e4451a0cc84589f3c9af971978e, type: 2}
+  - Item: {fileID: 11400000, guid: 428f279ff073bb54c81150df9f36247e, type: 2}
     ItemCount: 1
     ForceEquip: 1
   InventorySize: 55
   MaxModelTilt: 8
-  SideTurnLerpSpeed: 13
-  SpringLerpStiffness: 0.1
+  SideTurnSpringLerpSpeed: 13
+  SideTurnLerpSpringStiffness: 0.1
   WalkAnimationLerpSpeed: 4
   EffectsOnCauseDamage:
   - {fileID: 11400000, guid: 597bda602a9441346a2e721049c28c87, type: 2}

@@ -34,7 +34,7 @@ namespace EoE.Information
 			if (!(target is PlayerSettings))
 			{
 				ObjectField(new GUIContent("Possible Drops", "When the Entitie dies, this DropTable will be used for calculation of what to drop. If there is no DropTable nothing will be dropped."), ref settings.PossibleDropsTable, 1);
-				IntField(new GUIContent("Soul Worth", "How many Souls should this Entitie Drop on death?"), ref settings.SoulWorth, 1);
+				IntField(new GUIContent("Experience Worth", "How many Experience should this Entitie dsrop on death?"), ref settings.ExperienceWorth, 1);
 			}
 		}
 

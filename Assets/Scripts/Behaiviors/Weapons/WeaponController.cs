@@ -1,4 +1,5 @@
-﻿using EoE.Entities;
+﻿using EoE.Controlls;
+using EoE.Entities;
 using EoE.Information;
 using EoE.UI;
 using System.Collections;
@@ -29,6 +30,8 @@ namespace EoE.Combatery
 
 		//Behaivior Control
 		private bool colliderActive;
+		private bool isChargingAttack;
+		private float curChargeMultiplier;
 		private bool wantsToBeginNextSequence;
 		private Weapon weaponInfo;
 		private List<Collider> ignoredColliders = new List<Collider>();
@@ -39,6 +42,10 @@ namespace EoE.Combatery
 		private float timeToNextCombo;
 		private List<FXInstance> comboBoundFX = new List<FXInstance>();
 		private List<BuffInstance> comboBoundBuffs = new List<BuffInstance>();
+
+		private FXInstance[] chargeBoundFX;
+		private FXInstance[] chargeBoundFXMultiplied;
+		private BuffInstance[] chargeBoundBuffs;
 
 		#endregion
 		#region Setups
@@ -146,7 +153,7 @@ namespace EoE.Combatery
 
 			if (InAttackSequence)
 			{
-				if (curAttackAnimationPoint > COMBO_WAIT_THRESHOLD)
+				if (curAttackAnimationPoint > COMBO_WAIT_THRESHOLD && !isChargingAttack)
 					wantsToBeginNextSequence = true;
 				return;
 			}
@@ -219,6 +226,7 @@ namespace EoE.Combatery
 				float animationTime = animationDelayLookup[ActiveAttackStyle.AnimationTarget].Item1;
 				float animationActivationDelay = animationDelayLookup[ActiveAttackStyle.AnimationTarget].Item2;
 				float animationTimer = 0;
+				curChargeMultiplier = ActiveAttackStyle.ChargeSettings.StartCharge;
 				curAttackAnimationPoint = 0;
 				ChangeWeaponState(false, null);
 
@@ -283,6 +291,80 @@ namespace EoE.Combatery
 						}
 					}
 
+					//Check if this attackstyle charges, if so then we check if we crossed the point at which the charging should start
+					if (ActiveAttackStyle.NeedsCharging)
+					{
+						if ((ActiveAttackStyle.ChargeSettings.AnimationChargeStartpoint >= smallerPoint) && (ActiveAttackStyle.ChargeSettings.AnimationChargeStartpoint < biggerPoint))
+						{
+							//Setup charge time and apply stun if enabled
+							float chargeTime = curChargeMultiplier * ActiveAttackStyle.ChargeSettings.ChargeTime;
+
+							//Setup effects of charge
+							if(ActiveAttackStyle.ChargeSettings.ApplyMoveStunWhileCharging)
+								Player.Instance.AppliedMoveStuns++;
+
+							//FX
+							chargeBoundFX = new FXInstance[ActiveAttackStyle.ChargeSettings.FXObjects.Length];
+							for (int i = 0; i < chargeBoundFX.Length; i++)
+							{
+								chargeBoundFX[i] = FXManager.PlayFX(ActiveAttackStyle.ChargeSettings.FXObjects[i], transform, true, curChargeMultiplier);
+							}
+
+							chargeBoundFXMultiplied = new FXInstance[ActiveAttackStyle.ChargeSettings.FXObjectsWithMutliplier.Length];
+							for (int i = 0; i < chargeBoundFXMultiplied.Length; i++)
+							{
+								chargeBoundFXMultiplied[i] = FXManager.PlayFX(ActiveAttackStyle.ChargeSettings.FXObjectsWithMutliplier[i], transform, true, curChargeMultiplier);
+							}
+
+							//Buff
+							chargeBoundBuffs = new BuffInstance[ActiveAttackStyle.ChargeSettings.BuffOnUserWhileCharging.Length];
+							for (int i = 0; i < chargeBoundBuffs.Length; i++)
+							{
+								chargeBoundBuffs[i] = Player.Instance.AddBuff(ActiveAttackStyle.ChargeSettings.BuffOnUserWhileCharging[i], Player.Instance);
+							}
+
+							//Begin the charging
+							SetAnimationSpeed(0);
+							isChargingAttack = true;
+							while (curChargeMultiplier < 1 || (ActiveAttackStyle.ChargeSettings.WaitAtFullChargeForRelease && InputController.Attack.Pressed))
+							{
+								yield return new WaitForEndOfFrame();
+								if (GameController.GameIsPaused || (curChargeMultiplier >= 1 && InputController.Attack.Pressed))
+									continue;
+
+								if (InputController.Attack.Pressed)
+								{
+									chargeTime += Time.deltaTime;
+									curChargeMultiplier = chargeTime / ActiveAttackStyle.ChargeSettings.ChargeTime;
+									if (curChargeMultiplier > 1)
+										curChargeMultiplier = 1;
+
+									//Update multipliers of FX
+									for (int i = 0; i < chargeBoundFXMultiplied.Length; i++)
+									{
+										chargeBoundFXMultiplied[i].baseMultiplier = curChargeMultiplier;
+									}
+								}
+								else
+								{
+									if (curChargeMultiplier < ActiveAttackStyle.ChargeSettings.MinRequiredCharge)
+									{
+										RemoveChargeBoundEffects();
+										goto AttackFinished;
+									}
+									else
+									{
+										break;
+									}
+								}
+							}
+
+							//Reset to the previous state
+							RemoveChargeBoundEffects();
+							SetAnimationSpeed(multiplier);
+						}
+					}
+
 				} while (((curAttackAnimationPoint > 0 || multiplier > 0) && (curAttackAnimationPoint < 1)) || GameController.GameIsPaused);
 
 				//Debug for attackstyle end
@@ -325,6 +407,7 @@ namespace EoE.Combatery
 				break;
 			}
 
+		AttackFinished:;
 			if (ActiveAttackStyle.StopMovement)
 				Player.Instance.AppliedMoveStuns--;
 
@@ -345,11 +428,13 @@ namespace EoE.Combatery
 				Entitie hitEntitie = hit.gameObject.GetComponent<Entitie>();
 				if (ActiveAttackStyle.DirectHit)
 				{
+
+					float chargeMultiplier = ActiveAttackStyle.NeedsCharging ? curChargeMultiplier : 1;
 					EffectOverrides overrides = new EffectOverrides()
 					{
-						ExtraDamageMultiplier = ActiveAttackStyle.DamageMultiplier,
-						ExtraCritChanceMultiplier = ActiveAttackStyle.CritChanceMultiplier,
-						ExtraKnockbackMultiplier = ActiveAttackStyle.KnockbackMultiplier,
+						ExtraDamageMultiplier = ActiveAttackStyle.DamageMultiplier * (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.Damage) ? chargeMultiplier : 1),
+						ExtraCritChanceMultiplier = ActiveAttackStyle.CritChanceMultiplier * (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.CritChance) ? chargeMultiplier : 1),
+						ExtraKnockbackMultiplier = ActiveAttackStyle.KnockbackMultiplier * (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.Knockback) ? chargeMultiplier : 1),
 						OverridenElement = ActiveAttackStyle.OverrideElement ? ((ElementType?)ActiveAttackStyle.OverridenElement) : null,
 						OverridenCauseType = ActiveAttackStyle.OverrideCauseType ? ((CauseType?)ActiveAttackStyle.OverridenCauseType) : null
 					};
@@ -379,7 +464,7 @@ namespace EoE.Combatery
 
 		private void ComboHit(Entitie hitEntitie, Vector3 direction, Vector3 hitPos)
 		{
-			int newComboAmount = curCombo + ActiveAttackStyle.OnHitComboWorth;
+			int newComboAmount = curCombo + Mathf.RoundToInt(ActiveAttackStyle.OnHitComboWorth * (ActiveAttackStyle.NeedsCharging ? (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.ComboWorth) ? curChargeMultiplier : 1) : 1));
 			timeToNextCombo = ActiveAttackStyle.ComboIncreaseMaxDelay;
 
 			for (int i = 0; i < weaponInfo.ComboEffects.ComboData.Length; i++)
@@ -440,7 +525,51 @@ namespace EoE.Combatery
 				Player.Instance.RemoveBuff(comboBoundBuffs[i]);
 			}
 			comboBoundBuffs = new List<BuffInstance>();
-			ComboDisplayController.Instance.ResetCombo(weaponInfo.ComboEffects);
+			ComboDisplayController.Instance?.ResetCombo(weaponInfo.ComboEffects);
+		}
+		private void RemoveChargeBoundEffects()
+		{
+			isChargingAttack = false;
+			if (ActiveAttackStyle.ChargeSettings.ApplyMoveStunWhileCharging)
+				Player.Instance.AppliedMoveStuns--;
+
+			for (int i = 0; i < chargeBoundFX.Length; i++)
+			{
+				chargeBoundFX[i].FinishFX();
+			}
+			for (int i = 0; i < chargeBoundFXMultiplied.Length; i++)
+			{
+				chargeBoundFXMultiplied[i].FinishFX();
+			}
+			for (int i = 0; i < chargeBoundBuffs.Length; i++)
+			{
+				Player.Instance.RemoveBuff(chargeBoundBuffs[i]);
+			}
+
+			chargeBoundFX = null;
+			chargeBoundFXMultiplied = null;
+			chargeBoundBuffs = null;
+		}
+
+		private void OnDestroy()
+		{
+			if (this != PlayerWeaponController)
+			{
+				Debug.Log("Here");
+				return;
+			}
+			ComboFinish();
+			if(ActiveAttackStyle != null)
+			{
+				if(ActiveAttackStyle.StopMovement)
+					Player.Instance.AppliedMoveStuns--;
+
+				SetAnimationSpeed(1);
+				Player.Instance.animationControl.SetBool("InFight", false);
+
+				if (isChargingAttack)
+					RemoveChargeBoundEffects();
+			}
 		}
 
 		private void SetAnimationSpeed(float speed) => Player.Instance.animationControl.SetFloat("AttackAnimationSpeed", speed);

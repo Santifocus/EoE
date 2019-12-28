@@ -15,6 +15,7 @@ namespace EoE.UI
 		[SerializeField] private Image equippedIcon = default;
 
 		[Space(10)]
+		[Header("Item Type Icons")]
 		[SerializeField] private Sprite weaponItemIcon = default;
 		[SerializeField] private Sprite armorItemIcon = default;
 		[SerializeField] private Sprite spellItemIcon = default;

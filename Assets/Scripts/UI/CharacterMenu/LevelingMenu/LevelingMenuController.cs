@@ -10,7 +10,6 @@ namespace EoE.UI
 	public class LevelingMenuController : CharacterMenuPage
 	{
 		//Inspector Variables
-		[SerializeField] private float navigationCooldown = 0.2f;
 		[SerializeField] private CMenuItem[] menuItems = default;
 
 		[SerializeField] private Color remainingSkillpoints = Color.cyan;
@@ -78,7 +77,7 @@ namespace EoE.UI
 
 			if (InputController.MenuDown.Down || (InputController.MenuDown.Active && curNavigationCooldown <= 0))
 			{
-				curNavigationCooldown = navigationCooldown;
+				curNavigationCooldown = NAV_COOLDOWN;
 
 				navigationIndex++;
 				if (navigationIndex == menuItems.Length)
@@ -90,7 +89,7 @@ namespace EoE.UI
 			}
 			else if (InputController.MenuUp.Down || (InputController.MenuUp.Active && curNavigationCooldown <= 0))
 			{
-				curNavigationCooldown = navigationCooldown;
+				curNavigationCooldown = NAV_COOLDOWN;
 
 				navigationIndex--;
 				if (navigationIndex == -1)

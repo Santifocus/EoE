@@ -23,7 +23,7 @@ namespace EoE.Events
 		//Player Dashed
 		public delegate void PlayerDodge();
 		public static PlayerDodge PlayerDodgeEvent;
-		public static void PlayerDodgeInvoke()
+		public static void PlayerDashInvoke()
 		{
 			PlayerDodgeEvent?.Invoke();
 		}
@@ -36,12 +36,20 @@ namespace EoE.Events
 			PlayerCausedDamageEvent?.Invoke(receiver, wasCrit);
 		}
 
-		//Player Soulcount changed
-		public delegate void PlayerSoulCountChanged();
-		public static PlayerSoulCountChanged PlayerSoulCountChangedEvent;
-		public static void PlayerSoulCountChangedInvoke()
+		//Player Experience changed
+		public delegate void PlayerExperienceChanged();
+		public static PlayerExperienceChanged PlayerExperienceChangedEvent;
+		public static void PlayerExperienceChangedInvoke()
 		{
-			PlayerSoulCountChangedEvent?.Invoke();
+			PlayerExperienceChangedEvent?.Invoke();
+		}
+
+		//Player Currency changed
+		public delegate void PlayerCurrencyChanged();
+		public static PlayerCurrencyChanged PlayerCurrencyChangedEvent;
+		public static void PlayerCurrencyChangedInvoke()
+		{
+			PlayerCurrencyChangedEvent?.Invoke();
 		}
 
 		//Player Levelup

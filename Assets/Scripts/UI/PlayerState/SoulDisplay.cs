@@ -26,14 +26,14 @@ namespace EoE.UI
 
 		private void Start()
 		{
-			EventManager.PlayerSoulCountChangedEvent += PlayerSoulCountChanged;
-			soulsToLevelup = Player.Instance.RequiredSoulsForLevel;
-			shownSoulCount = Player.Instance.TotalSoulCount;
+			EventManager.PlayerExperienceChangedEvent += PlayerSoulCountChanged;
+			soulsToLevelup = Player.Instance.RequiredExperienceForLevel;
+			shownSoulCount = Player.Instance.TotalExperience;
 			textAmount.text = Mathf.CeilToInt(shownSoulCount) + " / " + soulsToLevelup;
 		}
 		private void OnDestroy()
 		{
-			EventManager.PlayerSoulCountChangedEvent -= PlayerSoulCountChanged;
+			EventManager.PlayerExperienceChangedEvent -= PlayerSoulCountChanged;
 		}
 		private void PlayerSoulCountChanged()
 		{
@@ -52,18 +52,18 @@ namespace EoE.UI
 
 				if (textTransition.trueState)
 				{
-					shownSoulCount = Mathf.Lerp(shownSoulCount, Player.Instance.TotalSoulCount, Time.unscaledDeltaTime * updateSoulCountSpeed);
+					shownSoulCount = Mathf.Lerp(shownSoulCount, Player.Instance.TotalExperience, Time.unscaledDeltaTime * updateSoulCountSpeed);
 					if (Mathf.CeilToInt(shownSoulCount) >= soulsToLevelup)
 					{
-						soulsToLevelup = Player.Instance.RequiredSoulsForLevel;
+						soulsToLevelup = Player.Instance.RequiredExperienceForLevel;
 					}
 					textAmount.text = Mathf.CeilToInt(shownSoulCount) + " / " + soulsToLevelup;
 				}
 			}
 			else if (!textTransition.trueState)
 			{
-				soulsToLevelup = Player.Instance.RequiredSoulsForLevel;
-				shownSoulCount = Player.Instance.TotalSoulCount;
+				soulsToLevelup = Player.Instance.RequiredExperienceForLevel;
+				shownSoulCount = Player.Instance.TotalExperience;
 				textAmount.text = Mathf.CeilToInt(shownSoulCount) + " / " + soulsToLevelup;
 			}
 			UpdateIconTransition();

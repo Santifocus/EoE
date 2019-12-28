@@ -122,7 +122,7 @@ MonoBehaviour:
       OverrideTextPunch: 1
       TextPunch: 100
       PunchResetSpeed: 0.5
-      EffectOnTarget: {fileID: 11400000, guid: 675729bc8b0983b4c9029cfb6b566fb3, type: 2}
+      EffectOnTarget: {fileID: 0}
       EffectAOE: {fileID: 0}
       HealEffects: []
       EffectsTillComboEnds:

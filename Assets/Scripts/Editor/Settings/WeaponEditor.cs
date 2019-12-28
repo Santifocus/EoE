@@ -161,6 +161,17 @@ namespace EoE.Combatery
 						style.AnimationSpeedCurveTimeframe = Mathf.Max(style.AnimationSpeedCurveTimeframe, 0);
 					}
 				}
+
+				//Charging
+				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+				Header("Charge Settings", offSet);
+				BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.NeedsCharging))), ref style.NeedsCharging, offSet + 1);
+				if (style.NeedsCharging)
+				{
+					SerializedProperty chargeProperty = styleProperty.FindPropertyRelative(nameof(style.ChargeSettings));
+					DrawChargeSettings(style.ChargeSettings, chargeProperty, offSet + 1);
+				}
+
 				//Multipliers
 				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 				Header("Multiplier Settings", offSet);
@@ -237,6 +248,36 @@ namespace EoE.Combatery
 				{
 					return index + ". Combo";
 				}
+			}
+		}
+		private void DrawChargeSettings(AttackChargeSettings settings, SerializedProperty settingsProperty, int offSet)
+		{
+			FoldoutFromSerializedProperty(new GUIContent("Charge Settings"), settingsProperty, offSet);
+			if (settingsProperty.isExpanded)
+			{
+				EnumFlagField<AttackChargeEffectMask>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectMask))), ref settings.EffectMask, offSet + 1);
+
+				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationChargeStartpoint))), ref settings.AnimationChargeStartpoint, 0, 1, offSet + 1);
+				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ChargeTime))), ref settings.ChargeTime, offSet + 1);
+				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartCharge))), ref settings.StartCharge, 0, 1, offSet + 1);
+
+				BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ApplyMoveStunWhileCharging))), ref settings.ApplyMoveStunWhileCharging, offSet + 1);
+				BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WaitAtFullChargeForRelease))), ref settings.WaitAtFullChargeForRelease, offSet + 1);
+				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MinRequiredCharge))), ref settings.MinRequiredCharge, 0, 1, offSet + 1);
+
+				//FX
+				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+				SerializedProperty fxProperty = settingsProperty.FindPropertyRelative(nameof(settings.FXObjects));
+				DrawCustomFXObjectArray(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.FXObjects))), ref settings.FXObjects, fxProperty, offSet + 1);
+
+				SerializedProperty fxMultipliedProperty = settingsProperty.FindPropertyRelative(nameof(settings.FXObjectsWithMutliplier));
+				DrawCustomFXObjectArray(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.FXObjectsWithMutliplier))), ref settings.FXObjectsWithMutliplier, fxMultipliedProperty, offSet + 1);
+
+				//Buffs
+				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+				SerializedProperty buffProperty = settingsProperty.FindPropertyRelative(nameof(settings.BuffOnUserWhileCharging));
+				ObjectArrayField<Buff>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BuffOnUserWhileCharging))), ref settings.BuffOnUserWhileCharging, buffProperty, new GUIContent(". Buff"), offSet + 1);
 			}
 		}
 		private void DrawAttackEffect(AttackEffect effect, SerializedProperty effectProperty, int index, int offSet)

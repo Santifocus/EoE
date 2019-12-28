@@ -29,7 +29,7 @@ namespace EoE.UI
 		[SerializeField] private TextMeshProUGUI atkDisplay = default;
 		[SerializeField] private TextMeshProUGUI mgaDisplay = default;
 		[SerializeField] private TextMeshProUGUI skillpointDisplay = default;
-		[SerializeField] private TextMeshProUGUI soulCountDisplay = default;
+		[SerializeField] private TextMeshProUGUI experienceDisplay = default;
 
 		private bool playerModelSetup;
 		private Transform cameraAnchor;
@@ -64,8 +64,6 @@ namespace EoE.UI
 				SetupPlayerModel();
 
 			UpdateStatDisplay();
-			UpdateSprites();
-
 			ResetPlayerModel();
 		}
 
@@ -80,11 +78,7 @@ namespace EoE.UI
 			mgaDisplay.text = Player.Instance.curMagicalDamage.ToString();
 
 			skillpointDisplay.text = Player.Instance.AvailableSkillPoints + " | " + Player.Instance.AvailableAtributePoints;
-			soulCountDisplay.text = Player.Instance.TotalSoulCount + " / " + Player.Instance.RequiredSoulsForLevel;
-		}
-		private void UpdateSprites()
-		{
-
+			experienceDisplay.text = Player.Instance.TotalExperience + " / " + Player.Instance.RequiredExperienceForLevel;
 		}
 		private void ResetPlayerModel()
 		{

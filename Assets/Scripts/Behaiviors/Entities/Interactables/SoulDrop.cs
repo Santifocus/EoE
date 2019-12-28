@@ -44,7 +44,7 @@ namespace EoE.Entities
 		}
 		protected override void Interact()
 		{
-			Player.Instance.AddSouls(soulCount);
+			Player.Instance.AddExperience(soulCount);
 			infoSign.gameObject.SetActive(false);
 
 			for (int i = 0; i < EffectsOnInteract.Length; i++)

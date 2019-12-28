@@ -47,7 +47,7 @@
 			public double b = 1;
 			public double c = 1;
 
-			public int GetRequiredSouls(int x)
+			public int GetRequiredExperience(int x)
 			{
 				double value = (x * x) * a + x * b + c;
 				return (int)value;

@@ -7,9 +7,9 @@ namespace EoE.Information
 	public class Inventory
 	{
 		private InventoryItem[] containedItems;
-		public InventoryItem this[int index] { get { if (index < 0 || index > Lenght) return null; else return containedItems[index]; } }
+		public InventoryItem this[int index] { get { if (index < 0 || index > Length) return null; else return containedItems[index]; } }
 		public int inventorySize;
-		public int Lenght { get => inventorySize; set => ChangeSize(value); }
+		public int Length { get => inventorySize; set => ChangeSize(value); }
 
 		public delegate void InventoryUpdate();
 		public InventoryUpdate InventoryChanged;
@@ -38,7 +38,7 @@ namespace EoE.Information
 		public InventoryAddability CheckAddablity(InventoryItem item)
 		{
 			int remainingStack = item.stackSize;
-			for (int i = 0; i < Lenght; i++)
+			for (int i = 0; i < Length; i++)
 			{
 				if (containedItems[i] == null)
 				{
@@ -63,7 +63,7 @@ namespace EoE.Information
 			bool changed = false;
 			List<int> targetSlots = new List<int>();
 			//Try to add item to incomplete stacks
-			for (int i = 0; i < Lenght; i++)
+			for (int i = 0; i < Length; i++)
 			{
 				//Is there a item in this slot? If so is it the same type as the one we are trying to add? If either is false goto the next slot
 				if (containedItems[i] == null || containedItems[i].data != toAdd.data)
@@ -92,7 +92,7 @@ namespace EoE.Information
 			}
 
 			//Still something of the stack left? Try to add it to open slots
-			for (int i = 0; i < Lenght; i++)
+			for (int i = 0; i < Length; i++)
 			{
 				if (containedItems[i] == null)
 				{
@@ -121,7 +121,7 @@ namespace EoE.Information
 		public void RemoveStackSize(Item data, int stackSize)
 		{
 			bool changed = false;
-			for (int i = Lenght - 1; i >= 0; i--)
+			for (int i = Length - 1; i >= 0; i--)
 			{
 				if (containedItems[i] != null && containedItems[i].data == data)
 				{
@@ -150,7 +150,7 @@ namespace EoE.Information
 		}
 		public void RemoveInventoryItem(InventoryItem item)
 		{
-			for (int i = 0; i < Lenght; i++)
+			for (int i = 0; i < Length; i++)
 			{
 				if (containedItems[i] == item)
 				{
@@ -163,7 +163,7 @@ namespace EoE.Information
 		}
 		public void RemoveInventoryItem(InventoryItem item, int stackSize)
 		{
-			for (int i = 0; i < Lenght; i++)
+			for (int i = 0; i < Length; i++)
 			{
 				if (containedItems[i] == item)
 				{
@@ -180,7 +180,7 @@ namespace EoE.Information
 		}
 		public bool Contains(Item type, int stack = 1)
 		{
-			for (int i = 0; i < Lenght; i++)
+			for (int i = 0; i < Length; i++)
 			{
 				if (containedItems[i] != null && containedItems[i].data == type)
 				{
@@ -194,7 +194,7 @@ namespace EoE.Information
 		}
 		public void ClearSlot(int index)
 		{
-			if (index < 0 || index >= Lenght)
+			if (index < 0 || index >= Length)
 				return;
 
 			if (containedItems[index] != null)
@@ -206,7 +206,7 @@ namespace EoE.Information
 		}
 		public void Empty()
 		{
-			for (int i = 0; i < Lenght; i++)
+			for (int i = 0; i < Length; i++)
 			{
 				if (containedItems[i] != null)
 				{
@@ -219,7 +219,7 @@ namespace EoE.Information
 		public void ForceUpdate()
 		{
 			//Make sure that all items that have 0 in stacksize will be deleted
-			for (int i = 0; i < Lenght; i++)
+			for (int i = 0; i < Length; i++)
 			{
 				if (containedItems[i] != null && containedItems[i].stackSize <= 0)
 				{
@@ -233,18 +233,18 @@ namespace EoE.Information
 		{
 			string fullString = "";
 
-			for (int i = 0; i < Lenght; i++)
+			for (int i = 0; i < Length; i++)
 			{
 				if (containedItems[i] != null)
 				{
 					fullString += i + ": " + containedItems[i].stackSize + "x " + containedItems[i].data.ItemName;
-					if (i != Lenght - 1)
+					if (i != Length - 1)
 						fullString += ", ";
 				}
 				else
 				{
 					fullString += i + ": Empty";
-					if (i != Lenght - 1)
+					if (i != Length - 1)
 						fullString += ", ";
 				}
 			}

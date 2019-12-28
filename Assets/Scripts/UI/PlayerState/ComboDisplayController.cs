@@ -107,5 +107,9 @@ namespace EoE.UI
 			curPunchPower = punchPower;
 			curPunchResetTime = punchResetTime;
 		}
+		private void OnDestroy()
+		{
+			Instance = null;
+		}
 	}
 }

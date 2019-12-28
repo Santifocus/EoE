@@ -57,6 +57,18 @@ MonoBehaviour:
         m_RotationOrder: 4
       AnimationSpeedCurveTimeframe: 0.8
       AnimationSpeedCurveMultiplier: 1.3
+      NeedsCharging: 0
+      ChargeSettings:
+        EffectMask: 3
+        AnimationChargeStartpoint: 0.1
+        ChargeTime: 1
+        StartCharge: 0
+        ApplyMoveStunWhileCharging: 0
+        WaitAtFullChargeForRelease: 1
+        MinRequiredCharge: 0.1
+        FXObjects: []
+        FXObjectsWithMutliplier: []
+        BuffOnUserWhileCharging: []
       DamageMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
@@ -120,6 +132,18 @@ MonoBehaviour:
         m_RotationOrder: 4
       AnimationSpeedCurveTimeframe: 0.8
       AnimationSpeedCurveMultiplier: 1.2
+      NeedsCharging: 0
+      ChargeSettings:
+        EffectMask: 3
+        AnimationChargeStartpoint: 0.1
+        ChargeTime: 1
+        StartCharge: 0
+        ApplyMoveStunWhileCharging: 0
+        WaitAtFullChargeForRelease: 1
+        MinRequiredCharge: 0.1
+        FXObjects: []
+        FXObjectsWithMutliplier: []
+        BuffOnUserWhileCharging: []
       DamageMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
@@ -183,7 +207,33 @@ MonoBehaviour:
         m_RotationOrder: 4
       AnimationSpeedCurveTimeframe: 0.8
       AnimationSpeedCurveMultiplier: 1.5
-      DamageMultiplier: 1.8
+      NeedsCharging: 1
+      ChargeSettings:
+        EffectMask: 3
+        AnimationChargeStartpoint: 0.5
+        ChargeTime: 1
+        StartCharge: 0.1
+        ApplyMoveStunWhileCharging: 0
+        WaitAtFullChargeForRelease: 1
+        MinRequiredCharge: 0.45
+        FXObjects: []
+        FXObjectsWithMutliplier:
+        - FX: {fileID: 11400000, guid: b7ca0c9b1adf6044a871c15b7af6ea29, type: 2}
+          HasPositionOffset: 0
+          PositionOffset: {x: 0, y: 0, z: 0}
+          HasRotationOffset: 0
+          RotationOffset: {x: 0, y: 0, z: 0}
+          HasCustomScale: 0
+          CustomScale: {x: 1, y: 1, z: 1}
+        - FX: {fileID: 11400000, guid: a1ac14100d656c84e8006d4bc848efbd, type: 2}
+          HasPositionOffset: 0
+          PositionOffset: {x: 0, y: 0, z: 0}
+          HasRotationOffset: 0
+          RotationOffset: {x: 0, y: 0, z: 0}
+          HasCustomScale: 0
+          CustomScale: {x: 1, y: 1, z: 1}
+        BuffOnUserWhileCharging: []
+      DamageMultiplier: 3.5
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 2
       KnockbackMultiplier: 1
@@ -251,6 +301,18 @@ MonoBehaviour:
         m_RotationOrder: 4
       AnimationSpeedCurveTimeframe: 2
       AnimationSpeedCurveMultiplier: 2
+      NeedsCharging: 0
+      ChargeSettings:
+        EffectMask: 3
+        AnimationChargeStartpoint: 0.1
+        ChargeTime: 1
+        StartCharge: 0
+        ApplyMoveStunWhileCharging: 0
+        WaitAtFullChargeForRelease: 1
+        MinRequiredCharge: 0.1
+        FXObjects: []
+        FXObjectsWithMutliplier: []
+        BuffOnUserWhileCharging: []
       DamageMultiplier: 0.9
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
@@ -296,13 +358,22 @@ MonoBehaviour:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 1.5494843
-          inSlope: 0.0056241527
-          outSlope: 0.0056241527
+          value: 0.7
+          inSlope: -0.0033264423
+          outSlope: -0.0033264423
           tangentMode: 0
           weightedMode: 0
           inWeight: 0
-          outWeight: 0.095466584
+          outWeight: 0.28128314
+        - serializedVersion: 3
+          time: 0.22582532
+          value: 1.5417807
+          inSlope: 0.93828005
+          outSlope: 0.93828005
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.16418724
+          outWeight: 0.33333334
         - serializedVersion: 3
           time: 1
           value: 0.8
@@ -315,8 +386,20 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      AnimationSpeedCurveTimeframe: 0.5
+      AnimationSpeedCurveTimeframe: 0.75
       AnimationSpeedCurveMultiplier: 1.8
+      NeedsCharging: 0
+      ChargeSettings:
+        EffectMask: 3
+        AnimationChargeStartpoint: 0.1
+        ChargeTime: 1
+        StartCharge: 0
+        ApplyMoveStunWhileCharging: 0
+        WaitAtFullChargeForRelease: 1
+        MinRequiredCharge: 0.1
+        FXObjects: []
+        FXObjectsWithMutliplier: []
+        BuffOnUserWhileCharging: []
       DamageMultiplier: 1.2
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
@@ -384,6 +467,18 @@ MonoBehaviour:
         m_RotationOrder: 4
       AnimationSpeedCurveTimeframe: 2
       AnimationSpeedCurveMultiplier: 1.5
+      NeedsCharging: 0
+      ChargeSettings:
+        EffectMask: 3
+        AnimationChargeStartpoint: 0.1
+        ChargeTime: 1
+        StartCharge: 0
+        ApplyMoveStunWhileCharging: 0
+        WaitAtFullChargeForRelease: 1
+        MinRequiredCharge: 0.1
+        FXObjects: []
+        FXObjectsWithMutliplier: []
+        BuffOnUserWhileCharging: []
       DamageMultiplier: 1.4
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1.4

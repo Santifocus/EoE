@@ -6,6 +6,8 @@ namespace EoE.Information
 	{
 		//Camera Settings
 		public float CameraToPlayerDistance = 7;
+		public float CameraYLerpSpeed = 5;
+		public float CameraYLerpSringStiffness = 0.2f;
 		public Vector3 CameraAnchorOffset = new Vector3(0, 1.6f, 0);
 		public Vector3 CameraAnchorOffsetWhenTargeting = new Vector3(0, 1.6f, 0);
 		public Vector2 CameraRotationPower = new Vector2(200, 75);
@@ -59,8 +61,8 @@ namespace EoE.Information
 
 		//Animation
 		public float MaxModelTilt = 10;
-		public float SideTurnLerpSpeed = 10;
-		public float SpringLerpStiffness = 1;
+		public float SideTurnSpringLerpSpeed = 13;
+		public float SideTurnLerpSpringStiffness = 0.1f;
 		public float WalkAnimationLerpSpeed = 4;
 
 		///FX

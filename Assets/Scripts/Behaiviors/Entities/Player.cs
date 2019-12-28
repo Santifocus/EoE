@@ -13,6 +13,7 @@ namespace EoE.Entities
 	{
 		#region Fields
 		//Constants
+		private const float MIN_WALK_ACCELERATION = 0.45f;
 		private const float NON_TURNING_THRESHOLD = 30;
 		private const float LERP_TURNING_AREA = 0.5f;
 		private const float JUMP_GROUND_COOLDOWN = 0.2f;
@@ -29,7 +30,7 @@ namespace EoE.Entities
 		public Animator animationControl = default;
 
 		[SerializeField] private PlayerSettings selfSettings = default;
-		[SerializeField] private PlayerBuffDisplay buffDisplay = default;
+		public PlayerBuffDisplay buffDisplay = default;
 
 		//Endurance
 		public float curEndurance { get; set; }
@@ -38,7 +39,7 @@ namespace EoE.Entities
 
 		//Dodge
 		public Transform modelTransform = default;
-		private float dodgeCooldown;
+		private float dashCooldown;
 		private bool currentlyDodging;
 
 		//Blocking
@@ -47,8 +48,8 @@ namespace EoE.Entities
 		private BuffInstance blockingBuff;
 
 		//Velocity
-		private Vector3 controllDirection;
 		private Vector3 curMoveVelocity => controllDirection * curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
+		private Vector3 controllDirection;
 		private float intendedAcceleration;
 		private float curAcceleration;
 		private float jumpGroundCooldown;
@@ -66,18 +67,18 @@ namespace EoE.Entities
 
 		//Targeting
 		private float switchTargetTimer;
+		public Entitie TargetedEntitie;
 
 		//Getter Helpers
 		public float jumpVelocity { get; private set; }
 		public float verticalVelocity { get; private set; }
 		public float totalVerticalVelocity => jumpVelocity * PlayerSettings.JumpImpulsePower + verticalVelocity;
 		public override Vector3 curVelocity => base.curVelocity + new Vector3(0, totalVerticalVelocity, 0);
-		public enum AttackState : short { NormalStand = 0, NormalSprint = 1, NormalJump = 2, NormalSprintJump = 3, HeavyStand = 4, HeavySprint = 5, HeavyJump = 6, HeavySprintJump = 7 }
 		public static Player Instance { get; private set; }
 		public override EntitieSettings SelfSettings => selfSettings;
 		public static PlayerSettings PlayerSettings => Instance.selfSettings;
-		public Entitie TargetedEntitie;
-		public PlayerBuffDisplay BuffDisplay => Instance.buffDisplay;
+		public int TotalExperience { get; private set; }
+		public int CurrentCurrencyAmount { get; private set; }
 		#region Items
 		public Inventory Inventory;
 
@@ -96,8 +97,7 @@ namespace EoE.Entities
 		#endregion
 		#region Leveling
 		public Buff LevelingPointsBuff { get; private set; }
-		public int TotalSoulCount { get; private set; }
-		public int RequiredSoulsForLevel { get; private set; }
+		public int RequiredExperienceForLevel { get; private set; }
 		public int AvailableSkillPoints;
 		public int AvailableAtributePoints;
 		#endregion
@@ -180,7 +180,7 @@ namespace EoE.Entities
 			}
 
 			AddBuff(LevelingPointsBuff, this);
-			RequiredSoulsForLevel = PlayerSettings.LevelSettings.curve.GetRequiredSouls(EntitieLevel);
+			RequiredExperienceForLevel = PlayerSettings.LevelSettings.curve.GetRequiredExperience(EntitieLevel);
 		}
 		private void SetupInventory()
 		{
@@ -323,7 +323,7 @@ namespace EoE.Entities
 			}
 
 			PlayerMoveControl();
-			DodgeControl();
+			DashControl();
 		}
 		private void CameraControl()
 		{
@@ -331,7 +331,7 @@ namespace EoE.Entities
 			{
 				if (InputController.ResetCamera.Active || InputController.ResetCamera.Down)
 				{
-					PlayerCameraController.Instance.LookAtDirection(transform.forward);
+					PlayerCameraController.Instance.LookInDirection(transform.forward);
 					PlayerCameraController.TargetRotation = new Vector2(PlayerCameraController.TargetRotation.x, PlayerSettings.CameraVerticalAngleClamps.y / 2);
 					return;
 				}
@@ -344,7 +344,7 @@ namespace EoE.Entities
 		private void PlayerFeedbackControl()
 		{
 			bool turning = curStates.Turning;
-			bool moving = curStates.Moving;
+			bool moving = curStates.Moving && curAcceleration >= MIN_WALK_ACCELERATION && intendedAcceleration >= MIN_WALK_ACCELERATION;
 			bool running = curStates.Running;
 
 			//If the Player doesnt move intentionally but is in run mode, then stop the run mode
@@ -368,8 +368,8 @@ namespace EoE.Entities
 			Vector2 targetTilt = velocityDirection * targetTiltAngle;
 			targetTilt = targetTilt.x * right * -1 + targetTilt.y * forward;
 
-			curModelTilt = new Vector2(Utils.SpringLerp(curModelTilt.x, targetTilt.x, ref curSpringLerpAcceleration.x, PlayerSettings.SpringLerpStiffness, PlayerSettings.SideTurnLerpSpeed * Time.deltaTime),
-										Utils.SpringLerp(curModelTilt.y, targetTilt.y, ref curSpringLerpAcceleration.y, PlayerSettings.SpringLerpStiffness, PlayerSettings.SideTurnLerpSpeed * Time.deltaTime)
+			curModelTilt = new Vector2(Utils.SpringLerp(curModelTilt.x, targetTilt.x, ref curSpringLerpAcceleration.x, PlayerSettings.SideTurnLerpSpringStiffness, PlayerSettings.SideTurnSpringLerpSpeed * Time.deltaTime),
+										Utils.SpringLerp(curModelTilt.y, targetTilt.y, ref curSpringLerpAcceleration.y, PlayerSettings.SideTurnLerpSpringStiffness, PlayerSettings.SideTurnSpringLerpSpeed * Time.deltaTime)
 										);
 			modelTransform.localEulerAngles = new Vector3(curModelTilt.y, 0, curModelTilt.x);
 
@@ -410,7 +410,7 @@ namespace EoE.Entities
 
 			//Walk effects
 			bool curWalkingEffectsOn = PlayerWalkingBoundEffects != null;
-			bool newWalkingEffectsOn = (!turning && curAcceleration > 0) && (!running) && (charController.isGrounded);
+			bool newWalkingEffectsOn = (!turning && !running && moving) && (charController.isGrounded);
 			if (curWalkingEffectsOn != newWalkingEffectsOn)
 			{
 				//Player started walking or stopped running and kept walking
@@ -525,7 +525,7 @@ namespace EoE.Entities
 			if (GameController.CurrentGameSettings.IsDebugEnabled)
 				Debug.DrawLine(transform.position, transform.position + controllDirection * 2, Color.green, Time.unscaledDeltaTime * 0.99f);
 
-			if (!TargetedEntitie)
+			if ((!TargetedEntitie) && (intendedControl > MIN_WALK_ACCELERATION * 0.95f))
 				intendedRotation = -(Mathf.Atan2(controllDirection.z, controllDirection.x) * Mathf.Rad2Deg - 90);
 		}
 		#endregion
@@ -637,9 +637,9 @@ namespace EoE.Entities
 		#region ForceControl
 		private void UpdateAcceleration()
 		{
-			if (curStates.Moving && !curStates.Turning)
+			float clampedIntent = Mathf.Clamp01(intendedAcceleration);
+			if (curStates.Moving && !curStates.Turning && intendedAcceleration >= MIN_WALK_ACCELERATION)
 			{
-				float clampedIntent = Mathf.Clamp01(intendedAcceleration);
 				if (curAcceleration < clampedIntent)
 				{
 					if (SelfSettings.MoveAcceleration > clampedIntent)
@@ -702,22 +702,22 @@ namespace EoE.Entities
 		}
 		#endregion
 		#region Dodging
-		private void DodgeControl()
+		private void DashControl()
 		{
-			if (dodgeCooldown > 0)
+			if (dashCooldown > 0)
 			{
-				dodgeCooldown -= Time.deltaTime;
+				dashCooldown -= Time.deltaTime;
 				return;
 			}
 
 			if (InputController.Dodge.Down && !currentlyDodging && curEndurance >= PlayerSettings.DodgeEnduranceCost)
 			{
-				EventManager.PlayerDodgeInvoke();
+				EventManager.PlayerDashInvoke();
 				ChangeEndurance(new ChangeInfo(this, CauseType.Magic, TargetStat.Endurance, PlayerSettings.DodgeEnduranceCost));
-				StartCoroutine(DodgeCoroutine());
+				StartCoroutine(DashCoroutine());
 			}
 		}
-		private IEnumerator DodgeCoroutine()
+		private IEnumerator DashCoroutine()
 		{
 			currentlyDodging = true;
 			float timer = 0;
@@ -761,7 +761,7 @@ namespace EoE.Entities
 				timer += Time.fixedDeltaTime;
 				dodgeMaterialInstance.color = baseColor + alphaPart * (1 - timer / PlayerSettings.DodgeModelExistTime);
 			}
-			dodgeCooldown = PlayerSettings.DodgeCooldown;
+			dashCooldown = PlayerSettings.DodgeCooldown;
 			currentlyDodging = false;
 			invincible--;
 
@@ -1211,20 +1211,25 @@ namespace EoE.Entities
 			}
 		}
 		#endregion
-		public void AddSouls(int amount)
+		public void AddExperience(int amount)
 		{
-			TotalSoulCount += amount;
-			EventManager.PlayerSoulCountChangedInvoke();
-			while (TotalSoulCount >= RequiredSoulsForLevel)
+			TotalExperience += amount;
+			EventManager.PlayerExperienceChangedInvoke();
+			while (TotalExperience >= RequiredExperienceForLevel)
 			{
 				LevelUpEntitie();
 			}
 		}
+		public void ChangeCurrency(int change)
+		{
+			CurrentCurrencyAmount += change;
+			EventManager.PlayerCurrencyChangedInvoke();
+		}
 		protected override void LevelUpEntitie()
 		{
 			base.LevelUpEntitie();
-			TotalSoulCount = System.Math.Max(TotalSoulCount, PlayerSettings.LevelSettings.curve.GetRequiredSouls(EntitieLevel - 1));
-			RequiredSoulsForLevel = PlayerSettings.LevelSettings.curve.GetRequiredSouls(EntitieLevel);
+			TotalExperience = System.Math.Max(TotalExperience, PlayerSettings.LevelSettings.curve.GetRequiredExperience(EntitieLevel - 1));
+			RequiredExperienceForLevel = PlayerSettings.LevelSettings.curve.GetRequiredExperience(EntitieLevel);
 			AvailableAtributePoints += PlayerSettings.LevelSettings.AttributePointsPerLevel;
 			AvailableSkillPoints += PlayerSettings.LevelSettings.SkillPointsPerLevel;
 

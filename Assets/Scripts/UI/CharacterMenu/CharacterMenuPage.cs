@@ -4,6 +4,7 @@ namespace EoE.UI
 {
 	public abstract class CharacterMenuPage : MonoBehaviour
 	{
+		protected const float NAV_COOLDOWN = 0.2f;
 		[SerializeField] protected TransitionUI pageSlider = default;
 		protected bool ActivePage;
 		protected virtual void Start()

@@ -428,12 +428,12 @@ namespace EoE.Entities
 		}
 		private void BuildDrops()
 		{
-			//Create souls drops
-			if ((SelfSettings.SoulWorth > 0) && !(this is Player))
+			//Create Experience drops
+			if ((SelfSettings.ExperienceWorth > 0) && !(this is Player))
 			{
 				SoulDrop newSoulDrop = Instantiate(GameController.SoulDropPrefab, Storage.DropStorage);
 				newSoulDrop.transform.position = actuallWorldPosition;
-				newSoulDrop.Setup(SelfSettings.SoulWorth);
+				newSoulDrop.Setup(SelfSettings.ExperienceWorth);
 			}
 
 			//Create item / other drops
@@ -523,7 +523,7 @@ namespace EoE.Entities
 				invincible++;
 
 			if (this is Player)
-				Player.Instance.BuffDisplay.AddBuffIcon(newBuff);
+				Player.Instance.buffDisplay.AddBuffIcon(newBuff);
 			else
 				statDisplay.AddBuffIcon(newBuff);
 
@@ -647,7 +647,7 @@ namespace EoE.Entities
 				invincible--;
 
 			if (this is Player)
-				Player.Instance.BuffDisplay.RemoveBuffIcon(targetBuff);
+				Player.Instance.buffDisplay.RemoveBuffIcon(targetBuff);
 			else
 				statDisplay.RemoveBuffIcon(targetBuff);
 
@@ -812,7 +812,8 @@ namespace EoE.Entities
 		#region Spell Casting
 		public bool CastSpell(Spell spell)
 		{
-			if (curMana < spell.BaseManaCost || IsCasting || CastingCooldown > 0 || (this is Player && WeaponController.PlayerWeaponController.InAttackSequence))
+			bool playerCurrentlyAttacking = this is Player && WeaponController.PlayerWeaponController != null && WeaponController.PlayerWeaponController.InAttackSequence;
+			if (curMana < spell.BaseManaCost || IsCasting || CastingCooldown > 0 || playerCurrentlyAttacking)
 				return false;
 
 			StartCoroutine(CastSpellC(spell));
