@@ -246,6 +246,13 @@ MonoBehaviour:
           RotationOffset: {x: 0, y: 0, z: 0}
           HasCustomScale: 0
           CustomScale: {x: 1, y: 1, z: 1}
+        - FX: {fileID: 11400000, guid: 3cec1795710fb1b4b861f2f5e6131d52, type: 2}
+          HasPositionOffset: 0
+          PositionOffset: {x: 0, y: 0, z: 0}
+          HasRotationOffset: 0
+          RotationOffset: {x: 0, y: 0, z: 0}
+          HasCustomScale: 0
+          CustomScale: {x: 1, y: 1, z: 1}
         BuffOnUserWhileCharging: []
       DamageMultiplier: 3.5
       ManaCostMultiplier: 1
