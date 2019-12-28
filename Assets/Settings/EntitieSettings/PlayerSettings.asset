@@ -84,6 +84,24 @@ MonoBehaviour:
   - Item: {fileID: 11400000, guid: 428f279ff073bb54c81150df9f36247e, type: 2}
     ItemCount: 1
     ForceEquip: 1
+  - Item: {fileID: 11400000, guid: 85a6ee9ea6326894bafdefc197d83d4f, type: 2}
+    ItemCount: 1
+    ForceEquip: 0
+  - Item: {fileID: 11400000, guid: 559b53f723906944b9b4184cc5331dc2, type: 2}
+    ItemCount: 1
+    ForceEquip: 0
+  - Item: {fileID: 11400000, guid: 577e912d320c9694b81aaffd76fd2162, type: 2}
+    ItemCount: 1
+    ForceEquip: 0
+  - Item: {fileID: 11400000, guid: f8b0ecbc61980774a811b21215e17673, type: 2}
+    ItemCount: 1
+    ForceEquip: 0
+  - Item: {fileID: 11400000, guid: e2175b767068abe49ad244c5541e84fd, type: 2}
+    ItemCount: 1
+    ForceEquip: 0
+  - Item: {fileID: 11400000, guid: 428f279ff073bb54c81150df9f36247e, type: 2}
+    ItemCount: 1
+    ForceEquip: 0
   InventorySize: 55
   MaxModelTilt: 8
   SideTurnSpringLerpSpeed: 13

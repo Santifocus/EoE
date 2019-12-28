@@ -13,11 +13,13 @@ MonoBehaviour:
   m_Name: FreezeSpellItem
   m_EditorClassIdentifier: 
   ItemName:
-    textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Item
-  ItemDescription: []
+    textColor: {r: 0, g: 0.88068175, b: 1, a: 1}
+    text: Ice Ring
+  ItemDescription:
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: Summons a Frostblast to slow enemys and push them away.
   SortingID: 8
-  ItemIcon: {fileID: 21300000, guid: 1b6cf7414d1c45a4c8edeffe46bda78e, type: 3}
+  ItemIcon: {fileID: 21300000, guid: 34a39a63d45b70d4784154ea0a26de29, type: 3}
   FXEffectsOnUse: []
   FXEffectsWhenEquipped:
   - {fileID: 11400000, guid: 53cbd187787d0e74e86d9b2eb2eb79f1, type: 2}

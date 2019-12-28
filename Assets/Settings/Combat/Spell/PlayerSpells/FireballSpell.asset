@@ -19,7 +19,7 @@ MonoBehaviour:
   BaseCritChance: 0
   SpellCooldown: 6
   ContainedParts: -1
-  MovementRestrictions: -1
+  MovementRestrictions: 2
   SubtractManaAtPart: 2
   CastInfo:
     Duration: 1.7
