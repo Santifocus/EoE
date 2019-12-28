@@ -224,12 +224,12 @@ MonoBehaviour:
       NeedsCharging: 1
       ChargeSettings:
         EffectMask: 3
-        AnimationChargeStartpoint: 0.5
-        ChargeTime: 1
+        AnimationChargeStartpoint: 0.45
+        ChargeTime: 2.5
         StartCharge: 0.1
         ApplyMoveStunWhileCharging: 0
         WaitAtFullChargeForRelease: 1
-        MinRequiredCharge: 0.45
+        MinRequiredCharge: 0
         FXObjects: []
         FXObjectsWithMutliplier:
         - FX: {fileID: 11400000, guid: b7ca0c9b1adf6044a871c15b7af6ea29, type: 2}

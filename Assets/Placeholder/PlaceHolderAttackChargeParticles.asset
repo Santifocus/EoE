@@ -20,7 +20,7 @@ MonoBehaviour:
     TimeStay: 1
   ParticleMainObject: {fileID: 2400535601577189870, guid: 866964891e813b8498df2f5b212fdbff,
     type: 3}
-  OffsetToTarget: {x: 0, y: 0, z: -0.65}
+  OffsetToTarget: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}
   FollowTarget: 1
   InheritRotationOfTarget: 1
