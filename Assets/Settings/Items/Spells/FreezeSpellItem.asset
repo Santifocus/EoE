@@ -30,4 +30,5 @@ MonoBehaviour:
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 1
+  ItemWorth: 250
   TargetSpell: {fileID: 11400000, guid: ac6d4f2b9cddec34c9d42ed76b3bbe50, type: 2}

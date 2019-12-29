@@ -34,7 +34,7 @@ MonoBehaviour:
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 10
-  ItemWorth: 10
+  ItemWorth: 30
   HealEffects:
   - HealType: 0
     Percent: 0

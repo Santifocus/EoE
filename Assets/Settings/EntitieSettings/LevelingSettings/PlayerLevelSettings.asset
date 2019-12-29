@@ -15,7 +15,7 @@ MonoBehaviour:
   curve:
     a: 2
     b: 6
-    c: 6
+    c: 10
   AttributePointsPerLevel: 1
   SkillPointsPerLevel: 3
   PerTenLevelsBasePoints: 1
