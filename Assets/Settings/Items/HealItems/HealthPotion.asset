@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 943f6c1bb4ab1e346adf9d15310d236d, type: 3}
-  m_Name: HealPotion
+  m_Name: HealthPotion
   m_EditorClassIdentifier: 
   ItemName:
     textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: HealPotion
+    text: Heal Potion
   ItemDescription:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: 'Heals you for '
+    text: Heals you for
   - textColor: {r: 0, g: 0.17029119, b: 1, a: 1}
-    text: '30 '
+    text: ' 30 '
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: HP on use.
   SortingID: 0
@@ -28,11 +28,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2b8f1e86bead3e14ab027d9072f9fd35, type: 2}
   - {fileID: 11400000, guid: 3154eaf86a359724a9b1df91fbcf6f0e, type: 2}
   FXEffectsWhenEquipped: []
+  AllowHoldUse: 0
   UseCooldown: 5
   RemoveOnUse: 1
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 10
+  ItemWorth: 10
   HealEffects:
   - HealType: 0
     Percent: 0

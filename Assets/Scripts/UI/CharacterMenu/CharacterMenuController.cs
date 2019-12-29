@@ -32,7 +32,7 @@ namespace EoE.UI
 
 		private void Update()
 		{
-			if (!MenuOpen && InputController.PlayerMenu.Down)
+			if (!MenuOpen && !GameController.GameIsPaused && InputController.PlayerMenu.Down)
 			{
 				OpenMenu();
 				return;

@@ -48,6 +48,8 @@ namespace EoE.UI
 			{
 				this.containedItem = containedItem;
 				iconDisplay.sprite = containedItem.ItemIcon;
+				iconDisplay.gameObject.SetActive(true);
+				itemTypeDisplay.gameObject.SetActive(true);
 				SetItemTypeIcon();
 
 				this.containedStacksize = containedStacksize;
@@ -94,12 +96,16 @@ namespace EoE.UI
 		{
 			if (selectedShopSlot)
 				selectedShopSlot.DeSelect();
+			selectedShopSlot = this;
 
 			onSelectBackground.gameObject.SetActive(true);
 			onNotSelectBackground.gameObject.SetActive(false);
 		}
 		private void DeSelect()
 		{
+			if (selectedShopSlot == this)
+				selectedShopSlot = null;
+
 			onSelectBackground.gameObject.SetActive(false);
 			onNotSelectBackground.gameObject.SetActive(true);
 		}

@@ -8,7 +8,7 @@ namespace EoE.Information
 	{
 		private InventoryItem[] containedItems;
 		public InventoryItem this[int index] { get { if (index < 0 || index > Length) return null; else return containedItems[index]; } }
-		public int inventorySize;
+		private int inventorySize;
 		public int Length { get => inventorySize; set => ChangeSize(value); }
 
 		public delegate void InventoryUpdate();
@@ -35,27 +35,25 @@ namespace EoE.Information
 
 			InventoryChanged?.Invoke();
 		}
-		public InventoryAddability CheckAddablity(InventoryItem item)
+		public int CheckAddablity(Item item, int stackSize)
 		{
-			int remainingStack = item.stackSize;
 			for (int i = 0; i < Length; i++)
 			{
 				if (containedItems[i] == null)
 				{
-					remainingStack -= item.data.MaxStack;
-					if (remainingStack <= 0)
+					stackSize -= item.MaxStack;
+					if (stackSize <= 0)
 						break;
 				}
-				else if (containedItems[i].data == item.data)
+				else if (containedItems[i].data == item)
 				{
-					remainingStack -= item.data.MaxStack - containedItems[i].stackSize;
-					if (remainingStack <= 0)
+					stackSize -= item.MaxStack - containedItems[i].stackSize;
+					if (stackSize <= 0)
 						break;
 				}
 			}
 
-			//If the remaining stack = 0 we can completly put the item into the inventory, if the stack changed the answer is capped, if it stayed the same the answer is Nothing
-			return remainingStack <= 0 ? InventoryAddability.Full : (remainingStack < item.stackSize ? InventoryAddability.Capped : InventoryAddability.Nothing);
+			return System.Math.Max(0, stackSize);
 		}
 		public List<int> AddItem(InventoryItem toAdd)
 		{
@@ -131,6 +129,9 @@ namespace EoE.Information
 						containedItems[i].OnRemove();
 						containedItems[i] = null;
 						changed = true;
+
+						if (stackSize == 0)
+							goto FullyRemovedStack;
 					}
 					else
 					{
@@ -147,6 +148,24 @@ namespace EoE.Information
 
 			if (changed)
 				InventoryChanged?.Invoke();
+		}
+		public void RemoveStackSize(int index, int stackSize)
+		{
+			if (index < 0 || index >= Length)
+				return;
+
+			if (containedItems[index] != null)
+			{
+				containedItems[index].stackSize -= stackSize;
+				if(containedItems[index].stackSize <= 0)
+				{
+					containedItems[index].OnRemove();
+					containedItems[index] = null;
+				}
+
+				if(stackSize > 0)
+					InventoryChanged?.Invoke();
+			}
 		}
 		public void RemoveInventoryItem(InventoryItem item)
 		{
@@ -266,6 +285,8 @@ namespace EoE.Information
 		public void OnRemove()
 		{
 			StopBoundEffects();
+			if (isEquiped)
+				data.UnEquip(this, Entities.Player.Instance);
 		}
 		public void StopBoundEffects()
 		{

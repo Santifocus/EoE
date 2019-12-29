@@ -173,6 +173,18 @@ namespace EoE.UI
 		{
 			return ColorToColorOpener(textColor) + text + COLOR_CLOSER;
 		}
+		public static string ToString(ColoredText[] coloredTexts)
+		{
+			if (coloredTexts == null)
+				return "";
+
+			string fullText = "";
+			for(int i = 0; i < coloredTexts.Length; i++)
+			{
+				fullText += coloredTexts[i];
+			}
+			return fullText;
+		}
 		public static string ColorToColorOpener(Color col)
 		{
 			return "<color=#" + ColorUtility.ToHtmlStringRGBA(col) + ">";

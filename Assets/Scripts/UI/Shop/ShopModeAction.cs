@@ -15,12 +15,17 @@ namespace EoE.UI
 		{
 			if (selectedMode)
 				selectedMode.DeSelect();
+
+			selectedMode = this;
 			onSelect.SetActive(true);
 			onNotSelect.SetActive(false);
 			description.SetActive(true);
 		}
-		private void DeSelect()
+		public void DeSelect()
 		{
+			if (selectedMode == this)
+				selectedMode = null;
+
 			onSelect.SetActive(false);
 			onNotSelect.SetActive(true);
 			description.SetActive(false);

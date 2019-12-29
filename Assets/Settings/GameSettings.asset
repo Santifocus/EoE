@@ -195,6 +195,7 @@ MonoBehaviour:
   SecondsPerEntitieHealthRegen: 1
   ItemDropRandomVelocityStrenght: 2
   WhileEffectTickSpeed: 0.1
+  ItemSellMultiplier: 0.7
   PhysicalDamageLevelAdd: 12
   PhysicalDamageDivider: 10
   PhysicalDefenseLevelAdd: 10

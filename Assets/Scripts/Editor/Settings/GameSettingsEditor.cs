@@ -104,7 +104,8 @@ namespace EoE.Information
 			FloatField(new GUIContent("Seconds Per Entitie Health Regen", "How many seconds for each regeneration cyle? This will not change the amount of healing only the frequency. (In Seconds)"), ref settings.SecondsPerEntitieHealthRegen, 1);
 			FloatField(new GUIContent("Crit Damage Multiplier", "If a ability / attack was counted as criticall for much should the damage be multiplied?"), ref settings.CritDamageMultiplier, 1);
 			FloatField(new GUIContent("Item Drop Random Velocity Strenght"), ref settings.ItemDropRandomVelocityStrenght, 1);
-			FloatField(new GUIContent("WhileEffectTickSpeed"), ref settings.WhileEffectTickSpeed, 1);
+			FloatField(new GUIContent("While Effect Tick Speed"), ref settings.WhileEffectTickSpeed, 1);
+			SliderField(new GUIContent("Item Sell Multiplier"), ref settings.ItemSellMultiplier, 0, 1, 1);
 
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			ObjectArrayField(new GUIContent("Global Sounds"), ref settings.globalSounds, ref GlobalSoundsOpen, new GUIContent(". Sound"), 1);

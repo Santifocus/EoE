@@ -126,7 +126,6 @@ namespace EoE.Entities
 			TargetEnemyControl();
 			ItemControl();
 			BlockControl();
-			JumpControl();
 
 			animationControl.SetBool("InCombat", curStates.Fighting);
 		}
@@ -324,6 +323,7 @@ namespace EoE.Entities
 
 			PlayerMoveControl();
 			DashControl();
+			JumpControl();
 		}
 		private void CameraControl()
 		{
@@ -741,7 +741,9 @@ namespace EoE.Entities
 			//Create a copy of the player model
 			Material dodgeMaterialInstance = Instantiate(PlayerSettings.DodgeModelMaterial);
 			Transform modelCopy = Instantiate(modelTransform, Storage.ParticleStorage);
-			Transform weaponCopy = WeaponController.PlayerWeaponController.CloneModel().transform;
+			Transform weaponCopy = null;
+			if (WeaponController.PlayerWeaponController)
+				weaponCopy = WeaponController.PlayerWeaponController.CloneModel().transform;
 
 			modelCopy.transform.position = modelTransform.position;
 			modelCopy.transform.localScale = modelTransform.lossyScale;
@@ -752,7 +754,8 @@ namespace EoE.Entities
 			baseColor.a = 0;
 
 			ApplyMaterialToAllChildren(modelCopy);
-			ApplyMaterialToAllChildren(weaponCopy);
+			if (weaponCopy)
+				ApplyMaterialToAllChildren(weaponCopy);
 
 			invincible++;
 			while (timer < PlayerSettings.DodgeModelExistTime)
@@ -766,7 +769,8 @@ namespace EoE.Entities
 			invincible--;
 
 			Destroy(modelCopy.gameObject);
-			Destroy(weaponCopy.gameObject);
+			if (weaponCopy)
+				Destroy(weaponCopy.gameObject);
 
 			for (int i = 0; i < dodgeEffects.Length; i++)
 			{

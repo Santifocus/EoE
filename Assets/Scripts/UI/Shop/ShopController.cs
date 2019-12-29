@@ -11,17 +11,19 @@ namespace EoE.UI
 	public class ShopController : MonoBehaviour
 	{
 		private const float NAV_COOLDOWN = 0.2f;
+		private const int MAX_POSSIBLE_ACTION_AMOUNT = 1000;
 		public enum ShopMode { None = 1, Buy = 2, Sell = 3}
-		private enum ShopState { ModeSelection = 1, ItemSelection = 2, SlotAction = 3, ActionAmount = 4 }
+		private enum ShopState { ModeSelection = 1, ItemSelection = 2, ActionSelection = 3, ActionAmount = 4 }
 
 		//Constants
 		//Inpsector variables
 		[SerializeField] private TextMeshProUGUI titleText = default;
 		[SerializeField] private Image shopIcon = default;
-		[SerializeField] private TextMeshProUGUI actionText = default;
+		[SerializeField] private ShopItemAction actionText = default;
 		[SerializeField] private TextMeshProUGUI evaluationText = default;
 		[SerializeField] private TextMeshProUGUI playerCurrencyDisplay = default;
 		[SerializeField] private TextMeshProUGUI worthEvaluationDisplay = default;
+		[SerializeField] private TextMeshProUGUI itemDescriptionDisplay = default;
 
 		[Space(5)]
 		[Header("Canvases")]
@@ -33,6 +35,7 @@ namespace EoE.UI
 		[Header("Actions")]
 		[SerializeField] private ShopModeAction[] shopModeActions = default;
 		[SerializeField] private ShopItemAction[] shopItemActions = default;
+		[SerializeField] private ActionAmountController amountController = default;
 
 		[Space(5)]
 		[Header("Settings")]
@@ -46,10 +49,21 @@ namespace EoE.UI
 		private ShopInventory curInventory;
 		private ShopSlot[] shopSlots;
 		private InventorySlot[] playerInventorySlots;
-		private int[] selectedIndex = new int[4];
+		private int[] selectedIndex = new int[3];
 		private bool isSetup;
 		private ShopMode shopMode = ShopMode.None;
-		private ShopState shopState = ShopState.ModeSelection;
+		private ShopState shopState = 0;
+
+		private void Start()
+		{
+			(transform as RectTransform).anchoredPosition = Vector2.zero;
+			gameObject.SetActive(false);
+
+			ShopInventory test = ScriptableObject.CreateInstance<ShopInventory>();
+			test.shopItems = new ShopInventory.ShopItem[1];
+			test.shopItems[0] = new ShopInventory.ShopItem() { item = GameController.ItemCollection.Data[0], maxPurchases = -1 };
+			BuildShop(test);
+		}
 		public void BuildShop(ShopInventory inventory)
 		{
 			curInventory = inventory;
@@ -82,6 +96,12 @@ namespace EoE.UI
 		}
 		private void Update()
 		{
+			if(InputController.MenuPlayerMenu.Down && navigationCooldown <= 0)
+			{
+				CloseShop();
+				return;
+			}
+
 			if (navigationCooldown > 0)
 				navigationCooldown -= Time.unscaledDeltaTime;
 
@@ -93,8 +113,8 @@ namespace EoE.UI
 				case ShopState.ItemSelection:
 					ItemSelectionNavigation();
 					break;
-				case ShopState.SlotAction:
-					SlotActionNavigation();
+				case ShopState.ActionSelection:
+					ActionSelectionNavigation();
 					break;
 				case ShopState.ActionAmount:
 					ActionAmountNavigation();
@@ -111,13 +131,14 @@ namespace EoE.UI
 					case ShopState.ItemSelection:
 						SetShopState(ShopState.ModeSelection);
 						break;
-					case ShopState.SlotAction:
+					case ShopState.ActionSelection:
 						SetShopState(ShopState.ItemSelection);
 						break;
 					case ShopState.ActionAmount:
-						SetShopState(ShopState.SlotAction);
+						SetShopState(ShopState.ActionSelection);
 						break;
 				}
+				PlayFeedback(true);
 			}
 		}
 		private void ModeChooseNavigation()
@@ -138,7 +159,7 @@ namespace EoE.UI
 					selectedIndex[selfID] += shopModeActions.Length;
 
 				shopModeActions[selectedIndex[selfID]].Select();
-				selectedIndex[selfID] = selectedIndex[selfID];
+				return;
 			}
 
 			//Choosing option
@@ -158,6 +179,7 @@ namespace EoE.UI
 						SetShopState(ShopState.ItemSelection);
 						break;
 				}
+				selectedIndex[(int)ShopState.ItemSelection - 1] = 0;
 				PlayFeedback(true);
 				navigationCooldown = NAV_COOLDOWN;
 			}
@@ -172,7 +194,8 @@ namespace EoE.UI
 				int upDownChange = InputController.MenuDown.Pressed ? 1 : (InputController.MenuUp.Pressed ? -1 : 0);
 				if (leftRightChange != 0 || upDownChange != 0)
 				{
-					if(leftRightChange != 0)
+					int oldIndex = selectedIndex[selfID];
+					if (leftRightChange != 0)
 					{
 						selectedIndex[selfID] += leftRightChange;
 					}
@@ -180,30 +203,31 @@ namespace EoE.UI
 					{
 						selectedIndex[selfID] += upDownChange * SlotsPerRow(shopMode == ShopMode.Buy ? buyModeInfo.itemGrid : sellModeInfo.itemGrid);
 					}
-					UpdateSelectedSlot();
+					UpdateSelectedItemSlot(oldIndex);
 				}
 				else if (InputController.MenuEnter.Down)
 				{
+					int targetIndex = selectedIndex[selfID];
 
+					bool allowedToOpen;
+					if (shopMode == ShopMode.Buy)
+						allowedToOpen = curInventory.shopItems.Length > targetIndex && curInventory.shopItems[targetIndex] != null;
+					else
+						allowedToOpen = Player.Instance.Inventory[targetIndex] != null;
+
+					if (allowedToOpen)
+					{
+						SetShopState(ShopState.ActionSelection);
+						selectedIndex[(int)ShopState.ActionSelection - 1] = 0;
+						shopItemActions[0].Select();
+					}
+
+					PlayFeedback(allowedToOpen);
+					navigationCooldown = NAV_COOLDOWN;
 				}
 			}
 
-			void UpdateSelectedSlot()
-			{
-				int maxIndex = shopMode == ShopMode.Buy ? shopSlots.Length : playerInventorySlots.Length;
-				if (selectedIndex[selfID] >= maxIndex)
-					selectedIndex[selfID] -= maxIndex;
-				if (selectedIndex[selfID] < 0)
-					selectedIndex[selfID] += maxIndex;
 
-				if (shopMode == ShopMode.Buy)
-					shopSlots[selectedIndex[selfID]].Select();
-				else
-					playerInventorySlots[selectedIndex[selfID]].SelectMenuItem();
-
-				PlayFeedback(true);
-				navigationCooldown = NAV_COOLDOWN;
-			}
 			int SlotsPerRow(GridLayoutGroup slotGrid)
 			{
 				float slotWidht = slotGrid.cellSize.x + slotGrid.spacing.x;
@@ -212,19 +236,163 @@ namespace EoE.UI
 				return Mathf.FloorToInt(gridWidht / slotWidht);
 			}
 		}
-		private void SlotActionNavigation()
+		private void UpdateSelectedItemSlot(int oldIndex)
 		{
-			int selfID = (int)ShopState.SlotAction - 1;
+			int itemSelectionID = (int)ShopState.ItemSelection - 1;
+			int maxIndex = shopMode == ShopMode.Buy ? shopSlots.Length : playerInventorySlots.Length;
+			if (selectedIndex[itemSelectionID] >= maxIndex)
+				selectedIndex[itemSelectionID] -= maxIndex;
+			if (selectedIndex[itemSelectionID] < 0)
+				selectedIndex[itemSelectionID] += maxIndex;
+
+			if (shopMode == ShopMode.Buy)
+			{
+				int newIndex = selectedIndex[itemSelectionID];
+				shopSlots[newIndex].Select();
+				if(shopSlots[newIndex].containedItem != null)
+				{
+					worthEvaluationDisplay.text = shopSlots[newIndex].containedItem.ItemWorth.ToString();
+					itemDescriptionDisplay.text = ColoredText.ToString(shopSlots[newIndex].containedItem.ItemDescription);
+				}
+				else
+				{
+					worthEvaluationDisplay.text = "0";
+					itemDescriptionDisplay.text = "";
+				}
+			}
+			else
+			{
+				int newIndex = selectedIndex[itemSelectionID];
+				playerInventorySlots[oldIndex].DeSelectMenuItem();
+				playerInventorySlots[newIndex].SelectMenuItem();
+				if(Player.Instance.Inventory[newIndex] != null)
+				{
+					worthEvaluationDisplay.text = (Player.Instance.Inventory[newIndex].data.ItemWorth * GameController.CurrentGameSettings.ItemSellMultiplier).ToString();
+					itemDescriptionDisplay.text = ColoredText.ToString(Player.Instance.Inventory[newIndex].data.ItemDescription);
+				}
+				else
+				{
+					worthEvaluationDisplay.text = "0";
+					itemDescriptionDisplay.text = "";
+				}
+			}
+
+			PlayFeedback(true);
+			navigationCooldown = NAV_COOLDOWN;
+		}
+		private void ActionSelectionNavigation()
+		{
+			int selfID = (int)ShopState.ActionSelection - 1;
+
+			//Navigation
+			int indexChange = InputController.MenuDown.Pressed ? 1 : (InputController.MenuUp.Pressed ? -1 : 0);
+			if (indexChange != 0 && navigationCooldown <= 0)
+			{
+				selectedIndex[selfID] += indexChange;
+				PlayFeedback(true);
+				navigationCooldown = NAV_COOLDOWN;
+
+				int maxIndex = shopItemActions.Length;
+
+				if (selectedIndex[selfID] >= maxIndex)
+					selectedIndex[selfID] -= maxIndex;
+				if (selectedIndex[selfID] < 0)
+					selectedIndex[selfID] += maxIndex;
+
+				shopItemActions[selectedIndex[selfID]].Select();
+			}
+
+			//Choosing option
+			if (InputController.MenuEnter.Down && navigationCooldown <= 0)
+			{
+				if (shopItemActions[selectedIndex[selfID]].isDoAction)
+				{
+					if (BuildAmountController())
+					{
+						SetShopState(ShopState.ActionAmount);
+						PlayFeedback(true);
+					}
+					else
+					{
+						PlayFeedback(false);
+					}
+				}
+				else 
+				{
+					SetShopState(ShopState.ItemSelection);
+					shopItemActions[selectedIndex[selfID]].DeSelect();
+					PlayFeedback(true);
+				}
+
+				navigationCooldown = NAV_COOLDOWN;
+			}
+		}
+		private bool BuildAmountController()
+		{
+			int actionWorth;
+			int maxAction;
+			int selectedItemIndex = selectedIndex[(int)ShopState.ItemSelection - 1];
+
+			//Get the action worth, based on the item that is currently selected (If the player is selling then the item worth will be mutliplied by a set value)
+			//And
+			//Find out what the possible max action amount is
+			//Buying => As much as the player can pay for; The amount of space he has in his inventory; How much the shop offers; Max action amount
+			//Selling => How much the player has; Max action amount
+			if (shopMode == ShopMode.Buy)
+			{
+				actionWorth = curInventory.shopItems[selectedItemIndex].item.ItemWorth;
+
+				int maxBuys = actionWorth == 0 ? MAX_POSSIBLE_ACTION_AMOUNT : (Player.Instance.CurrentCurrencyAmount / actionWorth);
+				maxAction = Mathf.Min(maxBuys, shopSlots[selectedItemIndex].Stacksize, MAX_POSSIBLE_ACTION_AMOUNT);
+			}
+			else
+			{
+				actionWorth = Mathf.RoundToInt(Player.Instance.Inventory[selectedItemIndex].data.ItemWorth * GameController.CurrentGameSettings.ItemSellMultiplier);
+				maxAction = Mathf.Min(Player.Instance.Inventory[selectedItemIndex].stackSize, MAX_POSSIBLE_ACTION_AMOUNT);
+			}
+
+			if (maxAction <= 0)
+				return false;
+
+			amountController.SetupController(actionWorth, maxAction);
+			return true;
 		}
 		private void ActionAmountNavigation()
 		{
-			int selfID = (int)ShopState.ActionAmount - 1;
+			AmountAction action = amountController.NavigationUpdate();
+			if(action == AmountAction.Back)
+			{
+				SetShopState(ShopState.ItemSelection);
+				shopItemActions[selectedIndex[(int)ShopState.ActionSelection - 1]].DeSelect();
+			}
+			else if(action == AmountAction.Executed)
+			{
+				(int actionAmount, int actionWorth) = amountController.GetChange();
+
+				int selectedSlotIndex = selectedIndex[(int)ShopState.ItemSelection - 1];
+				if (shopMode == ShopMode.Buy)
+				{
+					Player.Instance.ChangeCurrency(-actionWorth);
+					curInventory.shopItems[selectedSlotIndex].maxPurchases -= actionAmount;
+					shopSlots[selectedSlotIndex].Stacksize -= actionAmount;
+					Player.Instance.Inventory.AddItem(new InventoryItem(curInventory.shopItems[selectedSlotIndex].item, actionAmount));
+				}
+				else
+				{
+					Player.Instance.ChangeCurrency(actionWorth);
+					Player.Instance.Inventory.RemoveStackSize(selectedSlotIndex, actionAmount);
+				}
+
+				SetShopState(ShopState.ItemSelection);
+				UpdateSelectedItemSlot(selectedSlotIndex);
+				shopItemActions[selectedIndex[(int)ShopState.ActionSelection - 1]].DeSelect();
+			}
 		}
 		private void ResetShop()
 		{
 			ResetIndexes();
-			SetShopState(ShopState.ModeSelection);
 			SetShopMode(ShopMode.None);
+			SetShopState(ShopState.ModeSelection);
 		}
 		private void SetupShop()
 		{
@@ -265,13 +433,40 @@ namespace EoE.UI
 
 				titleText.text = targetInfo.title;
 				shopIcon.sprite = targetInfo.icon;
-				actionText.text = targetInfo.actionName;
+				actionText.displayText = targetInfo.actionName;
+				amountController.ExecutionText = targetInfo.actionName;
 				evaluationText.text = targetInfo.evaluationTitle + ":";
 				targetInfo.itemGrid.gameObject.SetActive(true);
 			}
 		}
 		private void SetShopState(ShopState newShopState)
 		{
+			if((int)shopState < (int)newShopState)
+			{
+				switch (newShopState)
+				{
+					case ShopState.ModeSelection:
+						selectedIndex[(int)ShopState.ModeSelection - 1] = 0;
+						shopModeActions[0].Select();
+						break;
+					case ShopState.ItemSelection:
+						int oldIndex = selectedIndex[(int)ShopState.ItemSelection - 1];
+						selectedIndex[(int)ShopState.ItemSelection - 1] = 0;
+						UpdateSelectedItemSlot(oldIndex);
+						break;
+					case ShopState.ActionSelection:
+						selectedIndex[(int)ShopState.ActionSelection - 1] = 0;
+						shopItemActions[0].Select();
+						break;
+				}
+			}
+			else if((int)shopState > (int)newShopState)
+			{
+				if(shopState == ShopState.ActionSelection)
+				{
+					shopItemActions[selectedIndex[(int)ShopState.ActionSelection - 1]].DeSelect();
+				}
+			}
 			shopState = newShopState;
 
 			modeChooseCanvas.SetActive(shopState == ShopState.ModeSelection);
@@ -300,7 +495,8 @@ namespace EoE.UI
 		}
 		private void ResetIndexes()
 		{
-			for(int i = 0; i < selectedIndex.Length; i++)
+			shopState = 0;
+			for (int i = 0; i < selectedIndex.Length; i++)
 			{
 				selectedIndex[i] = 0;
 			}

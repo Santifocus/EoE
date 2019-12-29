@@ -14,25 +14,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName:
     textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: EndurancePotion
+    text: Endurance Potion
   ItemDescription:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Heals you for
   - textColor: {r: 0, g: 0.17029119, b: 1, a: 1}
-    text: '50 '
+    text: ' 50 '
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: endurance on use.
+    text: Endurance on use.
   SortingID: 2
   ItemIcon: {fileID: 21300000, guid: 7658e6c2801b14e4ca018b2dd6859694, type: 3}
   FXEffectsOnUse:
   - {fileID: 11400000, guid: 3154eaf86a359724a9b1df91fbcf6f0e, type: 2}
   - {fileID: 11400000, guid: 410e71641ea32d249abb054fdfec4d1f, type: 2}
   FXEffectsWhenEquipped: []
+  AllowHoldUse: 0
   UseCooldown: 5
   RemoveOnUse: 1
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 10
+  ItemWorth: 10
   HealEffects:
   - HealType: 2
     Percent: 0

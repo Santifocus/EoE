@@ -291,7 +291,7 @@ namespace EoE.UI
 							equipSlotsOpen = actionMenuOpen = false;
 							SelectSlot(true);
 						}
-						else //(target is (SpellItem / Item / any other not mentioned type))
+						else //(target is (SpellItem / ConsumableItem / any other not mentioned type))
 						{
 							if (unequip)
 							{

@@ -27,11 +27,16 @@ namespace EoE.UI
 		{
 			if (selectedItemAction)
 				selectedItemAction.DeSelect();
+			selectedItemAction = this;
+
 			onSelect.SetActive(true);
 			onNotSelect.SetActive(false);
 		}
-		private void DeSelect()
+		public void DeSelect()
 		{
+			if (selectedItemAction == this)
+				selectedItemAction = null;
+
 			onSelect.SetActive(false);
 			onNotSelect.SetActive(true);
 		}
