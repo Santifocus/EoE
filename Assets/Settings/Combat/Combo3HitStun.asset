@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6012763415ced2a4684da0b169ee66eb, type: 3}
-  m_Name: Combo3Hit
+  m_Name: Combo3HitStun
   m_EditorClassIdentifier: 
   AffectedTargets: 4
   DamageElement: 1
@@ -22,7 +22,8 @@ MonoBehaviour:
   KnockbackDirection: 1
   KnockbackAxisMultiplier: {x: 1, y: 1, z: 1}
   BuffStackStyle: 2
-  BuffsToApply: []
+  BuffsToApply:
+  - {fileID: 11400000, guid: cfd21ec5a60866b4fa90b111fc6bc2b4, type: 2}
   Effects:
   - FX: {fileID: 11400000, guid: 9d4857f9764135b4fbc8971098614985, type: 2}
     HasPositionOffset: 0

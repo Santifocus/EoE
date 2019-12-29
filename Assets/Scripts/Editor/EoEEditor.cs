@@ -326,6 +326,99 @@ namespace EoE
 
 			return changed;
 		}
+		public static bool DrawArray<T>(GUIContent content, ref T[] fxArray, SerializedProperty arrayProperty, System.Func<GUIContent, T, SerializedProperty, int, bool> elementBinding, int offSet = 0, GUIContent elementContent = null, bool asHeader = false)
+		{
+			bool changed = false;
+			bool open = arrayProperty.isExpanded;
+
+			if (asHeader)
+				changed |= FoldoutHeader(content, ref open);
+			else
+				changed |= Foldout(content, ref open, offSet);
+
+			if (open != arrayProperty.isExpanded)
+				arrayProperty.isExpanded = open;
+
+			if (open)
+			{
+				if (elementContent == null)
+					elementContent = new GUIContent(". Element");
+
+				int newSize = fxArray.Length;
+				DelayedIntField("Size", ref newSize, offSet + 1);
+
+				for (int i = 0; i < arrayProperty.arraySize; i++)
+				{
+					bool? elementChanged = elementBinding?.Invoke(new GUIContent((i + 1) + elementContent.text, elementContent.tooltip), fxArray[i], arrayProperty.GetArrayElementAtIndex(i), offSet + 1);
+					changed |= elementChanged ?? false;
+				}
+
+				if (arrayProperty.arraySize != newSize)
+				{
+					changed = true;
+					T[] newArray = new T[newSize];
+					for (int i = 0; i < newSize; i++)
+					{
+						if (i < fxArray.Length)
+							newArray[i] = fxArray[i];
+						else
+							break;
+					}
+					fxArray = newArray;
+					arrayProperty.arraySize = newSize;
+				}
+			}
+
+			if (changed)
+				isDirty = true;
+			return changed;
+		}
+		public static bool DrawArray<T>(GUIContent content, ref T[] fxArray, SerializedProperty arrayProperty, System.Action<GUIContent, T, SerializedProperty, int> elementBinding, int offSet = 0, GUIContent elementContent = null, bool asHeader = false)
+		{
+			bool changed = false;
+			bool open = arrayProperty.isExpanded;
+
+			if (asHeader)
+				changed |= FoldoutHeader(content, ref open);
+			else
+				changed |= Foldout(content, ref open, offSet);
+
+			if (open != arrayProperty.isExpanded)
+				arrayProperty.isExpanded = open;
+
+			if (open)
+			{
+				if (elementContent == null)
+					elementContent = new GUIContent(". Element");
+
+				int newSize = fxArray.Length;
+				DelayedIntField("Size", ref newSize, offSet + 1);
+
+				for (int i = 0; i < arrayProperty.arraySize; i++)
+				{
+					elementBinding?.Invoke(new GUIContent((i + 1) + elementContent.text, elementContent.tooltip), fxArray[i], arrayProperty.GetArrayElementAtIndex(i), offSet + 1);
+				}
+
+				if (arrayProperty.arraySize != newSize)
+				{
+					changed = true;
+					T[] newArray = new T[newSize];
+					for (int i = 0; i < newSize; i++)
+					{
+						if (i < fxArray.Length)
+							newArray[i] = fxArray[i];
+						else
+							break;
+					}
+					fxArray = newArray;
+					arrayProperty.arraySize = newSize;
+				}
+			}
+
+			if (changed)
+				isDirty = true;
+			return changed;
+		}
 		public static bool DrawCustomFXObject(GUIContent content, CustomFXObject selfData, SerializedProperty selfProperty, int offSet)
 		{
 			bool changed = false;
@@ -423,6 +516,15 @@ namespace EoE
 			}
 			if (changed)
 				isDirty = true;
+			return changed;
+		}
+		public static bool DrawArray<T>(GUIContent arrayHeader, System.Func<int, int, T[], bool> elementBinding, ref T[] curValue, SerializedProperty property, int offSet = 0, bool asHeader = false)
+		{
+			bool open = property.isExpanded;
+			bool changed = DrawArray(arrayHeader, elementBinding, ref curValue, ref open, offSet, asHeader);
+			if (open != property.isExpanded)
+				property.isExpanded = open;
+
 			return changed;
 		}
 		public static bool DrawArray<T>(GUIContent arrayHeader, System.Func<int, int, T[], bool> elementBinding, ref T[] curValue, ref bool open, int offSet = 0, bool asHeader = false)

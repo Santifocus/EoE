@@ -326,18 +326,18 @@ namespace EoE.Combatery
 							//Begin the charging
 							SetAnimationSpeed(0);
 							isChargingAttack = true;
-							while (curChargeMultiplier < 1 || (ActiveAttackStyle.ChargeSettings.WaitAtFullChargeForRelease && InputController.Attack.Pressed))
+							while (curChargeMultiplier < ActiveAttackStyle.ChargeSettings.MaximumCharge || (ActiveAttackStyle.ChargeSettings.WaitAtFullChargeForRelease && InputController.Attack.Pressed))
 							{
 								yield return new WaitForEndOfFrame();
-								if (GameController.GameIsPaused || (curChargeMultiplier >= 1 && InputController.Attack.Pressed))
+								if (GameController.GameIsPaused || (curChargeMultiplier >= ActiveAttackStyle.ChargeSettings.MaximumCharge && InputController.Attack.Pressed))
 									continue;
 
 								if (InputController.Attack.Pressed)
 								{
 									chargeTime += Time.deltaTime;
 									curChargeMultiplier = chargeTime / ActiveAttackStyle.ChargeSettings.ChargeTime;
-									if (curChargeMultiplier > 1)
-										curChargeMultiplier = 1;
+									if (curChargeMultiplier > ActiveAttackStyle.ChargeSettings.MaximumCharge)
+										curChargeMultiplier = ActiveAttackStyle.ChargeSettings.MaximumCharge;
 
 									//Update multipliers of FX
 									for (int i = 0; i < chargeBoundFXMultiplied.Length; i++)
@@ -426,25 +426,48 @@ namespace EoE.Combatery
 			if (hit.gameObject.layer == ConstantCollector.ENTITIE_LAYER)
 			{
 				Entitie hitEntitie = hit.gameObject.GetComponent<Entitie>();
-				if (ActiveAttackStyle.DirectHit)
+
+				List<EffectSingle> directHitSettings = new List<EffectSingle>();
+
+				if (ActiveAttackStyle.NeedsCharging && ActiveAttackStyle.ChargeSettings.DirectHitOverrides.Length > 0)
 				{
-
-					float chargeMultiplier = ActiveAttackStyle.NeedsCharging ? curChargeMultiplier : 1;
-					EffectOverrides overrides = new EffectOverrides()
+					for(int i = 0; i < ActiveAttackStyle.ChargeSettings.DirectHitOverrides.Length; i++)
 					{
-						ExtraDamageMultiplier = ActiveAttackStyle.DamageMultiplier * (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.Damage) ? chargeMultiplier : 1),
-						ExtraCritChanceMultiplier = ActiveAttackStyle.CritChanceMultiplier * (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.CritChance) ? chargeMultiplier : 1),
-						ExtraKnockbackMultiplier = ActiveAttackStyle.KnockbackMultiplier * (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.Knockback) ? chargeMultiplier : 1),
-						OverridenElement = ActiveAttackStyle.OverrideElement ? ((ElementType?)ActiveAttackStyle.OverridenElement) : null,
-						OverridenCauseType = ActiveAttackStyle.OverrideCauseType ? ((CauseType?)ActiveAttackStyle.OverridenCauseType) : null
-					};
+						if(	ActiveAttackStyle.ChargeSettings.DirectHitOverrides[i].MinRequiredCharge <= curChargeMultiplier &&
+							ActiveAttackStyle.ChargeSettings.DirectHitOverrides[i].MaxRequiredCharge >= curChargeMultiplier)
+						{
+							directHitSettings.Add(ActiveAttackStyle.ChargeSettings.DirectHitOverrides[i].DirectHitOverride);
+						}
+					}
+				}
+				else
+				{
+					if (ActiveAttackStyle.DirectHit)
+						directHitSettings.Add(ActiveAttackStyle.DirectHit);
+				}
 
-					ActiveAttackStyle.DirectHit.ActivateEffectSingle(Player.Instance,
-																		hitEntitie,
-																		weaponInfo,
-																		direction,
-																		hitPos,
-																		overrides);
+				if (directHitSettings.Count > 0)
+				{
+					for (int i = 0; i < directHitSettings.Count; i++)
+					{
+						float chargeMultiplier = ActiveAttackStyle.NeedsCharging ? curChargeMultiplier : 1;
+						EffectOverrides overrides = new EffectOverrides()
+						{
+							ExtraDamageMultiplier = ActiveAttackStyle.DamageMultiplier * (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.Damage) ? chargeMultiplier : 1),
+							ExtraCritChanceMultiplier = ActiveAttackStyle.CritChanceMultiplier * (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.CritChance) ? chargeMultiplier : 1),
+							ExtraKnockbackMultiplier = ActiveAttackStyle.KnockbackMultiplier * (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.Knockback) ? chargeMultiplier : 1),
+							OverridenElement = ActiveAttackStyle.OverrideElement ? ((ElementType?)ActiveAttackStyle.OverridenElement) : null,
+							OverridenCauseType = ActiveAttackStyle.OverrideCauseType ? ((CauseType?)ActiveAttackStyle.OverridenCauseType) : null
+						};
+
+						directHitSettings[i].ActivateEffectSingle(	Player.Instance,
+																	hitEntitie,
+																	weaponInfo,
+																	direction,
+																	hitPos,
+																	overrides);
+					}
+
 					ComboHit(hitEntitie, direction, hitPos);
 					CreateParticles(GameController.CurrentGameSettings.HitEntitieParticles, hitPos, direction);
 				}
@@ -555,7 +578,6 @@ namespace EoE.Combatery
 		{
 			if (this != PlayerWeaponController)
 			{
-				Debug.Log("Here");
 				return;
 			}
 			ComboFinish();

@@ -8,7 +8,7 @@ namespace EoE.Combatery
 	public enum MultiplicationType { FlatValue = 1, Curve = 2 }
 	[System.Flags] public enum AttackEffectType { ImpulseVelocity = (1 << 0), FX = (1 << 1), AOE = (1 << 2), CreateProjectile = (1 << 3) }
 	[System.Flags] public enum AttackStylePart { StandAttack = (1 << 0), RunAttack = (1 << 1), JumpAttack = (1 << 2), RunJumpAttack = (1 << 3) }
-	[System.Flags] public enum AttackChargeEffectMask { Damage = (1 << 0), Knockback = (1 << 1), CritChance = (1 << 2), ComboWorth = (1 << 3) }
+	[System.Flags] public enum AttackChargeEffectMask { Damage = (1 << 0), Knockback = (1 << 1), CritChance = (1 << 2), ComboWorth = (1 << 3), DirectHit = (1 << 4) }
 	public enum AttackStylePartFallback { None = (0), StandAttack = (1 << 0), RunAttack = (1 << 1), JumpAttack = (1 << 2), RunJumpAttack = (1 << 3) }
 	public class Weapon : CombatObject
 	{
@@ -114,11 +114,16 @@ namespace EoE.Combatery
 		public AttackChargeEffectMask EffectMask = AttackChargeEffectMask.Damage | AttackChargeEffectMask.Knockback;
 
 		public float AnimationChargeStartpoint = 0.1f;
-		public float ChargeTime = 1;
-		public float StartCharge = 0;
 		public bool ApplyMoveStunWhileCharging = false;
 		public bool WaitAtFullChargeForRelease = true;
+
+		public float ChargeTime = 1;
+		public float StartCharge = 0;
+		public float MaximumCharge = 1;
 		public float MinRequiredCharge = 0.1f;
+
+		//DirectHit overrides
+		public ChargeBasedDirectHit[] DirectHitOverrides = new ChargeBasedDirectHit[0];
 
 		//FX
 		public CustomFXObject[] FXObjects = new CustomFXObject[0];
@@ -130,6 +135,13 @@ namespace EoE.Combatery
 		{
 			return (flag | EffectMask) == EffectMask;
 		}
+	}
+	[System.Serializable]
+	public class ChargeBasedDirectHit
+	{
+		public float MinRequiredCharge = 0;
+		public float MaxRequiredCharge = 1;
+		public EffectSingle DirectHitOverride = null;
 	}
 	[System.Serializable]
 	public class AttackEffect

@@ -61,11 +61,13 @@ MonoBehaviour:
       ChargeSettings:
         EffectMask: 3
         AnimationChargeStartpoint: 0.1
-        ChargeTime: 1
-        StartCharge: 0
         ApplyMoveStunWhileCharging: 0
         WaitAtFullChargeForRelease: 1
+        ChargeTime: 1
+        StartCharge: 0
+        MaximumCharge: 1
         MinRequiredCharge: 0.1
+        DirectHitOverrides: []
         FXObjects: []
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
@@ -143,11 +145,13 @@ MonoBehaviour:
       ChargeSettings:
         EffectMask: 3
         AnimationChargeStartpoint: 0.1
-        ChargeTime: 1
-        StartCharge: 0
         ApplyMoveStunWhileCharging: 0
         WaitAtFullChargeForRelease: 1
+        ChargeTime: 1
+        StartCharge: 0
+        MaximumCharge: 1
         MinRequiredCharge: 0.1
+        DirectHitOverrides: []
         FXObjects: []
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
@@ -225,11 +229,21 @@ MonoBehaviour:
       ChargeSettings:
         EffectMask: 3
         AnimationChargeStartpoint: 0.45
-        ChargeTime: 2.5
-        StartCharge: 0.1
         ApplyMoveStunWhileCharging: 0
         WaitAtFullChargeForRelease: 1
-        MinRequiredCharge: 0
+        ChargeTime: 2.5
+        StartCharge: 1
+        MaximumCharge: 2.5
+        MinRequiredCharge: 1
+        DirectHitOverrides:
+        - MinRequiredCharge: 1
+          MaxRequiredCharge: 2
+          DirectHitOverride: {fileID: 11400000, guid: 265e6994fdfd23549bf67df632fcc179,
+            type: 2}
+        - MinRequiredCharge: 2
+          MaxRequiredCharge: 2.5
+          DirectHitOverride: {fileID: 11400000, guid: ae95f75fc2b7e104b80d2b36faf8abd2,
+            type: 2}
         FXObjects: []
         FXObjectsWithMutliplier:
         - FX: {fileID: 11400000, guid: b7ca0c9b1adf6044a871c15b7af6ea29, type: 2}
@@ -254,14 +268,14 @@ MonoBehaviour:
           HasCustomScale: 0
           CustomScale: {x: 1, y: 1, z: 1}
         BuffOnUserWhileCharging: []
-      DamageMultiplier: 3.5
+      DamageMultiplier: 2
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 2
       KnockbackMultiplier: 1
       CritChanceMultiplier: 1
       CollisionMask: -1
       StopOnCollisionMask: 0
-      DirectHit: {fileID: 11400000, guid: 265e6994fdfd23549bf67df632fcc179, type: 2}
+      DirectHit: {fileID: 0}
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -333,11 +347,13 @@ MonoBehaviour:
       ChargeSettings:
         EffectMask: 3
         AnimationChargeStartpoint: 0.1
-        ChargeTime: 1
-        StartCharge: 0
         ApplyMoveStunWhileCharging: 0
         WaitAtFullChargeForRelease: 1
+        ChargeTime: 1
+        StartCharge: 0
+        MaximumCharge: 1
         MinRequiredCharge: 0.1
+        DirectHitOverrides: []
         FXObjects: []
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
@@ -427,11 +443,13 @@ MonoBehaviour:
       ChargeSettings:
         EffectMask: 3
         AnimationChargeStartpoint: 0.1
-        ChargeTime: 1
-        StartCharge: 0
         ApplyMoveStunWhileCharging: 0
         WaitAtFullChargeForRelease: 1
+        ChargeTime: 1
+        StartCharge: 0
+        MaximumCharge: 1
         MinRequiredCharge: 0.1
+        DirectHitOverrides: []
         FXObjects: []
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
@@ -513,11 +531,13 @@ MonoBehaviour:
       ChargeSettings:
         EffectMask: 3
         AnimationChargeStartpoint: 0.1
-        ChargeTime: 1
-        StartCharge: 0
         ApplyMoveStunWhileCharging: 0
         WaitAtFullChargeForRelease: 1
+        ChargeTime: 1
+        StartCharge: 0
+        MaximumCharge: 1
         MinRequiredCharge: 0.1
+        DirectHitOverrides: []
         FXObjects: []
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []

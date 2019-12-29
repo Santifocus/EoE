@@ -14,6 +14,9 @@ namespace EoE.Combatery
 		private static bool RunAttackOpen;
 		private static bool JumpAttackOpen;
 		private static bool RunJumpAttackOpen;
+
+		private AttackStylePart CurrentlyDrawnPart = 0;
+		private int CurrentlyDrawnPartCombo = 0;
 		protected override void CustomInspector()
 		{
 			Weapon settings = target as Weapon;
@@ -28,21 +31,25 @@ namespace EoE.Combatery
 
 			if (settings.HasMaskFlag(AttackStylePart.StandAttack))
 			{
+				CurrentlyDrawnPart = AttackStylePart.StandAttack;
 				DrawInFoldoutHeader(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StandAttackSequence))), ref StandAttackOpen, () => DrawAttackSequence(settings.StandAttackSequence, nameof(settings.StandAttackSequence)));
 				GUILayout.Space(1);
 			}
 			if (settings.HasMaskFlag(AttackStylePart.RunAttack))
 			{
+				CurrentlyDrawnPart = AttackStylePart.RunAttack;
 				DrawInFoldoutHeader(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.RunAttackSequence))), ref RunAttackOpen, () => DrawAttackSequence(settings.RunAttackSequence, nameof(settings.RunAttackSequence)));
 				GUILayout.Space(1);
 			}
 			if (settings.HasMaskFlag(AttackStylePart.JumpAttack))
 			{
+				CurrentlyDrawnPart = AttackStylePart.JumpAttack;
 				DrawInFoldoutHeader(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.JumpAttackSequence))), ref JumpAttackOpen, () => DrawAttackSequence(settings.JumpAttackSequence, nameof(settings.JumpAttackSequence)));
 				GUILayout.Space(1);
 			}
 			if (settings.HasMaskFlag(AttackStylePart.RunJumpAttack))
 			{
+				CurrentlyDrawnPart = AttackStylePart.RunJumpAttack;
 				DrawInFoldoutHeader(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.RunJumpAttackSequence))), ref RunJumpAttackOpen, () => DrawAttackSequence(settings.RunJumpAttackSequence, nameof(settings.RunJumpAttackSequence)));
 				GUILayout.Space(1);
 			}
@@ -82,6 +89,7 @@ namespace EoE.Combatery
 			SerializedProperty sequenceArray = serializedObject.FindProperty(sequenceName).FindPropertyRelative(nameof(sequence.AttackSequenceParts));
 			for (int i = 0; i < sequence.AttackSequenceParts.Length; i++)
 			{
+				CurrentlyDrawnPartCombo = i;
 				DrawAttackStyle(sequence.AttackSequenceParts[i], sequenceArray.GetArrayElementAtIndex(i), i, 1);
 				if (i < sequence.AttackSequenceParts.Length - 1)
 				{
@@ -259,12 +267,21 @@ namespace EoE.Combatery
 
 				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationChargeStartpoint))), ref settings.AnimationChargeStartpoint, 0, 1, offSet + 1);
-				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ChargeTime))), ref settings.ChargeTime, offSet + 1);
-				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartCharge))), ref settings.StartCharge, 0, 1, offSet + 1);
-
 				BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ApplyMoveStunWhileCharging))), ref settings.ApplyMoveStunWhileCharging, offSet + 1);
 				BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WaitAtFullChargeForRelease))), ref settings.WaitAtFullChargeForRelease, offSet + 1);
-				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MinRequiredCharge))), ref settings.MinRequiredCharge, 0, 1, offSet + 1);
+
+				//Charge values
+				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ChargeTime))), ref settings.ChargeTime, offSet + 1);
+				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartCharge))), ref settings.StartCharge, offSet + 1);
+				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MaximumCharge))), ref settings.MaximumCharge, offSet + 1);
+
+				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MinRequiredCharge))), ref settings.MinRequiredCharge, settings.StartCharge, settings.MaximumCharge, offSet + 1);
+
+				//DirectHit overrides
+				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+				SerializedProperty hitOverridesProperty = settingsProperty.FindPropertyRelative(nameof(settings.DirectHitOverrides));
+				DrawArray<ChargeBasedDirectHit>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DirectHitOverrides))), ref settings.DirectHitOverrides, hitOverridesProperty, DrawDirectHitOverride, offSet + 1, new GUIContent(". Charged Direct Hit"));
 
 				//FX
 				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
@@ -360,6 +377,23 @@ namespace EoE.Combatery
 			string IndexToName()
 			{
 				return (index + 1) + ". Effect";
+			}
+		}
+		private void DrawDirectHitOverride(GUIContent content, ChargeBasedDirectHit selfSettings, SerializedProperty selfProperty, int offSet)
+		{
+			Weapon settings = target as Weapon;
+
+			FoldoutFromSerializedProperty(content, selfProperty, offSet);
+			if (selfProperty.isExpanded)
+			{
+				float min = settings[CurrentlyDrawnPart].AttackSequenceParts[CurrentlyDrawnPartCombo].ChargeSettings.MinRequiredCharge;
+				float max = settings[CurrentlyDrawnPart].AttackSequenceParts[CurrentlyDrawnPartCombo].ChargeSettings.MaximumCharge;
+
+				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfSettings.MinRequiredCharge))), ref selfSettings.MinRequiredCharge, min, max, offSet + 1);
+				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfSettings.MaxRequiredCharge))), ref selfSettings.MaxRequiredCharge, selfSettings.MinRequiredCharge, max, offSet + 1);
+
+				GUILayout.Space(4);
+				ObjectField<EffectSingle>(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfSettings.DirectHitOverride))), ref selfSettings.DirectHitOverride, offSet + 1);
 			}
 		}
 		private void DrawProjectileInfo(SerializedProperty projectileProperty, ProjectileInfo info, int index, int offSet)
