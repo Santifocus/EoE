@@ -209,7 +209,7 @@ namespace EoE.UI
 					if (shopMode == ShopMode.Buy)
 						allowedToOpen = curInventory.ShopItems.Length > targetIndex && shopSlots[targetIndex].containedItem != null;
 					else
-						allowedToOpen = Player.Instance.Inventory[targetIndex] != null;
+						allowedToOpen = Player.Instance.Inventory[targetIndex] != null && Player.Instance.Inventory[targetIndex].data.ItemFlags != ItemSpecialFlag.NonRemoveable;
 
 					if (allowedToOpen)
 					{

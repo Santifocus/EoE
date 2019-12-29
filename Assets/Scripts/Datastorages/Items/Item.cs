@@ -5,6 +5,7 @@ using UnityEngine;
 namespace EoE.Information
 {
 	[System.Flags] public enum InUIUses { Use = 1, Equip = 2, Drop = 4, Back = 8 }
+	public enum ItemSpecialFlag { None = 1, NonRemoveable = 2, OnlySellable = 3 }
 	public abstract class Item : ScriptableObject
 	{
 		[Header("UI Data")]
@@ -26,6 +27,7 @@ namespace EoE.Information
 		public GameObject ItemModel;
 		public int MaxStack = 1;
 		public int ItemWorth = 10;
+		public ItemSpecialFlag ItemFlags = ItemSpecialFlag.None;
 
 		//Internal
 		public float curCooldown { get; set; }

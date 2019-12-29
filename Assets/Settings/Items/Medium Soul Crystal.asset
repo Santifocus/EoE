@@ -28,6 +28,7 @@ MonoBehaviour:
   ItemModel: {fileID: 0}
   MaxStack: 1
   ItemWorth: 250
+  ItemFlags: 3
   HealEffects: []
   BuffsToApply: []
   StackingStyle: 2
