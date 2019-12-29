@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 37f478ea248acbb4d872e251b4b2684b, type: 3}
-  m_Name: SoulDropPickupNotification
+  m_Name: SoulDropExperienceNotification
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0.3
@@ -24,7 +24,9 @@ MonoBehaviour:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: 'You freed '
   - textColor: {r: 1, g: 0.91147983, b: 0, a: 1}
-    text: '{Amount}'
+    text: '{Experience}'
+  - textColor: {r: 0.2663314, g: 0.990566, b: 0.9359773, a: 1}
+    text: ' Souls'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: ' Souls.'
+    text: .
   timeToExpand: 0.5

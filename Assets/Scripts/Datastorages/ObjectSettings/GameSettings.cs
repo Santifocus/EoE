@@ -62,7 +62,11 @@ namespace EoE.Information
 		public float SecondsPerEntitieHealthRegen = 0.5f;
 		public float ItemDropRandomVelocityStrenght = 2;
 		public float WhileEffectTickSpeed = 0.1f;
+
+		//CurrencySettings
 		public float ItemSellMultiplier = 0.70f;
+		public int BaseCurrencyPerSoul = 10;
+		public int ExtraRandomCurrencyPerSoul = 5;
 
 		//Damage Calculation
 		public float PhysicalDamageLevelAdd = 12;

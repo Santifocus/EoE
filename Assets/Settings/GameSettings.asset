@@ -196,6 +196,8 @@ MonoBehaviour:
   ItemDropRandomVelocityStrenght: 2
   WhileEffectTickSpeed: 0.1
   ItemSellMultiplier: 0.7
+  BaseCurrencyPerSoul: 10
+  ExtraRandomCurrencyPerSoul: 5
   PhysicalDamageLevelAdd: 12
   PhysicalDamageDivider: 10
   PhysicalDefenseLevelAdd: 10

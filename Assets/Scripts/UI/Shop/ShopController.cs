@@ -58,11 +58,7 @@ namespace EoE.UI
 		{
 			(transform as RectTransform).anchoredPosition = Vector2.zero;
 			gameObject.SetActive(false);
-
-			ShopInventory test = ScriptableObject.CreateInstance<ShopInventory>();
-			test.shopItems = new ShopInventory.ShopItem[1];
-			test.shopItems[0] = new ShopInventory.ShopItem() { item = GameController.ItemCollection.Data[0], maxPurchases = -1 };
-			BuildShop(test);
+			EventManager.PlayerCurrencyChangedEvent += UpdateCurrencyDisplay;
 		}
 		public void BuildShop(ShopInventory inventory)
 		{
@@ -77,16 +73,16 @@ namespace EoE.UI
 			//Upate the shop inventory slots
 			for(int i = 0; i < shopSlots.Length; i++)
 			{
-				if (i >= inventory.shopItems.Length)
+				if (i >= inventory.ShopItems.Length)
 				{
 					shopSlots[i].Setup(null);
 					continue;
 				}
 
-				if (inventory.shopItems[i].maxPurchases == -1)
-					shopSlots[i].Setup(inventory.shopItems[i].item);
+				if (inventory.ShopItems[i].InfinitePurchases)
+					shopSlots[i].Setup(inventory.ShopItems[i].Item);
 				else
-					shopSlots[i].Setup(inventory.shopItems[i].item, inventory.shopItems[i].maxPurchases);
+					shopSlots[i].Setup(inventory.ShopItems[i].Item, inventory.ShopItems[i].MaxPurchases);
 			}
 
 			//Set to the base state and then activate the UI
@@ -211,7 +207,7 @@ namespace EoE.UI
 
 					bool allowedToOpen;
 					if (shopMode == ShopMode.Buy)
-						allowedToOpen = curInventory.shopItems.Length > targetIndex && curInventory.shopItems[targetIndex] != null;
+						allowedToOpen = curInventory.ShopItems.Length > targetIndex && shopSlots[targetIndex].containedItem != null;
 					else
 						allowedToOpen = Player.Instance.Inventory[targetIndex] != null;
 
@@ -340,7 +336,7 @@ namespace EoE.UI
 			//Selling => How much the player has; Max action amount
 			if (shopMode == ShopMode.Buy)
 			{
-				actionWorth = curInventory.shopItems[selectedItemIndex].item.ItemWorth;
+				actionWorth = curInventory.ShopItems[selectedItemIndex].Item.ItemWorth;
 
 				int maxBuys = actionWorth == 0 ? MAX_POSSIBLE_ACTION_AMOUNT : (Player.Instance.CurrentCurrencyAmount / actionWorth);
 				maxAction = Mathf.Min(maxBuys, shopSlots[selectedItemIndex].Stacksize, MAX_POSSIBLE_ACTION_AMOUNT);
@@ -373,9 +369,9 @@ namespace EoE.UI
 				if (shopMode == ShopMode.Buy)
 				{
 					Player.Instance.ChangeCurrency(-actionWorth);
-					curInventory.shopItems[selectedSlotIndex].maxPurchases -= actionAmount;
+					curInventory.ShopItems[selectedSlotIndex].MaxPurchases -= actionAmount;
 					shopSlots[selectedSlotIndex].Stacksize -= actionAmount;
-					Player.Instance.Inventory.AddItem(new InventoryItem(curInventory.shopItems[selectedSlotIndex].item, actionAmount));
+					Player.Instance.Inventory.AddItem(new InventoryItem(curInventory.ShopItems[selectedSlotIndex].Item, actionAmount));
 				}
 				else
 				{
@@ -416,7 +412,6 @@ namespace EoE.UI
 
 			//Update subscriptions
 			Player.Instance.Inventory.InventoryChanged += UpdateInventorySlots;
-			EventManager.PlayerCurrencyChangedEvent += UpdateCurrencyDisplay;
 			UpdateInventorySlots();
 		}
 		private void SetShopMode(ShopMode newShopMode)

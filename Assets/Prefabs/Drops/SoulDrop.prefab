@@ -9599,6 +9599,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EffectsOnInteract:
   - {fileID: 11400000, guid: 51d7dbe4fc4221242938576fd5981e8a, type: 2}
+  - {fileID: 11400000, guid: bf321c44aab05ab46b96513e0efd45ca, type: 2}
   - {fileID: 11400000, guid: 53e7d5f845e8dd84ebbe448a62732c2c, type: 2}
   infoSign: {fileID: 4063212133673701822}
   colorOverTime:
@@ -9854,7 +9855,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_firstOverflowCharacterIndex: -1

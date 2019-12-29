@@ -1,6 +1,7 @@
 ﻿using EoE.Combatery;
 using EoE.Entities;
 using EoE.Information;
+using EoE.UI;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace EoE
 		public static GameSettings CurrentGameSettings => Instance.gameSettings;
 		public static Projectile ProjectilePrefab => Instance.projectilePrefab;
 		public static SoulDrop SoulDropPrefab => Instance.soulDropPrefab;
+		public static ShopController Shop => Instance.shop;
 		public static ItemCollector ItemCollection => Instance.itemCollector;
 		public static bool GameIsPaused { get => gameIsPaused; set => SetPauseGamestate(value); }
 
@@ -22,6 +24,7 @@ namespace EoE
 		[SerializeField] private GameSettings gameSettings = default;
 		[SerializeField] private Projectile projectilePrefab = default;
 		[SerializeField] private SoulDrop soulDropPrefab = default;
+		[SerializeField] private ShopController shop = default;
 		public ItemDrop itemDropPrefab;
 
 		public Transform BGCanvas => bgCanvas;

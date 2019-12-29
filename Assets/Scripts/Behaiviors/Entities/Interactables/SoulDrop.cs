@@ -45,15 +45,19 @@ namespace EoE.Entities
 		protected override void Interact()
 		{
 			Player.Instance.AddExperience(soulCount);
-			infoSign.gameObject.SetActive(false);
 
+			int totalCurrency = GameController.CurrentGameSettings.BaseCurrencyPerSoul * soulCount + Random.Range(0, GameController.CurrentGameSettings.ExtraRandomCurrencyPerSoul + 1) * soulCount;
+			Player.Instance.ChangeCurrency(totalCurrency);
+
+			infoSign.gameObject.SetActive(false);
 			for (int i = 0; i < EffectsOnInteract.Length; i++)
 			{
 				if (EffectsOnInteract[i] is Notification)
 				{
-					(string, string)[] replaceInstructions = new (string, string)[1]
+					(string, string)[] replaceInstructions = new (string, string)[2]
 					{
-						("{Amount}", soulCount.ToString())
+						("{Experience}", soulCount.ToString()),
+						("{Currency}", totalCurrency.ToString())
 					};
 					FXManager.PlayFX((EffectsOnInteract[i] as Notification).CreateInstructedNotification(replaceInstructions), transform, true);
 					continue;
@@ -92,12 +96,13 @@ namespace EoE.Entities
 			ParticleSystem.MainModule mm = soulParticles.main;
 			Destroy(gameObject, mm.startLifetime.constantMax * 1.1f);
 		}
-
-		private void Update()
+		private void FixedUpdate()
 		{
+			body.velocity = new Vector3(0, Mathf.Min(0, body.velocity.y - Time.fixedDeltaTime * Physics.gravity.y * (1 - gravityMultiplier)), 0);
+
 			if (isTarget && Player.Instance.Alive)
 			{
-				colorTime += Time.deltaTime / textColorCycleTime;
+				colorTime += Time.fixedDeltaTime / textColorCycleTime;
 				float point = (Mathf.Sin(colorTime * Mathf.PI) + 1) / 2;
 				infoSign.color = colorOverTime.Evaluate(point);
 
@@ -105,11 +110,6 @@ namespace EoE.Entities
 				Vector3 signDir = (infoSign.transform.position - facingDir).normalized;
 				infoSign.transform.forward = signDir;
 			}
-		}
-
-		private void FixedUpdate()
-		{
-			body.velocity = new Vector3(0, Mathf.Min(0, body.velocity.y - Time.fixedDeltaTime * Physics.gravity.y * (1 - gravityMultiplier)), 0);
 		}
 
 		protected override void MarkAsInteractTarget()

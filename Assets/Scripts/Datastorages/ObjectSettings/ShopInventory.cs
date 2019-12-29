@@ -6,14 +6,14 @@ namespace EoE.Information
 {
 	public class ShopInventory : ScriptableObject
 	{
-		public ShopItem[] shopItems;
+		public ShopItem[] ShopItems;
+	}
 
-		[System.Serializable]
-        public class ShopItem
-		{
-			public Item item;
-			[Tooltip("-1 = Infinite purchases.")]
-			public int maxPurchases = -1;
-		}
+	[System.Serializable]
+    public class ShopItem
+	{
+		public Item Item;
+		public bool InfinitePurchases = true;
+		public int MaxPurchases;
 	}
 }
