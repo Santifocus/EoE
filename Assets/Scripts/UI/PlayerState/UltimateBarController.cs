@@ -71,6 +71,10 @@ namespace EoE.UI
 				{
 					fadeTimer = 0;
 				}
+				else
+				{
+					ultimateIcon.color = new Color(ultimateIcon.color.r, ultimateIcon.color.g, ultimateIcon.color.b, 1);
+				}
 				barGlow.gameObject.SetActive(barFilled);
 				buttonIcon.gameObject.SetActive(barFilled);
 			}

@@ -425,7 +425,7 @@ namespace EoE.Combatery
 			WeaponUltimate settings = (target as Weapon).UltimateSettings;
 			ObjectField<Ultimate>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Ultimate))), ref settings.Ultimate, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.TotalRequiredCharge))), ref settings.TotalRequiredCharge, 1);
-			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OnUseChargeRemove))), ref settings.OnUseChargeRemove, 1);
+			SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OnUseChargeRemove))), ref settings.OnUseChargeRemove, 0, 1, 1);
 
 			LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OnHitCharge))), ref settings.OnHitCharge, 1);

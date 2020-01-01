@@ -236,7 +236,15 @@ MonoBehaviour:
         StartCharge: 1
         MaximumCharge: 2.5
         MinRequiredCharge: 1
-        ChargeBasedDirectHits: []
+        ChargeBasedDirectHits:
+        - MinRequiredCharge: 1
+          MaxRequiredCharge: 2
+          DirectHitOverride: {fileID: 11400000, guid: 265e6994fdfd23549bf67df632fcc179,
+            type: 2}
+        - MinRequiredCharge: 2
+          MaxRequiredCharge: 2.5
+          DirectHitOverride: {fileID: 11400000, guid: ae95f75fc2b7e104b80d2b36faf8abd2,
+            type: 2}
         FXObjects: []
         FXObjectsWithMutliplier:
         - FX: {fileID: 11400000, guid: b7ca0c9b1adf6044a871c15b7af6ea29, type: 2}
@@ -268,7 +276,7 @@ MonoBehaviour:
       CritChanceMultiplier: 1
       CollisionMask: -1
       StopOnCollisionMask: 0
-      DirectHit: {fileID: 11400000, guid: b2224e95e2fd03742845a26029bcb0dc, type: 2}
+      DirectHit: {fileID: 0}
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -584,5 +592,5 @@ MonoBehaviour:
     OnCritHitCharge: 2
     OnKillCharge: 2
     PerComboPointCharge: 0
-    ChargeOverTimeOnCombat: 0
-    OutOfCombatDecrease: 0
+    ChargeOverTimeOnCombat: 1
+    OutOfCombatDecrease: 1
