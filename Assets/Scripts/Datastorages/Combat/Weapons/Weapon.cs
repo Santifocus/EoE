@@ -36,6 +36,7 @@ namespace EoE.Combatery
 		public CauseType WeaponCauseType = CauseType.Physical;
 		public AttackStylePart ContainedParts = (AttackStylePart)(-1);
 		public AttackStylePartFallback FallBackPart = AttackStylePartFallback.StandAttack;
+		public bool HasUltimate = false;
 
 		//Offsets
 		public Vector3 WeaponPositionOffset;
@@ -48,6 +49,7 @@ namespace EoE.Combatery
 		public AttackSequence RunJumpAttackSequence = new AttackSequence();
 
 		public ComboSet ComboEffects;
+		public WeaponUltimate UltimateSettings = new WeaponUltimate();
 
 		public bool HasMaskFlag(AttackStylePart flag)
 		{
@@ -123,7 +125,7 @@ namespace EoE.Combatery
 		public float MinRequiredCharge = 0.1f;
 
 		//DirectHit overrides
-		public ChargeBasedDirectHit[] DirectHitOverrides = new ChargeBasedDirectHit[0];
+		public ChargeBasedDirectHit[] ChargeBasedDirectHits = new ChargeBasedDirectHit[0];
 
 		//FX
 		public CustomFXObject[] FXObjects = new CustomFXObject[0];
@@ -246,5 +248,21 @@ namespace EoE.Combatery
 		{
 			return (flag | ContainedEffectType) == ContainedEffectType;
 		}
+	}
+	[System.Serializable]
+	public class WeaponUltimate
+	{
+		public Ultimate Ultimate;
+		public float TotalRequiredCharge = 20;
+		public float OnUseChargeRemove = 1;
+
+		//Charge options
+		public float OnHitCharge = 1;
+		public float OnCritHitCharge = 2;
+		public float OnKillCharge = 2;
+		public float PerComboPointCharge = 0;
+		public float ChargeOverTimeOnCombat = 0;
+		public float OutOfCombatDecrease = 0;
+		//public float OnSuccessfullParry = 4;
 	}
 }

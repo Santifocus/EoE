@@ -65,6 +65,12 @@ namespace EoE.Information
 		public float SideTurnLerpSpringStiffness = 0.1f;
 		public float WalkAnimationLerpSpeed = 4;
 
+		public float BodyTurnHorizontalClamp = 30;
+		public float BodyTurnWeight = 0.5f;
+		public Vector4 HeadLookAngleClamps = new Vector4(60, 40, 60, 30);
+		public float LookLerpSpeed = 4;
+		public float LookLerpSpringStiffness = 0.05f;
+
 		///FX
 		//On Player do attack
 		public FXObject[] EffectsOnCauseDamage = default;

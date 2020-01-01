@@ -509,6 +509,16 @@ namespace EoE.UI
 			public string evaluationTitle;
 			public Sprite icon;
 			public GridLayoutGroup itemGrid;
+
+			public ShopModeInfo() { }
+			public ShopModeInfo(string title, string actionName, string evaluationTitle, Sprite icon, GridLayoutGroup itemGrid)
+			{
+				this.title = title;
+				this.actionName = actionName;
+				this.evaluationTitle = evaluationTitle;
+				this.icon = icon;
+				this.itemGrid = itemGrid;
+			}
 		}
 	}
 }

@@ -18,15 +18,10 @@ namespace EoE.Entities
 		[Header("Animation")]
 		[SerializeField] private float textColorCycleTime = 3;
 		[SerializeField] private float gravityMultiplier = 0.4f;
-		[SerializeField] private float fadeInTime = 1.5f;
 		[SerializeField] private float fadeOutTime = 1.5f;
 
 		[Space(5)]
 		[SerializeField] private Color amountColor = Color.blue;
-		[SerializeField] private float finallSphereSize = 1;
-		[SerializeField] private int pulsateCount = 5;
-		[SerializeField] private float pulsateStrenght = 0.5f;
-		[SerializeField] private Gradient pulsateColorGradient = default;
 
 		private static float colorTime;
 		private int soulCount;

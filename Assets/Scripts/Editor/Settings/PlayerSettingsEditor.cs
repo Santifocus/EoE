@@ -135,9 +135,20 @@ namespace EoE.Information
 		{
 			PlayerSettings settings = target as PlayerSettings;
 
-			FloatField(new GUIContent("Max Side Turn"), ref settings.MaxModelTilt, 1);
-			FloatField(new GUIContent("Side Turn Lerp Speed"), ref settings.SideTurnSpringLerpSpeed, 1);
-			FloatField(new GUIContent("Spring Lerp Stiffness"), ref settings.SideTurnLerpSpringStiffness, 1);
+			Header("Player Velocity Turning");
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MaxModelTilt))), ref settings.MaxModelTilt, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.SideTurnSpringLerpSpeed))), ref settings.SideTurnSpringLerpSpeed, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.SideTurnLerpSpringStiffness))), ref settings.SideTurnLerpSpringStiffness, 1);
+
+			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
+			Header("Player Look Turning");
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BodyTurnHorizontalClamp))), ref settings.BodyTurnHorizontalClamp, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BodyTurnWeight))), ref settings.BodyTurnWeight, 1);
+
+			GUILayout.Space(4);
+			Vector4Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.HeadLookAngleClamps))), ref settings.HeadLookAngleClamps, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.LookLerpSpeed))), ref settings.LookLerpSpeed, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.LookLerpSpringStiffness))), ref settings.LookLerpSpringStiffness, 1);
 		}
 		private void FXSettingsArea()
 		{

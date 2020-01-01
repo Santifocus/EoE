@@ -116,6 +116,11 @@ MonoBehaviour:
   SideTurnSpringLerpSpeed: 13
   SideTurnLerpSpringStiffness: 0.1
   WalkAnimationLerpSpeed: 4
+  BodyTurnHorizontalClamp: 30
+  BodyTurnWeight: 0.5
+  HeadLookAngleClamps: {x: 60, y: 40, z: 60, w: 30}
+  LookLerpSpeed: 15
+  LookLerpSpringStiffness: 0.05
   EffectsOnCauseDamage:
   - {fileID: 11400000, guid: 597bda602a9441346a2e721049c28c87, type: 2}
   EffectsOnCauseCrit:

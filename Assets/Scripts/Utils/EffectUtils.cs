@@ -146,7 +146,7 @@ namespace EoE
 				cameraShakeCore.localPosition = (Random.value - 0.5f) * cameraShakeCore.transform.right * axisIntensity.x +
 												(Random.value - 0.5f) * cameraShakeCore.transform.up * axisIntensity.y +
 												(Random.value - 0.5f) * cameraShakeCore.transform.forward * axisIntensity.z;
-				cameraShakeCore.localEulerAngles = new Vector3((Random.value - 0.5f) * angleIntensity.x,
+				cameraShakeCore.localEulerAngles = new Vector3(	(Random.value - 0.5f) * angleIntensity.x,
 																(Random.value - 0.5f) * angleIntensity.y,
 																(Random.value - 0.5f) * angleIntensity.z);
 			}

@@ -10,14 +10,14 @@ namespace EoE.Information
 		public Weapon TargetWeapon;
 		protected override bool OnUse(Entitie user)
 		{
-			if (WeaponController.PlayerWeaponController)
-				WeaponController.PlayerWeaponController.StartAttack();
+			if (WeaponController.Instance)
+				WeaponController.Instance.StartAttack();
 			return false;
 		}
 		protected override bool OnEquip(Entitie user)
 		{
-			if (WeaponController.PlayerWeaponController)
-				Destroy(WeaponController.PlayerWeaponController.gameObject);
+			if (WeaponController.Instance)
+				Destroy(WeaponController.Instance.gameObject);
 			WeaponController newWeapon = Instantiate(TargetWeapon.WeaponPrefab, Storage.ParticleStorage);
 			newWeapon.Setup(TargetWeapon);
 
@@ -25,8 +25,8 @@ namespace EoE.Information
 		}
 		protected override bool OnUnEquip(Entitie user)
 		{
-			if (WeaponController.PlayerWeaponController)
-				Destroy(WeaponController.PlayerWeaponController.gameObject);
+			if (WeaponController.Instance)
+				Destroy(WeaponController.Instance.gameObject);
 			ComboDisplayController.Instance.StopCombo();
 			return true;
 		}

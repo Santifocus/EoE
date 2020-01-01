@@ -27,8 +27,6 @@ namespace EoE.Combatery
 			DrawInFoldoutHeader("Base Data", ref BaseDataOpen, BaseDataArea);
 			GUILayout.Space(1);
 
-			SerializedObject weapon = new SerializedObject(target);
-
 			if (settings.HasMaskFlag(AttackStylePart.StandAttack))
 			{
 				CurrentlyDrawnPart = AttackStylePart.StandAttack;
@@ -53,6 +51,16 @@ namespace EoE.Combatery
 				DrawInFoldoutHeader(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.RunJumpAttackSequence))), ref RunJumpAttackOpen, () => DrawAttackSequence(settings.RunJumpAttackSequence, nameof(settings.RunJumpAttackSequence)));
 				GUILayout.Space(1);
 			}
+			if (settings.HasUltimate)
+			{
+				SerializedProperty ultimateSettingsProperty = serializedObject.FindProperty(nameof(settings.UltimateSettings));
+				FoldoutFromSerializedProperty(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.UltimateSettings))), ultimateSettingsProperty, 0, true);
+				if (ultimateSettingsProperty.isExpanded)
+				{
+					DrawUltimateSettings();
+				}
+				GUILayout.Space(1);
+			}
 
 			ObjectField<ComboSet>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ComboEffects))), ref settings.ComboEffects);
 		}
@@ -73,6 +81,8 @@ namespace EoE.Combatery
 			EnumFlagField<CauseType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WeaponCauseType))), ref settings.WeaponCauseType, 1);
 			EnumFlagField<AttackStylePart>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ContainedParts))), ref settings.ContainedParts, 1);
 			EnumFlagField<AttackStylePartFallback>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.FallBackPart))), ref settings.FallBackPart, 1);
+			BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.HasUltimate))), ref settings.HasUltimate, 1);
+
 
 			if (!settings.HasMaskFlag((AttackStylePart)settings.FallBackPart))
 			{
@@ -280,8 +290,8 @@ namespace EoE.Combatery
 
 				//DirectHit overrides
 				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
-				SerializedProperty hitOverridesProperty = settingsProperty.FindPropertyRelative(nameof(settings.DirectHitOverrides));
-				DrawArray<ChargeBasedDirectHit>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DirectHitOverrides))), ref settings.DirectHitOverrides, hitOverridesProperty, DrawDirectHitOverride, offSet + 1, new GUIContent(". Charged Direct Hit"));
+				SerializedProperty hitOverridesProperty = settingsProperty.FindPropertyRelative(nameof(settings.ChargeBasedDirectHits));
+				DrawArray<ChargeBasedDirectHit>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ChargeBasedDirectHits))), ref settings.ChargeBasedDirectHits, hitOverridesProperty, DrawDirectHitOverride, offSet + 1, new GUIContent(". Charge Based Direct Hit"));
 
 				//FX
 				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
@@ -409,6 +419,21 @@ namespace EoE.Combatery
 				if (info.ExecutionCount > 1)
 					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(info.ExecutionRepeatDelay))), ref info.ExecutionRepeatDelay, offSet + 1);
 			}
+		}
+		private void DrawUltimateSettings()
+		{
+			WeaponUltimate settings = (target as Weapon).UltimateSettings;
+			ObjectField<Ultimate>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Ultimate))), ref settings.Ultimate, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.TotalRequiredCharge))), ref settings.TotalRequiredCharge, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OnUseChargeRemove))), ref settings.OnUseChargeRemove, 1);
+
+			LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OnHitCharge))), ref settings.OnHitCharge, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OnCritHitCharge))), ref settings.OnCritHitCharge, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OnKillCharge))), ref settings.OnKillCharge, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.PerComboPointCharge))), ref settings.PerComboPointCharge, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ChargeOverTimeOnCombat))), ref settings.ChargeOverTimeOnCombat, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OutOfCombatDecrease))), ref settings.OutOfCombatDecrease, 1);
 		}
 	}
 }

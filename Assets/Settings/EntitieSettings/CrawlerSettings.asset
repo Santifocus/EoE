@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CrawlerSettings
   m_EditorClassIdentifier: 
   EntitieMass: 1
-  MassCenter: {x: 0, y: 0, z: 0}
+  MassCenter: {x: 0, y: 0.5, z: 0}
   EntitieElement: 4
   PossibleDropsTable: {fileID: 11400000, guid: 6c863124784db984e93eb995e00bd42e, type: 2}
   LevelSettings: {fileID: 11400000, guid: 8872bc66ea135374daf83e0b036673d5, type: 2}

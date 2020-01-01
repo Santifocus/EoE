@@ -32,6 +32,9 @@ namespace EoE.Entities
 		[SerializeField] private PlayerSettings selfSettings = default;
 		public PlayerBuffDisplay buffDisplay = default;
 
+		[SerializeField] private Transform head = default;
+		[SerializeField] private Transform torso = default;
+
 		//Endurance
 		public float curEndurance { get; set; }
 		public float curMaxEndurance { get; set; }
@@ -138,6 +141,10 @@ namespace EoE.Entities
 
 			if (!IsStunned || IsCasting)
 				TurnControl();
+		}
+		private void LateUpdate()
+		{
+			ProceduralAnimationControl();
 		}
 		#endregion
 		#region Setups
@@ -373,6 +380,9 @@ namespace EoE.Entities
 										);
 			modelTransform.localEulerAngles = new Vector3(curModelTilt.y, 0, curModelTilt.x);
 
+			if (GameController.CurrentGameSettings.IsDebugEnabled)
+				Debug.DrawLine(modelTransform.position, modelTransform.position + modelTransform.up * 2.5f, Color.blue, Time.unscaledDeltaTime * 0.99f);
+
 			//Move direction
 			float forwardValue = Vector2.Dot(velocityDirection, forward);
 			int xMultiplier = Vector2.Dot(velocityDirection, right) > 0 ? 1 : -1;
@@ -455,6 +465,51 @@ namespace EoE.Entities
 					PlayerRunningBoundEffects = null;
 				}
 			}
+		}
+		private float curTosoTurn;
+		private float bodyLookSpringAcceleration;
+
+		private Vector2 curHeadTurn;
+		private float headHLookSpringAcceleration;
+		private float headVLookSpringAcceleration;
+		private void ProceduralAnimationControl()
+		{
+			return;
+			Vector3 targetLookDirection;
+			if (TargetedEntitie)
+			{
+				targetLookDirection = (TargetedEntitie.actuallWorldPosition - head.position).normalized;
+			}
+			else if(curAcceleration > MIN_WALK_ACCELERATION)
+			{
+				targetLookDirection = transform.forward;
+			}
+			else
+			{
+				targetLookDirection = PlayerCameraController.PlayerCamera.transform.forward;
+			}
+
+
+			float hAngle = -(Mathf.Atan2(targetLookDirection.z, targetLookDirection.x) * Mathf.Rad2Deg + 90);
+			float vAngle = Mathf.Asin(targetLookDirection.y) * Mathf.Rad2Deg;
+
+			float targetTorsoAngle = Mathf.Clamp(hAngle * selfSettings.BodyTurnWeight, -selfSettings.BodyTurnHorizontalClamp, selfSettings.BodyTurnHorizontalClamp);
+			curTosoTurn = Utils.SpringLerp(curTosoTurn, targetTorsoAngle, ref bodyLookSpringAcceleration, selfSettings.LookLerpSpringStiffness, Time.deltaTime * selfSettings.LookLerpSpeed);
+
+			torso.localEulerAngles = new Vector3(torso.localEulerAngles.x, curTosoTurn, torso.localEulerAngles.z);
+
+			Vector2 targetHeadAngle = new Vector2(	Mathf.Clamp(hAngle - curTosoTurn, -selfSettings.HeadLookAngleClamps.z + curTosoTurn, selfSettings.HeadLookAngleClamps.x + curTosoTurn),
+													Mathf.Clamp(vAngle, -selfSettings.HeadLookAngleClamps.w, selfSettings.HeadLookAngleClamps.y));
+
+			curHeadTurn = new Vector2(	Utils.SpringLerp(curHeadTurn.x, targetHeadAngle.x, ref headHLookSpringAcceleration, selfSettings.LookLerpSpringStiffness, Time.deltaTime * selfSettings.LookLerpSpeed),
+										Utils.SpringLerp(curHeadTurn.y, targetHeadAngle.y, ref headVLookSpringAcceleration, selfSettings.LookLerpSpringStiffness, Time.deltaTime * selfSettings.LookLerpSpeed));
+
+			float vAngleSinPart = Mathf.Sin(curHeadTurn.x * Mathf.Deg2Rad);
+			float vAngleCosPart = Mathf.Cos(curHeadTurn.x * Mathf.Deg2Rad);
+
+			debugText.text = vAngleSinPart + ", " + vAngleCosPart;
+
+			head.eulerAngles = new Vector3(curHeadTurn.y * vAngleSinPart, curHeadTurn.x, curHeadTurn.y * vAngleCosPart);
 		}
 		#region Walking
 		private void TurnControl()
@@ -742,8 +797,8 @@ namespace EoE.Entities
 			Material dodgeMaterialInstance = Instantiate(PlayerSettings.DodgeModelMaterial);
 			Transform modelCopy = Instantiate(modelTransform, Storage.ParticleStorage);
 			Transform weaponCopy = null;
-			if (WeaponController.PlayerWeaponController)
-				weaponCopy = WeaponController.PlayerWeaponController.CloneModel().transform;
+			if (WeaponController.Instance)
+				weaponCopy = WeaponController.Instance.CloneModel().transform;
 
 			modelCopy.transform.position = modelTransform.position;
 			modelCopy.transform.localScale = modelTransform.lossyScale;

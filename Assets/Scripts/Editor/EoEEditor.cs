@@ -258,6 +258,53 @@ namespace EoE
 			}
 			return false;
 		}
+		public static bool Vector4Field(string content, ref Vector4 curValue, int offSet = 0) => Vector4Field(new GUIContent(content), ref curValue, offSet);
+		public static bool Vector4Field(GUIContent content, ref Vector4 curValue, int offSet = 0)
+		{
+			bool changed = false;
+			Vector4 newValue = curValue;
+
+			float preFieldWidth = EditorGUIUtility.fieldWidth;
+			EditorGUIUtility.fieldWidth = STANDARD_OFFSET * 4;
+
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space((offSet + 3) * STANDARD_OFFSET); 
+			newValue.y = EditorGUILayout.FloatField(" ", newValue.y);
+			GUILayout.FlexibleSpace();
+			EditorGUILayout.EndHorizontal();
+
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(offSet * STANDARD_OFFSET);
+			newValue.x = EditorGUILayout.FloatField(content, newValue.x);
+
+			GUILayout.Space(STANDARD_OFFSET * 1.3f);
+			newValue.z = EditorGUILayout.FloatField("", newValue.z, GUILayout.MaxWidth(EditorGUIUtility.fieldWidth));
+			GUILayout.FlexibleSpace();
+			EditorGUILayout.EndHorizontal();
+
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space((offSet + 3) * STANDARD_OFFSET);
+			newValue.w = EditorGUILayout.FloatField(" ", newValue.w);
+			GUILayout.FlexibleSpace();
+			EditorGUILayout.EndHorizontal();
+
+			for (int i = 0; i < 4; i++)
+			{
+				if(curValue[i] != newValue[i])
+				{
+					changed = true;
+					curValue[i] = newValue[i];
+				}
+			}
+
+			EditorGUIUtility.fieldWidth = preFieldWidth;
+
+			if (changed)
+			{
+				isDirty = true;
+			}
+			return changed;
+		}
 		public static bool ColorField(string content, ref Color curValue, int offSet = 0) => ColorField(new GUIContent(content), ref curValue, offSet);
 		public static bool ColorField(GUIContent content, ref Color curValue, int offSet = 0)
 		{

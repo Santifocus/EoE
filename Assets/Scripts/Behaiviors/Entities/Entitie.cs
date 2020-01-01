@@ -343,7 +343,6 @@ namespace EoE.Entities
 				ReceivedHealthDamage(causedChange, changeResult);
 			}
 
-
 			//Below zero health means death
 			if (curHealth <= 0)
 			{
@@ -812,7 +811,7 @@ namespace EoE.Entities
 		#region Spell Casting
 		public bool CastSpell(Spell spell)
 		{
-			bool playerCurrentlyAttacking = this is Player && WeaponController.PlayerWeaponController != null && WeaponController.PlayerWeaponController.InAttackSequence;
+			bool playerCurrentlyAttacking = this is Player && WeaponController.Instance != null && WeaponController.Instance.InAttackSequence;
 			if (curMana < spell.BaseManaCost || IsCasting || CastingCooldown > 0 || playerCurrentlyAttacking)
 				return false;
 
@@ -1039,7 +1038,7 @@ namespace EoE.Entities
 			Vector3 GetRandomPointInBounds()
 			{
 				return target.coll.bounds.center +
-					new Vector3(target.coll.bounds.extents.x * (Random.value - 0.5f) * 2,
+					new Vector3(	target.coll.bounds.extents.x * (Random.value - 0.5f) * 2,
 									target.coll.bounds.extents.y * (Random.value - 0.5f) * 2,
 									target.coll.bounds.extents.z * (Random.value - 0.5f) * 2);
 			}

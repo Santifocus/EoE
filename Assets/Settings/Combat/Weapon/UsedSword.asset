@@ -23,6 +23,7 @@ MonoBehaviour:
   WeaponCauseType: 0
   ContainedParts: -1
   FallBackPart: 1
+  HasUltimate: 1
   WeaponPositionOffset: {x: 0, y: 0, z: 1.05}
   WeaponRotationOffset: {x: 0, y: 0, z: 25}
   StandAttackSequence:
@@ -67,7 +68,7 @@ MonoBehaviour:
         StartCharge: 0
         MaximumCharge: 1
         MinRequiredCharge: 0.1
-        DirectHitOverrides: []
+        ChargeBasedDirectHits: []
         FXObjects: []
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
@@ -151,7 +152,7 @@ MonoBehaviour:
         StartCharge: 0
         MaximumCharge: 1
         MinRequiredCharge: 0.1
-        DirectHitOverrides: []
+        ChargeBasedDirectHits: []
         FXObjects: []
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
@@ -235,15 +236,7 @@ MonoBehaviour:
         StartCharge: 1
         MaximumCharge: 2.5
         MinRequiredCharge: 1
-        DirectHitOverrides:
-        - MinRequiredCharge: 1
-          MaxRequiredCharge: 2
-          DirectHitOverride: {fileID: 11400000, guid: 265e6994fdfd23549bf67df632fcc179,
-            type: 2}
-        - MinRequiredCharge: 2
-          MaxRequiredCharge: 2.5
-          DirectHitOverride: {fileID: 11400000, guid: ae95f75fc2b7e104b80d2b36faf8abd2,
-            type: 2}
+        ChargeBasedDirectHits: []
         FXObjects: []
         FXObjectsWithMutliplier:
         - FX: {fileID: 11400000, guid: b7ca0c9b1adf6044a871c15b7af6ea29, type: 2}
@@ -353,7 +346,7 @@ MonoBehaviour:
         StartCharge: 0
         MaximumCharge: 1
         MinRequiredCharge: 0.1
-        DirectHitOverrides: []
+        ChargeBasedDirectHits: []
         FXObjects: []
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
@@ -449,7 +442,7 @@ MonoBehaviour:
         StartCharge: 0
         MaximumCharge: 1
         MinRequiredCharge: 0.1
-        DirectHitOverrides: []
+        ChargeBasedDirectHits: []
         FXObjects: []
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
@@ -537,7 +530,7 @@ MonoBehaviour:
         StartCharge: 0
         MaximumCharge: 1
         MinRequiredCharge: 0.1
-        DirectHitOverrides: []
+        ChargeBasedDirectHits: []
         FXObjects: []
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
@@ -583,3 +576,13 @@ MonoBehaviour:
         ProjectileInfos: []
     PartsMaxDelays: []
   ComboEffects: {fileID: 11400000, guid: 4e7be449530b2d44fb6413e980a881e2, type: 2}
+  UltimateSettings:
+    Ultimate: {fileID: 0}
+    TotalRequiredCharge: 20
+    OnUseChargeRemove: 1
+    OnHitCharge: 1
+    OnCritHitCharge: 2
+    OnKillCharge: 2
+    PerComboPointCharge: 0
+    ChargeOverTimeOnCombat: 0
+    OutOfCombatDecrease: 0

@@ -158,7 +158,7 @@ namespace EoE.UI
 		[System.Serializable]
 		private class ItemDisplayCombo
 		{
-			[HideInInspector] public Color OriginalColor = default;
+			public Color OriginalColor { get; set; }
 			public Image ItemIconDisplay = default;
 			public Image ItemCooldownDisplay = default;
 			public TextMeshProUGUI ItemCountDisplay = default;

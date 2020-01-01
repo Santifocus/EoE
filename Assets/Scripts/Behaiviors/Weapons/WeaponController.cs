@@ -1,5 +1,6 @@
 ﻿using EoE.Controlls;
 using EoE.Entities;
+using EoE.Events;
 using EoE.Information;
 using EoE.UI;
 using System.Collections;
@@ -20,7 +21,7 @@ namespace EoE.Combatery
 			{ AttackAnimation.Attack2, (0.5f, 0.22f) },
 			{ AttackAnimation.Attack3, (1f, 0.6f) },
 		};
-		public static WeaponController PlayerWeaponController;
+		public static WeaponController Instance;
 		public bool InAttackSequence { get; private set; }
 		public AttackStyle ActiveAttackStyle { get; private set; }
 
@@ -43,6 +44,10 @@ namespace EoE.Combatery
 		private List<FXInstance> comboBoundFX = new List<FXInstance>();
 		private List<BuffInstance> comboBoundBuffs = new List<BuffInstance>();
 
+		//Ultimate control
+		public float ultimateCharge { get; set; }
+
+		//Charge effects
 		private FXInstance[] chargeBoundFX;
 		private FXInstance[] chargeBoundFXMultiplied;
 		private BuffInstance[] chargeBoundBuffs;
@@ -51,7 +56,7 @@ namespace EoE.Combatery
 		#region Setups
 		public void Setup(Weapon weaponInfo)
 		{
-			PlayerWeaponController = this;
+			Instance = this;
 			this.weaponInfo = weaponInfo;
 			for (int i = 0; i < weaponHitboxes.Length; i++)
 			{
@@ -60,6 +65,11 @@ namespace EoE.Combatery
 			ComboDisplayController.Instance.ResetCombo(weaponInfo.ComboEffects);
 			ChangeWeaponState(false, null);
 			FollowPlayer();
+
+			if (weaponInfo.HasUltimate)
+				EventManager.EntitieDiedEvent += EntitieDeath;
+
+			UltimateBarController.Instance.Setup(weaponInfo.HasUltimate ? weaponInfo.UltimateSettings : null);
 		}
 		private void ChangeWeaponState(bool state, AttackStyle style)
 		{
@@ -118,6 +128,11 @@ namespace EoE.Combatery
 					timeToNextCombo = 0;
 					ComboFinish();
 				}
+			}
+
+			if (weaponInfo.HasUltimate)
+			{
+				UltimateControl();
 			}
 		}
 		#endregion
@@ -426,68 +441,88 @@ namespace EoE.Combatery
 			if (hit.gameObject.layer == ConstantCollector.ENTITIE_LAYER)
 			{
 				Entitie hitEntitie = hit.gameObject.GetComponent<Entitie>();
-
-				List<EffectSingle> directHitSettings = new List<EffectSingle>();
-
-				if (ActiveAttackStyle.NeedsCharging && ActiveAttackStyle.ChargeSettings.DirectHitOverrides.Length > 0)
-				{
-					for(int i = 0; i < ActiveAttackStyle.ChargeSettings.DirectHitOverrides.Length; i++)
-					{
-						if(	ActiveAttackStyle.ChargeSettings.DirectHitOverrides[i].MinRequiredCharge <= curChargeMultiplier &&
-							ActiveAttackStyle.ChargeSettings.DirectHitOverrides[i].MaxRequiredCharge >= curChargeMultiplier)
-						{
-							directHitSettings.Add(ActiveAttackStyle.ChargeSettings.DirectHitOverrides[i].DirectHitOverride);
-						}
-					}
-				}
-				else
-				{
-					if (ActiveAttackStyle.DirectHit)
-						directHitSettings.Add(ActiveAttackStyle.DirectHit);
-				}
-
-				if (directHitSettings.Count > 0)
-				{
-					for (int i = 0; i < directHitSettings.Count; i++)
-					{
-						float chargeMultiplier = ActiveAttackStyle.NeedsCharging ? curChargeMultiplier : 1;
-						EffectOverrides overrides = new EffectOverrides()
-						{
-							ExtraDamageMultiplier = ActiveAttackStyle.DamageMultiplier * (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.Damage) ? chargeMultiplier : 1),
-							ExtraCritChanceMultiplier = ActiveAttackStyle.CritChanceMultiplier * (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.CritChance) ? chargeMultiplier : 1),
-							ExtraKnockbackMultiplier = ActiveAttackStyle.KnockbackMultiplier * (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.Knockback) ? chargeMultiplier : 1),
-							OverridenElement = ActiveAttackStyle.OverrideElement ? ((ElementType?)ActiveAttackStyle.OverridenElement) : null,
-							OverridenCauseType = ActiveAttackStyle.OverrideCauseType ? ((CauseType?)ActiveAttackStyle.OverridenCauseType) : null
-						};
-
-						directHitSettings[i].ActivateEffectSingle(	Player.Instance,
-																	hitEntitie,
-																	weaponInfo,
-																	direction,
-																	hitPos,
-																	overrides);
-					}
-
-					ComboHit(hitEntitie, direction, hitPos);
-					CreateParticles(GameController.CurrentGameSettings.HitEntitieParticles, hitPos, direction);
-				}
+				OnEntitieHit(hitEntitie, direction, hitPos);
+				CreateParticles(GameController.CurrentGameSettings.HitEntitieParticles, hitPos, direction);
 			}
 			else
 			{
 				CreateParticles(GameController.CurrentGameSettings.HitTerrainParticles, hitPos, direction);
 			}
 		}
-		private void CreateParticles(GameObject prefab, Vector3 hitPos, Vector3 direction)
+		private void OnEntitieHit(Entitie hitEntitie, Vector3 direction, Vector3 hitPos)
 		{
-			GameObject newParticleSystem = Instantiate(prefab, Storage.ParticleStorage);
-			newParticleSystem.transform.forward = direction;
-			newParticleSystem.transform.position = hitPos;
-			EffectUtils.FadeAndDestroyParticles(newParticleSystem, 1);
-		}
+			//First calculate the generall damage apply
+			float damage = ActiveAttackStyle.DamageMultiplier * weaponInfo.BaseDamage;
+			bool isCrit = Utils.Chance01(ActiveAttackStyle.CritChanceMultiplier * weaponInfo.BaseCritChance);
+			float? knockbackAmount = ActiveAttackStyle.KnockbackMultiplier * weaponInfo.BaseKnockback;
+			knockbackAmount = knockbackAmount.Value > 0 ? knockbackAmount : null;
+			ElementType attackElement = ActiveAttackStyle.OverrideElement ? ActiveAttackStyle.OverridenElement : weaponInfo.WeaponElement;
 
-		private void ComboHit(Entitie hitEntitie, Vector3 direction, Vector3 hitPos)
+			hitEntitie.ChangeHealth(new ChangeInfo(Player.Instance, CauseType.Physical, attackElement, TargetStat.Health, hitPos, direction, damage, isCrit, knockbackAmount));
+
+			//Now invoke the custom effects
+			ActivateSingleHitEffects(hitEntitie, direction, hitPos);
+			int comboIncrease = Mathf.RoundToInt(ActiveAttackStyle.OnHitComboWorth * (ActiveAttackStyle.NeedsCharging ? (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.ComboWorth) ? curChargeMultiplier : 1) : 1));
+			ComboHit(hitEntitie, direction, hitPos, comboIncrease);
+
+			//Calculate ultimate charge change
+			if (!weaponInfo.HasUltimate)
+				return;
+
+			float ultimateChargeAdd = isCrit ? weaponInfo.UltimateSettings.OnCritHitCharge : weaponInfo.UltimateSettings.OnHitCharge;
+			ultimateChargeAdd += comboIncrease * weaponInfo.UltimateSettings.PerComboPointCharge;
+			ultimateCharge = Mathf.Clamp(ultimateCharge + ultimateChargeAdd, 0, weaponInfo.UltimateSettings.TotalRequiredCharge);
+		}
+		private void ActivateSingleHitEffects(Entitie hitEntitie, Vector3 direction, Vector3 hitPos)
 		{
-			int newComboAmount = curCombo + Mathf.RoundToInt(ActiveAttackStyle.OnHitComboWorth * (ActiveAttackStyle.NeedsCharging ? (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.ComboWorth) ? curChargeMultiplier : 1) : 1));
+			List<EffectSingle> activatedDirectHits = new List<EffectSingle>();
+
+			if (ActiveAttackStyle.DirectHit)
+				activatedDirectHits.Add(ActiveAttackStyle.DirectHit);
+
+			if (ActiveAttackStyle.NeedsCharging && ActiveAttackStyle.ChargeSettings.ChargeBasedDirectHits.Length > 0)
+			{
+				for (int i = 0; i < ActiveAttackStyle.ChargeSettings.ChargeBasedDirectHits.Length; i++)
+				{
+					if (ActiveAttackStyle.ChargeSettings.ChargeBasedDirectHits[i].MinRequiredCharge <= curChargeMultiplier &&
+						ActiveAttackStyle.ChargeSettings.ChargeBasedDirectHits[i].MaxRequiredCharge >= curChargeMultiplier)
+					{
+						activatedDirectHits.Add(ActiveAttackStyle.ChargeSettings.ChargeBasedDirectHits[i].DirectHitOverride);
+					}
+				}
+			}
+
+			if (activatedDirectHits.Count > 0)
+			{
+				float chargeMultiplier = ActiveAttackStyle.NeedsCharging ? curChargeMultiplier : 1;
+
+				float damageMultiplier = (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.Damage) ? chargeMultiplier : 1);
+				float critChanceMultiplier = (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.CritChance) ? chargeMultiplier : 1);
+				float knockbackMultiplier = (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.Knockback) ? chargeMultiplier : 1);
+
+				for (int i = 0; i < activatedDirectHits.Count; i++)
+				{
+					EffectOverrides overrides = new EffectOverrides()
+					{
+						ExtraDamageMultiplier = ActiveAttackStyle.DamageMultiplier * damageMultiplier,
+						ExtraCritChanceMultiplier = ActiveAttackStyle.CritChanceMultiplier * critChanceMultiplier,
+						ExtraKnockbackMultiplier = ActiveAttackStyle.KnockbackMultiplier * knockbackMultiplier,
+						OverridenElement = ActiveAttackStyle.OverrideElement ? ((ElementType?)ActiveAttackStyle.OverridenElement) : null,
+						OverridenCauseType = ActiveAttackStyle.OverrideCauseType ? ((CauseType?)ActiveAttackStyle.OverridenCauseType) : null
+					};
+
+					activatedDirectHits[i].ActivateEffectSingle(Player.Instance,
+																hitEntitie,
+																weaponInfo,
+																direction,
+																hitPos,
+																overrides);
+				}
+			}
+		}
+		private void ComboHit(Entitie hitEntitie, Vector3 direction, Vector3 hitPos, int comboIncrease)
+		{
+			int newComboAmount = curCombo + comboIncrease;
 			timeToNextCombo = ActiveAttackStyle.ComboIncreaseMaxDelay;
 
 			for (int i = 0; i < weaponInfo.ComboEffects.ComboData.Length; i++)
@@ -573,10 +608,56 @@ namespace EoE.Combatery
 			chargeBoundFXMultiplied = null;
 			chargeBoundBuffs = null;
 		}
+		private void UltimateControl()
+		{
+			if (Player.Instance.curStates.Fighting)
+			{
+				if(ultimateCharge < weaponInfo.UltimateSettings.TotalRequiredCharge)
+				{
+					ultimateCharge += weaponInfo.UltimateSettings.ChargeOverTimeOnCombat * Time.deltaTime;
+					if (ultimateCharge > weaponInfo.UltimateSettings.TotalRequiredCharge)
+						ultimateCharge = weaponInfo.UltimateSettings.TotalRequiredCharge;
+				}
+			}
+			else
+			{
+				if (ultimateCharge > 0)
+				{
+					ultimateCharge -= weaponInfo.UltimateSettings.OutOfCombatDecrease * Time.deltaTime;
+					if (ultimateCharge < 0)
+						ultimateCharge = 0;
+				}
+			}
 
+			if(!InAttackSequence && !Player.Instance.IsCasting)
+			{
+				if (InputController.HeavyAttack.Down && ultimateCharge == weaponInfo.UltimateSettings.TotalRequiredCharge)
+				{
+					if (weaponInfo.UltimateSettings.Ultimate.CanActivate())
+					{
+						weaponInfo.UltimateSettings.Ultimate.Activate();
+						ultimateCharge -= weaponInfo.UltimateSettings.OnUseChargeRemove * weaponInfo.UltimateSettings.TotalRequiredCharge;
+					}
+				}
+			}
+		}
+		private void EntitieDeath(Entitie killed, Entitie killer)
+		{
+			if(killer is Player)
+			{
+				ultimateCharge = Mathf.Clamp(ultimateCharge + weaponInfo.UltimateSettings.OnKillCharge, 0, weaponInfo.UltimateSettings.TotalRequiredCharge);
+			}
+		}
+		private void CreateParticles(GameObject prefab, Vector3 hitPos, Vector3 direction)
+		{
+			GameObject newParticleSystem = Instantiate(prefab, Storage.ParticleStorage);
+			newParticleSystem.transform.forward = direction;
+			newParticleSystem.transform.position = hitPos;
+			EffectUtils.FadeAndDestroyParticles(newParticleSystem, 1);
+		}
 		private void OnDestroy()
 		{
-			if (this != PlayerWeaponController)
+			if (this != Instance)
 			{
 				return;
 			}
@@ -592,6 +673,7 @@ namespace EoE.Combatery
 				if (isChargingAttack)
 					RemoveChargeBoundEffects();
 			}
+			UltimateBarController.Instance.gameObject.SetActive(false);
 		}
 
 		private void SetAnimationSpeed(float speed) => Player.Instance.animationControl.SetFloat("AttackAnimationSpeed", speed);

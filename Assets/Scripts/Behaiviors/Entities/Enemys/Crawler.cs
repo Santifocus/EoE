@@ -129,7 +129,7 @@ namespace EoE.Entities
 						}
 					}
 
-					player.ChangeHealth(new ChangeInfo(this, CauseType.Physical, settings.EntitieElement, TargetStat.Health, hitPoint, bashForce.Force / restForce, restForce / settings.BashSpeed * settings.BaseAttackDamage, Random.value < settings.CritChance, restForce * settings.ForceTranslationMultiplier));
+					player.ChangeHealth(new ChangeInfo(this, CauseType.Physical, settings.EntitieElement, TargetStat.Health, hitPoint, bashForce.Force / restForce, restForce / settings.BashSpeed * settings.BaseAttackDamage, Utils.Chance01(settings.CritChance), restForce * settings.ForceTranslationMultiplier));
 					entitieForceController.ForceRemoveForce(bashForce);
 					body.velocity = curVelocity;
 				}
