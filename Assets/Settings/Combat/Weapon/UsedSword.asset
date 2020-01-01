@@ -261,14 +261,14 @@ MonoBehaviour:
           HasCustomScale: 0
           CustomScale: {x: 1, y: 1, z: 1}
         BuffOnUserWhileCharging: []
-      DamageMultiplier: 2
+      DamageMultiplier: 1.2
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 2
       KnockbackMultiplier: 1
       CritChanceMultiplier: 1
       CollisionMask: -1
       StopOnCollisionMask: 0
-      DirectHit: {fileID: 0}
+      DirectHit: {fileID: 11400000, guid: b2224e95e2fd03742845a26029bcb0dc, type: 2}
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
