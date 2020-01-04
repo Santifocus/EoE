@@ -36,6 +36,7 @@ namespace EoE.Combatery
 		private bool wantsToBeginNextSequence;
 		private Weapon weaponInfo;
 		private List<Collider> ignoredColliders = new List<Collider>();
+		private Coroutine attackCoroutine;
 
 		//Combo Control
 		private float curAttackAnimationPoint = 0;
@@ -208,7 +209,14 @@ namespace EoE.Combatery
 			}
 
 			//Start the attack
-			StartCoroutine(Attack(weaponInfo[part]));
+			attackCoroutine = StartCoroutine(Attack(weaponInfo[part]));
+		}
+		public void ForceAttackStart(AttackSequence targetSequence)
+		{
+			if (InAttackSequence)
+				StopCoroutine(attackCoroutine);
+
+			attackCoroutine = StartCoroutine(Attack(targetSequence));
 		}
 		private IEnumerator Attack(AttackSequence targetSequence)
 		{
@@ -223,12 +231,9 @@ namespace EoE.Combatery
 					Player.Instance.AppliedMoveStuns++;
 
 				//First check if this attack sequence is allowed if not we stop the while loop here
-				float enduranceCost = weaponInfo.BaseEnduranceCost * ActiveAttackStyle.EnduranceCostMultiplier;
-				float manaCost = weaponInfo.BaseManaCost * ActiveAttackStyle.ManaCostMultiplier;
-				if ((Player.Instance.curEndurance >= enduranceCost) && (Player.Instance.curMana >= manaCost))
+				if (weaponInfo.CheckIfCanActivateCost(Player.Instance, ActiveAttackStyle.HealthCostMultiplier, ActiveAttackStyle.ManaCostMultiplier, ActiveAttackStyle.EnduranceCostMultiplier))
 				{
-					Player.Instance.ChangeEndurance(new ChangeInfo(Player.Instance, CauseType.Magic, TargetStat.Endurance, enduranceCost));
-					Player.Instance.ChangeMana(new ChangeInfo(Player.Instance, CauseType.Magic, TargetStat.Mana, manaCost));
+					weaponInfo.ActivateCost(Player.Instance, ActiveAttackStyle.HealthCostMultiplier, ActiveAttackStyle.ManaCostMultiplier, ActiveAttackStyle.EnduranceCostMultiplier);
 				}
 				else
 				{
@@ -299,9 +304,9 @@ namespace EoE.Combatery
 						float point = ActiveAttackStyle.AttackEffects[i].AtAnimationPoint;
 						if ((point >= smallerPoint) && (point < biggerPoint))
 						{
-							if (Utils.Chance01(ActiveAttackStyle.AttackEffects[i].ChanceToActivate))
+							if (Utils.Chance01(ActiveAttackStyle.AttackEffects[i].Effect.ChanceToActivate))
 							{
-								ActiveAttackStyle.AttackEffects[i].ActivateEffect(Player.Instance, weaponInfo);
+								ActiveAttackStyle.AttackEffects[i].Effect.Activate(Player.Instance, weaponInfo);
 							}
 						}
 					}
@@ -511,7 +516,7 @@ namespace EoE.Combatery
 						OverridenCauseType = ActiveAttackStyle.OverrideCauseType ? ((CauseType?)ActiveAttackStyle.OverridenCauseType) : null
 					};
 
-					activatedDirectHits[i].ActivateEffectSingle(Player.Instance,
+					activatedDirectHits[i].Activate(Player.Instance,
 																hitEntitie,
 																weaponInfo,
 																direction,
@@ -541,9 +546,9 @@ namespace EoE.Combatery
 
 					//Single / AOE effects
 					if (weaponInfo.ComboEffects.ComboData[i].Effect.EffectOnTarget != null)
-						weaponInfo.ComboEffects.ComboData[i].Effect.EffectOnTarget.ActivateEffectSingle(Player.Instance, hitEntitie, weaponInfo, direction, hitPos);
+						weaponInfo.ComboEffects.ComboData[i].Effect.EffectOnTarget.Activate(Player.Instance, hitEntitie, weaponInfo, direction, hitPos);
 					if (weaponInfo.ComboEffects.ComboData[i].Effect.EffectAOE != null)
-						weaponInfo.ComboEffects.ComboData[i].Effect.EffectAOE.ActivateEffectAOE(Player.Instance, Player.Instance.transform, weaponInfo);
+						weaponInfo.ComboEffects.ComboData[i].Effect.EffectAOE.Activate(Player.Instance, Player.Instance.transform, weaponInfo);
 
 					//Heal effects
 					for (int j = 0; j < weaponInfo.ComboEffects.ComboData[i].Effect.HealEffects.Length; j++)
@@ -673,7 +678,9 @@ namespace EoE.Combatery
 				if (isChargingAttack)
 					RemoveChargeBoundEffects();
 			}
-			UltimateBarController.Instance.gameObject.SetActive(false);
+
+			if (UltimateBarController.Instance)
+				UltimateBarController.Instance.gameObject.SetActive(false);
 		}
 
 		private void SetAnimationSpeed(float speed) => Player.Instance.animationControl.SetFloat("AttackAnimationSpeed", speed);

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: UsedSword
   m_EditorClassIdentifier: 
   BaseDamage: 5
+  BaseHealthCost: 0
   BaseManaCost: 0
   BaseEnduranceCost: 3
   BaseKnockback: 10
@@ -21,7 +22,7 @@ MonoBehaviour:
     type: 3}
   WeaponElement: 1
   WeaponCauseType: 0
-  ContainedParts: -1
+  ContainedParts: 13
   FallBackPart: 1
   HasUltimate: 1
   WeaponPositionOffset: {x: 0, y: 0, z: 1.05}
@@ -73,6 +74,7 @@ MonoBehaviour:
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
       DamageMultiplier: 1
+      HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
       KnockbackMultiplier: 1
@@ -88,30 +90,34 @@ MonoBehaviour:
       OnHitComboWorth: 1
       AttackEffects:
       - AtAnimationPoint: 0.1
-        ChanceToActivate: 1
-        ContainedEffectType: 2
-        ImpulseVelocity: 5
-        ImpulseVelocityFallOffTime: 0.5
-        ImpulseVelocityDirection: 2
-        ImpulseVelocityFallbackDirection: 1
-        ImpulseDirectionBase: 1
-        FXObjects:
-        - FX: {fileID: 11400000, guid: 570ad84cc1492cb43a4cce2162e3b9f9, type: 2}
-          HasPositionOffset: 0
-          PositionOffset: {x: 0, y: 0, z: 0}
-          HasRotationOffset: 0
-          RotationOffset: {x: 0, y: 0, z: 0}
-          HasCustomScale: 0
-          CustomScale: {x: 1, y: 1, z: 1}
-        - FX: {fileID: 11400000, guid: 39ac2fcf652e44c479d1f9b66c082d6d, type: 2}
-          HasPositionOffset: 0
-          PositionOffset: {x: 0, y: 0, z: 0}
-          HasRotationOffset: 0
-          RotationOffset: {x: 0, y: 0, z: 0}
-          HasCustomScale: 0
-          CustomScale: {x: 1, y: 1, z: 1}
-        AOEEffects: []
-        ProjectileInfos: []
+        Effect:
+          ChanceToActivate: 1
+          ContainedEffectType: 2
+          ImpulseVelocity: 5
+          ImpulseVelocityFallOffTime: 0.5
+          ImpulseVelocityDirection: 2
+          ImpulseVelocityFallbackDirection: 1
+          ImpulseDirectionBase: 1
+          FXObjects:
+          - FX: {fileID: 11400000, guid: 570ad84cc1492cb43a4cce2162e3b9f9, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          - FX: {fileID: 11400000, guid: 39ac2fcf652e44c479d1f9b66c082d6d, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          AOEEffects: []
+          ProjectileInfos: []
+          HealEffects: []
+          StackingStyle: 2
+          BuffsToApply: []
     - AnimationTarget: 2
       StopMovement: 0
       AnimationMultiplicationType: 2
@@ -157,6 +163,7 @@ MonoBehaviour:
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
       DamageMultiplier: 1
+      HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
       KnockbackMultiplier: 1
@@ -172,30 +179,34 @@ MonoBehaviour:
       OnHitComboWorth: 1
       AttackEffects:
       - AtAnimationPoint: 0.1
-        ChanceToActivate: 1
-        ContainedEffectType: 2
-        ImpulseVelocity: 5
-        ImpulseVelocityFallOffTime: 0.5
-        ImpulseVelocityDirection: 2
-        ImpulseVelocityFallbackDirection: 1
-        ImpulseDirectionBase: 1
-        FXObjects:
-        - FX: {fileID: 11400000, guid: 570ad84cc1492cb43a4cce2162e3b9f9, type: 2}
-          HasPositionOffset: 0
-          PositionOffset: {x: 0, y: 0, z: 0}
-          HasRotationOffset: 0
-          RotationOffset: {x: 0, y: 0, z: 0}
-          HasCustomScale: 0
-          CustomScale: {x: 1, y: 1, z: 1}
-        - FX: {fileID: 11400000, guid: 37f86251f341af245a90869520ab23cd, type: 2}
-          HasPositionOffset: 0
-          PositionOffset: {x: 0, y: 0, z: 0}
-          HasRotationOffset: 0
-          RotationOffset: {x: 0, y: 0, z: 0}
-          HasCustomScale: 0
-          CustomScale: {x: 1, y: 1, z: 1}
-        AOEEffects: []
-        ProjectileInfos: []
+        Effect:
+          ChanceToActivate: 1
+          ContainedEffectType: 2
+          ImpulseVelocity: 5
+          ImpulseVelocityFallOffTime: 0.5
+          ImpulseVelocityDirection: 2
+          ImpulseVelocityFallbackDirection: 1
+          ImpulseDirectionBase: 1
+          FXObjects:
+          - FX: {fileID: 11400000, guid: 570ad84cc1492cb43a4cce2162e3b9f9, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          - FX: {fileID: 11400000, guid: 37f86251f341af245a90869520ab23cd, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          AOEEffects: []
+          ProjectileInfos: []
+          HealEffects: []
+          StackingStyle: 2
+          BuffsToApply: []
     - AnimationTarget: 4
       StopMovement: 1
       AnimationMultiplicationType: 2
@@ -270,6 +281,7 @@ MonoBehaviour:
           CustomScale: {x: 1, y: 1, z: 1}
         BuffOnUserWhileCharging: []
       DamageMultiplier: 1.2
+      HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 2
       KnockbackMultiplier: 1
@@ -285,30 +297,34 @@ MonoBehaviour:
       OnHitComboWorth: 1
       AttackEffects:
       - AtAnimationPoint: 0.55
-        ChanceToActivate: 1
-        ContainedEffectType: 2
-        ImpulseVelocity: 5
-        ImpulseVelocityFallOffTime: 0.5
-        ImpulseVelocityDirection: 2
-        ImpulseVelocityFallbackDirection: 1
-        ImpulseDirectionBase: 1
-        FXObjects:
-        - FX: {fileID: 11400000, guid: 33f4078c8a5dd4a44907009cea54301e, type: 2}
-          HasPositionOffset: 0
-          PositionOffset: {x: 0, y: 0, z: 0}
-          HasRotationOffset: 0
-          RotationOffset: {x: 0, y: 0, z: 0}
-          HasCustomScale: 0
-          CustomScale: {x: 1, y: 1, z: 1}
-        - FX: {fileID: 11400000, guid: 23c16a61dfc8b00419a8dd7863a8cf4e, type: 2}
-          HasPositionOffset: 0
-          PositionOffset: {x: 0, y: 0, z: 0}
-          HasRotationOffset: 0
-          RotationOffset: {x: 0, y: 0, z: 0}
-          HasCustomScale: 0
-          CustomScale: {x: 1, y: 1, z: 1}
-        AOEEffects: []
-        ProjectileInfos: []
+        Effect:
+          ChanceToActivate: 1
+          ContainedEffectType: 2
+          ImpulseVelocity: 5
+          ImpulseVelocityFallOffTime: 0.5
+          ImpulseVelocityDirection: 2
+          ImpulseVelocityFallbackDirection: 1
+          ImpulseDirectionBase: 1
+          FXObjects:
+          - FX: {fileID: 11400000, guid: 33f4078c8a5dd4a44907009cea54301e, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          - FX: {fileID: 11400000, guid: 23c16a61dfc8b00419a8dd7863a8cf4e, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          AOEEffects: []
+          ProjectileInfos: []
+          HealEffects: []
+          StackingStyle: 2
+          BuffsToApply: []
     PartsMaxDelays:
     - 0.2
     - 0.2
@@ -359,6 +375,7 @@ MonoBehaviour:
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
       DamageMultiplier: 0.9
+      HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
       KnockbackMultiplier: 1
@@ -374,30 +391,34 @@ MonoBehaviour:
       OnHitComboWorth: 1
       AttackEffects:
       - AtAnimationPoint: 0.1
-        ChanceToActivate: 1
-        ContainedEffectType: 2
-        ImpulseVelocity: 5
-        ImpulseVelocityFallOffTime: 0.5
-        ImpulseVelocityDirection: 2
-        ImpulseVelocityFallbackDirection: 1
-        ImpulseDirectionBase: 1
-        FXObjects:
-        - FX: {fileID: 11400000, guid: 570ad84cc1492cb43a4cce2162e3b9f9, type: 2}
-          HasPositionOffset: 0
-          PositionOffset: {x: 0, y: 0, z: 0}
-          HasRotationOffset: 0
-          RotationOffset: {x: 0, y: 0, z: 0}
-          HasCustomScale: 0
-          CustomScale: {x: 1, y: 1, z: 1}
-        - FX: {fileID: 11400000, guid: 39ac2fcf652e44c479d1f9b66c082d6d, type: 2}
-          HasPositionOffset: 0
-          PositionOffset: {x: 0, y: 0, z: 0}
-          HasRotationOffset: 0
-          RotationOffset: {x: 0, y: 0, z: 0}
-          HasCustomScale: 0
-          CustomScale: {x: 1, y: 1, z: 1}
-        AOEEffects: []
-        ProjectileInfos: []
+        Effect:
+          ChanceToActivate: 1
+          ContainedEffectType: 2
+          ImpulseVelocity: 5
+          ImpulseVelocityFallOffTime: 0.5
+          ImpulseVelocityDirection: 2
+          ImpulseVelocityFallbackDirection: 1
+          ImpulseDirectionBase: 1
+          FXObjects:
+          - FX: {fileID: 11400000, guid: 570ad84cc1492cb43a4cce2162e3b9f9, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          - FX: {fileID: 11400000, guid: 39ac2fcf652e44c479d1f9b66c082d6d, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          AOEEffects: []
+          ProjectileInfos: []
+          HealEffects: []
+          StackingStyle: 2
+          BuffsToApply: []
     PartsMaxDelays: []
   JumpAttackSequence:
     AttackSequenceParts:
@@ -455,6 +476,7 @@ MonoBehaviour:
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
       DamageMultiplier: 1.2
+      HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
       KnockbackMultiplier: 1
@@ -470,30 +492,34 @@ MonoBehaviour:
       OnHitComboWorth: 1
       AttackEffects:
       - AtAnimationPoint: 0.3
-        ChanceToActivate: 1
-        ContainedEffectType: 2
-        ImpulseVelocity: 5
-        ImpulseVelocityFallOffTime: 0.5
-        ImpulseVelocityDirection: 2
-        ImpulseVelocityFallbackDirection: 1
-        ImpulseDirectionBase: 1
-        FXObjects:
-        - FX: {fileID: 11400000, guid: 570ad84cc1492cb43a4cce2162e3b9f9, type: 2}
-          HasPositionOffset: 0
-          PositionOffset: {x: 0, y: 0, z: 0}
-          HasRotationOffset: 0
-          RotationOffset: {x: 0, y: 0, z: 0}
-          HasCustomScale: 0
-          CustomScale: {x: 1, y: 1, z: 1}
-        - FX: {fileID: 11400000, guid: 37f86251f341af245a90869520ab23cd, type: 2}
-          HasPositionOffset: 0
-          PositionOffset: {x: 0, y: 0, z: 0}
-          HasRotationOffset: 0
-          RotationOffset: {x: 0, y: 0, z: 0}
-          HasCustomScale: 0
-          CustomScale: {x: 1, y: 1, z: 1}
-        AOEEffects: []
-        ProjectileInfos: []
+        Effect:
+          ChanceToActivate: 1
+          ContainedEffectType: 2
+          ImpulseVelocity: 5
+          ImpulseVelocityFallOffTime: 0.5
+          ImpulseVelocityDirection: 2
+          ImpulseVelocityFallbackDirection: 1
+          ImpulseDirectionBase: 1
+          FXObjects:
+          - FX: {fileID: 11400000, guid: 570ad84cc1492cb43a4cce2162e3b9f9, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          - FX: {fileID: 11400000, guid: 37f86251f341af245a90869520ab23cd, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          AOEEffects: []
+          ProjectileInfos: []
+          HealEffects: []
+          StackingStyle: 2
+          BuffsToApply: []
     PartsMaxDelays:
     - 0
   RunJumpAttackSequence:
@@ -543,6 +569,7 @@ MonoBehaviour:
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
       DamageMultiplier: 1.4
+      HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1.4
       KnockbackMultiplier: 5
@@ -558,34 +585,38 @@ MonoBehaviour:
       OnHitComboWorth: 1
       AttackEffects:
       - AtAnimationPoint: 0.35
-        ChanceToActivate: 1
-        ContainedEffectType: 3
-        ImpulseVelocity: 10
-        ImpulseVelocityFallOffTime: 0.5
-        ImpulseVelocityDirection: 2
-        ImpulseVelocityFallbackDirection: 1
-        ImpulseDirectionBase: 1
-        FXObjects:
-        - FX: {fileID: 11400000, guid: 33f4078c8a5dd4a44907009cea54301e, type: 2}
-          HasPositionOffset: 0
-          PositionOffset: {x: 0, y: 0, z: 0}
-          HasRotationOffset: 0
-          RotationOffset: {x: 0, y: 0, z: 0}
-          HasCustomScale: 0
-          CustomScale: {x: 1, y: 1, z: 1}
-        - FX: {fileID: 11400000, guid: 23c16a61dfc8b00419a8dd7863a8cf4e, type: 2}
-          HasPositionOffset: 0
-          PositionOffset: {x: 0, y: 0, z: 0}
-          HasRotationOffset: 0
-          RotationOffset: {x: 0, y: 0, z: 0}
-          HasCustomScale: 0
-          CustomScale: {x: 1, y: 1, z: 1}
-        AOEEffects: []
-        ProjectileInfos: []
+        Effect:
+          ChanceToActivate: 1
+          ContainedEffectType: 2
+          ImpulseVelocity: 5
+          ImpulseVelocityFallOffTime: 0.5
+          ImpulseVelocityDirection: 2
+          ImpulseVelocityFallbackDirection: 1
+          ImpulseDirectionBase: 1
+          FXObjects:
+          - FX: {fileID: 11400000, guid: 570ad84cc1492cb43a4cce2162e3b9f9, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          - FX: {fileID: 11400000, guid: 23c16a61dfc8b00419a8dd7863a8cf4e, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          AOEEffects: []
+          ProjectileInfos: []
+          HealEffects: []
+          StackingStyle: 2
+          BuffsToApply: []
     PartsMaxDelays: []
   ComboEffects: {fileID: 11400000, guid: 4e7be449530b2d44fb6413e980a881e2, type: 2}
   UltimateSettings:
-    Ultimate: {fileID: 0}
+    Ultimate: {fileID: 11400000, guid: 94da0838ebc07b34c83b553d2ddf4f90, type: 2}
     TotalRequiredCharge: 20
     OnUseChargeRemove: 1
     OnHitCharge: 1

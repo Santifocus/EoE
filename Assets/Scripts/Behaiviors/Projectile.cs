@@ -183,7 +183,7 @@ namespace EoE.Combatery
 						break;
 					}
 			}
-			info.DirectHit.ActivateEffectSingle(creator, hit, baseData, knockbackDirection, hit.coll.ClosestPoint(transform.position));
+			info.DirectHit.Activate(creator, hit, baseData, knockbackDirection, hit.coll.ClosestPoint(transform.position));
 		}
 		private void FinishProjectileFlight()
 		{
@@ -222,7 +222,7 @@ namespace EoE.Combatery
 		private void ActivateSpellEffects(EffectAOE[] effects)
 		{
 			for (int i = 0; i < effects.Length; i++)
-				effects[i].ActivateEffectAOE(creator, transform, baseData);
+				effects[i].Activate(creator, transform, baseData);
 		}
 		private void CreateFX(CustomFXObject[] effects, bool bind = false)
 		{

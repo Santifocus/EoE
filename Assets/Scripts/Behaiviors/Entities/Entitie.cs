@@ -811,8 +811,8 @@ namespace EoE.Entities
 		#region Spell Casting
 		public bool CastSpell(Spell spell)
 		{
-			bool playerCurrentlyAttacking = this is Player && WeaponController.Instance != null && WeaponController.Instance.InAttackSequence;
-			if (curMana < spell.BaseManaCost || IsCasting || CastingCooldown > 0 || playerCurrentlyAttacking)
+			bool asPlayerCurrentlyAttacking = this is Player && WeaponController.Instance != null && WeaponController.Instance.InAttackSequence;
+			if (!spell.CheckIfCanActivateCost(this, 1, 1, 1) || IsCasting || CastingCooldown > 0 || asPlayerCurrentlyAttacking)
 				return false;
 
 			StartCoroutine(CastSpellC(spell));
@@ -831,7 +831,7 @@ namespace EoE.Entities
 
 				for (int i = 0; i < spell.CastInfo.StartEffects.Length; i++)
 				{
-					spell.CastInfo.StartEffects[i].ActivateEffectAOE(this, transform, spell);
+					spell.CastInfo.StartEffects[i].Activate(this, transform, spell);
 				}
 				curParticles = new FXInstance[spell.CastInfo.VisualEffects.Length];
 				for (int i = 0; i < spell.CastInfo.VisualEffects.Length; i++)
@@ -859,7 +859,7 @@ namespace EoE.Entities
 						effectTick -= GameController.CurrentGameSettings.WhileEffectTickSpeed;
 						for (int i = 0; i < spell.CastInfo.WhileEffects.Length; i++)
 						{
-							spell.CastInfo.WhileEffects[i].ActivateEffectAOE(this, transform, spell);
+							spell.CastInfo.WhileEffects[i].Activate(this, transform, spell);
 						}
 					}
 				}
@@ -883,7 +883,7 @@ namespace EoE.Entities
 			{
 				for (int i = 0; i < spell.StartInfo.Effects.Length; i++)
 				{
-					spell.StartInfo.Effects[i].ActivateEffectAOE(this, transform, spell);
+					spell.StartInfo.Effects[i].Activate(this, transform, spell);
 				}
 				curParticles = new FXInstance[spell.StartInfo.VisualEffects.Length];
 				for (int i = 0; i < spell.StartInfo.VisualEffects.Length; i++)
@@ -951,7 +951,7 @@ namespace EoE.Entities
 		StoppedSpell:;
 			IsCasting = false;
 			CastingCooldown = spell.SpellCooldown;
-			ChangeMana(new ChangeInfo(this, CauseType.Magic, TargetStat.Mana, spell.BaseManaCost));
+			spell.ActivateCost(this, 1, 1, 1);
 			if (curParticles != null)
 			{
 				for (int i = 0; i < curParticles.Length; i++)

@@ -117,19 +117,25 @@ namespace EoE.Information
 		{
 			PlayerSettings settings = target as PlayerSettings;
 
-			DrawArray(new GUIContent("Start Items"), DrawStartItem, ref settings.StartItems, ref InventoryStartItemsOpen, 1);
-			IntField("Use Inventory Size", ref settings.InventorySize, 1);
+			SerializedProperty startItemsArrayProperty = serializedObject.FindProperty(nameof(settings.StartItems));
+			DrawArray<PlayerSettings.StartItem>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartItems))), ref settings.StartItems, startItemsArrayProperty, DrawStartItem, 1, new GUIContent(". Start Item"));
+			IntField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.InventorySize))), ref settings.InventorySize, 1);
 		}
-		private bool DrawStartItem(int index, int offset, PlayerSettings.StartItem[] array)
+		private void DrawStartItem(GUIContent content, PlayerSettings.StartItem settings, SerializedProperty property, int offSet)
 		{
-			bool changed = false;
-			if (array[index] == null)
-				array[index] = new PlayerSettings.StartItem();
+			if(settings == null)
+			{
+				isDirty = true;
+				settings = new PlayerSettings.StartItem();
+			}
+			Foldout(content, property, offSet);
 
-			changed |= ObjectField(new GUIContent("Start Item " + (index + 1)), ref array[index].Item, offset);
-			changed |= IntField(new GUIContent("Item Count"), ref array[index].ItemCount, offset);
-			changed |= BoolField(new GUIContent("Force Equip"), ref array[index].ForceEquip, offset);
-			return changed;
+			if (property.isExpanded)
+			{
+				ObjectField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Item))), ref settings.Item, offSet + 1);
+				IntField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ItemCount))), ref settings.ItemCount, offSet + 1);
+				BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ForceEquip))), ref settings.ForceEquip, offSet + 1);
+			}
 		}
 		private void AnimationSettingsArea()
 		{

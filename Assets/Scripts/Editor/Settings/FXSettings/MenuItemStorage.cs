@@ -1,6 +1,7 @@
 ﻿using EoE.Combatery;
+using System.IO;
 using UnityEditor;
-using static EoE.EoEEditor;
+using UnityEngine;
 
 namespace EoE.Information
 {
@@ -30,12 +31,15 @@ namespace EoE.Information
 		[MenuItem("EoE/FX/Sound/Effect")] public static void CreateSoundEffect() => AssetCreator<SoundEffect>("Settings", "FX");
 
 		//Combat
+		[MenuItem("EoE/Combat/Object/BaseObject")] public static void CreateBaseCombatObject() => AssetCreator<CombatObject>("Settings", "Combat");
+		[MenuItem("EoE/Combat/Object/Weapon")] public static void CreateWeapon() => AssetCreator<Weapon>("Settings", "Combat", "Weapon");
+		[MenuItem("EoE/Combat/Object/Spell")] public static void CreateSpell() => AssetCreator<Spell>("Settings", "Combat", "Spell");
 		[MenuItem("EoE/Combat/ProjectileData")] public static void CreateProjectileData() => AssetCreator<ProjectileData>("Settings", "Combat");
 		[MenuItem("EoE/Combat/Effect/EffectSingle")] public static void CreateEffectSingle() => AssetCreator<EffectSingle>("Settings", "Combat");
 		[MenuItem("EoE/Combat/Effect/EffectAOE")] public static void CreateEffectAOE() => AssetCreator<EffectAOE>("Settings", "Combat");
-		[MenuItem("EoE/Combat/Spell")] public static void CreateSpell() => AssetCreator<Spell>("Settings", "Combat", "Spell");
-		[MenuItem("EoE/Combat/Physical/Weapon")] public static void CreateWeapon() => AssetCreator<Weapon>("Settings", "Combat", "Weapon");
 		[MenuItem("EoE/Combat/Physical/ComboSet")] public static void CreateComboSet() => AssetCreator<ComboSet>("Settings", "Combat", "Weapon", "ComboSets");
+		[MenuItem("EoE/Combat/Physical/Ultimate/Basic")] public static void CreateBasicUltimate() => AssetCreator<BasicUltimate>("Settings", "Combat", "Weapon", "Ultimates");
+		[MenuItem("EoE/Combat/Physical/Ultimate/Attack")] public static void CreateAttackUltimate() => AssetCreator<AttackUltimate>("Settings", "Combat", "Weapon", "Ultimates");
 
 		//Other
 		[MenuItem("EoE/Buff")] public static void CreateBuff() => AssetCreator<Buff>("Settings", "Buffs");
@@ -70,5 +74,34 @@ namespace EoE.Information
 				EditorUtility.SetDirty(itemCollector);
 			}
 		}
+
+		public static T AssetCreator<T>(params string[] pathParts) where T : ScriptableObject
+		{
+			T asset = ScriptableObject.CreateInstance<T>();
+			string name = "/New " + typeof(T).Name;
+			string path = "";
+
+			for (int i = 0; i < pathParts.Length; i++)
+			{
+				path += "/" + pathParts[i];
+				if (!Directory.Exists(Application.dataPath + path))
+				{
+					Directory.CreateDirectory(Application.dataPath + path);
+				}
+			}
+			AssetDatabase.CreateAsset(asset, "Assets" + path + name + ".asset");
+
+			AssetDatabase.SaveAssets();
+			AssetDatabase.Refresh();
+			EditorUtility.FocusProjectWindow();
+
+			Selection.activeObject = null;
+			Selection.activeObject = asset;
+			EditorGUIUtility.PingObject(asset);
+
+			Debug.Log("Created: '" + name.Substring(1) + "' at: Assets" + path + "/..");
+			return asset;
+		}
 	}
+
 }

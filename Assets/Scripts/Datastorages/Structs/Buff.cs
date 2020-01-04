@@ -6,6 +6,7 @@ namespace EoE.Information
 	public enum BuffType : byte { Negative = 0, Neutral = 1, Positive = 2 }
 	public enum TargetBaseStat { Health = 0, Mana = 1, Endurance = 2, PhysicalDamage = 3, MagicalDamage = 4, Defense = 5, MoveSpeed = 6, JumpHeightMultiplier = 7, TrueDamageMultiplier = 8 }
 	public enum TargetStat { Health = 0, Mana = 1, Endurance = 2 }
+	public enum BuffStackingStyle { Stack = 1, Reapply = 2, DoNothing = 4 }
 	public class Buff : ScriptableObject
 	{
 		public string Name;
@@ -18,6 +19,28 @@ namespace EoE.Information
 		public CustomEffect CustomEffects;
 		public DOT[] DOTs;
 		public FXObject[] FXEffects;
+
+		public static void ApplyBuff(Buff buff, Entitie target, Entitie applier, BuffStackingStyle stackingStyle = BuffStackingStyle.Reapply)
+		{
+			if (stackingStyle == BuffStackingStyle.Stack)
+			{
+				target.AddBuff(buff, applier);
+			}
+			else if (stackingStyle == BuffStackingStyle.Reapply)
+			{
+				if (!(target.TryReapplyBuff(buff, applier).Item1))
+				{
+					target.AddBuff(buff, applier);
+				}
+			}
+			else //stackingStyle == BuffStackingStyle.DoNothing
+			{
+				if (!(target.HasBuffActive(buff, applier).HasValue))
+				{
+					target.AddBuff(buff, applier);
+				}
+			}
+		}
 	}
 
 	public class BuffInstance

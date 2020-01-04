@@ -6,7 +6,6 @@ using UnityEngine;
 namespace EoE.Combatery
 {
 	public enum MultiplicationType { FlatValue = 1, Curve = 2 }
-	[System.Flags] public enum AttackEffectType { ImpulseVelocity = (1 << 0), FX = (1 << 1), AOE = (1 << 2), CreateProjectile = (1 << 3) }
 	[System.Flags] public enum AttackStylePart { StandAttack = (1 << 0), RunAttack = (1 << 1), JumpAttack = (1 << 2), RunJumpAttack = (1 << 3) }
 	[System.Flags] public enum AttackChargeEffectMask { Damage = (1 << 0), Knockback = (1 << 1), CritChance = (1 << 2), ComboWorth = (1 << 3), DirectHit = (1 << 4) }
 	public enum AttackStylePartFallback { None = (0), StandAttack = (1 << 0), RunAttack = (1 << 1), JumpAttack = (1 << 2), RunJumpAttack = (1 << 3) }
@@ -82,6 +81,7 @@ namespace EoE.Combatery
 
 		//Base multipliers
 		public float DamageMultiplier = 1;
+		public float HealthCostMultiplier = 1;
 		public float ManaCostMultiplier = 1;
 		public float EnduranceCostMultiplier = 1;
 		public float KnockbackMultiplier = 1;
@@ -103,12 +103,18 @@ namespace EoE.Combatery
 		public int OnHitComboWorth = 1;
 
 		//Attack effects
-		public AttackEffect[] AttackEffects = new AttackEffect[0];
+		public AttackActivationEffect[] AttackEffects = new AttackActivationEffect[0];
 
 		public static bool HasCollisionMask(ColliderMask collisionMask, ColliderMask flag)
 		{
 			return (flag | collisionMask) == collisionMask;
 		}
+	}
+	[System.Serializable]
+	public class AttackActivationEffect
+	{
+		public float AtAnimationPoint = 0.1f;
+		public ActivationEffect Effect = new ActivationEffect();
 	}
 	[System.Serializable]
 	public class AttackChargeSettings
@@ -144,110 +150,6 @@ namespace EoE.Combatery
 		public float MinRequiredCharge = 0;
 		public float MaxRequiredCharge = 1;
 		public EffectSingle DirectHitOverride = null;
-	}
-	[System.Serializable]
-	public class AttackEffect
-	{
-		public float AtAnimationPoint = 0.1f;
-		public float ChanceToActivate = 1;
-
-		public AttackEffectType ContainedEffectType = 0;
-
-		//Impulse Velocity
-		public float ImpulseVelocity = 5;
-		public float ImpulseVelocityFallOffTime = 0.5f;
-		public InherritDirection ImpulseVelocityDirection = InherritDirection.Target;
-		public InherritDirection ImpulseVelocityFallbackDirection = InherritDirection.Local;
-		public DirectionBase ImpulseDirectionBase = DirectionBase.Forward;
-
-		//FX
-		public CustomFXObject[] FXObjects = new CustomFXObject[0];
-
-		//AOE
-		public EffectAOE[] AOEEffects = new EffectAOE[0];
-
-		//Projectile
-		public ProjectileInfo[] ProjectileInfos = new ProjectileInfo[0];
-
-		public void ActivateEffect(Entitie activator, CombatObject baseObject)
-		{
-			if (HasMaskFlag(AttackEffectType.ImpulseVelocity))
-			{
-				Vector3 direction = CombatObject.CalculateDirection(ImpulseVelocityDirection, ImpulseVelocityFallbackDirection, ImpulseDirectionBase, activator, Vector3.zero);
-				activator.entitieForceController.ApplyForce(direction * ImpulseVelocity, 1 / ImpulseVelocityFallOffTime, true);
-			}
-			if (HasMaskFlag(AttackEffectType.FX))
-			{
-				for (int i = 0; i < FXObjects.Length; i++)
-				{
-					FXManager.PlayFX(FXObjects[i], activator.transform, activator is Player);
-				}
-			}
-			if (HasMaskFlag(AttackEffectType.AOE))
-			{
-				for (int i = 0; i < AOEEffects.Length; i++)
-				{
-					AOEEffects[i].ActivateEffectAOE(activator, activator.transform, baseObject);
-				}
-			}
-			if (HasMaskFlag(AttackEffectType.CreateProjectile))
-			{
-				GameController.Instance.StartCoroutine(ProjectileCreation(activator, baseObject));
-			}
-		}
-
-		#region ProjectileCreation
-		private IEnumerator ProjectileCreation(Entitie activator, CombatObject baseObject)
-		{
-			for (int i = 0; i < ProjectileInfos.Length; i++)
-			{
-				for (int j = 0; j < ProjectileInfos[i].ExecutionCount; j++)
-				{
-					float timer = 0;
-					while (timer < ProjectileInfos[i].ExecutionDelay)
-					{
-						yield return new WaitForEndOfFrame();
-						timer += Time.deltaTime;
-						if (activator.IsStunned)
-							goto ProjectileCreationFinished;
-					}
-
-					CreateProjectile(activator, baseObject, ProjectileInfos[i].Projectile);
-					if (j < ProjectileInfos[i].ExecutionCount - 1)
-					{
-						float repeatTimer = 0;
-						while (repeatTimer < ProjectileInfos[i].ExecutionRepeatDelay)
-						{
-							yield return new WaitForEndOfFrame();
-							repeatTimer += Time.deltaTime;
-							if (activator.IsStunned)
-								goto ProjectileCreationFinished;
-						}
-					}
-				}
-			}
-		ProjectileCreationFinished:;
-		}
-		private Projectile CreateProjectile(Entitie activator, CombatObject baseObject, ProjectileData data)
-		{
-			//Calculate the spawnoffset
-			Vector3 spawnOffset = data.CreateOffsetToCaster.x * activator.transform.right + data.CreateOffsetToCaster.y * activator.transform.up + data.CreateOffsetToCaster.z * activator.transform.forward;
-
-			//First find out what direction the projectile should fly
-			Vector3 direction = CombatObject.CalculateDirection(data.DirectionStyle,
-																data.FallbackDirectionStyle,
-																data.Direction,
-																activator,
-																spawnOffset
-																);
-			return Projectile.CreateProjectile(baseObject, data, activator, direction, activator.actuallWorldPosition + spawnOffset);
-		}
-		#endregion
-
-		public bool HasMaskFlag(AttackEffectType flag)
-		{
-			return (flag | ContainedEffectType) == ContainedEffectType;
-		}
 	}
 	[System.Serializable]
 	public class WeaponUltimate

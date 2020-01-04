@@ -38,7 +38,7 @@ namespace EoE.UI
 
 			this.settings = settings;
 			SetFill(0);
-			//ultimateIcon.sprite = settings.Ultimate.UltimateIcon;
+			ultimateIcon.sprite = settings.Ultimate.UltimateIcon;
 
 			barFilled = false;
 			barGlow.gameObject.SetActive(false);
@@ -55,11 +55,12 @@ namespace EoE.UI
 			if (barFilled)
 			{
 				fadeTimer += Time.deltaTime * fadeCycleSpeed;
-				float glowAlpha = Mathf.Max(0, Mathf.Sin(fadeTimer));
+				float glowAlpha = Mathf.Max(0, Mathf.Sin(fadeTimer * 2));
+				float buttonAlpha = Mathf.Max(0, Mathf.Sin(fadeTimer));
 				float iconAlpha = Mathf.Max(0, Mathf.Sin(fadeTimer + Mathf.PI));
 
 				barGlow.color = new Color(barGlow.color.r, barGlow.color.g, barGlow.color.b, glowAlpha);
-				buttonIcon.color = new Color(buttonIcon.color.r, buttonIcon.color.g, buttonIcon.color.b, glowAlpha);
+				buttonIcon.color = new Color(buttonIcon.color.r, buttonIcon.color.g, buttonIcon.color.b, buttonAlpha);
 				ultimateIcon.color = new Color(ultimateIcon.color.r, ultimateIcon.color.g, ultimateIcon.color.b, iconAlpha);
 			}
 

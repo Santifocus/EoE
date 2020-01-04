@@ -16,54 +16,29 @@ namespace EoE.Combatery
 			DrawInFoldoutHeader(new GUIContent("Base Settings"), ref BaseSettingsOpen, BaseSettingsArea);
 
 			SerializedProperty comboDataProperty = serializedObject.FindProperty(nameof(settings.ComboData));
-			FoldoutFromSerializedProperty(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ComboData))), comboDataProperty, 0, true);
-			if (comboDataProperty.isExpanded)
+			DrawArray<ComboInfo>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ComboData))), ref settings.ComboData, comboDataProperty, DrawComboInfo, 0, new GUIContent(". Combo Info"), true);
+			
+			//Check if the array needs to be resorted
+			if (isDirty)
 			{
-				int newSize = settings.ComboData.Length;
-				DelayedIntField("Size", ref newSize, 1);
-
+				bool needsResort = false;
+				int lastComboCount = -1;
 				for (int i = 0; i < settings.ComboData.Length; i++)
 				{
-					DrawComboInfo(settings.ComboData[i], comboDataProperty.GetArrayElementAtIndex(i), i, 1);
+					if (lastComboCount > settings.ComboData[i].RequiredComboCount)
+					{
+						needsResort = true;
+						break;
+					}
+					lastComboCount = settings.ComboData[i].RequiredComboCount;
 				}
 
-				if (settings.ComboData.Length != newSize)
+				if (needsResort)
 				{
-					isDirty = true;
-					ComboInfo[] newArray = new ComboInfo[newSize];
-					for (int i = 0; i < newSize; i++)
-					{
-						if (i < settings.ComboData.Length)
-							newArray[i] = settings.ComboData[i];
-						else
-							newArray[i] = new ComboInfo();
-					}
-					settings.ComboData = newArray;
-					comboDataProperty.arraySize = newSize;
-				}
+					List<ComboInfo> comboList = new List<ComboInfo>(settings.ComboData);
 
-				//Check if the array needs to be resorted
-				if (isDirty)
-				{
-					bool needsResort = false;
-					int lastComboCount = -1;
-					for (int i = 0; i < settings.ComboData.Length; i++)
-					{
-						if (lastComboCount > settings.ComboData[i].RequiredComboCount)
-						{
-							needsResort = true;
-							break;
-						}
-						lastComboCount = settings.ComboData[i].RequiredComboCount;
-					}
-
-					if (needsResort)
-					{
-						List<ComboInfo> comboList = new List<ComboInfo>(settings.ComboData);
-
-						comboList.Sort((x, y) => x.RequiredComboCount.CompareTo(y.RequiredComboCount));
-						settings.ComboData = comboList.ToArray();
-					}
+					comboList.Sort((x, y) => x.RequiredComboCount.CompareTo(y.RequiredComboCount));
+					settings.ComboData = comboList.ToArray();
 				}
 			}
 		}
@@ -79,10 +54,16 @@ namespace EoE.Combatery
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.TextPunch))), ref settings.TextPunch, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.PunchResetSpeed))), ref settings.PunchResetSpeed, 1);
 		}
-		private void DrawComboInfo(ComboInfo settings, SerializedProperty comboInfoProperty, int index, int offSet)
+		private void DrawComboInfo(GUIContent content, ComboInfo settings, SerializedProperty property, int offSet)
 		{
-			FoldoutFromSerializedProperty(new GUIContent((index + 1) + ". ComboEffect"), comboInfoProperty, offSet);
-			if (comboInfoProperty.isExpanded)
+			if(settings == null)
+			{
+				settings = new ComboInfo();
+				isDirty = true;
+			}
+
+			Foldout(content, property, offSet);
+			if (property.isExpanded)
 			{
 				DelayedIntField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.RequiredComboCount))), ref settings.RequiredComboCount, offSet + 1);
 				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
@@ -108,47 +89,23 @@ namespace EoE.Combatery
 				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 
 				///Effects
+				SerializedProperty effectProperty = property.FindPropertyRelative(nameof(settings.Effect));
 				ObjectField<EffectSingle>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effect.EffectOnTarget))), ref settings.Effect.EffectOnTarget, offSet + 1);
 				ObjectField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effect.EffectAOE))), ref settings.Effect.EffectAOE, offSet + 1);
 
-				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 				//Heal effects
-				SerializedProperty healEffectsProperty = comboInfoProperty.FindPropertyRelative(nameof(settings.Effect)).FindPropertyRelative(nameof(settings.Effect.HealEffects));
-				FoldoutFromSerializedProperty(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effect.HealEffects))), healEffectsProperty, offSet + 1);
-				if (healEffectsProperty.isExpanded)
-				{
-					int newSize = settings.Effect.HealEffects.Length;
-					DelayedIntField("Size", ref newSize, offSet + 2);
-
-					for (int i = 0; i < settings.Effect.HealEffects.Length; i++)
-					{
-						DrawHealTargetInfo(settings.Effect.HealEffects[i], healEffectsProperty.GetArrayElementAtIndex(i), i, offSet + 2);
-					}
-
-					if (settings.Effect.HealEffects.Length != newSize)
-					{
-						isDirty = true;
-						HealTargetInfo[] newArray = new HealTargetInfo[newSize];
-						for (int i = 0; i < newSize; i++)
-						{
-							if (i < settings.Effect.HealEffects.Length)
-								newArray[i] = settings.Effect.HealEffects[i];
-							else
-								newArray[i] = new HealTargetInfo();
-						}
-						settings.Effect.HealEffects = newArray;
-						healEffectsProperty.arraySize = newSize;
-					}
-				}
-
 				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+				SerializedProperty healEffectsProperty = effectProperty.FindPropertyRelative(nameof(settings.Effect.HealEffects));
+				DrawArray<HealTargetInfo>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effect.HealEffects))), ref settings.Effect.HealEffects, healEffectsProperty, DrawHealTargetInfo, offSet + 1, new GUIContent(". Heal Effect"));
+				
 				//FX
-				SerializedProperty comboFXProperty = comboInfoProperty.FindPropertyRelative(nameof(settings.Effect)).FindPropertyRelative(nameof(settings.Effect.EffectsTillComboEnds));
-				DrawCustomFXObjectArray(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effect.EffectsTillComboEnds))), ref settings.Effect.EffectsTillComboEnds, comboFXProperty, offSet + 1);
-
 				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+				SerializedProperty comboFXProperty = effectProperty.FindPropertyRelative(nameof(settings.Effect.EffectsTillComboEnds));
+				DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effect.EffectsTillComboEnds))), ref settings.Effect.EffectsTillComboEnds, comboFXProperty, DrawCustomFXObject, offSet + 1, new GUIContent(". Effect"));
+
 				//Buffs
-				SerializedProperty buffsProperty = comboInfoProperty.FindPropertyRelative(nameof(settings.Effect)).FindPropertyRelative(nameof(settings.Effect.BuffsTillComboEnds));
+				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+				SerializedProperty buffsProperty = effectProperty.FindPropertyRelative(nameof(settings.Effect.BuffsTillComboEnds));
 				bool buffsOpen = buffsProperty.isExpanded;
 				ObjectArrayField<Buff>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effect.BuffsTillComboEnds))), ref settings.Effect.BuffsTillComboEnds, ref buffsOpen, new GUIContent(". Buff"), offSet + 1);
 				if (buffsOpen != buffsProperty.isExpanded)
@@ -157,10 +114,15 @@ namespace EoE.Combatery
 				LineBreak(new Color(0.65f, 0.25f, 0.25f, 1));
 			}
 		}
-		private void DrawHealTargetInfo(HealTargetInfo settings, SerializedProperty healTargetProperty, int index, int offSet)
+		private void DrawHealTargetInfo(GUIContent content, HealTargetInfo settings, SerializedProperty property, int offSet)
 		{
-			FoldoutFromSerializedProperty((index + 1) + ". HealEffect", healTargetProperty, offSet);
-			if (healTargetProperty.isExpanded)
+			if (settings == null)
+			{
+				settings = new HealTargetInfo();
+				isDirty = true;
+			}
+			Foldout(content, property, offSet);
+			if (property.isExpanded)
 			{
 				EnumField<TargetStat>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.HealType))), ref settings.HealType, offSet + 1);
 				BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Percent))), ref settings.Percent, offSet + 1);

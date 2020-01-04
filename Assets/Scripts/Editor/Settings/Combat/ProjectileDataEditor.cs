@@ -29,13 +29,9 @@ namespace EoE.Combatery
 			//Fallback direction style
 			if (settings.DirectionStyle == InherritDirection.Target)
 			{
-				if (EnumField(new GUIContent("Fallback Direction Style"), ref settings.FallbackDirectionStyle, 1))
-				{
-					if (settings.FallbackDirectionStyle == InherritDirection.Target)
-					{
-						settings.FallbackDirectionStyle = InherritDirection.Local;
-					}
-				}
+				EnumField(new GUIContent("Fallback Direction Style"), ref settings.FallbackDirectionStyle, 1);
+				if (settings.FallbackDirectionStyle == InherritDirection.Target)
+					settings.FallbackDirectionStyle = InherritDirection.Local;
 			}
 			//Direction Base
 			EnumField(new GUIContent("Direction"), ref settings.Direction, 2);
@@ -51,7 +47,7 @@ namespace EoE.Combatery
 			LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 			{
 				SerializedProperty flightEffectsProperty = serializedObject.FindProperty(nameof(settings.VisualStartEffects));
-				DrawCustomFXObjectArray(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.VisualStartEffects))), ref settings.VisualStartEffects, flightEffectsProperty, 1);
+				DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.VisualStartEffects))), ref settings.VisualStartEffects, flightEffectsProperty, DrawCustomFXObject, 1);
 			}
 			LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 
@@ -89,7 +85,7 @@ namespace EoE.Combatery
 			}
 
 			SerializedProperty collisionEffectsProperty = serializedObject.FindProperty(nameof(settings.VisualCollisionEffects));
-			DrawCustomFXObjectArray(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.VisualCollisionEffects))), ref settings.VisualCollisionEffects, collisionEffectsProperty, 1);
+			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.VisualCollisionEffects))), ref settings.VisualCollisionEffects, collisionEffectsProperty, DrawCustomFXObject, 1);
 
 			LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 			//AOE Effects
@@ -113,7 +109,7 @@ namespace EoE.Combatery
 				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 				{
 					SerializedProperty effectsProperty = serializedObject.FindProperty(nameof(settings.Remenants)).FindPropertyRelative(nameof(settings.Remenants.VisualEffects));
-					DrawCustomFXObjectArray(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Remenants.VisualEffects))), ref settings.Remenants.VisualEffects, effectsProperty, 2);
+					DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Remenants.VisualEffects))), ref settings.Remenants.VisualEffects, effectsProperty, DrawCustomFXObject, 2);
 				}
 				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 

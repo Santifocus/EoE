@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace EoE.Information
 {
-	public enum BuffStackingStyle { Stack = 1, Reapply = 2, DoNothing = 4 }
 	public class ConsumableItem : Item
 	{
 		public override InUIUses Uses => InUIUses.Use | InUIUses.Equip | InUIUses.Drop | InUIUses.Back;
@@ -26,24 +25,7 @@ namespace EoE.Information
 			//Apply buffs
 			for (int i = 0; i < BuffsToApply.Length; i++)
 			{
-				if (StackingStyle == BuffStackingStyle.Stack)
-				{
-					user.AddBuff(BuffsToApply[i], user);
-				}
-				else if (StackingStyle == BuffStackingStyle.Reapply)
-				{
-					if (!(user.TryReapplyBuff(BuffsToApply[i], user).Item1))
-					{
-						user.AddBuff(BuffsToApply[i], user);
-					}
-				}
-				else //effect.BuffStackStyle == BuffStackingStyle.DoNothing
-				{
-					if (!(user.HasBuffActive(BuffsToApply[i], user).HasValue))
-					{
-						user.AddBuff(BuffsToApply[i], user);
-					}
-				}
+				Buff.ApplyBuff(BuffsToApply[i], user, user, StackingStyle);
 			}
 			return true;
 		}

@@ -13,7 +13,6 @@ namespace EoE.Information
 		private static bool KnockbackSettingsOpen;
 		private static bool BuffSettingsOpen;
 		private static bool BuffArrayOpen;
-		private static bool EffectsArrayOpen;
 		protected override void CustomInspector()
 		{
 			DrawInFoldoutHeader("Base Settings", ref BaseSettingsOpen, BaseSettingsArea);
@@ -22,7 +21,7 @@ namespace EoE.Information
 			DrawInFoldoutHeader("Buff Settings", ref BuffSettingsOpen, BuffSettingsArea);
 
 			EffectAOE settings = target as EffectAOE;
-			DrawCustomFXObjectArray(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effects))), ref settings.Effects, serializedObject.FindProperty(nameof(settings.Effects)), 0, true);
+			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effects))), ref settings.Effects, serializedObject.FindProperty(nameof(settings.Effects)), DrawCustomFXObject, 0, null, true);
 		}
 
 		private void BaseSettingsArea()

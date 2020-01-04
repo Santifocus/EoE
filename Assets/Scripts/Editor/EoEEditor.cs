@@ -1,8 +1,8 @@
-﻿using EoE.Combatery;
-using EoE.Information;
-using System.IO;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
+using EoE.Information;
+using EoE.Combatery;
+using System.Collections.Generic;
 
 namespace EoE
 {
@@ -11,52 +11,8 @@ namespace EoE
 		private const int LINE_HEIGHT = 2;
 		private const float STANDARD_OFFSET = 15;
 		public static bool isDirty;
-		public static void Header(string content, int offSet = 0, bool spaces = true, bool bold = true) => Header(new GUIContent(content), offSet, spaces, bold);
-		public static void Header(GUIContent content, int offSet = 0, bool spaces = true, bool bold = true)
-		{
-			if (spaces)
-				GUILayout.Space(8);
 
-			EditorGUILayout.BeginHorizontal();
-			GUILayout.Space(offSet * STANDARD_OFFSET);
-			if (bold)
-				GUILayout.Label(content, EditorStyles.boldLabel);
-			else
-				GUILayout.Label(content);
-			EditorGUILayout.EndHorizontal();
-
-			if (spaces)
-				GUILayout.Space(4);
-		}
-		public static void LineBreak(Color col, bool spaces = true)
-		{
-			if (spaces)
-				GUILayout.Space(3);
-
-			Rect rect = EditorGUILayout.GetControlRect(false, LINE_HEIGHT);
-			rect.height = LINE_HEIGHT;
-			rect.x /= 2;
-			EditorGUI.DrawRect(rect, col);
-
-			if (spaces)
-				GUILayout.Space(3);
-		}
-		public static bool StringField(string content, ref string curValue, int offSet = 0) => StringField(new GUIContent(content), ref curValue, offSet);
-		public static bool StringField(GUIContent content, ref string curValue, int offSet = 0)
-		{
-			EditorGUILayout.BeginHorizontal();
-			GUILayout.Space(offSet * STANDARD_OFFSET);
-			string newValue = EditorGUILayout.TextField(content, curValue);
-			EditorGUILayout.EndHorizontal();
-
-			if (newValue != curValue)
-			{
-				isDirty = true;
-				curValue = newValue;
-				return true;
-			}
-			return false;
-		}
+		#region Standard Drawing
 		public static bool FloatField(string content, ref float curValue, int offSet = 0) => FloatField(new GUIContent(content), ref curValue, offSet);
 		public static bool FloatField(GUIContent content, ref float curValue, int offSet = 0)
 		{
@@ -137,6 +93,22 @@ namespace EoE
 			}
 			return false;
 		}
+		public static bool StringField(string content, ref string curValue, int offSet = 0) => StringField(new GUIContent(content), ref curValue, offSet);
+		public static bool StringField(GUIContent content, ref string curValue, int offSet = 0)
+		{
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(offSet * STANDARD_OFFSET);
+			string newValue = EditorGUILayout.TextField(content, curValue);
+			EditorGUILayout.EndHorizontal();
+
+			if (newValue != curValue)
+			{
+				isDirty = true;
+				curValue = newValue;
+				return true;
+			}
+			return false;
+		}
 		public static bool BoolField(string content, ref bool curValue, int offSet = 0) => BoolField(new GUIContent(content), ref curValue, offSet);
 		public static bool BoolField(GUIContent content, ref bool curValue, int offSet = 0)
 		{
@@ -153,79 +125,6 @@ namespace EoE
 			}
 			return false;
 		}
-		public static bool Foldout(string content, ref bool curValue, int offSet = 0) => Foldout(new GUIContent(content), ref curValue, offSet);
-		public static bool Foldout(GUIContent content, ref bool curValue, int offSet = 0)
-		{
-			EditorGUILayout.BeginHorizontal();
-			GUILayout.Space(offSet * STANDARD_OFFSET);
-			bool newValue = EditorGUILayout.Foldout(curValue, content, true);
-			EditorGUILayout.EndHorizontal();
-
-			if (newValue != curValue)
-			{
-				isDirty = true;
-				curValue = newValue;
-				return true;
-			}
-			return false;
-		}
-		public static bool FoldoutFromSerializedProperty(string content, SerializedProperty property, int offSet = 0, bool asHeader = false) => FoldoutFromSerializedProperty(new GUIContent(content), property, offSet, asHeader);
-		public static bool FoldoutFromSerializedProperty(GUIContent content, SerializedProperty property, int offSet = 0, bool asHeader = false)
-		{
-			bool foldOutOpen = property.isExpanded;
-			if (asHeader)
-			{
-				if (FoldoutHeader(content, ref foldOutOpen))
-				{
-					property.isExpanded = foldOutOpen;
-					return true;
-				}
-			}
-			else
-			{
-				if (Foldout(content, ref foldOutOpen, offSet))
-				{
-					property.isExpanded = foldOutOpen;
-					return true;
-				}
-			}
-			return false;
-		}
-		public static bool FoldoutHeader(GUIContent content, ref bool curValue)
-		{
-			bool newValue = EditorGUILayout.BeginFoldoutHeaderGroup(curValue, content);
-
-			if (newValue != curValue)
-			{
-				isDirty = true;
-				curValue = newValue;
-				return true;
-			}
-			return false;
-		}
-		public static bool DrawInFoldoutHeader(string content, ref bool curValue, System.Func<bool> drawFunction) => DrawInFoldoutHeader(new GUIContent(content), ref curValue, drawFunction);
-		public static bool DrawInFoldoutHeader(GUIContent content, ref bool curValue, System.Func<bool> drawFunction)
-		{
-			bool changed = FoldoutHeader(content, ref curValue);
-			if (curValue)
-			{
-				changed |= drawFunction.Invoke();
-			}
-			EndFoldoutHeader();
-			return changed;
-		}
-		public static bool DrawInFoldoutHeader(string content, ref bool curValue, System.Action drawFunction) => DrawInFoldoutHeader(new GUIContent(content), ref curValue, drawFunction);
-		public static bool DrawInFoldoutHeader(GUIContent content, ref bool curValue, System.Action drawFunction)
-		{
-			bool changed = FoldoutHeader(content, ref curValue);
-			if (curValue)
-			{
-				drawFunction?.Invoke();
-			}
-			EndFoldoutHeader();
-			return changed;
-		}
-		public static void EndFoldoutHeader() => EditorGUILayout.EndFoldoutHeaderGroup();
 		public static bool Vector2Field(string content, ref Vector2 curValue, int offSet = 0) => Vector2Field(new GUIContent(content), ref curValue, offSet);
 		public static bool Vector2Field(GUIContent content, ref Vector2 curValue, int offSet = 0)
 		{
@@ -321,303 +220,6 @@ namespace EoE
 			}
 			return false;
 		}
-		public static bool NullableVector3Field(string content, string valueContent, ref Vector3 curValue, ref bool hasValue, int offSet = 0) => NullableVector3Field(new GUIContent(content), new GUIContent(valueContent), ref curValue, ref hasValue, offSet);
-		public static bool NullableVector3Field(GUIContent hasValueContent, GUIContent valueContent, ref Vector3 curValue, ref bool hasValue, int offSet = 0)
-		{
-			bool changed = false;
-
-			changed |= BoolField(hasValueContent, ref hasValue, offSet);
-			if (hasValue)
-				changed |= Vector3Field(valueContent, ref curValue, offSet + 1);
-
-			return changed;
-		}
-		public static bool DrawCustomFXObjectArray(GUIContent content, ref CustomFXObject[] fxArray, SerializedProperty arrayProperty, int offSet = 0, bool asHeader = false)
-		{
-			bool changed = false;
-			bool open = arrayProperty.isExpanded;
-
-			if (asHeader)
-				changed |= FoldoutHeader(content, ref open);
-			else
-				changed |= Foldout(content, ref open, offSet);
-
-			if (open != arrayProperty.isExpanded)
-				arrayProperty.isExpanded = open;
-
-			if (open)
-			{
-				int newSize = fxArray.Length;
-				DelayedIntField("Size", ref newSize, offSet + 1);
-
-				for (int i = 0; i < arrayProperty.arraySize; i++)
-				{
-					changed |= DrawCustomFXObject(new GUIContent((i + 1) + ". Effect"), fxArray[i], arrayProperty.GetArrayElementAtIndex(i), offSet + 1);
-				}
-
-				if (arrayProperty.arraySize != newSize)
-				{
-					changed = isDirty = true;
-					CustomFXObject[] newArray = new CustomFXObject[newSize];
-					for (int i = 0; i < newSize; i++)
-					{
-						if (i < fxArray.Length)
-							newArray[i] = fxArray[i];
-						else
-							break;
-					}
-					fxArray = newArray;
-					arrayProperty.arraySize = newSize;
-				}
-			}
-
-			return changed;
-		}
-		public static bool DrawArray<T>(GUIContent content, ref T[] fxArray, SerializedProperty arrayProperty, System.Func<GUIContent, T, SerializedProperty, int, bool> elementBinding, int offSet = 0, GUIContent elementContent = null, bool asHeader = false)
-		{
-			bool changed = false;
-			bool open = arrayProperty.isExpanded;
-
-			if (asHeader)
-				changed |= FoldoutHeader(content, ref open);
-			else
-				changed |= Foldout(content, ref open, offSet);
-
-			if (open != arrayProperty.isExpanded)
-				arrayProperty.isExpanded = open;
-
-			if (open)
-			{
-				if (elementContent == null)
-					elementContent = new GUIContent(". Element");
-
-				int newSize = fxArray.Length;
-				DelayedIntField("Size", ref newSize, offSet + 1);
-
-				for (int i = 0; i < arrayProperty.arraySize; i++)
-				{
-					bool? elementChanged = elementBinding?.Invoke(new GUIContent((i + 1) + elementContent.text, elementContent.tooltip), fxArray[i], arrayProperty.GetArrayElementAtIndex(i), offSet + 1);
-					changed |= elementChanged ?? false;
-				}
-
-				if (arrayProperty.arraySize != newSize)
-				{
-					changed = true;
-					T[] newArray = new T[newSize];
-					for (int i = 0; i < newSize; i++)
-					{
-						if (i < fxArray.Length)
-							newArray[i] = fxArray[i];
-						else
-							break;
-					}
-					fxArray = newArray;
-					arrayProperty.arraySize = newSize;
-				}
-			}
-
-			if (changed)
-				isDirty = true;
-			return changed;
-		}
-		public static bool DrawArray<T>(GUIContent content, ref T[] fxArray, SerializedProperty arrayProperty, System.Action<GUIContent, T, SerializedProperty, int> elementBinding, int offSet = 0, GUIContent elementContent = null, bool asHeader = false)
-		{
-			bool changed = false;
-			bool open = arrayProperty.isExpanded;
-
-			if (asHeader)
-				changed |= FoldoutHeader(content, ref open);
-			else
-				changed |= Foldout(content, ref open, offSet);
-
-			if (open != arrayProperty.isExpanded)
-				arrayProperty.isExpanded = open;
-
-			if (open)
-			{
-				if (elementContent == null)
-					elementContent = new GUIContent(". Element");
-
-				int newSize = fxArray.Length;
-				DelayedIntField("Size", ref newSize, offSet + 1);
-
-				for (int i = 0; i < arrayProperty.arraySize; i++)
-				{
-					elementBinding?.Invoke(new GUIContent((i + 1) + elementContent.text, elementContent.tooltip), fxArray[i], arrayProperty.GetArrayElementAtIndex(i), offSet + 1);
-				}
-
-				if (arrayProperty.arraySize != newSize)
-				{
-					changed = true;
-					T[] newArray = new T[newSize];
-					for (int i = 0; i < newSize; i++)
-					{
-						if (i < fxArray.Length)
-							newArray[i] = fxArray[i];
-						else
-							break;
-					}
-					fxArray = newArray;
-					arrayProperty.arraySize = newSize;
-				}
-			}
-
-			if (changed)
-				isDirty = true;
-			return changed;
-		}
-		public static bool DrawCustomFXObject(GUIContent content, CustomFXObject selfData, SerializedProperty selfProperty, int offSet)
-		{
-			bool changed = false;
-			if (selfData == null)
-			{
-				selfData = new CustomFXObject();
-			}
-
-			FoldoutFromSerializedProperty(content, selfProperty, offSet);
-
-			if (selfProperty.isExpanded)
-			{
-				changed |= ObjectField<FXObject>("Effect", ref selfData.FX, offSet + 1);
-				changed |= NullableVector3Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.HasPositionOffset))),
-												new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.PositionOffset))),
-												ref selfData.PositionOffset,
-												ref selfData.HasPositionOffset,
-												offSet + 1);
-				changed |= NullableVector3Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.HasRotationOffset))),
-												new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.RotationOffset))),
-												ref selfData.RotationOffset,
-												ref selfData.HasRotationOffset,
-												offSet + 1);
-				changed |= NullableVector3Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.HasCustomScale))),
-												new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.CustomScale))),
-												ref selfData.CustomScale,
-												ref selfData.HasCustomScale,
-												offSet + 1);
-			}
-
-			return changed;
-		}
-		public static bool ObjectField<T>(string content, ref T curValue, int offSet = 0) where T : Object => ObjectField<T>(new GUIContent(content), ref curValue, offSet);
-		public static bool ObjectField<T>(GUIContent content, ref T curValue, int offSet = 0) where T : Object
-		{
-			EditorGUILayout.BeginHorizontal();
-			GUILayout.Space(offSet * STANDARD_OFFSET);
-			T newValue = (T)EditorGUILayout.ObjectField(content, curValue, typeof(T), false);
-			EditorGUILayout.EndHorizontal();
-
-			if (newValue != curValue)
-			{
-				isDirty = true;
-				curValue = newValue;
-				return true;
-			}
-			return false;
-		}
-		public static bool ObjectArrayField<T>(string content, ref T[] curValue, ref bool open, GUIContent objectContent = null, int offSet = 0) where T : Object => ObjectArrayField<T>(new GUIContent(content), ref curValue, ref open, objectContent, offSet);
-		public static bool ObjectArrayField<T>(string content, ref T[] curValue, SerializedProperty property, GUIContent objectContent = null, int offSet = 0) where T : Object => ObjectArrayField<T>(new GUIContent(content), ref curValue, property, objectContent, offSet);
-		public static bool ObjectArrayField<T>(GUIContent content, ref T[] curValue, SerializedProperty property, GUIContent objectContent = null, int offSet = 0) where T : Object
-		{
-			bool changed = false;
-			bool open = property.isExpanded;
-			changed = ObjectArrayField<T>(content, ref curValue, ref open, objectContent, offSet);
-			if (open != property.isExpanded)
-				property.isExpanded = open;
-			return changed;
-		}
-		public static bool ObjectArrayField<T>(GUIContent arrayHeader, ref T[] curValue, ref bool open, GUIContent objectContent = null, int offSet = 0) where T : Object
-		{
-			bool changed = false;
-			if (curValue == null)
-			{
-				curValue = new T[0];
-				changed = true;
-			}
-
-			Foldout(arrayHeader, ref open, offSet);
-			if (open)
-			{
-				int newSize = curValue.Length;
-				DelayedIntField("Size", ref newSize, offSet + 1);
-
-				GUIContent targetContent = objectContent != null ? objectContent : new GUIContent(". Element");
-				for (int i = 0; i < curValue.Length; i++)
-				{
-					changed |= ObjectField(new GUIContent((i + 1) + targetContent.text, targetContent.tooltip), ref curValue[i], offSet + 1);
-				}
-
-				if (newSize != curValue.Length)
-				{
-					changed = true;
-					T[] newArray = new T[newSize];
-					for (int i = 0; i < newSize; i++)
-					{
-						if (i < curValue.Length)
-							newArray[i] = curValue[i];
-						else
-							break;
-					}
-
-					curValue = newArray;
-				}
-			}
-			if (changed)
-				isDirty = true;
-			return changed;
-		}
-		public static bool DrawArray<T>(GUIContent arrayHeader, System.Func<int, int, T[], bool> elementBinding, ref T[] curValue, SerializedProperty property, int offSet = 0, bool asHeader = false)
-		{
-			bool open = property.isExpanded;
-			bool changed = DrawArray(arrayHeader, elementBinding, ref curValue, ref open, offSet, asHeader);
-			if (open != property.isExpanded)
-				property.isExpanded = open;
-
-			return changed;
-		}
-		public static bool DrawArray<T>(GUIContent arrayHeader, System.Func<int, int, T[], bool> elementBinding, ref T[] curValue, ref bool open, int offSet = 0, bool asHeader = false)
-		{
-			bool changed = false;
-			if (curValue == null)
-			{
-				curValue = new T[0];
-				changed = true;
-			}
-
-			if (asHeader)
-				changed |= FoldoutHeader(arrayHeader, ref open);
-			else
-				changed |= Foldout(arrayHeader, ref open, offSet);
-			if (open)
-			{
-				int newSize = curValue.Length;
-				DelayedIntField("Size", ref newSize, offSet + 1);
-
-				for (int i = 0; i < curValue.Length; i++)
-				{
-					changed |= (elementBinding?.Invoke(i, offSet + 1, curValue)) ?? false;
-				}
-
-				if (newSize != curValue.Length)
-				{
-					T[] newArray = new T[newSize];
-					for (int i = 0; i < newSize; i++)
-					{
-						if (i < curValue.Length)
-							newArray[i] = curValue[i];
-						else
-							break;
-					}
-
-					curValue = newArray;
-				}
-			}
-
-			if (asHeader)
-				EndFoldoutHeader();
-			if (changed)
-				isDirty = true;
-			return changed;
-		}
 		public static bool GradientField(string content, ref Gradient curValue, int offSet = 0) => GradientField(new GUIContent(content), ref curValue, offSet);
 		public static bool GradientField(GUIContent content, ref Gradient curValue, int offSet = 0)
 		{
@@ -689,32 +291,584 @@ namespace EoE
 			}
 			return false;
 		}
-		public static T AssetCreator<T>(params string[] pathParts) where T : ScriptableObject
+		public static bool ObjectField<T>(string content, ref T curValue, int offSet = 0) where T : Object => ObjectField<T>(new GUIContent(content), ref curValue, offSet);
+		public static bool ObjectField<T>(GUIContent content, ref T curValue, int offSet = 0) where T : Object
 		{
-			T asset = ScriptableObject.CreateInstance<T>();
-			string name = "/New " + typeof(T).Name;
-			string path = "";
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(offSet * STANDARD_OFFSET);
+			T newValue = (T)EditorGUILayout.ObjectField(content, curValue, typeof(T), false);
+			EditorGUILayout.EndHorizontal();
 
-			for (int i = 0; i < pathParts.Length; i++)
+			if (newValue != curValue)
 			{
-				path += "/" + pathParts[i];
-				if (!Directory.Exists(Application.dataPath + path))
+				isDirty = true;
+				curValue = newValue;
+				return true;
+			}
+			return false;
+		}
+		#endregion
+		#region Array Drawing
+		public static bool DrawArray<T>(GUIContent content, ref T[] curValue, SerializedProperty arrayProperty, System.Action<GUIContent, T, SerializedProperty, int> elementBinding, int offSet = 0, GUIContent elementContent = null, bool asHeader = false)
+		{
+			bool changed = false;
+			if (curValue == null)
+			{
+				curValue = new T[0];
+				changed = true;
+			}
+
+			changed |= Foldout(content, arrayProperty, offSet, asHeader);
+
+			if (arrayProperty.isExpanded)
+			{
+				if (elementContent == null)
+					elementContent = new GUIContent(". Element");
+
+				int newSize = curValue.Length;
+				DelayedIntField("Size", ref newSize, offSet + 1);
+
+				for (int i = 0; i < arrayProperty.arraySize; i++)
 				{
-					Directory.CreateDirectory(Application.dataPath + path);
+					elementBinding?.Invoke(new GUIContent((i + 1) + elementContent.text, elementContent.tooltip), curValue[i], arrayProperty.GetArrayElementAtIndex(i), offSet + 1);
+				}
+
+				if (curValue.Length != newSize)
+				{
+					changed = true;
+					T[] newArray = new T[newSize];
+					for (int i = 0; i < newSize; i++)
+					{
+						if (i < curValue.Length)
+							newArray[i] = curValue[i];
+						else
+							break;
+					}
+					curValue = newArray;
+					arrayProperty.arraySize = newSize;
 				}
 			}
-			AssetDatabase.CreateAsset(asset, "Assets" + path + name + ".asset");
+			if (asHeader)
+				EndFoldoutHeader();
 
-			AssetDatabase.SaveAssets();
-			AssetDatabase.Refresh();
-			EditorUtility.FocusProjectWindow();
-
-			Selection.activeObject = null;
-			Selection.activeObject = asset;
-			EditorGUIUtility.PingObject(asset);
-
-			Debug.Log("Created: '" + name.Substring(1) + "' at: Assets" + path + "/..");
-			return asset;
+			if (changed)
+				isDirty = true;
+			return changed;
 		}
+		public static bool ObjectArrayField<T>(string content, ref T[] curValue, SerializedProperty property, GUIContent objectContent = null, int offSet = 0) where T : Object
+		{
+			return ObjectArrayField<T>(new GUIContent(content), ref curValue, property, objectContent, offSet);
+		}
+		public static bool ObjectArrayField<T>(GUIContent content, ref T[] curValue, SerializedProperty property, GUIContent objectContent = null, int offSet = 0) where T : Object
+		{
+			bool changed;
+			bool open = property.isExpanded;
+			changed = ObjectArrayField<T>(content, ref curValue, ref open, objectContent, offSet);
+			if (open != property.isExpanded)
+				property.isExpanded = open;
+
+			return changed;
+		}
+		public static bool ObjectArrayField<T>(string content, ref T[] curValue, ref bool open, GUIContent objectContent = null, int offSet = 0) where T : Object
+		{
+			return ObjectArrayField<T>(new GUIContent(content), ref curValue, ref open, objectContent, offSet);
+		}
+		public static bool ObjectArrayField<T>(GUIContent arrayHeader, ref T[] curValue, ref bool open, GUIContent objectContent = null, int offSet = 0) where T : Object
+		{
+			bool changed = false;
+			if (curValue == null)
+			{
+				curValue = new T[0];
+				changed = true;
+			}
+
+			Foldout(arrayHeader, ref open, offSet);
+			if (open)
+			{
+				int newSize = curValue.Length;
+				DelayedIntField("Size", ref newSize, offSet + 1);
+
+				GUIContent targetContent = objectContent != null ? objectContent : new GUIContent(". Element");
+				for (int i = 0; i < curValue.Length; i++)
+				{
+					changed |= ObjectField(new GUIContent((i + 1) + targetContent.text, targetContent.tooltip), ref curValue[i], offSet + 1);
+				}
+
+				if (newSize != curValue.Length)
+				{
+					changed = true;
+					T[] newArray = new T[newSize];
+					for (int i = 0; i < newSize; i++)
+					{
+						if (i < curValue.Length)
+							newArray[i] = curValue[i];
+						else
+							break;
+					}
+
+					curValue = newArray;
+				}
+			}
+			if (changed)
+				isDirty = true;
+
+			return changed;
+		}
+		#endregion
+		#region Layout Drawer
+		public static void Header(string content, int offSet = 0, bool spaces = true, bool bold = true) => Header(new GUIContent(content), offSet, spaces, bold);
+		public static void Header(GUIContent content, int offSet = 0, bool spaces = true, bool bold = true)
+		{
+			if (spaces)
+				GUILayout.Space(8);
+
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(offSet * STANDARD_OFFSET);
+			if (bold)
+				GUILayout.Label(content, EditorStyles.boldLabel);
+			else
+				GUILayout.Label(content);
+			EditorGUILayout.EndHorizontal();
+
+			if (spaces)
+				GUILayout.Space(4);
+		}
+		public static void LineBreak(Color col, bool spaces = true)
+		{
+			if (spaces)
+				GUILayout.Space(3);
+
+			Rect rect = EditorGUILayout.GetControlRect(false, LINE_HEIGHT);
+			rect.height = LINE_HEIGHT;
+			rect.x /= 2;
+			EditorGUI.DrawRect(rect, col);
+
+			if (spaces)
+				GUILayout.Space(3);
+		}
+		public static bool Foldout(string content, SerializedProperty property, int offSet = 0, bool asHeader = false)
+		{
+			return Foldout(new GUIContent(content), property, offSet, asHeader);
+		}
+		public static bool Foldout(GUIContent content, SerializedProperty property, int offSet = 0, bool asHeader = false)
+		{
+			bool curOpen = property.isExpanded;
+			if(Foldout(content, ref curOpen, offSet, asHeader))
+			{
+				property.isExpanded = curOpen;
+				return true;
+			}
+			return false;
+		}
+		public static bool Foldout(string content, ref bool curValue, int offSet = 0, bool asHeader = false) => Foldout(new GUIContent(content), ref curValue, offSet, asHeader);
+		public static bool Foldout(GUIContent content, ref bool curValue, int offSet = 0, bool asHeader = false)
+		{
+			bool newValue;
+			if (asHeader)
+			{
+				newValue = EditorGUILayout.BeginFoldoutHeaderGroup(curValue, content);
+			}
+			else
+			{
+				EditorGUILayout.BeginHorizontal();
+				GUILayout.Space(offSet * STANDARD_OFFSET);
+				newValue = EditorGUILayout.Foldout(curValue, content, true);
+				EditorGUILayout.EndHorizontal();
+			}
+
+			if (newValue != curValue)
+			{
+				isDirty = true;
+				curValue = newValue;
+				return true;
+			}
+			return false;
+		}
+		public static bool DrawInFoldoutHeader(string content, SerializedProperty property, System.Action drawFunction)
+		{
+			return DrawInFoldoutHeader(new GUIContent(content), property, drawFunction);
+		}
+		public static bool DrawInFoldoutHeader(GUIContent content, SerializedProperty property, System.Action drawFunction)
+		{
+			bool curOpen = property.isExpanded;
+			if (DrawInFoldoutHeader(content, ref curOpen, drawFunction))
+			{
+				property.isExpanded = curOpen;
+				return true;
+			}
+			return false;
+		}
+		public static bool DrawInFoldoutHeader(string content, ref bool curValue, System.Action drawFunction) => DrawInFoldoutHeader(new GUIContent(content), ref curValue, drawFunction);
+		public static bool DrawInFoldoutHeader(GUIContent content, ref bool curValue, System.Action drawFunction)
+		{
+			bool changed = Foldout(content, ref curValue, 0, true);
+			if (curValue)
+			{
+				drawFunction?.Invoke();
+			}
+			EndFoldoutHeader();
+			return changed;
+		}
+		public static void EndFoldoutHeader() => EditorGUILayout.EndFoldoutHeaderGroup();
+		#endregion
+		#region DrawCustoms
+		public static void DrawActivationEffect(GUIContent content, ActivationEffect settings, SerializedProperty property, int offSet)
+		{
+			if (settings == null)
+			{
+				isDirty = true;
+				settings = new ActivationEffect();
+			}
+			Foldout(content, property, offSet);
+			if (property.isExpanded)
+			{
+				//Activation Info
+				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ChanceToActivate))), ref settings.ChanceToActivate, 0, 1, offSet + 1);
+				EnumFlagField<EffectType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ContainedEffectType))), ref settings.ContainedEffectType, offSet + 1);
+				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1), false);
+
+				//Impulse Velocity
+				if (settings.HasMaskFlag(EffectType.ImpulseVelocity))
+				{
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ImpulseVelocity))), ref settings.ImpulseVelocity, offSet + 1);
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ImpulseVelocityFallOffTime))), ref settings.ImpulseVelocityFallOffTime, offSet + 1);
+
+					EnumField<InherritDirection>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ImpulseVelocityDirection))), ref settings.ImpulseVelocityDirection, offSet + 1);
+					if (settings.ImpulseVelocityDirection == InherritDirection.Target)
+					{
+						EnumField<InherritDirection>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ImpulseVelocityFallbackDirection))), ref settings.ImpulseVelocityFallbackDirection, offSet + 1);
+						if (settings.ImpulseVelocityFallbackDirection == InherritDirection.Target)
+							settings.ImpulseVelocityFallbackDirection = InherritDirection.Local;
+					}
+
+					EnumField<DirectionBase>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ImpulseDirectionBase))), ref settings.ImpulseDirectionBase, offSet + 2);
+					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1), false);
+				}
+				//FX
+				if (settings.HasMaskFlag(EffectType.FX))
+				{
+					SerializedProperty fxProperty = property.FindPropertyRelative(nameof(settings.FXObjects));
+					DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.FXObjects))), ref settings.FXObjects, fxProperty, DrawCustomFXObject, offSet + 1, new GUIContent(". Effect"));
+					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1), false);
+				}
+				//AOE
+				if (settings.HasMaskFlag(EffectType.AOE))
+				{
+					SerializedProperty aoeProperty = property.FindPropertyRelative(nameof(settings.AOEEffects));
+					bool aoeArrayOpen = aoeProperty.isExpanded;
+					ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AOEEffects))), ref settings.AOEEffects, ref aoeArrayOpen, new GUIContent(". AOE"), offSet + 1);
+					if (aoeProperty.isExpanded != aoeArrayOpen)
+						aoeProperty.isExpanded = aoeArrayOpen;
+
+					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1), false);
+				}
+				//Projectile
+				if (settings.HasMaskFlag(EffectType.CreateProjectile))
+				{
+					SerializedProperty projectileArrayProperty = property.FindPropertyRelative(nameof(settings.ProjectileInfos));
+					DrawArray<ProjectileInfo>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ProjectileInfos))), ref settings.ProjectileInfos, projectileArrayProperty, DrawProjectileInfo, offSet + 1, new GUIContent(". Projectile"));
+					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1), false);
+				}
+			}
+		}
+		public static void DrawProjectileInfo(GUIContent content, ProjectileInfo settings, SerializedProperty projectileProperty, int offSet)
+		{
+			if(settings == null)
+			{
+				settings = new ProjectileInfo();
+				isDirty = true;
+			}
+			Foldout(content, projectileProperty, offSet);
+			if (projectileProperty.isExpanded)
+			{
+				ObjectField<ProjectileData>(new GUIContent("ProjectileData"), ref settings.Projectile, offSet + 1);
+
+				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ExecutionDelay))), ref settings.ExecutionDelay, offSet + 1);
+
+				IntField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ExecutionCount))), ref settings.ExecutionCount, offSet + 1);
+				if (settings.ExecutionCount > 1)
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ExecutionRepeatDelay))), ref settings.ExecutionRepeatDelay, offSet + 1);
+			}
+		}
+		public static void DrawCustomFXObject(GUIContent content, CustomFXObject selfData, SerializedProperty selfProperty, int offSet)
+		{
+			bool changed = false;
+			if (selfData == null)
+			{
+				selfData = new CustomFXObject();
+				changed = true;
+			}
+
+			Foldout(content, selfProperty, offSet);
+
+			if (selfProperty.isExpanded)
+			{
+				changed |= ObjectField<FXObject>("Effect", ref selfData.FX, offSet + 1);
+				changed |= NullableVector3Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.HasPositionOffset))),
+												new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.PositionOffset))),
+												ref selfData.PositionOffset,
+												ref selfData.HasPositionOffset,
+												offSet + 1);
+				changed |= NullableVector3Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.HasRotationOffset))),
+												new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.RotationOffset))),
+												ref selfData.RotationOffset,
+												ref selfData.HasRotationOffset,
+												offSet + 1);
+				changed |= NullableVector3Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.HasCustomScale))),
+												new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.CustomScale))),
+												ref selfData.CustomScale,
+												ref selfData.HasCustomScale,
+												offSet + 1);
+			}
+			if (changed)
+				isDirty = true;
+
+			//&return changed;
+		}
+		public static bool NullableVector3Field(string content, string valueContent, ref Vector3 curValue, ref bool hasValue, int offSet = 0) => NullableVector3Field(new GUIContent(content), new GUIContent(valueContent), ref curValue, ref hasValue, offSet);
+		public static bool NullableVector3Field(GUIContent hasValueContent, GUIContent valueContent, ref Vector3 curValue, ref bool hasValue, int offSet = 0)
+		{
+			bool changed = false;
+
+			changed |= BoolField(hasValueContent, ref hasValue, offSet);
+			if (hasValue)
+				changed |= Vector3Field(valueContent, ref curValue, offSet + 1);
+
+			return changed;
+		}
+
+		#region Attack Sequence Drawing
+		public static class AttackSequenceDrawer
+		{
+			private static float CurMinCharge = 0;
+			private static float CurMaxCharge = 0;
+			public static void DrawAttackSequence(GUIContent content, AttackSequence settings, SerializedProperty property, int offSet, bool asHeader)
+			{
+				Foldout(content, property, offSet, asHeader);
+
+				if (property.isExpanded)
+				{
+					SerializedProperty sequenceArray = property.FindPropertyRelative(nameof(settings.AttackSequenceParts));
+					for (int i = 0; i < settings.AttackSequenceParts.Length; i++)
+					{
+						DrawAttackStyle(settings.AttackSequenceParts[i], sequenceArray.GetArrayElementAtIndex(i), i, offSet + 1);
+						if (i < settings.AttackSequenceParts.Length - 1)
+						{
+							LineBreak(new Color(0.8f, 0.5f, 0f, 1));
+							FloatField(new GUIContent("Maximum Delay"), ref settings.PartsMaxDelays[i], offSet + 1);
+							LineBreak(new Color(0.8f, 0.5f, 0f, 1));
+						}
+					}
+
+					LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
+					//Array resizer buttons
+					GUILayout.BeginHorizontal();
+					if (GUILayout.Button("+"))
+					{
+						sequenceArray.InsertArrayElementAtIndex(settings.AttackSequenceParts.Length);
+						List<AttackStyle> newContent = new List<AttackStyle>(settings.AttackSequenceParts);
+						newContent.Add(new AttackStyle());
+						settings.AttackSequenceParts = newContent.ToArray();
+
+						if (settings.AttackSequenceParts.Length > 1)
+						{
+							property.FindPropertyRelative(nameof(settings.PartsMaxDelays)).InsertArrayElementAtIndex(settings.PartsMaxDelays.Length);
+							List<float> newDelayContent = new List<float>(settings.PartsMaxDelays);
+							newDelayContent.Add(0);
+							settings.PartsMaxDelays = newDelayContent.ToArray();
+						}
+
+						isDirty = true;
+					}
+					EditorGUI.BeginDisabledGroup(settings.AttackSequenceParts.Length == 0);
+					if (GUILayout.Button("-"))
+					{
+						List<AttackStyle> newContent = new List<AttackStyle>(settings.AttackSequenceParts);
+						newContent.RemoveAt(newContent.Count - 1);
+						settings.AttackSequenceParts = newContent.ToArray();
+						sequenceArray.arraySize = settings.AttackSequenceParts.Length;
+
+						if (settings.AttackSequenceParts.Length > 1)
+						{
+							List<float> newDelayContent = new List<float>(settings.PartsMaxDelays);
+							newDelayContent.RemoveAt(newDelayContent.Count - 1);
+							settings.PartsMaxDelays = newDelayContent.ToArray();
+							property.FindPropertyRelative(nameof(settings.PartsMaxDelays)).arraySize = settings.PartsMaxDelays.Length;
+						}
+						isDirty = true;
+					}
+					EditorGUI.EndDisabledGroup();
+					GUILayout.EndHorizontal();
+
+					GUILayout.Space(10);
+				}
+				if (asHeader)
+					EndFoldoutHeader();
+			}
+			private static void DrawAttackStyle(AttackStyle style, SerializedProperty styleProperty, int index, int offSet)
+			{
+				Foldout(new GUIContent(IndexToName()), styleProperty, offSet);
+				if (styleProperty.isExpanded)
+				{
+					//Animation
+					Header("Animation Settings", offSet);
+					EnumField<AttackAnimation>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AnimationTarget))), ref style.AnimationTarget, offSet + 1);
+					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.StopMovement))), ref style.StopMovement, offSet + 1);
+
+					LineBreak(new Color(0.25f, 0.25f, 0.65f, 0.25f));
+					EnumField<MultiplicationType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AnimationMultiplicationType))), ref style.AnimationMultiplicationType, offSet + 1);
+					if (style.AnimationMultiplicationType == MultiplicationType.FlatValue)
+					{
+						if (FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AnimationSpeedFlatValue))), ref style.AnimationSpeedFlatValue, offSet + 1))
+						{
+							style.AnimationSpeedFlatValue = Mathf.Max(style.AnimationSpeedFlatValue, 0);
+						}
+					}
+					else
+					{
+						AnimationCurveField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AnimationSpeedCurve))), ref style.AnimationSpeedCurve, offSet + 1);
+						FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AnimationSpeedCurveMultiplier))), ref style.AnimationSpeedCurveMultiplier, offSet + 1);
+						if (FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AnimationSpeedCurveTimeframe))), ref style.AnimationSpeedCurveTimeframe, offSet + 1))
+						{
+							style.AnimationSpeedCurveTimeframe = Mathf.Max(style.AnimationSpeedCurveTimeframe, 0);
+						}
+					}
+
+					//Charging
+					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+					Header("Charge Settings", offSet);
+					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.NeedsCharging))), ref style.NeedsCharging, offSet + 1);
+					if (style.NeedsCharging)
+					{
+						SerializedProperty chargeProperty = styleProperty.FindPropertyRelative(nameof(style.ChargeSettings));
+						DrawChargeSettings(style.ChargeSettings, chargeProperty, offSet + 1);
+					}
+
+					//Multipliers
+					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+					Header("Multiplier Settings", offSet);
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.DamageMultiplier))), ref style.DamageMultiplier, offSet + 1);
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.HealthCostMultiplier))), ref style.HealthCostMultiplier, offSet + 1);
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.ManaCostMultiplier))), ref style.ManaCostMultiplier, offSet + 1);
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.EnduranceCostMultiplier))), ref style.EnduranceCostMultiplier, offSet + 1);
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.KnockbackMultiplier))), ref style.KnockbackMultiplier, offSet + 1);
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.CritChanceMultiplier))), ref style.CritChanceMultiplier, offSet + 1);
+
+					//Collision
+					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+					Header("Collision Settings", offSet);
+					EnumFlagField<ColliderMask>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.CollisionMask))), ref style.CollisionMask, offSet + 1);
+					EnumFlagField<ColliderMask>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.StopOnCollisionMask))), ref style.StopOnCollisionMask, offSet + 1);
+					ObjectField<EffectSingle>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.DirectHit))), ref style.DirectHit, offSet + 1);
+
+					//Overrides
+					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+					Header("Override Settings", offSet);
+					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.OverrideElement))), ref style.OverrideElement, offSet + 1);
+					if (style.OverrideElement)
+						EnumField<ElementType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.OverridenElement))), ref style.OverridenElement, offSet + 2);
+					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.OverrideCauseType))), ref style.OverrideCauseType, offSet + 1);
+					if (style.OverrideCauseType)
+						EnumField<CauseType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.OverridenCauseType))), ref style.OverridenCauseType, offSet + 2);
+
+					//Combo
+					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+					Header("Combo Settings", offSet);
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.ComboIncreaseMaxDelay))), ref style.ComboIncreaseMaxDelay, offSet + 1);
+					IntField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.OnHitComboWorth))), ref style.OnHitComboWorth, offSet + 1);
+
+					//Attack effects
+					GUILayout.Space(6);
+					LineBreak(new Color(0.5f, 0.25f, 0.65f, 1), false);
+					LineBreak(new Color(0.5f, 0.25f, 0.65f, 1), false);
+					Header("Attack Effects", offSet);
+
+					SerializedProperty attackEffectsProperty = styleProperty.FindPropertyRelative(nameof(style.AttackEffects));
+					DrawArray<AttackActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AttackEffects))), ref style.AttackEffects, attackEffectsProperty, DrawAttackActivationEffect, offSet + 1, new GUIContent(". Effect"));
+				}
+				string IndexToName()
+				{
+					if (index == 0)
+					{
+						return "Start Attack";
+					}
+					else
+					{
+						return index + ". Combo";
+					}
+				}
+			}
+			private static void DrawChargeSettings(AttackChargeSettings settings, SerializedProperty settingsProperty, int offSet)
+			{
+				Foldout(new GUIContent("Charge Settings"), settingsProperty, offSet);
+				if (settingsProperty.isExpanded)
+				{
+					EnumFlagField<AttackChargeEffectMask>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectMask))), ref settings.EffectMask, offSet + 1);
+
+					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+					SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationChargeStartpoint))), ref settings.AnimationChargeStartpoint, 0, 1, offSet + 1);
+					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ApplyMoveStunWhileCharging))), ref settings.ApplyMoveStunWhileCharging, offSet + 1);
+					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WaitAtFullChargeForRelease))), ref settings.WaitAtFullChargeForRelease, offSet + 1);
+
+					//Charge values
+					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ChargeTime))), ref settings.ChargeTime, offSet + 1);
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartCharge))), ref settings.StartCharge, offSet + 1);
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MaximumCharge))), ref settings.MaximumCharge, offSet + 1);
+
+					SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MinRequiredCharge))), ref settings.MinRequiredCharge, settings.StartCharge, settings.MaximumCharge, offSet + 1);
+
+					//DirectHit overrides
+					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+					SerializedProperty hitOverridesProperty = settingsProperty.FindPropertyRelative(nameof(settings.ChargeBasedDirectHits));
+					CurMinCharge = settings.MinRequiredCharge;
+					CurMaxCharge = settings.MaximumCharge;
+					DrawArray<ChargeBasedDirectHit>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ChargeBasedDirectHits))), ref settings.ChargeBasedDirectHits, hitOverridesProperty, DrawDirectHitOverride, offSet + 1, new GUIContent(". Charge Based Direct Hit"));
+
+					//FX
+					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+					SerializedProperty fxProperty = settingsProperty.FindPropertyRelative(nameof(settings.FXObjects));
+					DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.FXObjects))), ref settings.FXObjects, fxProperty, DrawCustomFXObject, offSet + 1);
+
+					SerializedProperty fxMultipliedProperty = settingsProperty.FindPropertyRelative(nameof(settings.FXObjectsWithMutliplier));
+					DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.FXObjectsWithMutliplier))), ref settings.FXObjectsWithMutliplier, fxMultipliedProperty, DrawCustomFXObject, offSet + 1);
+
+					//Buffs
+					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+					SerializedProperty buffProperty = settingsProperty.FindPropertyRelative(nameof(settings.BuffOnUserWhileCharging));
+					ObjectArrayField<Buff>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BuffOnUserWhileCharging))), ref settings.BuffOnUserWhileCharging, buffProperty, new GUIContent(". Buff"), offSet + 1);
+				}
+			}
+			private static void DrawAttackActivationEffect(GUIContent content, AttackActivationEffect settings, SerializedProperty property, int offSet)
+			{
+				if (settings == null)
+				{
+					settings = new AttackActivationEffect();
+					isDirty = true;
+				}
+				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AtAnimationPoint))), ref settings.AtAnimationPoint, 0, 1, offSet + 1);
+				DrawActivationEffect(content, settings.Effect, property.FindPropertyRelative(nameof(settings.Effect)), offSet);
+			}
+			private static void DrawDirectHitOverride(GUIContent content, ChargeBasedDirectHit selfSettings, SerializedProperty selfProperty, int offSet)
+			{
+				if (selfSettings == null)
+				{
+					isDirty = true;
+					selfSettings = new ChargeBasedDirectHit();
+				}
+
+				Foldout(content, selfProperty, offSet);
+				if (selfProperty.isExpanded)
+				{
+					SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfSettings.MinRequiredCharge))), ref selfSettings.MinRequiredCharge, CurMinCharge, CurMaxCharge, offSet + 1);
+					SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfSettings.MaxRequiredCharge))), ref selfSettings.MaxRequiredCharge, selfSettings.MinRequiredCharge, CurMaxCharge, offSet + 1);
+
+					GUILayout.Space(4);
+					ObjectField<EffectSingle>(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfSettings.DirectHitOverride))), ref selfSettings.DirectHitOverride, offSet + 1);
+				}
+			}
+		}
+		#endregion
+		#endregion
 	}
 }

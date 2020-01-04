@@ -37,8 +37,8 @@ namespace EoE.Combatery
 		//Effect settings
 		public EffectSingle EffectOnTarget;
 		public EffectAOE EffectAOE;
-		public HealTargetInfo[] HealEffects = new HealTargetInfo[0];
 
+		public HealTargetInfo[] HealEffects = new HealTargetInfo[0];
 		public CustomFXObject[] EffectsTillComboEnds = new CustomFXObject[0];
 		public Buff[] BuffsTillComboEnds = new Buff[0];
 	}

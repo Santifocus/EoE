@@ -30,7 +30,7 @@ namespace EoE.Combatery
 		public CustomFXObject[] Effects = new CustomFXObject[0];
 
 		#region Activation
-		public void ActivateEffectAOE(Entitie effectCauser, Transform origin, CombatObject infoBase, EffectOverrides effectOverrides = null)
+		public void Activate(Entitie effectCauser, Transform origin, CombatObject infoBase, EffectOverrides effectOverrides = null)
 		{
 			ElementType effectElement = (effectOverrides == null) ? DamageElement : (effectOverrides.OverridenElement.HasValue ? effectOverrides.OverridenElement.Value : DamageElement);
 			CauseType effectCause = (effectOverrides == null) ? CauseType : (effectOverrides.OverridenCauseType.HasValue ? effectOverrides.OverridenCauseType.Value : CauseType);
@@ -168,24 +168,7 @@ namespace EoE.Combatery
 				//Buffs
 				for (int j = 0; j < BuffsToApply.Length; j++)
 				{
-					if (BuffStackStyle == BuffStackingStyle.Stack)
-					{
-						eligibleTargets[i].Target.AddBuff(BuffsToApply[j], effectCauser);
-					}
-					else if (BuffStackStyle == BuffStackingStyle.Reapply)
-					{
-						if (!(eligibleTargets[i].Target.TryReapplyBuff(BuffsToApply[j], effectCauser).Item1))
-						{
-							eligibleTargets[i].Target.AddBuff(BuffsToApply[j], effectCauser);
-						}
-					}
-					else //effect.BuffStackStyle == BuffStackingStyle.DoNothing
-					{
-						if (!(eligibleTargets[i].Target.HasBuffActive(BuffsToApply[j], effectCauser).HasValue))
-						{
-							eligibleTargets[i].Target.AddBuff(BuffsToApply[j], effectCauser);
-						}
-					}
+					Buff.ApplyBuff(BuffsToApply[j], eligibleTargets[i].Target, effectCauser, BuffStackStyle);
 				}
 
 				//FXEffects

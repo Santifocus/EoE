@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: DarkBarrageSpell
   m_EditorClassIdentifier: 
   BaseDamage: 6
+  BaseHealthCost: 0
   BaseManaCost: 2
   BaseEnduranceCost: 0
   BaseKnockback: 1

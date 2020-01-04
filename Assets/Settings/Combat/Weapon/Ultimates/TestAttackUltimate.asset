@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f668e22fb629a4409275a25b2c92f34, type: 3}
+  m_Name: TestAttackUltimate
+  m_EditorClassIdentifier: 
+  UltimateIcon: {fileID: 21300000, guid: 2b94c096a2edb6746b3d1ac46cbe2ec0, type: 3}
+  BaseSettings: {fileID: 11400000, guid: 96dcb5c9bff843f4fa1ad4cf0c08cb1e, type: 2}
+  ActivationEffects:
+  - ChanceToActivate: 1
+    ContainedEffectType: 2
+    ImpulseVelocity: 5
+    ImpulseVelocityFallOffTime: 0.5
+    ImpulseVelocityDirection: 2
+    ImpulseVelocityFallbackDirection: 1
+    ImpulseDirectionBase: 1
+    FXObjects:
+    - FX: {fileID: 11400000, guid: 6812b6ecf408ba8439c8e9f47922381b, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    AOEEffects: []
+    ProjectileInfos: []
+    HealEffects: []
+    StackingStyle: 2
+    BuffsToApply: []
+  AttackData:
+    AttackSequenceParts:
+    - AnimationTarget: 4
+      StopMovement: 1
+      AnimationMultiplicationType: 1
+      AnimationSpeedFlatValue: 2
+      AnimationSpeedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AnimationSpeedCurveTimeframe: 2
+      AnimationSpeedCurveMultiplier: 1
+      NeedsCharging: 0
+      ChargeSettings:
+        EffectMask: 3
+        AnimationChargeStartpoint: 0.1
+        ApplyMoveStunWhileCharging: 0
+        WaitAtFullChargeForRelease: 1
+        ChargeTime: 1
+        StartCharge: 0
+        MaximumCharge: 1
+        MinRequiredCharge: 0.1
+        ChargeBasedDirectHits: []
+        FXObjects: []
+        FXObjectsWithMutliplier: []
+        BuffOnUserWhileCharging: []
+      DamageMultiplier: 5
+      HealthCostMultiplier: 1
+      ManaCostMultiplier: 1
+      EnduranceCostMultiplier: 1
+      KnockbackMultiplier: 1
+      CritChanceMultiplier: 1
+      CollisionMask: -1
+      StopOnCollisionMask: -1
+      DirectHit: {fileID: 0}
+      OverrideElement: 0
+      OverridenElement: 1
+      OverrideCauseType: 0
+      OverridenCauseType: 0
+      ComboIncreaseMaxDelay: 1
+      OnHitComboWorth: 1
+      AttackEffects: []
+    PartsMaxDelays:
+    - 0

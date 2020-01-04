@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: FreezeSpell
   m_EditorClassIdentifier: 
   BaseDamage: 15
+  BaseHealthCost: 0
   BaseManaCost: 10
   BaseEnduranceCost: 0
   BaseKnockback: 16
