@@ -623,5 +623,5 @@ MonoBehaviour:
     OnCritHitCharge: 2
     OnKillCharge: 2
     PerComboPointCharge: 0
-    ChargeOverTimeOnCombat: 1
-    OutOfCombatDecrease: 1
+    ChargeOverTimeOnCombat: 0
+    OutOfCombatDecrease: 0
