@@ -45,7 +45,7 @@ MonoBehaviour:
   CameraYLerpSringStiffness: 0.3
   CameraAnchorOffset: {x: 0, y: 1.4, z: 0}
   CameraAnchorOffsetWhenTargeting: {x: 1.4, y: 1.7, z: 0}
-  CameraRotationPower: {x: 200, y: -75}
+  CameraRotationPower: {x: 200, y: 75}
   CameraRotationSpeed: 7
   CameraVerticalAngleClamps: {x: -50, y: 50}
   CameraExtraZoomOnVertical: 0.8

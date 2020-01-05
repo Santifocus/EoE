@@ -92,7 +92,7 @@ namespace EoE.UI
 		}
 		private void Update()
 		{
-			if(InputController.MenuPlayerMenu.Down && navigationCooldown <= 0)
+			if(InputController.PlayerMenu.Down && navigationCooldown <= 0)
 			{
 				CloseShop();
 				return;

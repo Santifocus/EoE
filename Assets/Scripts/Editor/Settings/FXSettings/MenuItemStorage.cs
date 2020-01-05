@@ -1,7 +1,10 @@
 ﻿using EoE.Combatery;
 using System.IO;
+using TMPro;
 using UnityEditor;
+using UnityEditor.Events;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace EoE.Information
 {
@@ -74,7 +77,50 @@ namespace EoE.Information
 				EditorUtility.SetDirty(itemCollector);
 			}
 		}
+		//Context menu
+		[MenuItem("GameObject/UI/EoEButton")]
+		public static void CreateEoEButton(MenuCommand menuCommand)
+		{
+			Transform parent = Selection.activeTransform;
+			GameObject buttonMain = new GameObject("ControllerButton");
+			buttonMain.AddComponent<RectTransform>().sizeDelta = new Vector2(200,50);
+			GameObjectUtility.SetParentAndAlign(buttonMain, menuCommand.context as GameObject);
 
+			UI.ControllerMenuItem m = buttonMain.AddComponent<UI.ControllerMenuItem>();
+
+			GameObject inActiveTextMain = new GameObject("InActiveText");
+			inActiveTextMain.transform.SetParent(buttonMain.transform);
+			TextMeshProUGUI inActiveText = inActiveTextMain.AddComponent<TextMeshProUGUI>();
+			inActiveText.text = "Button";
+			inActiveText.alignment = TextAlignmentOptions.Center;
+
+			//Clone the inActiveText
+			TextMeshProUGUI activeText = Object.Instantiate(inActiveText, buttonMain.transform);
+			GameObject activeTextMain = activeText.gameObject;
+			activeTextMain.name = "ActiveText";
+			activeText.color = Color.magenta;
+			activeTextMain.SetActive(false);
+
+			activeText.rectTransform.anchoredPosition = Vector2.zero;
+			inActiveText.rectTransform.anchoredPosition = Vector2.zero;
+			activeText.rectTransform.localScale = Vector2.one;
+			inActiveText.rectTransform.localScale = Vector2.one;
+
+			m.onSelectedEvent = new UnityEvent();
+			m.onDeSelectedEvent = new UnityEvent();
+
+			UnityAction<bool> inActiveSetter = new UnityAction<bool>(inActiveTextMain.SetActive);
+			UnityEventTools.AddBoolPersistentListener(m.onSelectedEvent, inActiveSetter, false);
+			UnityEventTools.AddBoolPersistentListener(m.onDeSelectedEvent, inActiveSetter, true);
+
+			UnityAction<bool> activeSetter = new UnityAction<bool>(activeTextMain.SetActive);
+			UnityEventTools.AddBoolPersistentListener(m.onSelectedEvent, activeSetter, true);
+			UnityEventTools.AddBoolPersistentListener(m.onDeSelectedEvent, activeSetter, false);
+
+			Undo.RegisterCreatedObjectUndo(buttonMain, "Create " + buttonMain.name);
+			Selection.activeGameObject = buttonMain;
+		}
+		//Other
 		public static T AssetCreator<T>(params string[] pathParts) where T : ScriptableObject
 		{
 			T asset = ScriptableObject.CreateInstance<T>();

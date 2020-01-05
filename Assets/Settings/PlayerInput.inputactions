@@ -86,22 +86,6 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Pause",
-                    "type": "Button",
-                    "id": "8cea9377-d5ee-40ee-b827-b7d0d516ccae",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "PlayerMenu",
-                    "type": "Button",
-                    "id": "a34bc4a8-b213-4e55-9385-1db00e9e30d8",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
                     "name": "UseItem",
                     "type": "Button",
                     "id": "e8d9a16f-3a49-442f-ab0c-dbcb89a3dbc8",
@@ -263,17 +247,6 @@
                 },
                 {
                     "name": "",
-                    "id": "c7d2d2f1-363b-4265-aec1-cae8a2bcc883",
-                    "path": "<Gamepad>/start",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Pause",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "413f925e-a271-4c0c-b230-f356e10c65c4",
                     "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
@@ -335,17 +308,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "ItemScrollDown",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "f7dd6639-5674-47b3-8c8d-0118846e07ed",
-                    "path": "<Gamepad>/select",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "PlayerMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
