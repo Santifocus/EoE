@@ -7,10 +7,11 @@ namespace EoE.Sounds
 		private Sound baseData;
 		private AudioSource source;
 
-		public float FadePoint { get => fadePoint; set { fadePoint = value; source.volume = baseData.volume * value; } }
+		public float FadePoint { get => fadePoint; set { fadePoint = value; source.volume = baseData.volume * volumeScale * value; } }
 		private float fadePoint;
 		public bool FullyStopped => !isPaused && !source.isPlaying;
 		private bool isPaused;
+		private float volumeScale => (baseData.soundCategory == SoundCategory.Music) ? (SettingsData.ActiveMusicVolumeScale) : (SettingsData.ActiveSoundVolumeScale);
 		public void Setup(Sound baseData)
 		{
 			source = gameObject.AddComponent<AudioSource>();
@@ -18,6 +19,7 @@ namespace EoE.Sounds
 			source.Stop();
 			RetrieveData(baseData);
 			FadePoint = 1;
+			UI.SettingsMenuController.VolumeScalesChangedEvent += UpdateVolumeScale;
 		}
 		private void RetrieveData(Sound baseData)
 		{
@@ -26,11 +28,15 @@ namespace EoE.Sounds
 			source.pitch = baseData.pitch;
 			source.loop = baseData.Loop;
 			source.spatialBlend = baseData.spatialBlend;
-			source.volume = baseData.volume;
+			source.volume = baseData.volume * volumeScale;
 			source.priority = baseData.priority;
 			source.outputAudioMixerGroup = baseData.audioGroup;
 		}
-
+		private void UpdateVolumeScale()
+		{
+			//Just update with the set volumes
+			FadePoint = FadePoint;
+		}
 		private void Update()
 		{
 			UpdateScale();
@@ -86,6 +92,10 @@ namespace EoE.Sounds
 				source.Stop();
 
 			isPaused = false;
+		}
+		private void OnDestroy()
+		{
+			UI.SettingsMenuController.VolumeScalesChangedEvent -= UpdateVolumeScale;
 		}
 	}
 }

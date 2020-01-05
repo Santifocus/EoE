@@ -41,7 +41,8 @@ namespace EoE.Information
 			{
 				ItemDrop baseObject = Instantiate(GameController.Instance.itemDropPrefab, Storage.DropStorage);
 				InventoryItem item = new InventoryItem(this, ((i == createdItemDrops.Length - 1) && (stackSize % MaxStack != 0) ? stackSize % MaxStack : MaxStack));
-				Instantiate(ItemModel, baseObject.transform);
+				if(ItemModel)
+					Instantiate(ItemModel, baseObject.transform);
 
 				baseObject.transform.position = positon;
 				baseObject.SetupItemDrop(item, stopVelocity);

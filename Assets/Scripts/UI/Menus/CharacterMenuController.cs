@@ -41,7 +41,7 @@ namespace EoE.UI
 			if (!MenuOpen)
 				return;
 
-			if (InputController.MenuPlayerMenu.Down)
+			if (InputController.PlayerMenu.Down)
 			{
 				HideMenu();
 				return;

@@ -25,7 +25,8 @@ MonoBehaviour:
   AllowHoldUse: 0
   UseCooldown: 0
   RemoveOnUse: 0
-  ItemModel: {fileID: 0}
+  ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
+    type: 3}
   MaxStack: 1
   ItemWorth: 120
   ItemFlags: 3

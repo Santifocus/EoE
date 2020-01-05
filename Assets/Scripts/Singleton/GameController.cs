@@ -42,13 +42,17 @@ namespace EoE
 		{
 			if (Instance)
 			{
-				Destroy(Instance.gameObject);
+				Destroy(gameObject);
+				return;
 			}
 			Instance = this;
+
+			//PLACEHOLDER
 			StartCoroutine(StartMusic());
 		}
 		private IEnumerator StartMusic()
 		{
+			//PLACEHOLDER
 			yield return new WaitForEndOfFrame();
 			Sounds.SoundManager.SetSoundState("ChurchMusic", true);
 		}

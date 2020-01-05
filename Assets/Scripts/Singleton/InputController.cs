@@ -22,9 +22,6 @@ namespace EoE.Controlls
 		public static Button Aim;
 		public static Button Block;
 
-		public static Button Pause;
-		public static Button PlayerMenu;
-
 		public static Button UseItem;
 		public static Button MagicCast;
 
@@ -45,8 +42,8 @@ namespace EoE.Controlls
 		public static Button MenuEnter;
 		public static Button MenuBack;
 
-		public static Button MenuPause;
-		public static Button MenuPlayerMenu;
+		public static Button Pause;
+		public static Button PlayerMenu;
 
 		public static Button LeftPage;
 		public static Button RightPage;
@@ -63,7 +60,11 @@ namespace EoE.Controlls
 		private void Start()
 		{
 			if (Instance)
-				Destroy(Instance.gameObject);
+			{
+				Destroy(gameObject);
+				return;
+			}
+			DontDestroyOnLoad(this);
 			Instance = this;
 			playerInput = new PlayerInput();
 			playerInput.Enable();
@@ -80,7 +81,7 @@ namespace EoE.Controlls
 		{
 			//Player/Cam - Move
 			gameActions.PlayerMove.performed += ctx => playerMove = ctx.ReadValue<Vector2>();
-			gameActions.CameraMove.performed += ctx => cameraMove = ctx.ReadValue<Vector2>();
+			gameActions.CameraMove.performed += ctx => cameraMove = GetCameraInputVector(ctx.ReadValue<Vector2>());
 			gameActions.PlayerMove.canceled += ctx => playerMove = Vector2.zero;
 			gameActions.CameraMove.canceled += ctx => cameraMove = Vector2.zero;
 
@@ -124,16 +125,6 @@ namespace EoE.Controlls
 			gameActions.Block.started += ctx => ButtonStarted(Block);
 			gameActions.Block.canceled += ctx => ButtonEnded(Block);
 
-			//Pause
-			Pause = new Button("Pause");
-			gameActions.Pause.started += ctx => ButtonStarted(Pause);
-			gameActions.Pause.canceled += ctx => ButtonEnded(Pause);
-
-			//PlayerMenu
-			PlayerMenu = new Button("PlayerMenu");
-			gameActions.PlayerMenu.started += ctx => ButtonStarted(PlayerMenu);
-			gameActions.PlayerMenu.canceled += ctx => ButtonEnded(PlayerMenu);
-
 			//UseItem
 			UseItem = new Button("UseItem");
 			gameActions.UseItem.started += ctx => ButtonStarted(UseItem);
@@ -163,6 +154,10 @@ namespace EoE.Controlls
 			ItemScrollDown = new Button("ItemScrollDown");
 			gameActions.ItemScrollDown.started += ctx => ButtonStarted(ItemScrollDown);
 			gameActions.ItemScrollDown.canceled += ctx => ButtonEnded(ItemScrollDown);
+		}
+		private Vector2 GetCameraInputVector(Vector2 baseVector)
+		{
+			return new Vector2(baseVector.x * (SettingsData.ActiveInvertCameraX ? -1 : 1), baseVector.y * (SettingsData.ActiveInvertCameraY ? -1 : 1));
 		}
 		private void SetupMenuInput()
 		{
@@ -196,15 +191,15 @@ namespace EoE.Controlls
 			menuActions.Back.started += ctx => ButtonStarted(MenuBack);
 			menuActions.Back.canceled += ctx => ButtonEnded(MenuBack);
 
-			//MenuPause
-			MenuPause = new Button("MenuPause");
-			menuActions.Pause.started += ctx => ButtonStarted(MenuPause);
-			menuActions.Pause.canceled += ctx => ButtonEnded(MenuPause);
+			//Pause
+			Pause = new Button("Pause");
+			menuActions.Pause.started += ctx => ButtonStarted(Pause);
+			menuActions.Pause.canceled += ctx => ButtonEnded(Pause);
 
-			//MenuPlayerMenu
-			MenuPlayerMenu = new Button("MenuPlayerMenu");
-			menuActions.PlayerMenu.started += ctx => ButtonStarted(MenuPlayerMenu);
-			menuActions.PlayerMenu.canceled += ctx => ButtonEnded(MenuPlayerMenu);
+			//PlayerMenu
+			PlayerMenu = new Button("PlayerMenu");
+			menuActions.PlayerMenu.started += ctx => ButtonStarted(PlayerMenu);
+			menuActions.PlayerMenu.canceled += ctx => ButtonEnded(PlayerMenu);
 
 			//LeftPage
 			LeftPage = new Button("LeftPage");
@@ -223,8 +218,11 @@ namespace EoE.Controlls
 
 		private void OnDestroy()
 		{
-			playerInput.Disable();
-			StopAllCoroutines();
+			if (Instance == this)
+			{
+				playerInput.Disable();
+				StopAllCoroutines();
+			}
 		}
 
 		private void ButtonStarted(Button target)

@@ -101,22 +101,6 @@ namespace EoE.Controlls
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Pause"",
-                    ""type"": ""Button"",
-                    ""id"": ""8cea9377-d5ee-40ee-b827-b7d0d516ccae"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""PlayerMenu"",
-                    ""type"": ""Button"",
-                    ""id"": ""a34bc4a8-b213-4e55-9385-1db00e9e30d8"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
                     ""name"": ""UseItem"",
                     ""type"": ""Button"",
                     ""id"": ""e8d9a16f-3a49-442f-ab0c-dbcb89a3dbc8"",
@@ -278,17 +262,6 @@ namespace EoE.Controlls
                 },
                 {
                     ""name"": """",
-                    ""id"": ""c7d2d2f1-363b-4265-aec1-cae8a2bcc883"",
-                    ""path"": ""<Gamepad>/start"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Pause"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""413f925e-a271-4c0c-b230-f356e10c65c4"",
                     ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
@@ -350,17 +323,6 @@ namespace EoE.Controlls
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ItemScrollDown"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""f7dd6639-5674-47b3-8c8d-0118846e07ed"",
-                    ""path"": ""<Gamepad>/select"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""PlayerMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -686,8 +648,6 @@ namespace EoE.Controlls
             m_GameInput_ResetCamera = m_GameInput.FindAction("ResetCamera", throwIfNotFound: true);
             m_GameInput_Aim = m_GameInput.FindAction("Aim", throwIfNotFound: true);
             m_GameInput_Block = m_GameInput.FindAction("Block", throwIfNotFound: true);
-            m_GameInput_Pause = m_GameInput.FindAction("Pause", throwIfNotFound: true);
-            m_GameInput_PlayerMenu = m_GameInput.FindAction("PlayerMenu", throwIfNotFound: true);
             m_GameInput_UseItem = m_GameInput.FindAction("UseItem", throwIfNotFound: true);
             m_GameInput_MagicCast = m_GameInput.FindAction("MagicCast", throwIfNotFound: true);
             m_GameInput_MagicScrollUp = m_GameInput.FindAction("MagicScrollUp", throwIfNotFound: true);
@@ -766,8 +726,6 @@ namespace EoE.Controlls
         private readonly InputAction m_GameInput_ResetCamera;
         private readonly InputAction m_GameInput_Aim;
         private readonly InputAction m_GameInput_Block;
-        private readonly InputAction m_GameInput_Pause;
-        private readonly InputAction m_GameInput_PlayerMenu;
         private readonly InputAction m_GameInput_UseItem;
         private readonly InputAction m_GameInput_MagicCast;
         private readonly InputAction m_GameInput_MagicScrollUp;
@@ -788,8 +746,6 @@ namespace EoE.Controlls
             public InputAction @ResetCamera => m_Wrapper.m_GameInput_ResetCamera;
             public InputAction @Aim => m_Wrapper.m_GameInput_Aim;
             public InputAction @Block => m_Wrapper.m_GameInput_Block;
-            public InputAction @Pause => m_Wrapper.m_GameInput_Pause;
-            public InputAction @PlayerMenu => m_Wrapper.m_GameInput_PlayerMenu;
             public InputAction @UseItem => m_Wrapper.m_GameInput_UseItem;
             public InputAction @MagicCast => m_Wrapper.m_GameInput_MagicCast;
             public InputAction @MagicScrollUp => m_Wrapper.m_GameInput_MagicScrollUp;
@@ -835,12 +791,6 @@ namespace EoE.Controlls
                     Block.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnBlock;
                     Block.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnBlock;
                     Block.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnBlock;
-                    Pause.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPause;
-                    Pause.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPause;
-                    Pause.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPause;
-                    PlayerMenu.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPlayerMenu;
-                    PlayerMenu.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPlayerMenu;
-                    PlayerMenu.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnPlayerMenu;
                     UseItem.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnUseItem;
                     UseItem.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnUseItem;
                     UseItem.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnUseItem;
@@ -893,12 +843,6 @@ namespace EoE.Controlls
                     Block.started += instance.OnBlock;
                     Block.performed += instance.OnBlock;
                     Block.canceled += instance.OnBlock;
-                    Pause.started += instance.OnPause;
-                    Pause.performed += instance.OnPause;
-                    Pause.canceled += instance.OnPause;
-                    PlayerMenu.started += instance.OnPlayerMenu;
-                    PlayerMenu.performed += instance.OnPlayerMenu;
-                    PlayerMenu.canceled += instance.OnPlayerMenu;
                     UseItem.started += instance.OnUseItem;
                     UseItem.performed += instance.OnUseItem;
                     UseItem.canceled += instance.OnUseItem;
@@ -1046,8 +990,6 @@ namespace EoE.Controlls
             void OnResetCamera(InputAction.CallbackContext context);
             void OnAim(InputAction.CallbackContext context);
             void OnBlock(InputAction.CallbackContext context);
-            void OnPause(InputAction.CallbackContext context);
-            void OnPlayerMenu(InputAction.CallbackContext context);
             void OnUseItem(InputAction.CallbackContext context);
             void OnMagicCast(InputAction.CallbackContext context);
             void OnMagicScrollUp(InputAction.CallbackContext context);
