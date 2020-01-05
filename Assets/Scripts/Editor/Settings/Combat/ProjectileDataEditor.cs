@@ -45,29 +45,19 @@ namespace EoE.Combatery
 			Vector3Field(new GUIContent("CreateOffsetToCaster"), ref settings.CreateOffsetToCaster, 1);
 
 			LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
-			{
-				SerializedProperty flightEffectsProperty = serializedObject.FindProperty(nameof(settings.VisualStartEffects));
-				DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.VisualStartEffects))), ref settings.VisualStartEffects, flightEffectsProperty, DrawCustomFXObject, 1);
-			}
+
+			SerializedProperty flightEffectsProperty = serializedObject.FindProperty(nameof(settings.VisualStartEffects));
+			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.VisualStartEffects))), ref settings.VisualStartEffects, flightEffectsProperty, DrawCustomFXObject, 1);
+
 			LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 
-			bool open;
-			{
-				SerializedProperty startEffectsOpen = serializedObject.FindProperty(nameof(settings.StartEffects));
-				open = startEffectsOpen.isExpanded;
-				ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartEffects))), ref settings.StartEffects, ref open, new GUIContent(". Effect"), 1);
-				if (open != startEffectsOpen.isExpanded)
-					startEffectsOpen.isExpanded = open;
-			}
-			LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
-			{
-				SerializedProperty whileEffectsOpen = serializedObject.FindProperty(nameof(settings.WhileEffects));
-				open = whileEffectsOpen.isExpanded;
-				ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WhileEffects))), ref settings.WhileEffects, ref open, new GUIContent(". Effect"), 1);
-				if (open != whileEffectsOpen.isExpanded)
-					whileEffectsOpen.isExpanded = open;
-			}
+			SerializedProperty startEffectsOpen = serializedObject.FindProperty(nameof(settings.StartEffects));
+			ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartEffects))), ref settings.StartEffects, startEffectsOpen, new GUIContent(". Effect"), 1);
 
+			LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+
+			SerializedProperty whileEffectsOpen = serializedObject.FindProperty(nameof(settings.WhileEffects));
+			ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WhileEffects))), ref settings.WhileEffects, whileEffectsOpen, new GUIContent(". Effect"), 1);
 		}
 		private void CollisionSettingsArea()
 		{
@@ -90,10 +80,7 @@ namespace EoE.Combatery
 			LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 			//AOE Effects
 			SerializedProperty collisionEffectsAOEProperty = serializedObject.FindProperty(nameof(settings.CollisionEffectsAOE));
-			bool collisionEffectsAOEOpen = collisionEffectsAOEProperty.isExpanded;
-			ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CollisionEffectsAOE))), ref settings.CollisionEffectsAOE, ref collisionEffectsAOEOpen, new GUIContent(". Effect"), 1);
-			if (collisionEffectsAOEOpen != collisionEffectsAOEProperty.isExpanded)
-				collisionEffectsAOEProperty.isExpanded = collisionEffectsAOEOpen;
+			ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CollisionEffectsAOE))), ref settings.CollisionEffectsAOE, collisionEffectsAOEProperty, new GUIContent(". Effect"), 1);
 
 			//Direct hit effects
 			ObjectField<EffectSingle>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DirectHit))), ref settings.DirectHit, 1);
@@ -106,29 +93,21 @@ namespace EoE.Combatery
 			{
 				if (settings.Remenants == null)
 					settings.Remenants = new ProjectileRemenants();
-				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
-				{
-					SerializedProperty effectsProperty = serializedObject.FindProperty(nameof(settings.Remenants)).FindPropertyRelative(nameof(settings.Remenants.VisualEffects));
-					DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Remenants.VisualEffects))), ref settings.Remenants.VisualEffects, effectsProperty, DrawCustomFXObject, 2);
-				}
+
 				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 
-				bool open;
-				{
-					SerializedProperty startEffectsOpen = serializedObject.FindProperty(nameof(settings.Remenants)).FindPropertyRelative(nameof(settings.Remenants.StartEffects));
-					open = startEffectsOpen.isExpanded;
-					ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Remenants.StartEffects))), ref settings.Remenants.StartEffects, ref open, new GUIContent(". Effect"), 2);
-					if (open != startEffectsOpen.isExpanded)
-						startEffectsOpen.isExpanded = open;
-				}
+				SerializedProperty effectsProperty = serializedObject.FindProperty(nameof(settings.Remenants)).FindPropertyRelative(nameof(settings.Remenants.VisualEffects));
+				DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Remenants.VisualEffects))), ref settings.Remenants.VisualEffects, effectsProperty, DrawCustomFXObject, 2);
+
 				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
-				{
-					SerializedProperty whileEffectsOpen = serializedObject.FindProperty(nameof(settings.Remenants)).FindPropertyRelative(nameof(settings.Remenants.WhileEffects));
-					open = whileEffectsOpen.isExpanded;
-					ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Remenants.WhileEffects))), ref settings.Remenants.WhileEffects, ref open, new GUIContent(". Effect"), 2);
-					if (open != whileEffectsOpen.isExpanded)
-						whileEffectsOpen.isExpanded = open;
-				}
+
+				SerializedProperty startEffectsOpen = serializedObject.FindProperty(nameof(settings.Remenants)).FindPropertyRelative(nameof(settings.Remenants.StartEffects));
+				ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Remenants.StartEffects))), ref settings.Remenants.StartEffects, startEffectsOpen, new GUIContent(". Effect"), 2);
+
+				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+
+				SerializedProperty whileEffectsOpen = serializedObject.FindProperty(nameof(settings.Remenants)).FindPropertyRelative(nameof(settings.Remenants.WhileEffects));
+				ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Remenants.WhileEffects))), ref settings.Remenants.WhileEffects, whileEffectsOpen, new GUIContent(". Effect"), 2);
 			}
 		}
 	}

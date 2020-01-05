@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Indestructible
   m_EditorClassIdentifier: 
   Name: Indestructible
-  Quality: 1
+  Quality: 2
   Permanent: 0
   BuffTime: 3
   Icon: {fileID: 0}

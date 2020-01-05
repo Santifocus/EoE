@@ -52,37 +52,22 @@ namespace EoE.Information
 			Spell settings = target as Spell;
 
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CastInfo.Duration))), ref settings.CastInfo.Duration, 1);
-			bool open;
-			{
-				SerializedProperty startEffectsProperty = serializedObject.FindProperty(nameof(settings.CastInfo)).FindPropertyRelative(nameof(settings.CastInfo.StartEffects));
-				open = startEffectsProperty.isExpanded;
-				ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CastInfo.StartEffects))), ref settings.CastInfo.StartEffects, ref open, new GUIContent(". Effect"), 1);
-				if (open != startEffectsProperty.isExpanded)
-					startEffectsProperty.isExpanded = open;
-			}
-			{
-				SerializedProperty whileEffectsProperty = serializedObject.FindProperty(nameof(settings.CastInfo)).FindPropertyRelative(nameof(settings.CastInfo.WhileEffects));
-				open = whileEffectsProperty.isExpanded;
-				ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CastInfo.WhileEffects))), ref settings.CastInfo.WhileEffects, ref open, new GUIContent(". Effect"), 1);
-				if (open != whileEffectsProperty.isExpanded)
-					whileEffectsProperty.isExpanded = open;
-			}
+			SerializedProperty startEffectsProperty = serializedObject.FindProperty(nameof(settings.CastInfo)).FindPropertyRelative(nameof(settings.CastInfo.StartEffects));
+			ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CastInfo.StartEffects))), ref settings.CastInfo.StartEffects, startEffectsProperty, new GUIContent(". Effect"), 1);
+
+			SerializedProperty whileEffectsProperty = serializedObject.FindProperty(nameof(settings.CastInfo)).FindPropertyRelative(nameof(settings.CastInfo.WhileEffects));
+			ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CastInfo.WhileEffects))), ref settings.CastInfo.WhileEffects, whileEffectsProperty, new GUIContent(". Effect"), 1);
 
 			//Custom FX Objects
-			{
-				SerializedProperty visualCastEffectsProperty = serializedObject.FindProperty(nameof(settings.CastInfo)).FindPropertyRelative(nameof(settings.CastInfo.VisualEffects));
-				DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CastInfo.VisualEffects))), ref settings.StartInfo.VisualEffects, visualCastEffectsProperty, DrawCustomFXObject, 1);
-			}
+			SerializedProperty visualCastEffectsProperty = serializedObject.FindProperty(nameof(settings.CastInfo)).FindPropertyRelative(nameof(settings.CastInfo.VisualEffects));
+			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CastInfo.VisualEffects))), ref settings.StartInfo.VisualEffects, visualCastEffectsProperty, DrawCustomFXObject, 1);
 		}
 		private void StartInfoArea()
 		{
 			Spell settings = target as Spell;
 
 			SerializedProperty startEffectsProperty = serializedObject.FindProperty(nameof(settings.StartInfo)).FindPropertyRelative(nameof(settings.StartInfo.Effects));
-			bool open = startEffectsProperty.isExpanded;
-			ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartInfo.Effects))), ref settings.StartInfo.Effects, ref open, new GUIContent(". Effect"), 1);
-			if (open != startEffectsProperty.isExpanded)
-				startEffectsProperty.isExpanded = open;
+			ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartInfo.Effects))), ref settings.StartInfo.Effects, startEffectsProperty, new GUIContent(". Effect"), 1);
 
 			SerializedProperty visualStartEffectProperty = serializedObject.FindProperty(nameof(settings.StartInfo)).FindPropertyRelative(nameof(settings.StartInfo.VisualEffects));
 			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartInfo.VisualEffects))), ref settings.StartInfo.VisualEffects, visualStartEffectProperty, DrawCustomFXObject, 1);

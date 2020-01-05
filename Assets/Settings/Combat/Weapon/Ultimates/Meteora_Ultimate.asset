@@ -16,7 +16,7 @@ MonoBehaviour:
   BaseSettings: {fileID: 11400000, guid: 96dcb5c9bff843f4fa1ad4cf0c08cb1e, type: 2}
   ActivationEffects:
   - ChanceToActivate: 1
-    ContainedEffectType: 2
+    ContainedEffectType: 34
     ImpulseVelocity: 5
     ImpulseVelocityFallOffTime: 0.5
     ImpulseVelocityDirection: 2
@@ -48,7 +48,8 @@ MonoBehaviour:
     ProjectileInfos: []
     HealEffects: []
     StackingStyle: 2
-    BuffsToApply: []
+    BuffsToApply:
+    - {fileID: 11400000, guid: f09a51f38f9717a4fa0301886cf683bb, type: 2}
   AttackData:
     AttackSequenceParts:
     - AnimationTarget: 4
@@ -181,6 +182,21 @@ MonoBehaviour:
             CustomScale: {x: 1, y: 1, z: 1}
           AOEEffects:
           - {fileID: 11400000, guid: 1d8ebfed7c135e54f9ec85cae386f553, type: 2}
+          ProjectileInfos: []
+          HealEffects: []
+          StackingStyle: 2
+          BuffsToApply: []
+      - AtAnimationPoint: 0.1
+        Effect:
+          ChanceToActivate: 1
+          ContainedEffectType: 1
+          ImpulseVelocity: 25
+          ImpulseVelocityFallOffTime: 0.35
+          ImpulseVelocityDirection: 2
+          ImpulseVelocityFallbackDirection: 1
+          ImpulseDirectionBase: 1
+          FXObjects: []
+          AOEEffects: []
           ProjectileInfos: []
           HealEffects: []
           StackingStyle: 2

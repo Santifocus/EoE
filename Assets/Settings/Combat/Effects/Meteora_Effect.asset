@@ -15,8 +15,8 @@ MonoBehaviour:
   AffectedTargets: 4
   DamageElement: 2
   CauseType: 0
-  BaseEffectRadius: 11
-  ZeroOutDistance: 11
+  BaseEffectRadius: 10
+  ZeroOutDistance: 13
   HasMaximumHits: 0
   MaximumHits: 0
   DamageMultiplier: 3.5
@@ -28,4 +28,5 @@ MonoBehaviour:
   BuffStackStyle: 2
   BuffsToApply:
   - {fileID: 11400000, guid: 23e1ab5c5ac8dba46b691279a20574b8, type: 2}
+  - {fileID: 11400000, guid: 00476bbaf4dfe5642a8febdb5abccf24, type: 2}
   Effects: []

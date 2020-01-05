@@ -7,7 +7,6 @@ namespace EoE.Information
 	[CustomEditor(typeof(CrawlerSettings), true), CanEditMultipleObjects]
 	public class CrawlerSettingsEditor : EnemySettingsEditor
 	{
-		private static bool AnnouncementFXOpen;
 		protected override void CustomInspector()
 		{
 			base.CustomInspector();
@@ -27,7 +26,8 @@ namespace EoE.Information
 		{
 			CrawlerSettings settings = target as CrawlerSettings;
 			FloatField(new GUIContent("Bash Announcement Delay", "If 'Bash Start' = T, then the BashAnnouncement will be played at 'T + Delay'"), ref settings.BashAnnouncementDelay, 1);
-			ObjectArrayField(new GUIContent("Bash Announcement", "The particles that will be shown when the BashAnnouncement is played."), ref settings.BashAnnouncement, ref AnnouncementFXOpen, new GUIContent(". Effect"), 1);
+			SerializedProperty fxArrayProperty = serializedObject.FindProperty(nameof(settings.BashAnnouncement));
+			ObjectArrayField(new GUIContent("Bash Announcement", "The particles that will be shown when the BashAnnouncement is played."), ref settings.BashAnnouncement, fxArrayProperty, new GUIContent(". Effect"), 1);
 		}
 	}
 }

@@ -355,25 +355,7 @@ namespace EoE
 				isDirty = true;
 			return changed;
 		}
-		public static bool ObjectArrayField<T>(string content, ref T[] curValue, SerializedProperty property, GUIContent objectContent = null, int offSet = 0) where T : Object
-		{
-			return ObjectArrayField<T>(new GUIContent(content), ref curValue, property, objectContent, offSet);
-		}
-		public static bool ObjectArrayField<T>(GUIContent content, ref T[] curValue, SerializedProperty property, GUIContent objectContent = null, int offSet = 0) where T : Object
-		{
-			bool changed;
-			bool open = property.isExpanded;
-			changed = ObjectArrayField<T>(content, ref curValue, ref open, objectContent, offSet);
-			if (open != property.isExpanded)
-				property.isExpanded = open;
-
-			return changed;
-		}
-		public static bool ObjectArrayField<T>(string content, ref T[] curValue, ref bool open, GUIContent objectContent = null, int offSet = 0) where T : Object
-		{
-			return ObjectArrayField<T>(new GUIContent(content), ref curValue, ref open, objectContent, offSet);
-		}
-		public static bool ObjectArrayField<T>(GUIContent arrayHeader, ref T[] curValue, ref bool open, GUIContent objectContent = null, int offSet = 0) where T : Object
+		public static bool ObjectArrayField<T>(GUIContent content, ref T[] curValue, SerializedProperty property, GUIContent objectContent = null, int offSet = 0, bool asHeader = false) where T : Object
 		{
 			bool changed = false;
 			if (curValue == null)
@@ -381,9 +363,9 @@ namespace EoE
 				curValue = new T[0];
 				changed = true;
 			}
+			changed |= Foldout(content, property, offSet, asHeader);
 
-			Foldout(arrayHeader, ref open, offSet);
-			if (open)
+			if (property.isExpanded)
 			{
 				int newSize = curValue.Length;
 				DelayedIntField("Size", ref newSize, offSet + 1);
@@ -409,6 +391,10 @@ namespace EoE
 					curValue = newArray;
 				}
 			}
+
+			if (asHeader)
+				EndFoldoutHeader();
+
 			if (changed)
 				isDirty = true;
 
@@ -555,11 +541,7 @@ namespace EoE
 				if (settings.HasMaskFlag(EffectType.AOE))
 				{
 					SerializedProperty aoeProperty = property.FindPropertyRelative(nameof(settings.AOEEffects));
-					bool aoeArrayOpen = aoeProperty.isExpanded;
-					ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AOEEffects))), ref settings.AOEEffects, ref aoeArrayOpen, new GUIContent(". AOE"), offSet + 1);
-					if (aoeProperty.isExpanded != aoeArrayOpen)
-						aoeProperty.isExpanded = aoeArrayOpen;
-
+					ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AOEEffects))), ref settings.AOEEffects, aoeProperty, new GUIContent(". AOE"), offSet + 1);
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1), false);
 				}
 				//Projectile
@@ -567,6 +549,20 @@ namespace EoE
 				{
 					SerializedProperty projectileArrayProperty = property.FindPropertyRelative(nameof(settings.ProjectileInfos));
 					DrawArray<ProjectileInfo>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ProjectileInfos))), ref settings.ProjectileInfos, projectileArrayProperty, DrawProjectileInfo, offSet + 1, new GUIContent(". Projectile"));
+					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1), false);
+				}
+				//Heal Effects
+				if (settings.HasMaskFlag(EffectType.HealOnUser))
+				{
+					SerializedProperty healEffectArrayProperty = property.FindPropertyRelative(nameof(settings.HealEffects));
+					DrawArray<HealTargetInfo>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.HealEffects))), ref settings.HealEffects, healEffectArrayProperty, DrawHealTargetInfo, offSet + 1, new GUIContent(". Heal Effect"));
+					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1), false);
+				}
+				//Buffs
+				if (settings.HasMaskFlag(EffectType.BuffOnUser))
+				{
+					SerializedProperty buffArrayProperty = property.FindPropertyRelative(nameof(settings.BuffsToApply));
+					ObjectArrayField<Buff>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BuffsToApply))), ref settings.BuffsToApply, buffArrayProperty, new GUIContent(". Buff"), offSet + 1);
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1), false);
 				}
 			}
@@ -588,6 +584,21 @@ namespace EoE
 				IntField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ExecutionCount))), ref settings.ExecutionCount, offSet + 1);
 				if (settings.ExecutionCount > 1)
 					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ExecutionRepeatDelay))), ref settings.ExecutionRepeatDelay, offSet + 1);
+			}
+		}
+		public static void DrawHealTargetInfo(GUIContent content, HealTargetInfo settings, SerializedProperty property, int offSet)
+		{
+			if (settings == null)
+			{
+				settings = new HealTargetInfo();
+				isDirty = true;
+			}
+			Foldout(content, property, offSet);
+			if (property.isExpanded)
+			{
+				EnumField<TargetStat>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.HealType))), ref settings.HealType, offSet + 1);
+				BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Percent))), ref settings.Percent, offSet + 1);
+				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Amount))), ref settings.Amount, offSet + 1);
 			}
 		}
 		public static void DrawCustomFXObject(GUIContent content, CustomFXObject selfData, SerializedProperty selfProperty, int offSet)
@@ -846,8 +857,12 @@ namespace EoE
 					settings = new AttackActivationEffect();
 					isDirty = true;
 				}
-				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AtAnimationPoint))), ref settings.AtAnimationPoint, 0, 1, offSet + 1);
-				DrawActivationEffect(content, settings.Effect, property.FindPropertyRelative(nameof(settings.Effect)), offSet);
+				Foldout(content, property, offSet);
+				if (property.isExpanded)
+				{
+					SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AtAnimationPoint))), ref settings.AtAnimationPoint, 0, 1, offSet + 1);
+					DrawActivationEffect(new GUIContent("Effect Data"), settings.Effect, property.FindPropertyRelative(nameof(settings.Effect)), offSet + 1);
+				}
 			}
 			private static void DrawDirectHitOverride(GUIContent content, ChargeBasedDirectHit selfSettings, SerializedProperty selfProperty, int offSet)
 			{

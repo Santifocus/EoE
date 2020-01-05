@@ -669,12 +669,14 @@ namespace EoE.Combatery
 			ComboFinish();
 			if(ActiveAttackStyle != null)
 			{
-				if(ActiveAttackStyle.StopMovement)
-					Player.Instance.AppliedMoveStuns--;
+				if (Player.Instance.Alive)
+				{
+					if (ActiveAttackStyle.StopMovement)
+						Player.Instance.AppliedMoveStuns--;
 
-				SetAnimationSpeed(1);
-				Player.Instance.animationControl.SetBool("InFight", false);
-
+					SetAnimationSpeed(1);
+					Player.Instance.animationControl.SetBool("InFight", false);
+				}
 				if (isChargingAttack)
 					RemoveChargeBoundEffects();
 			}

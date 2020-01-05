@@ -928,7 +928,8 @@ namespace EoE.Entities
 				if (possibleTargets.Count > 0)
 				{
 					List<(Entitie, float)> screenTargets = new List<(Entitie, float)>();
-					Vector2 clickedDirection = InputController.CameraMove.normalized;
+					Vector2 actuallInput = new Vector2(InputController.CameraMove.x * (SettingsData.ActiveInvertCameraX ? -1 : 1), InputController.CameraMove.y * (SettingsData.ActiveInvertCameraY ? -1 : 1));
+					Vector2 clickedDirection = actuallInput.normalized;
 					Vector2 curMiddle = PlayerCameraController.PlayerCamera.WorldToScreenPoint(TargetedEntitie.actuallWorldPosition);
 
 					for (int i = 0; i < possibleTargets.Count; i++)

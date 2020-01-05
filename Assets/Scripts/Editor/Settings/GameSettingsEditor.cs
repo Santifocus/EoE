@@ -12,7 +12,6 @@ namespace EoE.Information
 		private static bool VisualsSettingsOpen;
 		private static bool DamageNumberSettingsOpen;
 		private static bool OtherSettingsOpen;
-		private static bool GlobalSoundsOpen;
 		private static bool DamageCalculationsOpen;
 		private static bool DamageCalculationValuesOpen;
 		private static bool DialogueSettingsOpen;
@@ -112,7 +111,8 @@ namespace EoE.Information
 			IntField(new GUIContent("Extra Random Currency Per Soul"), ref settings.ExtraRandomCurrencyPerSoul, 1);
 
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
-			ObjectArrayField(new GUIContent("Global Sounds"), ref settings.globalSounds, ref GlobalSoundsOpen, new GUIContent(". Sound"), 1);
+			SerializedProperty soundArrayProperty = serializedObject.FindProperty(nameof(settings.globalSounds));
+			ObjectArrayField(new GUIContent("Global Sounds"), ref settings.globalSounds, soundArrayProperty, new GUIContent(". Sound"), 1);
 		}
 
 		private void EffectivenessMatrixArea()

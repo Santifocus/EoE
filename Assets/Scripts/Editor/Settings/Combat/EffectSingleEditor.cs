@@ -13,8 +13,6 @@ namespace EoE.Information
 		private static bool KnockbackSettingsOpen;
 		private static bool BuffSettingsOpen;
 
-		private static bool BuffArrayOpen;
-		private static bool EffectsArrayOpen;
 		protected override void CustomInspector()
 		{
 			DrawInFoldoutHeader(new GUIContent("Base Settings"), ref BaseSettingsOpen, BaseSettingsArea);
@@ -54,7 +52,8 @@ namespace EoE.Information
 		{
 			EffectSingle settings = target as EffectSingle;
 			EnumField(new GUIContent("Buff Stack Style"), ref settings.BuffStackStyle, 1);
-			ObjectArrayField<Buff>(new GUIContent("Buffs To Apply"), ref settings.BuffsToApply, ref BuffArrayOpen, new GUIContent(". Buff"), 1);
+			SerializedProperty buffsArrayProperty = serializedObject.FindProperty(nameof(settings.BuffsToApply));
+			ObjectArrayField<Buff>(new GUIContent("Buffs To Apply"), ref settings.BuffsToApply, buffsArrayProperty, new GUIContent(". Buff"), 1);
 		}
 	}
 }

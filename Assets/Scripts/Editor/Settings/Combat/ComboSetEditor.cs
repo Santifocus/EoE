@@ -88,8 +88,8 @@ namespace EoE.Combatery
 				}
 				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 
-				///Effects
 				SerializedProperty effectProperty = property.FindPropertyRelative(nameof(settings.Effect));
+				///Effects
 				ObjectField<EffectSingle>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effect.EffectOnTarget))), ref settings.Effect.EffectOnTarget, offSet + 1);
 				ObjectField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effect.EffectAOE))), ref settings.Effect.EffectAOE, offSet + 1);
 
@@ -106,27 +106,9 @@ namespace EoE.Combatery
 				//Buffs
 				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 				SerializedProperty buffsProperty = effectProperty.FindPropertyRelative(nameof(settings.Effect.BuffsTillComboEnds));
-				bool buffsOpen = buffsProperty.isExpanded;
-				ObjectArrayField<Buff>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effect.BuffsTillComboEnds))), ref settings.Effect.BuffsTillComboEnds, ref buffsOpen, new GUIContent(". Buff"), offSet + 1);
-				if (buffsOpen != buffsProperty.isExpanded)
-					buffsProperty.isExpanded = buffsOpen;
+				ObjectArrayField<Buff>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effect.BuffsTillComboEnds))), ref settings.Effect.BuffsTillComboEnds, buffsProperty, new GUIContent(". Buff"), offSet + 1);
 
 				LineBreak(new Color(0.65f, 0.25f, 0.25f, 1));
-			}
-		}
-		private void DrawHealTargetInfo(GUIContent content, HealTargetInfo settings, SerializedProperty property, int offSet)
-		{
-			if (settings == null)
-			{
-				settings = new HealTargetInfo();
-				isDirty = true;
-			}
-			Foldout(content, property, offSet);
-			if (property.isExpanded)
-			{
-				EnumField<TargetStat>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.HealType))), ref settings.HealType, offSet + 1);
-				BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Percent))), ref settings.Percent, offSet + 1);
-				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Amount))), ref settings.Amount, offSet + 1);
 			}
 		}
 	}
