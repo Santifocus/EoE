@@ -131,7 +131,8 @@ namespace EoE.UI
 						SetShopState(ShopState.ItemSelection);
 						break;
 					case ShopState.ActionAmount:
-						SetShopState(ShopState.ActionSelection);
+						SetShopState(ShopState.ItemSelection);
+						shopItemActions[selectedIndex[(int)ShopState.ActionSelection - 1]].DeSelect();
 						break;
 				}
 				PlayFeedback(true);
@@ -356,12 +357,7 @@ namespace EoE.UI
 		private void ActionAmountNavigation()
 		{
 			AmountAction action = amountController.NavigationUpdate();
-			if(action == AmountAction.Back)
-			{
-				SetShopState(ShopState.ItemSelection);
-				shopItemActions[selectedIndex[(int)ShopState.ActionSelection - 1]].DeSelect();
-			}
-			else if(action == AmountAction.Executed)
+			if(action == AmountAction.Executed)
 			{
 				(int actionAmount, int actionWorth) = amountController.GetChange();
 

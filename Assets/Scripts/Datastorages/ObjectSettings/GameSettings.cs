@@ -37,9 +37,6 @@ namespace EoE.Information
 		public EntitieStatDisplay EntitieStatDisplayPrefab = default;
 		public float EnemeyHealthBarLerpSpeed = 4;
 
-		//Sound
-		public Sound[] globalSounds = default;
-
 		//Damage Numbers
 		public float DamageNumberLifeTime = 1;
 		public bool ShowRegenNumbers = true;

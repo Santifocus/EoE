@@ -2,22 +2,19 @@
 using EoE.Events;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace EoE.UI
 {
 	public class GameOverScreen : MonoBehaviour
 	{
-		private const float NAV_COOLDOWN = 0.2f;
 		[SerializeField] private Graphic[] fadeInComponents = default;
 		[SerializeField] private float fadeInTime = 2;
-
-		[SerializeField] private CMenuItem[] gameOverOptions = default;
-		private int selectedIndex;
+		[SerializeField] private ControllerMenuItem startMenuItem = default;
 
 		private float[] alphaValues;
 		private bool fadingIn;
-		private float navigationCooldown;
 		private void Start()
 		{
 			gameObject.SetActive(false);
@@ -25,7 +22,6 @@ namespace EoE.UI
 		}
 		public void Show(Entities.Entitie killer)
 		{
-			selectedIndex = 0;
 			gameObject.SetActive(true);
 			(transform as RectTransform).anchoredPosition = Vector2.zero;
 			StartCoroutine(StartFadeIn());
@@ -40,41 +36,12 @@ namespace EoE.UI
 			{
 				if (InputController.MenuRight.Down || InputController.MenuLeft.Down || InputController.MenuEnter.Down)
 				{
-					navigationCooldown = NAV_COOLDOWN * 2;
 					StopAllCoroutines();
-					SelectIndex();
 					FinishFadeIn();
+					startMenuItem.SetNavigationCooldown(0.3f);
 				}
 				return;
 			}
-
-			if (navigationCooldown > 0)
-			{
-				navigationCooldown -= Time.deltaTime;
-				return;
-			}
-
-			if (InputController.MenuRight.Pressed)
-			{
-				navigationCooldown = NAV_COOLDOWN;
-				selectedIndex++;
-				SelectIndex();
-			}
-			else if (InputController.MenuLeft.Pressed)
-			{
-				navigationCooldown = NAV_COOLDOWN;
-				selectedIndex--;
-				SelectIndex();
-			}
-		}
-		private void SelectIndex()
-		{
-			if (selectedIndex < 0)
-				selectedIndex += gameOverOptions.Length;
-			else if (selectedIndex >= gameOverOptions.Length)
-				selectedIndex = 0;
-
-			gameOverOptions[selectedIndex].SelectMenuItem();
 		}
 		private IEnumerator StartFadeIn()
 		{
@@ -110,6 +77,17 @@ namespace EoE.UI
 				Color col = fadeInComponents[i].color;
 				fadeInComponents[i].color = new Color(col.r, col.g, col.b, alphaValues[i]);
 			}
+			startMenuItem.Select();
+		}
+		public void OnRestart()
+		{
+			EffectUtils.ResetScreenEffects();
+			SceneManager.LoadScene(ConstantCollector.GAME_SCENE_INDEX);
+		}
+		public void OnQuit()
+		{
+			EffectUtils.ResetScreenEffects();
+			SceneManager.LoadScene(ConstantCollector.MAIN_MENU_SCENE_INDEX);
 		}
 	}
 }

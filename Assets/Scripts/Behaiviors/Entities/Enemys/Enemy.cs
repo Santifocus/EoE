@@ -116,7 +116,9 @@ namespace EoE.Entities
 				{
 					targetPosition = Vector3.Lerp(targetPosition ?? GuessedPlayerPosition, GuessedPlayerPosition, Time.deltaTime * enemySettings.PlayerTrackSpeed);
 					if (GameController.CurrentGameSettings.IsDebugEnabled)
-						Debug.DrawLine(actuallWorldPosition, targetPosition.Value, Color.red, Time.deltaTime * 1.1f);
+					{
+						Debug.DrawLine(actuallWorldPosition, targetPosition.Value, Color.red, Time.unscaledDeltaTime);
+					}
 
 					if (!prevInRange && PlayerInAttackRange)
 					{

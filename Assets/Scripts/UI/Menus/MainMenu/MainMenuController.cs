@@ -25,7 +25,7 @@ namespace EoE
 		private void SettingsMenuChangedState(bool state)
 		{
 			if (!state)
-				startMenuItem.Select();
+				startMenuItem.OpenSelfLayer();
 		}
 		public void OpenCredits()
 		{

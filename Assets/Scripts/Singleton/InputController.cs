@@ -59,12 +59,6 @@ namespace EoE.Controlls
 
 		private void Start()
 		{
-			if (Instance)
-			{
-				Destroy(gameObject);
-				return;
-			}
-			DontDestroyOnLoad(this);
 			Instance = this;
 			playerInput = new PlayerInput();
 			playerInput.Enable();

@@ -26,35 +26,12 @@ namespace EoE.UI
 		[SerializeField] private GameObject invertCameraXToggle = default;
 		[SerializeField] private GameObject invertCameraYToggle = default;
 
-		private bool open;
-
 		private void Start()
 		{
-			if (Instance)
-			{
-				Destroy(gameObject);
-				return;
-			}
-			DontDestroyOnLoad(this);
 			Instance = this;
 
 			ReadOrCreate();
 			ResetToBase();
-		}
-		private void Update()
-		{
-			if (InputController.Pause.Down)
-			{
-				if (open)
-				{
-					ResetToBase();
-					Close();
-				}
-				else
-				{
-					Open();
-				}
-			}
 		}
 		public static void Open()
 		{
@@ -63,22 +40,13 @@ namespace EoE.UI
 		}
 		private void OpenInternal()
 		{
-			if (GameController.Instance)
-			{
-				GameController.GameIsPaused = true;
-			}
-			open = true;
+			ResetToBase();
 			startMenuItem.Select();
 			settingsCanvas.SetActive(true);
 			ChangeStateEvent?.Invoke(true);
 		}
 		public void Close()
 		{
-			if (GameController.Instance)
-			{
-				GameController.GameIsPaused = false;
-			}
-			open = false;
 			settingsCanvas.SetActive(false);
 			ChangeStateEvent?.Invoke(false);
 		}

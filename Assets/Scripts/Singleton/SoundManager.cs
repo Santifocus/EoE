@@ -1,62 +1,51 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace EoE.Sounds
 {
 	public class SoundManager : MonoBehaviour
 	{
 		public static SoundManager Instance { get; private set; }
-		private SoundPlayer[] soundPlayers;
-		private int[] soundHashes;
+		[SerializeField] private GlobalSounds globalSoundsSettings = default;
+		private Dictionary<string, SoundPlayer> globalSounds;
 
 		private void Start()
 		{
 			Instance = this;
 
-			soundPlayers = new SoundPlayer[GameController.CurrentGameSettings.globalSounds.Length];
-			soundHashes = new int[GameController.CurrentGameSettings.globalSounds.Length];
+			globalSounds = new Dictionary<string, SoundPlayer>(globalSoundsSettings.Sounds.Length);
 
-			for (int i = 0; i < soundPlayers.Length; i++)
+			for (int i = 0; i < globalSoundsSettings.Sounds.Length; i++)
 			{
-				soundPlayers[i] = (new GameObject(GameController.CurrentGameSettings.globalSounds[i].soundName + " Sound Player")).AddComponent<SoundPlayer>();
-				soundPlayers[i].transform.SetParent(transform);
-				soundPlayers[i].Setup(GameController.CurrentGameSettings.globalSounds[i]);
-				soundHashes[i] = GameController.CurrentGameSettings.globalSounds[i].soundName.GetHashCode();
-			}
-			CheckForDupeNames();
-		}
-
-		private void CheckForDupeNames()
-		{
-#if UNITY_EDITOR
-			for (int i = 0; i < soundHashes.Length; i++)
-			{
-				for (int j = 0; j < soundHashes.Length; j++)
+				if (!globalSounds.ContainsKey(globalSoundsSettings.Sounds[i].soundName))
 				{
-					if (i != j && soundHashes[i] == soundHashes[j])
-					{
-						Debug.LogError("Global sounds Nr. " + i + " & Nr. " + j + "have identical names (" + GameController.CurrentGameSettings.globalSounds[i].soundName + "). This is not permitted and will cause Errors.");
-					}
+					SoundPlayer soundPlayer =(new GameObject(globalSoundsSettings.Sounds[i].soundName + " Sound Player")).AddComponent<SoundPlayer>();
+	
+					soundPlayer.transform.SetParent(transform);
+					soundPlayer.Setup(globalSoundsSettings.Sounds[i]);
+
+					globalSounds.Add(globalSoundsSettings.Sounds[i].soundName, soundPlayer);
+				}
+				else
+				{
+					Debug.LogError("Global sound Nr. " + i + " has a duplicate name: " + globalSoundsSettings.Sounds[i].soundName + ". This is not permitted and will cause Errors.");
 				}
 			}
-#endif
 		}
 
 		public static void SetSoundState(string soundName, bool state)
 		{
-			int hash = soundName.GetHashCode();
-			for (int i = 0; i < Instance.soundHashes.Length; i++)
+			if(Instance.globalSounds.TryGetValue(soundName, out SoundPlayer result))
 			{
-				if (hash == Instance.soundHashes[i])
-				{
-					if (state)
-						Instance.soundPlayers[i].Play();
-					else
-						Instance.soundPlayers[i].Stop();
-					return;
-				}
+				if (state)
+					result.Play();
+				else
+					result.Stop();
 			}
-
-			Debug.LogError("Could not find the named sound '" + soundName + "'!");
+			else
+			{
+				Debug.LogError("Could not find the named sound '" + soundName + "'!");
+			}
 		}
 	}
 }

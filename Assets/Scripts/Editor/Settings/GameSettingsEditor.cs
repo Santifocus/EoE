@@ -109,10 +109,6 @@ namespace EoE.Information
 			SliderField(new GUIContent("Item Sell Multiplier"), ref settings.ItemSellMultiplier, 0, 1, 1);
 			IntField(new GUIContent("Base Currency Per Soul"), ref settings.BaseCurrencyPerSoul, 1);
 			IntField(new GUIContent("Extra Random Currency Per Soul"), ref settings.ExtraRandomCurrencyPerSoul, 1);
-
-			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
-			SerializedProperty soundArrayProperty = serializedObject.FindProperty(nameof(settings.globalSounds));
-			ObjectArrayField(new GUIContent("Global Sounds"), ref settings.globalSounds, soundArrayProperty, new GUIContent(". Sound"), 1);
 		}
 
 		private void EffectivenessMatrixArea()

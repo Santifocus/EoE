@@ -118,7 +118,7 @@ namespace EoE.UI
 			{
 				if (choiceSelected != state)
 				{
-					SelectExecuteAction(false);
+					SelectExecuteAction(true);
 				}
 			}
 			else

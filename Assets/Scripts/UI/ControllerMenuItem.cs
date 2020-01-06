@@ -101,7 +101,7 @@ namespace EoE.UI
 				SelectedItemInLayer.Add(menuLayer, this);
 			}
 
-			ActiveMenuLayer = menuLayer;
+			OpenSelfLayer();
 			isSelected = true;
 			onSelectedEvent.Invoke();
 		}
@@ -109,39 +109,13 @@ namespace EoE.UI
 		{
 			MenuNavigationCooldown = amount;
 		}
-		private void OnDrawGizmosSelected()
+		public void OpenSelfLayer()
 		{
-			RectTransform r = transform as RectTransform;
-			if (!r)
-				return;
-			Vector2 pos = r.position;
-			DrawForEvent(upEvent,		pos + new Vector2(r.rect.width / 3, r.rect.height / 2)		* r.lossyScale,	3, -2, Color.blue);
-			DrawForEvent(downEvent,		pos + new Vector2(-r.rect.width / 3, -r.rect.height / 2)	* r.lossyScale,	-3, 2, Color.red);
-			DrawForEvent(rightEvent,	pos + new Vector2(r.rect.width / 2, -r.rect.height / 3)		* r.lossyScale,	-2, -3, Color.green);
-			DrawForEvent(leftEvent,		pos + new Vector2(-r.rect.width / 2, r.rect.height / 3)		* r.lossyScale,	2, 3, Color.yellow);
+			ActiveMenuLayer = menuLayer;
 		}
-		private void DrawForEvent(UnityEvent targetEvent, Vector2 lineStart, float xDiv, float yDiv, Color targetColor)
+		public void PlayFeedback(bool succesSound)
 		{
-			int count = targetEvent.GetPersistentEventCount();
-			Gizmos.color = targetColor;
-
-			for (int i = 0; i < count; i++)
-			{
-				Object target = targetEvent.GetPersistentTarget(i);
-				if (!target)
-					continue;
-
-				GameObject objectTarget = (target as GameObject) ?? (target as MonoBehaviour).gameObject;
-				if (!objectTarget)
-					continue;
-
-				RectTransform otherR = objectTarget.transform as RectTransform;
-				if (otherR)
-				{
-					Vector2 lineEnd = (Vector2)otherR.position + new Vector2(otherR.rect.width / xDiv, otherR.rect.height / yDiv) * otherR.lossyScale;
-					Gizmos.DrawLine(lineStart, lineEnd);
-				}
-			}
+			Sounds.SoundManager.SetSoundState(succesSound ? ConstantCollector.MENU_NAV_SOUND : ConstantCollector.FAILED_MENU_NAV_SOUND, true);
 		}
 	}
 }

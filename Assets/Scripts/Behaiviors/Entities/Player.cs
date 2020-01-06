@@ -381,7 +381,9 @@ namespace EoE.Entities
 			modelTransform.localEulerAngles = new Vector3(curModelTilt.y, 0, curModelTilt.x);
 
 			if (GameController.CurrentGameSettings.IsDebugEnabled)
-				Debug.DrawLine(modelTransform.position, modelTransform.position + modelTransform.up * 2.5f, Color.blue, Time.unscaledDeltaTime * 0.99f);
+			{
+				Debug.DrawLine(modelTransform.position, modelTransform.position + modelTransform.up * 2.5f, Color.blue, Time.unscaledDeltaTime);
+			}
 
 			//Move direction
 			float forwardValue = Vector2.Dot(velocityDirection, forward);
@@ -578,7 +580,9 @@ namespace EoE.Entities
 			controllDirection = inputDirection.y * camForward + inputDirection.x * camRight;
 
 			if (GameController.CurrentGameSettings.IsDebugEnabled)
-				Debug.DrawLine(transform.position, transform.position + controllDirection * 2, Color.green, Time.unscaledDeltaTime * 0.99f);
+			{
+				Debug.DrawLine(transform.position, transform.position + controllDirection * 2, Color.green, Time.unscaledDeltaTime);
+			}
 
 			if ((!TargetedEntitie) && (intendedControl > MIN_WALK_ACCELERATION * 0.95f))
 				intendedRotation = -(Mathf.Atan2(controllDirection.z, controllDirection.x) * Mathf.Rad2Deg - 90);
