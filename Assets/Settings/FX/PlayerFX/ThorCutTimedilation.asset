@@ -9,12 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b77b7145a3aa2f46aac58517d25ca6e, type: 3}
-  m_Name: MeteoraBase
+  m_Script: {fileID: 11500000, guid: 3c871e95794c1664eb6ab3b44ed21f55, type: 3}
+  m_Name: ThorCutTimedilation
   m_EditorClassIdentifier: 
-  BaseDamage: 8
-  BaseHealthCost: 0
-  BaseManaCost: 0
-  BaseEnduranceCost: 0
-  BaseKnockback: 5
-  BaseCritChance: 0
+  TimeIn: 0
+  TimeOut: 0
+  FinishConditions:
+    OnParentDeath: 0
+    OnTimeout: 1
+    TimeStay: 0.6
+  Scale: 0.05
+  Dominance: 0
+  OverwriteOtherTimeDilations: 0

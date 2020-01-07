@@ -19,7 +19,7 @@ MonoBehaviour:
   ZeroOutDistance: 13
   HasMaximumHits: 0
   MaximumHits: 0
-  DamageMultiplier: 3.5
+  DamageMultiplier: 2.5
   CritChanceMultiplier: 0
   KnockbackMultiplier: 20
   KnockbackOrigin: 2

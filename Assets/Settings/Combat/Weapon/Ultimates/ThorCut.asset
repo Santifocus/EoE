@@ -37,7 +37,7 @@ MonoBehaviour:
       RotationOffset: {x: 0, y: 0, z: 0}
       HasCustomScale: 0
       CustomScale: {x: 1, y: 1, z: 1}
-    - FX: {fileID: 11400000, guid: c67c34406e2f4e441aad597ba53c4657, type: 2}
+    - FX: {fileID: 11400000, guid: 43d8cf05796096940a9250523df58423, type: 2}
       HasPositionOffset: 0
       PositionOffset: {x: 0, y: 0, z: 0}
       HasRotationOffset: 0
@@ -93,7 +93,7 @@ MonoBehaviour:
         EffectMask: 3
         AnimationChargeStartpoint: 0.1
         ApplyMoveStunWhileCharging: 0
-        WaitAtFullChargeForRelease: 1
+        WaitAtFullChargeForRelease: 0
         ChargeTime: 1
         StartCharge: 0
         MaximumCharge: 1
@@ -137,7 +137,14 @@ MonoBehaviour:
           ImpulseVelocityDirection: 4
           ImpulseVelocityFallbackDirection: 1
           ImpulseDirectionBase: 4
-          FXObjects: []
+          FXObjects:
+          - FX: {fileID: 11400000, guid: c67c34406e2f4e441aad597ba53c4657, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
           AOEEffects: []
           ProjectileInfos:
           - Projectile: {fileID: 11400000, guid: 42e2c1128d64e5e478bb7302ef4c9d71,
@@ -157,13 +164,20 @@ MonoBehaviour:
       - AtAnimationPoint: 0.6
         Effect:
           ChanceToActivate: 1
-          ContainedEffectType: 1
-          ImpulseVelocity: 2000
+          ContainedEffectType: 0
+          ImpulseVelocity: 1000
           ImpulseVelocityFallOffTime: 0.05
           ImpulseVelocityDirection: 2
           ImpulseVelocityFallbackDirection: 1
           ImpulseDirectionBase: 1
-          FXObjects: []
+          FXObjects:
+          - FX: {fileID: 11400000, guid: 4af042e469dd86441a8dd108859e839a, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
           AOEEffects: []
           ProjectileInfos: []
           HealEffects: []
@@ -179,7 +193,7 @@ MonoBehaviour:
           ImpulseVelocityFallbackDirection: 1
           ImpulseDirectionBase: 1
           FXObjects:
-          - FX: {fileID: 11400000, guid: 747459de57fd01a42aa6faa56aa4d4cd, type: 2}
+          - FX: {fileID: 0}
             HasPositionOffset: 0
             PositionOffset: {x: 0, y: 0, z: 0}
             HasRotationOffset: 0
@@ -209,8 +223,17 @@ MonoBehaviour:
             CustomScale: {x: 1, y: 1, z: 1}
           AOEEffects:
           - {fileID: 11400000, guid: e2084185285c1bf4a92a69155bab56af, type: 2}
-          ProjectileInfos: []
+          ProjectileInfos:
+          - Projectile: {fileID: 0}
+            ExecutionDelay: 0.2
+            ExecutionCount: 1
+            ExecutionRepeatDelay: 0.2
+          - Projectile: {fileID: 0}
+            ExecutionDelay: 0.2
+            ExecutionCount: 1
+            ExecutionRepeatDelay: 0.2
           HealEffects: []
           StackingStyle: 2
           BuffsToApply: []
-    PartsMaxDelays: []
+    PartsMaxDelays:
+    - 0
