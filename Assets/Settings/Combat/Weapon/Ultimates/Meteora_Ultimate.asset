@@ -182,7 +182,12 @@ MonoBehaviour:
             CustomScale: {x: 1, y: 1, z: 1}
           AOEEffects:
           - {fileID: 11400000, guid: 1d8ebfed7c135e54f9ec85cae386f553, type: 2}
-          ProjectileInfos: []
+          ProjectileInfos:
+          - Projectile: {fileID: 11400000, guid: 3ffc6dbdcbb3b1b48b8e6d01c62fea4d,
+              type: 2}
+            ExecutionDelay: 0.2
+            ExecutionCount: 1
+            ExecutionRepeatDelay: 0.2
           HealEffects: []
           StackingStyle: 2
           BuffsToApply: []
@@ -190,7 +195,7 @@ MonoBehaviour:
         Effect:
           ChanceToActivate: 1
           ContainedEffectType: 1
-          ImpulseVelocity: 25
+          ImpulseVelocity: 70
           ImpulseVelocityFallOffTime: 0.35
           ImpulseVelocityDirection: 2
           ImpulseVelocityFallbackDirection: 1
@@ -201,6 +206,22 @@ MonoBehaviour:
           HealEffects: []
           StackingStyle: 2
           BuffsToApply: []
+      - AtAnimationPoint: 0
+        Effect:
+          ChanceToActivate: 1
+          ContainedEffectType: 32
+          ImpulseVelocity: 5
+          ImpulseVelocityFallOffTime: 0.5
+          ImpulseVelocityDirection: 2
+          ImpulseVelocityFallbackDirection: 1
+          ImpulseDirectionBase: 1
+          FXObjects: []
+          AOEEffects: []
+          ProjectileInfos: []
+          HealEffects: []
+          StackingStyle: 2
+          BuffsToApply:
+          - {fileID: 11400000, guid: d8eb7d4e7fad95d4697760e4d0ea7392, type: 2}
     PartsMaxDelays:
     - 0
     - 0
