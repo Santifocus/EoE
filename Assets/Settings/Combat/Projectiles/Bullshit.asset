@@ -47,25 +47,7 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
-  WhileEffects:
-  - ChanceToActivate: 0.1
-    ContainedEffectType: 8
-    ImpulseVelocity: 5
-    ImpulseVelocityFallOffTime: 0.5
-    ImpulseVelocityDirection: 2
-    ImpulseVelocityFallbackDirection: 1
-    ImpulseDirectionBase: 1
-    FXObjects: []
-    AOEEffects: []
-    ProjectileInfos:
-    - Projectile: {fileID: 11400000}
-      ExecutionDelay: 0
-      ExecutionCount: 1
-      ExecutionRepeatDelay: 0.2
-    HealsOnUser: []
-    StackingStyle: 2
-    BuffsOnUser: []
-    CreatedRemenants: []
+  WhileEffects: []
   TerrainHitboxSize: 0.5
   EntitieHitboxSize: 1
   CollideMask: -1
