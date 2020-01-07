@@ -141,7 +141,7 @@ namespace EoE.Entities
 			CheckForFalling();
 			UpdateAcceleration();
 
-			if (!IsStunned || IsCasting)
+			if (!IsStunned)
 				TurnControl();
 		}
 		private void LateUpdate()
@@ -291,7 +291,7 @@ namespace EoE.Entities
 			CameraControl();
 			PlayerFeedbackControl();
 
-			if (IsStunned)
+			if (IsStunned || IsMovementStopped)
 			{
 				curAcceleration = 0;
 				curStates.Moving = curStates.Running = false;
@@ -785,7 +785,7 @@ namespace EoE.Entities
 			if (weaponCopy)
 				ApplyMaterialToAllChildren(weaponCopy);
 
-			invincible++;
+			Invincible++;
 			while (timer < PlayerSettings.DodgeModelExistTime)
 			{
 				yield return new WaitForFixedUpdate();
@@ -794,7 +794,7 @@ namespace EoE.Entities
 			}
 			dashCooldown = PlayerSettings.DodgeCooldown;
 			currentlyDodging = false;
-			invincible--;
+			Invincible--;
 
 			Destroy(modelCopy.gameObject);
 			if (weaponCopy)
@@ -1226,7 +1226,7 @@ namespace EoE.Entities
 		private float? remainingInvincibleTime = null;
 		private IEnumerator OnHitInvincibleCoroutine()
 		{
-			invincible++;
+			Invincible++;
 			float flashTimer = 0;
 			bool flashOn = false;
 			Renderer[] targetRenderers = GetComponentsInChildren<Renderer>();
@@ -1260,7 +1260,7 @@ namespace EoE.Entities
 				UnFlashMaterials();
 
 			remainingInvincibleTime = null;
-			invincible--;
+			Invincible--;
 			void FlashMaterials()
 			{
 				flashOn = true;

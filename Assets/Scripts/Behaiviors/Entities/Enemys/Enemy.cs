@@ -137,7 +137,7 @@ namespace EoE.Entities
 			if (PlayerInAttackRange && chasingPlayer)
 				InRangeBehaiviorBase();
 
-			if (IsStunned)
+			if (IsStunned || IsMovementStopped)
 			{
 				body.isKinematic = false;
 				body.velocity = curVelocity;

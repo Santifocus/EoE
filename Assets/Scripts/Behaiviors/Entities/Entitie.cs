@@ -33,7 +33,9 @@ namespace EoE.Entities
 		public float curTrueDamageDamageMultiplier { get; protected set; }
 
 		//Entitie states
-		protected int invincible;
+		public int Invincible { get; set; }
+		public int MovementStop { get; set; }
+		public int AppliedMoveStuns { get; set; }
 		public bool Alive { get; protected set; }
 		public List<BuffInstance> nonPermanentBuffs { get; protected set; }
 		public List<BuffInstance> permanentBuffs { get; protected set; }
@@ -44,7 +46,6 @@ namespace EoE.Entities
 		public Vector3? targetPosition = null;
 
 		//Velocity Control
-		public int AppliedMoveStuns { get; set; }
 		protected Vector2 impactForce;
 
 		protected float curRotation;
@@ -68,8 +69,9 @@ namespace EoE.Entities
 		public float highestPos => coll.bounds.center.y + coll.bounds.extents.y;
 		public ForceController entitieForceController;
 		public virtual Vector3 curVelocity => new Vector3(impactForce.x, 0, impactForce.y) + entitieForceController.currentTotalForce;
-		public bool IsInvincible => invincible > 0;
+		public bool IsInvincible => Invincible > 0;
 		public bool IsStunned => AppliedMoveStuns > 0;
+		public bool IsMovementStopped => MovementStop > 0;
 
 		//Armor
 		public InventoryItem EquipedArmor;
@@ -129,7 +131,7 @@ namespace EoE.Entities
 			BuffSetup();
 
 			AppliedMoveStuns = 0;
-			invincible = 0;
+			Invincible = 0;
 			intendedRotation = curRotation = transform.eulerAngles.y;
 		}
 		protected virtual void ResetStats()
@@ -522,7 +524,7 @@ namespace EoE.Entities
 			if (buff.CustomEffects.ApplyMoveStun)
 				AppliedMoveStuns++;
 			if (buff.CustomEffects.Invincible)
-				invincible++;
+				Invincible++;
 
 			if (this is Player)
 				Player.Instance.buffDisplay.AddBuffIcon(newBuff);
@@ -646,7 +648,7 @@ namespace EoE.Entities
 			if (targetBuff.Base.CustomEffects.ApplyMoveStun)
 				AppliedMoveStuns--;
 			if (targetBuff.Base.CustomEffects.Invincible)
-				invincible--;
+				Invincible--;
 
 			if (this is Player)
 				Player.Instance.buffDisplay.RemoveBuffIcon(targetBuff);
@@ -828,9 +830,9 @@ namespace EoE.Entities
 			FXInstance[] curParticles = null;
 			if (spell.ContainedParts.HasFlag(SpellPart.Cast))
 			{
-				bool appliedStun = spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting);
-				if (appliedStun)
-					AppliedMoveStuns++;
+				bool movementStopper = spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting);
+				if (movementStopper)
+					MovementStop++;
 
 				for (int i = 0; i < spell.CastInfo.StartEffects.Length; i++)
 				{
@@ -850,10 +852,10 @@ namespace EoE.Entities
 					castTime += Time.deltaTime;
 					effectTick += Time.deltaTime;
 
-					if (AppliedMoveStuns > (appliedStun ? 1 : 0))
+					if (IsStunned)
 					{
-						if(appliedStun)
-							AppliedMoveStuns--;
+						if (movementStopper)
+							MovementStop--;
 						goto StoppedSpell;
 					}
 
@@ -867,8 +869,8 @@ namespace EoE.Entities
 					}
 				}
 
-				if (appliedStun)
-					AppliedMoveStuns--;
+				if (movementStopper)
+					MovementStop--;
 			}
 
 			if (curParticles != null)
@@ -907,9 +909,9 @@ namespace EoE.Entities
 			//Projectile
 			if (spell.ContainedParts.HasFlag(SpellPart.Projectile))
 			{
-				bool appliedStun = spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileShooting);
-				if (appliedStun)
-					AppliedMoveStuns++;
+				bool movementStopper = spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting);
+				if (movementStopper)
+					MovementStop++;
 
 				for (int i = 0; i < spell.ProjectileInfos.Length; i++)
 				{
@@ -918,10 +920,10 @@ namespace EoE.Entities
 					{
 						yield return new WaitForEndOfFrame();
 						timer += Time.deltaTime;
-						if (AppliedMoveStuns > (appliedStun ? 1 : 0))
+						if (IsStunned)
 						{
-							if (appliedStun)
-								AppliedMoveStuns--;
+							if (movementStopper)
+								MovementStop--;
 							goto StoppedSpell;
 						}
 					}
@@ -936,18 +938,18 @@ namespace EoE.Entities
 							{
 								yield return new WaitForEndOfFrame();
 								repeatTimer += Time.deltaTime;
-								if (AppliedMoveStuns > (appliedStun ? 1 : 0))
+								if (IsStunned)
 								{
-									if (appliedStun)
-										AppliedMoveStuns--;
+									if (movementStopper)
+										MovementStop--;
 									goto StoppedSpell;
 								}
 							}
 						}
 					}
 				}
-				if (appliedStun)
-					AppliedMoveStuns--;
+				if (movementStopper)
+					MovementStop--;
 			}
 
 		//If the spell cast / shooting was canceled we jump here

@@ -166,7 +166,7 @@ MonoBehaviour:
       - AtAnimationPoint: 0.6
         Effect:
           ChanceToActivate: 1
-          ContainedEffectType: 0
+          ContainedEffectType: 8
           ImpulseVelocity: 1000
           ImpulseVelocityFallOffTime: 0.05
           ImpulseVelocityDirection: 2
