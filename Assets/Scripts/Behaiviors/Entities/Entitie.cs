@@ -378,7 +378,10 @@ namespace EoE.Entities
 			bool intendedState = inCombat;
 			if (inCombat)
 			{
-				statDisplay.HealthValue = curHealth / curMaxHealth;
+				float curHealthNormalized = curHealth / curMaxHealth;
+				if (statDisplay.HealthValue != curHealthNormalized)
+					statDisplay.HealthValue = curHealthNormalized;
+
 				Vector3 pos = PlayerCameraController.PlayerCamera.WorldToScreenPoint(new Vector3(coll.bounds.center.x, highestPos, coll.bounds.center.z));
 				if (pos.z > 0)
 					statDisplay.Position = pos + new Vector3(0, statDisplay.Height);

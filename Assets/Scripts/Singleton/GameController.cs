@@ -27,8 +27,6 @@ namespace EoE
 		[SerializeField] private ShopController shop = default;
 		public ItemDrop itemDropPrefab;
 
-		public Transform BGCanvas => bgCanvas;
-		[SerializeField] private Transform bgCanvas = default;
 		public Transform MainCanvas => mainCanvas;
 		[SerializeField] private Transform mainCanvas = default;
 		public Transform MenuCanvas => menuCanvas;
@@ -40,12 +38,8 @@ namespace EoE
 
 		private void Start()
 		{
-			if (Instance)
-			{
-				Destroy(gameObject);
-				return;
-			}
 			Instance = this;
+			GameIsPaused = false;
 
 			//PLACEHOLDER
 			StartCoroutine(StartMusic());
@@ -58,8 +52,8 @@ namespace EoE
 		}
 		private static void SetPauseGamestate(bool state)
 		{
-			Instance.mainCanvas.gameObject.SetActive(!state);
-			Instance.bgCanvas.gameObject.SetActive(!state);
+			Instance.mainCanvas?.gameObject?.SetActive(!state);
+
 			Time.timeScale = state ? 0 : 1;
 			gameIsPaused = state;
 		}

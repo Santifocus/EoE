@@ -2,7 +2,7 @@
 
 namespace EoE.Information
 {
-	public enum CanvasTarget { Background = 1, Main = 2, Menu = 3 }
+	public enum CanvasTarget { Main = 1, Menu = 2 }
 	public class CustomUI : FXObject
 	{
 		[Tooltip("The UI Paremt that will be created on the canvas.")]

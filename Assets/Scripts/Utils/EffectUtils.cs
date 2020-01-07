@@ -709,7 +709,7 @@ namespace EoE
 		private Coroutine CustomUICoroutine = null;
 		public static FXInstance PlayCustomUI(CustomUI info, float multiplier)
 		{
-			Transform parent = info.CanvasTarget == CanvasTarget.Background ? GameController.Instance.BGCanvas : (info.CanvasTarget == CanvasTarget.Main ? GameController.Instance.MainCanvas : GameController.Instance.MenuCanvas);
+			Transform parent = info.CanvasTarget == CanvasTarget.Main ? GameController.Instance.MainCanvas : GameController.Instance.MenuCanvas;
 			CustomUIInstance newCustomUI = new CustomUIInstance(info, parent);
 			newCustomUI.BaseSetup(multiplier, parent);
 			AllCustomUIs.Add(newCustomUI);

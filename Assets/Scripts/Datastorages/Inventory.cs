@@ -35,6 +35,12 @@ namespace EoE.Information
 
 			InventoryChanged?.Invoke();
 		}
+		/// <summary>
+		/// Returns how many items could not be added, returns 0 if the the whole stacksize can be fitted into the inventory.
+		/// </summary>
+		/// <param name="item"></param>
+		/// <param name="stackSize"></param>
+		/// <returns></returns>
 		public int CheckAddablity(Item item, int stackSize)
 		{
 			for (int i = 0; i < Length; i++)

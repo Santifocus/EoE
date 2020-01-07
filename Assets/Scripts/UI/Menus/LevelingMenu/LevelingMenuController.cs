@@ -9,13 +9,24 @@ namespace EoE.UI
 {
 	public class LevelingMenuController : CharacterMenuPage
 	{
+		public static LevelingMenuController Instance { get; private set; }
 		//Inspector Variables
-		[SerializeField] private CMenuItem[] menuItems = default;
-
+		[Header("Skill Point Apply Settings")]
 		[SerializeField] private Color remainingSkillpoints = Color.cyan;
 		[SerializeField] private Color noSkillPointsLeft = Color.gray;
 		[SerializeField] private TextMeshProUGUI availableAtributePoints = default;
 		[SerializeField] private TextMeshProUGUI availableSkillPoints = default;
+
+		[Space(5)]
+		[SerializeField] private SkillPointStat[] skillPointApplier = default;
+
+		public Color standardColor = Color.white;
+		public Color notConfirmedChangeColor = Color.green;
+
+		public Color recentlyChangedFlashColor = Color.red;
+		public float recentlyChangedFlashTime = 0.2f;
+		public int recentlyChangedFlashCount = 3;
+
 
 		//Getter Helpers
 		public int this[TargetBaseStat stat]
@@ -37,9 +48,6 @@ namespace EoE.UI
 					assignedAttributePoints[index] = value;
 			}
 		}
-		public static LevelingMenuController Instance { get; private set; }
-		private PlayerSettings baseData => Player.PlayerSettings;
-		private Buff skillBuff => Player.Instance.LevelingPointsBuff;
 		private int skillPoints
 		{ get => Player.Instance.AvailableSkillPoints; set => Player.Instance.AvailableSkillPoints = value; }
 		private int attributePoints
@@ -51,71 +59,36 @@ namespace EoE.UI
 
 		private int[] assignedAttributePoints;
 		private int assignedAttributePointCount;
-
-		private int navigationIndex;
-		private float curNavigationCooldown;
 		protected override void Start()
 		{
-			base.Start();
 			Instance = this;
 			assignedSkillPoints = new int[3]; //ATK, MGA, DEF
 			assignedAttributePoints = new int[3]; //Health, Mana, Endurance
+			base.Start();
 		}
 		protected override void ResetPage()
 		{
-			curNavigationCooldown = 0;
-			navigationIndex = 0;
-			if (menuItems.Length > 0)
-				menuItems[navigationIndex].SelectMenuItem();
+			skillPointApplier[0].Select();
 			UpdateDisplay();
 			ResetAssignedSkillPoints(false);
 		}
-		private void Update()
+		public void ModifyAssignedSkillPoint(bool add)
 		{
-			if (curNavigationCooldown > 0)
-				curNavigationCooldown -= Time.unscaledDeltaTime;
-
-			if (InputController.MenuDown.Down || (InputController.MenuDown.Active && curNavigationCooldown <= 0))
-			{
-				curNavigationCooldown = NAV_COOLDOWN;
-
-				navigationIndex++;
-				if (navigationIndex == menuItems.Length)
-					navigationIndex -= menuItems.Length;
-
-				PlayFeedback(true);
-
-				menuItems[navigationIndex].SelectMenuItem();
-			}
-			else if (InputController.MenuUp.Down || (InputController.MenuUp.Active && curNavigationCooldown <= 0))
-			{
-				curNavigationCooldown = NAV_COOLDOWN;
-
-				navigationIndex--;
-				if (navigationIndex == -1)
-					navigationIndex += menuItems.Length;
-
-				PlayFeedback(true);
-
-				menuItems[navigationIndex].SelectMenuItem();
-			}
-		}
-		public bool ModifyAssignedSkillPoint(bool add, TargetBaseStat stat)
-		{
+			TargetBaseStat stat = GetSelectedStat();
 			bool toAttributePoints = (int)stat < 3;
 
 			//First check if we have enought Points for the stat we want to increment
 			if (add && (toAttributePoints ? assignedAttributePointCount == attributePoints : assignedSkillPointCount == skillPoints))
 			{
 				PlayFeedback(false);
-				return false;
+				return;
 			}
 
 			//Then check if we try to remove a point but dont actually have one assigned
 			if (!add && this[stat] == 0)
 			{
 				PlayFeedback(false);
-				return false;
+				return;
 			}
 
 			int change = add ? 1 : -1;
@@ -128,19 +101,30 @@ namespace EoE.UI
 
 			UpdateDisplay();
 			PlayFeedback(true);
-			return true;
 		}
-		public bool ApplyAssignedPoints()
+		private TargetBaseStat GetSelectedStat()
+		{
+			for(int i = 0; i < skillPointApplier.Length; i++)
+			{
+				if(skillPointApplier[i].isSelected)
+				{
+					return skillPointApplier[i].targetStat;
+				}
+			}
+
+			return TargetBaseStat.Health;
+		}
+		public void ApplyAssignedPoints()
 		{
 			if (assignedAttributePointCount + assignedSkillPointCount == 0)
 			{
 				PlayFeedback(false);
-				return false;
+				return;
 			}
 			attributePoints -= assignedAttributePointCount;
 			for (int i = 0; i < 3; i++)
 			{
-				skillBuff.Effects[i].Amount += baseData.LevelSettings[(TargetBaseStat)i] * assignedAttributePoints[i];
+				Player.Instance.LevelingPointsBuff.Effects[i].Amount += Player.PlayerSettings.LevelSettings[(TargetBaseStat)i] * assignedAttributePoints[i];
 				assignedAttributePoints[i] = 0;
 			}
 			assignedAttributePointCount = 0;
@@ -148,7 +132,7 @@ namespace EoE.UI
 			skillPoints -= assignedSkillPointCount;
 			for (int i = 0; i < 3; i++)
 			{
-				skillBuff.Effects[i + 3].Amount += baseData.LevelSettings[(TargetBaseStat)(i + 3)] * assignedSkillPoints[i];
+				Player.Instance.LevelingPointsBuff.Effects[i + 3].Amount += Player.PlayerSettings.LevelSettings[(TargetBaseStat)(i + 3)] * assignedSkillPoints[i];
 				assignedSkillPoints[i] = 0;
 			}
 			assignedSkillPointCount = 0;
@@ -157,26 +141,14 @@ namespace EoE.UI
 			UpdateDisplay();
 
 			PlayFeedback(true);
-			return true;
 		}
-		public void GotoConfirmation()
-		{
-			for (int i = 0; i < menuItems.Length; i++)
-			{
-				if (menuItems[i] is AcceptResetButton)
-				{
-					menuItems[i].SelectMenuItem();
-					break;
-				}
-			}
-		}
-		public bool ResetAssignedSkillPoints(bool feedback = true)
+		public void ResetAssignedSkillPoints(bool feedback = true)
 		{
 			if (assignedAttributePointCount + assignedSkillPointCount == 0)
 			{
 				if (feedback)
 					PlayFeedback(false);
-				return false;
+				return;
 			}
 
 			for (int i = 0; i < 3; i++)
@@ -194,7 +166,6 @@ namespace EoE.UI
 
 			if (feedback)
 				PlayFeedback(true);
-			return true;
 		}
 		private void UpdateDisplay()
 		{
@@ -203,16 +174,16 @@ namespace EoE.UI
 			availableSkillPoints.text = (skillPoints - assignedSkillPointCount).ToString();
 			availableSkillPoints.color = (skillPoints - assignedSkillPointCount) > 0 ? remainingSkillpoints : noSkillPointsLeft;
 
-			for (int i = 0; i < menuItems.Length; i++)
+			for (int i = 0; i < skillPointApplier.Length; i++)
 			{
-				SkillPointStat target = menuItems[i] as SkillPointStat;
+				SkillPointStat target = skillPointApplier[i] as SkillPointStat;
 				if (target == null)
 					continue;
 
 				target.UpdateNumbers();
 			}
 		}
-		private void PlayFeedback(bool succesSound)
+		public void PlayFeedback(bool succesSound)
 		{
 			SoundManager.SetSoundState(succesSound ? ConstantCollector.MENU_NAV_SOUND : ConstantCollector.FAILED_MENU_NAV_SOUND, true);
 		}

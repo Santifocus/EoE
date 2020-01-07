@@ -7,32 +7,64 @@ namespace EoE.UI
 {
 	public class EntitieStatDisplay : MonoBehaviour
 	{
+		private const float DONE_LERP_THRESHOLD = 0.01f;
 		[SerializeField] private Image healthBarSlider = default;
+		[SerializeField] private Image remenantHealthBarSlider = default;
 		[SerializeField] private RectTransform selfTransform = default;
 		[SerializeField] private GridLayoutGroup buffGrid = default;
 		[SerializeField] private Transform buffIconPrefab = default;
-		public float HealthValue { get; set; }
+		private float healthValue;
+		public float HealthValue
+		{
+			get => healthValue;
+			set
+			{
+				if (curLerpState == LerpState.Idle)
+				{
+					lerpWaitDelay = GameController.CurrentGameSettings.EntitieHealthBarLerpDelay;
+					curLerpState = LerpState.Waiting;
+				}
+
+				healthBarSlider.fillAmount = healthValue = value;
+			}
+		}
 		private Vector3 pos;
 		public Vector3 Position { get => pos; set => SetPosition(value); }
-		public float Height => healthBarSlider.rectTransform.rect.height;
-		private float displayedValue;
+		public float Height => remenantHealthBarSlider.rectTransform.rect.height;
 		private Dictionary<BuffInstance, Transform> buffIconLookup;
+
+		private enum LerpState { Idle = 1, Waiting = 2, Lerping = 3 }
+		private LerpState curLerpState = LerpState.Idle;
+
+		private float lerpWaitDelay;
+		private float remenantValue;
 
 		public void Setup()
 		{
-			displayedValue = 1;
-			HealthValue = 1;
+			healthBarSlider.fillAmount = remenantHealthBarSlider.fillAmount = healthValue = remenantValue = 1;
 			buffIconLookup = new Dictionary<BuffInstance, Transform>();
-		}
-		private void SetPosition(Vector3 pos)
-		{
-			this.pos = pos;
-			selfTransform.position = pos;
 		}
 		private void Update()
 		{
-			displayedValue = Mathf.Lerp(displayedValue, HealthValue, Time.deltaTime * GameController.CurrentGameSettings.EnemeyHealthBarLerpSpeed);
-			healthBarSlider.fillAmount = displayedValue;
+			if (curLerpState == LerpState.Waiting)
+			{
+				lerpWaitDelay -= Time.deltaTime;
+				if(lerpWaitDelay <= 0)
+				{
+					curLerpState = LerpState.Lerping;
+					lerpWaitDelay = 0;
+				}
+			}
+			else if(curLerpState == LerpState.Lerping)
+			{
+				remenantValue = Mathf.MoveTowards(remenantValue, healthValue, Time.deltaTime * GameController.CurrentGameSettings.EntitieHealthBarLerpSpeed);
+				if(Mathf.Abs(remenantValue - healthValue) <= DONE_LERP_THRESHOLD)
+				{
+					remenantValue = healthValue;
+					curLerpState = LerpState.Idle;
+				}
+			}
+			remenantHealthBarSlider.fillAmount = remenantValue;
 		}
 		public void AddBuffIcon(BuffInstance targetBuff)
 		{
@@ -54,6 +86,11 @@ namespace EoE.UI
 				Destroy(buffIconLookup[targetBuff].gameObject);
 				buffIconLookup.Remove(targetBuff);
 			}
+		}
+		private void SetPosition(Vector3 pos)
+		{
+			this.pos = pos;
+			selfTransform.position = pos;
 		}
 	}
 }

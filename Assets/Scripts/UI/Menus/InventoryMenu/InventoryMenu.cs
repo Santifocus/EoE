@@ -189,7 +189,7 @@ namespace EoE.UI
 			if (feedBack)
 				PlayFeedback(true);
 			navigationCooldown = NAV_COOLDOWN;
-			slots[curSlotIndex].SelectMenuItem();
+			slots[curSlotIndex].Select();
 			UpdateActionMenu();
 			itemDescriptionDisplay.SetItem(Player.Instance.Inventory[curSlotIndex] == null ? null : Player.Instance.Inventory[curSlotIndex].data);
 		}

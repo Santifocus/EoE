@@ -8,20 +8,20 @@ namespace EoE.UI
 {
 	public class PauseMenuController : MonoBehaviour
 	{
-		[SerializeField] private GameObject pauseMenuObject = default;
+		public static PauseMenuController Instance { get; private set; }
+		public bool PauseMenuOpen { get; private set; }
+		[SerializeField] private RectTransform pauseMenuObject = default;
 		[SerializeField] private ControllerMenuItem startMenuItem = default;
-		private bool open;
 		private void Start()
 		{
-			pauseMenuObject.SetActive(false);
+			pauseMenuObject.gameObject.SetActive(false);
+			pauseMenuObject.anchoredPosition = Vector2.zero;
+			 Instance = this;
 			SettingsMenuController.ChangeStateEvent += SettingsMenuChangedState;
 		}
-		private void Update()
+		public void ToggleState()
 		{
-			if (InputController.Pause.Down && !(GameController.GameIsPaused && !open))
-			{
-				SetState(!open);
-			}
+			SetState(!PauseMenuOpen);
 		}
 		public void Close()
 		{
@@ -29,11 +29,12 @@ namespace EoE.UI
 		}
 		private void SetState(bool state)
 		{
-			open = state;
-			GameController.GameIsPaused = open;
-			pauseMenuObject.SetActive(open);
-			if (open)
+			PauseMenuOpen = state;
+			SettingsMenuController.Instance.Close();
+			pauseMenuObject.gameObject.SetActive(PauseMenuOpen);
+			if (PauseMenuOpen)
 				startMenuItem.Select();
+			GameController.GameIsPaused = PauseMenuOpen;
 		}
 		public void OpenSettings()
 		{

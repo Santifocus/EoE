@@ -5,8 +5,10 @@ using UnityEngine.UI;
 
 namespace EoE.UI
 {
-	public class InventorySlot : CMenuItem
+	public class InventorySlot : MonoBehaviour
 	{
+		public static InventorySlot SelectedInventorySlot { get; private set; }
+
 		[SerializeField] private Image iconDisplay = default;
 		[SerializeField] private Image itemTypeDisplay = default;
 		[SerializeField] private TextMeshProUGUI stackDisplay = default;
@@ -23,7 +25,7 @@ namespace EoE.UI
 
 		private int inventoryIndex;
 		private Inventory targetInventory;
-
+		
 		public void Setup(Inventory targetInventory, int inventoryIndex)
 		{
 			this.targetInventory = targetInventory;
@@ -62,13 +64,20 @@ namespace EoE.UI
 			equippedIcon.gameObject.SetActive(!(empty || !targetInventory[inventoryIndex].isEquiped));
 		}
 
-		protected override void Select()
+		public void Select()
 		{
+			if (SelectedInventorySlot != null)
+				SelectedInventorySlot.DeSelect();
+
+			SelectedInventorySlot = this;
 			onSelectBackground.gameObject.SetActive(true);
 			onNotSelectBackground.gameObject.SetActive(false);
 		}
-		protected override void DeSelect()
+		public void DeSelect()
 		{
+			if (SelectedInventorySlot == this)
+				SelectedInventorySlot = null;
+
 			onSelectBackground.gameObject.SetActive(false);
 			onNotSelectBackground.gameObject.SetActive(true);
 		}

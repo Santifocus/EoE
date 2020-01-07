@@ -191,7 +191,6 @@ namespace EoE.UI
 				int upDownChange = InputController.MenuDown.Pressed ? 1 : (InputController.MenuUp.Pressed ? -1 : 0);
 				if (leftRightChange != 0 || upDownChange != 0)
 				{
-					int oldIndex = selectedIndex[selfID];
 					if (leftRightChange != 0)
 					{
 						selectedIndex[selfID] += leftRightChange;
@@ -200,7 +199,7 @@ namespace EoE.UI
 					{
 						selectedIndex[selfID] += upDownChange * SlotsPerRow(shopMode == ShopMode.Buy ? buyModeInfo.itemGrid : sellModeInfo.itemGrid);
 					}
-					UpdateSelectedItemSlot(oldIndex);
+					UpdateSelectedItemSlot();
 				}
 				else if (InputController.MenuEnter.Down)
 				{
@@ -233,7 +232,7 @@ namespace EoE.UI
 				return Mathf.FloorToInt(gridWidht / slotWidht);
 			}
 		}
-		private void UpdateSelectedItemSlot(int oldIndex)
+		private void UpdateSelectedItemSlot()
 		{
 			int itemSelectionID = (int)ShopState.ItemSelection - 1;
 			int maxIndex = shopMode == ShopMode.Buy ? shopSlots.Length : playerInventorySlots.Length;
@@ -260,8 +259,7 @@ namespace EoE.UI
 			else
 			{
 				int newIndex = selectedIndex[itemSelectionID];
-				playerInventorySlots[oldIndex].DeSelectMenuItem();
-				playerInventorySlots[newIndex].SelectMenuItem();
+				playerInventorySlots[newIndex].Select();
 				if(Player.Instance.Inventory[newIndex] != null)
 				{
 					worthEvaluationDisplay.text = (Player.Instance.Inventory[newIndex].data.ItemWorth * GameController.CurrentGameSettings.ItemSellMultiplier).ToString();
@@ -340,6 +338,7 @@ namespace EoE.UI
 				actionWorth = curInventory.ShopItems[selectedItemIndex].Item.ItemWorth;
 
 				int maxBuys = actionWorth == 0 ? MAX_POSSIBLE_ACTION_AMOUNT : (Player.Instance.CurrentCurrencyAmount / actionWorth);
+				maxBuys = maxBuys - Player.Instance.Inventory.CheckAddablity(curInventory.ShopItems[selectedItemIndex].Item, maxBuys);
 				maxAction = Mathf.Min(maxBuys, shopSlots[selectedItemIndex].Stacksize, MAX_POSSIBLE_ACTION_AMOUNT);
 			}
 			else
@@ -376,7 +375,7 @@ namespace EoE.UI
 				}
 
 				SetShopState(ShopState.ItemSelection);
-				UpdateSelectedItemSlot(selectedSlotIndex);
+				UpdateSelectedItemSlot();
 				shopItemActions[selectedIndex[(int)ShopState.ActionSelection - 1]].DeSelect();
 			}
 		}
@@ -441,9 +440,8 @@ namespace EoE.UI
 						shopModeActions[0].Select();
 						break;
 					case ShopState.ItemSelection:
-						int oldIndex = selectedIndex[(int)ShopState.ItemSelection - 1];
 						selectedIndex[(int)ShopState.ItemSelection - 1] = 0;
-						UpdateSelectedItemSlot(oldIndex);
+						UpdateSelectedItemSlot();
 						break;
 					case ShopState.ActionSelection:
 						selectedIndex[(int)ShopState.ActionSelection - 1] = 0;

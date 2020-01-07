@@ -35,7 +35,8 @@ namespace EoE.Information
 		public GameObject HitTerrainParticles = default;
 
 		public EntitieStatDisplay EntitieStatDisplayPrefab = default;
-		public float EnemeyHealthBarLerpSpeed = 4;
+		public float EntitieHealthBarLerpSpeed = 2;
+		public float EntitieHealthBarLerpDelay = 0.5f;
 
 		//Damage Numbers
 		public float DamageNumberLifeTime = 1;

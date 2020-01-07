@@ -7,7 +7,8 @@ namespace EoE.UI
 {
 	public class CharacterMenuController : MonoBehaviour
 	{
-		public static bool MenuOpen;
+		public static CharacterMenuController Instance { get; private set; }
+		public bool CharacterMenuOpen { get; private set; }
 		[SerializeField] private CharacterMenuPage[] menuPages = default;
 		[SerializeField] private float pageScrollTime = 0.3f;
 		[SerializeField] private float pageFinishScrollTime = 0.2f;
@@ -18,7 +19,8 @@ namespace EoE.UI
 
 		private int curMenuIndex;
 		private bool allowedSlide;
-		private TransitionUI.OnFinishCall pageFinishSlide;
+		private Coroutine LeftScrollFadeC;
+		private Coroutine RightScrollFadeC;
 
 		private Vector2 LeftScreen => new Vector2(-Screen.width, 0) / transform.lossyScale;
 		private Vector2 RightScreen => new Vector2(Screen.width, 0) / transform.lossyScale;
@@ -26,26 +28,14 @@ namespace EoE.UI
 		private void Start()
 		{
 			allowedSlide = true;
-			pageFinishSlide += AllowSlide;
+			Instance = this;
 			characterMenuBackground.gameObject.SetActive(false);
 		}
 
 		private void Update()
 		{
-			if (!MenuOpen && !GameController.GameIsPaused && InputController.PlayerMenu.Down)
-			{
-				OpenMenu();
+			if (!CharacterMenuOpen)
 				return;
-			}
-
-			if (!MenuOpen)
-				return;
-
-			if (InputController.PlayerMenu.Down || InputController.MenuBack.Down)
-			{
-				HideMenu();
-				return;
-			}
 
 			if (InputController.LeftPage.Active && allowedSlide)
 			{
@@ -57,7 +47,7 @@ namespace EoE.UI
 				if (curMenuIndex < 0)
 					curMenuIndex += menuPages.Length;
 
-				menuPages[curMenuIndex].ShowPage(LeftScreen, pageScrollTime, pageFinishSlide);
+				menuPages[curMenuIndex].ShowPage(LeftScreen, pageScrollTime, AllowSlide);
 
 				if (LeftScrollFadeC != null)
 					StopCoroutine(LeftScrollFadeC);
@@ -73,15 +63,13 @@ namespace EoE.UI
 				if (curMenuIndex >= menuPages.Length)
 					curMenuIndex %= menuPages.Length;
 
-				menuPages[curMenuIndex].ShowPage(RightScreen, pageScrollTime, pageFinishSlide);
+				menuPages[curMenuIndex].ShowPage(RightScreen, pageScrollTime, AllowSlide);
 
 				if (RightScrollFadeC != null)
 					StopCoroutine(RightScrollFadeC);
 				RightScrollFadeC = StartCoroutine(FadeTrigger(rightScrollImage));
 			}
 		}
-		private Coroutine LeftScrollFadeC;
-		private Coroutine RightScrollFadeC;
 		private IEnumerator FadeTrigger(Image target)
 		{
 			PlayScrollSound();
@@ -101,18 +89,24 @@ namespace EoE.UI
 		{
 			Sounds.SoundManager.SetSoundState(ConstantCollector.MENU_SCROLL_SOUND, true);
 		}
-		public void OpenMenu()
+		public void ToggleState()
 		{
-			MenuOpen = true;
+			CharacterMenuOpen = !CharacterMenuOpen;
+			if (CharacterMenuOpen)
+				OpenMenu();
+			else
+				HideMenu();
+		}
+		private void OpenMenu()
+		{
 			GameController.GameIsPaused = true;
 			allowedSlide = false;
-			menuPages[0].ShowPage(LeftScreen, pageScrollTime / 2, pageFinishSlide);
+			menuPages[0].ShowPage(LeftScreen, pageScrollTime / 2, AllowSlide);
 			curMenuIndex = 0;
 			characterMenuBackground.gameObject.SetActive(true);
 		}
-		public void HideMenu()
+		private void HideMenu()
 		{
-			MenuOpen = false;
 			GameController.GameIsPaused = false;
 			allowedSlide = false;
 			menuPages[curMenuIndex].HidePage(RightScreen, pageScrollTime / 2);

@@ -24,7 +24,7 @@ namespace EoE.UI
 		[SerializeField] private UnityEvent onEnterEvent = default;
 		[SerializeField] private UnityEvent onBackEvent = default;
 
-		private bool isSelected;
+		public bool isSelected { get; protected set; }
 
 		private void Start()
 		{

@@ -6,12 +6,16 @@ namespace EoE.Entities
 {
 	public class ItemDrop : Interactable
 	{
+		private const float FAILED_PICKUP_DELAY = 0.5f;
+
 		[SerializeField] private Rigidbody body = default;
 		[SerializeField] private TextMeshPro infoDisplayPrefab = default;
 		[SerializeField] private Vector3 infoDisplayOffset = new Vector3(0, 2, 0);
 		[SerializeField] private Color amountColor = Color.red;
+		[SerializeField] private Notification failedPickUpNotification = default;
 		private TextMeshPro infoDisplay;
 		private InventoryItem containedItem;
+		private float FailedPickUpDelay;
 		protected override void Interact()
 		{
 			int preStacksize = containedItem.stackSize;
@@ -28,10 +32,18 @@ namespace EoE.Entities
 							("{Name}", containedItem.data.ItemName.text.ToString()),
 							("{Amount}", (preStacksize - containedItem.stackSize).ToString())
 						};
-						FXManager.PlayFX((EffectsOnInteract[i] as Notification).CreateInstructedNotification(replaceInstructions), transform, true);
+						FXManager.PlayFX((EffectsOnInteract[i] as Notification).CreateInstructedNotification(replaceInstructions), Player.Instance.transform, true);
 						continue;
 					}
 					FXManager.PlayFX(EffectsOnInteract[i], transform, true);
+				}
+			}
+			else
+			{
+				if (FailedPickUpDelay <= 0)
+				{
+					FXManager.PlayFX(failedPickUpNotification, Player.Instance.transform, true);
+					FailedPickUpDelay = FAILED_PICKUP_DELAY;
 				}
 			}
 
@@ -43,6 +55,9 @@ namespace EoE.Entities
 		}
 		private void LateUpdate()
 		{
+			if (FailedPickUpDelay > 0)
+				FailedPickUpDelay -= Time.deltaTime;
+
 			if (!isTarget || !Player.Instance.Alive)
 				return;
 
@@ -77,7 +92,7 @@ namespace EoE.Entities
 			infoDisplay.gameObject.SetActive(false);
 
 			string amountColHex = ColorUtility.ToHtmlStringRGBA(amountColor);
-			infoDisplay.text = "Pick up <color=#" + amountColHex + ">" + containedItem.stackSize + "x </color>" + containedItem.data.ItemName + "[A]";
+			infoDisplay.text = "Pick up <color=#" + amountColHex + ">" + containedItem.stackSize + "x </color>" + containedItem.data.ItemName + " [A]";
 		}
 	}
 }

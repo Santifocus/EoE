@@ -62,7 +62,7 @@ namespace EoE.Information
 			}
 			else if (itemCollectorGUID.Length > 1)
 			{
-				UnityEngine.Debug.Log("Found more then 1 Item collector... Deleting all and creating new one.");
+				Debug.Log("Found more then 1 Item collector... Deleting all and creating new one.");
 				for (int i = 0; i < itemCollectorGUID.Length; i++)
 				{
 					AssetDatabase.DeleteAsset(AssetDatabase.GUIDToAssetPath(itemCollectorGUID[i]));

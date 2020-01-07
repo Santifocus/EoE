@@ -66,6 +66,8 @@ MonoBehaviour:
     type: 3}
   infoDisplayOffset: {x: 0, y: 2, z: 0}
   amountColor: {r: 1, g: 0, b: 0, a: 1}
+  failedPickUpNotification: {fileID: 11400000, guid: 844e43e30828f2942a1506846a4661c9,
+    type: 2}
 --- !u!54 &877910255125148309
 Rigidbody:
   m_ObjectHideFlags: 0

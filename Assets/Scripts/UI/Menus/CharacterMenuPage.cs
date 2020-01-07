@@ -11,7 +11,7 @@ namespace EoE.UI
 		{
 			gameObject.SetActive(false);
 		}
-		public void ShowPage(Vector2 slideStart, float slideTime, TransitionUI.OnFinishCall finishCall)
+		public void ShowPage(Vector2 slideStart, float slideTime, System.Action finishCall)
 		{
 			ActivePage = true;
 			ResetPage();

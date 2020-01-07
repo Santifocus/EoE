@@ -1,11 +1,11 @@
-﻿using EoE.Combatery;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using EoE.Combatery;
 using EoE.Controlls;
 using EoE.Events;
 using EoE.Information;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using UnityEngine;
+using EoE.UI;
 
 namespace EoE.Entities
 {
@@ -25,7 +25,6 @@ namespace EoE.Entities
 		//Inspector variables
 		[Space(10)]
 		public CharacterController charController = default;
-		public TextMeshProUGUI debugText = default;
 		public Transform weaponHoldPoint = default;
 		public Animator animationControl = default;
 
@@ -69,8 +68,8 @@ namespace EoE.Entities
 		private FXInstance[] HealthBelowThresholdBoundEffects;
 
 		//Targeting
+		public Entitie TargetedEntitie { get; private set; }
 		private float switchTargetTimer;
-		public Entitie TargetedEntitie;
 
 		//Getter Helpers
 		public float jumpVelocity { get; private set; }
@@ -118,6 +117,9 @@ namespace EoE.Entities
 		}
 		protected override void EntitieUpdate()
 		{
+			if (ContextControl())
+				return;
+
 			if (GameController.GameIsPaused)
 			{
 				if (TargetedEntitie)
@@ -280,37 +282,6 @@ namespace EoE.Entities
 						}
 					}
 				}
-			}
-		}
-		#endregion
-		#region Endurance Control
-		public void ChangeEndurance(ChangeInfo change)
-		{
-			ChangeInfo.ChangeResult changeResult = new ChangeInfo.ChangeResult(change, this, false);
-
-			if (changeResult.finalChangeAmount > 0)
-			{
-				usedEnduranceCooldown = PlayerSettings.EnduranceAfterUseCooldown;
-			}
-
-			curEndurance -= changeResult.finalChangeAmount;
-			ClampEndurance();
-		}
-		public void ClampEndurance() => curEndurance = Mathf.Clamp(curEndurance, 0, curMaxEndurance);
-		protected override void Regen()
-		{
-			base.Regen();
-
-			if (PlayerSettings.DoEnduranceRegen && curEndurance < curMaxEndurance)
-			{
-				float enduranceRegenMultiplier = curStates.Fighting ? PlayerSettings.EnduranceRegenInCombatMultiplier : 1;
-				if (usedEnduranceCooldown > 0)
-				{
-					usedEnduranceCooldown -= Time.deltaTime;
-					enduranceRegenMultiplier *= PlayerSettings.EnduranceRegenAfterUseMultiplier;
-				}
-				curEndurance += PlayerSettings.EnduranceRegen * enduranceRegenMultiplier * Time.deltaTime;
-				curEndurance = Mathf.Min(curEndurance, curMaxEndurance);
 			}
 		}
 		#endregion
@@ -508,8 +479,6 @@ namespace EoE.Entities
 
 			float vAngleSinPart = Mathf.Sin(curHeadTurn.x * Mathf.Deg2Rad);
 			float vAngleCosPart = Mathf.Cos(curHeadTurn.x * Mathf.Deg2Rad);
-
-			debugText.text = vAngleSinPart + ", " + vAngleCosPart;
 
 			head.eulerAngles = new Vector3(curHeadTurn.y * vAngleSinPart, curHeadTurn.x, curHeadTurn.y * vAngleCosPart);
 		}
@@ -881,6 +850,37 @@ namespace EoE.Entities
 					rend.materials = newMats;
 
 				}
+			}
+		}
+		#endregion
+		#region Endurance Control
+		public void ChangeEndurance(ChangeInfo change)
+		{
+			ChangeInfo.ChangeResult changeResult = new ChangeInfo.ChangeResult(change, this, false);
+
+			if (changeResult.finalChangeAmount > 0)
+			{
+				usedEnduranceCooldown = PlayerSettings.EnduranceAfterUseCooldown;
+			}
+
+			curEndurance -= changeResult.finalChangeAmount;
+			ClampEndurance();
+		}
+		public void ClampEndurance() => curEndurance = Mathf.Clamp(curEndurance, 0, curMaxEndurance);
+		protected override void Regen()
+		{
+			base.Regen();
+
+			if (PlayerSettings.DoEnduranceRegen && curEndurance < curMaxEndurance)
+			{
+				float enduranceRegenMultiplier = curStates.Fighting ? PlayerSettings.EnduranceRegenInCombatMultiplier : 1;
+				if (usedEnduranceCooldown > 0)
+				{
+					usedEnduranceCooldown -= Time.deltaTime;
+					enduranceRegenMultiplier *= PlayerSettings.EnduranceRegenAfterUseMultiplier;
+				}
+				curEndurance += PlayerSettings.EnduranceRegen * enduranceRegenMultiplier * Time.deltaTime;
+				curEndurance = Mathf.Min(curEndurance, curMaxEndurance);
 			}
 		}
 		#endregion
@@ -1358,6 +1358,28 @@ namespace EoE.Entities
 			}
 
 			return value;
+		}
+		#endregion
+		#region ContextControl
+		private bool ContextControl()
+		{
+			//Both for the pause and character menu the same logic applies:
+			//1. Open if the relating pause button is pressed (Start or Select)
+			//2. Close when the relating pause button is pressed or MenuBack
+			//3. If the other is open we ignore all input (Paused + SelfNotOpen)
+			if ((InputController.Pause.Down || (PauseMenuController.Instance.PauseMenuOpen && InputController.MenuBack.Down)) && 
+				!(GameController.GameIsPaused && !PauseMenuController.Instance.PauseMenuOpen))
+			{
+				PauseMenuController.Instance.ToggleState();
+				return true;
+			}
+			else if((InputController.PlayerMenu.Down || (CharacterMenuController.Instance.CharacterMenuOpen && InputController.MenuBack.Down)) && 
+				!(GameController.GameIsPaused && !CharacterMenuController.Instance.CharacterMenuOpen))
+			{
+				CharacterMenuController.Instance.ToggleState();
+				return true;
+			}
+			return false;
 		}
 		#endregion
 	}
