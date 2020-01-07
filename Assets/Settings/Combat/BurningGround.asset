@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BurningGround
   m_EditorClassIdentifier: 
   AffectedTargets: 4
-  DamageElement: 1
+  DamageElement: 2
   CauseType: 1
   BaseEffectRadius: 5
   ZeroOutDistance: 5

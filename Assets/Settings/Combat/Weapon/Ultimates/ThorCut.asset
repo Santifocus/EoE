@@ -53,9 +53,10 @@ MonoBehaviour:
       CustomScale: {x: 1, y: 1, z: 1}
     AOEEffects: []
     ProjectileInfos: []
-    HealEffects: []
+    HealsOnUser: []
     StackingStyle: 2
-    BuffsToApply: []
+    BuffsOnUser: []
+    CreatedRemenants: []
   AttackData:
     AttackSequenceParts:
     - AnimationTarget: 2
@@ -157,10 +158,11 @@ MonoBehaviour:
             ExecutionDelay: 0.1
             ExecutionCount: 1
             ExecutionRepeatDelay: 0.2
-          HealEffects: []
+          HealsOnUser: []
           StackingStyle: 2
-          BuffsToApply:
+          BuffsOnUser:
           - {fileID: 11400000, guid: 292e93b3ed5e91a4a8e1daf88c8f1c0b, type: 2}
+          CreatedRemenants: []
       - AtAnimationPoint: 0.6
         Effect:
           ChanceToActivate: 1
@@ -179,10 +181,16 @@ MonoBehaviour:
             HasCustomScale: 0
             CustomScale: {x: 1, y: 1, z: 1}
           AOEEffects: []
-          ProjectileInfos: []
-          HealEffects: []
+          ProjectileInfos:
+          - Projectile: {fileID: 11400000, guid: 42e2c1128d64e5e478bb7302ef4c9d71,
+              type: 2}
+            ExecutionDelay: 0.2
+            ExecutionCount: 1
+            ExecutionRepeatDelay: 0.2
+          HealsOnUser: []
           StackingStyle: 2
-          BuffsToApply: []
+          BuffsOnUser: []
+          CreatedRemenants: []
       - AtAnimationPoint: 0.8
         Effect:
           ChanceToActivate: 1
@@ -223,17 +231,10 @@ MonoBehaviour:
             CustomScale: {x: 1, y: 1, z: 1}
           AOEEffects:
           - {fileID: 11400000, guid: e2084185285c1bf4a92a69155bab56af, type: 2}
-          ProjectileInfos:
-          - Projectile: {fileID: 0}
-            ExecutionDelay: 0.2
-            ExecutionCount: 1
-            ExecutionRepeatDelay: 0.2
-          - Projectile: {fileID: 0}
-            ExecutionDelay: 0.2
-            ExecutionCount: 1
-            ExecutionRepeatDelay: 0.2
-          HealEffects: []
+          ProjectileInfos: []
+          HealsOnUser: []
           StackingStyle: 2
-          BuffsToApply: []
+          BuffsOnUser: []
+          CreatedRemenants: []
     PartsMaxDelays:
     - 0

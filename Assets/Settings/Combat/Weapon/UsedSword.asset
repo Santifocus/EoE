@@ -115,9 +115,10 @@ MonoBehaviour:
             CustomScale: {x: 1, y: 1, z: 1}
           AOEEffects: []
           ProjectileInfos: []
-          HealEffects: []
+          HealsOnUser: []
           StackingStyle: 2
-          BuffsToApply: []
+          BuffsOnUser: []
+          CreatedRemenants: []
     - AnimationTarget: 2
       StopMovement: 0
       AnimationMultiplicationType: 2
@@ -204,9 +205,10 @@ MonoBehaviour:
             CustomScale: {x: 1, y: 1, z: 1}
           AOEEffects: []
           ProjectileInfos: []
-          HealEffects: []
+          HealsOnUser: []
           StackingStyle: 2
-          BuffsToApply: []
+          BuffsOnUser: []
+          CreatedRemenants: []
     - AnimationTarget: 4
       StopMovement: 1
       AnimationMultiplicationType: 2
@@ -322,9 +324,10 @@ MonoBehaviour:
             CustomScale: {x: 1, y: 1, z: 1}
           AOEEffects: []
           ProjectileInfos: []
-          HealEffects: []
+          HealsOnUser: []
           StackingStyle: 2
-          BuffsToApply: []
+          BuffsOnUser: []
+          CreatedRemenants: []
     PartsMaxDelays:
     - 0.2
     - 0.2
@@ -416,9 +419,10 @@ MonoBehaviour:
             CustomScale: {x: 1, y: 1, z: 1}
           AOEEffects: []
           ProjectileInfos: []
-          HealEffects: []
+          HealsOnUser: []
           StackingStyle: 2
-          BuffsToApply: []
+          BuffsOnUser: []
+          CreatedRemenants: []
     PartsMaxDelays: []
   JumpAttackSequence:
     AttackSequenceParts:
@@ -517,9 +521,10 @@ MonoBehaviour:
             CustomScale: {x: 1, y: 1, z: 1}
           AOEEffects: []
           ProjectileInfos: []
-          HealEffects: []
+          HealsOnUser: []
           StackingStyle: 2
-          BuffsToApply: []
+          BuffsOnUser: []
+          CreatedRemenants: []
     PartsMaxDelays:
     - 0
   RunJumpAttackSequence:
@@ -610,9 +615,10 @@ MonoBehaviour:
             CustomScale: {x: 1, y: 1, z: 1}
           AOEEffects: []
           ProjectileInfos: []
-          HealEffects: []
+          HealsOnUser: []
           StackingStyle: 2
-          BuffsToApply: []
+          BuffsOnUser: []
+          CreatedRemenants: []
     PartsMaxDelays:
     - 0
   ComboEffects: {fileID: 11400000, guid: 4e7be449530b2d44fb6413e980a881e2, type: 2}

@@ -228,7 +228,7 @@ MonoBehaviour:
           CreatedRemenants:
           - Duration: 5
             VisualEffects:
-            - FX: {fileID: 0}
+            - FX: {fileID: 11400000, guid: 6794a349e3e123444b5fa54cef8e4c6c, type: 2}
               HasPositionOffset: 0
               PositionOffset: {x: 0, y: 0, z: 0}
               HasRotationOffset: 0
@@ -237,7 +237,7 @@ MonoBehaviour:
               CustomScale: {x: 1, y: 1, z: 1}
             StartEffects: []
             WhileEffects:
-            - {fileID: 0}
+            - {fileID: 11400000, guid: a54c289df8dd0824bb8b6900336b1e3d, type: 2}
             TryGroundRemenants: 1
     PartsMaxDelays:
     - 0
