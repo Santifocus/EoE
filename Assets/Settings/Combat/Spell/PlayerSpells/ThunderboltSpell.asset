@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ThunderboltSpell
   m_EditorClassIdentifier: 
   BaseDamage: 22
+  BaseHealthCost: 0
   BaseManaCost: 20
   BaseEnduranceCost: 0
   BaseKnockback: 0
