@@ -182,7 +182,22 @@ MonoBehaviour:
             CustomScale: {x: 1, y: 1, z: 1}
           AOEEffects: []
           ProjectileInfos:
-          - Projectile: {fileID: 11400000, guid: 42e2c1128d64e5e478bb7302ef4c9d71,
+          - Projectile: {fileID: 11400000, guid: 632cd7046f520cc42a8017602eadabbe,
+              type: 2}
+            ExecutionDelay: 0.2
+            ExecutionCount: 1
+            ExecutionRepeatDelay: 0.2
+          - Projectile: {fileID: 11400000, guid: e392838f575da04479e51ad01ab31afc,
+              type: 2}
+            ExecutionDelay: 0.2
+            ExecutionCount: 1
+            ExecutionRepeatDelay: 0.2
+          - Projectile: {fileID: 11400000, guid: 2bf1646699b19f540b711c1a8f764247,
+              type: 2}
+            ExecutionDelay: 0.2
+            ExecutionCount: 1
+            ExecutionRepeatDelay: 0.2
+          - Projectile: {fileID: 11400000, guid: 75870a57f7f6f2d4791864740ea4d28c,
               type: 2}
             ExecutionDelay: 0.2
             ExecutionCount: 1
