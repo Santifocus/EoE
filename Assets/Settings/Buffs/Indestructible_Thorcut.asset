@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: Indestructible
   Quality: 2
   Permanent: 0
-  BuffTime: 3
+  BuffTime: 1
   Icon: {fileID: 0}
   Effects: []
   CustomEffects:
