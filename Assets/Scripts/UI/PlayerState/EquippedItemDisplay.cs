@@ -42,7 +42,7 @@ namespace EoE.UI
 			for (int i = 0; i < targetDisplays.Length; i++)
 			{
 				targetDisplays[i].OriginalColor = targetDisplays[i].ItemIconDisplay.color;
-				targetDisplays[i].ItemCooldownDisplay.color = targetDisplays[i].ItemIconDisplay.color = Color.clear;
+				targetDisplays[i].ItemCooldownDisplayShadow.color = targetDisplays[i].ItemIconDisplay.color = Color.clear;
 			}
 		}
 
@@ -65,12 +65,15 @@ namespace EoE.UI
 			{
 				targets[index].Item1 = target;
 
-				targetDisplays[index].ItemIconDisplay.sprite = targetDisplays[index].ItemCooldownDisplay.sprite = (target == null) ? null : target.data.ItemIcon;
+				targetDisplays[index].ItemIconDisplay.sprite = targetDisplays[index].ItemCooldownDisplayShadow.sprite = (target == null) ? null : target.data.ItemIcon;
 				targetDisplays[index].ItemIconDisplay.color = (target == null) ? Color.clear : targetDisplays[index].OriginalColor;
-				targetDisplays[index].ItemCooldownDisplay.color = (target == null) ? Color.clear : Color.black;
+				targetDisplays[index].ItemCooldownDisplayShadow.color = (target == null) ? Color.clear : Color.black;
 
 				if (targetDisplays[index].ItemCountDisplay)
 					targetDisplays[index].ItemCountDisplay.gameObject.SetActive(target != null);
+
+				if (targetDisplays[index].ItemCooldownDisplayText)
+					targetDisplays[index].ItemCooldownDisplayText.gameObject.SetActive(target != null);
 
 				targets[index].Item2 = GetCurCooldown(target);
 			}
@@ -86,15 +89,21 @@ namespace EoE.UI
 					//Blink
 				}
 
+				if (targetDisplays[index].ItemCooldownDisplayText)
+				{
+					targetDisplays[index].ItemCooldownDisplayText.gameObject.SetActive(targets[index].Item2 > 0);
+					targetDisplays[index].ItemCooldownDisplayText.text = (Mathf.Round(targets[index].Item2 * 10) / 10).ToString();
+				}
+
 				//Update cooldowndisplay
 				float maxCooldown = GetMaxCooldown(target);
 				if (maxCooldown > 0)
 				{
-					targetDisplays[index].ItemCooldownDisplay.fillAmount = Mathf.Clamp01(lastCooldown / maxCooldown);
+					targetDisplays[index].ItemCooldownDisplayShadow.fillAmount = Mathf.Clamp01(targets[index].Item2 / maxCooldown);
 				}
 				else
 				{
-					targetDisplays[index].ItemCooldownDisplay.fillAmount = 0;
+					targetDisplays[index].ItemCooldownDisplayShadow.fillAmount = 0;
 				}
 
 				//Update count
@@ -160,8 +169,9 @@ namespace EoE.UI
 		{
 			public Color OriginalColor { get; set; }
 			public Image ItemIconDisplay = default;
-			public Image ItemCooldownDisplay = default;
+			public Image ItemCooldownDisplayShadow = default;
 			public TextMeshProUGUI ItemCountDisplay = default;
+			public TextMeshProUGUI ItemCooldownDisplayText = default;
 		}
 	}
 }

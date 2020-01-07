@@ -18,7 +18,7 @@ MonoBehaviour:
   BaseEnduranceCost: 0
   BaseKnockback: 10
   BaseCritChance: 0
-  SpellCooldown: 6
+  SpellCooldown: 5
   ContainedParts: -1
   MovementRestrictions: 2
   SubtractManaAtPart: 2
