@@ -18,51 +18,88 @@ MonoBehaviour:
   Duration: 10
   FlightSpeed: 40
   CreateOffsetToCaster: {x: 1, y: 0, z: 0}
-  VisualStartEffects:
-  - FX: {fileID: 11400000, guid: f3a5d4a11481585419aa5a911b8dcce1, type: 2}
-    HasPositionOffset: 0
-    PositionOffset: {x: 0, y: 0, z: 0}
-    HasRotationOffset: 0
-    RotationOffset: {x: 0, y: 0, z: 0}
-    HasCustomScale: 0
-    CustomScale: {x: 1, y: 1, z: 1}
-  - FX: {fileID: 11400000, guid: 9dde42a015e34634d8ef3d7e6db9cdcc, type: 2}
-    HasPositionOffset: 0
-    PositionOffset: {x: 0, y: 0, z: 0}
-    HasRotationOffset: 0
-    RotationOffset: {x: 0, y: 0, z: 0}
-    HasCustomScale: 0
-    CustomScale: {x: 1, y: 1, z: 1}
-  StartEffects: []
-  WhileEffects: []
+  StartEffects:
+  - ChanceToActivate: 1
+    ContainedEffectType: 2
+    ImpulseVelocity: 5
+    ImpulseVelocityFallOffTime: 0.5
+    ImpulseVelocityDirection: 2
+    ImpulseVelocityFallbackDirection: 1
+    ImpulseDirectionBase: 1
+    FXObjects:
+    - FX: {fileID: 11400000, guid: f3a5d4a11481585419aa5a911b8dcce1, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 11400000, guid: 9dde42a015e34634d8ef3d7e6db9cdcc, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    AOEEffects: []
+    ProjectileInfos: []
+    HealsOnUser: []
+    StackingStyle: 2
+    BuffsOnUser: []
+    CreatedRemenants: []
+  WhileEffects:
+  - ChanceToActivate: 1
+    ContainedEffectType: 8
+    ImpulseVelocity: 5
+    ImpulseVelocityFallOffTime: 0.5
+    ImpulseVelocityDirection: 2
+    ImpulseVelocityFallbackDirection: 1
+    ImpulseDirectionBase: 1
+    FXObjects: []
+    AOEEffects: []
+    ProjectileInfos:
+    - Projectile: {fileID: 11400000, guid: 96f6178256f7a3c4da98e420882a237d, type: 2}
+      ExecutionDelay: 0
+      ExecutionCount: 1
+      ExecutionRepeatDelay: 0.2
+    HealsOnUser: []
+    StackingStyle: 2
+    BuffsOnUser: []
+    CreatedRemenants: []
   TerrainHitboxSize: 0.5
   EntitieHitboxSize: 1
   CollideMask: -1
-  Bounces: 0
-  DestroyOnEntiteBounce: 1
-  CollisionEffectsOnBounce: 1
-  VisualCollisionEffects:
-  - FX: {fileID: 11400000, guid: 2762cd21c6bde30458700de03ee7df29, type: 2}
-    HasPositionOffset: 0
-    PositionOffset: {x: 0, y: 0, z: 0}
-    HasRotationOffset: 0
-    RotationOffset: {x: 0, y: 0, z: 0}
-    HasCustomScale: 0
-    CustomScale: {x: 1, y: 1, z: 1}
-  - FX: {fileID: 11400000, guid: e7a8e0a9d3897234792d47d6be5ce7ac, type: 2}
-    HasPositionOffset: 0
-    PositionOffset: {x: 0, y: 0, z: 0}
-    HasRotationOffset: 0
-    RotationOffset: {x: 0, y: 0, z: 0}
-    HasCustomScale: 0
-    CustomScale: {x: 1, y: 1, z: 1}
-  CollisionEffectsAOE:
-  - {fileID: 11400000, guid: 5132a501c71885448b1687f8df51cacc, type: 2}
   DirectHit: {fileID: 0}
-  CreatesRemenants: 0
-  Remenants:
-    Duration: 5
-    VisualEffects: []
-    StartEffects: []
-    WhileEffects: []
-    TryGroundRemenants: 1
+  CollisionEffects:
+  - ChanceToActivate: 1
+    ContainedEffectType: 6
+    ImpulseVelocity: 5
+    ImpulseVelocityFallOffTime: 0.5
+    ImpulseVelocityDirection: 2
+    ImpulseVelocityFallbackDirection: 1
+    ImpulseDirectionBase: 1
+    FXObjects:
+    - FX: {fileID: 11400000, guid: 2762cd21c6bde30458700de03ee7df29, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 11400000, guid: e7a8e0a9d3897234792d47d6be5ce7ac, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    AOEEffects:
+    - {fileID: 11400000, guid: 5132a501c71885448b1687f8df51cacc, type: 2}
+    ProjectileInfos: []
+    HealsOnUser: []
+    StackingStyle: 2
+    BuffsOnUser: []
+    CreatedRemenants: []
+  Bounces: 0
+  DestroyOnEntiteBounce: 0
+  CollisionEffectsOnBounce: 1

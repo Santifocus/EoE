@@ -46,10 +46,10 @@ MonoBehaviour:
       CustomScale: {x: 1, y: 1, z: 1}
     AOEEffects: []
     ProjectileInfos: []
-    HealEffects: []
+    HealsOnUser: []
     StackingStyle: 2
-    BuffsToApply:
-    - {fileID: 11400000, guid: f09a51f38f9717a4fa0301886cf683bb, type: 2}
+    BuffsOnUser: []
+    CreatedRemenants: []
   AttackData:
     AttackSequenceParts:
     - AnimationTarget: 4
@@ -124,9 +124,10 @@ MonoBehaviour:
           FXObjects: []
           AOEEffects: []
           ProjectileInfos: []
-          HealEffects: []
+          HealsOnUser: []
           StackingStyle: 2
-          BuffsToApply: []
+          BuffsOnUser: []
+          CreatedRemenants: []
       - AtAnimationPoint: 0.2
         Effect:
           ChanceToActivate: 1
@@ -146,9 +147,10 @@ MonoBehaviour:
             CustomScale: {x: 1, y: 1, z: 1}
           AOEEffects: []
           ProjectileInfos: []
-          HealEffects: []
+          HealsOnUser: []
           StackingStyle: 2
-          BuffsToApply: []
+          BuffsOnUser: []
+          CreatedRemenants: []
       - AtAnimationPoint: 0.92
         Effect:
           ChanceToActivate: 1
@@ -188,9 +190,10 @@ MonoBehaviour:
             ExecutionDelay: 0.2
             ExecutionCount: 1
             ExecutionRepeatDelay: 0.2
-          HealEffects: []
+          HealsOnUser: []
           StackingStyle: 2
-          BuffsToApply: []
+          BuffsOnUser: []
+          CreatedRemenants: []
       - AtAnimationPoint: 0.1
         Effect:
           ChanceToActivate: 1
@@ -203,13 +206,14 @@ MonoBehaviour:
           FXObjects: []
           AOEEffects: []
           ProjectileInfos: []
-          HealEffects: []
+          HealsOnUser: []
           StackingStyle: 2
-          BuffsToApply: []
-      - AtAnimationPoint: 0
+          BuffsOnUser: []
+          CreatedRemenants: []
+      - AtAnimationPoint: 1
         Effect:
           ChanceToActivate: 1
-          ContainedEffectType: 32
+          ContainedEffectType: 64
           ImpulseVelocity: 5
           ImpulseVelocityFallOffTime: 0.5
           ImpulseVelocityDirection: 2
@@ -218,10 +222,23 @@ MonoBehaviour:
           FXObjects: []
           AOEEffects: []
           ProjectileInfos: []
-          HealEffects: []
+          HealsOnUser: []
           StackingStyle: 2
-          BuffsToApply:
-          - {fileID: 11400000, guid: d8eb7d4e7fad95d4697760e4d0ea7392, type: 2}
+          BuffsOnUser: []
+          CreatedRemenants:
+          - Duration: 5
+            VisualEffects:
+            - FX: {fileID: 11400000, guid: 2bd48134fcb3222429adde541c21e0a7, type: 2}
+              HasPositionOffset: 0
+              PositionOffset: {x: 0, y: 0, z: 0}
+              HasRotationOffset: 0
+              RotationOffset: {x: 0, y: 0, z: 0}
+              HasCustomScale: 0
+              CustomScale: {x: 1, y: 1, z: 1}
+            StartEffects: []
+            WhileEffects:
+            - {fileID: 11400000, guid: 5132a501c71885448b1687f8df51cacc, type: 2}
+            TryGroundRemenants: 1
     PartsMaxDelays:
     - 0
     - 0

@@ -10,7 +10,7 @@ namespace EoE.Combatery
 	public enum DirectionBase { Forward = 1, Right = 2, Up = 4, Back = 8, Left = 16, Down = 32 }
 	[System.Flags] public enum TargetMask { Self = (1 << 0), Allied = (1 << 1), Enemy = (1 << 2) }
 	[System.Flags] public enum ColliderMask { Terrain = (1 << 0), Entities = (1 << 1) }
-	[System.Flags] public enum EffectType { ImpulseVelocity = (1 << 0), FX = (1 << 1), AOE = (1 << 2), CreateProjectile = (1 << 3), HealOnUser = (1 << 4), BuffOnUser = (1 << 5) }
+	[System.Flags] public enum EffectType { ImpulseVelocity = (1 << 0), FX = (1 << 1), AOE = (1 << 2), CreateProjectile = (1 << 3), HealOnUser = (1 << 4), BuffOnUser = (1 << 5), CreateRemenants = (1 << 6) }
 	public class CombatObject : ScriptableObject
 	{
 		public float BaseDamage = 10;
@@ -93,6 +93,22 @@ namespace EoE.Combatery
 				return (flag | mask) == mask;
 			}
 		}
+		public static Vector3 CalculateDirection(InherritDirection directionStyle, InherritDirection fallbackDirectionStyle, DirectionBase direction, Transform originTransform, Vector3 originOffset)
+		{
+			Vector3 calculatedDirection;
+			(Vector3, bool) dirInfo = EnumDirToDir(direction);
+
+			if (directionStyle == InherritDirection.Target)
+			{
+				calculatedDirection = DirectionFromStyle(fallbackDirectionStyle, originTransform, ref dirInfo);
+			}
+			else
+			{
+				calculatedDirection = DirectionFromStyle(directionStyle, originTransform, ref dirInfo);
+			}
+
+			return calculatedDirection;
+		}
 		public static Vector3 CalculateDirection(InherritDirection directionStyle, InherritDirection fallbackDirectionStyle, DirectionBase direction, Entitie originEntitie, Vector3 originOffset)
 		{
 			Vector3 calculatedDirection;
@@ -105,34 +121,34 @@ namespace EoE.Combatery
 				}
 				else
 				{
-					calculatedDirection = DirectionFromStyle(fallbackDirectionStyle);
+					calculatedDirection = DirectionFromStyle(fallbackDirectionStyle, originEntitie.transform, ref dirInfo);
 				}
 			}
 			else
 			{
-				calculatedDirection = DirectionFromStyle(directionStyle);
+				calculatedDirection = DirectionFromStyle(directionStyle, originEntitie.transform, ref dirInfo);
 			}
 			return calculatedDirection;
-			Vector3 DirectionFromStyle(InherritDirection style)
+		}
+		private static Vector3 DirectionFromStyle(InherritDirection style, Transform originTransform, ref (Vector3, bool) dirInfo)
+		{
+			if (style == InherritDirection.World)
 			{
-				if (style == InherritDirection.World)
+				return dirInfo.Item1 * (dirInfo.Item2 ? -1 : 1);
+			}
+			else //style == InherritDirection.Local
+			{
+				if (dirInfo.Item1 == new Vector3Int(0, 0, 1))
 				{
-					return dirInfo.Item1 * (dirInfo.Item2 ? -1 : 1);
+					return originTransform.forward * (dirInfo.Item2 ? -1 : 1);
 				}
-				else //style == InherritDirection.Local
+				else if (dirInfo.Item1 == new Vector3Int(1, 0, 0))
 				{
-					if (dirInfo.Item1 == new Vector3Int(0, 0, 1))
-					{
-						return originEntitie.transform.forward * (dirInfo.Item2 ? -1 : 1);
-					}
-					else if (dirInfo.Item1 == new Vector3Int(1, 0, 0))
-					{
-						return originEntitie.transform.right * (dirInfo.Item2 ? -1 : 1);
-					}
-					else //dir.Item1 == new Vector3Int(0, 1, 0)
-					{
-						return originEntitie.transform.up * (dirInfo.Item2 ? -1 : 1);
-					}
+					return originTransform.right * (dirInfo.Item2 ? -1 : 1);
+				}
+				else //dir.Item1 == new Vector3Int(0, 1, 0)
+				{
+					return originTransform.up * (dirInfo.Item2 ? -1 : 1);
 				}
 			}
 		}
@@ -161,6 +177,15 @@ namespace EoE.Combatery
 		public Vector3 CustomScale = Vector3.one;
 	}
 	[System.Serializable]
+	public class RemenantsData
+	{
+		public float Duration = 5;
+		public CustomFXObject[] VisualEffects = new CustomFXObject[0];
+		public EffectAOE[] StartEffects = new EffectAOE[0];
+		public EffectAOE[] WhileEffects = new EffectAOE[0];
+		public bool TryGroundRemenants = true;
+	}
+	[System.Serializable]
 	public class ActivationEffect
 	{
 		public float ChanceToActivate = 1;
@@ -184,14 +209,18 @@ namespace EoE.Combatery
 		public ProjectileInfo[] ProjectileInfos = new ProjectileInfo[0];
 
 		//HealEffects
-		public HealTargetInfo[] HealEffects = new HealTargetInfo[0];
+		public HealTargetInfo[] HealsOnUser = new HealTargetInfo[0];
 
 		//Buffs
 		public BuffStackingStyle StackingStyle = BuffStackingStyle.Reapply;
-		public Buff[] BuffsToApply = new Buff[0];
+		public Buff[] BuffsOnUser = new Buff[0];
 
-		public void Activate(Entitie activator, CombatObject baseObject)
+		//Remenants
+		public RemenantsData[] CreatedRemenants = new RemenantsData[0];
+
+		public FXInstance[] Activate(Entitie activator, CombatObject baseObject, Transform overrideTransform = null)
 		{
+			FXInstance[] createdFXInstances = (HasMaskFlag(EffectType.FX) ? (new FXInstance[FXObjects.Length]) : (new FXInstance[0]));
 			if (HasMaskFlag(EffectType.ImpulseVelocity))
 			{
 				Vector3 direction = CombatObject.CalculateDirection(ImpulseVelocityDirection, ImpulseVelocityFallbackDirection, ImpulseDirectionBase, activator, Vector3.zero);
@@ -201,38 +230,46 @@ namespace EoE.Combatery
 			{
 				for (int i = 0; i < FXObjects.Length; i++)
 				{
-					FXManager.PlayFX(FXObjects[i], activator.transform, activator is Player);
+					createdFXInstances[i] = FXManager.PlayFX(FXObjects[i], overrideTransform ?? activator.transform, activator is Player);
 				}
 			}
 			if (HasMaskFlag(EffectType.AOE))
 			{
 				for (int i = 0; i < AOEEffects.Length; i++)
 				{
-					AOEEffects[i].Activate(activator, activator.transform, baseObject);
+					AOEEffects[i].Activate(activator, overrideTransform ?? activator.transform, baseObject);
 				}
 			}
 			if (HasMaskFlag(EffectType.CreateProjectile))
 			{
-				GameController.Instance.StartCoroutine(ProjectileCreation(activator, baseObject));
+				GameController.Instance.StartCoroutine(ProjectileCreation(activator, baseObject, overrideTransform));
 			}
 			if (HasMaskFlag(EffectType.HealOnUser))
 			{
-				for(int i = 0; i < HealEffects.Length; i++)
+				for(int i = 0; i < HealsOnUser.Length; i++)
 				{
-					HealEffects[i].Activate(activator);
+					HealsOnUser[i].Activate(activator);
 				}
 			}
 			if (HasMaskFlag(EffectType.BuffOnUser))
 			{
-				for(int i = 0; i < BuffsToApply.Length; i++)
+				for (int i = 0; i < BuffsOnUser.Length; i++)
 				{
-					Buff.ApplyBuff(BuffsToApply[i], activator, activator, StackingStyle);
+					Buff.ApplyBuff(BuffsOnUser[i], activator, activator, StackingStyle);
 				}
 			}
+			if (HasMaskFlag(EffectType.CreateRemenants))
+			{
+				for (int i = 0; i < CreatedRemenants.Length; i++)
+				{
+					Remenants.CreateRemenants(baseObject, CreatedRemenants[i], activator, (overrideTransform ?? activator.transform).position);
+				}
+			}
+			return createdFXInstances;
 		}
 
 		#region ProjectileCreation
-		private IEnumerator ProjectileCreation(Entitie activator, CombatObject baseObject)
+		private IEnumerator ProjectileCreation(Entitie activator, CombatObject baseObject, Transform overrideTransform)
 		{
 			for (int i = 0; i < ProjectileInfos.Length; i++)
 			{
@@ -247,7 +284,11 @@ namespace EoE.Combatery
 
 				for (int j = 0; j < ProjectileInfos[i].ExecutionCount; j++)
 				{
-					CreateProjectile(activator, baseObject, ProjectileInfos[i].Projectile);
+					if(overrideTransform)
+						CreateProjectile(activator, overrideTransform, baseObject, ProjectileInfos[i].Projectile);
+					else
+						CreateProjectile(activator, baseObject, ProjectileInfos[i].Projectile);
+
 					if (j < ProjectileInfos[i].ExecutionCount - 1)
 					{
 						float repeatTimer = 0;
@@ -276,6 +317,20 @@ namespace EoE.Combatery
 																spawnOffset
 																);
 			Projectile.CreateProjectile(baseObject, data, activator, direction, activator.actuallWorldPosition + spawnOffset);
+		}
+		private void CreateProjectile(Entitie activator, Transform originTransform, CombatObject baseObject, ProjectileData data)
+		{
+			//Calculate the spawnoffset
+			Vector3 spawnOffset = data.CreateOffsetToCaster.x * originTransform.right + data.CreateOffsetToCaster.y * originTransform.up + data.CreateOffsetToCaster.z * originTransform.forward;
+
+			//First find out what direction the projectile should fly
+			Vector3 direction = CombatObject.CalculateDirection(data.DirectionStyle,
+																data.FallbackDirectionStyle,
+																data.Direction,
+																originTransform,
+																spawnOffset
+																);
+			Projectile.CreateProjectile(baseObject, data, activator, direction, originTransform.transform.position + spawnOffset);
 		}
 		#endregion
 

@@ -309,7 +309,7 @@ namespace EoE
 		}
 		#endregion
 		#region Array Drawing
-		public static bool DrawArray<T>(GUIContent content, ref T[] curValue, SerializedProperty arrayProperty, System.Action<GUIContent, T, SerializedProperty, int> elementBinding, int offSet = 0, GUIContent elementContent = null, bool asHeader = false)
+		public static bool DrawArray<T>(GUIContent content, ref T[] curValue, SerializedProperty arrayProperty, System.Action<GUIContent, T, SerializedProperty, int> elementBinding, GUIContent elementContent = null, int offSet = 0, bool asHeader = false)
 		{
 			bool changed = false;
 			if (curValue == null)
@@ -534,7 +534,7 @@ namespace EoE
 				if (settings.HasMaskFlag(EffectType.FX))
 				{
 					SerializedProperty fxProperty = property.FindPropertyRelative(nameof(settings.FXObjects));
-					DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.FXObjects))), ref settings.FXObjects, fxProperty, DrawCustomFXObject, offSet + 1, new GUIContent(". Effect"));
+					DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.FXObjects))), ref settings.FXObjects, fxProperty, DrawCustomFXObject, new GUIContent(". Effect"), offSet + 1);
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1), false);
 				}
 				//AOE
@@ -548,21 +548,28 @@ namespace EoE
 				if (settings.HasMaskFlag(EffectType.CreateProjectile))
 				{
 					SerializedProperty projectileArrayProperty = property.FindPropertyRelative(nameof(settings.ProjectileInfos));
-					DrawArray<ProjectileInfo>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ProjectileInfos))), ref settings.ProjectileInfos, projectileArrayProperty, DrawProjectileInfo, offSet + 1, new GUIContent(". Projectile"));
+					DrawArray<ProjectileInfo>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ProjectileInfos))), ref settings.ProjectileInfos, projectileArrayProperty, DrawProjectileInfo, new GUIContent(". Projectile"), offSet + 1);
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1), false);
 				}
 				//Heal Effects
 				if (settings.HasMaskFlag(EffectType.HealOnUser))
 				{
-					SerializedProperty healEffectArrayProperty = property.FindPropertyRelative(nameof(settings.HealEffects));
-					DrawArray<HealTargetInfo>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.HealEffects))), ref settings.HealEffects, healEffectArrayProperty, DrawHealTargetInfo, offSet + 1, new GUIContent(". Heal Effect"));
+					SerializedProperty healEffectArrayProperty = property.FindPropertyRelative(nameof(settings.HealsOnUser));
+					DrawArray<HealTargetInfo>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.HealsOnUser))), ref settings.HealsOnUser, healEffectArrayProperty, DrawHealTargetInfo, new GUIContent(". Heal Effect"), offSet + 1);
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1), false);
 				}
 				//Buffs
 				if (settings.HasMaskFlag(EffectType.BuffOnUser))
 				{
-					SerializedProperty buffArrayProperty = property.FindPropertyRelative(nameof(settings.BuffsToApply));
-					ObjectArrayField<Buff>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BuffsToApply))), ref settings.BuffsToApply, buffArrayProperty, new GUIContent(". Buff"), offSet + 1);
+					SerializedProperty buffArrayProperty = property.FindPropertyRelative(nameof(settings.BuffsOnUser));
+					ObjectArrayField<Buff>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BuffsOnUser))), ref settings.BuffsOnUser, buffArrayProperty, new GUIContent(". Buff"), offSet + 1);
+					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1), false);
+				}
+				//Remenants
+				if (settings.HasMaskFlag(EffectType.CreateRemenants))
+				{
+					SerializedProperty remenantsArrayProperty = property.FindPropertyRelative(nameof(settings.CreatedRemenants));
+					DrawArray<RemenantsData>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CreatedRemenants))), ref settings.CreatedRemenants, remenantsArrayProperty, DrawRemenantsInfo, new GUIContent(". Remenant"), offSet + 1);
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1), false);
 				}
 			}
@@ -633,8 +640,35 @@ namespace EoE
 			}
 			if (changed)
 				isDirty = true;
+		}
+		public static void DrawRemenantsInfo(GUIContent content, RemenantsData selfData, SerializedProperty selfProperty, int offSet)
+		{
+			if (selfData == null)
+			{
+				selfData = new RemenantsData();
+				isDirty = true;
+			}
 
-			//&return changed;
+			Foldout(content, selfProperty, offSet);
+
+			if (selfProperty.isExpanded)
+			{
+				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.Duration))), ref selfData.Duration, offSet + 1);
+				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+
+				SerializedProperty effectsProperty = selfProperty.FindPropertyRelative(nameof(selfData.VisualEffects));
+				DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.VisualEffects))), ref selfData.VisualEffects, effectsProperty, DrawCustomFXObject, new GUIContent(". Effect"), offSet + 1);
+
+				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+
+				SerializedProperty startEffectsOpen = selfProperty.FindPropertyRelative(nameof(selfData.StartEffects));
+				ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.StartEffects))), ref selfData.StartEffects, startEffectsOpen, new GUIContent(". Effect"), offSet + 1);
+
+				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+
+				SerializedProperty whileEffectsOpen = selfProperty.FindPropertyRelative(nameof(selfData.WhileEffects));
+				ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.WhileEffects))), ref selfData.WhileEffects, whileEffectsOpen, new GUIContent(". Effect"), offSet + 1);
+			}
 		}
 		public static bool NullableVector3Field(string content, string valueContent, ref Vector3 curValue, ref bool hasValue, int offSet = 0) => NullableVector3Field(new GUIContent(content), new GUIContent(valueContent), ref curValue, ref hasValue, offSet);
 		public static bool NullableVector3Field(GUIContent hasValueContent, GUIContent valueContent, ref Vector3 curValue, ref bool hasValue, int offSet = 0)
@@ -795,7 +829,7 @@ namespace EoE
 					Header("Attack Effects", offSet);
 
 					SerializedProperty attackEffectsProperty = styleProperty.FindPropertyRelative(nameof(style.AttackEffects));
-					DrawArray<AttackActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AttackEffects))), ref style.AttackEffects, attackEffectsProperty, DrawAttackActivationEffect, offSet + 1, new GUIContent(". Effect"));
+					DrawArray<AttackActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AttackEffects))), ref style.AttackEffects, attackEffectsProperty, DrawAttackActivationEffect, new GUIContent(". Effect"), offSet + 1);
 				}
 				string IndexToName()
 				{
@@ -834,15 +868,15 @@ namespace EoE
 					SerializedProperty hitOverridesProperty = settingsProperty.FindPropertyRelative(nameof(settings.ChargeBasedDirectHits));
 					CurMinCharge = settings.MinRequiredCharge;
 					CurMaxCharge = settings.MaximumCharge;
-					DrawArray<ChargeBasedDirectHit>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ChargeBasedDirectHits))), ref settings.ChargeBasedDirectHits, hitOverridesProperty, DrawDirectHitOverride, offSet + 1, new GUIContent(". Charge Based Direct Hit"));
+					DrawArray<ChargeBasedDirectHit>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ChargeBasedDirectHits))), ref settings.ChargeBasedDirectHits, hitOverridesProperty, DrawDirectHitOverride, new GUIContent(". Charge Based Direct Hit"), offSet + 1);
 
 					//FX
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 					SerializedProperty fxProperty = settingsProperty.FindPropertyRelative(nameof(settings.FXObjects));
-					DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.FXObjects))), ref settings.FXObjects, fxProperty, DrawCustomFXObject, offSet + 1);
+					DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.FXObjects))), ref settings.FXObjects, fxProperty, DrawCustomFXObject, new GUIContent(". Effect"), offSet + 1);
 
 					SerializedProperty fxMultipliedProperty = settingsProperty.FindPropertyRelative(nameof(settings.FXObjectsWithMutliplier));
-					DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.FXObjectsWithMutliplier))), ref settings.FXObjectsWithMutliplier, fxMultipliedProperty, DrawCustomFXObject, offSet + 1);
+					DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.FXObjectsWithMutliplier))), ref settings.FXObjectsWithMutliplier, fxMultipliedProperty, DrawCustomFXObject, new GUIContent(". Effect"), offSet + 1);
 
 					//Buffs
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));

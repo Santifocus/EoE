@@ -26,7 +26,7 @@ namespace EoE.Information
 			if (settings.HasSpellPart(SpellPart.Projectile))
 			{
 				SerializedProperty projectileArrayProperty = serializedObject.FindProperty(nameof(settings.ProjectileInfos));
-				DrawArray<ProjectileInfo>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ProjectileInfos))), ref settings.ProjectileInfos, projectileArrayProperty, DrawProjectileInfo, 0, new GUIContent(". Projectile"), true);
+				DrawArray<ProjectileInfo>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ProjectileInfos))), ref settings.ProjectileInfos, projectileArrayProperty, DrawProjectileInfo, new GUIContent(". Projectile"), 0, true);
 			}
 		}
 
@@ -60,7 +60,7 @@ namespace EoE.Information
 
 			//Custom FX Objects
 			SerializedProperty visualCastEffectsProperty = serializedObject.FindProperty(nameof(settings.CastInfo)).FindPropertyRelative(nameof(settings.CastInfo.VisualEffects));
-			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CastInfo.VisualEffects))), ref settings.StartInfo.VisualEffects, visualCastEffectsProperty, DrawCustomFXObject, 1);
+			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CastInfo.VisualEffects))), ref settings.StartInfo.VisualEffects, visualCastEffectsProperty, DrawCustomFXObject, new GUIContent(". Effect"), 1);
 		}
 		private void StartInfoArea()
 		{
@@ -70,7 +70,7 @@ namespace EoE.Information
 			ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartInfo.Effects))), ref settings.StartInfo.Effects, startEffectsProperty, new GUIContent(". Effect"), 1);
 
 			SerializedProperty visualStartEffectProperty = serializedObject.FindProperty(nameof(settings.StartInfo)).FindPropertyRelative(nameof(settings.StartInfo.VisualEffects));
-			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartInfo.VisualEffects))), ref settings.StartInfo.VisualEffects, visualStartEffectProperty, DrawCustomFXObject, 1);
+			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartInfo.VisualEffects))), ref settings.StartInfo.VisualEffects, visualStartEffectProperty, DrawCustomFXObject, new GUIContent(". Effect"), 1);
 		}
 	}
 }

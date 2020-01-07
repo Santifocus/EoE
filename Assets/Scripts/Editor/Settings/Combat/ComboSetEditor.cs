@@ -16,7 +16,7 @@ namespace EoE.Combatery
 			DrawInFoldoutHeader(new GUIContent("Base Settings"), ref BaseSettingsOpen, BaseSettingsArea);
 
 			SerializedProperty comboDataProperty = serializedObject.FindProperty(nameof(settings.ComboData));
-			DrawArray<ComboInfo>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ComboData))), ref settings.ComboData, comboDataProperty, DrawComboInfo, 0, new GUIContent(". Combo Info"), true);
+			DrawArray<ComboInfo>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ComboData))), ref settings.ComboData, comboDataProperty, DrawComboInfo, new GUIContent(". Combo Info"), 0, true);
 			
 			//Check if the array needs to be resorted
 			if (isDirty)
@@ -96,12 +96,12 @@ namespace EoE.Combatery
 				//Heal effects
 				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 				SerializedProperty healEffectsProperty = effectProperty.FindPropertyRelative(nameof(settings.Effect.HealEffects));
-				DrawArray<HealTargetInfo>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effect.HealEffects))), ref settings.Effect.HealEffects, healEffectsProperty, DrawHealTargetInfo, offSet + 1, new GUIContent(". Heal Effect"));
+				DrawArray<HealTargetInfo>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effect.HealEffects))), ref settings.Effect.HealEffects, healEffectsProperty, DrawHealTargetInfo, new GUIContent(". Heal Effect"), offSet + 1);
 				
 				//FX
 				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 				SerializedProperty comboFXProperty = effectProperty.FindPropertyRelative(nameof(settings.Effect.EffectsTillComboEnds));
-				DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effect.EffectsTillComboEnds))), ref settings.Effect.EffectsTillComboEnds, comboFXProperty, DrawCustomFXObject, offSet + 1, new GUIContent(". Effect"));
+				DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effect.EffectsTillComboEnds))), ref settings.Effect.EffectsTillComboEnds, comboFXProperty, DrawCustomFXObject, new GUIContent(". Effect"), offSet + 1);
 
 				//Buffs
 				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));

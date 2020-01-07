@@ -11,13 +11,11 @@ namespace EoE.Combatery
 		private static bool DirectionSettingsOpen;
 		private static bool FlightSettingsOpen;
 		private static bool CollisionSettingsOpen;
-		private static bool RemenantsSettingsOpen;
 		protected override void CustomInspector()
 		{
 			DrawInFoldoutHeader(new GUIContent("Direction Settings"), ref DirectionSettingsOpen, DirectionSettingsArea);
 			DrawInFoldoutHeader(new GUIContent("Flight Settings"), ref FlightSettingsOpen, FlightSettingsArea);
 			DrawInFoldoutHeader(new GUIContent("Collision Settings"), ref CollisionSettingsOpen, CollisionSettingsArea);
-			DrawInFoldoutHeader(new GUIContent("Remenants Settings"), ref RemenantsSettingsOpen, RemenantsSettingsArea);
 		}
 
 		private void DirectionSettingsArea()
@@ -46,18 +44,13 @@ namespace EoE.Combatery
 
 			LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 
-			SerializedProperty flightEffectsProperty = serializedObject.FindProperty(nameof(settings.VisualStartEffects));
-			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.VisualStartEffects))), ref settings.VisualStartEffects, flightEffectsProperty, DrawCustomFXObject, 1);
+			SerializedProperty startEffectsProperty = serializedObject.FindProperty(nameof(settings.StartEffects));
+			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartEffects))), ref settings.StartEffects, startEffectsProperty, DrawActivationEffect, new GUIContent(". Effect"), 1);
 
 			LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 
-			SerializedProperty startEffectsOpen = serializedObject.FindProperty(nameof(settings.StartEffects));
-			ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartEffects))), ref settings.StartEffects, startEffectsOpen, new GUIContent(". Effect"), 1);
-
-			LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
-
-			SerializedProperty whileEffectsOpen = serializedObject.FindProperty(nameof(settings.WhileEffects));
-			ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WhileEffects))), ref settings.WhileEffects, whileEffectsOpen, new GUIContent(". Effect"), 1);
+			SerializedProperty whileEffectsProperty = serializedObject.FindProperty(nameof(settings.WhileEffects));
+			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WhileEffects))), ref settings.WhileEffects, whileEffectsProperty, DrawActivationEffect, new GUIContent(". Effect"), 1);
 		}
 		private void CollisionSettingsArea()
 		{
@@ -74,41 +67,11 @@ namespace EoE.Combatery
 				BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CollisionEffectsOnBounce))), ref settings.CollisionEffectsOnBounce, 2);
 			}
 
-			SerializedProperty collisionEffectsProperty = serializedObject.FindProperty(nameof(settings.VisualCollisionEffects));
-			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.VisualCollisionEffects))), ref settings.VisualCollisionEffects, collisionEffectsProperty, DrawCustomFXObject, 1);
-
-			LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
-			//AOE Effects
-			SerializedProperty collisionEffectsAOEProperty = serializedObject.FindProperty(nameof(settings.CollisionEffectsAOE));
-			ObjectArrayField<EffectAOE>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CollisionEffectsAOE))), ref settings.CollisionEffectsAOE, collisionEffectsAOEProperty, new GUIContent(". Effect"), 1);
+			SerializedProperty collisionEffectsProperty = serializedObject.FindProperty(nameof(settings.CollisionEffects));
+			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CollisionEffects))), ref settings.CollisionEffects, collisionEffectsProperty, DrawActivationEffect, new GUIContent(". Effect"), 1);
 
 			//Direct hit effects
 			ObjectField<EffectSingle>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DirectHit))), ref settings.DirectHit, 1);
-		}
-		private void RemenantsSettingsArea()
-		{
-			ProjectileData settings = target as ProjectileData;
-			BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CreatesRemenants))), ref settings.CreatesRemenants, 1);
-			if (settings.CreatesRemenants)
-			{
-				if (settings.Remenants == null)
-					settings.Remenants = new ProjectileRemenants();
-
-				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
-
-				SerializedProperty effectsProperty = serializedObject.FindProperty(nameof(settings.Remenants)).FindPropertyRelative(nameof(settings.Remenants.VisualEffects));
-				DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Remenants.VisualEffects))), ref settings.Remenants.VisualEffects, effectsProperty, DrawCustomFXObject, 2);
-
-				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
-
-				SerializedProperty startEffectsOpen = serializedObject.FindProperty(nameof(settings.Remenants)).FindPropertyRelative(nameof(settings.Remenants.StartEffects));
-				ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Remenants.StartEffects))), ref settings.Remenants.StartEffects, startEffectsOpen, new GUIContent(". Effect"), 2);
-
-				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
-
-				SerializedProperty whileEffectsOpen = serializedObject.FindProperty(nameof(settings.Remenants)).FindPropertyRelative(nameof(settings.Remenants.WhileEffects));
-				ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Remenants.WhileEffects))), ref settings.Remenants.WhileEffects, whileEffectsOpen, new GUIContent(". Effect"), 2);
-			}
 		}
 	}
 }

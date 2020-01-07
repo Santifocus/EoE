@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.11653908, g: 0.11864976, b: 0.11893117, a: 1}
+  m_IndirectSpecularColor: {r: 0.11653923, g: 0.11864985, b: 0.11893123, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4646,6 +4646,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameSettings: {fileID: 11400000, guid: eb894c191e0767e428687e3c68a86e59, type: 2}
   projectilePrefab: {fileID: 7949894643786082984, guid: b161c93739aa6b94b9bc8bb2974557a7,
+    type: 3}
+  remenantsPrefab: {fileID: 9023344140537841210, guid: 2f5a03f3649921b44b950a3bc49d0464,
     type: 3}
   soulDropPrefab: {fileID: 4063212132472539359, guid: a354723b262e2cd4ab866dc03a384c10,
     type: 3}

@@ -20,7 +20,7 @@ namespace EoE.Information
 			DrawInFoldoutHeader("Buff Settings", ref BuffSettingsOpen, BuffSettingsArea);
 
 			EffectAOE settings = target as EffectAOE;
-			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effects))), ref settings.Effects, serializedObject.FindProperty(nameof(settings.Effects)), DrawCustomFXObject, 0, null, true);
+			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effects))), ref settings.Effects, serializedObject.FindProperty(nameof(settings.Effects)), DrawCustomFXObject, new GUIContent(". Effect"), 0, true);
 		}
 
 		private void BaseSettingsArea()

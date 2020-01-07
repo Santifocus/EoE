@@ -118,7 +118,7 @@ namespace EoE.Information
 			PlayerSettings settings = target as PlayerSettings;
 
 			SerializedProperty startItemsArrayProperty = serializedObject.FindProperty(nameof(settings.StartItems));
-			DrawArray<PlayerSettings.StartItem>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartItems))), ref settings.StartItems, startItemsArrayProperty, DrawStartItem, 1, new GUIContent(". Start Item"));
+			DrawArray<PlayerSettings.StartItem>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartItems))), ref settings.StartItems, startItemsArrayProperty, DrawStartItem, new GUIContent(". Start Item"), 1);
 			IntField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.InventorySize))), ref settings.InventorySize, 1);
 		}
 		private void DrawStartItem(GUIContent content, PlayerSettings.StartItem settings, SerializedProperty property, int offSet)

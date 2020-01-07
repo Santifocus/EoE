@@ -11,7 +11,7 @@ namespace EoE.Information
 		{
 			DropTable settings = target as DropTable;
 			SerializedProperty dropTableArrayProperty = serializedObject.FindProperty(nameof(settings.PossibleDrops));
-			DrawArray<DropTable.ItemDropData>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.PossibleDrops))), ref settings.PossibleDrops, dropTableArrayProperty, DrawItemDropData, 0, new GUIContent(". Drop"), true);
+			DrawArray<DropTable.ItemDropData>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.PossibleDrops))), ref settings.PossibleDrops, dropTableArrayProperty, DrawItemDropData, new GUIContent(". Drop"), 0, true);
 		}
 		private void DrawItemDropData(GUIContent content, DropTable.ItemDropData settings, SerializedProperty property, int offSet)
 		{

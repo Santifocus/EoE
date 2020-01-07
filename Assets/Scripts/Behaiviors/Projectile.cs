@@ -22,7 +22,6 @@ namespace EoE.Combatery
 
 		private float delayToWhileCast;
 		private bool isDead;
-		private bool isRemenants;
 
 		private List<FXInstance> boundEffects = new List<FXInstance>();
 
@@ -48,7 +47,7 @@ namespace EoE.Combatery
 			projectile.remainingLifeTime = info.Duration;
 
 			projectile.SetupCollider();
-			projectile.CreateFX(info.VisualStartEffects, true);
+			projectile.ActivateActivationEffects(info.StartEffects, true);
 
 			return projectile;
 		}
@@ -79,51 +78,27 @@ namespace EoE.Combatery
 			delayToWhileCast -= Time.deltaTime;
 			remainingLifeTime -= Time.deltaTime;
 
-			if (isRemenants)
-			{
-				if (delayToWhileCast <= 0)
-				{
-					delayToWhileCast += GameController.CurrentGameSettings.WhileEffectTickSpeed;
-					ActivateSpellEffects(info.Remenants.WhileEffects);
-				}
-			}
-			else
-			{
-				if (bounceCooldown > 0)
-					bounceCooldown -= Time.deltaTime;
+			if (bounceCooldown > 0)
+				bounceCooldown -= Time.deltaTime;
 
-				if (delayToWhileCast <= 0)
-				{
-					delayToWhileCast += GameController.CurrentGameSettings.WhileEffectTickSpeed;
-					ActivateSpellEffects(info.WhileEffects);
-				}
+			if (delayToWhileCast <= 0)
+			{
+				delayToWhileCast += GameController.CurrentGameSettings.WhileEffectTickSpeed;
+				ActivateActivationEffects(info.WhileEffects, true);
 			}
 
 			if (remainingLifeTime < 0)
 			{
-				if (isRemenants)
-				{
-					Destroy(gameObject);
-				}
-				else
-				{
-					FinishProjectileFlight();
-				}
+				Destroy(gameObject);
 			}
 		}
 		private void FixedUpdate()
 		{
-			if (!isRemenants)
-			{
-				transform.forward = body.velocity.normalized;
-				body.velocity = transform.forward * info.FlightSpeed;
-			}
+			transform.forward = body.velocity.normalized;
+			body.velocity = transform.forward * info.FlightSpeed;
 		}
 		private void OnTriggerEnter(Collider other)
 		{
-			if (isRemenants)
-				return;
-
 			Entitie hit = other.GetComponent<Entitie>();
 			if (info.DirectHit != null)
 			{
@@ -135,7 +110,7 @@ namespace EoE.Combatery
 		}
 		private void OnCollisionEnter(Collision collision)
 		{
-			if (bounceCooldown > 0 || isRemenants)
+			if (bounceCooldown > 0)
 				return;
 
 			if ((info.DestroyOnEntiteBounce) && (collision.gameObject.layer == ConstantCollector.ENTITIE_LAYER))
@@ -160,8 +135,7 @@ namespace EoE.Combatery
 
 			if (info.CollisionEffectsOnBounce)
 			{
-				ActivateSpellEffects(info.CollisionEffectsAOE);
-				CreateFX(info.VisualCollisionEffects);
+				ActivateActivationEffects(info.CollisionEffects, false);
 			}
 		}
 		private void DirectTargetHit(Entitie hit)
@@ -187,53 +161,24 @@ namespace EoE.Combatery
 		}
 		private void FinishProjectileFlight()
 		{
-			if (isDead || isRemenants)
+			if (isDead)
 				return;
 
-			ActivateSpellEffects(info.CollisionEffectsAOE);
-			CreateFX(info.VisualCollisionEffects);
-			if (info.CreatesRemenants)
-			{
-				isRemenants = true;
-				body.velocity = Vector3.zero;
-				StopBoundParticles();
-				ActivateSpellEffects(info.Remenants.StartEffects);
-
-				for (int i = 0; i < info.Remenants.VisualEffects.Length; i++)
-				{
-					FXInstance instance = FXManager.PlayFX(info.Remenants.VisualEffects[i], transform, false);
-					boundEffects.Add(instance);
-				}
-
-				this.remainingLifeTime = info.Remenants.Duration;
-
-				if (info.Remenants.TryGroundRemenants)
-				{
-					Fall();
-				}
-			}
-			else
-			{
-				body.velocity = Vector3.zero;
-				isDead = true;
-				Destroy(gameObject);
-			}
+			ActivateActivationEffects(info.CollisionEffects, false);
+			body.velocity = Vector3.zero;
+			isDead = true;
+			Destroy(gameObject);
 		}
-		private void ActivateSpellEffects(EffectAOE[] effects)
+		private void ActivateActivationEffects(ActivationEffect[] activationEffects, bool binding)
 		{
-			for (int i = 0; i < effects.Length; i++)
-				effects[i].Activate(creator, transform, baseData);
-		}
-		private void CreateFX(CustomFXObject[] effects, bool bind = false)
-		{
-			for (int i = 0; i < effects.Length; i++)
+			for (int i = 0; i < activationEffects.Length; i++)
 			{
-				FXInstance instance = FXManager.PlayFX(effects[i], transform, false, 1);
-				if (bind)
-					boundEffects.Add(instance);
+				FXInstance[] fxInstances = activationEffects[i].Activate(creator, baseData, transform);
+				if (binding)
+					boundEffects.AddRange(fxInstances);
 			}
 		}
-		private void StopBoundParticles()
+		private void StopBoundFX()
 		{
 			for (int i = 0; i < boundEffects.Count; i++)
 			{
@@ -241,20 +186,9 @@ namespace EoE.Combatery
 			}
 			boundEffects = new List<FXInstance>();
 		}
-		public void Fall()
-		{
-			entitieColl.enabled = entitieTriggerColl.enabled = false;
-
-			terrainColl.enabled = true;
-			terrainColl.material = null;
-			terrainColl.radius = 0.5f;
-
-			body.useGravity = true;
-			body.constraints = ~RigidbodyConstraints.FreezePositionY;
-		}
 		private void OnDestroy()
 		{
-			StopBoundParticles();
+			StopBoundFX();
 			AllProjectiles.Remove(this);
 		}
 	}

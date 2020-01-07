@@ -16,7 +16,7 @@ namespace EoE.Information
 
 			BasicUltimate settings = (target as BasicUltimate);
 			SerializedProperty activationEffectsProperty = serializedObject.FindProperty(nameof(settings.ActivationEffects));
-			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ActivationEffects))), ref settings.ActivationEffects, activationEffectsProperty, DrawActivationEffect, 0, new GUIContent(". Activation Effect"), true);
+			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ActivationEffects))), ref settings.ActivationEffects, activationEffectsProperty, DrawActivationEffect, new GUIContent(". Activation Effect"), 0, true);
 		}
 
 	}
