@@ -9,17 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c475015d82123d4c9d421d67f39e273, type: 3}
-  m_Name: Indestructible
+  m_Script: {fileID: 11500000, guid: 7b77b7145a3aa2f46aac58517d25ca6e, type: 3}
+  m_Name: ThorCutBasis
   m_EditorClassIdentifier: 
-  Name: Indestructible
-  Quality: 2
-  Permanent: 0
-  BuffTime: 1
-  Icon: {fileID: 0}
-  Effects: []
-  CustomEffects:
-    ApplyMoveStun: 0
-    Invincible: 1
-  DOTs: []
-  FXEffects: []
+  BaseDamage: 15
+  BaseHealthCost: 0
+  BaseManaCost: 0
+  BaseEnduranceCost: 0
+  BaseKnockback: 0
+  BaseCritChance: 0
