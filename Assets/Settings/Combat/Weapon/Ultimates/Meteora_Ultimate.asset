@@ -210,6 +210,35 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+      - AtAnimationPoint: 1
+        Effect:
+          ChanceToActivate: 1
+          ContainedEffectType: 64
+          ImpulseVelocity: 5
+          ImpulseVelocityFallOffTime: 0.5
+          ImpulseVelocityDirection: 2
+          ImpulseVelocityFallbackDirection: 1
+          ImpulseDirectionBase: 1
+          FXObjects: []
+          AOEEffects: []
+          ProjectileInfos: []
+          HealsOnUser: []
+          StackingStyle: 2
+          BuffsOnUser: []
+          CreatedRemenants:
+          - Duration: 5
+            VisualEffects:
+            - FX: {fileID: 0}
+              HasPositionOffset: 0
+              PositionOffset: {x: 0, y: 0, z: 0}
+              HasRotationOffset: 0
+              RotationOffset: {x: 0, y: 0, z: 0}
+              HasCustomScale: 0
+              CustomScale: {x: 1, y: 1, z: 1}
+            StartEffects: []
+            WhileEffects:
+            - {fileID: 0}
+            TryGroundRemenants: 1
     PartsMaxDelays:
     - 0
     - 0
