@@ -89,7 +89,7 @@ namespace EoE.Combatery
 
 			if (remainingLifeTime < 0)
 			{
-				Destroy(gameObject);
+				FinishProjectileFlight();
 			}
 		}
 		private void FixedUpdate()
