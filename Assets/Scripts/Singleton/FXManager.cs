@@ -22,6 +22,10 @@ namespace EoE
 		}
 		private void OnDestroy()
 		{
+			Unsubscribe();
+		}
+		private void Unsubscribe()
+		{
 			EventManager.PlayerTookDamageEvent -= PlayerTookDamage;
 			EventManager.PlayerCausedDamageEvent -= PlayerCausedDamage;
 			EventManager.PlayerLevelupEvent -= PlayerLevelUp;
@@ -70,6 +74,7 @@ namespace EoE
 			{
 				PlayFX(playerSettings.EffectsOnPlayerDeath[i], Player.Instance.transform, true);
 			}
+			Unsubscribe();
 		}
 		private void PlayerCausedDamage(Entitie receiver, bool wasCrit)
 		{

@@ -7,7 +7,7 @@ namespace EoE.Combatery
 {
 	public enum MultiplicationType { FlatValue = 1, Curve = 2 }
 	[System.Flags] public enum AttackStylePart { StandAttack = (1 << 0), RunAttack = (1 << 1), JumpAttack = (1 << 2), RunJumpAttack = (1 << 3) }
-	[System.Flags] public enum AttackChargeEffectMask { Damage = (1 << 0), Knockback = (1 << 1), CritChance = (1 << 2), ComboWorth = (1 << 3), DirectHit = (1 << 4) }
+	[System.Flags] public enum AttackChargeEffectMask { Damage = (1 << 0), Knockback = (1 << 1), CritChance = (1 << 2), ComboWorth = (1 << 3) }
 	public enum AttackStylePartFallback { None = (0), StandAttack = (1 << 0), RunAttack = (1 << 1), JumpAttack = (1 << 2), RunJumpAttack = (1 << 3) }
 	public class Weapon : CombatObject
 	{

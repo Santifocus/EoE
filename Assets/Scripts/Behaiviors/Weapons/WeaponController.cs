@@ -457,13 +457,21 @@ namespace EoE.Combatery
 		private void OnEntitieHit(Entitie hitEntitie, Vector3 direction, Vector3 hitPos)
 		{
 			//First calculate the generall damage apply
-			float damage = ActiveAttackStyle.DamageMultiplier * weaponInfo.BaseDamage;
-			bool isCrit = Utils.Chance01(ActiveAttackStyle.CritChanceMultiplier * weaponInfo.BaseCritChance);
-			float? knockbackAmount = ActiveAttackStyle.KnockbackMultiplier * weaponInfo.BaseKnockback;
+			float chargeMultiplier = ActiveAttackStyle.NeedsCharging ? curChargeMultiplier : 1;
+
+			float damageMultiplier = (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.Damage) ? chargeMultiplier : 1);
+			float critChanceMultiplier = (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.CritChance) ? chargeMultiplier : 1);
+			float knockbackMultiplier = (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.Knockback) ? chargeMultiplier : 1);
+
+			float damage = ActiveAttackStyle.DamageMultiplier * weaponInfo.BaseDamage * damageMultiplier;
+			bool isCrit = Utils.Chance01(ActiveAttackStyle.CritChanceMultiplier * weaponInfo.BaseCritChance * critChanceMultiplier);
+			float? knockbackAmount = ActiveAttackStyle.KnockbackMultiplier * weaponInfo.BaseKnockback * knockbackMultiplier;
+
 			knockbackAmount = knockbackAmount.Value > 0 ? knockbackAmount : null;
 			ElementType attackElement = ActiveAttackStyle.OverrideElement ? ActiveAttackStyle.OverridenElement : weaponInfo.WeaponElement;
+			CauseType attackCauseType = ActiveAttackStyle.OverrideCauseType ? ActiveAttackStyle.OverridenCauseType : weaponInfo.WeaponCauseType;
 
-			hitEntitie.ChangeHealth(new ChangeInfo(Player.Instance, CauseType.Physical, attackElement, TargetStat.Health, hitPos, direction, damage, isCrit, knockbackAmount));
+			hitEntitie.ChangeHealth(new ChangeInfo(Player.Instance, attackCauseType, attackElement, TargetStat.Health, hitPos, direction, damage, isCrit, knockbackAmount));
 
 			//Now invoke the custom effects
 			ActivateSingleHitEffects(hitEntitie, direction, hitPos);
@@ -485,7 +493,7 @@ namespace EoE.Combatery
 			if (ActiveAttackStyle.DirectHit)
 				activatedDirectHits.Add(ActiveAttackStyle.DirectHit);
 
-			if (ActiveAttackStyle.NeedsCharging && ActiveAttackStyle.ChargeSettings.ChargeBasedDirectHits.Length > 0)
+			if (ActiveAttackStyle.NeedsCharging)
 			{
 				for (int i = 0; i < ActiveAttackStyle.ChargeSettings.ChargeBasedDirectHits.Length; i++)
 				{

@@ -18,12 +18,12 @@ namespace EoE.UI
 		private void Start()
 		{
 			gameObject.SetActive(false);
+			(transform as RectTransform).anchoredPosition = Vector2.zero;
 			EventManager.PlayerDiedEvent += Show;
 		}
 		public void Show(Entities.Entitie killer)
 		{
 			gameObject.SetActive(true);
-			(transform as RectTransform).anchoredPosition = Vector2.zero;
 			StartCoroutine(StartFadeIn());
 		}
 		private void OnDestroy()

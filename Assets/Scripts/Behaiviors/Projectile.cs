@@ -94,7 +94,9 @@ namespace EoE.Combatery
 		}
 		private void FixedUpdate()
 		{
-			transform.forward = body.velocity.normalized;
+			float speed = body.velocity.magnitude;
+			if(speed > 0)
+				transform.forward = body.velocity / speed;
 			body.velocity = transform.forward * info.FlightSpeed;
 		}
 		private void OnTriggerEnter(Collider other)

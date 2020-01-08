@@ -654,6 +654,7 @@ namespace EoE
 			if (selfProperty.isExpanded)
 			{
 				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.Duration))), ref selfData.Duration, offSet + 1);
+				BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.TryGroundRemenants))), ref selfData.TryGroundRemenants, offSet + 1);
 				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 
 				SerializedProperty effectsProperty = selfProperty.FindPropertyRelative(nameof(selfData.VisualEffects));

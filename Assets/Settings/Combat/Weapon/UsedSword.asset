@@ -73,7 +73,7 @@ MonoBehaviour:
         FXObjects: []
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
-      DamageMultiplier: 1
+      DamageMultiplier: 1.5
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 0.5
@@ -163,7 +163,7 @@ MonoBehaviour:
         FXObjects: []
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
-      DamageMultiplier: 1
+      DamageMultiplier: 1.8
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
@@ -245,7 +245,7 @@ MonoBehaviour:
         AnimationChargeStartpoint: 0.45
         ApplyMoveStunWhileCharging: 0
         WaitAtFullChargeForRelease: 1
-        ChargeTime: 2.5
+        ChargeTime: 2
         StartCharge: 1
         MaximumCharge: 2.5
         MinRequiredCharge: 1
@@ -282,12 +282,12 @@ MonoBehaviour:
           HasCustomScale: 0
           CustomScale: {x: 1, y: 1, z: 1}
         BuffOnUserWhileCharging: []
-      DamageMultiplier: 1.2
+      DamageMultiplier: 2.2
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 2
-      KnockbackMultiplier: 1
-      CritChanceMultiplier: 1
+      KnockbackMultiplier: 4
+      CritChanceMultiplier: 0
       CollisionMask: -1
       StopOnCollisionMask: 0
       DirectHit: {fileID: 0}
@@ -479,12 +479,12 @@ MonoBehaviour:
         FXObjects: []
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
-      DamageMultiplier: 1.2
+      DamageMultiplier: 2.25
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
-      KnockbackMultiplier: 1
-      CritChanceMultiplier: 1
+      KnockbackMultiplier: 2
+      CritChanceMultiplier: 0
       CollisionMask: -1
       StopOnCollisionMask: -1
       DirectHit: {fileID: 11400000, guid: bfb7e1ecec740634fb4282d888a3b9ed, type: 2}
@@ -573,12 +573,12 @@ MonoBehaviour:
         FXObjects: []
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
-      DamageMultiplier: 1.4
+      DamageMultiplier: 3
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1.4
-      KnockbackMultiplier: 5
-      CritChanceMultiplier: 1
+      KnockbackMultiplier: 6.5
+      CritChanceMultiplier: 0
       CollisionMask: -1
       StopOnCollisionMask: -1
       DirectHit: {fileID: 11400000, guid: ef39d8966b001e245a7f7d4cf21cef44, type: 2}

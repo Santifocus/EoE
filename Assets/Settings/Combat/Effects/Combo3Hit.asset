@@ -15,9 +15,9 @@ MonoBehaviour:
   AffectedTargets: 4
   DamageElement: 1
   CauseType: 0
-  DamageMultiplier: 1
+  DamageMultiplier: 0
   CritChanceMultiplier: 0
-  KnockbackMultiplier: 4
+  KnockbackMultiplier: 0
   KnockbackOrigin: 2
   KnockbackDirection: 1
   KnockbackAxisMultiplier: {x: 1, y: 1, z: 1}
