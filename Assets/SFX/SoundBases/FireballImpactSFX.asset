@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: ImpactFire
   clip: {fileID: 8300000, guid: 277fb53c9dfd2ab499ab390b24041bc2, type: 3}
-  audioGroup: {fileID: 0}
+  audioGroup: {fileID: 24300002, guid: b8b319c0096b4d34196070be7e374c0c, type: 2}
   Loop: 0
   priority: 128
   pitch: 1
   volume: 0.6
   spatialBlend: 0.9
   scaleStyle: 0
+  soundCategory: 0

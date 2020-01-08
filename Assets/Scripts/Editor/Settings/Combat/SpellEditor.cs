@@ -61,6 +61,7 @@ namespace EoE.Information
 			//Custom FX Objects
 			SerializedProperty visualCastEffectsProperty = serializedObject.FindProperty(nameof(settings.CastInfo)).FindPropertyRelative(nameof(settings.CastInfo.VisualEffects));
 			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CastInfo.VisualEffects))), ref settings.StartInfo.VisualEffects, visualCastEffectsProperty, DrawCustomFXObject, new GUIContent(". Effect"), 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CastInfo.WhileTickTime))), ref settings.CastInfo.WhileTickTime, 1);
 		}
 		private void StartInfoArea()
 		{

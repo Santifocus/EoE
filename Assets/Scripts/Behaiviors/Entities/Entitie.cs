@@ -859,9 +859,9 @@ namespace EoE.Entities
 						goto StoppedSpell;
 					}
 
-					if (effectTick > GameController.CurrentGameSettings.WhileEffectTickSpeed)
+					if (effectTick > spell.CastInfo.WhileTickTime)
 					{
-						effectTick -= GameController.CurrentGameSettings.WhileEffectTickSpeed;
+						effectTick -= spell.CastInfo.WhileTickTime;
 						for (int i = 0; i < spell.CastInfo.WhileEffects.Length; i++)
 						{
 							spell.CastInfo.WhileEffects[i].Activate(this, transform, spell);

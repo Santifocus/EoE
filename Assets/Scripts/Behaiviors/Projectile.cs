@@ -41,7 +41,7 @@ namespace EoE.Combatery
 			projectile.transform.forward = direction;
 			projectile.body.velocity = direction * info.FlightSpeed;
 
-			projectile.delayToWhileCast = GameController.CurrentGameSettings.WhileEffectTickSpeed;
+			projectile.delayToWhileCast = info.WhileTickTime;
 
 			projectile.remainingBounces = info.Bounces;
 			projectile.remainingLifeTime = info.Duration;
@@ -83,7 +83,7 @@ namespace EoE.Combatery
 
 			if (delayToWhileCast <= 0)
 			{
-				delayToWhileCast += GameController.CurrentGameSettings.WhileEffectTickSpeed;
+				delayToWhileCast += info.WhileTickTime;
 				ActivateActivationEffects(info.WhileEffects, true);
 			}
 

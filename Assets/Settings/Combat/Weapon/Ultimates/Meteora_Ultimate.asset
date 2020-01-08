@@ -238,6 +238,7 @@ MonoBehaviour:
             StartEffects: []
             WhileEffects:
             - {fileID: 11400000, guid: a54c289df8dd0824bb8b6900336b1e3d, type: 2}
+            WhileTickTime: 0.1
             TryGroundRemenants: 1
     PartsMaxDelays:
     - 0

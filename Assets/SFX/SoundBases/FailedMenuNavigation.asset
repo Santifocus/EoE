@@ -15,8 +15,10 @@ MonoBehaviour:
   soundName: FailedMenuNavigation
   clip: {fileID: 8300000, guid: 7e59b70cda0b8c846957fb865c25cfbd, type: 3}
   audioGroup: {fileID: 24300002, guid: b8b319c0096b4d34196070be7e374c0c, type: 2}
+  Loop: 0
   priority: 128
   pitch: 1
   volume: 1
   spatialBlend: 0
   scaleStyle: 1
+  soundCategory: 0

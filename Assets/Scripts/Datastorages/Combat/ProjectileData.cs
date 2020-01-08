@@ -15,6 +15,7 @@ namespace EoE.Combatery
 		public Vector3 CreateOffsetToCaster = Vector3.forward;
 		public ActivationEffect[] StartEffects = new ActivationEffect[0];
 		public ActivationEffect[] WhileEffects = new ActivationEffect[0];
+		public float WhileTickTime = 0.1f;
 
 		//Collision
 		public float TerrainHitboxSize = 0.5f;

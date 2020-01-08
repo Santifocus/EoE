@@ -21,3 +21,4 @@ MonoBehaviour:
   volume: 1
   spatialBlend: 0.75
   scaleStyle: 1
+  soundCategory: 0

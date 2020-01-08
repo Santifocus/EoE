@@ -15,8 +15,10 @@ MonoBehaviour:
   soundName: LevelUpSound
   clip: {fileID: 8300000, guid: 33360798af1d6cf4eb2f2cc4cb6901bd, type: 3}
   audioGroup: {fileID: 24300002, guid: b8b319c0096b4d34196070be7e374c0c, type: 2}
+  Loop: 0
   priority: 128
   pitch: 1
   volume: 1
   spatialBlend: 0.3
   scaleStyle: 0
+  soundCategory: 0

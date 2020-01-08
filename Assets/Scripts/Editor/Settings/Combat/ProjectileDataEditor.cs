@@ -51,6 +51,7 @@ namespace EoE.Combatery
 
 			SerializedProperty whileEffectsProperty = serializedObject.FindProperty(nameof(settings.WhileEffects));
 			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WhileEffects))), ref settings.WhileEffects, whileEffectsProperty, DrawActivationEffect, new GUIContent(". Effect"), 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WhileTickTime))), ref settings.WhileTickTime, 1);
 		}
 		private void CollisionSettingsArea()
 		{

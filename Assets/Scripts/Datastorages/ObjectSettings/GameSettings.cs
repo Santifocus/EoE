@@ -59,7 +59,6 @@ namespace EoE.Information
 		public float CritDamageMultiplier = 2;
 		public float SecondsPerEntitieHealthRegen = 0.5f;
 		public float ItemDropRandomVelocityStrenght = 2;
-		public float WhileEffectTickSpeed = 0.1f;
 
 		//CurrencySettings
 		public float ItemSellMultiplier = 0.70f;

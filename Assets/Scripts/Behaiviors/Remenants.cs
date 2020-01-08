@@ -24,7 +24,7 @@ namespace EoE.Combatery
 			newRemenants.creator = creator;
 
 			newRemenants.transform.position = spawnPos;
-			newRemenants.delayToWhileCast = GameController.CurrentGameSettings.WhileEffectTickSpeed;
+			newRemenants.delayToWhileCast = info.WhileTickTime;
 
 			newRemenants.ActivateAOEEffects(info.StartEffects);
 			newRemenants.CreateFX(info.VisualEffects, true);
@@ -42,7 +42,7 @@ namespace EoE.Combatery
 
 			if (delayToWhileCast <= 0)
 			{
-				delayToWhileCast += GameController.CurrentGameSettings.WhileEffectTickSpeed;
+				delayToWhileCast += info.WhileTickTime;
 				ActivateAOEEffects(info.WhileEffects);
 			}
 

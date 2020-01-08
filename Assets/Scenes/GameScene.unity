@@ -13019,7 +13019,7 @@ MonoBehaviour:
   - ItemIconDisplay: {fileID: 1448250054}
     ItemCooldownDisplayShadow: {fileID: 581043501}
     ItemCountDisplay: {fileID: 2008900328}
-    ItemCooldownDisplayText: {fileID: 2008900328}
+    ItemCooldownDisplayText: {fileID: 1776459646}
   - ItemIconDisplay: {fileID: 976526315}
     ItemCooldownDisplayShadow: {fileID: 1166005070}
     ItemCountDisplay: {fileID: 1329527720}

@@ -183,6 +183,7 @@ namespace EoE.Combatery
 		public CustomFXObject[] VisualEffects = new CustomFXObject[0];
 		public EffectAOE[] StartEffects = new EffectAOE[0];
 		public EffectAOE[] WhileEffects = new EffectAOE[0];
+		public float WhileTickTime = 0.1f;
 		public bool TryGroundRemenants = true;
 	}
 	[System.Serializable]

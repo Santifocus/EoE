@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: SacredCircleSpell
   m_EditorClassIdentifier: 
   BaseDamage: 14
+  BaseHealthCost: 0
   BaseManaCost: 10
   BaseEnduranceCost: 0
   BaseKnockback: 5
@@ -41,6 +42,7 @@ MonoBehaviour:
     StartEffects: []
     WhileEffects:
     - {fileID: 11400000, guid: ba44429a7ba4fd840a9133d6e8c55966, type: 2}
+    WhileTickTime: 0.3
   StartInfo:
     VisualEffects:
     - FX: {fileID: 11400000, guid: d51ee1224ea2f3545a6d3018c4b11c1e, type: 2}
