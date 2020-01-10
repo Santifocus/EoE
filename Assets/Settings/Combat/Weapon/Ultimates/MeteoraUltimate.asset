@@ -48,8 +48,7 @@ MonoBehaviour:
     ProjectileInfos: []
     HealsOnUser: []
     StackingStyle: 2
-    BuffsOnUser:
-    - {fileID: 11400000, guid: d8eb7d4e7fad95d4697760e4d0ea7392, type: 2}
+    BuffsOnUser: []
     CreatedRemenants: []
   AttackData:
     AttackSequenceParts:
@@ -88,7 +87,8 @@ MonoBehaviour:
       ChargeSettings:
         EffectMask: 3
         AnimationChargeStartpoint: 0.1
-        ApplyMoveStunWhileCharging: 0
+        StopMovementWhileCharging: 0
+        StopRotationWhileCharging: 0
         WaitAtFullChargeForRelease: 1
         ChargeTime: 1
         StartCharge: 0

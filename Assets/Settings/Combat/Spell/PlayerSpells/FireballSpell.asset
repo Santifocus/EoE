@@ -21,6 +21,7 @@ MonoBehaviour:
   SpellCooldown: 5
   ContainedParts: -1
   MovementRestrictions: 2
+  RotationRestrictions: 0
   SubtractManaAtPart: 2
   CastInfo:
     Duration: 1.7
@@ -41,6 +42,7 @@ MonoBehaviour:
       CustomScale: {x: 1, y: 1, z: 1}
     StartEffects: []
     WhileEffects: []
+    WhileTickTime: 0.1
   StartInfo:
     VisualEffects:
     - FX: {fileID: 11400000, guid: 58c19c7b60833bd448f0db05e659e5bb, type: 2}

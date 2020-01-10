@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ShadowBombSpell
   m_EditorClassIdentifier: 
   BaseDamage: 20
+  BaseHealthCost: 0
   BaseManaCost: 10
   BaseEnduranceCost: 0
   BaseKnockback: 8
@@ -20,6 +21,7 @@ MonoBehaviour:
   SpellCooldown: 1.5
   ContainedParts: 5
   MovementRestrictions: -1
+  RotationRestrictions: 0
   SubtractManaAtPart: 2
   CastInfo:
     Duration: 2.5
@@ -40,6 +42,7 @@ MonoBehaviour:
       CustomScale: {x: 1, y: 1, z: 1}
     StartEffects: []
     WhileEffects: []
+    WhileTickTime: 0.1
   StartInfo:
     VisualEffects: []
     Effects: []

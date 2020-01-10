@@ -328,7 +328,7 @@ namespace EoE
 				int newSize = curValue.Length;
 				DelayedIntField("Size", ref newSize, offSet + 1);
 
-				for (int i = 0; i < arrayProperty.arraySize; i++)
+				for (int i = 0; i < curValue.Length; i++)
 				{
 					elementBinding?.Invoke(new GUIContent((i + 1) + elementContent.text, elementContent.tooltip), curValue[i], arrayProperty.GetArrayElementAtIndex(i), offSet + 1);
 				}
