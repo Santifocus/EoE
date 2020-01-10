@@ -41,6 +41,7 @@ MonoBehaviour:
       CustomScale: {x: 1, y: 1, z: 1}
     StartEffects: []
     WhileEffects: []
+    WhileTickTime: 0.1
   StartInfo:
     VisualEffects:
     - FX: {fileID: 11400000, guid: 2f56fb7ee9ef43a42bcda935dc610a0b, type: 2}
