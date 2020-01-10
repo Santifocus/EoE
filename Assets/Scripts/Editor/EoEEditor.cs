@@ -608,12 +608,12 @@ namespace EoE
 				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Amount))), ref settings.Amount, offSet + 1);
 			}
 		}
-		public static void DrawCustomFXObject(GUIContent content, CustomFXObject selfData, SerializedProperty selfProperty, int offSet)
+		public static void DrawCustomFXObject(GUIContent content, CustomFXObject settings, SerializedProperty selfProperty, int offSet)
 		{
 			bool changed = false;
-			if (selfData == null)
+			if (settings == null)
 			{
-				selfData = new CustomFXObject();
+				settings = new CustomFXObject();
 				changed = true;
 			}
 
@@ -621,25 +621,41 @@ namespace EoE
 
 			if (selfProperty.isExpanded)
 			{
-				changed |= ObjectField<FXObject>("Effect", ref selfData.FX, offSet + 1);
-				changed |= NullableVector3Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.HasPositionOffset))),
-												new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.PositionOffset))),
-												ref selfData.PositionOffset,
-												ref selfData.HasPositionOffset,
+				changed |= ObjectField<FXObject>("Effect", ref settings.FX, offSet + 1);
+				changed |= NullableVector3Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.HasPositionOffset))),
+												new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.PositionOffset))),
+												ref settings.PositionOffset,
+												ref settings.HasPositionOffset,
 												offSet + 1);
-				changed |= NullableVector3Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.HasRotationOffset))),
-												new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.RotationOffset))),
-												ref selfData.RotationOffset,
-												ref selfData.HasRotationOffset,
+				changed |= NullableVector3Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.HasRotationOffset))),
+												new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.RotationOffset))),
+												ref settings.RotationOffset,
+												ref settings.HasRotationOffset,
 												offSet + 1);
-				changed |= NullableVector3Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.HasCustomScale))),
-												new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.CustomScale))),
-												ref selfData.CustomScale,
-												ref selfData.HasCustomScale,
+				changed |= NullableVector3Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.HasCustomScale))),
+												new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CustomScale))),
+												ref settings.CustomScale,
+												ref settings.HasCustomScale,
 												offSet + 1);
 			}
 			if (changed)
 				isDirty = true;
+		}
+		public static void DrawWaitCondition(GUIContent content, WaitSetting settings, SerializedProperty selfProperty, int offSet)
+		{
+			if(settings == null)
+			{
+				settings = new WaitSetting();
+				isDirty = true;
+			}
+			Foldout(content, selfProperty, offSet);
+
+			if (selfProperty.isExpanded)
+			{
+				ObjectField<ConditionObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WaitCondition))), ref settings.WaitCondition, offSet + 1);
+				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MinAnimtionPoint))), ref settings.MinAnimtionPoint, 0, 1, offSet + 1);
+				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MaxAnimtionPoint))), ref settings.MaxAnimtionPoint, settings.MinAnimtionPoint, 1, offSet + 1);
+			}
 		}
 		public static bool NullableVector3Field(string content, string valueContent, ref Vector3 curValue, ref bool hasValue, int offSet = 0) => NullableVector3Field(new GUIContent(content), new GUIContent(valueContent), ref curValue, ref hasValue, offSet);
 		public static bool NullableVector3Field(GUIContent hasValueContent, GUIContent valueContent, ref Vector3 curValue, ref bool hasValue, int offSet = 0)
@@ -721,77 +737,82 @@ namespace EoE
 				if (asHeader)
 					EndFoldoutHeader();
 			}
-			private static void DrawAttackStyle(AttackStyle style, SerializedProperty styleProperty, int index, int offSet)
+			private static void DrawAttackStyle(AttackStyle settings, SerializedProperty property, int index, int offSet)
 			{
-				Foldout(new GUIContent(IndexToName()), styleProperty, offSet);
-				if (styleProperty.isExpanded)
+				Foldout(new GUIContent(IndexToName()), property, offSet);
+				if (property.isExpanded)
 				{
 					//Animation
 					Header("Animation Settings", offSet);
-					EnumField<AttackAnimation>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AnimationTarget))), ref style.AnimationTarget, offSet + 1);
-					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.StopMovement))), ref style.StopMovement, offSet + 1);
+					EnumField<AttackAnimation>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationTarget))), ref settings.AnimationTarget, offSet + 1);
+					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StopMovement))), ref settings.StopMovement, offSet + 1);
 
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 0.25f));
-					EnumField<MultiplicationType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AnimationMultiplicationType))), ref style.AnimationMultiplicationType, offSet + 1);
-					if (style.AnimationMultiplicationType == MultiplicationType.FlatValue)
+					EnumField<MultiplicationType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationMultiplicationType))), ref settings.AnimationMultiplicationType, offSet + 1);
+					if (settings.AnimationMultiplicationType == MultiplicationType.FlatValue)
 					{
-						if (FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AnimationSpeedFlatValue))), ref style.AnimationSpeedFlatValue, offSet + 1))
+						if (FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationSpeedFlatValue))), ref settings.AnimationSpeedFlatValue, offSet + 1))
 						{
-							style.AnimationSpeedFlatValue = Mathf.Max(style.AnimationSpeedFlatValue, 0);
+							settings.AnimationSpeedFlatValue = Mathf.Max(settings.AnimationSpeedFlatValue, 0);
 						}
 					}
 					else
 					{
-						AnimationCurveField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AnimationSpeedCurve))), ref style.AnimationSpeedCurve, offSet + 1);
-						FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AnimationSpeedCurveMultiplier))), ref style.AnimationSpeedCurveMultiplier, offSet + 1);
-						if (FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AnimationSpeedCurveTimeframe))), ref style.AnimationSpeedCurveTimeframe, offSet + 1))
+						AnimationCurveField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationSpeedCurve))), ref settings.AnimationSpeedCurve, offSet + 1);
+						FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationSpeedCurveMultiplier))), ref settings.AnimationSpeedCurveMultiplier, offSet + 1);
+						if (FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationSpeedCurveTimeframe))), ref settings.AnimationSpeedCurveTimeframe, offSet + 1))
 						{
-							style.AnimationSpeedCurveTimeframe = Mathf.Max(style.AnimationSpeedCurveTimeframe, 0);
+							settings.AnimationSpeedCurveTimeframe = Mathf.Max(settings.AnimationSpeedCurveTimeframe, 0);
 						}
 					}
+
+					//Wait Settings
+					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+					SerializedProperty waitSettingsProperty = property.FindPropertyRelative(nameof(settings.WaitSettings));
+					DrawArray<WaitSetting>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WaitSettings))), ref settings.WaitSettings, waitSettingsProperty, DrawWaitCondition, new GUIContent(". Wait Setting"), offSet + 1);
 
 					//Charging
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 					Header("Charge Settings", offSet);
-					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.NeedsCharging))), ref style.NeedsCharging, offSet + 1);
-					if (style.NeedsCharging)
+					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.NeedsCharging))), ref settings.NeedsCharging, offSet + 1);
+					if (settings.NeedsCharging)
 					{
-						SerializedProperty chargeProperty = styleProperty.FindPropertyRelative(nameof(style.ChargeSettings));
-						DrawChargeSettings(style.ChargeSettings, chargeProperty, offSet + 1);
+						SerializedProperty chargeProperty = property.FindPropertyRelative(nameof(settings.ChargeSettings));
+						DrawChargeSettings(settings.ChargeSettings, chargeProperty, offSet + 1);
 					}
 
 					//Multipliers
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 					Header("Multiplier Settings", offSet);
-					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.DamageMultiplier))), ref style.DamageMultiplier, offSet + 1);
-					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.HealthCostMultiplier))), ref style.HealthCostMultiplier, offSet + 1);
-					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.ManaCostMultiplier))), ref style.ManaCostMultiplier, offSet + 1);
-					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.EnduranceCostMultiplier))), ref style.EnduranceCostMultiplier, offSet + 1);
-					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.KnockbackMultiplier))), ref style.KnockbackMultiplier, offSet + 1);
-					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.CritChanceMultiplier))), ref style.CritChanceMultiplier, offSet + 1);
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DamageMultiplier))), ref settings.DamageMultiplier, offSet + 1);
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.HealthCostMultiplier))), ref settings.HealthCostMultiplier, offSet + 1);
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ManaCostMultiplier))), ref settings.ManaCostMultiplier, offSet + 1);
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EnduranceCostMultiplier))), ref settings.EnduranceCostMultiplier, offSet + 1);
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.KnockbackMultiplier))), ref settings.KnockbackMultiplier, offSet + 1);
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CritChanceMultiplier))), ref settings.CritChanceMultiplier, offSet + 1);
 
 					//Collision
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 					Header("Collision Settings", offSet);
-					EnumFlagField<ColliderMask>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.CollisionMask))), ref style.CollisionMask, offSet + 1);
-					EnumFlagField<ColliderMask>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.StopOnCollisionMask))), ref style.StopOnCollisionMask, offSet + 1);
-					ObjectField<EffectSingle>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.DirectHit))), ref style.DirectHit, offSet + 1);
+					EnumFlagField<ColliderMask>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CollisionMask))), ref settings.CollisionMask, offSet + 1);
+					EnumFlagField<ColliderMask>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StopOnCollisionMask))), ref settings.StopOnCollisionMask, offSet + 1);
+					ObjectField<EffectSingle>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DirectHit))), ref settings.DirectHit, offSet + 1);
 
 					//Overrides
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 					Header("Override Settings", offSet);
-					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.OverrideElement))), ref style.OverrideElement, offSet + 1);
-					if (style.OverrideElement)
-						EnumField<ElementType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.OverridenElement))), ref style.OverridenElement, offSet + 2);
-					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.OverrideCauseType))), ref style.OverrideCauseType, offSet + 1);
-					if (style.OverrideCauseType)
-						EnumField<CauseType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.OverridenCauseType))), ref style.OverridenCauseType, offSet + 2);
+					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OverrideElement))), ref settings.OverrideElement, offSet + 1);
+					if (settings.OverrideElement)
+						EnumField<ElementType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OverridenElement))), ref settings.OverridenElement, offSet + 2);
+					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OverrideCauseType))), ref settings.OverrideCauseType, offSet + 1);
+					if (settings.OverrideCauseType)
+						EnumField<CauseType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OverridenCauseType))), ref settings.OverridenCauseType, offSet + 2);
 
 					//Combo
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 					Header("Combo Settings", offSet);
-					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.ComboIncreaseMaxDelay))), ref style.ComboIncreaseMaxDelay, offSet + 1);
-					IntField(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.OnHitComboWorth))), ref style.OnHitComboWorth, offSet + 1);
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ComboIncreaseMaxDelay))), ref settings.ComboIncreaseMaxDelay, offSet + 1);
+					IntField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OnHitComboWorth))), ref settings.OnHitComboWorth, offSet + 1);
 
 					//Attack effects
 					GUILayout.Space(6);
@@ -799,8 +820,8 @@ namespace EoE
 					LineBreak(new Color(0.5f, 0.25f, 0.65f, 1), false);
 					Header("Attack Effects", offSet);
 
-					SerializedProperty attackEffectsProperty = styleProperty.FindPropertyRelative(nameof(style.AttackEffects));
-					DrawArray<AttackActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(style.AttackEffects))), ref style.AttackEffects, attackEffectsProperty, DrawAttackActivationEffect, new GUIContent(". Effect"), offSet + 1);
+					SerializedProperty attackEffectsProperty = property.FindPropertyRelative(nameof(settings.AttackEffects));
+					DrawArray<AttackActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AttackEffects))), ref settings.AttackEffects, attackEffectsProperty, DrawAttackActivationEffect, new GUIContent(". Effect"), offSet + 1);
 				}
 				string IndexToName()
 				{

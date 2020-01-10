@@ -162,7 +162,7 @@ namespace EoE.Combatery
 		}
 		private void FollowPlayer()
 		{
-			if (!Player.Instance.Alive)
+			if (!Player.Instance)
 			{
 				Destroy(gameObject);
 				return;
@@ -321,6 +321,25 @@ namespace EoE.Combatery
 							if (Utils.Chance01(ActiveAttackStyle.AttackEffects[i].Effect.ChanceToActivate))
 							{
 								ActiveAttackStyle.AttackEffects[i].Effect.Activate(Player.Instance, curBaseData);
+							}
+						}
+					}
+
+					//Check if any wait conditions are true
+					//First check if the animation point is correct, and then check the condition state
+					//if both are true: stop the animation and wait until they are false
+					for(int i = 0; i < ActiveAttackStyle.WaitSettings.Length; i++)
+					{
+						if((ActiveAttackStyle.WaitSettings[i].MinAnimtionPoint <= curAttackAnimationPoint) && (ActiveAttackStyle.WaitSettings[i].MaxAnimtionPoint > curAttackAnimationPoint))
+						{
+							if (ActiveAttackStyle.WaitSettings[i].WaitCondition.ConditionMet())
+							{
+								SetAnimationSpeed(0);
+								while (ActiveAttackStyle.WaitSettings[i].WaitCondition.ConditionMet())
+								{
+									yield return new WaitForEndOfFrame();
+								}
+								SetAnimationSpeed(multiplier);
 							}
 						}
 					}
@@ -698,7 +717,7 @@ namespace EoE.Combatery
 			ComboFinish();
 			if(ActiveAttackStyle != null)
 			{
-				if (Player.Instance.Alive)
+				if (Player.Instance)
 				{
 					if (ActiveAttackStyle.StopMovement)
 						Player.Instance.MovementStop--;

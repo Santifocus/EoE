@@ -95,7 +95,7 @@ namespace EoE.Entities
 		{
 			body.velocity = new Vector3(0, Mathf.Min(0, body.velocity.y - Time.fixedDeltaTime * Physics.gravity.y * (1 - gravityMultiplier)), 0);
 
-			if (isTarget && Player.Instance.Alive)
+			if (isTarget && Player.Instance)
 			{
 				colorTime += Time.fixedDeltaTime / textColorCycleTime;
 				float point = (Mathf.Sin(colorTime * Mathf.PI) + 1) / 2;

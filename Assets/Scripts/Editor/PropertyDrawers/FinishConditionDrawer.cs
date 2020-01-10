@@ -7,6 +7,7 @@ namespace EoE.Information
 	public class FinishConditionDrawer : PropertyDrawer
 	{
 		private bool TimeOpen(SerializedProperty property) => property.FindPropertyRelative("OnTimeout").boolValue;
+		private bool ConditionMetOpen(SerializedProperty property) => property.FindPropertyRelative("OnConditionMet").boolValue;
 		private const float INDENT_WIDHT = 15;
 		private float curIndentOff => EditorGUI.indentLevel * INDENT_WIDHT;
 		private static FinishConditions exampleInstance = new FinishConditions();
@@ -41,10 +42,16 @@ namespace EoE.Information
 					EditorGUI.indentLevel--;
 				}
 
-				Rect internalCancelRect = new Rect(curIndentOff, position.y + linePos * line++, position.width - curIndentOff, lineHeight);
-				EditorGUI.BeginDisabledGroup(true);
-				EditorGUI.Toggle(internalCancelRect, new GUIContent("Internal Cancel"), true);
-				EditorGUI.EndDisabledGroup();
+				Rect onConditionMetRect = new Rect(curIndentOff, position.y + linePos * line++, position.width - curIndentOff, lineHeight);
+				EditorGUI.PropertyField(onConditionMetRect, property.FindPropertyRelative(nameof(exampleInstance.OnConditionMet)));
+
+				if (ConditionMetOpen(property))
+				{
+					EditorGUI.indentLevel++;
+					Rect conditionRect = new Rect(curIndentOff, position.y + linePos * line++, position.width - curIndentOff + 15, lineHeight);
+					EditorGUI.PropertyField(conditionRect, property.FindPropertyRelative(nameof(exampleInstance.Condition)));
+					EditorGUI.indentLevel--;
+				}
 
 				EditorGUI.indentLevel--;
 			}
@@ -55,6 +62,8 @@ namespace EoE.Information
 		{
 			float mul = property.isExpanded ? 4 : 1;
 			mul += TimeOpen(property) && property.isExpanded ? 1 : 0;
+			mul += ConditionMetOpen(property) && property.isExpanded ? 1 : 0;
+
 			return EditorGUIUtility.singleLineHeight * mul + EditorGUIUtility.standardVerticalSpacing * (mul - 1);
 		}
 	}

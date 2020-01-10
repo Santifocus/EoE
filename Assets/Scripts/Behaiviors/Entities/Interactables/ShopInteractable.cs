@@ -22,7 +22,7 @@ namespace EoE.Entities
 		}
 		private void FixedUpdate()
 		{
-			if (isTarget && Player.Instance.Alive)
+			if (isTarget && Player.Instance)
 			{
 				Vector3 facingDir = Vector3.Lerp(Player.Instance.actuallWorldPosition, PlayerCameraController.PlayerCamera.transform.position, 0.35f);
 				Vector3 signDir = (infoSign.transform.position - facingDir).normalized;

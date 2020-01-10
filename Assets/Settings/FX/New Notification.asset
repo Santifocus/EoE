@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37f478ea248acbb4d872e251b4b2684b, type: 3}
+  m_Name: New Notification
+  m_EditorClassIdentifier: 
+  TimeIn: 0
+  TimeOut: 0.1
+  FinishConditions:
+    OnParentDeath: 0
+    OnTimeout: 0
+    TimeStay: 1
+    OnConditionMet: 1
+    Condition: {fileID: 11400000, guid: d9a42b04b4b55a343aac23eba2be7f67, type: 2}
+  notificationIcon: {fileID: 21300000, guid: 070080759fd8a224d824f824f5c5afa3, type: 3}
+  iconColor: {r: 1, g: 0, b: 0, a: 1}
+  parts:
+  - textColor: {r: 0.27302432, g: 1, b: 0, a: 1}
+    text: In the air!
+  timeToExpand: 0.15

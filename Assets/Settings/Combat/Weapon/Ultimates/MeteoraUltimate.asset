@@ -54,6 +54,7 @@ MonoBehaviour:
     AttackSequenceParts:
     - AnimationTarget: 4
       StopMovement: 1
+      StopRotation: 0
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 2
       AnimationSpeedCurve:
@@ -96,6 +97,11 @@ MonoBehaviour:
         FXObjects: []
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
+      WaitSettings:
+      - WaitCondition: {fileID: 11400000, guid: d9a42b04b4b55a343aac23eba2be7f67,
+          type: 2}
+        MinAnimtionPoint: 0.85
+        MaxAnimtionPoint: 1
       DamageMultiplier: 1
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1

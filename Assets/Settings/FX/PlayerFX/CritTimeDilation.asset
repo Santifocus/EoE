@@ -18,6 +18,8 @@ MonoBehaviour:
     OnParentDeath: 0
     OnTimeout: 1
     TimeStay: 0.4
+    OnConditionMet: 0
+    Condition: {fileID: 0}
   Scale: 0.2
   Dominance: 0
   OverwriteOtherTimeDilations: 0
