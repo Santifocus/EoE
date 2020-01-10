@@ -33,9 +33,10 @@ namespace EoE.Entities
 		public float curTrueDamageDamageMultiplier { get; protected set; }
 
 		//Entitie states
-		public int Invincible { get; set; }
-		public int MovementStop { get; set; }
-		public int AppliedMoveStuns { get; set; }
+		public int Invincibilities { get; set; }
+		public int Stuns { get; set; }
+		public int MovementStops { get; set; }
+		public int RotationStops { get; set; }
 		public bool Alive { get; protected set; }
 		public List<BuffInstance> nonPermanentBuffs { get; protected set; }
 		public List<BuffInstance> permanentBuffs { get; protected set; }
@@ -69,9 +70,10 @@ namespace EoE.Entities
 		public float highestPos => coll.bounds.center.y + coll.bounds.extents.y;
 		public ForceController entitieForceController;
 		public virtual Vector3 CurVelocity => new Vector3(impactForce.x, 0, impactForce.y) + entitieForceController.currentTotalForce;
-		public bool IsInvincible => Invincible > 0;
-		public bool IsStunned => AppliedMoveStuns > 0;
-		public bool IsMovementStopped => MovementStop > 0;
+		public bool IsInvincible => Invincibilities > 0;
+		public bool IsStunned => Stuns > 0;
+		public bool IsMovementStopped => MovementStops > 0;
+		public bool IsRotationStopped => RotationStops > 0;
 
 		//Armor
 		public InventoryItem EquipedArmor;
@@ -130,8 +132,8 @@ namespace EoE.Entities
 			SetupHealingParticles();
 			BuffSetup();
 
-			AppliedMoveStuns = 0;
-			Invincible = 0;
+			Stuns = 0;
+			Invincibilities = 0;
 			intendedRotation = curRotation = transform.eulerAngles.y;
 		}
 		protected virtual void ResetStats()
@@ -522,9 +524,9 @@ namespace EoE.Entities
 
 			//Custom Buff Effects
 			if (buff.CustomEffects.ApplyMoveStun)
-				AppliedMoveStuns++;
+				Stuns++;
 			if (buff.CustomEffects.Invincible)
-				Invincible++;
+				Invincibilities++;
 
 			if (this is Player)
 				Player.Instance.buffDisplay.AddBuffIcon(newBuff);
@@ -646,9 +648,9 @@ namespace EoE.Entities
 
 			//Custom Buff Effects
 			if (targetBuff.Base.CustomEffects.ApplyMoveStun)
-				AppliedMoveStuns--;
+				Stuns--;
 			if (targetBuff.Base.CustomEffects.Invincible)
-				Invincible--;
+				Invincibilities--;
 
 			if (this is Player)
 				Player.Instance.buffDisplay.RemoveBuffIcon(targetBuff);
@@ -831,8 +833,12 @@ namespace EoE.Entities
 			if (spell.ContainedParts.HasFlag(SpellPart.Cast))
 			{
 				bool movementStopper = spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting);
+				bool rotationStopper = spell.RotationRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting);
+
 				if (movementStopper)
-					MovementStop++;
+					MovementStops++;
+				if (rotationStopper)
+					RotationStops++;
 
 				for (int i = 0; i < spell.CastInfo.StartEffects.Length; i++)
 				{
@@ -855,7 +861,9 @@ namespace EoE.Entities
 					if (IsStunned)
 					{
 						if (movementStopper)
-							MovementStop--;
+							MovementStops--;
+						if (rotationStopper)
+							RotationStops--;
 						goto StoppedSpell;
 					}
 
@@ -870,7 +878,9 @@ namespace EoE.Entities
 				}
 
 				if (movementStopper)
-					MovementStop--;
+					MovementStops--;
+				if (rotationStopper)
+					RotationStops--;
 			}
 
 			if (curParticles != null)
@@ -909,9 +919,12 @@ namespace EoE.Entities
 			//Projectile
 			if (spell.ContainedParts.HasFlag(SpellPart.Projectile))
 			{
-				bool movementStopper = spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting);
+				bool movementStopper = spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileShooting);
+				bool rotationStopper = spell.RotationRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileShooting);
 				if (movementStopper)
-					MovementStop++;
+					MovementStops++;
+				if (rotationStopper)
+					RotationStops++;
 
 				for (int i = 0; i < spell.ProjectileInfos.Length; i++)
 				{
@@ -923,7 +936,9 @@ namespace EoE.Entities
 						if (IsStunned)
 						{
 							if (movementStopper)
-								MovementStop--;
+								MovementStops--;
+							if (rotationStopper)
+								RotationStops--;
 							goto StoppedSpell;
 						}
 					}
@@ -941,7 +956,9 @@ namespace EoE.Entities
 								if (IsStunned)
 								{
 									if (movementStopper)
-										MovementStop--;
+										MovementStops--;
+									if (rotationStopper)
+										RotationStops--;
 									goto StoppedSpell;
 								}
 							}
@@ -949,7 +966,9 @@ namespace EoE.Entities
 					}
 				}
 				if (movementStopper)
-					MovementStop--;
+					MovementStops--;
+				if (rotationStopper)
+					RotationStops--;
 			}
 
 		//If the spell cast / shooting was canceled we jump here

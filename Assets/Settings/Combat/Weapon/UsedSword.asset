@@ -31,6 +31,7 @@ MonoBehaviour:
     AttackSequenceParts:
     - AnimationTarget: 1
       StopMovement: 0
+      StopRotation: 0
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:
@@ -63,7 +64,8 @@ MonoBehaviour:
       ChargeSettings:
         EffectMask: 3
         AnimationChargeStartpoint: 0.1
-        ApplyMoveStunWhileCharging: 0
+        StopMovementWhileCharging: 0
+        StopRotationWhileCharging: 0
         WaitAtFullChargeForRelease: 1
         ChargeTime: 1
         StartCharge: 0
@@ -73,6 +75,7 @@ MonoBehaviour:
         FXObjects: []
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
+      WaitSettings: []
       DamageMultiplier: 1.5
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
@@ -121,6 +124,7 @@ MonoBehaviour:
           CreatedRemenants: []
     - AnimationTarget: 2
       StopMovement: 0
+      StopRotation: 0
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:
@@ -153,7 +157,8 @@ MonoBehaviour:
       ChargeSettings:
         EffectMask: 3
         AnimationChargeStartpoint: 0.1
-        ApplyMoveStunWhileCharging: 0
+        StopMovementWhileCharging: 0
+        StopRotationWhileCharging: 0
         WaitAtFullChargeForRelease: 1
         ChargeTime: 1
         StartCharge: 0
@@ -163,6 +168,7 @@ MonoBehaviour:
         FXObjects: []
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
+      WaitSettings: []
       DamageMultiplier: 1.8
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
@@ -211,6 +217,7 @@ MonoBehaviour:
           CreatedRemenants: []
     - AnimationTarget: 4
       StopMovement: 1
+      StopRotation: 1
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 2
       AnimationSpeedCurve:
@@ -243,7 +250,8 @@ MonoBehaviour:
       ChargeSettings:
         EffectMask: 3
         AnimationChargeStartpoint: 0.45
-        ApplyMoveStunWhileCharging: 0
+        StopMovementWhileCharging: 0
+        StopRotationWhileCharging: 0
         WaitAtFullChargeForRelease: 1
         ChargeTime: 2
         StartCharge: 1
@@ -282,6 +290,7 @@ MonoBehaviour:
           HasCustomScale: 0
           CustomScale: {x: 1, y: 1, z: 1}
         BuffOnUserWhileCharging: []
+      WaitSettings: []
       DamageMultiplier: 2.2
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
@@ -335,6 +344,7 @@ MonoBehaviour:
     AttackSequenceParts:
     - AnimationTarget: 2
       StopMovement: 0
+      StopRotation: 0
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:
@@ -367,7 +377,8 @@ MonoBehaviour:
       ChargeSettings:
         EffectMask: 3
         AnimationChargeStartpoint: 0.1
-        ApplyMoveStunWhileCharging: 0
+        StopMovementWhileCharging: 0
+        StopRotationWhileCharging: 0
         WaitAtFullChargeForRelease: 1
         ChargeTime: 1
         StartCharge: 0
@@ -377,6 +388,7 @@ MonoBehaviour:
         FXObjects: []
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
+      WaitSettings: []
       DamageMultiplier: 0.9
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
@@ -427,7 +439,8 @@ MonoBehaviour:
   JumpAttackSequence:
     AttackSequenceParts:
     - AnimationTarget: 4
-      StopMovement: 0
+      StopMovement: 1
+      StopRotation: 1
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:
@@ -469,7 +482,8 @@ MonoBehaviour:
       ChargeSettings:
         EffectMask: 3
         AnimationChargeStartpoint: 0.1
-        ApplyMoveStunWhileCharging: 0
+        StopMovementWhileCharging: 0
+        StopRotationWhileCharging: 0
         WaitAtFullChargeForRelease: 1
         ChargeTime: 1
         StartCharge: 0
@@ -479,6 +493,7 @@ MonoBehaviour:
         FXObjects: []
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
+      WaitSettings: []
       DamageMultiplier: 2.25
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
@@ -530,7 +545,8 @@ MonoBehaviour:
   RunJumpAttackSequence:
     AttackSequenceParts:
     - AnimationTarget: 4
-      StopMovement: 0
+      StopMovement: 1
+      StopRotation: 1
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:
@@ -563,7 +579,8 @@ MonoBehaviour:
       ChargeSettings:
         EffectMask: 3
         AnimationChargeStartpoint: 0.1
-        ApplyMoveStunWhileCharging: 0
+        StopMovementWhileCharging: 0
+        StopRotationWhileCharging: 0
         WaitAtFullChargeForRelease: 1
         ChargeTime: 1
         StartCharge: 0
@@ -573,6 +590,7 @@ MonoBehaviour:
         FXObjects: []
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
+      WaitSettings: []
       DamageMultiplier: 3
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1

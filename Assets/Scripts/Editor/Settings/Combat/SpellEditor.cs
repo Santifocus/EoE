@@ -46,6 +46,7 @@ namespace EoE.Information
 
 			EnumFlagField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ContainedParts))), ref settings.ContainedParts, 1);
 			EnumFlagField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MovementRestrictions))), ref settings.MovementRestrictions, 1);
+			EnumFlagField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.RotationRestrictions))), ref settings.RotationRestrictions, 1);
 		}
 		private void CastInfoArea()
 		{

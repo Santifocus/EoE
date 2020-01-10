@@ -746,6 +746,7 @@ namespace EoE
 					Header("Animation Settings", offSet);
 					EnumField<AttackAnimation>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationTarget))), ref settings.AnimationTarget, offSet + 1);
 					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StopMovement))), ref settings.StopMovement, offSet + 1);
+					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StopRotation))), ref settings.StopRotation, offSet + 1);
 
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 0.25f));
 					EnumField<MultiplicationType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationMultiplicationType))), ref settings.AnimationMultiplicationType, offSet + 1);
@@ -844,7 +845,8 @@ namespace EoE
 
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 					SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationChargeStartpoint))), ref settings.AnimationChargeStartpoint, 0, 1, offSet + 1);
-					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ApplyMoveStunWhileCharging))), ref settings.ApplyMoveStunWhileCharging, offSet + 1);
+					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StopMovementWhileCharging))), ref settings.StopMovementWhileCharging, offSet + 1);
+					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StopRotationWhileCharging))), ref settings.StopRotationWhileCharging, offSet + 1);
 					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WaitAtFullChargeForRelease))), ref settings.WaitAtFullChargeForRelease, offSet + 1);
 
 					//Charge values

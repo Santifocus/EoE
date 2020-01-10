@@ -83,7 +83,7 @@ namespace EoE.Entities
 
 			StartCombat();
 			bashing = true;
-			MovementStop++;
+			MovementStops++;
 			bashForce = entitieForceController.ApplyForce(transform.forward * settings.BashSpeed, settings.BashSpeed / settings.BashDistance, false, bashFinish);
 
 			CanceledBash:;
@@ -105,7 +105,7 @@ namespace EoE.Entities
 		private void FinishedBash()
 		{
 			bashing = false;
-			MovementStop--;
+			MovementStops--;
 		}
 		private void OnCollisionEnter(Collision collision)
 		{

@@ -242,7 +242,9 @@ namespace EoE.Combatery
 				ActiveAttackStyle = targetSequence.AttackSequenceParts[curSequenceIndex];
 
 				if (ActiveAttackStyle.StopMovement)
-					Player.Instance.MovementStop++;
+					Player.Instance.MovementStops++;
+				if (ActiveAttackStyle.StopRotation)
+					Player.Instance.RotationStops++;
 
 				//First check if this attack sequence is allowed if not we stop the while loop here
 				if (curBaseData.CheckIfCanActivateCost(Player.Instance, ActiveAttackStyle.HealthCostMultiplier, ActiveAttackStyle.ManaCostMultiplier, ActiveAttackStyle.EnduranceCostMultiplier))
@@ -353,8 +355,10 @@ namespace EoE.Combatery
 							float chargeTime = curChargeMultiplier * ActiveAttackStyle.ChargeSettings.ChargeTime;
 
 							//Setup effects of charge
-							if(ActiveAttackStyle.ChargeSettings.ApplyMoveStunWhileCharging)
-								Player.Instance.MovementStop++;
+							if (ActiveAttackStyle.ChargeSettings.StopMovementWhileCharging)
+								Player.Instance.MovementStops++;
+							if (ActiveAttackStyle.ChargeSettings.StopRotationWhileCharging)
+								Player.Instance.MovementStops++;
 
 							//FX
 							chargeBoundFX = new FXInstance[ActiveAttackStyle.ChargeSettings.FXObjects.Length];
@@ -452,7 +456,9 @@ namespace EoE.Combatery
 					wantsToBeginNextSequence = false;
 
 					if (ActiveAttackStyle.StopMovement)
-						Player.Instance.MovementStop--;
+						Player.Instance.MovementStops--;
+					if (ActiveAttackStyle.StopRotation)
+						Player.Instance.RotationStops--;
 					continue;
 				}
 
@@ -462,7 +468,9 @@ namespace EoE.Combatery
 
 		AttackFinished:;
 			if (ActiveAttackStyle.StopMovement)
-				Player.Instance.MovementStop--;
+				Player.Instance.MovementStops--;
+			if (ActiveAttackStyle.StopRotation)
+				Player.Instance.RotationStops--;
 
 			SetAnimationSpeed(1);
 			Player.Instance.animationControl.SetBool("InFight", false);
@@ -641,8 +649,10 @@ namespace EoE.Combatery
 		private void RemoveChargeBoundEffects()
 		{
 			isChargingAttack = false;
-			if (ActiveAttackStyle.ChargeSettings.ApplyMoveStunWhileCharging)
-				Player.Instance.MovementStop--;
+			if (ActiveAttackStyle.ChargeSettings.StopMovementWhileCharging)
+				Player.Instance.MovementStops--;
+			if (ActiveAttackStyle.ChargeSettings.StopRotationWhileCharging)
+				Player.Instance.MovementStops--;
 
 			for (int i = 0; i < chargeBoundFX.Length; i++)
 			{
@@ -720,7 +730,7 @@ namespace EoE.Combatery
 				if (Player.Instance)
 				{
 					if (ActiveAttackStyle.StopMovement)
-						Player.Instance.MovementStop--;
+						Player.Instance.MovementStops--;
 
 					SetAnimationSpeed(1);
 					Player.Instance.animationControl.SetBool("InFight", false);

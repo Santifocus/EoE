@@ -1,6 +1,4 @@
-﻿using EoE.Entities;
-using EoE.Information;
-using System.Collections;
+﻿using EoE.Information;
 using UnityEngine;
 
 namespace EoE.Combatery
@@ -133,7 +131,8 @@ namespace EoE.Combatery
 		public AttackChargeEffectMask EffectMask = AttackChargeEffectMask.Damage | AttackChargeEffectMask.Knockback;
 
 		public float AnimationChargeStartpoint = 0.1f;
-		public bool ApplyMoveStunWhileCharging = false;
+		public bool StopMovementWhileCharging = false;
+		public bool StopRotationWhileCharging = false;
 		public bool WaitAtFullChargeForRelease = true;
 
 		public float ChargeTime = 1;

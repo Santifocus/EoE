@@ -8,6 +8,7 @@
 
 		public SpellPart ContainedParts = (SpellPart)(-1);
 		public SpellMovementRestrictionsMask MovementRestrictions = (SpellMovementRestrictionsMask)(-1);
+		public SpellMovementRestrictionsMask RotationRestrictions = (SpellMovementRestrictionsMask)(-1);
 		public SpellPart SubtractManaAtPart = SpellPart.Start;
 
 		public SpellCastPart CastInfo = new SpellCastPart();

@@ -305,6 +305,9 @@ namespace EoE.Entities
 		}
 		private void LookAroundArea()
 		{
+			if (IsRotationStopped)
+				return;
+
 			if (lookAroundCooldown > 0)
 			{
 				lookAroundCooldown -= Time.deltaTime;
@@ -374,6 +377,9 @@ namespace EoE.Entities
 		}
 		protected void LookAtPlayer()
 		{
+			if (IsRotationStopped)
+				return;
+
 			Vector3 plyPos = Player.Instance.actuallWorldPosition;
 			Vector2 direction = new Vector2(plyPos.x - actuallWorldPosition.x, plyPos.z - actuallWorldPosition.z).normalized;
 			float rotation = -Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
