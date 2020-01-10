@@ -16,7 +16,7 @@ MonoBehaviour:
   BaseSettings: {fileID: 11400000, guid: 96dcb5c9bff843f4fa1ad4cf0c08cb1e, type: 2}
   ActivationEffects:
   - ChanceToActivate: 1
-    ContainedEffectType: 2
+    ContainedEffectType: 34
     ImpulseVelocity: 5
     ImpulseVelocityFallOffTime: 0.5
     ImpulseVelocityDirection: 2
@@ -48,7 +48,8 @@ MonoBehaviour:
     ProjectileInfos: []
     HealsOnUser: []
     StackingStyle: 2
-    BuffsOnUser: []
+    BuffsOnUser:
+    - {fileID: 11400000, guid: d8eb7d4e7fad95d4697760e4d0ea7392, type: 2}
     CreatedRemenants: []
   AttackData:
     AttackSequenceParts:
@@ -101,7 +102,7 @@ MonoBehaviour:
       - WaitCondition: {fileID: 11400000, guid: d9a42b04b4b55a343aac23eba2be7f67,
           type: 2}
         MinAnimtionPoint: 0.85
-        MaxAnimtionPoint: 1
+        MaxAnimtionPoint: 0.9
       DamageMultiplier: 1
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
@@ -168,7 +169,7 @@ MonoBehaviour:
           ImpulseDirectionBase: 1
           FXObjects:
           - FX: {fileID: 11400000, guid: 88094765e5d19e44abace7f01ce20547, type: 2}
-            HasPositionOffset: 1
+            HasPositionOffset: 0
             PositionOffset: {x: 0, y: -2, z: 0}
             HasRotationOffset: 0
             RotationOffset: {x: 0, y: 0, z: 0}
