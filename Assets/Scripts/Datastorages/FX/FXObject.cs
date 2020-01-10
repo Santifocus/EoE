@@ -14,5 +14,7 @@ namespace EoE.Information
 		public bool OnParentDeath = false;
 		public bool OnTimeout = false;
 		public float TimeStay = 1;
+		public bool OnConditionMet = false;
+		public ConditionObject Condition;
 	}
 }

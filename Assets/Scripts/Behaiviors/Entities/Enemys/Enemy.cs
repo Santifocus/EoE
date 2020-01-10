@@ -90,7 +90,7 @@ namespace EoE.Entities
 		#region Behaivior
 		private void DecideOnBehaivior()
 		{
-			if (Player.Instance.Alive)
+			if (Player.Instance)
 			{
 				bool prevInRange = PlayerInAttackRange;
 				float sqrPlayerDist = (player.actuallWorldPosition - actuallWorldPosition).sqrMagnitude;
@@ -239,7 +239,7 @@ namespace EoE.Entities
 		}
 		private bool CheckForPlayer()
 		{
-			if (!Player.Instance.Alive)
+			if (!Player.Instance)
 				return false;
 
 			Vector3 dif = player.actuallWorldPosition - actuallWorldPosition;

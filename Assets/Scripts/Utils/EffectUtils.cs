@@ -1104,8 +1104,14 @@ namespace EoE
 		{
 			if (!ShouldBeRemoved)
 				passedTime += timeStep * timeStepMultiplier;
-			if (BaseInfo.FinishConditions.OnParentDeath && !parent)
-				FinishFX();
+
+			if (currentState != FXState.End)
+			{
+				if (BaseInfo.FinishConditions.OnParentDeath && !parent)
+					FinishFX();
+				else if (BaseInfo.FinishConditions.OnConditionMet && BaseInfo.FinishConditions.Condition.ConditionMet())
+					FinishFX();
+			}
 
 			if (currentState == FXState.Start && passedTime > BaseInfo.TimeIn)
 			{

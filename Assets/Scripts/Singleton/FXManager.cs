@@ -60,7 +60,7 @@ namespace EoE
 		}
 		private void EnemyKilled(Entitie killed, Entitie killer)
 		{
-			if (killer is Player && Player.Instance.Alive)
+			if (killer is Player && Player.Instance)
 			{
 				for (int i = 0; i < playerSettings.EffectsOnEnemyKilled.Length; i++)
 				{

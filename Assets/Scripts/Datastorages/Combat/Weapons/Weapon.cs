@@ -67,6 +67,7 @@ namespace EoE.Combatery
 		//Animation Settings
 		public AttackAnimation AnimationTarget = AttackAnimation.Attack1;
 		public bool StopMovement;
+		public bool StopRotation;
 
 		public MultiplicationType AnimationMultiplicationType = MultiplicationType.FlatValue;
 		public float AnimationSpeedFlatValue = 1;
@@ -78,6 +79,9 @@ namespace EoE.Combatery
 		//Charge settings
 		public bool NeedsCharging = false;
 		public AttackChargeSettings ChargeSettings = new AttackChargeSettings();
+
+		//Wait settings
+		public WaitSetting[] WaitSettings = new WaitSetting[0];
 
 		//Base multipliers
 		public float DamageMultiplier = 1;
@@ -109,6 +113,13 @@ namespace EoE.Combatery
 		{
 			return (flag | collisionMask) == collisionMask;
 		}
+	}
+	[System.Serializable]
+	public class WaitSetting
+	{
+		public ConditionObject WaitCondition;
+		public float MinAnimtionPoint;
+		public float MaxAnimtionPoint;
 	}
 	[System.Serializable]
 	public class AttackActivationEffect
