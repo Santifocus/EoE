@@ -10,7 +10,7 @@ namespace EoE.Combatery
 	public enum DirectionBase { Forward = 1, Right = 2, Up = 4, Back = 8, Left = 16, Down = 32 }
 	[System.Flags] public enum TargetMask { Self = (1 << 0), Allied = (1 << 1), Enemy = (1 << 2) }
 	[System.Flags] public enum ColliderMask { Terrain = (1 << 0), Entities = (1 << 1) }
-	[System.Flags] public enum EffectType { ImpulseVelocity = (1 << 0), FX = (1 << 1), AOE = (1 << 2), CreateProjectile = (1 << 3), HealOnUser = (1 << 4), BuffOnUser = (1 << 5), CreateRemenants = (1 << 6) }
+	[System.Flags] public enum EffectType { ImpulseVelocity = (1 << 0), FX = (1 << 1), AOE = (1 << 2), CreateProjectile = (1 << 3), HealOnCreator = (1 << 4), BuffOnCreator = (1 << 5), CreateRemenants = (1 << 6) }
 	public class CombatObject : ScriptableObject
 	{
 		public float BaseDamage = 10;
@@ -177,16 +177,6 @@ namespace EoE.Combatery
 		public Vector3 CustomScale = Vector3.one;
 	}
 	[System.Serializable]
-	public class RemenantsData
-	{
-		public float Duration = 5;
-		public CustomFXObject[] VisualEffects = new CustomFXObject[0];
-		public EffectAOE[] StartEffects = new EffectAOE[0];
-		public EffectAOE[] WhileEffects = new EffectAOE[0];
-		public float WhileTickTime = 0.1f;
-		public bool TryGroundRemenants = true;
-	}
-	[System.Serializable]
 	public class ActivationEffect
 	{
 		public float ChanceToActivate = 1;
@@ -224,6 +214,7 @@ namespace EoE.Combatery
 			FXInstance[] createdFXInstances = (HasMaskFlag(EffectType.FX) ? (new FXInstance[FXObjects.Length]) : (new FXInstance[0]));
 			if (HasMaskFlag(EffectType.ImpulseVelocity))
 			{
+				Player.Instance.FallDamageCooldown = 0.2f; //Prevents fall damage
 				Vector3 direction = CombatObject.CalculateDirection(ImpulseVelocityDirection, ImpulseVelocityFallbackDirection, ImpulseDirectionBase, activator, Vector3.zero);
 				activator.entitieForceController.ApplyForce(direction * ImpulseVelocity, 1 / ImpulseVelocityFallOffTime, true);
 			}
@@ -245,14 +236,14 @@ namespace EoE.Combatery
 			{
 				GameController.Instance.StartCoroutine(ProjectileCreation(activator, baseObject, overrideTransform));
 			}
-			if (HasMaskFlag(EffectType.HealOnUser))
+			if (HasMaskFlag(EffectType.HealOnCreator))
 			{
 				for(int i = 0; i < HealsOnUser.Length; i++)
 				{
 					HealsOnUser[i].Activate(activator);
 				}
 			}
-			if (HasMaskFlag(EffectType.BuffOnUser))
+			if (HasMaskFlag(EffectType.BuffOnCreator))
 			{
 				for (int i = 0; i < BuffsOnUser.Length; i++)
 				{

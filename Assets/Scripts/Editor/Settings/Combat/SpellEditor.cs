@@ -6,7 +6,7 @@ using static EoE.EoEEditor;
 namespace EoE.Information
 {
 	[CustomEditor(typeof(Spell), true), CanEditMultipleObjects]
-	public class SpellEditor : ObjectSettingEditor
+	public class SpellEditor : ScriptableObjectEditor
 	{
 		private static bool BaseInfoOpen;
 		private static bool CastInfoOpen;

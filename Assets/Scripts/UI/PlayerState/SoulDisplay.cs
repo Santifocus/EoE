@@ -9,7 +9,7 @@ namespace EoE.UI
 	public class SoulDisplay : MonoBehaviour
 	{
 		[SerializeField] private float showTime = default;
-		[SerializeField] private float updateSoulCountSpeed = 5;
+		[SerializeField] private float updateExperienceAmountSpeed = 5;
 
 		[SerializeField] private Image soulIcon = default;
 		[SerializeField] private float soulIconColorTransitionSpeed = 2;
@@ -21,15 +21,15 @@ namespace EoE.UI
 
 		private float delayTillHide;
 		private float iconTransitionPoint;
-		private float shownSoulCount;
-		private int soulsToLevelup;
+		private float shownExperianceAmount;
+		private int experienceToLevelup;
 
 		private void Start()
 		{
 			EventManager.PlayerExperienceChangedEvent += PlayerSoulCountChanged;
-			soulsToLevelup = Player.Instance.RequiredExperienceForLevel;
-			shownSoulCount = Player.Instance.TotalExperience;
-			textAmount.text = Mathf.CeilToInt(shownSoulCount) + " / " + soulsToLevelup;
+			experienceToLevelup = Player.Instance.RequiredExperienceForLevel;
+			shownExperianceAmount = Player.Instance.TotalExperience;
+			textAmount.text = Mathf.CeilToInt(shownExperianceAmount) + " / " + experienceToLevelup;
 		}
 		private void OnDestroy()
 		{
@@ -52,19 +52,19 @@ namespace EoE.UI
 
 				if (textTransition.trueState)
 				{
-					shownSoulCount = Mathf.Lerp(shownSoulCount, Player.Instance.TotalExperience, Time.unscaledDeltaTime * updateSoulCountSpeed);
-					if (Mathf.CeilToInt(shownSoulCount) >= soulsToLevelup)
+					shownExperianceAmount = Mathf.Lerp(shownExperianceAmount, Player.Instance.TotalExperience, Time.unscaledDeltaTime * updateExperienceAmountSpeed);
+					if (Mathf.CeilToInt(shownExperianceAmount) >= experienceToLevelup)
 					{
-						soulsToLevelup = Player.Instance.RequiredExperienceForLevel;
+						experienceToLevelup = Player.Instance.RequiredExperienceForLevel;
 					}
-					textAmount.text = Mathf.CeilToInt(shownSoulCount) + " / " + soulsToLevelup;
+					textAmount.text = Mathf.CeilToInt(shownExperianceAmount) + " / " + experienceToLevelup;
 				}
 			}
 			else if (!textTransition.trueState)
 			{
-				soulsToLevelup = Player.Instance.RequiredExperienceForLevel;
-				shownSoulCount = Player.Instance.TotalExperience;
-				textAmount.text = Mathf.CeilToInt(shownSoulCount) + " / " + soulsToLevelup;
+				experienceToLevelup = Player.Instance.RequiredExperienceForLevel;
+				shownExperianceAmount = Player.Instance.TotalExperience;
+				textAmount.text = Mathf.CeilToInt(shownExperianceAmount) + " / " + experienceToLevelup;
 			}
 			UpdateIconTransition();
 		}

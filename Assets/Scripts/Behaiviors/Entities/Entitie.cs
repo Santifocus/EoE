@@ -68,7 +68,7 @@ namespace EoE.Entities
 		public float lowestPos => coll.bounds.center.y - coll.bounds.extents.y;
 		public float highestPos => coll.bounds.center.y + coll.bounds.extents.y;
 		public ForceController entitieForceController;
-		public virtual Vector3 curVelocity => new Vector3(impactForce.x, 0, impactForce.y) + entitieForceController.currentTotalForce;
+		public virtual Vector3 CurVelocity => new Vector3(impactForce.x, 0, impactForce.y) + entitieForceController.currentTotalForce;
 		public bool IsInvincible => Invincible > 0;
 		public bool IsStunned => AppliedMoveStuns > 0;
 		public bool IsMovementStopped => MovementStop > 0;

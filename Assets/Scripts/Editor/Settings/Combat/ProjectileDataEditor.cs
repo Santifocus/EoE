@@ -6,7 +6,7 @@ using static EoE.EoEEditor;
 namespace EoE.Combatery
 {
 	[CustomEditor(typeof(ProjectileData), true), CanEditMultipleObjects]
-	public class ProjectileDataEditor : ObjectSettingEditor
+	public class ProjectileDataEditor : ScriptableObjectEditor
 	{
 		private static bool DirectionSettingsOpen;
 		private static bool FlightSettingsOpen;

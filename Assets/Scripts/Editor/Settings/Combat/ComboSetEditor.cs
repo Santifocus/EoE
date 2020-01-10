@@ -7,7 +7,7 @@ using static EoE.EoEEditor;
 namespace EoE.Combatery
 {
 	[CustomEditor(typeof(ComboSet), true), CanEditMultipleObjects]
-	public class ComboSetEditor : ObjectSettingEditor
+	public class ComboSetEditor : ScriptableObjectEditor
 	{
 		private static bool BaseSettingsOpen;
 		protected override void CustomInspector()

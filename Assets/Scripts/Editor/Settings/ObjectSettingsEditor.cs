@@ -3,7 +3,7 @@ using UnityEditor;
 namespace EoE.Information
 {
 	[CustomEditor(typeof(ObjectSettings), true), CanEditMultipleObjects]
-	public class ObjectSettingEditor : Editor
+	public class ScriptableObjectEditor : Editor
 	{
 		public override void OnInspectorGUI()
 		{

@@ -8,7 +8,7 @@ using EoE.Combatery;
 namespace EoE.Information
 {
 	[CustomEditor(typeof(Ultimate)), CanEditMultipleObjects]
-	public class UltimateEditor : ObjectSettingEditor
+	public class UltimateEditor : ScriptableObjectEditor
 	{
 		protected override void CustomInspector()
 		{

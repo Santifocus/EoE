@@ -41,7 +41,7 @@ namespace EoE.Entities
 
 		//Getter Helpers
 		protected Player player => Player.Instance;
-		public override Vector3 curVelocity => new Vector3(impactForce.x, 0, impactForce.y) + entitieForceController.currentTotalForce;
+		public override Vector3 CurVelocity => new Vector3(impactForce.x, 0, impactForce.y) + entitieForceController.currentTotalForce;
 		public override EntitieSettings SelfSettings => enemySettings;
 		public abstract EnemySettings enemySettings { get; }
 		public bool PlayerInAttackRange { get; private set; }
@@ -102,7 +102,7 @@ namespace EoE.Entities
 					if (CheckIfCanSeeEntitie(transform, player, true))
 					{
 						lastConfirmedPlayerPos = player.actuallWorldPosition;
-						lastPlayerSpeed = player.curVelocity;
+						lastPlayerSpeed = player.CurVelocity;
 						lastSeenPlayer = 0;
 
 						if (!prevInRange && PlayerInAttackRange)
@@ -140,7 +140,7 @@ namespace EoE.Entities
 			if (IsStunned || IsMovementStopped)
 			{
 				body.isKinematic = false;
-				body.velocity = curVelocity;
+				body.velocity = CurVelocity;
 				SetAgentState(false);
 				return;
 			}
@@ -158,7 +158,7 @@ namespace EoE.Entities
 				//Update information on the player
 				chasingPlayer = true;
 				lastConfirmedPlayerPos = player.actuallWorldPosition;
-				lastPlayerSpeed = player.curVelocity;
+				lastPlayerSpeed = player.CurVelocity;
 				lastSeenPlayer = 0;
 
 				//Find a path
@@ -220,7 +220,7 @@ namespace EoE.Entities
 		}
 		protected void EnforceKnockback()
 		{
-			agent.nextPosition += curVelocity * Time.deltaTime;
+			agent.nextPosition += CurVelocity * Time.deltaTime;
 		}
 		private void UpdateAgentSettings()
 		{

@@ -22,6 +22,7 @@ namespace EoE.Combatery
 
 		private float delayToWhileCast;
 		private bool isDead;
+		private Vector3 spawnPos;
 
 		private List<FXInstance> boundEffects = new List<FXInstance>();
 
@@ -32,7 +33,7 @@ namespace EoE.Combatery
 		public static Projectile CreateProjectile(CombatObject baseData, ProjectileData info, Entitie creator, Vector3 direction, Vector3 spawnPos)
 		{
 			Projectile projectile = Instantiate(GameController.ProjectilePrefab, Storage.ProjectileStorage);
-			projectile.transform.position = spawnPos;
+			projectile.transform.position = projectile.spawnPos = spawnPos;
 
 			projectile.baseData = baseData;
 			projectile.info = info;
@@ -192,6 +193,32 @@ namespace EoE.Combatery
 		{
 			StopBoundFX();
 			AllProjectiles.Remove(this);
+		}
+		private void OnDrawGizmos()
+		{
+			if(info.Duration - remainingLifeTime < 0.5f)
+				DrawEffectSpheres(info.StartEffects, spawnPos);
+
+			DrawEffectSpheres(info.WhileEffects, transform.position);
+		}
+		private void DrawEffectSpheres(ActivationEffect[] arrayTarget, Vector3 targetPos)
+		{
+			for (int i = 0; i < arrayTarget.Length; i++)
+			{
+				if (arrayTarget[i].HasMaskFlag(EffectType.AOE))
+				{
+					for (int j = 0; j < arrayTarget[i].AOEEffects.Length; j++)
+					{
+						Gizmos.color = new Color(0, 1, 0, 0.3f);
+						Gizmos.DrawSphere(targetPos, arrayTarget[i].AOEEffects[j].BaseEffectRadius);
+						if (arrayTarget[i].AOEEffects[j].ZeroOutDistance > arrayTarget[i].AOEEffects[j].BaseEffectRadius)
+						{
+							Gizmos.color = Color.red;
+							Gizmos.DrawWireSphere(targetPos, arrayTarget[i].AOEEffects[j].ZeroOutDistance);
+						}
+					}
+				}
+			}
 		}
 	}
 }

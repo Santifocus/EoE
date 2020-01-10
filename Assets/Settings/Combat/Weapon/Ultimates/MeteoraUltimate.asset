@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7f668e22fb629a4409275a25b2c92f34, type: 3}
-  m_Name: Meteora_Ultimate
+  m_Name: MeteoraUltimate
   m_EditorClassIdentifier: 
   UltimateIcon: {fileID: 21300000, guid: 518175f4993c7c94b8ad8a4ba3db1338, type: 3}
   BaseSettings: {fileID: 11400000, guid: 96dcb5c9bff843f4fa1ad4cf0c08cb1e, type: 2}
   ActivationEffects:
   - ChanceToActivate: 1
-    ContainedEffectType: 34
+    ContainedEffectType: 2
     ImpulseVelocity: 5
     ImpulseVelocityFallOffTime: 0.5
     ImpulseVelocityDirection: 2
@@ -226,20 +226,8 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants:
-          - Duration: 5
-            VisualEffects:
-            - FX: {fileID: 11400000, guid: 6794a349e3e123444b5fa54cef8e4c6c, type: 2}
-              HasPositionOffset: 0
-              PositionOffset: {x: 0, y: 0, z: 0}
-              HasRotationOffset: 0
-              RotationOffset: {x: 0, y: 0, z: 0}
-              HasCustomScale: 0
-              CustomScale: {x: 1, y: 1, z: 1}
-            StartEffects: []
-            WhileEffects:
-            - {fileID: 11400000, guid: a54c289df8dd0824bb8b6900336b1e3d, type: 2}
-            WhileTickTime: 0.1
-            TryGroundRemenants: 1
+          - {fileID: 11400000, guid: 152eb11e03316d44aad7e04c89ea1a83, type: 2}
     PartsMaxDelays:
+    - 0
     - 0
     - 0

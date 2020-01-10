@@ -5,7 +5,7 @@ using static EoE.EoEEditor;
 namespace EoE.Information
 {
 	[CustomEditor(typeof(DropTable), true), CanEditMultipleObjects]
-	public class DropTableEditor : ObjectSettingEditor
+	public class DropTableEditor : ScriptableObjectEditor
 	{
 		protected override void CustomInspector()
 		{

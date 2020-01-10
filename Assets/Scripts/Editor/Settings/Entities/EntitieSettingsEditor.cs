@@ -5,7 +5,7 @@ using static EoE.EoEEditor;
 namespace EoE.Information
 {
 	[CustomEditor(typeof(EntitieSettings), true), CanEditMultipleObjects]
-	public class EntitieSettingsEditor : ObjectSettingEditor
+	public class EntitieSettingsEditor : ScriptableObjectEditor
 	{
 		protected static bool BaseSettingsOpen;
 		protected static bool CombatSettingsOpen;

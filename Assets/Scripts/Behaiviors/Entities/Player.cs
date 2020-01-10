@@ -16,9 +16,10 @@ namespace EoE.Entities
 		private const float MIN_WALK_ACCELERATION = 0.45f;
 		private const float NON_TURNING_THRESHOLD = 30;
 		private const float LERP_TURNING_AREA = 0.5f;
-		private const float JUMP_GROUND_COOLDOWN = 0.2f;
+		private const float JUMP_COOLDOWN = 0.2f;
+		private const float FALLDAMAGE_COOLDOWN = 0.2f;
 		private const float IS_FALLING_THRESHOLD = -1;
-		private const float LANDED_VELOCITY_THRESHOLD = 0.5f;
+		private const float LANDED_VELOCITY_THRESHOLD = 0.15f;
 		private const float SWITCH_TARGET_COOLDOWN = 0.25f;
 		private const int SELECTABLE_ITEMS_AMOUNT = 4;
 
@@ -50,11 +51,11 @@ namespace EoE.Entities
 		private BuffInstance blockingBuff;
 
 		//Velocity
+		private float jumpCooldown;
 		private Vector3 curMoveVelocity => controllDirection * curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
 		private Vector3 controllDirection;
 		private float intendedAcceleration;
 		private float curAcceleration;
-		private float jumpGroundCooldown;
 		private bool lastOnGroundState = true;
 		private float lastFallVelocity;
 
@@ -72,10 +73,11 @@ namespace EoE.Entities
 		private float switchTargetTimer;
 
 		//Getter Helpers
-		public float jumpVelocity { get; private set; }
-		public float verticalVelocity { get; private set; }
-		public float totalVerticalVelocity => jumpVelocity * PlayerSettings.JumpImpulsePower + verticalVelocity;
-		public override Vector3 curVelocity => base.curVelocity + new Vector3(0, totalVerticalVelocity, 0);
+		public float JumpVelocity { get; private set; }
+		public float FallDamageCooldown { get; set; }
+		public float VerticalVelocity { get; private set; }
+		public float TotalVerticalVelocity => JumpVelocity * PlayerSettings.JumpImpulsePower + VerticalVelocity;
+		public override Vector3 CurVelocity => base.CurVelocity + new Vector3(0, TotalVerticalVelocity, 0);
 		public static Player Instance { get; private set; }
 		public override EntitieSettings SelfSettings => selfSettings;
 		public static PlayerSettings PlayerSettings => Instance.selfSettings;
@@ -567,13 +569,20 @@ namespace EoE.Entities
 					return;
 			}
 
-			if (jumpGroundCooldown > 0)
+			bool disallowJump = false;
+			if (jumpCooldown > 0)
 			{
-				jumpGroundCooldown -= Time.deltaTime;
-				return;
+				jumpCooldown -= Time.deltaTime;
+				disallowJump = true;
 			}
 
-			if (jumpPressed && charController.isGrounded)
+			if(FallDamageCooldown > 0)
+			{
+				FallDamageCooldown -= Time.deltaTime;
+				disallowJump = true;
+			}
+
+			if (!disallowJump && (jumpPressed && charController.isGrounded))
 			{
 				if (curEndurance >= PlayerSettings.JumpEnduranceCost)
 				{
@@ -587,12 +596,12 @@ namespace EoE.Entities
 			float directionOffset = Vector3.Dot(controllDirection, transform.forward);
 			float forwardMultiplier = Mathf.Lerp(PlayerSettings.JumpBackwardMultiplier, 1, (directionOffset + 1) / 2) * (directionOffset > 0 ? 1 : -1);
 
-			jumpVelocity = Mathf.Min(PlayerSettings.JumpPower.y * curJumpPowerMultiplier, PlayerSettings.JumpPower.y * curJumpPowerMultiplier);
+			JumpVelocity = Mathf.Min(PlayerSettings.JumpPower.y * curJumpPowerMultiplier, PlayerSettings.JumpPower.y * curJumpPowerMultiplier);
 			Vector3 addedExtraForce = PlayerSettings.JumpPower.x * transform.right * curJumpPowerMultiplier + PlayerSettings.JumpPower.z * transform.forward * curJumpPowerMultiplier * (curStates.Running ? PlayerSettings.RunSpeedMultiplicator : 1) * forwardMultiplier;
 			impactForce += new Vector2(addedExtraForce.x, addedExtraForce.z) * curAcceleration;
-			verticalVelocity = 0;
+			VerticalVelocity = 0;
 
-			jumpGroundCooldown = JUMP_GROUND_COOLDOWN;
+			FallDamageCooldown = FALLDAMAGE_COOLDOWN;
 			animationControl.SetTrigger("Jump");
 
 			for (int i = 0; i < PlayerSettings.EffectsOnJump.Length; i++)
@@ -604,7 +613,7 @@ namespace EoE.Entities
 		{
 			//Find out wether the entitie is falling or not
 			bool playerWantsToFall = curStates.Falling || !InputController.Jump.Active;
-			bool falling = !charController.isGrounded && (totalVerticalVelocity < IS_FALLING_THRESHOLD || playerWantsToFall);
+			bool falling = !charController.isGrounded && (TotalVerticalVelocity < IS_FALLING_THRESHOLD || playerWantsToFall);
 
 			//If so: we enable the falling animation and add extra velocity for a better looking fallcurve
 			curStates.Falling = falling;
@@ -617,17 +626,21 @@ namespace EoE.Entities
 		private void CheckForLanding()
 		{
 			bool newOnGroundState = charController.isGrounded;
-			float velDif = curVelocity.y - lastFallVelocity;
+			float velDif = CurVelocity.y - lastFallVelocity;
 			//Check if the grounded state changed
 			if ((newOnGroundState != lastOnGroundState))
 			{
 				lastOnGroundState = newOnGroundState;
 				//Did the ground state change from false to true?
 				//Then if we reached a certain velocity we count this is landing
-				if (newOnGroundState && velDif > LANDED_VELOCITY_THRESHOLD)
-					Landed(velDif);
+				if (newOnGroundState)
+				{
+					jumpCooldown = JUMP_COOLDOWN;
+					if(velDif > LANDED_VELOCITY_THRESHOLD)
+						Landed(velDif);
+				}
 			}
-			lastFallVelocity = curVelocity.y;
+			lastFallVelocity = CurVelocity.y;
 		}
 		private void Landed(float velDif)
 		{
@@ -651,7 +664,7 @@ namespace EoE.Entities
 			curAcceleration *= 1 - velocityMultiplier;
 			impactForce *= 1 - velocityMultiplier;
 
-			if (jumpGroundCooldown <= 0)
+			if (FallDamageCooldown <= 0)
 			{
 				//Check if there is any fall damage to give
 				float damageAmount = GameController.CurrentGameSettings.FallDamageCurve.Evaluate(velDif);
@@ -690,11 +703,11 @@ namespace EoE.Entities
 		protected override void ApplyKnockback(Vector3 causedKnockback)
 		{
 			base.ApplyKnockback(causedKnockback);
-			verticalVelocity += causedKnockback.y;
+			VerticalVelocity += causedKnockback.y;
 		}
 		private void ApplyForces()
 		{
-			Vector3 appliedForce = curMoveVelocity + curVelocity;
+			Vector3 appliedForce = curMoveVelocity + CurVelocity;
 
 			charController.Move(appliedForce * Time.fixedDeltaTime);
 			animationControl.SetBool("OnGround", charController.isGrounded);
@@ -705,27 +718,27 @@ namespace EoE.Entities
 			float lowerFallThreshold = Physics.gravity.y / 2;
 			float force = scale * Physics.gravity.y * Time.fixedDeltaTime;
 
-			if (!charController.isGrounded || totalVerticalVelocity > 0)
+			if (!charController.isGrounded || TotalVerticalVelocity > 0)
 			{
-				if (jumpVelocity > 0)
+				if (JumpVelocity > 0)
 				{
-					jumpVelocity += force * PlayerSettings.JumpImpulsePower;
-					if (jumpVelocity < 0)
+					JumpVelocity += force * PlayerSettings.JumpImpulsePower;
+					if (JumpVelocity < 0)
 					{
-						verticalVelocity += jumpVelocity;
-						jumpVelocity = 0;
+						VerticalVelocity += JumpVelocity;
+						JumpVelocity = 0;
 					}
 				}
 				else
 				{
-					verticalVelocity += force;
-					jumpVelocity = 0;
+					VerticalVelocity += force;
+					JumpVelocity = 0;
 				}
 			}
 			else
 			{
-				jumpVelocity = 0;
-				verticalVelocity = lowerFallThreshold;
+				JumpVelocity = 0;
+				VerticalVelocity = lowerFallThreshold;
 			}
 		}
 		#endregion

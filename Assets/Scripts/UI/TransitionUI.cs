@@ -16,6 +16,12 @@ namespace EoE.UI
 		private bool inTransition;
 		private bool curState;
 
+		private Vector2 startPos;
+		private Vector2 targetPos;
+		private float transitionTime;
+		private float finalTransitionTime;
+		private System.Action finishCall;
+
 		private void Start()
 		{
 			rTransform = GetComponent<RectTransform>();
@@ -24,48 +30,48 @@ namespace EoE.UI
 		}
 		public void ChangeTransitionState(bool newState, System.Action finishCall = null)
 		{
-			if (inTransition)
-				StopAllCoroutines();
-
 			curState = newState;
+			inTransition = true;
 			gameObject.SetActive(true);
-			StartCoroutine(Transition(curState ? activePosition : disabledPosition, finishCall));
+
+			this.startPos = rTransform.anchoredPosition;
+			this.targetPos = curState ? activePosition : disabledPosition;
+			this.transitionTime = 0;
+			this.finalTransitionTime = standardTransitionTime;
+			this.finishCall = finishCall;
 		}
 		public void CustomTransition(Vector2 targetPos, System.Action finishCall = null, float? time = null)
 		{
-			if (inTransition)
-				StopAllCoroutines();
-
 			curState = true;
-			gameObject.SetActive(true);
-			StartCoroutine(Transition(targetPos, finishCall, time));
-		}
-
-		private IEnumerator Transition(Vector2 targetPos, System.Action finishCall = null, float? time = null)
-		{
 			inTransition = true;
-			Vector2 startPos = rTransform.anchoredPosition;
-			float timer = 0;
-			float finalTime = time.HasValue ? time.Value : standardTransitionTime;
+			gameObject.SetActive(true);
 
-			while (timer < finalTime)
+			this.startPos = rTransform.anchoredPosition;
+			this.targetPos = targetPos;
+			this.transitionTime = 0;
+			this.finalTransitionTime = time ?? standardTransitionTime;
+			this.finishCall = finishCall;
+		}
+		private void Update()
+		{
+			if (inTransition)
 			{
-				yield return new WaitForEndOfFrame();
-				timer += ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
-
-				rTransform.anchoredPosition = Vector2.Lerp(startPos, targetPos, timer / finalTime);
+				transitionTime += ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
+				rTransform.anchoredPosition = Vector2.LerpUnclamped(startPos, targetPos, transitionTime / finalTransitionTime);
+				if(transitionTime >= finalTransitionTime)
+				{
+					inTransition = false;
+					rTransform.anchoredPosition = targetPos;
+					if (finishCall != null)
+					{
+						finishCall?.Invoke();
+					}
+					if (!curState && disableOnDisabledPos)
+					{
+						gameObject.SetActive(false);
+					}
+				}
 			}
-
-			rTransform.anchoredPosition = targetPos;
-			inTransition = false;
-
-			if (!curState && disableOnDisabledPos)
-			{
-				gameObject.SetActive(false);
-			}
-
-			if (finishCall != null)
-				finishCall?.Invoke();
 		}
 	}
 }

@@ -13,7 +13,8 @@ namespace EoE.Combatery
 	public class WeaponController : MonoBehaviour
 	{
 		#region Fields
-		private const float COMBO_WAIT_THRESHOLD = 0.65f;
+		private const float COMBO_WAIT_THRESHOLD = 0.25f;
+		private const float ATTACK_END_COOLDOWN = 0.35f;
 		//Static info
 		private static readonly Dictionary<AttackAnimation, (float, float)> animationDelayLookup = new Dictionary<AttackAnimation, (float, float)>()
 		{
@@ -27,14 +28,19 @@ namespace EoE.Combatery
 
 		//Inspector variables
 		[SerializeField] private WeaponHitbox[] weaponHitboxes = default;
-		[SerializeField] private GameObject[] objectsToActivateOnActive = default;
+		[SerializeField] private ParticleSystem[] particlesToActivateOnEnable = default;
+
+		//Base Data
+		private Weapon weaponInfo;
+		public CombatObject overrideBaseObject { get; set; }
+		private CombatObject curBaseData => overrideBaseObject ?? weaponInfo;
 
 		//Behaivior Control
+		private float attackEndCooldown;
 		private bool colliderActive;
 		private bool isChargingAttack;
 		private float curChargeMultiplier;
 		private bool wantsToBeginNextSequence;
-		private Weapon weaponInfo;
 		private List<Collider> ignoredColliders = new List<Collider>();
 		private Coroutine attackCoroutine;
 
@@ -86,9 +92,12 @@ namespace EoE.Combatery
 					}
 				}
 			}
-			for (int i = 0; i < objectsToActivateOnActive.Length; i++)
+			for (int i = 0; i < particlesToActivateOnEnable.Length; i++)
 			{
-				objectsToActivateOnActive[i].SetActive(state);
+				if(state)
+					particlesToActivateOnEnable[i].Play(true);
+				else
+					particlesToActivateOnEnable[i].Stop(true, ParticleSystemStopBehavior.StopEmitting);
 			}
 			ignoredColliders = new List<Collider>();
 		}
@@ -104,9 +113,9 @@ namespace EoE.Combatery
 			}
 
 			//deactivate all custom objects
-			for (int i = 0; i < clone.objectsToActivateOnActive.Length; i++)
+			for (int i = 0; i < clone.particlesToActivateOnEnable.Length; i++)
 			{
-				clone.objectsToActivateOnActive[i].SetActive(false);
+				particlesToActivateOnEnable[i].Stop(true, ParticleSystemStopBehavior.StopEmitting);
 			}
 
 			//Set layers to default
@@ -121,6 +130,11 @@ namespace EoE.Combatery
 		#region BasicMonobehaivior
 		private void Update()
 		{
+			if(attackEndCooldown > 0)
+			{
+				attackEndCooldown -= Time.deltaTime;
+			}
+
 			if (timeToNextCombo > 0)
 			{
 				timeToNextCombo -= Time.deltaTime;
@@ -164,7 +178,7 @@ namespace EoE.Combatery
 		#endregion
 		public void StartAttack()
 		{
-			if (Player.Instance.IsCasting)
+			if (Player.Instance.IsCasting || attackEndCooldown > 0)
 				return;
 
 			if (InAttackSequence)
@@ -231,9 +245,9 @@ namespace EoE.Combatery
 					Player.Instance.MovementStop++;
 
 				//First check if this attack sequence is allowed if not we stop the while loop here
-				if (weaponInfo.CheckIfCanActivateCost(Player.Instance, ActiveAttackStyle.HealthCostMultiplier, ActiveAttackStyle.ManaCostMultiplier, ActiveAttackStyle.EnduranceCostMultiplier))
+				if (curBaseData.CheckIfCanActivateCost(Player.Instance, ActiveAttackStyle.HealthCostMultiplier, ActiveAttackStyle.ManaCostMultiplier, ActiveAttackStyle.EnduranceCostMultiplier))
 				{
-					weaponInfo.ActivateCost(Player.Instance, ActiveAttackStyle.HealthCostMultiplier, ActiveAttackStyle.ManaCostMultiplier, ActiveAttackStyle.EnduranceCostMultiplier);
+					curBaseData.ActivateCost(Player.Instance, ActiveAttackStyle.HealthCostMultiplier, ActiveAttackStyle.ManaCostMultiplier, ActiveAttackStyle.EnduranceCostMultiplier);
 				}
 				else
 				{
@@ -306,7 +320,7 @@ namespace EoE.Combatery
 						{
 							if (Utils.Chance01(ActiveAttackStyle.AttackEffects[i].Effect.ChanceToActivate))
 							{
-								ActiveAttackStyle.AttackEffects[i].Effect.Activate(Player.Instance, weaponInfo);
+								ActiveAttackStyle.AttackEffects[i].Effect.Activate(Player.Instance, curBaseData);
 							}
 						}
 					}
@@ -433,6 +447,7 @@ namespace EoE.Combatery
 
 			SetAnimationSpeed(1);
 			Player.Instance.animationControl.SetBool("InFight", false);
+			attackEndCooldown = ATTACK_END_COOLDOWN;
 			ChangeWeaponState(InAttackSequence = false, ActiveAttackStyle = null);
 		}
 		public void HitObject(Vector3 hitPos, Collider hit, Vector3 direction)
@@ -463,9 +478,9 @@ namespace EoE.Combatery
 			float critChanceMultiplier = (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.CritChance) ? chargeMultiplier : 1);
 			float knockbackMultiplier = (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.Knockback) ? chargeMultiplier : 1);
 
-			float damage = ActiveAttackStyle.DamageMultiplier * weaponInfo.BaseDamage * damageMultiplier;
-			bool isCrit = Utils.Chance01(ActiveAttackStyle.CritChanceMultiplier * weaponInfo.BaseCritChance * critChanceMultiplier);
-			float? knockbackAmount = ActiveAttackStyle.KnockbackMultiplier * weaponInfo.BaseKnockback * knockbackMultiplier;
+			float damage = ActiveAttackStyle.DamageMultiplier * curBaseData.BaseDamage * damageMultiplier;
+			bool isCrit = Utils.Chance01(ActiveAttackStyle.CritChanceMultiplier * curBaseData.BaseCritChance * critChanceMultiplier);
+			float? knockbackAmount = ActiveAttackStyle.KnockbackMultiplier * curBaseData.BaseKnockback * knockbackMultiplier;
 
 			knockbackAmount = knockbackAmount.Value > 0 ? knockbackAmount : null;
 			ElementType attackElement = ActiveAttackStyle.OverrideElement ? ActiveAttackStyle.OverridenElement : weaponInfo.WeaponElement;
@@ -475,10 +490,16 @@ namespace EoE.Combatery
 
 			//Now invoke the custom effects
 			ActivateSingleHitEffects(hitEntitie, direction, hitPos);
+
+			//If we are currently overriding the base data then we want to stop here, this will happen for example if a ultimate is active
+			if (curBaseData != weaponInfo)
+				return;
+
+			//Combo addtion
 			int comboIncrease = Mathf.RoundToInt(ActiveAttackStyle.OnHitComboWorth * (ActiveAttackStyle.NeedsCharging ? (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.ComboWorth) ? curChargeMultiplier : 1) : 1));
 			ComboHit(hitEntitie, direction, hitPos, comboIncrease);
 
-			//Calculate ultimate charge change
+			//Ultimate charge change
 			if (!weaponInfo.HasUltimate)
 				return;
 
@@ -526,7 +547,7 @@ namespace EoE.Combatery
 
 					activatedDirectHits[i].Activate(Player.Instance,
 																hitEntitie,
-																weaponInfo,
+																curBaseData,
 																direction,
 																hitPos,
 																overrides);

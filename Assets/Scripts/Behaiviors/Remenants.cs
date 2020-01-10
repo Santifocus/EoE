@@ -16,6 +16,7 @@ namespace EoE.Combatery
 
 		private float delayToWhileCast;
 		private float remainingLifeTime;
+		private Vector3 spawnPos;
 		public static Remenants CreateRemenants(CombatObject baseData, RemenantsData info, Entitie creator, Vector3 spawnPos)
 		{
 			Remenants newRemenants = Instantiate(GameController.RemenantsPrefab, Storage.ProjectileStorage);
@@ -23,16 +24,19 @@ namespace EoE.Combatery
 			newRemenants.info = info;
 			newRemenants.creator = creator;
 
-			newRemenants.transform.position = spawnPos;
+			newRemenants.transform.position = newRemenants.spawnPos = spawnPos;
 			newRemenants.delayToWhileCast = info.WhileTickTime;
 
-			newRemenants.ActivateAOEEffects(info.StartEffects);
-			newRemenants.CreateFX(info.VisualEffects, true);
+			newRemenants.ActivateActivationEffects(info.StartEffects, true);
 
 			newRemenants.remainingLifeTime = info.Duration;
 
 			newRemenants.body.useGravity = info.TryGroundRemenants;
-
+			if (info.TryGroundRemenants)
+			{
+				newRemenants.body.AddForce(Physics.gravity * 10, ForceMode.Impulse);
+			}
+			
 			return newRemenants;
 		}
 		private void Update()
@@ -43,7 +47,7 @@ namespace EoE.Combatery
 			if (delayToWhileCast <= 0)
 			{
 				delayToWhileCast += info.WhileTickTime;
-				ActivateAOEEffects(info.WhileEffects);
+				ActivateActivationEffects(info.WhileEffects, true);
 			}
 
 			if (remainingLifeTime < 0)
@@ -51,18 +55,13 @@ namespace EoE.Combatery
 				Destroy(gameObject);
 			}
 		}
-		private void ActivateAOEEffects(EffectAOE[] effects)
+		private void ActivateActivationEffects(ActivationEffect[] activationEffects, bool binding)
 		{
-			for (int i = 0; i < effects.Length; i++)
-				effects[i].Activate(creator, transform, baseData);
-		}
-		private void CreateFX(CustomFXObject[] effects, bool bind = false)
-		{
-			for (int i = 0; i < effects.Length; i++)
+			for (int i = 0; i < activationEffects.Length; i++)
 			{
-				FXInstance instance = FXManager.PlayFX(effects[i], transform, false, 1);
-				if (bind)
-					boundEffects.Add(instance);
+				FXInstance[] fxInstances = activationEffects[i].Activate(creator, baseData, transform);
+				if (binding)
+					boundEffects.AddRange(fxInstances);
 			}
 		}
 		private void StopBoundFX()
@@ -75,7 +74,34 @@ namespace EoE.Combatery
 		}
 		private void OnDestroy()
 		{
+			ActivateActivationEffects(info.OnEndEffects, false);
 			StopBoundFX();
+		}
+		private void OnDrawGizmos()
+		{
+			if (info.Duration - remainingLifeTime < 0.5f)
+				DrawEffectSpheres(info.StartEffects, spawnPos);
+
+			DrawEffectSpheres(info.WhileEffects, transform.position);
+		}
+		private void DrawEffectSpheres(ActivationEffect[] arrayTarget, Vector3 targetPos)
+		{
+			for (int i = 0; i < arrayTarget.Length; i++)
+			{
+				if (arrayTarget[i].HasMaskFlag(EffectType.AOE))
+				{
+					for (int j = 0; j < arrayTarget[i].AOEEffects.Length; j++)
+					{
+						Gizmos.color = new Color(0, 1, 0, 0.3f);
+						Gizmos.DrawSphere(targetPos, arrayTarget[i].AOEEffects[j].BaseEffectRadius);
+						if (arrayTarget[i].AOEEffects[j].ZeroOutDistance > arrayTarget[i].AOEEffects[j].BaseEffectRadius)
+						{
+							Gizmos.color = Color.red;
+							Gizmos.DrawWireSphere(targetPos, arrayTarget[i].AOEEffects[j].ZeroOutDistance);
+						}
+					}
+				}
+			}
 		}
 	}
 }

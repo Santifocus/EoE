@@ -552,14 +552,14 @@ namespace EoE
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1), false);
 				}
 				//Heal Effects
-				if (settings.HasMaskFlag(EffectType.HealOnUser))
+				if (settings.HasMaskFlag(EffectType.HealOnCreator))
 				{
 					SerializedProperty healEffectArrayProperty = property.FindPropertyRelative(nameof(settings.HealsOnUser));
 					DrawArray<HealTargetInfo>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.HealsOnUser))), ref settings.HealsOnUser, healEffectArrayProperty, DrawHealTargetInfo, new GUIContent(". Heal Effect"), offSet + 1);
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1), false);
 				}
 				//Buffs
-				if (settings.HasMaskFlag(EffectType.BuffOnUser))
+				if (settings.HasMaskFlag(EffectType.BuffOnCreator))
 				{
 					SerializedProperty buffArrayProperty = property.FindPropertyRelative(nameof(settings.BuffsOnUser));
 					ObjectArrayField<Buff>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BuffsOnUser))), ref settings.BuffsOnUser, buffArrayProperty, new GUIContent(". Buff"), offSet + 1);
@@ -569,7 +569,7 @@ namespace EoE
 				if (settings.HasMaskFlag(EffectType.CreateRemenants))
 				{
 					SerializedProperty remenantsArrayProperty = property.FindPropertyRelative(nameof(settings.CreatedRemenants));
-					DrawArray<RemenantsData>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CreatedRemenants))), ref settings.CreatedRemenants, remenantsArrayProperty, DrawRemenantsInfo, new GUIContent(". Remenant"), offSet + 1);
+					ObjectArrayField<RemenantsData>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CreatedRemenants))), ref settings.CreatedRemenants, remenantsArrayProperty, new GUIContent(". Remenant"), offSet + 1);
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1), false);
 				}
 			}
@@ -640,36 +640,6 @@ namespace EoE
 			}
 			if (changed)
 				isDirty = true;
-		}
-		public static void DrawRemenantsInfo(GUIContent content, RemenantsData selfData, SerializedProperty selfProperty, int offSet)
-		{
-			if (selfData == null)
-			{
-				selfData = new RemenantsData();
-				isDirty = true;
-			}
-
-			Foldout(content, selfProperty, offSet);
-
-			if (selfProperty.isExpanded)
-			{
-				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.Duration))), ref selfData.Duration, offSet + 1);
-				BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.TryGroundRemenants))), ref selfData.TryGroundRemenants, offSet + 1);
-				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
-
-				SerializedProperty effectsProperty = selfProperty.FindPropertyRelative(nameof(selfData.VisualEffects));
-				DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.VisualEffects))), ref selfData.VisualEffects, effectsProperty, DrawCustomFXObject, new GUIContent(". Effect"), offSet + 1);
-
-				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
-
-				SerializedProperty startEffectsOpen = selfProperty.FindPropertyRelative(nameof(selfData.StartEffects));
-				ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.StartEffects))), ref selfData.StartEffects, startEffectsOpen, new GUIContent(". Effect"), offSet + 1);
-
-				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
-
-				SerializedProperty whileEffectsOpen = selfProperty.FindPropertyRelative(nameof(selfData.WhileEffects));
-				ObjectArrayField(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfData.WhileEffects))), ref selfData.WhileEffects, whileEffectsOpen, new GUIContent(". Effect"), offSet + 1);
-			}
 		}
 		public static bool NullableVector3Field(string content, string valueContent, ref Vector3 curValue, ref bool hasValue, int offSet = 0) => NullableVector3Field(new GUIContent(content), new GUIContent(valueContent), ref curValue, ref hasValue, offSet);
 		public static bool NullableVector3Field(GUIContent hasValueContent, GUIContent valueContent, ref Vector3 curValue, ref bool hasValue, int offSet = 0)
