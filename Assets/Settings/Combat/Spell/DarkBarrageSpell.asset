@@ -21,12 +21,14 @@ MonoBehaviour:
   SpellCooldown: 0.3
   ContainedParts: 4
   MovementRestrictions: 0
+  RotationRestrictions: -1
   SubtractManaAtPart: 2
   CastInfo:
     Duration: 3
     VisualEffects: []
     StartEffects: []
     WhileEffects: []
+    WhileTickTime: 0.1
   StartInfo:
     VisualEffects: []
     Effects: []

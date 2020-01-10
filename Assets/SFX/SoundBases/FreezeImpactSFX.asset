@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: FreezeImpactSFX
   m_EditorClassIdentifier: 
   soundName: FreezeImpact
-  clip: {fileID: 8300000, guid: 3b5746f2b8155c343aeffda617a5e0fc, type: 3}
+  clip: {fileID: 8300000, guid: 43a735fd2eb93474cb64d7efd3bb4fc7, type: 3}
   audioGroup: {fileID: 24300002, guid: b8b319c0096b4d34196070be7e374c0c, type: 2}
   Loop: 0
   priority: 128
-  pitch: 0.75
+  pitch: 0.7
   volume: 0.922
   spatialBlend: 0
   scaleStyle: 1
