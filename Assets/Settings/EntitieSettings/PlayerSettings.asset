@@ -49,7 +49,7 @@ MonoBehaviour:
   CameraRotationSpeed: 7
   CameraVerticalAngleClamps: {x: -50, y: 50}
   CameraExtraZoomOnVertical: 0.8
-  MaxEnemyTargetingDistance: 180
+  MaxEnemyTargetingDistance: 50
   CameraClampsWhenTargeting: {x: -30, y: 30}
   CameraBaseFOV: 60
   Endurance: 100
@@ -99,7 +99,7 @@ MonoBehaviour:
   - Item: {fileID: 11400000, guid: e2175b767068abe49ad244c5541e84fd, type: 2}
     ItemCount: 1
     ForceEquip: 0
-  - Item: {fileID: 11400000, guid: 428f279ff073bb54c81150df9f36247e, type: 2}
+  - Item: {fileID: 11400000, guid: 328dc4ced1e3d1f43ad1d209ac2b013e, type: 2}
     ItemCount: 1
     ForceEquip: 0
   - Item: {fileID: 11400000, guid: 20e8cd93f617d124d83e9a5570f04234, type: 2}

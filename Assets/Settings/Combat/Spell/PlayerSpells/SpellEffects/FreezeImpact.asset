@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FreezeImpact
   m_EditorClassIdentifier: 
   AffectedTargets: 4
-  DamageElement: 1
+  DamageElement: 8
   CauseType: 1
   BaseEffectRadius: 8
   ZeroOutDistance: 8

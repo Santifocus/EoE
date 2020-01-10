@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc89a2906f120d45877860a48c8c4e2, type: 3}
   m_Name: FreezeSpell
   m_EditorClassIdentifier: 
-  BaseDamage: 15
+  BaseDamage: 25
   BaseHealthCost: 0
   BaseManaCost: 10
   BaseEnduranceCost: 0
   BaseKnockback: 16
   BaseCritChance: 0
   SpellCooldown: 6
-  ContainedParts: 3
+  ContainedParts: 4
   MovementRestrictions: -1
   SubtractManaAtPart: 2
   CastInfo:
@@ -60,4 +60,8 @@ MonoBehaviour:
       CustomScale: {x: 1, y: 1, z: 1}
     Effects:
     - {fileID: 11400000, guid: 991091382b25eb546806b4ae8d249a8b, type: 2}
-  ProjectileInfos: []
+  ProjectileInfos:
+  - Projectile: {fileID: 11400000, guid: 4a7eb00bceddfbc448f67ae2a7fe1136, type: 2}
+    ExecutionDelay: 0
+    ExecutionCount: 1
+    ExecutionRepeatDelay: 0.2
