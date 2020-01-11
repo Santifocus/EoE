@@ -664,7 +664,7 @@ namespace EoE
 		{
 			while (AllNotifications.Count > 0)
 			{
-				yield return new WaitForFixedUpdate();
+				yield return new WaitForEndOfFrame();
 				if (GameController.GameIsPaused)
 					continue;
 
@@ -725,7 +725,7 @@ namespace EoE
 		{
 			while (AllCustomUIs.Count > 0)
 			{
-				yield return new WaitForFixedUpdate();
+				yield return new WaitForEndOfFrame();
 				if (GameController.GameIsPaused)
 					continue;
 

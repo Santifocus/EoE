@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.11653908, g: 0.11864976, b: 0.11893117, a: 1}
+  m_IndirectSpecularColor: {r: 0.11653923, g: 0.11864985, b: 0.11893123, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -20257,7 +20257,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1296732447}
   m_Layer: 5
-  m_Name: MiniDialogueController
+  m_Name: NotificationCavas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21592,6 +21592,7 @@ MonoBehaviour:
     text: Talk to strange appearance
   - textColor: {r: 0, g: 1, b: 0.20422673, a: 1}
     text: ' [A]'
+  dialoguePopup: {fileID: 11400000, guid: d2cc520754e2f464393a7d62c8aa9fcc, type: 2}
 --- !u!54 &1422176381
 Rigidbody:
   m_ObjectHideFlags: 0

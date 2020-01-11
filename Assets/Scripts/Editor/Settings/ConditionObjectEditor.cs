@@ -40,9 +40,14 @@ namespace EoE.Information
 				needsToCheckComparison |= FloatField(new GUIContent("Test Value"), ref currentTestValue);
 				GUILayout.Label("Test Comparison is: " + comparisonMet + "!", EditorStyles.boldLabel);
 			}
-			else
+			else if (settings.conditionType == ConditionObject.ConditionType.State)
 			{
 				EnumField<ConditionObject.StateTarget>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.stateTarget))), ref settings.stateTarget);
+			}
+			else
+			{
+				EnumField<ConditionObject.InputTarget>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.inputTarget))), ref settings.inputTarget);
+				EnumField<ConditionObject.InputCheckStyle>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.inputCheckStyle))), ref settings.inputCheckStyle);
 			}
 		}
 		private bool DrawValueComparer(GUIContent content, ConditionObject.ValueComparer settings, SerializedProperty property, int offSet = 0)

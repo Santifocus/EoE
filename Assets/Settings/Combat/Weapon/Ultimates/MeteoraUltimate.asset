@@ -54,7 +54,7 @@ MonoBehaviour:
     AttackSequenceParts:
     - AnimationTarget: 4
       StopMovement: 1
-      StopRotation: 0
+      StopRotation: 1
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 2
       AnimationSpeedCurve:

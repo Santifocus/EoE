@@ -1,4 +1,5 @@
-﻿using EoE.Entities;
+﻿using EoE.Controlls;
+using EoE.Entities;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,10 +8,12 @@ namespace EoE.Information
 {
 	public class ConditionObject : ScriptableObject
 	{
+		#region Enums
 		public enum ConditionType
 		{
 			Comparison = 1,
 			State = 2,
+			Input = 3,
 		}
         public enum ComparisonTarget 
 		{
@@ -36,7 +39,31 @@ namespace EoE.Information
 			PlayerIsRotationStopped = 10,
 			PlayerIsInvincible = 11,
 		}
-
+		public enum InputTarget
+		{
+			Enter = 1,
+			Back = 2,
+			Action = 3,
+			Special = 4,
+			Up = 5,
+			Down = 6,
+			Right = 7,
+			Left = 8,
+			RightBumper = 9,
+			LeftBumper = 10,
+			RightTrigger = 11,
+			LeftTrigger = 12,
+			Menu = 13,
+			Pause = 14,
+		}
+		public enum InputCheckStyle
+		{
+			Down = 1,
+			Active = 2,
+			Up = 3,
+		}
+		#endregion
+		#region Fields
 		//Base settings
 		public bool Inverse = false;
 		public ConditionType conditionType = ConditionType.Comparison;
@@ -50,10 +77,26 @@ namespace EoE.Information
 		//State
 		public StateTarget stateTarget = StateTarget.PlayerOnGround;
 
+		//Input
+		public InputTarget inputTarget = InputTarget.Enter;
+		public InputCheckStyle inputCheckStyle = InputCheckStyle.Down;
+		#endregion
+		#region ConditionMetRequest
 		public bool ConditionMet()
 		{
-			return ((conditionType == ConditionType.Comparison) ? ComparisonCheck() : StateCheck()) != Inverse;
+			switch (conditionType)
+			{
+				case ConditionType.Comparison:
+					return ComparisonCheck() != Inverse;
+				case ConditionType.State:
+					return StateCheck() != Inverse;
+				case ConditionType.Input:
+					return InputCheck() != Inverse;
+			}
+			return false;
 		}
+		#endregion
+		#region Comparison
 		private bool ComparisonCheck()
 		{
 			bool wasMet = false;
@@ -84,6 +127,44 @@ namespace EoE.Information
 
 			return wasMet;
 		}
+		private bool Compare(float value)
+		{
+			return firstComparer.ComparisonMet(value) && (!useSecondComparer || secondComparer.ComparisonMet(value));
+		}
+		[System.Serializable]
+		public class ValueComparer
+		{
+			public enum ComparisonStyle
+			{
+				LowerEquals = 1,    //val <= input
+				Lower = 2,          //val < input
+				Equals = 3,         //val == input
+				Higher = 4,         //val > input
+				HigherEquals = 5,   //val >= input
+			}
+			public ComparisonStyle compareStyle = ComparisonStyle.HigherEquals;
+			public float compareValue = 1;
+
+			public bool ComparisonMet(float value)
+			{
+				switch (compareStyle)
+				{
+					case ComparisonStyle.LowerEquals:
+						return compareValue <= value;
+					case ComparisonStyle.Lower:
+						return compareValue < value;
+					case ComparisonStyle.Equals:
+						return compareValue == value;
+					case ComparisonStyle.Higher:
+						return compareValue > value;
+					case ComparisonStyle.HigherEquals:
+						return compareValue >= value;
+				}
+				return false;
+			}
+		}
+		#endregion
+		#region State
 		private bool StateCheck()
 		{
 			bool wasMet = false;
@@ -125,43 +206,56 @@ namespace EoE.Information
 			}
 			return wasMet;
 		}
-
-		private bool Compare(float value)
+		#endregion
+		#region Input
+		private bool InputCheck()
 		{
-			return firstComparer.ComparisonMet(value) && (!useSecondComparer || secondComparer.ComparisonMet(value));
+			switch (inputTarget)
+			{
+				case InputTarget.Enter:
+					return InputValidation(InputController.MenuEnter);
+				case InputTarget.Back:
+					return InputValidation(InputController.MenuBack);
+				case InputTarget.Action:
+					return InputValidation(InputController.Attack);
+				case InputTarget.Special:
+					return InputValidation(InputController.HeavyAttack);
+				case InputTarget.Up:
+					return InputValidation(InputController.MenuUp);
+				case InputTarget.Down:
+					return InputValidation(InputController.MenuDown);
+				case InputTarget.Right:
+					return InputValidation(InputController.MenuRight);
+				case InputTarget.Left:
+					return InputValidation(InputController.MenuLeft);
+				case InputTarget.RightBumper:
+					return InputValidation(InputController.MagicCast);
+				case InputTarget.LeftBumper:
+					return InputValidation(InputController.UseItem);
+				case InputTarget.RightTrigger:
+					return InputValidation(InputController.Block);
+				case InputTarget.LeftTrigger:
+					return InputValidation(InputController.Aim);
+				case InputTarget.Menu:
+					return InputValidation(InputController.PlayerMenu);
+				case InputTarget.Pause:
+					return InputValidation(InputController.Pause);
+			}
+			return false;
 		}
-
-		[System.Serializable]
-		public class ValueComparer
+		private bool InputValidation(InputController.Button button)
 		{
-			public enum ComparisonStyle
+			switch (inputCheckStyle)
 			{
-				LowerEquals = 1,    //val <= input
-				Lower = 2,          //val < input
-				Equals = 3,         //val == input
-				Higher = 4,         //val > input
-				HigherEquals = 5,   //val >= input
+				case InputCheckStyle.Down:
+					return button.Down;
+				case InputCheckStyle.Active:
+					return button.Active;
+				case InputCheckStyle.Up:
+					return button.Up;
 			}
-			public ComparisonStyle compareStyle = ComparisonStyle.HigherEquals;
-			public float compareValue = 1;
-
-			public bool ComparisonMet(float value)
-			{
-				switch (compareStyle)
-				{
-					case ComparisonStyle.LowerEquals:
-						return compareValue <= value;
-					case ComparisonStyle.Lower:
-						return compareValue < value;
-					case ComparisonStyle.Equals:
-						return compareValue == value;
-					case ComparisonStyle.Higher:
-						return compareValue > value;
-					case ComparisonStyle.HigherEquals:
-						return compareValue >= value;
-				}
-				return false;
-			}
+			return false;
 		}
+		#endregion
 	}
 }

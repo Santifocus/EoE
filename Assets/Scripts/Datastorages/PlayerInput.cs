@@ -447,7 +447,7 @@ namespace EoE.Controlls
                 {
                     ""name"": """",
                     ""id"": ""4336d187-b155-475b-908f-45951571add8"",
-                    ""path"": ""<DualShockGamepad>/leftStick/right"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -480,7 +480,7 @@ namespace EoE.Controlls
                 {
                     ""name"": """",
                     ""id"": ""88d0235c-a0aa-42b5-8219-b3fe3d8b3996"",
-                    ""path"": ""<DualShockGamepad>/leftStick/left"",
+                    ""path"": ""<Gamepad>/leftStick/left"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -513,7 +513,7 @@ namespace EoE.Controlls
                 {
                     ""name"": """",
                     ""id"": ""f0887442-5619-4c0d-96d4-f0d4b8f60420"",
-                    ""path"": ""<DualShockGamepad>/leftStick/up"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -546,7 +546,7 @@ namespace EoE.Controlls
                 {
                     ""name"": """",
                     ""id"": ""69bc4cae-2dea-4871-b07a-23c5d5619ce9"",
-                    ""path"": ""<DualShockGamepad>/leftStick/down"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

@@ -297,9 +297,10 @@ namespace EoE.Entities
 
 			if (IsStunned || IsMovementStopped)
 			{
-				curAcceleration = 0;
 				curStates.Moving = curStates.Running = false;
 				curStates.Turning = IsCasting ? curStates.Turning : false;
+				if (IsStunned)
+					curAcceleration = 0;
 				return;
 			}
 
