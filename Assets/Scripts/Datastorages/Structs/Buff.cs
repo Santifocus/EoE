@@ -11,8 +11,7 @@ namespace EoE.Information
 	{
 		public string Name;
 		public BuffType Quality = BuffType.Neutral;
-		public bool Permanent = false;
-		public float BuffTime = 5;
+		public FinishConditions FinishConditions = new FinishConditions();
 		public Sprite Icon;
 
 		public Effect[] Effects;
@@ -48,24 +47,41 @@ namespace EoE.Information
 		public Buff Base;
 		public Entitie Applier;
 		public Entitie Target;
-		public float RemainingTime;
 		public float[] FlatChanges;
 		public float[] DOTCooldowns;
 		public FXInstance[] BoundEffects;
+		private float RemainingTime;
 
 		public BuffInstance(Buff Base, Entitie Applier, Entitie Target)
 		{
 			this.Base = Base;
 			this.Applier = Applier;
-			this.RemainingTime = Base.BuffTime;
 			this.FlatChanges = new float[Base.Effects.Length];
 			this.DOTCooldowns = new float[Base.DOTs.Length];
+
+			Reset();
 
 			BoundEffects = new FXInstance[Base.FXEffects != null ? Base.FXEffects.Length : 0];
 			for (int i = 0; i < BoundEffects.Length; i++)
 			{
 				BoundEffects[i] = FXManager.PlayFX(Base.FXEffects[i], Target.transform, Target is Player);
 			}
+		}
+		public void Reset()
+		{
+			this.RemainingTime = Base.FinishConditions.OnTimeout ? Base.FinishConditions.TimeStay : 1;
+		}
+		public bool Update()
+		{
+			if(Base.FinishConditions.OnTimeout)
+				RemainingTime -= Time.deltaTime;
+
+			for(int i = 0; i < DOTCooldowns.Length; i++)
+			{
+				DOTCooldowns[i] -= Time.deltaTime;
+			}
+
+			return (RemainingTime <= 0) || (Base.FinishConditions.OnConditionMet && Base.FinishConditions.Condition.ConditionMet());
 		}
 		public void OnRemove()
 		{

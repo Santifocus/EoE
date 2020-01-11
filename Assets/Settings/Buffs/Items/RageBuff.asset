@@ -14,8 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Rage Buff
   Quality: 2
-  Permanent: 0
-  BuffTime: 10
+  FinishConditions:
+    OnParentDeath: 0
+    OnTimeout: 1
+    TimeStay: 10
+    OnConditionMet: 0
+    Condition: {fileID: 0}
   Icon: {fileID: 21300000, guid: 070080759fd8a224d824f824f5c5afa3, type: 3}
   Effects:
   - TargetBaseStat: 3

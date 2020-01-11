@@ -16,6 +16,12 @@ MonoBehaviour:
   Quality: 0
   Permanent: 0
   BuffTime: 0.1
+  FinishConditions:
+    OnParentDeath: 0
+    OnTimeout: 1
+    TimeStay: 0.1
+    OnConditionMet: 0
+    Condition: {fileID: 0}
   Icon: {fileID: 0}
   Effects: []
   CustomEffects:

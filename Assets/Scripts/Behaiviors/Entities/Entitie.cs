@@ -38,8 +38,7 @@ namespace EoE.Entities
 		public int MovementStops { get; set; }
 		public int RotationStops { get; set; }
 		public bool Alive { get; protected set; }
-		public List<BuffInstance> nonPermanentBuffs { get; protected set; }
-		public List<BuffInstance> permanentBuffs { get; protected set; }
+		public List<BuffInstance> activeBuffs { get; protected set; }
 		public EntitieState curStates;
 		private float healthRegenCooldown;
 		private float healthRegenDelay;
@@ -154,9 +153,7 @@ namespace EoE.Entities
 		}
 		private void BuffSetup()
 		{
-			nonPermanentBuffs = new List<BuffInstance>();
-			permanentBuffs = new List<BuffInstance>();
-
+			activeBuffs = new List<BuffInstance>();
 			LevelSetup();
 		}
 		protected virtual void LevelSetup()
@@ -166,8 +163,10 @@ namespace EoE.Entities
 				LevelingBaseBuff.Name = "LevelingBase";
 				LevelingBaseBuff.Quality = BuffType.Positive;
 				LevelingBaseBuff.Icon = null;
-				LevelingBaseBuff.BuffTime = 0;
-				LevelingBaseBuff.Permanent = true;
+				LevelingBaseBuff.FinishConditions = new FinishConditions()
+				{
+					OnTimeout = false,
+				};
 				LevelingBaseBuff.DOTs = new DOT[0];
 			}
 
@@ -460,42 +459,47 @@ namespace EoE.Entities
 		private void BuffUpdate()
 		{
 			bool requiresRecalculate = false;
-			for (int i = 0; i < nonPermanentBuffs.Count; i++)
+			for (int i = 0; i < activeBuffs.Count; i++)
 			{
-				nonPermanentBuffs[i].RemainingTime -= Time.deltaTime;
-				for (int j = 0; j < nonPermanentBuffs[i].DOTCooldowns.Length; j++)
-				{
-					nonPermanentBuffs[i].DOTCooldowns[j] -= Time.deltaTime;
-					if (nonPermanentBuffs[i].DOTCooldowns[j] <= 0)
-					{
-						float cd = nonPermanentBuffs[i].Base.DOTs[j].DelayPerActivation;
-						nonPermanentBuffs[i].DOTCooldowns[j] += cd;
+				bool shouldBeRemoved = activeBuffs[i].Update();
 
-						if (nonPermanentBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Health)
-							ChangeHealth(new ChangeInfo(nonPermanentBuffs[i].Applier, CauseType.DOT, nonPermanentBuffs[i].Base.DOTs[j].Element, TargetStat.Health, actuallWorldPosition, Vector3.up, cd * nonPermanentBuffs[i].Base.DOTs[j].BaseDamage, false));
-						else if (nonPermanentBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Mana)
-							ChangeMana(new ChangeInfo(nonPermanentBuffs[i].Applier, CauseType.DOT, TargetStat.Mana, cd * nonPermanentBuffs[i].Base.DOTs[j].BaseDamage));
+				for (int j = 0; j < activeBuffs[i].DOTCooldowns.Length; j++)
+				{
+					if (activeBuffs[i].DOTCooldowns[j] <= 0)
+					{
+						float cd = activeBuffs[i].Base.DOTs[j].DelayPerActivation;
+						activeBuffs[i].DOTCooldowns[j] += cd;
+
+						if (activeBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Health)
+						{
+							ChangeHealth(new ChangeInfo(activeBuffs[i].Applier, CauseType.DOT, activeBuffs[i].Base.DOTs[j].Element, TargetStat.Health, actuallWorldPosition, Vector3.up, cd * activeBuffs[i].Base.DOTs[j].BaseDamage, false));
+						}
+						else if (activeBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Mana)
+						{
+							ChangeMana(new ChangeInfo(activeBuffs[i].Applier, CauseType.DOT, TargetStat.Mana, cd * activeBuffs[i].Base.DOTs[j].BaseDamage));
+						}
 						else if (this is Player)//TargetStat.Endurance
-							(this as Player).ChangeEndurance(new ChangeInfo(nonPermanentBuffs[i].Applier, CauseType.DOT, TargetStat.Endurance, cd * nonPermanentBuffs[i].Base.DOTs[j].BaseDamage));
+						{
+							(this as Player).ChangeEndurance(new ChangeInfo(activeBuffs[i].Applier, CauseType.DOT, TargetStat.Endurance, cd * activeBuffs[i].Base.DOTs[j].BaseDamage));
+						}
 					}
 				}
-				if (nonPermanentBuffs[i].RemainingTime <= 0)
+				if (shouldBeRemoved)
 				{
 					requiresRecalculate = true;
-					RemoveBuff(i, false);
+					RemoveBuff(activeBuffs[i]);
 					i--;
 				}
 			}
-			PermanentBuffsControl();
+
 			if (requiresRecalculate)
 				RecalculateBuffs();
 		}
 		public int? HasBuffActive(Buff buff, Entitie applier)
 		{
-			List<BuffInstance> toSearch = buff.Permanent ? permanentBuffs : nonPermanentBuffs;
-			for (int i = 0; i < toSearch.Count; i++)
+			for (int i = 0; i < activeBuffs.Count; i++)
 			{
-				if (toSearch[i].Applier == applier && toSearch[i].Base == buff)
+				if (activeBuffs[i].Applier == applier && activeBuffs[i].Base == buff)
 				{
 					return i;
 				}
@@ -504,13 +508,12 @@ namespace EoE.Entities
 		}
 		public (bool, BuffInstance) TryReapplyBuff(Buff buff, Entitie applier)
 		{
-			List<BuffInstance> toSearch = buff.Permanent ? permanentBuffs : nonPermanentBuffs;
-			for (int i = 0; i < toSearch.Count; i++)
+			for (int i = 0; i < activeBuffs.Count; i++)
 			{
-				if (toSearch[i].Applier == applier && toSearch[i].Base == buff)
+				if (activeBuffs[i].Applier == applier && activeBuffs[i].Base == buff)
 				{
-					toSearch[i].RemainingTime = buff.BuffTime;
-					return (true, toSearch[i]);
+					activeBuffs[i].Reset();
+					return (true, activeBuffs[i]);
 				}
 			}
 
@@ -533,10 +536,7 @@ namespace EoE.Entities
 			else
 				statDisplay.AddBuffIcon(newBuff);
 
-			if (buff.Permanent)
-				permanentBuffs.Add(newBuff);
-			else
-				nonPermanentBuffs.Add(newBuff);
+			activeBuffs.Add(newBuff);
 
 			return newBuff;
 		}
@@ -640,9 +640,9 @@ namespace EoE.Entities
 				buffInstance.FlatChanges[i] = change;
 			}
 		}
-		public void RemoveBuff(int index, bool fromPermanent)
+		public void RemoveBuff(int index)
 		{
-			BuffInstance targetBuff = fromPermanent ? permanentBuffs[index] : nonPermanentBuffs[index];
+			BuffInstance targetBuff = activeBuffs[index];
 			RemoveBuffEffect(targetBuff);
 			targetBuff.OnRemove();
 
@@ -657,36 +657,20 @@ namespace EoE.Entities
 			else
 				statDisplay.RemoveBuffIcon(targetBuff);
 
-			if (fromPermanent)
-				permanentBuffs.RemoveAt(index);
-			else
-				nonPermanentBuffs.RemoveAt(index);
-
-			if (fromPermanent)
-				RecalculateBuffs();
+			activeBuffs.RemoveAt(index);
+			RecalculateBuffs();
 		}
-		public void RemoveBuff(BuffInstance buffInstance)
+		public bool RemoveBuff(BuffInstance buffInstance)
 		{
-			if (buffInstance.Base.Permanent)
+			for (int i = 0; i < activeBuffs.Count; i++)
 			{
-				for (int i = 0; i < permanentBuffs.Count; i++)
+				if (activeBuffs[i] == buffInstance)
 				{
-					if (permanentBuffs[i] == buffInstance)
-					{
-						RemoveBuff(i, true);
-					}
+					RemoveBuff(i);
+					return true;
 				}
 			}
-			else
-			{
-				for (int i = 0; i < nonPermanentBuffs.Count; i++)
-				{
-					if (nonPermanentBuffs[i] == buffInstance)
-					{
-						RemoveBuff(i, false);
-					}
-				}
-			}
+			return false;
 		}
 		private void RemoveBuffEffect(BuffInstance buffInstance, bool clampRequired = true)
 		{
@@ -765,22 +749,14 @@ namespace EoE.Entities
 			//Now re-add them, so the values can be recalculated
 			//First add flat values and then percent
 			//Flat
-			for (int i = 0; i < nonPermanentBuffs.Count; i++)
+			for (int i = 0; i < activeBuffs.Count; i++)
 			{
-				AddBuffEffect(nonPermanentBuffs[i], CalculateValue.Flat, false);
-			}
-			for (int i = 0; i < permanentBuffs.Count; i++)
-			{
-				AddBuffEffect(permanentBuffs[i], CalculateValue.Flat, false);
+				AddBuffEffect(activeBuffs[i], CalculateValue.Flat, false);
 			}
 			//Percent
-			for (int i = 0; i < nonPermanentBuffs.Count; i++)
+			for (int i = 0; i < activeBuffs.Count; i++)
 			{
-				AddBuffEffect(nonPermanentBuffs[i], CalculateValue.Percent, false);
-			}
-			for (int i = 0; i < permanentBuffs.Count; i++)
-			{
-				AddBuffEffect(permanentBuffs[i], CalculateValue.Percent, false);
+				AddBuffEffect(activeBuffs[i], CalculateValue.Percent, false);
 			}
 
 			if (curHealth > curMaxHealth)
@@ -789,30 +765,6 @@ namespace EoE.Entities
 				curMana = curMaxMana;
 			if (this is Player)
 				(this as Player).ClampEndurance();
-		}
-		private void PermanentBuffsControl()
-		{
-			for (int i = 0; i < permanentBuffs.Count; i++)
-			{
-				//The only thing that needs to be controlled about permanent buffs are DOTs
-				//If there are none nothing will change
-				for (int j = 0; j < permanentBuffs[i].DOTCooldowns.Length; j++)
-				{
-					permanentBuffs[i].DOTCooldowns[j] -= Time.deltaTime;
-					if (permanentBuffs[i].DOTCooldowns[j] <= 0)
-					{
-						float cd = permanentBuffs[i].Base.DOTs[j].DelayPerActivation;
-						permanentBuffs[i].DOTCooldowns[j] += cd;
-
-						if (permanentBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Health)
-							ChangeHealth(new ChangeInfo(permanentBuffs[i].Applier, CauseType.DOT, permanentBuffs[i].Base.DOTs[j].Element, TargetStat.Health, actuallWorldPosition, Vector3.up, cd * permanentBuffs[i].Base.DOTs[j].BaseDamage, false));
-						else if (permanentBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Mana)
-							ChangeMana(new ChangeInfo(permanentBuffs[i].Applier, CauseType.DOT, TargetStat.Mana, cd * permanentBuffs[i].Base.DOTs[j].BaseDamage));
-						else if (this is Player)//TargetStat.Endurance
-							(this as Player).ChangeEndurance(new ChangeInfo(permanentBuffs[i].Applier, CauseType.DOT, TargetStat.Endurance, cd * permanentBuffs[i].Base.DOTs[j].BaseDamage));
-					}
-				}
-			}
 		}
 		#endregion
 		#region Spell Casting
