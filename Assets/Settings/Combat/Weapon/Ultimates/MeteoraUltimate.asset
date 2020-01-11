@@ -234,6 +234,23 @@ MonoBehaviour:
           BuffsOnUser: []
           CreatedRemenants:
           - {fileID: 11400000, guid: 152eb11e03316d44aad7e04c89ea1a83, type: 2}
+      - AtAnimationPoint: 0.2
+        Effect:
+          ChanceToActivate: 1
+          ContainedEffectType: 32
+          ImpulseVelocity: 5
+          ImpulseVelocityFallOffTime: 0.5
+          ImpulseVelocityDirection: 2
+          ImpulseVelocityFallbackDirection: 1
+          ImpulseDirectionBase: 1
+          FXObjects: []
+          AOEEffects: []
+          ProjectileInfos: []
+          HealsOnUser: []
+          StackingStyle: 2
+          BuffsOnUser:
+          - {fileID: 11400000, guid: d8eb7d4e7fad95d4697760e4d0ea7392, type: 2}
+          CreatedRemenants: []
     PartsMaxDelays:
     - 0
     - 0
