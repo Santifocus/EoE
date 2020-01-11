@@ -16,6 +16,12 @@ MonoBehaviour:
   Quality: 2
   Permanent: 1
   BuffTime: 0
+  FinishConditions:
+    OnParentDeath: 0
+    OnTimeout: 0
+    TimeStay: 0
+    OnConditionMet: 0
+    Condition: {fileID: 0}
   Icon: {fileID: 21300000, guid: 5ea31f1d462ccd14297a5bb11769c153, type: 3}
   Effects:
   - TargetBaseStat: 5

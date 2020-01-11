@@ -170,8 +170,10 @@ namespace EoE.Entities
 				LevelingPointsBuff.Name = "LevelingSkillPoints";
 				LevelingPointsBuff.Quality = BuffType.Positive;
 				LevelingPointsBuff.Icon = null;
-				LevelingPointsBuff.BuffTime = 0;
-				LevelingPointsBuff.Permanent = true;
+				LevelingPointsBuff.FinishConditions = new FinishConditions()
+				{
+					OnTimeout = false
+				};
 				LevelingPointsBuff.DOTs = new DOT[0];
 			}
 

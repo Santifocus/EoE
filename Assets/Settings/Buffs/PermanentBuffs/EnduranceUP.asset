@@ -16,6 +16,12 @@ MonoBehaviour:
   Quality: 2
   Permanent: 1
   BuffTime: 5
+  FinishConditions:
+    OnParentDeath: 0
+    OnTimeout: 0
+    TimeStay: 5
+    OnConditionMet: 0
+    Condition: {fileID: 0}
   Icon: {fileID: 0}
   Effects:
   - TargetBaseStat: 2
