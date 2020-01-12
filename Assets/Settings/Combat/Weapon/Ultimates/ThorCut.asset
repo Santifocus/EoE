@@ -61,6 +61,7 @@ MonoBehaviour:
     AttackSequenceParts:
     - AnimationTarget: 2
       StopMovement: 1
+      StopRotation: 0
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:
@@ -93,7 +94,8 @@ MonoBehaviour:
       ChargeSettings:
         EffectMask: 3
         AnimationChargeStartpoint: 0.1
-        ApplyMoveStunWhileCharging: 0
+        StopMovementWhileCharging: 0
+        StopRotationWhileCharging: 0
         WaitAtFullChargeForRelease: 0
         ChargeTime: 1
         StartCharge: 0
@@ -113,6 +115,7 @@ MonoBehaviour:
           HasCustomScale: 0
           CustomScale: {x: 1, y: 1, z: 1}
         BuffOnUserWhileCharging: []
+      WaitSettings: []
       DamageMultiplier: 2.5
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
@@ -161,7 +164,7 @@ MonoBehaviour:
           HealsOnUser: []
           StackingStyle: 2
           BuffsOnUser:
-          - {fileID: 11400000, guid: 292e93b3ed5e91a4a8e1daf88c8f1c0b, type: 2}
+          - {fileID: 11400000, guid: 04c40735dbf85f54ab1effad039fed11, type: 2}
           CreatedRemenants: []
       - AtAnimationPoint: 0.6
         Effect:

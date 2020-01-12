@@ -16,7 +16,7 @@ MonoBehaviour:
   BaseSettings: {fileID: 11400000, guid: 96dcb5c9bff843f4fa1ad4cf0c08cb1e, type: 2}
   ActivationEffects:
   - ChanceToActivate: 1
-    ContainedEffectType: 34
+    ContainedEffectType: 2
     ImpulseVelocity: 5
     ImpulseVelocityFallOffTime: 0.5
     ImpulseVelocityDirection: 2
@@ -207,7 +207,7 @@ MonoBehaviour:
           ContainedEffectType: 1
           ImpulseVelocity: 70
           ImpulseVelocityFallOffTime: 0.35
-          ImpulseVelocityDirection: 2
+          ImpulseVelocityDirection: 1
           ImpulseVelocityFallbackDirection: 1
           ImpulseDirectionBase: 1
           FXObjects: []
@@ -234,7 +234,7 @@ MonoBehaviour:
           BuffsOnUser: []
           CreatedRemenants:
           - {fileID: 11400000, guid: 152eb11e03316d44aad7e04c89ea1a83, type: 2}
-      - AtAnimationPoint: 0.2
+      - AtAnimationPoint: 0
         Effect:
           ChanceToActivate: 1
           ContainedEffectType: 32

@@ -8,13 +8,13 @@ namespace EoE.Information
 	{
 		public override InUIUses Uses => InUIUses.Equip | InUIUses.Drop | InUIUses.Back;
 		public Weapon TargetWeapon;
-		protected override bool OnUse(Entitie user)
+		protected override bool OnUse(Entity user)
 		{
 			if (WeaponController.Instance)
 				WeaponController.Instance.StartAttack();
 			return false;
 		}
-		protected override bool OnEquip(Entitie user)
+		protected override bool OnEquip(Entity user)
 		{
 			if (WeaponController.Instance)
 				Destroy(WeaponController.Instance.gameObject);
@@ -23,7 +23,7 @@ namespace EoE.Information
 
 			return true;
 		}
-		protected override bool OnUnEquip(Entitie user)
+		protected override bool OnUnEquip(Entity user)
 		{
 			if (WeaponController.Instance)
 				Destroy(WeaponController.Instance.gameObject);

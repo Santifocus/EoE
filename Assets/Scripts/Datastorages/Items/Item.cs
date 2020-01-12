@@ -53,7 +53,7 @@ namespace EoE.Information
 			return createdItemDrops;
 		}
 
-		public void Use(InventoryItem originStack, Entitie user, Inventory origin)
+		public void Use(InventoryItem originStack, Entity user, Inventory origin)
 		{
 			//We have basic item mechanics that we always want to execute, however in some cases the override OnUse
 			//give us the info that the item cannot be used if that is the case we dont do any of the base mechanics
@@ -67,7 +67,7 @@ namespace EoE.Information
 				}
 			}
 		}
-		public void Equip(InventoryItem originStack, Entitie user)
+		public void Equip(InventoryItem originStack, Entity user)
 		{
 			if (OnEquip(user))
 			{
@@ -75,14 +75,14 @@ namespace EoE.Information
 				originStack.BoundFXInstances = PlayEffects(user, FXEffectsWhenEquipped);
 			}
 		}
-		public void UnEquip(InventoryItem originStack, Entitie user)
+		public void UnEquip(InventoryItem originStack, Entity user)
 		{
 			if (OnUnEquip(user))
 			{
 				originStack.StopBoundEffects();
 			}
 		}
-		private FXInstance[] PlayEffects(Entitie user, FXObject[] effects)
+		private FXInstance[] PlayEffects(Entity user, FXObject[] effects)
 		{
 			FXInstance[] playedEffects = new FXInstance[effects.Length];
 			for (int i = 0; i < effects.Length; i++)
@@ -91,8 +91,8 @@ namespace EoE.Information
 			}
 			return playedEffects;
 		}
-		protected virtual bool OnEquip(Entitie user) => false;
-		protected virtual bool OnUnEquip(Entitie user) => true;
-		protected virtual bool OnUse(Entitie user) => false;
+		protected virtual bool OnEquip(Entity user) => false;
+		protected virtual bool OnUnEquip(Entity user) => true;
+		protected virtual bool OnUse(Entity user) => false;
 	}
 }

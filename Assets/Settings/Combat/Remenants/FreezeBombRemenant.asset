@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TryGroundRemenants: 1
   Duration: 1
-  StartEffects: []
-  WhileEffects:
+  StartEffects:
   - ChanceToActivate: 1
     ContainedEffectType: 2
     ImpulseVelocity: 5
@@ -44,6 +43,7 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
+  WhileEffects: []
   WhileTickTime: 0.1
   OnEndEffects:
   - ChanceToActivate: 1

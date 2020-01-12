@@ -21,7 +21,7 @@ namespace EoE.UI
 			(transform as RectTransform).anchoredPosition = Vector2.zero;
 			EventManager.PlayerDiedEvent += Show;
 		}
-		public void Show(Entities.Entitie killer)
+		public void Show(Entities.Entity killer)
 		{
 			gameObject.SetActive(true);
 			StartCoroutine(StartFadeIn());

@@ -21592,7 +21592,7 @@ MonoBehaviour:
     text: Talk to strange appearance
   - textColor: {r: 0, g: 1, b: 0.20422673, a: 1}
     text: ' [A]'
-  dialoguePopup: {fileID: 11400000, guid: d2cc520754e2f464393a7d62c8aa9fcc, type: 2}
+  interactInfo: {fileID: 11400000, guid: 0784c05e474407b4bb90fbb09ab8ebc8, type: 2}
 --- !u!54 &1422176381
 Rigidbody:
   m_ObjectHideFlags: 0

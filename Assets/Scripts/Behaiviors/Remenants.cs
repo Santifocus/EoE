@@ -9,7 +9,7 @@ namespace EoE.Combatery
 	{
 		[SerializeField] private Rigidbody body = default;
 
-		private Entitie creator;
+		private Entity creator;
 		private CombatObject baseData;
 		private RemenantsData info;
 		private List<FXInstance> boundEffects = new List<FXInstance>();
@@ -17,7 +17,7 @@ namespace EoE.Combatery
 		private float delayToWhileCast;
 		private float remainingLifeTime;
 		private Vector3 spawnPos;
-		public static Remenants CreateRemenants(CombatObject baseData, RemenantsData info, Entitie creator, Vector3 spawnPos)
+		public static Remenants CreateRemenants(CombatObject baseData, RemenantsData info, Entity creator, Vector3 spawnPos)
 		{
 			Remenants newRemenants = Instantiate(GameController.RemenantsPrefab, Storage.ProjectileStorage);
 			newRemenants.baseData = baseData;
@@ -27,7 +27,6 @@ namespace EoE.Combatery
 			newRemenants.transform.position = newRemenants.spawnPos = spawnPos;
 			newRemenants.delayToWhileCast = info.WhileTickTime;
 
-			newRemenants.ActivateActivationEffects(info.StartEffects, true);
 
 			newRemenants.remainingLifeTime = info.Duration;
 
@@ -38,6 +37,10 @@ namespace EoE.Combatery
 			}
 			
 			return newRemenants;
+		}
+		private void Start()
+		{
+			ActivateActivationEffects(info.StartEffects, true);
 		}
 		private void Update()
 		{

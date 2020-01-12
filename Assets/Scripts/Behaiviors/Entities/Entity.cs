@@ -8,12 +8,12 @@ using UnityEngine;
 
 namespace EoE.Entities
 {
-	public abstract class Entitie : MonoBehaviour
+	public abstract class Entity : MonoBehaviour
 	{
 		#region Fields
 		//Constants
 		private const int VISIBLE_CHECK_RAY_COUNT = 40;
-		public static List<Entitie> AllEntities = new List<Entitie>();
+		public static List<Entity> AllEntities = new List<Entity>();
 
 		//Inspector variables
 		public Collider coll = default;
@@ -495,7 +495,7 @@ namespace EoE.Entities
 			if (requiresRecalculate)
 				RecalculateBuffs();
 		}
-		public int? HasBuffActive(Buff buff, Entitie applier)
+		public int? HasBuffActive(Buff buff, Entity applier)
 		{
 			for (int i = 0; i < activeBuffs.Count; i++)
 			{
@@ -506,7 +506,7 @@ namespace EoE.Entities
 			}
 			return null;
 		}
-		public (bool, BuffInstance) TryReapplyBuff(Buff buff, Entitie applier)
+		public (bool, BuffInstance) TryReapplyBuff(Buff buff, Entity applier)
 		{
 			for (int i = 0; i < activeBuffs.Count; i++)
 			{
@@ -519,7 +519,7 @@ namespace EoE.Entities
 
 			return (false, null);
 		}
-		public BuffInstance AddBuff(Buff buff, Entitie applier)
+		public BuffInstance AddBuff(Buff buff, Entity applier)
 		{
 			BuffInstance newBuff = new BuffInstance(buff, applier, this);
 			AddBuffEffect(newBuff, CalculateValue.Flat);
@@ -771,7 +771,7 @@ namespace EoE.Entities
 		public bool CastSpell(Spell spell)
 		{
 			bool asPlayerCurrentlyAttacking = this is Player && WeaponController.Instance != null && WeaponController.Instance.InAttackSequence;
-			if (!spell.CheckIfCanActivateCost(this, 1, 1, 1) || IsCasting || CastingCooldown > 0 || asPlayerCurrentlyAttacking)
+			if (!spell.IsActivatable(this, 1, 1, 1) || IsCasting || CastingCooldown > 0 || asPlayerCurrentlyAttacking)
 				return false;
 
 			StartCoroutine(CastSpellC(spell));
@@ -955,7 +955,7 @@ namespace EoE.Entities
 		#endregion
 		#endregion
 		#region Helper Functions
-		protected bool CheckIfCanSeeEntitie(Transform eye, Entitie target, bool lowPriority = false)
+		protected bool CheckIfCanSeeEntitie(Transform eye, Entity target, bool lowPriority = false)
 		{
 			//First we check the middle and corners of the entitie
 			//Middle

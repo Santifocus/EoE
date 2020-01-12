@@ -19,7 +19,7 @@ namespace EoE.Information
 		public DOT[] DOTs;
 		public FXObject[] FXEffects;
 
-		public static void ApplyBuff(Buff buff, Entitie target, Entitie applier, BuffStackingStyle stackingStyle = BuffStackingStyle.Reapply)
+		public static void ApplyBuff(Buff buff, Entity target, Entity applier, BuffStackingStyle stackingStyle = BuffStackingStyle.Reapply)
 		{
 			if (stackingStyle == BuffStackingStyle.Stack)
 			{
@@ -45,14 +45,14 @@ namespace EoE.Information
 	public class BuffInstance
 	{
 		public Buff Base;
-		public Entitie Applier;
-		public Entitie Target;
+		public Entity Applier;
+		public Entity Target;
 		public float[] FlatChanges;
 		public float[] DOTCooldowns;
 		public FXInstance[] BoundEffects;
 		private float RemainingTime;
 
-		public BuffInstance(Buff Base, Entitie Applier, Entitie Target)
+		public BuffInstance(Buff Base, Entity Applier, Entity Target)
 		{
 			this.Base = Base;
 			this.Applier = Applier;

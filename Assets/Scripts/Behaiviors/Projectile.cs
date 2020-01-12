@@ -13,7 +13,7 @@ namespace EoE.Combatery
 		[SerializeField] private SphereCollider entitieColl = default;
 		[SerializeField] private SphereCollider entitieTriggerColl = default;
 
-		private Entitie creator;
+		private Entity creator;
 		private CombatObject baseData;
 		private ProjectileData info;
 		private int remainingBounces;
@@ -30,7 +30,7 @@ namespace EoE.Combatery
 		{
 			AllProjectiles.Add(this);
 		}
-		public static Projectile CreateProjectile(CombatObject baseData, ProjectileData info, Entitie creator, Vector3 direction, Vector3 spawnPos)
+		public static Projectile CreateProjectile(CombatObject baseData, ProjectileData info, Entity creator, Vector3 direction, Vector3 spawnPos)
 		{
 			Projectile projectile = Instantiate(GameController.ProjectilePrefab, Storage.ProjectileStorage);
 			projectile.transform.position = projectile.spawnPos = spawnPos;
@@ -102,7 +102,7 @@ namespace EoE.Combatery
 		}
 		private void OnTriggerEnter(Collider other)
 		{
-			Entitie hit = other.GetComponent<Entitie>();
+			Entity hit = other.GetComponent<Entity>();
 			if (info.DirectHit != null)
 			{
 				if (CombatObject.IsAllowedEntitie(hit, creator, info.DirectHit.AffectedTargets))
@@ -141,7 +141,7 @@ namespace EoE.Combatery
 				ActivateActivationEffects(info.CollisionEffects, false);
 			}
 		}
-		private void DirectTargetHit(Entitie hit)
+		private void DirectTargetHit(Entity hit)
 		{
 			Vector3 knockbackDirection = transform.forward;
 			switch (info.DirectHit.KnockbackOrigin)

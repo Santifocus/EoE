@@ -58,7 +58,7 @@ namespace EoE
 				PlayFX(playerSettings.EffectsOnLevelup[i], Player.Instance.transform, true);
 			}
 		}
-		private void EnemyKilled(Entitie killed, Entitie killer)
+		private void EnemyKilled(Entity killed, Entity killer)
 		{
 			if (killer is Player && Player.Instance)
 			{
@@ -68,7 +68,7 @@ namespace EoE
 				}
 			}
 		}
-		private void PlayerDied(Entitie killer)
+		private void PlayerDied(Entity killer)
 		{
 			for (int i = 0; i < playerSettings.EffectsOnPlayerDeath.Length; i++)
 			{
@@ -76,7 +76,7 @@ namespace EoE
 			}
 			Unsubscribe();
 		}
-		private void PlayerCausedDamage(Entitie receiver, bool wasCrit)
+		private void PlayerCausedDamage(Entity receiver, bool wasCrit)
 		{
 			for (int i = 0; i < playerSettings.EffectsOnCauseDamage.Length; i++)
 			{
@@ -91,20 +91,20 @@ namespace EoE
 				}
 			}
 		}
-		public static FXInstance PlayFX(CustomFXObject customFX, Transform target, bool allowScreenEffects, float multiplier = 1)
+		public static FXInstance PlayFX(CustomFXObject customFX, Transform target, bool allowPlayerOnlyEffects, float multiplier = 1)
 		{
 			return PlayFX(customFX.FX,
 							target,
-							allowScreenEffects,
+							allowPlayerOnlyEffects,
 							multiplier,
 							customFX.HasPositionOffset ? ((Vector3?)customFX.PositionOffset) : null,
 							customFX.HasRotationOffset ? ((Vector3?)customFX.RotationOffset) : null,
 							customFX.HasCustomScale ? ((Vector3?)customFX.CustomScale) : null
 							);
 		}
-		public static FXInstance PlayFX(FXObject effect, Transform target, bool allowScreenEffects, float multiplier = 1, Vector3? customOffset = null, Vector3? customRotationOffset = null, Vector3? customScale = null)
+		public static FXInstance PlayFX(FXObject effect, Transform target, bool allowPlayerOnlyEffects, float multiplier = 1, Vector3? customOffset = null, Vector3? customRotationOffset = null, Vector3? customScale = null)
 		{
-			if (allowScreenEffects)
+			if (allowPlayerOnlyEffects)
 			{
 				if (effect is ScreenShake)
 				{
@@ -136,12 +136,11 @@ namespace EoE
 				}
 				else if(effect is Notification)
 				{
-					return EffectUtils.PlayNotification(effect as Notification, multiplier);
+					return EffectUtils.ShowNotification(effect as Notification, multiplier);
 				}
-				else if (effect is DialogueInput)
+				else if (effect is Dialogue)
 				{
-					DialogueController.CreateAndShowDialogue(effect as DialogueInput);
-					return null;
+					return EffectUtils.ShowDialogue(effect as Dialogue);
 				}
 			}
 

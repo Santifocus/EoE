@@ -34,7 +34,8 @@ namespace EoE.UI
 			pauseMenuObject.gameObject.SetActive(PauseMenuOpen);
 			if (PauseMenuOpen)
 				startMenuItem.Select();
-			GameController.GameIsPaused = PauseMenuOpen;
+
+			GameController.ActivePauses += state ? 1 : -1;
 		}
 		public void OpenSettings()
 		{

@@ -12,8 +12,10 @@ namespace EoE.Entities
 		[SerializeField] private ShopInventory shopData = default;
 		[SerializeField] private TextMeshPro infoSign = default;
 		[SerializeField] private ColoredText[] signText = default;
+		[SerializeField] private TextBasedFX interactInfo = default;
 
 		private ShopInventory shopDataInstance;
+		private bool showingInteractInfo;
 		private void Start()
 		{
 			shopDataInstance = Instantiate(shopData);
@@ -31,7 +33,17 @@ namespace EoE.Entities
 		}
 		protected override void Interact()
 		{
-			GameController.Shop.BuildShop(shopDataInstance);
+			if (!showingInteractInfo)
+			{
+				showingInteractInfo = true;
+				FXInstance info = FXManager.PlayFX(interactInfo, Player.Instance.transform, true);
+				GameController.BeginDelayedCall(() => { GameController.Shop.BuildShop(shopDataInstance); showingInteractInfo = false; },
+												0,
+												TimeType.Realtime,
+												() => info.ShouldBeRemoved
+												);
+												
+			}
 		}
 
 		protected override void MarkAsInteractTarget()

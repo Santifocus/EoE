@@ -25,14 +25,14 @@ namespace EoE.Entities
 			{
 				for (int i = 0; i < EffectsOnInteract.Length; i++)
 				{
-					if (EffectsOnInteract[i] is Notification)
+					if (EffectsOnInteract[i] is TextBasedFX)
 					{
 						(string, string)[] replaceInstructions = new (string, string)[2]
 						{
 							("{Name}", containedItem.data.ItemName.text.ToString()),
 							("{Amount}", (preStacksize - containedItem.stackSize).ToString())
 						};
-						FXManager.PlayFX((EffectsOnInteract[i] as Notification).CreateInstructedNotification(replaceInstructions), Player.Instance.transform, true);
+						FXManager.PlayFX((EffectsOnInteract[i] as TextBasedFX).CreateInstructedNotification(replaceInstructions), Player.Instance.transform, true);
 						continue;
 					}
 					FXManager.PlayFX(EffectsOnInteract[i], transform, true);

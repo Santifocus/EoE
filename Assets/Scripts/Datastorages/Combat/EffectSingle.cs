@@ -23,7 +23,7 @@ namespace EoE.Combatery
 
 		public CustomFXObject[] Effects = new CustomFXObject[0];
 		#region Activation
-		public void Activate(Entitie effectCauser, Entitie target, CombatObject infoBase, Vector3 forceDirection, Vector3 hitPoint, EffectOverrides effectOverrides = null)
+		public void Activate(Entity effectCauser, Entity target, CombatObject infoBase, Vector3 forceDirection, Vector3 hitPoint, EffectOverrides effectOverrides = null)
 		{
 			ElementType effectElement = (effectOverrides == null) ? DamageElement : (effectOverrides.OverridenElement.HasValue ? effectOverrides.OverridenElement.Value : DamageElement);
 			CauseType effectCause = (effectOverrides == null) ? CauseType : (effectOverrides.OverridenCauseType.HasValue ? effectOverrides.OverridenCauseType.Value : CauseType);

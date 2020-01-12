@@ -19,9 +19,20 @@ namespace EoE
 		public static SoulDrop SoulDropPrefab => Instance.soulDropPrefab;
 		public static ShopController Shop => Instance.shop;
 		public static ItemCollector ItemCollection => Instance.itemCollector;
-		public static bool GameIsPaused { get => gameIsPaused; set => SetPauseGamestate(value); }
+		public static bool GameIsPaused { get; private set; }
+		public static int ActivePauses 
+		{ 
+		   get => activePauses;
+			set
+			{
+				activePauses = value;
+				bool newPauseState = activePauses > 0;
+				if (newPauseState != GameIsPaused)
+					SetPauseGamestate(newPauseState);
+			}
+		}
 
-		private static bool gameIsPaused;
+		private static int activePauses;
 		[SerializeField] private GameSettings gameSettings = default;
 		[SerializeField] private Projectile projectilePrefab = default;
 		[SerializeField] private Remenants remenantsPrefab = default;
@@ -54,10 +65,10 @@ namespace EoE
 		}
 		private static void SetPauseGamestate(bool state)
 		{
-			Instance.mainCanvas?.gameObject?.SetActive(!state);
+			//Instance.mainCanvas?.gameObject?.SetActive(!state);
 
 			Time.timeScale = state ? 0 : 1;
-			gameIsPaused = state;
+			GameIsPaused = state;
 		}
 		public static Coroutine BeginDelayedCall(Action call, float delay, TimeType timeType, Func<bool> condition = null, OnDelayConditionNotMet conditionBehaivior = OnDelayConditionNotMet.ContinueTimerAndInvokeWhenMet)
 		{

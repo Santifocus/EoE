@@ -47,14 +47,14 @@ namespace EoE.Entities
 			infoSign.gameObject.SetActive(false);
 			for (int i = 0; i < EffectsOnInteract.Length; i++)
 			{
-				if (EffectsOnInteract[i] is Notification)
+				if (EffectsOnInteract[i] is TextBasedFX)
 				{
 					(string, string)[] replaceInstructions = new (string, string)[2]
 					{
 						("{Experience}", soulCount.ToString()),
 						("{Currency}", totalCurrency.ToString())
 					};
-					FXManager.PlayFX((EffectsOnInteract[i] as Notification).CreateInstructedNotification(replaceInstructions), transform, true);
+					FXManager.PlayFX((EffectsOnInteract[i] as TextBasedFX).CreateInstructedNotification(replaceInstructions), transform, true);
 					continue;
 				}
 				FXManager.PlayFX(EffectsOnInteract[i], transform, true);

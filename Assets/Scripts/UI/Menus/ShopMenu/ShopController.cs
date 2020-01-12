@@ -87,7 +87,7 @@ namespace EoE.UI
 
 			//Set to the base state and then activate the UI
 			ResetShop();
-			GameController.GameIsPaused = true;
+			GameController.ActivePauses++;
 			gameObject.SetActive(true);
 		}
 		private void Update()
@@ -479,7 +479,7 @@ namespace EoE.UI
 		}
 		private void CloseShop()
 		{
-			GameController.GameIsPaused = false;
+			GameController.ActivePauses--;
 			gameObject.SetActive(false);
 		}
 		private void ResetIndexes()
