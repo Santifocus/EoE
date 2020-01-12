@@ -390,7 +390,8 @@ namespace EoE.Entities
 				{
 					for (int i = 0; i < HealthBelowThresholdBoundEffects.Length; i++)
 					{
-						HealthBelowThresholdBoundEffects[i].FinishFX();
+						if (HealthBelowThresholdBoundEffects[i] != null)
+							HealthBelowThresholdBoundEffects[i].FinishFX();
 					}
 					HealthBelowThresholdBoundEffects = null;
 				}
@@ -414,7 +415,8 @@ namespace EoE.Entities
 				{
 					for (int i = 0; i < PlayerWalkingBoundEffects.Length; i++)
 					{
-						PlayerWalkingBoundEffects[i].FinishFX();
+						if (PlayerWalkingBoundEffects[i] != null)
+							PlayerWalkingBoundEffects[i].FinishFX();
 					}
 					PlayerWalkingBoundEffects = null;
 				}
@@ -438,7 +440,8 @@ namespace EoE.Entities
 				{
 					for (int i = 0; i < PlayerRunningBoundEffects.Length; i++)
 					{
-						PlayerRunningBoundEffects[i].FinishFX();
+						if (PlayerRunningBoundEffects[i] != null)
+							PlayerRunningBoundEffects[i].FinishFX();
 					}
 					PlayerRunningBoundEffects = null;
 				}
@@ -818,7 +821,8 @@ namespace EoE.Entities
 
 			for (int i = 0; i < dodgeEffects.Length; i++)
 			{
-				dodgeEffects[i].FinishFX();
+				if(dodgeEffects[i] != null)
+					dodgeEffects[i].FinishFX();
 			}
 
 			void ApplyMaterialToAllChildren(Transform parent)

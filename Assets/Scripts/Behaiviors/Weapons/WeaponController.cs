@@ -635,7 +635,8 @@ namespace EoE.Combatery
 			curCombo = 0;
 			for (int i = 0; i < comboBoundFX.Count; i++)
 			{
-				comboBoundFX[i].FinishFX();
+				if(comboBoundFX[i] != null)
+				   comboBoundFX[i].FinishFX();
 			}
 			comboBoundFX = new List<FXInstance>();
 
@@ -656,11 +657,13 @@ namespace EoE.Combatery
 
 			for (int i = 0; i < chargeBoundFX.Length; i++)
 			{
-				chargeBoundFX[i].FinishFX();
+				if (chargeBoundFX[i] != null)
+					chargeBoundFX[i].FinishFX();
 			}
 			for (int i = 0; i < chargeBoundFXMultiplied.Length; i++)
 			{
-				chargeBoundFXMultiplied[i].FinishFX();
+				if (chargeBoundFXMultiplied[i] != null)
+					chargeBoundFXMultiplied[i].FinishFX();
 			}
 			for (int i = 0; i < chargeBoundBuffs.Length; i++)
 			{

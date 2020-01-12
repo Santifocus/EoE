@@ -781,7 +781,7 @@ namespace EoE.Entities
 		{
 			IsCasting = true;
 			//Casting
-			FXInstance[] curParticles = null;
+			FXInstance[] curBoundFX = null;
 			if (spell.ContainedParts.HasFlag(SpellPart.Cast))
 			{
 				bool movementStopper = spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting);
@@ -796,10 +796,10 @@ namespace EoE.Entities
 				{
 					spell.CastInfo.StartEffects[i].Activate(this, transform, spell);
 				}
-				curParticles = new FXInstance[spell.CastInfo.VisualEffects.Length];
+				curBoundFX = new FXInstance[spell.CastInfo.VisualEffects.Length];
 				for (int i = 0; i < spell.CastInfo.VisualEffects.Length; i++)
 				{
-					curParticles[i] = FXManager.PlayFX(spell.CastInfo.VisualEffects[i], transform, this is Player, 1);
+					curBoundFX[i] = FXManager.PlayFX(spell.CastInfo.VisualEffects[i], transform, this is Player, 1);
 				}
 
 				float castTime = 0;
@@ -835,14 +835,14 @@ namespace EoE.Entities
 					RotationStops--;
 			}
 
-			if (curParticles != null)
+			if (curBoundFX != null)
 			{
-				for (int i = 0; i < curParticles.Length; i++)
+				for (int i = 0; i < curBoundFX.Length; i++)
 				{
-					if(curParticles[i] != null)
-						curParticles[i].FinishFX();
+					if(curBoundFX[i] != null)
+						curBoundFX[i].FinishFX();
 				}
-				curParticles = null;
+				curBoundFX = null;
 			}
 
 			//Start
@@ -852,19 +852,19 @@ namespace EoE.Entities
 				{
 					spell.StartInfo.Effects[i].Activate(this, transform, spell);
 				}
-				curParticles = new FXInstance[spell.StartInfo.VisualEffects.Length];
+				curBoundFX = new FXInstance[spell.StartInfo.VisualEffects.Length];
 				for (int i = 0; i < spell.StartInfo.VisualEffects.Length; i++)
 				{
-					curParticles[i] = FXManager.PlayFX(spell.StartInfo.VisualEffects[i], transform, this is Player, 1);
+					curBoundFX[i] = FXManager.PlayFX(spell.StartInfo.VisualEffects[i], transform, this is Player, 1);
 				}
 			}
 
-			if (curParticles != null)
+			if (curBoundFX != null)
 			{
-				for (int i = 0; i < curParticles.Length; i++)
+				for (int i = 0; i < curBoundFX.Length; i++)
 				{
-					if (curParticles[i] != null)
-						curParticles[i].FinishFX();
+					if (curBoundFX[i] != null)
+						curBoundFX[i].FinishFX();
 				}
 			}
 
@@ -928,12 +928,12 @@ namespace EoE.Entities
 			IsCasting = false;
 			CastingCooldown = spell.SpellCooldown;
 			spell.ActivateCost(this, 1, 1, 1);
-			if (curParticles != null)
+			if (curBoundFX != null)
 			{
-				for (int i = 0; i < curParticles.Length; i++)
+				for (int i = 0; i < curBoundFX.Length; i++)
 				{
-					if (curParticles[i] != null)
-						curParticles[i].FinishFX();
+					if (curBoundFX[i] != null)
+						curBoundFX[i].FinishFX();
 				}
 			}
 		}

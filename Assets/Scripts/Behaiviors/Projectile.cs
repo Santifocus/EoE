@@ -185,7 +185,8 @@ namespace EoE.Combatery
 		{
 			for (int i = 0; i < boundEffects.Count; i++)
 			{
-				boundEffects[i].FinishFX();
+				if(boundEffects[i] != null)
+					boundEffects[i].FinishFX();
 			}
 			boundEffects = new List<FXInstance>();
 		}

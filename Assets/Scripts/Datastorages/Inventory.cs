@@ -300,7 +300,8 @@ namespace EoE.Information
 			{
 				for (int i = 0; i < BoundFXInstances.Length; i++)
 				{
-					BoundFXInstances[i].FinishFX();
+					if(BoundFXInstances[i] != null)
+						BoundFXInstances[i].FinishFX();
 				}
 			}
 			BoundFXInstances = null;

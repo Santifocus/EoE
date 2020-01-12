@@ -87,7 +87,8 @@ namespace EoE.Information
 		{
 			for (int i = 0; i < BoundEffects.Length; i++)
 			{
-				BoundEffects[i].FinishFX();
+				if (BoundEffects[i] != null)
+					BoundEffects[i].FinishFX();
 			}
 		}
 	}

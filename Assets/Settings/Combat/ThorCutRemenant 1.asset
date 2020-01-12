@@ -14,28 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TryGroundRemenants: 1
   Duration: 0.8
-  StartEffects:
-  - ChanceToActivate: 1
-    ContainedEffectType: 2
-    ImpulseVelocity: 5
-    ImpulseVelocityFallOffTime: 0.5
-    ImpulseVelocityDirection: 2
-    ImpulseVelocityFallbackDirection: 1
-    ImpulseDirectionBase: 1
-    FXObjects:
-    - FX: {fileID: 0}
-      HasPositionOffset: 0
-      PositionOffset: {x: 0, y: 0, z: 0}
-      HasRotationOffset: 0
-      RotationOffset: {x: 0, y: 0, z: 0}
-      HasCustomScale: 0
-      CustomScale: {x: 1, y: 1, z: 1}
-    AOEEffects: []
-    ProjectileInfos: []
-    HealsOnUser: []
-    StackingStyle: 2
-    BuffsOnUser: []
-    CreatedRemenants: []
+  StartEffects: []
   WhileEffects: []
   WhileTickTime: 0.1
   OnEndEffects:
