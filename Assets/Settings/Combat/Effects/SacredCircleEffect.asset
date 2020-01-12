@@ -19,12 +19,13 @@ MonoBehaviour:
   ZeroOutDistance: 5
   HasMaximumHits: 0
   MaximumHits: 0
-  DamageMultiplier: 0.54
+  DamageMultiplier: 1
   CritChanceMultiplier: 0
-  KnockbackMultiplier: 1
+  KnockbackMultiplier: 15
   KnockbackOrigin: 2
   KnockbackDirection: 1
   KnockbackAxisMultiplier: {x: 1, y: 1, z: 1}
   BuffStackStyle: 2
-  BuffsToApply: []
+  BuffsToApply:
+  - {fileID: 11400000, guid: cfd21ec5a60866b4fa90b111fc6bc2b4, type: 2}
   Effects: []

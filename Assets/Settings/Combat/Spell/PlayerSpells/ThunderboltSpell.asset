@@ -18,7 +18,8 @@ MonoBehaviour:
   BaseEnduranceCost: 0
   BaseKnockback: 0
   BaseCritChance: 0
-  AdditionalConditions: []
+  AdditionalConditions:
+  - {fileID: 11400000, guid: 280b76991508dc34cba8214296c979e6, type: 2}
   SpellCooldown: 10
   ContainedParts: -1
   MovementRestrictions: -1

@@ -21,7 +21,7 @@ MonoBehaviour:
   MaximumHits: 0
   DamageMultiplier: 1
   CritChanceMultiplier: 0
-  KnockbackMultiplier: 10
+  KnockbackMultiplier: 1
   KnockbackOrigin: 2
   KnockbackDirection: 1
   KnockbackAxisMultiplier: {x: 1, y: 1, z: 1}

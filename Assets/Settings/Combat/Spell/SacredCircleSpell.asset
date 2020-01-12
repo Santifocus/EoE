@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc89a2906f120d45877860a48c8c4e2, type: 3}
   m_Name: SacredCircleSpell
   m_EditorClassIdentifier: 
-  BaseDamage: 14
+  BaseDamage: 25
   BaseHealthCost: 0
-  BaseManaCost: 10
+  BaseManaCost: 15
   BaseEnduranceCost: 0
-  BaseKnockback: 5
+  BaseKnockback: 10
   BaseCritChance: 0
-  SpellCooldown: 1
+  AdditionalConditions: []
+  SpellCooldown: 0
   ContainedParts: 1
   MovementRestrictions: 0
   RotationRestrictions: -1
@@ -40,9 +41,9 @@ MonoBehaviour:
       RotationOffset: {x: 0, y: 0, z: 0}
       HasCustomScale: 0
       CustomScale: {x: 1, y: 1, z: 1}
-    StartEffects: []
-    WhileEffects:
+    StartEffects:
     - {fileID: 11400000, guid: ba44429a7ba4fd840a9133d6e8c55966, type: 2}
+    WhileEffects: []
     WhileTickTime: 0.3
   StartInfo:
     VisualEffects:

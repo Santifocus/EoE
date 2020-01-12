@@ -16,7 +16,7 @@ MonoBehaviour:
   BaseHealthCost: 0
   BaseManaCost: 10
   BaseEnduranceCost: 0
-  BaseKnockback: 16
+  BaseKnockback: 1
   BaseCritChance: 0
   AdditionalConditions: []
   SpellCooldown: 6

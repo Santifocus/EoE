@@ -15,9 +15,9 @@ MonoBehaviour:
   DirectionStyle: 2
   FallbackDirectionStyle: 1
   Direction: 32
-  Duration: 0.1
+  Duration: 1
   FlightSpeed: 1000
-  CreateOffsetToCaster: {x: 0, y: 100, z: 0}
+  CreateOffsetToCaster: {x: 0, y: 5, z: 0}
   StartEffects:
   - ChanceToActivate: 1
     ContainedEffectType: 2
