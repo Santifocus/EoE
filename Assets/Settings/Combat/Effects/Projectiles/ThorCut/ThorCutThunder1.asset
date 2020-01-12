@@ -1,0 +1,96 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e35303dd6414342b3f1ed005a8e3fa, type: 3}
+  m_Name: ThorCutThunder1
+  m_EditorClassIdentifier: Assembly-CSharp:EoE.Combatery:ProjectileData2
+  DirectionStyle: 4
+  FallbackDirectionStyle: 4
+  Direction: 32
+  Duration: 0.1
+  FlightSpeed: 0
+  CreateOffsetToCaster: {x: 0, y: 0, z: 10}
+  StartEffects:
+  - ChanceToActivate: 1
+    ContainedEffectType: 2
+    ImpulseVelocity: 5
+    ImpulseVelocityFallOffTime: 0.5
+    ImpulseVelocityDirection: 2
+    ImpulseVelocityFallbackDirection: 1
+    ImpulseDirectionBase: 1
+    FXObjects:
+    - FX: {fileID: 11400000, guid: 2d9464ef70c8d5b47989f2acfbbe9a96, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 11400000, guid: 7543f6994db65374080610e684fd0b0f, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    AOEEffects: []
+    ProjectileInfos: []
+    HealsOnUser: []
+    StackingStyle: 2
+    BuffsOnUser: []
+    CreatedRemenants: []
+  WhileEffects: []
+  WhileTickTime: 0.1
+  TerrainHitboxSize: 0.5
+  EntitieHitboxSize: 2.5
+  CollideMask: 2
+  DirectHit: {fileID: 0}
+  CollisionEffects:
+  - ChanceToActivate: 1
+    ContainedEffectType: 64
+    ImpulseVelocity: 5
+    ImpulseVelocityFallOffTime: 0.5
+    ImpulseVelocityDirection: 2
+    ImpulseVelocityFallbackDirection: 1
+    ImpulseDirectionBase: 1
+    FXObjects:
+    - FX: {fileID: 11400000, guid: ce223436b84375541aa61b77745257f5, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 0}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 11400000, guid: b0f9889bdfd841d4fbec04506ed5f462, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    AOEEffects:
+    - {fileID: 11400000, guid: 28a7db62ee4f299499aca0629e5281a6, type: 2}
+    ProjectileInfos: []
+    HealsOnUser: []
+    StackingStyle: 2
+    BuffsOnUser: []
+    CreatedRemenants:
+    - {fileID: 11400000, guid: f1388ba0bc4e1444a9b3c2301c1104f2, type: 2}
+  Bounces: 0
+  DestroyOnEntiteBounce: 0
+  CollisionEffectsOnBounce: 1

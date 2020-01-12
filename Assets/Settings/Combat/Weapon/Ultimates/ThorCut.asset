@@ -61,7 +61,7 @@ MonoBehaviour:
     AttackSequenceParts:
     - AnimationTarget: 2
       StopMovement: 1
-      StopRotation: 0
+      StopRotation: 1
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:
@@ -77,8 +77,8 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 1
-          value: 1
+          time: 0.16548157
+          value: 0.9946289
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -166,7 +166,7 @@ MonoBehaviour:
           BuffsOnUser:
           - {fileID: 11400000, guid: 04c40735dbf85f54ab1effad039fed11, type: 2}
           CreatedRemenants: []
-      - AtAnimationPoint: 0.6
+      - AtAnimationPoint: 0
         Effect:
           ChanceToActivate: 1
           ContainedEffectType: 8
@@ -187,27 +187,28 @@ MonoBehaviour:
           ProjectileInfos:
           - Projectile: {fileID: 11400000, guid: 632cd7046f520cc42a8017602eadabbe,
               type: 2}
-            ExecutionDelay: 0.2
+            ExecutionDelay: 0
             ExecutionCount: 1
             ExecutionRepeatDelay: 0.2
           - Projectile: {fileID: 11400000, guid: e392838f575da04479e51ad01ab31afc,
               type: 2}
-            ExecutionDelay: 0.2
+            ExecutionDelay: 0
             ExecutionCount: 1
             ExecutionRepeatDelay: 0.2
           - Projectile: {fileID: 11400000, guid: 2bf1646699b19f540b711c1a8f764247,
               type: 2}
-            ExecutionDelay: 0.2
+            ExecutionDelay: 0
             ExecutionCount: 1
             ExecutionRepeatDelay: 0.2
           - Projectile: {fileID: 11400000, guid: 75870a57f7f6f2d4791864740ea4d28c,
               type: 2}
-            ExecutionDelay: 0.2
+            ExecutionDelay: 0
             ExecutionCount: 1
             ExecutionRepeatDelay: 0.2
           HealsOnUser: []
           StackingStyle: 2
-          BuffsOnUser: []
+          BuffsOnUser:
+          - {fileID: 11400000, guid: dee924a8ba33749409b1d2e235d49543, type: 2}
           CreatedRemenants: []
       - AtAnimationPoint: 0.8
         Effect:

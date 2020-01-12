@@ -18,6 +18,7 @@ MonoBehaviour:
   BaseEnduranceCost: 0
   BaseKnockback: 0
   BaseCritChance: 0
+  AdditionalConditions: []
   SpellCooldown: 10
   ContainedParts: -1
   MovementRestrictions: -1
@@ -51,21 +52,7 @@ MonoBehaviour:
     WhileEffects: []
     WhileTickTime: 0.1
   StartInfo:
-    VisualEffects:
-    - FX: {fileID: 11400000, guid: e2693ff5d8f1dab4f948eece6830a48b, type: 2}
-      HasPositionOffset: 0
-      PositionOffset: {x: 0, y: 0, z: 0}
-      HasRotationOffset: 0
-      RotationOffset: {x: 0, y: 0, z: 0}
-      HasCustomScale: 0
-      CustomScale: {x: 1, y: 1, z: 1}
-    - FX: {fileID: 11400000, guid: 19ca080591f90b4409c8dc487b8df2fb, type: 2}
-      HasPositionOffset: 0
-      PositionOffset: {x: 0, y: 0, z: 0}
-      HasRotationOffset: 0
-      RotationOffset: {x: 0, y: 0, z: 0}
-      HasCustomScale: 0
-      CustomScale: {x: 1, y: 1, z: 1}
+    VisualEffects: []
     Effects: []
   ProjectileInfos:
   - Projectile: {fileID: 11400000, guid: 3ffc6dbdcbb3b1b48b8e6d01c62fea4d, type: 2}

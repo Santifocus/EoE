@@ -5416,7 +5416,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 100
+    maxNumParticles: 21
     size3D: 1
     rotation3D: 1
     gravityModifier:
@@ -5476,7 +5476,7 @@ ParticleSystem:
     serializedVersion: 6
     enabled: 1
     type: 4
-    angle: 5.58
+    angle: 1.97
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 0
@@ -5562,7 +5562,7 @@ ParticleSystem:
     sphericalDirectionAmount: 1
     randomPositionAmount: 0.43
     radius:
-      value: 8
+      value: 1.86
       mode: 0
       spread: 0
       speed:
@@ -5681,7 +5681,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 50
       minScalar: 10
       maxCurve:
         serializedVersion: 2

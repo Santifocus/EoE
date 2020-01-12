@@ -9,21 +9,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
-  m_Name: FreezeRemenant
+  m_Script: {fileID: 11500000, guid: 4c475015d82123d4c9d421d67f39e273, type: 3}
+  m_Name: Don'tMove
   m_EditorClassIdentifier: 
-  TimeIn: 0
-  TimeOut: 0
+  Name: YoucantMove
+  Quality: 1
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 1
-    TimeStay: 1
+    TimeStay: 0.5
     OnConditionMet: 0
     Condition: {fileID: 0}
-  ParticleMainObject: {fileID: 4008991940138571066, guid: 770376d5f69c9ff409e68a6ce4bb0719,
-    type: 3}
-  OffsetToTarget: {x: 0, y: 0, z: 0}
-  RotationOffset: {x: 0, y: 0, z: 0}
-  FollowTarget: 1
-  InheritRotationOfTarget: 0
-  RotationInheritLerpSpeed: 4
+  Icon: {fileID: 0}
+  Effects: []
+  CustomEffects:
+    ApplyMoveStun: 1
+    Invincible: 0
+  DOTs: []
+  FXEffects: []

@@ -183,7 +183,6 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   DialogueBoxPrefab: {fileID: 2308643982866350638, guid: 33a870a2539712d4685b260a30230ce8,
     type: 3}
-  ShowDialogueBaseDelay: 0.25
   DialogueDelayPerLetter: 0.04
   SkipDelayOnSpace: 1
   DelayToNextDialogue: 1
