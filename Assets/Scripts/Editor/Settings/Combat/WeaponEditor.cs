@@ -58,12 +58,7 @@ namespace EoE.Combatery
 		{
 			Weapon settings = target as Weapon;
 
-			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseDamage))), ref settings.BaseDamage, 1);
-			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseHealthCost))), ref settings.BaseHealthCost, 1);
-			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseManaCost))), ref settings.BaseManaCost, 1);
-			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseEnduranceCost))), ref settings.BaseEnduranceCost, 1);
-			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseKnockback))), ref settings.BaseKnockback, 1);
-			SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseCritChance))), ref settings.BaseCritChance, 0, 1, 1);
+			DrawCombatObjectBase(settings, serializedObject, 1);
 
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			ObjectField<WeaponController>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WeaponPrefab))), ref settings.WeaponPrefab, 1);

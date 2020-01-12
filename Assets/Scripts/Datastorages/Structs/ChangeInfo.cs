@@ -8,7 +8,7 @@ namespace EoE.Information
 	public enum ElementType { None = 1, Fire = 2, Earth = 4, Water = 8, Electro = 16, Light = 32 }
 	public struct ChangeInfo
 	{
-		public readonly Entitie attacker;
+		public readonly Entity attacker;
 		public readonly CauseType cause;
 		private readonly ElementType element;
 		private readonly TargetStat targetStat;
@@ -20,7 +20,7 @@ namespace EoE.Information
 
 		private readonly float? knockbackAmount;
 
-		public ChangeInfo(Entitie attacker, CauseType cause, ElementType element, TargetStat targetStat, Vector3 impactPosition, Vector3 impactDirection, float baseDamageAmount, bool wasCritical, float? knockbackAmount = null)
+		public ChangeInfo(Entity attacker, CauseType cause, ElementType element, TargetStat targetStat, Vector3 impactPosition, Vector3 impactDirection, float baseDamageAmount, bool wasCritical, float? knockbackAmount = null)
 		{
 			this.attacker = attacker;
 			this.cause = cause;
@@ -33,7 +33,7 @@ namespace EoE.Information
 			this.wasCritical = wasCritical;
 		}
 
-		public ChangeInfo(Entitie attacker, CauseType cause, TargetStat targetStat, float baseDamageAmount)
+		public ChangeInfo(Entity attacker, CauseType cause, TargetStat targetStat, float baseDamageAmount)
 		{
 			this.attacker = attacker;
 			this.cause = cause;
@@ -52,7 +52,7 @@ namespace EoE.Information
 			public readonly Vector3 forceDirection;
 			public readonly Vector3? causedKnockback;
 
-			public ChangeResult(ChangeInfo basis, Entitie receiver, bool createDamageNumber, bool fromRegen = false)
+			public ChangeResult(ChangeInfo basis, Entity receiver, bool createDamageNumber, bool fromRegen = false)
 			{
 				//Calculate the damage that we want to cause
 				finalChangeAmount = basis.baseDamageAmount;

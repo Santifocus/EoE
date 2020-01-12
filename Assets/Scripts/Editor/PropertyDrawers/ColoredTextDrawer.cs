@@ -1,4 +1,5 @@
-﻿using EoE.UI;
+﻿using EoE.Information;
+using EoE.UI;
 using UnityEditor;
 using UnityEngine;
 

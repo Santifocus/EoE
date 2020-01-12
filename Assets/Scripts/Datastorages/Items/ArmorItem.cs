@@ -7,7 +7,7 @@ namespace EoE.Information
 	{
 		public override InUIUses Uses => InUIUses.Equip | InUIUses.Drop | InUIUses.Back;
 		[SerializeField] private Buff buffToApply = default;
-		protected override bool OnEquip(Entitie user)
+		protected override bool OnEquip(Entity user)
 		{
 			if (user.ArmorBuff != null)
 			{
@@ -16,7 +16,7 @@ namespace EoE.Information
 			user.ArmorBuff = user.AddBuff(buffToApply, user);
 			return true;
 		}
-		protected override bool OnUnEquip(Entitie user)
+		protected override bool OnUnEquip(Entity user)
 		{
 			user.RemoveBuff(user.ArmorBuff);
 			return true;

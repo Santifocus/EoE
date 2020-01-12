@@ -498,6 +498,17 @@ namespace EoE
 		public static void EndFoldoutHeader() => EditorGUILayout.EndFoldoutHeaderGroup();
 		#endregion
 		#region DrawCustoms
+		public static void DrawCombatObjectBase(CombatObject settings, SerializedObject serializedObject, int offSet)
+		{
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseDamage))), ref settings.BaseDamage, offSet);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseHealthCost))), ref settings.BaseHealthCost, offSet);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseManaCost))), ref settings.BaseManaCost, offSet);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseEnduranceCost))), ref settings.BaseEnduranceCost, offSet);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseKnockback))), ref settings.BaseKnockback, offSet);
+			SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseCritChance))), ref settings.BaseCritChance, 0, 1, offSet);
+
+			ObjectArrayField<ConditionObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AdditionalConditions))), ref settings.AdditionalConditions, serializedObject.FindProperty(nameof(settings.AdditionalConditions)), new GUIContent(". Condtion"), 1);
+		}
 		public static void DrawActivationEffect(GUIContent content, ActivationEffect settings, SerializedProperty property, int offSet)
 		{
 			if (settings == null)

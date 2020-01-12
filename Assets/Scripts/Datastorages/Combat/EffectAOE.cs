@@ -30,7 +30,7 @@ namespace EoE.Combatery
 		public CustomFXObject[] Effects = new CustomFXObject[0];
 
 		#region Activation
-		public void Activate(Entitie effectCauser, Transform origin, CombatObject infoBase, EffectOverrides effectOverrides = null)
+		public void Activate(Entity effectCauser, Transform origin, CombatObject infoBase, EffectOverrides effectOverrides = null)
 		{
 			ElementType effectElement = (effectOverrides == null) ? DamageElement : (effectOverrides.OverridenElement.HasValue ? effectOverrides.OverridenElement.Value : DamageElement);
 			CauseType effectCause = (effectOverrides == null) ? CauseType : (effectOverrides.OverridenCauseType.HasValue ? effectOverrides.OverridenCauseType.Value : CauseType);
@@ -69,33 +69,33 @@ namespace EoE.Combatery
 			//In order to dodge using a list so we dont spam the garbage collector we first find out how many entities will be added
 			//And then build a array with that size, for that we could use Linq aswell but this methode is faster (probably)
 			int requiredCapacity = 0;
-			for (int i = 0; i < Entitie.AllEntities.Count; i++)
+			for (int i = 0; i < Entity.AllEntities.Count; i++)
 			{
-				if ((Entitie.AllEntities[i].actuallWorldPosition - origin.position).sqrMagnitude < outerSphereDist)
+				if ((Entity.AllEntities[i].actuallWorldPosition - origin.position).sqrMagnitude < outerSphereDist)
 				{
 					//Check if this entitie should be a targetable entitie
-					if (CombatObject.IsAllowedEntitie(Entitie.AllEntities[i], effectCauser, AffectedTargets))
+					if (CombatObject.IsAllowedEntitie(Entity.AllEntities[i], effectCauser, AffectedTargets))
 						requiredCapacity++;
 				}
 			}
 			CollectedEntitieData[] eligibleTargets = new CollectedEntitieData[requiredCapacity];
 
 			int addedEntities = 0;
-			for (int i = 0; i < Entitie.AllEntities.Count; i++)
+			for (int i = 0; i < Entity.AllEntities.Count; i++)
 			{
-				Vector3 dif = Entitie.AllEntities[i].actuallWorldPosition - origin.position;
+				Vector3 dif = Entity.AllEntities[i].actuallWorldPosition - origin.position;
 				float sqrDist = dif.sqrMagnitude;
 
 				//Generally onbly allow to keep going if the distance is smaller then the other sphere distance
 				if (sqrDist < outerSphereDist)
 				{
 					//Check if this entitie should be a targetable entitie
-					if (!CombatObject.IsAllowedEntitie(Entitie.AllEntities[i], effectCauser, AffectedTargets))
+					if (!CombatObject.IsAllowedEntitie(Entity.AllEntities[i], effectCauser, AffectedTargets))
 						continue;
 
 					CollectedEntitieData data = new CollectedEntitieData()
 					{
-						Target = Entitie.AllEntities[i],
+						Target = Entity.AllEntities[i],
 						SqrDist = sqrDist
 					};
 
@@ -180,7 +180,7 @@ namespace EoE.Combatery
 		}
 		private struct CollectedEntitieData
 		{
-			public Entitie Target;
+			public Entity Target;
 			public float Multiplier;
 			public float SqrDist;
 			public Vector3 ApplyDirection;

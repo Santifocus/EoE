@@ -5,9 +5,9 @@ namespace EoE.Events
 	public static class EventManager
 	{
 		//Entitie Death
-		public delegate void EntitieDied(Entitie killed, Entitie killer);
+		public delegate void EntitieDied(Entity killed, Entity killer);
 		public static EntitieDied EntitieDiedEvent;
-		public static void EntitieDiedInvoke(Entitie killed, Entitie killer)
+		public static void EntitieDiedInvoke(Entity killed, Entity killer)
 		{
 			EntitieDiedEvent?.Invoke(killed, killer);
 		}
@@ -29,9 +29,9 @@ namespace EoE.Events
 		}
 
 		//Player Caused Damage
-		public delegate void PlayerCausedDamage(Entitie receiver, bool wasCrit);
+		public delegate void PlayerCausedDamage(Entity receiver, bool wasCrit);
 		public static PlayerCausedDamage PlayerCausedDamageEvent;
-		public static void PlayerCausedDamageInvoke(Entitie receiver, bool wasCrit)
+		public static void PlayerCausedDamageInvoke(Entity receiver, bool wasCrit)
 		{
 			PlayerCausedDamageEvent?.Invoke(receiver, wasCrit);
 		}
@@ -61,9 +61,9 @@ namespace EoE.Events
 		}
 
 		//Player Death
-		public delegate void PlayerDied(Entitie killer);
+		public delegate void PlayerDied(Entity killer);
 		public static PlayerDied PlayerDiedEvent;
-		public static void PlayerDiedInvoke(Entitie killer)
+		public static void PlayerDiedInvoke(Entity killer)
 		{
 			PlayerDiedEvent?.Invoke(killer);
 		}

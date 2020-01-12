@@ -50,7 +50,6 @@ namespace EoE.Information
 
 		//Dialogue Settings
 		public DialogueBox DialogueBoxPrefab = default;
-		public float ShowDialogueBaseDelay = 0.75f;
 		public float DialogueDelayPerLetter = 0.1f;
 		public bool SkipDelayOnSpace = true;
 		public float DelayToNextDialogue = 1.5f;

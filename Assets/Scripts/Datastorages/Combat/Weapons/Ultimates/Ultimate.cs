@@ -12,7 +12,7 @@ namespace EoE.Information
 		public CombatObject BaseSettings;
         public virtual bool CanActivate()
 		{
-			return BaseSettings.CheckIfCanActivateCost(Player.Instance, 1, 1, 1);
+			return BaseSettings.IsActivatable(Player.Instance, 1, 1, 1);
 		}
 		public void Activate()
 		{

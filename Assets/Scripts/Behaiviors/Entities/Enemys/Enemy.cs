@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 namespace EoE.Entities
 {
-	public abstract class Enemy : Entitie
+	public abstract class Enemy : Entity
 	{
 		#region Fields
 		//Constants
@@ -332,7 +332,7 @@ namespace EoE.Entities
 			intendedRotation = Random.value * 360;
 			curRotation = transform.localEulerAngles.y;
 		}
-		private void PlayerDied(Entitie killer)
+		private void PlayerDied(Entity killer)
 		{
 			curStates.Fighting = false;
 			chasingPlayer = false;

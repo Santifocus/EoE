@@ -90,7 +90,6 @@ namespace EoE.Information
 			GameSettings settings = target as GameSettings;
 
 			ObjectField(new GUIContent("Dialogue Box Prefab"), ref settings.DialogueBoxPrefab, 1);
-			FloatField(new GUIContent("Show Dialogue Base Delay", "When a dialogue request is sent this is the minumum delay until the DialogBox appears."), ref settings.ShowDialogueBaseDelay, 1);
 			FloatField(new GUIContent("Dialogue Delay Per Letter", "When the dialogue box displays a text every letter will take this time to show itself."), ref settings.DialogueDelayPerLetter, 1);
 			BoolField(new GUIContent("Skip Delay On Space", "Should the delay of spaces be ignored?."), ref settings.SkipDelayOnSpace, 1);
 			FloatField(new GUIContent("Delay To Next Dialogue", "After a dialogue finishes what time should be waited until it will be cleared or the next one starts to show?"), ref settings.DelayToNextDialogue, 1);

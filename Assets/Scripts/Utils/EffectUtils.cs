@@ -41,6 +41,8 @@ namespace EoE
 			AllTimeDilationsEffects = new List<TimeDilationInstance>();
 			AllTintScreenEffects = new List<ScreenTintInstance>();
 			AllCameraFOVWarpEffects = new List<CameraFOVWarpInstance>();
+			AllDialogues = new List<DialogueInstance>();
+			AllNotifications = new List<NotificationInstance>();
 			AllCustomUIs = new List<CustomUIInstance>();
 			AllSoundFXs = new List<SoundEffectInstance>();
 			AllParticleFXs = new List<ParticleEffectInstance>();
@@ -644,10 +646,74 @@ namespace EoE
 			}
 		}
 		#endregion
+		#region Dialogue
+		private static List<DialogueInstance> AllDialogues = new List<DialogueInstance>();
+		private Coroutine DialogueCoroutine = null;
+		public static FXInstance ShowDialogue(Dialogue info)
+		{
+			DialogueInstance newDialogue = new DialogueInstance(info);
+			newDialogue.BaseSetup(1, Player.Instance.transform);
+			AllDialogues.Add(newDialogue);
+
+			if (Instance.DialogueCoroutine == null)
+			{
+				Instance.DialogueCoroutine = Instance.StartCoroutine(Instance.DialgoueC());
+			}
+
+			return newDialogue;
+		}
+		private IEnumerator DialgoueC()
+		{
+			while (AllDialogues.Count > 0)
+			{
+				yield return new WaitForEndOfFrame();
+
+				for (int i = 0; i < AllDialogues.Count; i++)
+				{
+					AllDialogues[i].Update(Time.unscaledDeltaTime);
+					if (AllDialogues[i].ShouldBeRemoved && AllDialogues[i].AllowedToRemove())
+					{
+						AllDialogues[i].OnRemove();
+						AllDialogues.RemoveAt(i);
+						i--;
+					}
+				}
+			}
+
+			DialogueCoroutine = null;
+		}
+		private class DialogueInstance : FXInstance
+		{
+			public override FXType Type => FXType.Player;
+
+			public override FXObject BaseInfo => DialogueInfo;
+			private Dialogue DialogueInfo;
+			private QueuedDialogue queuedDialogue;
+			public DialogueInstance(Dialogue DialogueInfo)
+			{
+				this.DialogueInfo = DialogueInfo;
+				queuedDialogue = DialogueController.Instance.QueueDialogue(DialogueInfo);
+				allowBaseUpdate = false;
+				if (DialogueInfo.pauseTimeWhenDisplaying)
+					GameController.ActivePauses++;
+			}
+			protected override void InternalUpdate()
+			{
+				if (!allowBaseUpdate && queuedDialogue.DoneDisplaying)
+					allowBaseUpdate = true;
+			}
+			public override void OnRemove()
+			{
+				queuedDialogue.ShouldRemove = true;
+				if(DialogueInfo.pauseTimeWhenDisplaying)
+					GameController.ActivePauses--;
+			}
+		}
+		#endregion
 		#region Notification
 		private static List<NotificationInstance> AllNotifications = new List<NotificationInstance>();
 		private Coroutine NotificationCoroutine = null;
-		public static FXInstance PlayNotification(Notification info, float multiplier)
+		public static FXInstance ShowNotification(Notification info, float multiplier)
 		{
 			NotificationInstance newNotification = new NotificationInstance(info);
 			newNotification.BaseSetup(multiplier, Player.Instance.transform);
@@ -1096,15 +1162,25 @@ namespace EoE
 		protected Transform parent;
 
 		protected FXState currentState { get; private set; }
-		protected float timeStepMultiplier = 1;
+		protected bool allowBaseUpdate = true;
 		private float passedTime;
 		private float stateMultiplier;
 
 		public void Update(float timeStep)
 		{
-			if (!ShouldBeRemoved)
-				passedTime += timeStep * timeStepMultiplier;
+			if (allowBaseUpdate)
+			{
+				if (!ShouldBeRemoved)
+					passedTime += timeStep;
 
+				CheckForFinishCondition();
+				UpdateCurrentState();
+				UpdateMultiplier();
+			}
+			InternalUpdate();
+		}
+		private void CheckForFinishCondition()
+		{
 			if (currentState != FXState.End)
 			{
 				if (BaseInfo.FinishConditions.OnParentDeath && !parent)
@@ -1112,7 +1188,9 @@ namespace EoE
 				else if (BaseInfo.FinishConditions.OnConditionMet && BaseInfo.FinishConditions.Condition.ConditionMet())
 					FinishFX();
 			}
-
+		}
+		private void UpdateCurrentState()
+		{
 			if (currentState == FXState.Start && passedTime > BaseInfo.TimeIn)
 			{
 				passedTime -= BaseInfo.TimeIn;
@@ -1133,7 +1211,9 @@ namespace EoE
 					passedTime = BaseInfo.TimeOut;
 				}
 			}
-
+		}
+		private void UpdateMultiplier()
+		{
 			if (currentState == FXState.Start)
 			{
 				if (BaseInfo.TimeIn > 0)
@@ -1153,7 +1233,6 @@ namespace EoE
 					stateMultiplier = 0;
 			}
 
-			InternalUpdate();
 		}
 		public void BaseSetup(float baseMultiplier, Transform parent)
 		{

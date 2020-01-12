@@ -9,7 +9,7 @@ using EoE.UI;
 
 namespace EoE.Entities
 {
-	public class Player : Entitie
+	public class Player : Entity
 	{
 		#region Fields
 		//Constants
@@ -69,7 +69,7 @@ namespace EoE.Entities
 		private FXInstance[] HealthBelowThresholdBoundEffects;
 
 		//Targeting
-		public Entitie TargetedEntitie { get; private set; }
+		public Entity TargetedEntitie { get; private set; }
 		private float switchTargetTimer;
 
 		//Getter Helpers
@@ -918,7 +918,7 @@ namespace EoE.Entities
 
 			if (InputController.Aim.Down)
 			{
-				List<(Entitie, float)> possibleTargets = GetPossibleTargets();
+				List<(Entity, float)> possibleTargets = GetPossibleTargets();
 				TargetedEntitie = null;
 				if (possibleTargets.Count > 0)
 				{
@@ -943,11 +943,11 @@ namespace EoE.Entities
 					return;
 				switchTargetTimer = SWITCH_TARGET_COOLDOWN;
 
-				List<(Entitie, float)> possibleTargets = GetPossibleTargets();
+				List<(Entity, float)> possibleTargets = GetPossibleTargets();
 
 				if (possibleTargets.Count > 0)
 				{
-					List<(Entitie, float)> screenTargets = new List<(Entitie, float)>();
+					List<(Entity, float)> screenTargets = new List<(Entity, float)>();
 					Vector2 actuallInput = new Vector2(InputController.CameraMove.x * (SettingsData.ActiveInvertCameraX ? -1 : 1), InputController.CameraMove.y * (SettingsData.ActiveInvertCameraY ? -1 : 1));
 					Vector2 clickedDirection = actuallInput.normalized;
 					Vector2 curMiddle = PlayerCameraController.PlayerCamera.WorldToScreenPoint(TargetedEntitie.actuallWorldPosition);
@@ -984,9 +984,9 @@ namespace EoE.Entities
 			else if (InputController.Aim.Up)
 				TargetedEntitie = null;
 		}
-		private List<(Entitie, float)> GetPossibleTargets()
+		private List<(Entity, float)> GetPossibleTargets()
 		{
-			List<(Entitie, float)> possibleTargets = new List<(Entitie, float)>();
+			List<(Entity, float)> possibleTargets = new List<(Entity, float)>();
 
 			for (int i = 0; i < AllEntities.Count; i++)
 			{

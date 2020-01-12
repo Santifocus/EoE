@@ -22,6 +22,6 @@ MonoBehaviour:
   secondComparer:
     compareStyle: 4
     compareValue: 1
-  stateTarget: 3
+  stateTarget: 7
   inputTarget: 1
   inputCheckStyle: 1

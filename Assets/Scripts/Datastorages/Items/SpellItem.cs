@@ -7,10 +7,10 @@ namespace EoE.Information
 	{
 		public override InUIUses Uses => InUIUses.Equip | InUIUses.Drop | InUIUses.Back;
 		public Spell TargetSpell;
-		protected override bool OnUse(Entitie user)
+		protected override bool OnUse(Entity user)
 		{
 			return user.CastSpell(TargetSpell);
 		}
-		protected override bool OnEquip(Entitie user) => true;
+		protected override bool OnEquip(Entity user) => true;
 	}
 }

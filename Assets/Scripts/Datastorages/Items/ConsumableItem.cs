@@ -15,7 +15,7 @@ namespace EoE.Information
 		public Buff[] BuffsToApply;
 		public BuffStackingStyle StackingStyle = BuffStackingStyle.Reapply;
 
-		protected override bool OnUse(Entitie user)
+		protected override bool OnUse(Entity user)
 		{
 			//Activate Healeffects
 			for (int i = 0; i < HealEffects.Length; i++)
@@ -30,7 +30,7 @@ namespace EoE.Information
 			return true;
 		}
 
-		protected override bool OnEquip(Entitie user)
+		protected override bool OnEquip(Entity user)
 		{
 			return true;
 		}
@@ -42,7 +42,7 @@ namespace EoE.Information
 		public bool Percent;
 		public float Amount;
 
-		public void Activate(Entitie user)
+		public void Activate(Entity user)
 		{
 			if (HealType == TargetStat.Endurance && !(user is Player))
 				return;

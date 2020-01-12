@@ -19,9 +19,15 @@ namespace EoE.Combatery
 		public float BaseEnduranceCost = 0;
 		public float BaseKnockback = 0;
 		public float BaseCritChance = 0;
+		public ConditionObject[] AdditionalConditions = new ConditionObject[0];
 
-		public bool CheckIfCanActivateCost(Entitie target, float healthCostMultiplier, float manaCostMultiplier, float enduranceCostMultiplier)
+		public bool IsActivatable(Entity target, float healthCostMultiplier, float manaCostMultiplier, float enduranceCostMultiplier)
 		{
+			for(int i = 0; i < AdditionalConditions.Length; i++)
+			{
+				if (!AdditionalConditions[i].ConditionMet())
+					return false;
+			}
 			float totalHealthCost = BaseHealthCost * healthCostMultiplier;
 			float totalManaCost = BaseManaCost * manaCostMultiplier;
 			float totalEnduranceCost = BaseEnduranceCost * enduranceCostMultiplier;
@@ -29,7 +35,7 @@ namespace EoE.Combatery
 			bool asPlayerCanAffordEndurance = (target is Player) ? (target as Player).curEndurance >= totalEnduranceCost : true;
 			return (target.curHealth >= totalHealthCost) && (target.curMana >= totalManaCost) && asPlayerCanAffordEndurance;
 		}
-		public void ActivateCost(Entitie target, float healthCostMultiplier, float manaCostMultiplier, float enduranceCostMultiplier)
+		public void ActivateCost(Entity target, float healthCostMultiplier, float manaCostMultiplier, float enduranceCostMultiplier)
 		{
 			float totalHealthCost = BaseHealthCost * healthCostMultiplier;
 			float totalManaCost = BaseManaCost * manaCostMultiplier;
@@ -64,7 +70,7 @@ namespace EoE.Combatery
 					return (new Vector3Int(0, 0, 1), false);
 			}
 		}
-		public static bool IsAllowedEntitie(Entitie target, Entitie causer, TargetMask mask)
+		public static bool IsAllowedEntitie(Entity target, Entity causer, TargetMask mask)
 		{
 			bool isSelf = causer == target;
 			bool selfIsPlayer = causer is Player;
@@ -109,7 +115,7 @@ namespace EoE.Combatery
 
 			return calculatedDirection;
 		}
-		public static Vector3 CalculateDirection(InherritDirection directionStyle, InherritDirection fallbackDirectionStyle, DirectionBase direction, Entitie originEntitie, Vector3 originOffset)
+		public static Vector3 CalculateDirection(InherritDirection directionStyle, InherritDirection fallbackDirectionStyle, DirectionBase direction, Entity originEntitie, Vector3 originOffset)
 		{
 			Vector3 calculatedDirection;
 			(Vector3, bool) dirInfo = EnumDirToDir(direction);
@@ -209,7 +215,7 @@ namespace EoE.Combatery
 		//Remenants
 		public RemenantsData[] CreatedRemenants = new RemenantsData[0];
 
-		public FXInstance[] Activate(Entitie activator, CombatObject baseObject, Transform overrideTransform = null)
+		public FXInstance[] Activate(Entity activator, CombatObject baseObject, Transform overrideTransform = null)
 		{
 			FXInstance[] createdFXInstances = (HasMaskFlag(EffectType.FX) ? (new FXInstance[FXObjects.Length]) : (new FXInstance[0]));
 			if (HasMaskFlag(EffectType.ImpulseVelocity))
@@ -261,7 +267,7 @@ namespace EoE.Combatery
 		}
 
 		#region ProjectileCreation
-		private IEnumerator ProjectileCreation(Entitie activator, CombatObject baseObject, Transform overrideTransform)
+		private IEnumerator ProjectileCreation(Entity activator, CombatObject baseObject, Transform overrideTransform)
 		{
 			for (int i = 0; i < ProjectileInfos.Length; i++)
 			{
@@ -296,7 +302,7 @@ namespace EoE.Combatery
 			}
 		ProjectileCreationFinished:;
 		}
-		private void CreateProjectile(Entitie activator, CombatObject baseObject, ProjectileData data)
+		private void CreateProjectile(Entity activator, CombatObject baseObject, ProjectileData data)
 		{
 			//Calculate the spawnoffset
 			Vector3 spawnOffset = data.CreateOffsetToCaster.x * activator.transform.right + data.CreateOffsetToCaster.y * activator.transform.up + data.CreateOffsetToCaster.z * activator.transform.forward;
@@ -310,7 +316,7 @@ namespace EoE.Combatery
 																);
 			Projectile.CreateProjectile(baseObject, data, activator, direction, activator.actuallWorldPosition + spawnOffset);
 		}
-		private void CreateProjectile(Entitie activator, Transform originTransform, CombatObject baseObject, ProjectileData data)
+		private void CreateProjectile(Entity activator, Transform originTransform, CombatObject baseObject, ProjectileData data)
 		{
 			//Calculate the spawnoffset
 			Vector3 spawnOffset = data.CreateOffsetToCaster.x * originTransform.right + data.CreateOffsetToCaster.y * originTransform.up + data.CreateOffsetToCaster.z * originTransform.forward;

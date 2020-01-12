@@ -247,7 +247,7 @@ namespace EoE.Combatery
 					Player.Instance.RotationStops++;
 
 				//First check if this attack sequence is allowed if not we stop the while loop here
-				if (curBaseData.CheckIfCanActivateCost(Player.Instance, ActiveAttackStyle.HealthCostMultiplier, ActiveAttackStyle.ManaCostMultiplier, ActiveAttackStyle.EnduranceCostMultiplier))
+				if (curBaseData.IsActivatable(Player.Instance, ActiveAttackStyle.HealthCostMultiplier, ActiveAttackStyle.ManaCostMultiplier, ActiveAttackStyle.EnduranceCostMultiplier))
 				{
 					curBaseData.ActivateCost(Player.Instance, ActiveAttackStyle.HealthCostMultiplier, ActiveAttackStyle.ManaCostMultiplier, ActiveAttackStyle.EnduranceCostMultiplier);
 				}
@@ -487,7 +487,7 @@ namespace EoE.Combatery
 
 			if (hit.gameObject.layer == ConstantCollector.ENTITIE_LAYER)
 			{
-				Entitie hitEntitie = hit.gameObject.GetComponent<Entitie>();
+				Entity hitEntitie = hit.gameObject.GetComponent<Entity>();
 				OnEntitieHit(hitEntitie, direction, hitPos);
 				CreateParticles(GameController.CurrentGameSettings.HitEntitieParticles, hitPos, direction);
 			}
@@ -496,7 +496,7 @@ namespace EoE.Combatery
 				CreateParticles(GameController.CurrentGameSettings.HitTerrainParticles, hitPos, direction);
 			}
 		}
-		private void OnEntitieHit(Entitie hitEntitie, Vector3 direction, Vector3 hitPos)
+		private void OnEntitieHit(Entity hitEntitie, Vector3 direction, Vector3 hitPos)
 		{
 			//First calculate the generall damage apply
 			float chargeMultiplier = ActiveAttackStyle.NeedsCharging ? curChargeMultiplier : 1;
@@ -534,7 +534,7 @@ namespace EoE.Combatery
 			ultimateChargeAdd += comboIncrease * weaponInfo.UltimateSettings.PerComboPointCharge;
 			ultimateCharge = Mathf.Clamp(ultimateCharge + ultimateChargeAdd, 0, weaponInfo.UltimateSettings.TotalRequiredCharge);
 		}
-		private void ActivateSingleHitEffects(Entitie hitEntitie, Vector3 direction, Vector3 hitPos)
+		private void ActivateSingleHitEffects(Entity hitEntitie, Vector3 direction, Vector3 hitPos)
 		{
 			List<EffectSingle> activatedDirectHits = new List<EffectSingle>();
 
@@ -581,7 +581,7 @@ namespace EoE.Combatery
 				}
 			}
 		}
-		private void ComboHit(Entitie hitEntitie, Vector3 direction, Vector3 hitPos, int comboIncrease)
+		private void ComboHit(Entity hitEntitie, Vector3 direction, Vector3 hitPos, int comboIncrease)
 		{
 			int newComboAmount = curCombo + comboIncrease;
 			timeToNextCombo = ActiveAttackStyle.ComboIncreaseMaxDelay;
@@ -704,7 +704,7 @@ namespace EoE.Combatery
 				}
 			}
 		}
-		private void EntitieDeath(Entitie killed, Entitie killer)
+		private void EntitieDeath(Entity killed, Entity killer)
 		{
 			if(killer is Player)
 			{

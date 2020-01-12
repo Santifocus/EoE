@@ -99,7 +99,7 @@ namespace EoE.UI
 		}
 		private void OpenMenu()
 		{
-			GameController.GameIsPaused = true;
+			GameController.ActivePauses++;
 			allowedSlide = false;
 			menuPages[0].ShowPage(LeftScreen, pageScrollTime / 2, AllowSlide);
 			curMenuIndex = 0;
@@ -107,7 +107,7 @@ namespace EoE.UI
 		}
 		private void HideMenu()
 		{
-			GameController.GameIsPaused = false;
+			GameController.ActivePauses--;
 			allowedSlide = false;
 			menuPages[curMenuIndex].HidePage(RightScreen, pageScrollTime / 2);
 			characterMenuBackground.gameObject.SetActive(false);
