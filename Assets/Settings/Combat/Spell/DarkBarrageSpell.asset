@@ -20,13 +20,20 @@ MonoBehaviour:
   BaseCritChance: 0.02
   AdditionalConditions: []
   SpellCooldown: 0.3
-  ContainedParts: 4
+  ContainedParts: 5
   MovementRestrictions: 0
   RotationRestrictions: -1
   SubtractManaAtPart: 2
   CastInfo:
-    Duration: 3
-    VisualEffects: []
+    Duration: 0.05
+    VisualEffects:
+    - FX: {fileID: 11400000, guid: af1fb4d57241dff499bbc9d8fb74c299, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
     StartEffects: []
     WhileEffects: []
     WhileTickTime: 0.1
