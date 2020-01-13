@@ -35,18 +35,16 @@ namespace EoE.Information
 		public float JumpImpulsePower = 2.5f;
 		public float JumpBackwardMultiplier = 0.65f;
 
-		//Dodging
-		public float DodgePower = 1;
-		public float DodgeDuration = 0.2f;
-		public float DodgeModelExistTime = 0.4f;
-		public float DodgeCooldown = 0.5f;
-		public float DodgeEnduranceCost = 20;
-		public Material DodgeModelMaterial = null;
+		//Dashing
+		public float DashPower = 1;
+		public float DashDuration = 0.2f;
+		public float DashModelExistTime = 0.4f;
+		public float DashCooldown = 0.5f;
+		public float DashEnduranceCost = 20;
+		public Material DashModelMaterial = null;
 
-		//Blocking
-		public float StartBlockingInertia = 0.3f;
-		public Buff BlockingBuff = default;
-		public float StopBlockingInertia = 0.3f;
+		//Shielding
+		public ShieldData ShieldSettings = default;
 
 		//IFrames
 		public bool InvincibleAfterHit = true;
@@ -84,7 +82,7 @@ namespace EoE.Information
 		public FXObject[] EffectsOnJump = default;
 		public float PlayerLandingVelocityThreshold = 5f;
 		public FXObject[] EffectsOnPlayerLanding = default;
-		public FXObject[] EffectsOnPlayerDodge = default;
+		public FXObject[] EffectsOnPlayerDash = default;
 
 		//On Player receive attack
 		public FXObject[] EffectsOnReceiveDamage = default;

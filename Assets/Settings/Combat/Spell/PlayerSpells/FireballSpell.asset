@@ -13,6 +13,11 @@ MonoBehaviour:
   m_Name: FireballSpell
   m_EditorClassIdentifier: 
   BaseDamage: 5
+  Cost:
+    Health: 0
+    Mana: 15
+    Endurance: 0
+    AdditionalConditions: []
   BaseHealthCost: 0
   BaseManaCost: 15
   BaseEnduranceCost: 0

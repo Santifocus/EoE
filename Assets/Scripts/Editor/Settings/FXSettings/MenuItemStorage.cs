@@ -38,6 +38,7 @@ namespace EoE.Information
 		[MenuItem("EoE/Combat/Object/Weapon")] public static void CreateWeapon() => AssetCreator<Weapon>("Settings", "Combat", "Weapon");
 		[MenuItem("EoE/Combat/Object/Spell")] public static void CreateSpell() => AssetCreator<Spell>("Settings", "Combat", "Spell");
 		[MenuItem("EoE/Combat/ProjectileData")] public static void CreateProjectileData() => AssetCreator<ProjectileData>("Settings", "Combat");
+		[MenuItem("EoE/Combat/ShieldData")] public static void CreateShieldData() => AssetCreator<ShieldData>("Settings", "Combat");
 		[MenuItem("EoE/Combat/Effect/EffectSingle")] public static void CreateEffectSingle() => AssetCreator<EffectSingle>("Settings", "Combat");
 		[MenuItem("EoE/Combat/Effect/EffectAOE")] public static void CreateEffectAOE() => AssetCreator<EffectAOE>("Settings", "Combat");
 		[MenuItem("EoE/Combat/Effect/RemenantsData")] public static void CreateRemenantsData() => AssetCreator<RemenantsData>("Settings", "Combat");

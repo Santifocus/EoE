@@ -13,6 +13,11 @@ MonoBehaviour:
   m_Name: DarkBarrageSpell
   m_EditorClassIdentifier: 
   BaseDamage: 6
+  Cost:
+    Health: 0
+    Mana: 2
+    Endurance: 0
+    AdditionalConditions: []
   BaseHealthCost: 0
   BaseManaCost: 2
   BaseEnduranceCost: 0

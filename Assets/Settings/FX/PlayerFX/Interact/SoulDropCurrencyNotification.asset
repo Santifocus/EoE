@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37f478ea248acbb4d872e251b4b2684b, type: 3}
+  m_Name: SoulDropCurrencyNotification
+  m_EditorClassIdentifier: 
+  TimeIn: 0
+  TimeOut: 0.3
+  FinishConditions:
+    OnParentDeath: 0
+    OnTimeout: 1
+    TimeStay: 2.5
+    OnConditionMet: 0
+    Condition: {fileID: 0}
+  parts:
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: 'You found '
+  - textColor: {r: 1, g: 0.91147983, b: 0, a: 1}
+    text: '{Currency}'
+  - textColor: {r: 0.77181095, g: 0.3726415, b: 1, a: 1}
+    text: ' Souldust'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: .
+  notificationIcon: {fileID: 21300000, guid: bf3612c746ceb3e4a826e3f3d51d6b93, type: 3}
+  iconColor: {r: 1, g: 1, b: 1, a: 1}
+  timeToExpand: 0.5

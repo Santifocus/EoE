@@ -14,40 +14,9 @@ namespace EoE.Combatery
 	public class CombatObject : ScriptableObject
 	{
 		public float BaseDamage = 10;
-		public float BaseHealthCost = 0;
-		public float BaseManaCost = 0;
-		public float BaseEnduranceCost = 0;
+		public ObjectCost Cost = default;
 		public float BaseKnockback = 0;
 		public float BaseCritChance = 0;
-		public ConditionObject[] AdditionalConditions = new ConditionObject[0];
-
-		public bool IsActivatable(Entity target, float healthCostMultiplier, float manaCostMultiplier, float enduranceCostMultiplier)
-		{
-			for(int i = 0; i < AdditionalConditions.Length; i++)
-			{
-				if (!AdditionalConditions[i].ConditionMet())
-					return false;
-			}
-			float totalHealthCost = BaseHealthCost * healthCostMultiplier;
-			float totalManaCost = BaseManaCost * manaCostMultiplier;
-			float totalEnduranceCost = BaseEnduranceCost * enduranceCostMultiplier;
-
-			bool asPlayerCanAffordEndurance = (target is Player) ? (target as Player).curEndurance >= totalEnduranceCost : true;
-			return (target.curHealth >= totalHealthCost) && (target.curMana >= totalManaCost) && asPlayerCanAffordEndurance;
-		}
-		public void ActivateCost(Entity target, float healthCostMultiplier, float manaCostMultiplier, float enduranceCostMultiplier)
-		{
-			float totalHealthCost = BaseHealthCost * healthCostMultiplier;
-			float totalManaCost = BaseManaCost * manaCostMultiplier;
-			float totalEnduranceCost = BaseEnduranceCost * enduranceCostMultiplier;
-
-			if (totalHealthCost != 0)
-				target.ChangeHealth(new ChangeInfo(Player.Instance, CauseType.Magic, TargetStat.Health, totalHealthCost));
-			if (totalManaCost != 0)
-				target.ChangeMana(new ChangeInfo(Player.Instance, CauseType.Magic, TargetStat.Mana, totalManaCost));
-			if (totalEnduranceCost != 0 && target is Player)
-				(target as Player).ChangeEndurance(new ChangeInfo(Player.Instance, CauseType.Magic, TargetStat.Endurance, totalEnduranceCost));
-		}
 
 		//Helper functions
 		public static (Vector3Int, bool) EnumDirToDir(DirectionBase direction)
@@ -157,6 +126,41 @@ namespace EoE.Combatery
 					return originTransform.up * (dirInfo.Item2 ? -1 : 1);
 				}
 			}
+		}
+	}
+	[System.Serializable]
+	public class ObjectCost
+	{
+		public float Health;
+		public float Mana;
+		public float Endurance;
+		public ConditionObject[] AdditionalConditions = new ConditionObject[0];
+		public bool CanActivate(Entity target, float healthCostMultiplier, float manaCostMultiplier, float enduranceCostMultiplier)
+		{
+			for (int i = 0; i < AdditionalConditions.Length; i++)
+			{
+				if (!AdditionalConditions[i].ConditionMet())
+					return false;
+			}
+			float totalHealthCost = Health * healthCostMultiplier;
+			float totalManaCost = Mana * manaCostMultiplier;
+			float totalEnduranceCost = Endurance * enduranceCostMultiplier;
+
+			bool asPlayerCanAffordEndurance = (target is Player) ? (target as Player).curEndurance >= totalEnduranceCost : true;
+			return (target.curHealth >= totalHealthCost) && (target.curMana >= totalManaCost) && asPlayerCanAffordEndurance;
+		}
+		public void Activate(Entity target, float healthCostMultiplier, float manaCostMultiplier, float enduranceCostMultiplier)
+		{
+			float totalHealthCost = Health * healthCostMultiplier;
+			float totalManaCost = Mana * manaCostMultiplier;
+			float totalEnduranceCost = Endurance * enduranceCostMultiplier;
+
+			if (totalHealthCost != 0)
+				target.ChangeHealth(new ChangeInfo(Player.Instance, CauseType.Magic, TargetStat.Health, totalHealthCost));
+			if (totalManaCost != 0)
+				target.ChangeMana(new ChangeInfo(Player.Instance, CauseType.Magic, TargetStat.Mana, totalManaCost));
+			if (totalEnduranceCost != 0 && target is Player)
+				(target as Player).ChangeEndurance(new ChangeInfo(Player.Instance, CauseType.Magic, TargetStat.Endurance, totalEnduranceCost));
 		}
 	}
 	[System.Serializable]

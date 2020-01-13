@@ -101,7 +101,7 @@ namespace EoE.UI
 			int preActionIndex = itemActionIndex;
 			int preEquipIndex = equipedSlotIndex;
 
-			if (InputController.MenuRight.Active)
+			if (InputController.MenuRight.Held)
 			{
 				if (!actionMenuOpen)
 				{
@@ -111,7 +111,7 @@ namespace EoE.UI
 						equipedSlotIndex++;
 				}
 			}
-			else if (InputController.MenuLeft.Active)
+			else if (InputController.MenuLeft.Held)
 			{
 				if (!actionMenuOpen)
 				{
@@ -121,7 +121,7 @@ namespace EoE.UI
 						equipedSlotIndex--;
 				}
 			}
-			else if (InputController.MenuDown.Active)
+			else if (InputController.MenuDown.Held)
 			{
 				if (!equipSlotsOpen)
 				{
@@ -131,7 +131,7 @@ namespace EoE.UI
 						itemActionIndex++;
 				}
 			}
-			else if (InputController.MenuUp.Active)
+			else if (InputController.MenuUp.Held)
 			{
 				if (!equipSlotsOpen)
 				{

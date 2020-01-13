@@ -250,7 +250,7 @@ namespace EoE.Information
 				case InputCheckStyle.Down:
 					return button.Down;
 				case InputCheckStyle.Active:
-					return button.Active;
+					return button.Held;
 				case InputCheckStyle.Up:
 					return button.Up;
 			}

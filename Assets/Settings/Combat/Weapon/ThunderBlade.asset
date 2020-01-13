@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: ThunderBlade
   m_EditorClassIdentifier: 
   BaseDamage: 7
-  BaseHealthCost: 0
-  BaseManaCost: 0
-  BaseEnduranceCost: 6
+  Cost:
+    Health: 0
+    Mana: 0
+    Endurance: 6
+    AdditionalConditions: []
   BaseKnockback: 5
   BaseCritChance: 0.04
-  AdditionalConditions: []
   WeaponPrefab: {fileID: 5533782398965989895, guid: b8a1958f21cf1e34c96f3a2c98f4beeb,
     type: 3}
   WeaponElement: 1

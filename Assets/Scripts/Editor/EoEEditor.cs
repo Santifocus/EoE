@@ -501,13 +501,22 @@ namespace EoE
 		public static void DrawCombatObjectBase(CombatObject settings, SerializedObject serializedObject, int offSet)
 		{
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseDamage))), ref settings.BaseDamage, offSet);
-			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseHealthCost))), ref settings.BaseHealthCost, offSet);
-			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseManaCost))), ref settings.BaseManaCost, offSet);
-			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseEnduranceCost))), ref settings.BaseEnduranceCost, offSet);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseKnockback))), ref settings.BaseKnockback, offSet);
 			SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseCritChance))), ref settings.BaseCritChance, 0, 1, offSet);
+			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
+			DrawObjectCost(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Cost))), ref settings.Cost, serializedObject.FindProperty(nameof(settings.Cost)), offSet);
+		}
+		public static void DrawObjectCost(GUIContent content, ref ObjectCost settings, SerializedProperty property, int offSet)
+		{
+			Foldout(content, property, offSet);
+			if (property.isExpanded)
+			{
+				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Health))), ref settings.Health, offSet + 1);
+				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Mana))), ref settings.Mana, offSet + 1);
+				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Endurance))), ref settings.Endurance, offSet + 1);
 
-			ObjectArrayField<ConditionObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AdditionalConditions))), ref settings.AdditionalConditions, serializedObject.FindProperty(nameof(settings.AdditionalConditions)), new GUIContent(". Condtion"), 1);
+				ObjectArrayField<ConditionObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AdditionalConditions))), ref settings.AdditionalConditions, property.FindPropertyRelative(nameof(settings.AdditionalConditions)), new GUIContent(". Condtion"), offSet + 1);
+			}
 		}
 		public static void DrawActivationEffect(GUIContent content, ActivationEffect settings, SerializedProperty property, int offSet)
 		{

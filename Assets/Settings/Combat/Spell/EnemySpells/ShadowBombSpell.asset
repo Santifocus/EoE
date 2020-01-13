@@ -13,6 +13,11 @@ MonoBehaviour:
   m_Name: ShadowBombSpell
   m_EditorClassIdentifier: 
   BaseDamage: 20
+  Cost:
+    Health: 0
+    Mana: 10
+    Endurance: 0
+    AdditionalConditions: []
   BaseHealthCost: 0
   BaseManaCost: 10
   BaseEnduranceCost: 0

@@ -13,6 +13,11 @@ MonoBehaviour:
   m_Name: SacredCircleSpell
   m_EditorClassIdentifier: 
   BaseDamage: 25
+  Cost:
+    Health: 0
+    Mana: 15
+    Endurance: 0
+    AdditionalConditions: []
   BaseHealthCost: 0
   BaseManaCost: 15
   BaseEnduranceCost: 0

@@ -112,24 +112,24 @@ namespace EoE.Entities
 			if (!bashing)
 				return;
 
-			if (collision.gameObject.layer == 9)
+			if (collision.gameObject.layer == ConstantCollector.ENTITIE_LAYER)
 			{
-				Player hitPlayer = collision.gameObject.GetComponent<Player>();
-				if (hitPlayer)
+				Entity hitEntity = collision.gameObject.GetComponent<Entity>();
+				if (!(hitEntity is Enemy))
 				{
 					float restForce = bashForce.Force.magnitude;
 					Vector3 hitPoint = Vector3.zero;
 
 					for (int i = 0; i < collision.contactCount; i++)
 					{
-						if (collision.GetContact(i).otherCollider == player.coll)
+						if (collision.GetContact(i).otherCollider == hitEntity.coll)
 						{
 							hitPoint = collision.GetContact(i).point;
 							break;
 						}
 					}
 
-					player.ChangeHealth(new ChangeInfo(this, CauseType.Physical, settings.EntitieElement, TargetStat.Health, hitPoint, bashForce.Force / restForce, restForce / settings.BashSpeed * settings.BaseAttackDamage, Utils.Chance01(settings.CritChance), restForce * settings.ForceTranslationMultiplier));
+					hitEntity.ChangeHealth(new ChangeInfo(this, CauseType.Physical, settings.EntitieElement, TargetStat.Health, hitPoint, bashForce.Force / restForce, restForce / settings.BashSpeed * settings.BaseAttackDamage, Utils.Chance01(settings.CritChance), restForce * settings.ForceTranslationMultiplier));
 					entitieForceController.ForceRemoveForce(bashForce);
 					body.velocity = CurVelocity;
 				}

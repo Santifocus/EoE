@@ -6,7 +6,7 @@ namespace EoE.UI
 {
 	public class DialogueBox : MonoBehaviour
 	{
-		[SerializeField] private Image iconDisplay;
+		[SerializeField] private Image iconDisplay = default;
 		[SerializeField] private TextMeshProUGUI textWithIcon = default;
 		[SerializeField] private TextMeshProUGUI textWithoutIcon = default;
 		public TextMeshProUGUI TextDisplay { get => iconDisplay.sprite ? textWithIcon : textWithoutIcon; }

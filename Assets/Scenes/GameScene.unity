@@ -4801,6 +4801,8 @@ MonoBehaviour:
     type: 3}
   remenantsPrefab: {fileID: 9023344140537841210, guid: 2f5a03f3649921b44b950a3bc49d0464,
     type: 3}
+  shieldPrefab: {fileID: 8483908323921632107, guid: e6c93d77d74b493448af95a0ce8f5cc7,
+    type: 3}
   soulDropPrefab: {fileID: 4063212132472539359, guid: a354723b262e2cd4ab866dc03a384c10,
     type: 3}
   shop: {fileID: 531628749}
@@ -33518,7 +33520,7 @@ MonoBehaviour:
   charController: {fileID: 1812088018617618231}
   weaponHoldPoint: {fileID: 1878234028}
   animationControl: {fileID: 3166231815079933415}
-  selfSettings: {fileID: 11400000, guid: 3d517d6da82d5bf4a9f88e6e105f9701, type: 2}
+  playerSettings: {fileID: 11400000, guid: 3d517d6da82d5bf4a9f88e6e105f9701, type: 2}
   buffDisplay: {fileID: 2119644731}
   head: {fileID: 1707243786618732576}
   torso: {fileID: 1791773642560378344}
@@ -41524,7 +41526,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6790186541030812413}
   m_LocalRotation: {x: -0.0016556183, y: 0, z: -0, w: 0.9999986}
-  m_LocalPosition: {x: 0.0028830403, y: 1.8839802e-10, z: 0.0015728952}
+  m_LocalPosition: {x: 0.0028830403, y: 0, z: 0.0015728952}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2111569914466092096}

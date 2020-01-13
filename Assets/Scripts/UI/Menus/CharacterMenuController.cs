@@ -37,7 +37,7 @@ namespace EoE.UI
 			if (!CharacterMenuOpen)
 				return;
 
-			if (InputController.LeftPage.Active && allowedSlide)
+			if (InputController.LeftPage.Held && allowedSlide)
 			{
 				allowedSlide = false;
 
@@ -53,7 +53,7 @@ namespace EoE.UI
 					StopCoroutine(LeftScrollFadeC);
 				LeftScrollFadeC = StartCoroutine(FadeTrigger(leftScrollImage));
 			}
-			else if (InputController.RightPage.Active && allowedSlide)
+			else if (InputController.RightPage.Held && allowedSlide)
 			{
 				allowedSlide = false;
 

@@ -63,15 +63,13 @@ MonoBehaviour:
   JumpPower: {x: 0, y: 10, z: 15}
   JumpImpulsePower: 1.75
   JumpBackwardMultiplier: 0.65
-  DodgePower: 5
-  DodgeDuration: 0.15
-  DodgeModelExistTime: 0.35
-  DodgeCooldown: 0.3
-  DodgeEnduranceCost: 8
-  DodgeModelMaterial: {fileID: 2100000, guid: 11d51a887e999af408b3d408f575a218, type: 2}
-  StartBlockingInertia: 0.3
-  BlockingBuff: {fileID: 11400000, guid: 87a7d061072cff848981b0f42550401b, type: 2}
-  StopBlockingInertia: 0.3
+  DashPower: 5
+  DashDuration: 0.15
+  DashModelExistTime: 0.35
+  DashCooldown: 0.3
+  DashEnduranceCost: 8
+  DashModelMaterial: {fileID: 2100000, guid: 11d51a887e999af408b3d408f575a218, type: 2}
+  ShieldSettings: {fileID: 11400000, guid: 4ab47e41b78d9914db30d5fbfdad95d5, type: 2}
   InvincibleAfterHit: 1
   InvincibleAfterHitTime: 1.5
   InvincibleModelFlashColor: {r: 1, g: 0, b: 0, a: 0.23137255}
@@ -172,7 +170,7 @@ MonoBehaviour:
   EffectsOnPlayerLanding:
   - {fileID: 11400000, guid: ba451c2b316cc054ba26cb958cbb7f1a, type: 2}
   - {fileID: 11400000, guid: b16188df833539c4391e686f9ab8b6a5, type: 2}
-  EffectsOnPlayerDodge:
+  EffectsOnPlayerDash:
   - {fileID: 11400000, guid: 16c048efcd73fc94fb2bd95baaa20137, type: 2}
   - {fileID: 11400000, guid: 83283d5fa89550943ae53abf369f6351, type: 2}
   - {fileID: 11400000, guid: a1a241ff7cc72544e9475b9495c7ee11, type: 2}

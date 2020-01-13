@@ -16,6 +16,7 @@ namespace EoE
 		public static GameSettings CurrentGameSettings => Instance.gameSettings;
 		public static Projectile ProjectilePrefab => Instance.projectilePrefab;
 		public static Remenants RemenantsPrefab => Instance.remenantsPrefab;
+		public static Shield ShieldPrefab => Instance.shieldPrefab;
 		public static SoulDrop SoulDropPrefab => Instance.soulDropPrefab;
 		public static ShopController Shop => Instance.shop;
 		public static ItemCollector ItemCollection => Instance.itemCollector;
@@ -36,6 +37,7 @@ namespace EoE
 		[SerializeField] private GameSettings gameSettings = default;
 		[SerializeField] private Projectile projectilePrefab = default;
 		[SerializeField] private Remenants remenantsPrefab = default;
+		[SerializeField] private Shield shieldPrefab = default;
 		[SerializeField] private SoulDrop soulDropPrefab = default;
 		[SerializeField] private ShopController shop = default;
 		public ItemDrop itemDropPrefab;

@@ -228,7 +228,7 @@ namespace EoE.Controlls
 			target.Down = true;
 			yield return new WaitForEndOfFrame();
 			target.Down = false;
-			target.Active = true;
+			target.Held = true;
 		}
 		private void ButtonEnded(Button target)
 		{
@@ -243,7 +243,7 @@ namespace EoE.Controlls
 				yield return new WaitForEndOfFrame();
 
 			target.Up = true;
-			target.Active = false;
+			target.Held = false;
 			yield return new WaitForEndOfFrame();
 			target.Up = false;
 		}
@@ -252,15 +252,15 @@ namespace EoE.Controlls
 		{
 			public readonly string ButtonName;
 			public bool Down { get; internal set; }
-			public bool Active { get; internal set; }
+			public bool Held { get; internal set; }
 			public bool Up { get; internal set; }
-			public bool Pressed => Active || Down;
+			public bool Pressed => Held || Down;
 
 			public Button(string ButtonName)
 			{
 				this.ButtonName = ButtonName;
 				Down = false;
-				Active = false;
+				Held = false;
 				Up = false;
 			}
 		}

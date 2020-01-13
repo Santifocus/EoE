@@ -29,7 +29,7 @@ namespace EoE.Entities
 		public Transform weaponHoldPoint = default;
 		public Animator animationControl = default;
 
-		[SerializeField] private PlayerSettings selfSettings = default;
+		[SerializeField] private PlayerSettings playerSettings = default;
 		public PlayerBuffDisplay buffDisplay = default;
 
 		[SerializeField] private Transform head = default;
@@ -40,15 +40,13 @@ namespace EoE.Entities
 		public float curMaxEndurance { get; set; }
 		private float usedEnduranceCooldown;
 
-		//Dodge
+		//Dashing
 		public Transform modelTransform = default;
 		private float dashCooldown;
-		private bool currentlyDodging;
+		private bool currentlyDashing;
 
-		//Blocking
-		private float blockingTimer;
-		private bool isBlocking;
-		private BuffInstance blockingBuff;
+		//Shielding
+		private Shield playerShield;
 
 		//Velocity
 		private float jumpCooldown;
@@ -79,8 +77,8 @@ namespace EoE.Entities
 		public float TotalVerticalVelocity => JumpVelocity * PlayerSettings.JumpImpulsePower + VerticalVelocity;
 		public override Vector3 CurVelocity => base.CurVelocity + new Vector3(0, TotalVerticalVelocity, 0);
 		public static Player Instance { get; private set; }
-		public override EntitieSettings SelfSettings => selfSettings;
-		public static PlayerSettings PlayerSettings => Instance.selfSettings;
+		public override EntitieSettings SelfSettings => playerSettings;
+		public static PlayerSettings PlayerSettings => Instance.playerSettings;
 		public int TotalExperience { get; private set; }
 		public int CurrentCurrencyAmount { get; private set; }
 		#region Items
@@ -132,7 +130,7 @@ namespace EoE.Entities
 			MovementControl();
 			TargetEnemyControl();
 			ItemControl();
-			BlockControl();
+			ShieldControl();
 
 			animationControl.SetBool("InCombat", curStates.Fighting);
 		}
@@ -155,12 +153,13 @@ namespace EoE.Entities
 		protected override void ResetStats()
 		{
 			base.ResetStats();
-			curMaxEndurance = PlayerSettings.Endurance;
+			curMaxEndurance = playerSettings.Endurance;
 		}
 		protected override void ResetStatValues()
 		{
 			base.ResetStatValues();
 			curEndurance = curMaxEndurance;
+			playerShield = Shield.CreateShield(playerSettings.ShieldSettings, this);
 		}
 		protected override void LevelSetup()
 		{
@@ -320,7 +319,7 @@ namespace EoE.Entities
 				}
 
 				Vector2 newMoveDistance = InputController.CameraMove;
-				newMoveDistance = new Vector2(newMoveDistance.x * selfSettings.CameraRotationPower.x, newMoveDistance.y * selfSettings.CameraRotationPower.y) * Time.deltaTime;
+				newMoveDistance = new Vector2(newMoveDistance.x * playerSettings.CameraRotationPower.x, newMoveDistance.y * playerSettings.CameraRotationPower.y) * Time.deltaTime;
 				PlayerCameraController.TargetRotation += newMoveDistance;
 			}
 		}
@@ -331,7 +330,7 @@ namespace EoE.Entities
 			bool running = curStates.Running;
 
 			//If the Player doesnt move intentionally but is in run mode, then stop the run mode
-			if (running && (!moving || isBlocking))
+			if (running && !moving)
 				curStates.Running = false;
 
 			//Set all the animation states
@@ -474,16 +473,16 @@ namespace EoE.Entities
 			float hAngle = -(Mathf.Atan2(targetLookDirection.z, targetLookDirection.x) * Mathf.Rad2Deg + 90);
 			float vAngle = Mathf.Asin(targetLookDirection.y) * Mathf.Rad2Deg;
 
-			float targetTorsoAngle = Mathf.Clamp(hAngle * selfSettings.BodyTurnWeight, -selfSettings.BodyTurnHorizontalClamp, selfSettings.BodyTurnHorizontalClamp);
-			curTosoTurn = Utils.SpringLerp(curTosoTurn, targetTorsoAngle, ref bodyLookSpringAcceleration, selfSettings.LookLerpSpringStiffness, Time.deltaTime * selfSettings.LookLerpSpeed);
+			float targetTorsoAngle = Mathf.Clamp(hAngle * playerSettings.BodyTurnWeight, -playerSettings.BodyTurnHorizontalClamp, playerSettings.BodyTurnHorizontalClamp);
+			curTosoTurn = Utils.SpringLerp(curTosoTurn, targetTorsoAngle, ref bodyLookSpringAcceleration, playerSettings.LookLerpSpringStiffness, Time.deltaTime * playerSettings.LookLerpSpeed);
 
 			torso.localEulerAngles = new Vector3(torso.localEulerAngles.x, curTosoTurn, torso.localEulerAngles.z);
 
-			Vector2 targetHeadAngle = new Vector2(	Mathf.Clamp(hAngle - curTosoTurn, -selfSettings.HeadLookAngleClamps.z + curTosoTurn, selfSettings.HeadLookAngleClamps.x + curTosoTurn),
-													Mathf.Clamp(vAngle, -selfSettings.HeadLookAngleClamps.w, selfSettings.HeadLookAngleClamps.y));
+			Vector2 targetHeadAngle = new Vector2(	Mathf.Clamp(hAngle - curTosoTurn, -playerSettings.HeadLookAngleClamps.z + curTosoTurn, playerSettings.HeadLookAngleClamps.x + curTosoTurn),
+													Mathf.Clamp(vAngle, -playerSettings.HeadLookAngleClamps.w, playerSettings.HeadLookAngleClamps.y));
 
-			curHeadTurn = new Vector2(	Utils.SpringLerp(curHeadTurn.x, targetHeadAngle.x, ref headHLookSpringAcceleration, selfSettings.LookLerpSpringStiffness, Time.deltaTime * selfSettings.LookLerpSpeed),
-										Utils.SpringLerp(curHeadTurn.y, targetHeadAngle.y, ref headVLookSpringAcceleration, selfSettings.LookLerpSpringStiffness, Time.deltaTime * selfSettings.LookLerpSpeed));
+			curHeadTurn = new Vector2(	Utils.SpringLerp(curHeadTurn.x, targetHeadAngle.x, ref headHLookSpringAcceleration, playerSettings.LookLerpSpringStiffness, Time.deltaTime * playerSettings.LookLerpSpeed),
+										Utils.SpringLerp(curHeadTurn.y, targetHeadAngle.y, ref headVLookSpringAcceleration, playerSettings.LookLerpSpringStiffness, Time.deltaTime * playerSettings.LookLerpSpeed));
 
 			float vAngleSinPart = Mathf.Sin(curHeadTurn.x * Mathf.Deg2Rad);
 			float vAngleCosPart = Mathf.Cos(curHeadTurn.x * Mathf.Deg2Rad);
@@ -618,7 +617,7 @@ namespace EoE.Entities
 		private void CheckForFalling()
 		{
 			//Find out wether the entitie is falling or not
-			bool playerWantsToFall = curStates.Falling || !InputController.Jump.Active;
+			bool playerWantsToFall = curStates.Falling || !InputController.Jump.Held;
 			bool falling = !charController.isGrounded && (TotalVerticalVelocity < IS_FALLING_THRESHOLD || playerWantsToFall);
 
 			//If so: we enable the falling animation and add extra velocity for a better looking fallcurve
@@ -748,7 +747,7 @@ namespace EoE.Entities
 			}
 		}
 		#endregion
-		#region Dodging
+		#region Dashing
 		private void DashControl()
 		{
 			if (dashCooldown > 0)
@@ -757,16 +756,16 @@ namespace EoE.Entities
 				return;
 			}
 
-			if (InputController.Dodge.Down && !currentlyDodging && curEndurance >= PlayerSettings.DodgeEnduranceCost)
+			if (InputController.Dodge.Down && !currentlyDashing && curEndurance >= PlayerSettings.DashEnduranceCost)
 			{
 				EventManager.PlayerDashInvoke();
-				ChangeEndurance(new ChangeInfo(this, CauseType.Magic, TargetStat.Endurance, PlayerSettings.DodgeEnduranceCost));
+				ChangeEndurance(new ChangeInfo(this, CauseType.Magic, TargetStat.Endurance, PlayerSettings.DashEnduranceCost));
 				StartCoroutine(DashCoroutine());
 			}
 		}
 		private IEnumerator DashCoroutine()
 		{
-			currentlyDodging = true;
+			currentlyDashing = true;
 			float timer = 0;
 			float targetAngle = intendedRotation;
 			if (InputController.PlayerMove != Vector2.zero)
@@ -775,18 +774,18 @@ namespace EoE.Entities
 			}
 
 			//Play FX
-			FXInstance[] dodgeEffects = new FXInstance[PlayerSettings.EffectsOnPlayerDodge.Length];
-			for (int i = 0; i < PlayerSettings.EffectsOnPlayerDodge.Length; i++)
+			FXInstance[] dashEffects = new FXInstance[PlayerSettings.EffectsOnPlayerDash.Length];
+			for (int i = 0; i < PlayerSettings.EffectsOnPlayerDash.Length; i++)
 			{
-				dodgeEffects[i] = FXManager.PlayFX(PlayerSettings.EffectsOnPlayerDodge[i], transform, true);
+				dashEffects[i] = FXManager.PlayFX(PlayerSettings.EffectsOnPlayerDash[i], transform, true);
 			}
 
-			Vector3 newForce = new Vector3(Mathf.Sin(targetAngle * Mathf.Deg2Rad), 0, Mathf.Cos(targetAngle * Mathf.Deg2Rad)) * PlayerSettings.DodgePower * curWalkSpeed;
+			Vector3 newForce = new Vector3(Mathf.Sin(targetAngle * Mathf.Deg2Rad), 0, Mathf.Cos(targetAngle * Mathf.Deg2Rad)) * PlayerSettings.DashPower * curWalkSpeed;
 
-			entitieForceController.ApplyForce(newForce, 1 / PlayerSettings.DodgeDuration);
+			entitieForceController.ApplyForce(newForce, 1 / PlayerSettings.DashDuration);
 
 			//Create a copy of the player model
-			Material dodgeMaterialInstance = Instantiate(PlayerSettings.DodgeModelMaterial);
+			Material dashMaterialInstance = Instantiate(PlayerSettings.DashModelMaterial);
 			Transform modelCopy = Instantiate(modelTransform, Storage.ParticleStorage);
 			Transform weaponCopy = null;
 			if (WeaponController.Instance)
@@ -796,8 +795,8 @@ namespace EoE.Entities
 			modelCopy.transform.localScale = modelTransform.lossyScale;
 			modelCopy.transform.rotation = modelTransform.rotation;
 
-			Color baseColor = dodgeMaterialInstance.color;
-			Color alphaPart = new Color(0, 0, 0, dodgeMaterialInstance.color.a);
+			Color baseColor = dashMaterialInstance.color;
+			Color alphaPart = new Color(0, 0, 0, dashMaterialInstance.color.a);
 			baseColor.a = 0;
 
 			ApplyMaterialToAllChildren(modelCopy);
@@ -805,24 +804,24 @@ namespace EoE.Entities
 				ApplyMaterialToAllChildren(weaponCopy);
 
 			Invincibilities++;
-			while (timer < PlayerSettings.DodgeModelExistTime)
+			while (timer < PlayerSettings.DashModelExistTime)
 			{
 				yield return new WaitForFixedUpdate();
 				timer += Time.fixedDeltaTime;
-				dodgeMaterialInstance.color = baseColor + alphaPart * (1 - timer / PlayerSettings.DodgeModelExistTime);
+				dashMaterialInstance.color = baseColor + alphaPart * (1 - timer / PlayerSettings.DashModelExistTime);
 			}
-			dashCooldown = PlayerSettings.DodgeCooldown;
-			currentlyDodging = false;
+			dashCooldown = PlayerSettings.DashCooldown;
+			currentlyDashing = false;
 			Invincibilities--;
 
 			Destroy(modelCopy.gameObject);
 			if (weaponCopy)
 				Destroy(weaponCopy.gameObject);
 
-			for (int i = 0; i < dodgeEffects.Length; i++)
+			for (int i = 0; i < dashEffects.Length; i++)
 			{
-				if(dodgeEffects[i] != null)
-					dodgeEffects[i].FinishFX();
+				if(dashEffects[i] != null)
+					dashEffects[i].FinishFX();
 			}
 
 			void ApplyMaterialToAllChildren(Transform parent)
@@ -838,7 +837,7 @@ namespace EoE.Entities
 						Material[] newMats = new Material[rend.materials.Length];
 						for (int i = 0; i < newMats.Length; i++)
 						{
-							newMats[i] = dodgeMaterialInstance;
+							newMats[i] = dashMaterialInstance;
 						}
 						rend.materials = newMats;
 					}
@@ -865,7 +864,7 @@ namespace EoE.Entities
 					Material[] newMats = new Material[rend.materials.Length];
 					for (int j = 0; j < newMats.Length; j++)
 					{
-						newMats[j] = dodgeMaterialInstance;
+						newMats[j] = dashMaterialInstance;
 					}
 					rend.materials = newMats;
 
@@ -941,7 +940,7 @@ namespace EoE.Entities
 					}
 				}
 			}
-			else if (InputController.Aim.Active && InputController.CameraMove.sqrMagnitude > 0.25f)
+			else if (InputController.Aim.Held && InputController.CameraMove.sqrMagnitude > 0.25f)
 			{
 				if (switchTargetTimer > 0 || TargetedEntitie == null)
 					return;
@@ -1181,43 +1180,10 @@ namespace EoE.Entities
 			}
 		}
 		#endregion
-		#region BlockControl
-		private void BlockControl()
+		#region ShieldControl
+		private void ShieldControl()
 		{
-			float manaCost = 0;
-			float enduranceCost = 0;
-			for (int i = 0; i < PlayerSettings.BlockingBuff.DOTs.Length; i++)
-			{
-				if (PlayerSettings.BlockingBuff.DOTs[i].TargetStat == TargetStat.Mana)
-					manaCost += PlayerSettings.BlockingBuff.DOTs[i].BaseDamage;
-				else if (PlayerSettings.BlockingBuff.DOTs[i].TargetStat == TargetStat.Endurance)
-					enduranceCost += PlayerSettings.BlockingBuff.DOTs[i].BaseDamage;
-			}
-			manaCost *= Time.deltaTime;
-			enduranceCost *= Time.deltaTime;
-
-			if ((InputController.Block.Down || InputController.Block.Active) && (curMana >= manaCost && curEndurance >= enduranceCost))
-			{
-				if (!isBlocking)
-				{
-					blockingTimer += Time.deltaTime;
-					if (blockingTimer >= PlayerSettings.StartBlockingInertia)
-					{
-						isBlocking = true;
-						blockingBuff = AddBuff(PlayerSettings.BlockingBuff, this);
-					}
-				}
-			}
-			else if (isBlocking)
-			{
-				blockingTimer -= Time.deltaTime;
-				if (blockingTimer < PlayerSettings.StartBlockingInertia - PlayerSettings.StopBlockingInertia)
-				{
-					isBlocking = false;
-					blockingTimer = 0;
-					RemoveBuff(blockingBuff);
-				}
-			}
+			playerShield.SetShieldState(InputController.Block.Pressed);
 		}
 		#endregion
 		#region StateControl

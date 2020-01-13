@@ -771,7 +771,7 @@ namespace EoE.Entities
 		public bool CastSpell(Spell spell)
 		{
 			bool asPlayerCurrentlyAttacking = this is Player && WeaponController.Instance != null && WeaponController.Instance.InAttackSequence;
-			if (!spell.IsActivatable(this, 1, 1, 1) || IsCasting || CastingCooldown > 0 || asPlayerCurrentlyAttacking)
+			if (!spell.Cost.CanActivate(this, 1, 1, 1) || IsCasting || CastingCooldown > 0 || asPlayerCurrentlyAttacking)
 				return false;
 
 			StartCoroutine(CastSpellC(spell));
@@ -927,7 +927,7 @@ namespace EoE.Entities
 		StoppedSpell:;
 			IsCasting = false;
 			CastingCooldown = spell.SpellCooldown;
-			spell.ActivateCost(this, 1, 1, 1);
+			spell.Cost.Activate(this, 1, 1, 1);
 			if (curBoundFX != null)
 			{
 				for (int i = 0; i < curBoundFX.Length; i++)

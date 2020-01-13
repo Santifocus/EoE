@@ -8,13 +8,12 @@ namespace EoE.Information
 	public class PlayerSettingsEditor : EntitieSettingsEditor
 	{
 		private static bool CameraSettingsOpen;
-		private static bool DodgeSettingsOpen;
-		private static bool BlockingSettingsOpen;
+		private static bool DashSettingsOpen;
+		private static bool ShieldingSettingsOpen;
 		private static bool IFramesSettingsOpen;
 		private static bool InventorySettingsOpen;
 		private static bool AnimationSettingsOpen;
 
-		private static bool InventoryStartItemsOpen;
 		//VFXEffectArrays
 		private static bool OnLandingEffectsOpen;
 		private static bool OnHealthCriticalEffectsOpen;
@@ -23,8 +22,8 @@ namespace EoE.Information
 		{
 			base.CustomInspector();
 			DrawInFoldoutHeader(new GUIContent("Camera Settings"), ref CameraSettingsOpen, CameraSettingsArea);
-			DrawInFoldoutHeader(new GUIContent("Dodge Settings"), ref DodgeSettingsOpen, DodgeSettingsArea);
-			DrawInFoldoutHeader(new GUIContent("Blocking Settings"), ref BlockingSettingsOpen, BlockingSettingsArea);
+			DrawInFoldoutHeader(new GUIContent("Dash Settings"), ref DashSettingsOpen, DashSettingsArea);
+			DrawInFoldoutHeader(new GUIContent("Shielding Settings"), ref ShieldingSettingsOpen, ShieldingSettingsArea);
 			DrawInFoldoutHeader(new GUIContent("IFrames Settings"), ref IFramesSettingsOpen, IFramesSettingsArea);
 			DrawInFoldoutHeader(new GUIContent("Inventory Settings"), ref InventorySettingsOpen, InventorySettingsArea);
 			DrawInFoldoutHeader(new GUIContent("Animation Settings"), ref AnimationSettingsOpen, AnimationSettingsArea);
@@ -81,24 +80,21 @@ namespace EoE.Information
 				FloatField(new GUIContent("Endurance Regen After Use Multiplier", "If the player recently used Endurance how will the Endurance regen multiplied? (Per Second)"), ref settings.EnduranceRegenAfterUseMultiplier, 2);
 			}
 		}
-		private void DodgeSettingsArea()
+		private void DashSettingsArea()
 		{
 			PlayerSettings settings = target as PlayerSettings;
 
-			FloatField(new GUIContent("Dodge Power", "How strong does the player dodge into the intended direction? (Value * Movespeed)"), ref settings.DodgePower, 1);
-			FloatField(new GUIContent("Dodge Duration"), ref settings.DodgeDuration, 1);
-			FloatField(new GUIContent("Dodge Model Exist Time", "The Silhouette that appears after dodging will exist for this amount of time."), ref settings.DodgeModelExistTime, 1);
-			FloatField(new GUIContent("Dodge Cooldown", "After finishing a Dodge, how long should it be on cooldown? (In Seconds)"), ref settings.DodgeCooldown, 1);
-			FloatField(new GUIContent("Dodge Endurance Cost", "How much Endurance does dodging drain?"), ref settings.DodgeEnduranceCost, 1);
-			ObjectField(new GUIContent("Dodge Model Material", "What material should be used for the Dodge Silhouette?"), ref settings.DodgeModelMaterial, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DashPower))), ref settings.DashPower, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DashDuration))), ref settings.DashDuration, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DashModelExistTime))), ref settings.DashModelExistTime, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DashCooldown))), ref settings.DashCooldown, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DashEnduranceCost))), ref settings.DashEnduranceCost, 1);
+			ObjectField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DashModelMaterial))), ref settings.DashModelMaterial, 1);
 		}
-		private void BlockingSettingsArea()
+		private void ShieldingSettingsArea()
 		{
 			PlayerSettings settings = target as PlayerSettings;
-
-			FloatField(new GUIContent("Start Blocking Inertia"), ref settings.StartBlockingInertia, 1);
-			ObjectField<Buff>(new GUIContent("Blocking Buff"), ref settings.BlockingBuff, 1);
-			FloatField(new GUIContent("Stop Blocking Inertia"), ref settings.StopBlockingInertia, 1);
+			ObjectField<ShieldData>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ShieldSettings))), ref settings.ShieldSettings, 1);
 		}
 		private void IFramesSettingsArea()
 		{
@@ -176,7 +172,7 @@ namespace EoE.Information
 				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.PlayerLandingVelocityThreshold))), ref settings.PlayerLandingVelocityThreshold, 2);
 				ObjectArrayField<FXObject>(new GUIContent("Effects"), ref settings.EffectsOnPlayerLanding, serializedObject.FindProperty(nameof(settings.EffectsOnPlayerLanding)), new GUIContent(". Effect"), 2);
 			}
-			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnPlayerDodge))), ref settings.EffectsOnPlayerDodge, serializedObject.FindProperty(nameof(settings.EffectsOnPlayerDodge)), new GUIContent(". Effect"), 1);
+			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnPlayerDash))), ref settings.EffectsOnPlayerDash, serializedObject.FindProperty(nameof(settings.EffectsOnPlayerDash)), new GUIContent(". Effect"), 1);
 
 			Header("On Player Receiving Damage");
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnReceiveDamage))), ref settings.EffectsOnReceiveDamage, serializedObject.FindProperty(nameof(settings.EffectsOnReceiveDamage)), new GUIContent(". Effect"), 1);

@@ -197,6 +197,8 @@ namespace EoE.Combatery
 		}
 		private void OnDrawGizmos()
 		{
+			if (info == null)
+				return;
 			if(info.Duration - remainingLifeTime < 0.5f)
 				DrawEffectSpheres(info.StartEffects, spawnPos);
 

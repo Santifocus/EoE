@@ -13,6 +13,11 @@ MonoBehaviour:
   m_Name: UsedSword
   m_EditorClassIdentifier: 
   BaseDamage: 5
+  Cost:
+    Health: 0
+    Mana: 0
+    Endurance: 3
+    AdditionalConditions: []
   BaseHealthCost: 0
   BaseManaCost: 0
   BaseEnduranceCost: 3
