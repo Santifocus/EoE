@@ -16,7 +16,7 @@ namespace EoE
 		}
 		public void StartGame()
 		{
-			SceneManager.LoadSceneAsync(ConstantCollector.GAME_SCENE_INDEX);
+			SceneManager.LoadScene(ConstantCollector.GAME_SCENE_INDEX);
 		}
 		public void OpenSettings()
 		{
