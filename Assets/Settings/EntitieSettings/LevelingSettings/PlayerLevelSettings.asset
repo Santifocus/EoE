@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   curve:
     a: 2
-    b: 6
+    b: 8
     c: 10
   AttributePointsPerLevel: 1
   SkillPointsPerLevel: 3
