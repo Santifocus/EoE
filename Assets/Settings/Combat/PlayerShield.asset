@@ -18,11 +18,13 @@ MonoBehaviour:
     Mana: 0
     Endurance: 0
     AdditionalConditions: []
+  EffectOnUserOnShieldBreak: {fileID: 11400000, guid: eadfd855a332c49408281caac48a3346,
+    type: 2}
   ShieldResistance: 20
-  ShieldDrain: 1
+  ShieldDrain: 5
   ShieldRegeneration: 3
   ShieldSize: 2
-  ReflectProjectiles: 0
+  ReflectProjectiles: 1
   FollowOwner: 1
   InheritOwnerRotation: 1
   OffsetToOwner: {x: 0, y: 0, z: 0}

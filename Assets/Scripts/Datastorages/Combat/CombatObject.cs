@@ -219,7 +219,7 @@ namespace EoE.Combatery
 		//Remenants
 		public RemenantsData[] CreatedRemenants = new RemenantsData[0];
 
-		public FXInstance[] Activate(Entity activator, CombatObject baseObject, Transform overrideTransform = null)
+		public FXInstance[] Activate(Entity activator, CombatObject baseObject, Transform overrideTransform = null, params Entity[] ignoredEntities)
 		{
 			FXInstance[] createdFXInstances = (HasMaskFlag(EffectType.FX) ? (new FXInstance[FXObjects.Length]) : (new FXInstance[0]));
 			if (HasMaskFlag(EffectType.ImpulseVelocity))
@@ -239,7 +239,7 @@ namespace EoE.Combatery
 			{
 				for (int i = 0; i < AOEEffects.Length; i++)
 				{
-					AOEEffects[i].Activate(activator, overrideTransform ?? activator.transform, baseObject);
+					AOEEffects[i].Activate(activator, overrideTransform ?? activator.transform, baseObject, null, ignoredEntities);
 				}
 			}
 			if (HasMaskFlag(EffectType.CreateProjectile))

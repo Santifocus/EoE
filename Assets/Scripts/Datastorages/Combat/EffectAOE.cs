@@ -1,5 +1,6 @@
 ﻿using EoE.Entities;
 using EoE.Information;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace EoE.Combatery
@@ -30,7 +31,7 @@ namespace EoE.Combatery
 		public CustomFXObject[] Effects = new CustomFXObject[0];
 
 		#region Activation
-		public void Activate(Entity effectCauser, Transform origin, CombatObject infoBase, EffectOverrides effectOverrides = null)
+		public void Activate(Entity effectCauser, Transform origin, CombatObject infoBase, EffectOverrides effectOverrides = null, params Entity[] ignoredEntities)
 		{
 			ElementType effectElement = (effectOverrides == null) ? DamageElement : (effectOverrides.OverridenElement.HasValue ? effectOverrides.OverridenElement.Value : DamageElement);
 			CauseType effectCause = (effectOverrides == null) ? CauseType : (effectOverrides.OverridenCauseType.HasValue ? effectOverrides.OverridenCauseType.Value : CauseType);
@@ -69,8 +70,24 @@ namespace EoE.Combatery
 			//In order to dodge using a list so we dont spam the garbage collector we first find out how many entities will be added
 			//And then build a array with that size, for that we could use Linq aswell but this methode is faster (probably)
 			int requiredCapacity = 0;
+			List<int> ignoredIndexes = new List<int>(ignoredEntities.Length);
+
 			for (int i = 0; i < Entity.AllEntities.Count; i++)
 			{
+				bool isIgnored = false;
+				for(int j = 0; j < ignoredEntities.Length; j++)
+				{
+					if(Entity.AllEntities[i] == ignoredEntities[j])
+					{
+						isIgnored = true;
+						ignoredIndexes.Add(i);
+						break;
+					}
+
+				}
+				if (isIgnored)
+					continue;
+
 				if ((Entity.AllEntities[i].actuallWorldPosition - origin.position).sqrMagnitude < outerSphereDist)
 				{
 					//Check if this entitie should be a targetable entitie
@@ -81,8 +98,15 @@ namespace EoE.Combatery
 			CollectedEntitieData[] eligibleTargets = new CollectedEntitieData[requiredCapacity];
 
 			int addedEntities = 0;
+			int checkedIgnoredIndexes = 0;
 			for (int i = 0; i < Entity.AllEntities.Count; i++)
 			{
+				if (ignoredIndexes.Count > 0 && ignoredIndexes[checkedIgnoredIndexes] == i)
+				{
+					checkedIgnoredIndexes++;
+					continue;
+				}
+
 				Vector3 dif = Entity.AllEntities[i].actuallWorldPosition - origin.position;
 				float sqrDist = dif.sqrMagnitude;
 

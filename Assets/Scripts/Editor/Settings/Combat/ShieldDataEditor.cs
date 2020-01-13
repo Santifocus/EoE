@@ -23,6 +23,7 @@ namespace EoE.Combatery
 
 			ObjectField<CombatObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseData))), ref settings.BaseData, 1);
 			DrawObjectCost(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.FirstActivationCost))), ref settings.FirstActivationCost, serializedObject.FindProperty(nameof(settings.FirstActivationCost)), 1);
+			ObjectField<EffectSingle>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectOnUserOnShieldBreak))), ref settings.EffectOnUserOnShieldBreak, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ShieldResistance))), ref settings.ShieldResistance, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ShieldDrain))), ref settings.ShieldDrain, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ShieldRegeneration))), ref settings.ShieldRegeneration, 1);

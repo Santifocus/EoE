@@ -1183,7 +1183,12 @@ namespace EoE.Entities
 		#region ShieldControl
 		private void ShieldControl()
 		{
-			playerShield.SetShieldState(InputController.Block.Pressed);
+			return;
+			if(InputController.Block.Down)
+				playerShield.SetShieldState(true);
+			else if(InputController.Block.Up)
+				playerShield.SetShieldState(false);
+
 		}
 		#endregion
 		#region StateControl

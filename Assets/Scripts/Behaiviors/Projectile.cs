@@ -55,6 +55,7 @@ namespace EoE.Combatery
 		private void SetupCollider()
 		{
 			Physics.IgnoreCollision(creator.coll, entitieColl);
+			Physics.IgnoreCollision(creator.coll, entitieTriggerColl);
 
 			if ((info.CollideMask | ColliderMask.Terrain) == info.CollideMask)
 			{
@@ -102,33 +103,87 @@ namespace EoE.Combatery
 		}
 		private void OnTriggerEnter(Collider other)
 		{
-			Entity hit = other.GetComponent<Entity>();
-			if (info.DirectHit != null)
+			if (info.DirectHit == null)
+				return;
+
+			if (other.gameObject.layer == ConstantCollector.ENTITIE_LAYER)
 			{
+				Entity hit = other.GetComponent<Entity>();
 				if (CombatObject.IsAllowedEntitie(hit, creator, info.DirectHit.AffectedTargets))
 				{
 					DirectTargetHit(hit);
 				}
 			}
+			else //other.gameObject.layer == ConstantCollector.SHIELD_LAYER
+			{
+				Shield hit = other.GetComponent<Shield>();
+				if (hit.creator != creator)
+				{
+					bool isCrit = Utils.Chance01(info.DirectHit.CritChanceMultiplier * baseData.BaseCritChance);
+					float damage = info.DirectHit.DamageMultiplier * baseData.BaseDamage * (isCrit ? GameController.CurrentGameSettings.CritDamageMultiplier : 1);
+					hit.HitShield(damage);
+
+					if (hit.info.ReflectProjectiles)
+						Reflect(hit.creator);
+				}
+			}
 		}
 		private void OnCollisionEnter(Collision collision)
 		{
-			if (bounceCooldown > 0)
-				return;
-
-			if ((info.DestroyOnEntiteBounce) && (collision.gameObject.layer == ConstantCollector.ENTITIE_LAYER))
+			if (collision.gameObject.layer != ConstantCollector.SHIELD_LAYER)
 			{
-				FinishProjectileFlight();
-				return;
-			}
+				if (bounceCooldown > 0)
+					return;
 
-			if (remainingBounces > 0)
-			{
-				OnBounce();
+				if ((info.DestroyOnEntiteBounce) && (collision.gameObject.layer == ConstantCollector.ENTITIE_LAYER))
+				{
+					FinishProjectileFlight();
+					return;
+				}
+
+				if (remainingBounces > 0)
+				{
+					OnBounce();
+				}
+				else
+				{
+					FinishProjectileFlight();
+				}
 			}
 			else
 			{
-				FinishProjectileFlight();
+				Shield hit = collision.gameObject.GetComponent<Shield>();
+				if (hit.creator != creator)
+				{
+					if (hit.info.ReflectProjectiles)
+					{
+						Reflect(hit.creator);
+					}
+					else
+					{
+						for (int i = 0; i < info.CollisionEffects.Length; i++)
+						{
+							info.CollisionEffects[i].Activate(creator, baseData, transform, null, hit.creator);
+						}
+						isDead = true;
+						Destroy(gameObject);
+					}
+
+					//Apply damage to the shield
+					float totalDamage = 0;
+					for (int i = 0; i < info.CollisionEffects.Length; i++)
+					{
+						if (info.CollisionEffects[i].HasMaskFlag(EffectType.AOE))
+						{
+							for(int j = 0; j < info.CollisionEffects[i].AOEEffects.Length; j++)
+							{
+								bool wasCrit = Utils.Chance01(info.CollisionEffects[i].AOEEffects[j].CritChanceMultiplier * baseData.BaseCritChance);
+								totalDamage += info.CollisionEffects[i].AOEEffects[j].DamageMultiplier * (wasCrit ? GameController.CurrentGameSettings.CritDamageMultiplier : 1) * baseData.BaseDamage;
+							}
+						}
+					}
+					hit.HitShield(totalDamage);
+				}
 			}
 		}
 		private void OnBounce()
@@ -168,7 +223,6 @@ namespace EoE.Combatery
 				return;
 
 			ActivateActivationEffects(info.CollisionEffects, false);
-			body.velocity = Vector3.zero;
 			isDead = true;
 			Destroy(gameObject);
 		}
@@ -189,6 +243,16 @@ namespace EoE.Combatery
 					boundEffects[i].FinishFX();
 			}
 			boundEffects = new List<FXInstance>();
+		}
+		private void Reflect(Entity newOwner)
+		{
+			body.velocity = transform.forward * body.velocity.magnitude * -1;
+			Physics.IgnoreCollision(creator.coll, entitieColl, false);
+			Physics.IgnoreCollision(creator.coll, entitieTriggerColl, false);
+
+			creator = newOwner;
+			Physics.IgnoreCollision(creator.coll, entitieColl);
+			Physics.IgnoreCollision(creator.coll, entitieTriggerColl);
 		}
 		private void OnDestroy()
 		{

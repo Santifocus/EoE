@@ -134,6 +134,10 @@ namespace EoE.Entities
 					body.velocity = CurVelocity;
 				}
 			}
+			else if(collision.gameObject.layer == ConstantCollector.SHIELD_LAYER)
+			{
+				Debug.Log("Here");
+			}
 		}
 	}
 }

@@ -9,6 +9,7 @@ namespace EoE.Information
 	{
 		public CombatObject BaseData = default;
 		public ObjectCost FirstActivationCost = default;
+		public EffectSingle EffectOnUserOnShieldBreak = default;
 
 		public float ShieldResistance = 20;
 		public float ShieldDrain = 1;

@@ -10,9 +10,9 @@ namespace EoE.Combatery
     {
 		[SerializeField] private SphereCollider coll = default;
 
-        private Entity creator;
-        private List<FXInstance> boundEffects;
-		private ShieldData info;
+        public Entity creator { get; private set; }
+		private List<FXInstance> boundEffects;
+		public ShieldData info { get; private set; }
 
 		private bool shieldActive;
 		private float curShieldResistance;
@@ -29,6 +29,7 @@ namespace EoE.Combatery
 			newShield.boundEffects = new List<FXInstance>();
 
 			newShield.AnchorShield();
+			newShield.coll.enabled = false;
 			return newShield;
 		}
 		public void HitShield(float damage)
@@ -46,9 +47,11 @@ namespace EoE.Combatery
 
 			if (state)
 			{
-				if (info.FirstActivationCost.CanActivate(creator, 1, 1, 1))
+				float resistanceCost = Time.deltaTime * info.ShieldDrain;
+				if (info.FirstActivationCost.CanActivate(creator, 1, 1, 1) && curShieldResistance >= resistanceCost)
 				{
 					info.FirstActivationCost.Activate(creator, 1, 1, 1);
+					curShieldResistance -= resistanceCost;
 				}
 				else
 				{
@@ -58,6 +61,7 @@ namespace EoE.Combatery
 			}
 
 			shieldActive = state;
+			coll.enabled = state;
 			if (shieldActive)
 			{
 				ActivateActivationEffects(info.ShieldStartEffects, false);
@@ -97,6 +101,9 @@ namespace EoE.Combatery
 		}
 		private void AnchorShield()
 		{
+			if (!creator)
+				return;
+
 			if (info.FollowOwner)
 			{
 				transform.position = creator.actuallWorldPosition + info.OffsetToOwner;
@@ -129,7 +136,9 @@ namespace EoE.Combatery
 		}
 		private void BreakShield()
 		{
-			StopBoundFX();
+			StopBoundFX(); 
+			if(info.EffectOnUserOnShieldBreak)
+				info.EffectOnUserOnShieldBreak.Activate(creator, creator, info.BaseData, Vector3.zero, creator.actuallWorldPosition);
 			ActivateActivationEffects(info.ShieldBreakEffects, false);
 		}
         private void OnDestroy()
