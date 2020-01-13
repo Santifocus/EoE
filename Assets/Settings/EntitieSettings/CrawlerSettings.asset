@@ -20,8 +20,8 @@ MonoBehaviour:
   ExperienceWorth: 1
   BaseAttackDamage: 14
   BaseMagicDamage: 3
-  BaseDefense: 3
-  Health: 60
+  BaseDefense: 4
+  Health: 70
   DoHealthRegen: 0
   HealthRegen: 0
   HealthRegenCooldownAfterTakingDamage: 4
