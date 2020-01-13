@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ab78e7538a021446a2451566185bbde, type: 3}
-  m_Name: UsedSword
+  m_Name: ThunderBlade
   m_EditorClassIdentifier: 
-  BaseDamage: 5
+  BaseDamage: 7
   BaseHealthCost: 0
   BaseManaCost: 0
-  BaseEnduranceCost: 3
-  BaseKnockback: 10
-  BaseCritChance: 0.05
+  BaseEnduranceCost: 6
+  BaseKnockback: 5
+  BaseCritChance: 0.04
   AdditionalConditions: []
-  WeaponPrefab: {fileID: 5533782398965989895, guid: 18284dacf122148419232919f51c45c2,
+  WeaponPrefab: {fileID: 5533782398965989895, guid: b8a1958f21cf1e34c96f3a2c98f4beeb,
     type: 3}
   WeaponElement: 1
   WeaponCauseType: 0
@@ -85,7 +85,7 @@ MonoBehaviour:
       CritChanceMultiplier: 1
       CollisionMask: -1
       StopOnCollisionMask: 0
-      DirectHit: {fileID: 11400000, guid: b2224e95e2fd03742845a26029bcb0dc, type: 2}
+      DirectHit: {fileID: 11400000, guid: 370c9ec2a63887748b041f9075022b73, type: 2}
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -178,7 +178,7 @@ MonoBehaviour:
       CritChanceMultiplier: 1
       CollisionMask: -1
       StopOnCollisionMask: 0
-      DirectHit: {fileID: 11400000, guid: b2224e95e2fd03742845a26029bcb0dc, type: 2}
+      DirectHit: {fileID: 11400000, guid: 370c9ec2a63887748b041f9075022b73, type: 2}
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -261,11 +261,11 @@ MonoBehaviour:
         ChargeBasedDirectHits:
         - MinRequiredCharge: 1
           MaxRequiredCharge: 2
-          DirectHitOverride: {fileID: 11400000, guid: 265e6994fdfd23549bf67df632fcc179,
+          DirectHitOverride: {fileID: 11400000, guid: 55b51d3b6452e93468136d47761a8377,
             type: 2}
         - MinRequiredCharge: 2
           MaxRequiredCharge: 2.5
-          DirectHitOverride: {fileID: 11400000, guid: ae95f75fc2b7e104b80d2b36faf8abd2,
+          DirectHitOverride: {fileID: 11400000, guid: 4bfccf338e5e38946a72ae0f84e38614,
             type: 2}
         FXObjects: []
         FXObjectsWithMutliplier:
@@ -503,7 +503,7 @@ MonoBehaviour:
       CritChanceMultiplier: 0
       CollisionMask: -1
       StopOnCollisionMask: -1
-      DirectHit: {fileID: 11400000, guid: bfb7e1ecec740634fb4282d888a3b9ed, type: 2}
+      DirectHit: {fileID: 11400000, guid: 370c9ec2a63887748b041f9075022b73, type: 2}
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -600,7 +600,7 @@ MonoBehaviour:
       CritChanceMultiplier: 0
       CollisionMask: -1
       StopOnCollisionMask: -1
-      DirectHit: {fileID: 11400000, guid: ef39d8966b001e245a7f7d4cf21cef44, type: 2}
+      DirectHit: {fileID: 11400000, guid: 370c9ec2a63887748b041f9075022b73, type: 2}
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -642,7 +642,7 @@ MonoBehaviour:
     - 0
   ComboEffects: {fileID: 11400000, guid: 4e7be449530b2d44fb6413e980a881e2, type: 2}
   UltimateSettings:
-    Ultimate: {fileID: 11400000, guid: 94da0838ebc07b34c83b553d2ddf4f90, type: 2}
+    Ultimate: {fileID: 11400000, guid: 870e27f2e49f188479010fa86ff71b7f, type: 2}
     TotalRequiredCharge: 1
     OnUseChargeRemove: 1
     OnHitCharge: 1
