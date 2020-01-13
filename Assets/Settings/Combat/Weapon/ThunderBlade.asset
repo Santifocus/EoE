@@ -643,7 +643,7 @@ MonoBehaviour:
   ComboEffects: {fileID: 11400000, guid: 4e7be449530b2d44fb6413e980a881e2, type: 2}
   UltimateSettings:
     Ultimate: {fileID: 11400000, guid: 870e27f2e49f188479010fa86ff71b7f, type: 2}
-    TotalRequiredCharge: 1
+    TotalRequiredCharge: 5
     OnUseChargeRemove: 1
     OnHitCharge: 1
     OnCritHitCharge: 2
