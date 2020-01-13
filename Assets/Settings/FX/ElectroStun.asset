@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aa0729519a808d449bdb777d2d35538b, type: 3}
-  m_Name: ElectroHit
+  m_Name: ElectroStun
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
@@ -20,6 +20,6 @@ MonoBehaviour:
     TimeStay: 1
     OnConditionMet: 0
     Condition: {fileID: 0}
-  TargetSound: {fileID: 0}
+  TargetSound: {fileID: 11400000, guid: 8500823b7d9cb6b42b8b8403a33cb641, type: 2}
   FollowTarget: 0
   OffsetToTarget: {x: 0, y: 0, z: 0}

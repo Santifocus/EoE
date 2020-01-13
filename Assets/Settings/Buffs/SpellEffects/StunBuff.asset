@@ -14,8 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Stun
   Quality: 0
-  Permanent: 0
-  BuffTime: 3.5
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 1
@@ -30,3 +28,4 @@ MonoBehaviour:
   DOTs: []
   FXEffects:
   - {fileID: 11400000, guid: 5c28d04af48610b47b181b05fc6bf580, type: 2}
+  - {fileID: 11400000, guid: 14a51361675ee9744b5cb5c300568758, type: 2}

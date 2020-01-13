@@ -21,7 +21,7 @@ MonoBehaviour:
   - textColor: {r: 0.21681976, g: 1, b: 0, a: 1}
     text: + 7 ATK.
   SortingID: 11
-  ItemIcon: {fileID: 21300000, guid: 4adc3b04da06a574dbaf2fb511a270bd, type: 3}
+  ItemIcon: {fileID: 21300000, guid: 647ad7791ee4f234ea78f067b2c09496, type: 3}
   FXEffectsOnUse: []
   FXEffectsWhenEquipped: []
   AllowHoldUse: 0
@@ -30,6 +30,6 @@ MonoBehaviour:
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 1
-  ItemWorth: 100
+  ItemWorth: 450
   ItemFlags: 2
   TargetWeapon: {fileID: 11400000, guid: 06b6b51412cb2d34c813125274104efd, type: 2}

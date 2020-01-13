@@ -34,5 +34,6 @@ MonoBehaviour:
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 1
-  ItemWorth: 300
+  ItemWorth: 400
+  ItemFlags: 1
   buffToApply: {fileID: 11400000, guid: a27cb54fb6a890c4fb62f2273585252d, type: 2}
