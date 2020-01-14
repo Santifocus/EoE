@@ -17,7 +17,7 @@ namespace EoE.Information
 			CrawlerSettings settings = target as CrawlerSettings;
 			base.CombatSettings();
 
-			FloatField(new GUIContent("Attack Speed"), ref settings.AttackSpeed, 1);
+			FloatField(new GUIContent("Attack Speed"), ref settings.BashChargeSpeed, 1);
 			FloatField(new GUIContent("Bash Speed"), ref settings.BashSpeed, 1);
 			FloatField(new GUIContent("Bash Distance"), ref settings.BashDistance, 1);
 			FloatField(new GUIContent("ForceTranslationMultiplier", "When the Crawler hits the player he will give the current speed multiplied by this amount to the Player"), ref settings.ForceTranslationMultiplier, 1);

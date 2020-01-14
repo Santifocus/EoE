@@ -867,7 +867,6 @@ namespace EoE.Entities
 						newMats[j] = dashMaterialInstance;
 					}
 					rend.materials = newMats;
-
 				}
 			}
 		}
@@ -1183,7 +1182,6 @@ namespace EoE.Entities
 		#region ShieldControl
 		private void ShieldControl()
 		{
-			return;
 			if(InputController.Block.Down)
 				playerShield.SetShieldState(true);
 			else if(InputController.Block.Up)

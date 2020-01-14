@@ -69,7 +69,7 @@ namespace EoE.Information
 						finalChangeAmount = (((basis.attacker ? basis.attacker.EntitieLevel : 0) + GameController.CurrentGameSettings.MagicDamageLevelAdd) * basis.baseDamageAmount) / GameController.CurrentGameSettings.MagicDamageDivider;
 					}
 
-					//If the multiplications caused the final damage change from positive to negative we want to set it to zero
+					//If the chages caused the final damage change from positive to negative we want to set it to zero
 					//This will prevent situations in which very weak attacks would heal the receiver
 					if (finalChangeAmount < 0)
 					{

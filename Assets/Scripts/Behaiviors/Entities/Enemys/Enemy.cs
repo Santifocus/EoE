@@ -172,7 +172,7 @@ namespace EoE.Entities
 
 					if (reachedDestination)
 					{
-						LookAtPlayer();
+						LookAtTarget();
 					}
 				}
 			}
@@ -375,12 +375,12 @@ namespace EoE.Entities
 
 			return reached;
 		}
-		protected void LookAtPlayer()
+		protected void LookAtTarget()
 		{
 			if (IsRotationStopped)
 				return;
 
-			Vector3 plyPos = Player.Instance.actuallWorldPosition;
+			Vector3 plyPos = GuessedPlayerPosition;
 			Vector2 direction = new Vector2(plyPos.x - actuallWorldPosition.x, plyPos.z - actuallWorldPosition.z).normalized;
 			float rotation = -Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
 

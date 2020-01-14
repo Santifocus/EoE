@@ -9,7 +9,6 @@ namespace EoE.Entities
 		public Vector3 currentTotalForce { get; private set; }
 		private List<SingleForce> currentForces;
 
-		public delegate void OnForceDelete();
 		public ForceController()
 		{
 			currentForces = new List<SingleForce>();
@@ -29,7 +28,7 @@ namespace EoE.Entities
 				}
 			}
 		}
-		public SingleForce ApplyForce(Vector3 Force, float Drag, bool linearDrag = false, OnForceDelete deleteCall = null)
+		public SingleForce ApplyForce(Vector3 Force, float Drag, bool linearDrag = false, System.Action deleteCall = null)
 		{
 			SingleForce force = new SingleForce(Force, Drag, linearDrag, deleteCall);
 			currentForces.Add(force);
@@ -58,12 +57,11 @@ namespace EoE.Entities
 			public bool LinearDrag { get; private set; }
 			public float PassedTime { get; private set; }
 
-			public OnForceDelete deleteCall { get; private set; }
+			public System.Action deleteCall { get; private set; }
 
-			public SingleForce(Vector3 Force, float Drag, bool LinearDrag, OnForceDelete deleteCall)
+			public SingleForce(Vector3 Force, float Drag, bool LinearDrag, System.Action deleteCall)
 			{
-				this.Force = Force;
-				this.StartForce = Force;
+				this.StartForce = this.Force = Force;
 				this.Drag = Drag;
 				this.LinearDrag = LinearDrag;
 				this.deleteCall = deleteCall;

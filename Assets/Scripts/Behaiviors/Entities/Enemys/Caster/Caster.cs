@@ -8,7 +8,7 @@ namespace EoE.Entities
 		public CasterSettings settings;
 		protected override void InRangeBehaivior()
 		{
-			LookAtPlayer();
+			LookAtTarget();
 			CastSpell(settings.CasterAttack);
 		}
 	}
