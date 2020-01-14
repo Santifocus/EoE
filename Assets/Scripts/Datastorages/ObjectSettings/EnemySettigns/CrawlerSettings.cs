@@ -11,12 +11,10 @@ namespace EoE.Information
 		public float ForceTranslationMultiplier = 2;
 
 		//VFX
-		public float BashAnnouncementDelay = -0.2f;
 		public EffectSingle DirectHitEntitieEffect = default;
+		public ActivationEffect[] BashChargeStartEffects = new ActivationEffect[0];
 		public ActivationEffect[] BashStartEffects = new ActivationEffect[0];
-		public ActivationEffect[] BashHitWallEffects = new ActivationEffect[0];
+		public ActivationEffect[] BashHitTerrainEffects = new ActivationEffect[0];
 		public ActivationEffect[] BashHitEntitieEffects = new ActivationEffect[0];
-
-		public FXObject[] BashAnnouncement = new FXObject[0];
 	}
 }

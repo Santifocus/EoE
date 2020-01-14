@@ -13,8 +13,10 @@ namespace EoE.Combatery
 	[System.Flags] public enum EffectType { ImpulseVelocity = (1 << 0), FX = (1 << 1), AOE = (1 << 2), CreateProjectile = (1 << 3), HealOnCreator = (1 << 4), BuffOnCreator = (1 << 5), CreateRemenants = (1 << 6) }
 	public class CombatObject : ScriptableObject
 	{
+		public CombatData Data = new CombatData();
+		public ObjectCost Cost = new ObjectCost();
+
 		public float BaseDamage = 10;
-		public ObjectCost Cost = default;
 		public float BaseKnockback = 0;
 		public float BaseCritChance = 0;
 
@@ -129,6 +131,14 @@ namespace EoE.Combatery
 		}
 	}
 	[System.Serializable]
+	public class CombatData
+	{
+		public float BasePhysicalDamage = 10;
+		public float BaseMagicalDamage = 10;
+		public float BaseKnockback = 0;
+		public float BaseCritChance = 0;
+	}
+	[System.Serializable]
 	public class ObjectCost
 	{
 		public float Health;
@@ -219,7 +229,7 @@ namespace EoE.Combatery
 		//Remenants
 		public RemenantsData[] CreatedRemenants = new RemenantsData[0];
 
-		public FXInstance[] Activate(Entity activator, CombatObject baseObject, Transform overrideTransform = null, params Entity[] ignoredEntities)
+		public FXInstance[] Activate(Entity activator, CombatData baseObject, Transform overrideTransform = null, params Entity[] ignoredEntities)
 		{
 			FXInstance[] createdFXInstances = (HasMaskFlag(EffectType.FX) ? (new FXInstance[FXObjects.Length]) : (new FXInstance[0]));
 			if (HasMaskFlag(EffectType.ImpulseVelocity))
@@ -271,7 +281,7 @@ namespace EoE.Combatery
 		}
 
 		#region ProjectileCreation
-		private IEnumerator ProjectileCreation(Entity activator, CombatObject baseObject, Transform overrideTransform)
+		private IEnumerator ProjectileCreation(Entity activator, CombatData baseObject, Transform overrideTransform)
 		{
 			for (int i = 0; i < ProjectileInfos.Length; i++)
 			{
@@ -306,7 +316,7 @@ namespace EoE.Combatery
 			}
 		ProjectileCreationFinished:;
 		}
-		private void CreateProjectile(Entity activator, CombatObject baseObject, ProjectileData data)
+		private void CreateProjectile(Entity activator, CombatData baseObject, ProjectileData data)
 		{
 			//Calculate the spawnoffset
 			Vector3 spawnOffset = data.CreateOffsetToCaster.x * activator.transform.right + data.CreateOffsetToCaster.y * activator.transform.up + data.CreateOffsetToCaster.z * activator.transform.forward;
@@ -320,7 +330,7 @@ namespace EoE.Combatery
 																);
 			Projectile.CreateProjectile(baseObject, data, activator, direction, activator.actuallWorldPosition + spawnOffset);
 		}
-		private void CreateProjectile(Entity activator, Transform originTransform, CombatObject baseObject, ProjectileData data)
+		private void CreateProjectile(Entity activator, Transform originTransform, CombatData baseObject, ProjectileData data)
 		{
 			//Calculate the spawnoffset
 			Vector3 spawnOffset = data.CreateOffsetToCaster.x * originTransform.right + data.CreateOffsetToCaster.y * originTransform.up + data.CreateOffsetToCaster.z * originTransform.forward;

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using EoE.Combatery;
+using UnityEngine;
 
 namespace EoE.Information
 {
@@ -17,6 +18,7 @@ namespace EoE.Information
 		public int ExperienceWorth = 10;
 
 		//Basic Combat Data
+		public CombatData CombatData = new CombatData();
 		public float BaseAttackDamage = 4;
 		public float BaseMagicDamage = 3;
 		public float BaseDefense = 2;

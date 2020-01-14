@@ -14,7 +14,7 @@ namespace EoE.Combatery
 		[SerializeField] private SphereCollider entitieTriggerColl = default;
 
 		private Entity creator;
-		private CombatObject baseData;
+		private CombatData baseData;
 		private ProjectileData info;
 		private int remainingBounces;
 		private float remainingLifeTime;
@@ -30,7 +30,7 @@ namespace EoE.Combatery
 		{
 			AllProjectiles.Add(this);
 		}
-		public static Projectile CreateProjectile(CombatObject baseData, ProjectileData info, Entity creator, Vector3 direction, Vector3 spawnPos)
+		public static Projectile CreateProjectile(CombatData baseData, ProjectileData info, Entity creator, Vector3 direction, Vector3 spawnPos)
 		{
 			Projectile projectile = Instantiate(GameController.ProjectilePrefab, Storage.ProjectileStorage);
 			projectile.transform.position = projectile.spawnPos = spawnPos;
@@ -120,7 +120,7 @@ namespace EoE.Combatery
 				if (hit.creator != creator)
 				{
 					bool isCrit = Utils.Chance01(info.DirectHit.CritChanceMultiplier * baseData.BaseCritChance);
-					float damage = info.DirectHit.DamageMultiplier * baseData.BaseDamage * (isCrit ? GameController.CurrentGameSettings.CritDamageMultiplier : 1);
+					float damage = info.DirectHit.DamageMultiplier * baseData.BaseMagicalDamage * (isCrit ? GameController.CurrentGameSettings.CritDamageMultiplier : 1);
 					hit.HitShield(damage);
 
 					if (hit.info.ReflectProjectiles)
@@ -178,7 +178,7 @@ namespace EoE.Combatery
 							for(int j = 0; j < info.CollisionEffects[i].AOEEffects.Length; j++)
 							{
 								bool wasCrit = Utils.Chance01(info.CollisionEffects[i].AOEEffects[j].CritChanceMultiplier * baseData.BaseCritChance);
-								totalDamage += info.CollisionEffects[i].AOEEffects[j].DamageMultiplier * (wasCrit ? GameController.CurrentGameSettings.CritDamageMultiplier : 1) * baseData.BaseDamage;
+								totalDamage += info.CollisionEffects[i].AOEEffects[j].DamageMultiplier * (wasCrit ? GameController.CurrentGameSettings.CritDamageMultiplier : 1) * baseData.BaseMagicalDamage;
 							}
 						}
 					}

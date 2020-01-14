@@ -70,8 +70,7 @@ namespace EoE.Entities
 			chargingBash = true;
 			behaviorSimpleStop = true;
 
-			Coroutine bashAnnouncement = GameController.BeginDelayedCall(() => BashStart(), settings.BashChargeSpeed + settings.BashAnnouncementDelay, TimeType.ScaledDeltaTime, new System.Func<bool>(() => this), OnDelayConditionNotMet.Cancel);
-
+			ActivateActivationEffects(settings.BashChargeStartEffects);
 			float timer = 0;
 			while (timer < settings.BashChargeSpeed)
 			{
@@ -79,7 +78,6 @@ namespace EoE.Entities
 				timer += Time.deltaTime;
 				if(IsStunned)
 				{
-					GameController.Instance.StopCoroutine(bashAnnouncement);
 					goto CanceledBash;
 				}
 			}
@@ -89,18 +87,12 @@ namespace EoE.Entities
 			MovementStops++;
 			bashForce = entitieForceController.ApplyForce(transform.forward * settings.BashSpeed, settings.BashSpeed / settings.BashDistance, false, () => FinishedBash());
 			SetBashColliderState(true);
+			ActivateActivationEffects(settings.BashStartEffects);
 
 		CanceledBash:;
 
 			chargingBash = false;
 			behaviorSimpleStop = false;
-		}
-		private void BashStart()
-		{
-			for (int i = 0; i < settings.BashStartEffects.Length; i++)
-			{
-				settings.BashStartEffects[i].Activate(this, null);
-			}
 		}
 		private void FinishedBash()
 		{
@@ -110,7 +102,8 @@ namespace EoE.Entities
 		}
 		private void SetBashColliderState(bool state)
 		{
-
+			for (int i = 0; i < crawlerHitboxes.Length; i++)
+				crawlerHitboxes[i].CollisionActive = state;
 		}
 		public void HitCollider(Collider other, Collider self)
 		{
@@ -118,6 +111,7 @@ namespace EoE.Entities
 			bool wasCrit = Utils.Chance01(settings.CritChance);
 			float resultingDamage = restForce / settings.BashSpeed * settings.BaseAttackDamage;
 
+			bool shouldRemoveForces = true;
 			switch (other.gameObject.layer)
 			{
 				case ConstantCollector.ENTITIE_LAYER:
@@ -125,51 +119,43 @@ namespace EoE.Entities
 						Entity hitEntity = other.gameObject.GetComponent<Entity>();
 						if (!(hitEntity is Enemy))
 						{
-
 							hitEntity.ChangeHealth(new ChangeInfo(this, CauseType.Physical, settings.EntitieElement, TargetStat.Health, other.ClosestPoint(self.bounds.center), bashForce.Force / restForce, resultingDamage, wasCrit, restForce * settings.ForceTranslationMultiplier));
-							entitieForceController.ForceRemoveForce(bashForce);
-							body.velocity = CurVelocity;
+
+							ActivateActivationEffects(settings.BashHitEntitieEffects);
 						}
 					}
 					break;
 				case ConstantCollector.SHIELD_LAYER:
 					{
-
+						Shield hitShield = other.gameObject.GetComponent<Shield>();
+						if(hitShield.creator != this)
+						{
+							hitShield.HitShield(resultingDamage * (wasCrit ? GameController.CurrentGameSettings.CritDamageMultiplier : 1));
+						}
+						else
+						{
+							shouldRemoveForces = false;
+						}
 					}
 					break;
 				case ConstantCollector.TERRAIN_LAYER:
 					{
-
+						ActivateActivationEffects(settings.BashHitTerrainEffects);
 					}
 					break;
 			}
-		}
-		private void OnCollisionEnter(Collision collision)
-		{
-			if (!bashing)
-				return;
 
-			if (collision.gameObject.layer == ConstantCollector.ENTITIE_LAYER)
+			if (shouldRemoveForces)
 			{
-				Entity hitEntity = collision.gameObject.GetComponent<Entity>();
-				if (!(hitEntity is Enemy))
-				{
-					float restForce = bashForce.Force.magnitude;
-					Vector3 hitPoint = Vector3.zero;
-
-					for (int i = 0; i < collision.contactCount; i++)
-					{
-						if (collision.GetContact(i).otherCollider == hitEntity.coll)
-						{
-							hitPoint = collision.GetContact(i).point;
-							break;
-						}
-					}
-
-					hitEntity.ChangeHealth(new ChangeInfo(this, CauseType.Physical, settings.EntitieElement, TargetStat.Health, hitPoint, bashForce.Force / restForce, restForce / settings.BashSpeed * settings.BaseAttackDamage, Utils.Chance01(settings.CritChance), restForce * settings.ForceTranslationMultiplier));
-					entitieForceController.ForceRemoveForce(bashForce);
-					body.velocity = CurVelocity;
-				}
+				entitieForceController.ForceRemoveForce(bashForce);
+				body.velocity = CurVelocity;
+			}
+		}
+		private void ActivateActivationEffects(ActivationEffect[] activationEffects)
+		{
+			for (int i = 0; i < activationEffects.Length; i++)
+			{
+				activationEffects[i].Activate(this, null);
 			}
 		}
 	}

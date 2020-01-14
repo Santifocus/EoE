@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using EoE.Combatery;
+using UnityEditor;
 using UnityEngine;
 using static EoE.EoEEditor;
 
@@ -25,9 +26,15 @@ namespace EoE.Information
 		private void FXSettingsArea()
 		{
 			CrawlerSettings settings = target as CrawlerSettings;
-			FloatField(new GUIContent("Bash Announcement Delay", "If 'Bash Start' = T, then the BashAnnouncement will be played at 'T + Delay'"), ref settings.BashAnnouncementDelay, 1);
-			SerializedProperty fxArrayProperty = serializedObject.FindProperty(nameof(settings.BashAnnouncement));
-			ObjectArrayField(new GUIContent("Bash Announcement", "The particles that will be shown when the BashAnnouncement is played."), ref settings.BashAnnouncement, fxArrayProperty, new GUIContent(". Effect"), 1);
+
+			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BashChargeStartEffects))), ref settings.BashChargeStartEffects, serializedObject.FindProperty(nameof
+				(settings.BashChargeStartEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
+			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BashStartEffects))), ref settings.BashStartEffects, serializedObject.FindProperty(nameof
+				(settings.BashStartEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
+			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BashHitTerrainEffects))), ref settings.BashHitTerrainEffects, serializedObject.FindProperty(nameof
+				(settings.BashHitTerrainEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
+			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BashHitEntitieEffects))), ref settings.BashHitEntitieEffects, serializedObject.FindProperty(nameof
+				(settings.BashHitEntitieEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
 		}
 	}
 }

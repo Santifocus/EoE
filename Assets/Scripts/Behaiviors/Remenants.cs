@@ -17,7 +17,7 @@ namespace EoE.Combatery
 		private float delayToWhileCast;
 		private float remainingLifeTime;
 		private Vector3 spawnPos;
-		public static Remenants CreateRemenants(CombatObject baseData, RemenantsData info, Entity creator, Vector3 spawnPos)
+		public static Remenants CreateRemenants(CombatData baseData, RemenantsData info, Entity creator, Vector3 spawnPos)
 		{
 			Remenants newRemenants = Instantiate(GameController.RemenantsPrefab, Storage.ProjectileStorage);
 			newRemenants.baseData = baseData;
