@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AffectedTargets: 0
   DamageElement: 1
-  CauseType: 1
+  CauseType: 3
   DamageMultiplier: 0
   CritChanceMultiplier: 0
   KnockbackMultiplier: 0

@@ -98,7 +98,7 @@ namespace EoE.Combatery
 			int checkedIgnoredIndexes = 0;
 			for (int i = 0; i < Entity.AllEntities.Count; i++)
 			{
-				if (ignoredIndexes.Count > 0 && ignoredIndexes[checkedIgnoredIndexes] == i)
+				if (ignoredIndexes.Count > checkedIgnoredIndexes && ignoredIndexes[checkedIgnoredIndexes] == i)
 				{
 					checkedIgnoredIndexes++;
 					continue;

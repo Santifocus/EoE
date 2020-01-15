@@ -87,7 +87,7 @@ namespace EoE.Combatery
 				}
 				else
 				{
-					SetShieldState(false);
+					BreakShield();
 				}
 			}
 			else
@@ -140,6 +140,8 @@ namespace EoE.Combatery
 			if(info.EffectOnUserOnShieldBreak)
 				info.EffectOnUserOnShieldBreak.Activate(creator, creator, info.BaseData, Vector3.zero, creator.actuallWorldPosition);
 			ActivateActivationEffects(info.ShieldBreakEffects, false);
+
+			shieldActive = coll.enabled = false;
 		}
         private void OnDestroy()
         {
