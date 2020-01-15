@@ -134,7 +134,7 @@ namespace EoE.Entities
 			}
 			UpdateAgentSettings();
 
-			if (PlayerInAttackRange && chasingPlayer)
+			if (PlayerInAttackRange && chasingPlayer && !IsStunned)
 				InRangeBehaiviorBase();
 
 			if (IsStunned || IsMovementStopped)

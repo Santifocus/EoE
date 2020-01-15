@@ -124,6 +124,10 @@ namespace EoE.Entities
 
 							ActivateActivationEffects(settings.BashHitEntitieEffects, normalizedRestForce);
 						}
+						else
+						{
+							shouldRemoveForces = false;
+						}
 					}
 					break;
 				case ConstantCollector.SHIELD_LAYER:

@@ -55,7 +55,7 @@ MonoBehaviour:
   WanderingDelayMax: 5
   LookAroundDelayMin: 0.5
   LookAroundDelayMax: 2
-  BashChargeSpeed: 1
+  BashChargeSpeed: 0.75
   BashSpeed: 35
   BashDistance: 9
   ForceTranslationMultiplier: 1.5
@@ -90,5 +90,27 @@ MonoBehaviour:
     BuffsOnUser: []
     CreatedRemenants: []
   BashStartEffects: []
-  BashHitTerrainEffects: []
+  BashHitTerrainEffects:
+  - ChanceToActivate: 1
+    ContainedEffectType: 35
+    ImpulseVelocity: 10
+    ImpulseVelocityFallOffTime: 0.75
+    ImpulseVelocityDirection: 1
+    ImpulseVelocityFallbackDirection: 1
+    ImpulseDirectionBase: 8
+    FXObjects:
+    - FX: {fileID: 11400000, guid: 86f5776015fd98f44b7783b9cea66b8c, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    AOEEffects: []
+    ProjectileInfos: []
+    HealsOnUser: []
+    StackingStyle: 2
+    BuffsOnUser:
+    - {fileID: 11400000, guid: cfd21ec5a60866b4fa90b111fc6bc2b4, type: 2}
+    CreatedRemenants: []
   BashHitEntitieEffects: []

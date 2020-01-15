@@ -167,6 +167,7 @@ namespace EoE.Combatery
 			float overrideDamageMultiplier = effectOverrides == null ? 1 : effectOverrides.ExtraDamageMultiplier;
 			float overrideKnockbackMultiplier = effectOverrides == null ? 1 : effectOverrides.ExtraKnockbackMultiplier;
 			float overrideCritChanceMultiplier = effectOverrides == null ? 1 : effectOverrides.ExtraCritChanceMultiplier;
+			float overrideEffectMultiplier = effectOverrides == null ? 1 : effectOverrides.EffectMultiplier;
 
 			//Now we calculate damage and knockback
 			float baseDamage = (effectCause == CauseType.Physical ? infoBase.BasePhysicalDamage : infoBase.BaseMagicalDamage) * DamageMultiplier;
@@ -200,16 +201,17 @@ namespace EoE.Combatery
 												(knockback != 0) ? (float?)knockback : (null)
 												));
 
+				float effectMultiplier = eligibleTargets[i].Multiplier * overrideEffectMultiplier;
 				//Buffs
 				for (int j = 0; j < BuffsToApply.Length; j++)
 				{
-					Buff.ApplyBuff(BuffsToApply[j], eligibleTargets[i].Target, effectCauser, BuffStackStyle);
+					Buff.ApplyBuff(BuffsToApply[j], eligibleTargets[i].Target, effectCauser, effectMultiplier, BuffStackStyle);
 				}
 
 				//FXEffects
 				for (int j = 0; j < Effects.Length; j++)
 				{
-					FXManager.PlayFX(Effects[j].FX, eligibleTargets[i].Target.transform, eligibleTargets[i].Target is Player, eligibleTargets[i].Multiplier);
+					FXManager.PlayFX(Effects[j].FX, eligibleTargets[i].Target.transform, eligibleTargets[i].Target is Player, effectMultiplier);
 				}
 			}
 		}

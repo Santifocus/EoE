@@ -265,7 +265,7 @@ namespace EoE.Combatery
 			{
 				for (int i = 0; i < BuffsOnUser.Length; i++)
 				{
-					Buff.ApplyBuff(BuffsOnUser[i], activator, activator, StackingStyle);
+					Buff.ApplyBuff(BuffsOnUser[i], activator, activator, multiplier, StackingStyle);
 				}
 			}
 			if (HasMaskFlag(EffectType.CreateRemenants))

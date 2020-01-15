@@ -31,6 +31,7 @@ namespace EoE.Combatery
 			float overrideDamageMultiplier = effectOverrides == null ? 1 : effectOverrides.ExtraDamageMultiplier;
 			float overrideKnockbackMultiplier = effectOverrides == null ? 1 : effectOverrides.ExtraKnockbackMultiplier;
 			float overrideCritChanceMultiplier = effectOverrides == null ? 1 : effectOverrides.ExtraCritChanceMultiplier;
+			float overrideEffectMultiplier = effectOverrides == null ? 1 : effectOverrides.EffectMultiplier;
 
 			//Damage / Knockback
 			float damage = (effectCause == CauseType.Physical ? infoBase.BasePhysicalDamage : infoBase.BaseMagicalDamage) * DamageMultiplier;
@@ -58,13 +59,13 @@ namespace EoE.Combatery
 			//Buffs
 			for (int j = 0; j < BuffsToApply.Length; j++)
 			{
-				Buff.ApplyBuff(BuffsToApply[j], target, effectCauser, BuffStackStyle);
+				Buff.ApplyBuff(BuffsToApply[j], target, effectCauser, overrideEffectMultiplier, BuffStackStyle);
 			}
 
 			//FXEffects
 			for (int j = 0; j < Effects.Length; j++)
 			{
-				FXManager.PlayFX(Effects[j], target.transform, target is Player);
+				FXManager.PlayFX(Effects[j], target.transform, target is Player, overrideEffectMultiplier);
 			}
 		}
 		#endregion
@@ -74,6 +75,7 @@ namespace EoE.Combatery
 		public float ExtraDamageMultiplier;
 		public float ExtraCritChanceMultiplier;
 		public float ExtraKnockbackMultiplier;
+		public float EffectMultiplier;
 		public ElementType? OverridenElement;
 		public CauseType? OverridenCauseType;
 	}

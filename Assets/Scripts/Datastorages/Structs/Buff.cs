@@ -19,24 +19,24 @@ namespace EoE.Information
 		public DOT[] DOTs;
 		public FXObject[] FXEffects;
 
-		public static void ApplyBuff(Buff buff, Entity target, Entity applier, BuffStackingStyle stackingStyle = BuffStackingStyle.Reapply)
+		public static void ApplyBuff(Buff buff, Entity target, Entity applier, float multiplier = 1, BuffStackingStyle stackingStyle = BuffStackingStyle.Reapply)
 		{
 			if (stackingStyle == BuffStackingStyle.Stack)
 			{
-				target.AddBuff(buff, applier);
+				target.AddBuff(buff, applier, multiplier);
 			}
 			else if (stackingStyle == BuffStackingStyle.Reapply)
 			{
 				if (!(target.TryReapplyBuff(buff, applier).Item1))
 				{
-					target.AddBuff(buff, applier);
+					target.AddBuff(buff, applier, multiplier);
 				}
 			}
 			else //stackingStyle == BuffStackingStyle.DoNothing
 			{
 				if (!(target.HasBuffActive(buff, applier).HasValue))
 				{
-					target.AddBuff(buff, applier);
+					target.AddBuff(buff, applier, multiplier);
 				}
 			}
 		}
@@ -50,15 +50,17 @@ namespace EoE.Information
 		public float[] FlatChanges;
 		public float[] DOTCooldowns;
 		public FXInstance[] BoundEffects;
+		private float TimeMultiplier;
 		private float RemainingTime;
 
-		public BuffInstance(Buff Base, Entity Applier, Entity Target)
+		public BuffInstance(Buff Base, Entity Applier, Entity Target, float TimeMultiplier)
 		{
 			this.Base = Base;
 			this.Applier = Applier;
 			this.FlatChanges = new float[Base.Effects.Length];
 			this.DOTCooldowns = new float[Base.DOTs.Length];
 
+			this.TimeMultiplier = TimeMultiplier;
 			Reset();
 
 			BoundEffects = new FXInstance[Base.FXEffects != null ? Base.FXEffects.Length : 0];
@@ -69,7 +71,7 @@ namespace EoE.Information
 		}
 		public void Reset()
 		{
-			this.RemainingTime = Base.FinishConditions.OnTimeout ? Base.FinishConditions.TimeStay : 1;
+			this.RemainingTime = Base.FinishConditions.OnTimeout ? (Base.FinishConditions.TimeStay * TimeMultiplier) : 1;
 		}
 		public bool Update()
 		{

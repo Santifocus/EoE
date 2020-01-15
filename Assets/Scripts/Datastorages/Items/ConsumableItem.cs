@@ -25,7 +25,7 @@ namespace EoE.Information
 			//Apply buffs
 			for (int i = 0; i < BuffsToApply.Length; i++)
 			{
-				Buff.ApplyBuff(BuffsToApply[i], user, user, StackingStyle);
+				Buff.ApplyBuff(BuffsToApply[i], user, user, 1, StackingStyle);
 			}
 			return true;
 		}

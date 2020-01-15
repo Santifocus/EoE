@@ -184,7 +184,7 @@ namespace EoE.Entities
 					};
 			}
 
-			AddBuff(LevelingBaseBuff, this);
+			AddBuff(LevelingBaseBuff, this, 1);
 			for (int i = 0; i < StartLevel; i++)
 				LevelUpEntitie();
 		}
@@ -519,9 +519,9 @@ namespace EoE.Entities
 
 			return (false, null);
 		}
-		public BuffInstance AddBuff(Buff buff, Entity applier)
+		public BuffInstance AddBuff(Buff buff, Entity applier, float multiplier = 1)
 		{
-			BuffInstance newBuff = new BuffInstance(buff, applier, this);
+			BuffInstance newBuff = new BuffInstance(buff, applier, this, multiplier);
 			AddBuffEffect(newBuff, CalculateValue.Flat);
 			AddBuffEffect(newBuff, CalculateValue.Percent);
 
