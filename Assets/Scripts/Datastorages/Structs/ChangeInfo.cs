@@ -54,9 +54,19 @@ namespace EoE.Information
 
 			public ChangeResult(ChangeInfo basis, Entity receiver, bool createDamageNumber, bool fromRegen = false)
 			{
-				//Calculate the damage that we want to cause
-				finalChangeAmount = basis.baseDamageAmount;
-				if (basis.targetStat == TargetStat.Health && receiver != basis.attacker && finalChangeAmount > 0)
+				bool changeOnHealth = basis.targetStat == TargetStat.Health;
+				float attackerExtraDamage = 0;
+				if (changeOnHealth)
+					attackerExtraDamage = (basis.cause == CauseType.Physical) ? basis.attacker.curPhysicalDamage : ((basis.cause == CauseType.Magic) ? basis.attacker.curMagicalDamage : 0);
+
+				finalChangeAmount = basis.baseDamageAmount + attackerExtraDamage;
+
+				//First we check if the receiver is invincible, if that is the case & the final damage is more then zero (Not a heal) then we set it to zero
+				if (receiver.IsInvincible && changeOnHealth && (finalChangeAmount > 0))
+					finalChangeAmount = 0;
+
+				//Calculate the damage that we want to cause based on formulas set in the GameSettings
+				if (changeOnHealth && receiver != basis.attacker && finalChangeAmount > 0)
 				{
 					if (basis.cause == CauseType.Physical)
 					{
@@ -77,16 +87,17 @@ namespace EoE.Information
 					}
 				}
 
+				//Generall multipliers
 				if (basis.cause != CauseType.Heal)
+				{
 					finalChangeAmount *= GameController.CurrentGameSettings.GetEffectiveness(basis.element, receiver.SelfSettings.EntitieElement);
+				}
 				if (basis.wasCritical)
+				{
 					finalChangeAmount *= GameController.CurrentGameSettings.CritDamageMultiplier;
+				}
 
-				//Finally we check if the receiver is actually invincible, if that is the case and the final damage is more then zero (Not a heal) then we set it to zero
-				if (receiver.IsInvincible && basis.targetStat == TargetStat.Health && finalChangeAmount > 0)
-					finalChangeAmount = 0;
-
-				//Calculate the caused knockback if there is one
+				//Calculate the caused knockback if it has a value
 				if (basis.knockbackAmount.HasValue && basis.impactDirection.HasValue)
 				{
 					forceDirection = basis.impactDirection.Value;
@@ -100,8 +111,8 @@ namespace EoE.Information
 					causedKnockback = null;
 				}
 
-				//We dont want to overheal, but will allow overkill for bettet VFX
-				if (basis.targetStat == TargetStat.Health)
+				//We dont want to overheal, but will allow overkill for better FX
+				if (changeOnHealth)
 				{
 					//Change true damage based on the entities true damage multiplier
 					finalChangeAmount *= receiver.curTrueDamageDamageMultiplier;
@@ -111,15 +122,15 @@ namespace EoE.Information
 				{
 					finalChangeAmount = Mathf.Max(finalChangeAmount, -(receiver.curMaxMana - receiver.curMana));
 				}
-				else if (receiver is Player)
+				else if (receiver is Player) //&& basis.targetStat == TargetStat.Endurance
 				{
 					finalChangeAmount = Mathf.Max(finalChangeAmount, -((receiver as Player).curMaxEndurance - (receiver as Player).curEndurance));
 				}
 
-				//FX for Player
-				//We dont want to send VFX if the Player caused himself damage
-				if (basis.targetStat == TargetStat.Health && basis.cause != CauseType.DOT)
+				//Event call for: Player receive damage OR Player caused damage
+				if (changeOnHealth && basis.cause != CauseType.DOT)
 				{
+					//We dont want to send FX if the Player caused himself damage
 					if (basis.attacker is Player && !(receiver is Player))
 					{
 						EventManager.PlayerCausedDamageInvoke(receiver, basis.wasCritical);
@@ -131,12 +142,17 @@ namespace EoE.Information
 					}
 				}
 
+				bool notZero = finalChangeAmount != 0;
+				bool isRegenButAllowed = !(fromRegen && !GameController.CurrentGameSettings.ShowRegenNumbers);
+
 				//Only show damage numbers if it is a change on health. Also, if the cause is regen, then check if we want to display regen numbers
-				if (basis.targetStat == TargetStat.Health && finalChangeAmount != 0 && createDamageNumber && !(fromRegen && !GameController.CurrentGameSettings.ShowRegenNumbers))
+				if (changeOnHealth && notZero && createDamageNumber && isRegenButAllowed)
 				{
 					Gradient colors;
-					if (finalChangeAmount < 0)
+					if ((finalChangeAmount < 0) || (basis.cause == CauseType.Heal))
+					{
 						colors = GameController.CurrentGameSettings.HealColors;
+					}
 					else
 					{
 						switch (basis.cause)
@@ -147,12 +163,9 @@ namespace EoE.Information
 							case CauseType.Magic:
 								colors = GameController.CurrentGameSettings.MagicalDamageColors;
 								break;
-							case CauseType.Heal:
-								colors = GameController.CurrentGameSettings.HealColors;
-								break;
 							case CauseType.DOT:
 								{
-									if (basis.element != ElementType.None)
+									if (basis.element == ElementType.None)
 										colors = GameController.CurrentGameSettings.PhysicalDamageColors;
 									else
 										colors = GameController.CurrentGameSettings.MagicalDamageColors;
@@ -165,13 +178,13 @@ namespace EoE.Information
 					}
 					float sizeMultiplier = finalChangeAmount < 0 ? 1 : (Mathf.Clamp((finalChangeAmount / receiver.curMaxHealth) * 8, 0.75f, 4));
 
-					EffectUtils.CreateDamageNumber(
-						basis.impactPosition ?? receiver.actuallWorldPosition,
-						colors,
-						forceDirection * GameController.CurrentGameSettings.DamageNumberFlySpeed * sizeMultiplier,
-						Mathf.Abs(finalChangeAmount),
-						basis.wasCritical,
-						sizeMultiplier);
+					EffectUtils.CreateDamageNumber(	basis.impactPosition ?? receiver.actuallWorldPosition,
+													colors,
+													forceDirection * GameController.CurrentGameSettings.DamageNumberFlySpeed * sizeMultiplier,
+													Mathf.Abs(finalChangeAmount),
+													basis.wasCritical,
+													sizeMultiplier
+													);
 				}
 			}
 		}

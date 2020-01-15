@@ -31,11 +31,8 @@ namespace EoE.Combatery
 		public CustomFXObject[] Effects = new CustomFXObject[0];
 
 		#region Activation
-		public void Activate(Entity effectCauser, Transform origin, CombatData infoBase, EffectOverrides effectOverrides = null, params Entity[] ignoredEntities)
+		public void Activate(Entity effectCauser, Transform origin, CombatObject infoBase, EffectOverrides effectOverrides = null, params Entity[] ignoredEntities)
 		{
-			ElementType effectElement = (effectOverrides == null) ? DamageElement : (effectOverrides.OverridenElement.HasValue ? effectOverrides.OverridenElement.Value : DamageElement);
-			CauseType effectCause = (effectOverrides == null) ? CauseType : (effectOverrides.OverridenCauseType.HasValue ? effectOverrides.OverridenCauseType.Value : CauseType);
-
 			//If the effect is not applying force based on its center we can find out the direction here
 			//so we dont have to recalculate it everytime a new eligible target is added
 			Vector3 localDirection = Vector3.up;
@@ -164,20 +161,30 @@ namespace EoE.Combatery
 				System.Array.Sort(eligibleTargets, (x, y) => x.SqrDist.CompareTo(y.SqrDist));
 			}
 
-			//Now we have to apply effects: Damage, Knockback, Buffs and FXEffects
+			//Override implementation
+			ElementType effectElement = (effectOverrides == null) ? DamageElement : (effectOverrides.OverridenElement.HasValue ? effectOverrides.OverridenElement.Value : DamageElement);
+			CauseType effectCause = (effectOverrides == null) ? CauseType : (effectOverrides.OverridenCauseType.HasValue ? effectOverrides.OverridenCauseType.Value : CauseType);
+			float overrideDamageMultiplier = effectOverrides == null ? 1 : effectOverrides.ExtraDamageMultiplier;
+			float overrideKnockbackMultiplier = effectOverrides == null ? 1 : effectOverrides.ExtraKnockbackMultiplier;
+			float overrideCritChanceMultiplier = effectOverrides == null ? 1 : effectOverrides.ExtraCritChanceMultiplier;
+
+			//Now we calculate damage and knockback
+			float baseDamage = (effectCause == CauseType.Physical ? infoBase.BasePhysicalDamage : infoBase.BaseMagicalDamage) * DamageMultiplier;
+			float baseKnockBack = infoBase.BaseKnockback * KnockbackMultiplier;
+			float critChance = infoBase.BaseCritChance * CritChanceMultiplier;
+
+			baseDamage *= overrideDamageMultiplier;
+			baseKnockBack *= overrideKnockbackMultiplier;
+			critChance *= overrideCritChanceMultiplier;
+
+			bool isCrit = Utils.Chance01(critChance);
+
 			int targetCount = HasMaximumHits ? System.Math.Min(eligibleTargets.Length, MaximumHits) : eligibleTargets.Length;
-			bool effectWasCrit = Utils.Chance01(CritChanceMultiplier * infoBase.BaseCritChance * (effectOverrides == null ? 1 : effectOverrides.ExtraCritChanceMultiplier));
-
-			float baseDamage =	(effectCause == CauseType.Physical ? (effectCauser.curPhysicalDamage) : (effectCause == CauseType.Magic ? effectCauser.curMagicalDamage : 0)) +
-								(effectCause == CauseType.Physical ? infoBase.BasePhysicalDamage : effectCauser.curMagicalDamage);
-
-			float baseKnockBack = KnockbackMultiplier * infoBase.BaseKnockback;
-
 			for (int i = 0; i < targetCount; i++)
 			{
 				//Damage / Knockback
-				float damage = baseDamage * DamageMultiplier * eligibleTargets[i].Multiplier * (effectOverrides == null ? 1 : effectOverrides.ExtraDamageMultiplier);
-				float? knockbackAmount = (baseKnockBack != 0) ? (float?)(baseKnockBack * eligibleTargets[i].Multiplier * (effectOverrides == null ? 1 : effectOverrides.ExtraKnockbackMultiplier)) : (null);
+				float damage = baseDamage * eligibleTargets[i].Multiplier;
+				float knockback = baseKnockBack * eligibleTargets[i].Multiplier;
 
 				eligibleTargets[i].Target.ChangeHealth(new ChangeInfo(
 												effectCauser,
@@ -185,10 +192,12 @@ namespace EoE.Combatery
 												effectElement,
 												TargetStat.Health,
 												eligibleTargets[i].Target.actuallWorldPosition,
-												new Vector3(eligibleTargets[i].ApplyDirection.x * KnockbackAxisMultiplier.x, eligibleTargets[i].ApplyDirection.y * KnockbackAxisMultiplier.y, eligibleTargets[i].ApplyDirection.z * KnockbackAxisMultiplier.z),
+												new Vector3(eligibleTargets[i].ApplyDirection.x * KnockbackAxisMultiplier.x, 
+															eligibleTargets[i].ApplyDirection.y * KnockbackAxisMultiplier.y, 
+															eligibleTargets[i].ApplyDirection.z * KnockbackAxisMultiplier.z),
 												damage,
-												effectWasCrit,
-												knockbackAmount
+												isCrit,
+												(knockback != 0) ? (float?)knockback : (null)
 												));
 
 				//Buffs

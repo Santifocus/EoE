@@ -14,11 +14,12 @@ namespace EoE.Combatery
 		[SerializeField] private SphereCollider entitieTriggerColl = default;
 
 		private Entity creator;
-		private CombatData baseData;
+		private CombatObject baseData;
 		private ProjectileData info;
 		private int remainingBounces;
 		private float remainingLifeTime;
 		private float bounceCooldown;
+		private float effectMultiplier;
 
 		private float delayToWhileCast;
 		private bool isDead;
@@ -30,7 +31,7 @@ namespace EoE.Combatery
 		{
 			AllProjectiles.Add(this);
 		}
-		public static Projectile CreateProjectile(CombatData baseData, ProjectileData info, Entity creator, Vector3 direction, Vector3 spawnPos)
+		public static Projectile CreateProjectile(CombatObject baseData, ProjectileData info, Entity creator, Vector3 direction, Vector3 spawnPos, float effectMultiplier = 1)
 		{
 			Projectile projectile = Instantiate(GameController.ProjectilePrefab, Storage.ProjectileStorage);
 			projectile.transform.position = projectile.spawnPos = spawnPos;
@@ -46,6 +47,7 @@ namespace EoE.Combatery
 
 			projectile.remainingBounces = info.Bounces;
 			projectile.remainingLifeTime = info.Duration;
+			projectile.effectMultiplier = effectMultiplier;
 
 			projectile.SetupCollider();
 			projectile.ActivateActivationEffects(info.StartEffects, true);
@@ -163,7 +165,7 @@ namespace EoE.Combatery
 					{
 						for (int i = 0; i < info.CollisionEffects.Length; i++)
 						{
-							info.CollisionEffects[i].Activate(creator, baseData, transform, null, hit.creator);
+							info.CollisionEffects[i].Activate(creator, baseData, effectMultiplier, transform, hit.creator);
 						}
 						isDead = true;
 						Destroy(gameObject);
@@ -230,7 +232,7 @@ namespace EoE.Combatery
 		{
 			for (int i = 0; i < activationEffects.Length; i++)
 			{
-				FXInstance[] fxInstances = activationEffects[i].Activate(creator, baseData, transform);
+				FXInstance[] fxInstances = activationEffects[i].Activate(creator, baseData, effectMultiplier, transform);
 				if (binding)
 					boundEffects.AddRange(fxInstances);
 			}

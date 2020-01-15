@@ -12,14 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ab78e7538a021446a2451566185bbde, type: 3}
   m_Name: ThunderBlade
   m_EditorClassIdentifier: 
-  BaseDamage: 7
+  BasePhysicalDamage: 7
+  BaseMagicalDamage: 0
+  BaseKnockback: 5
+  BaseCritChance: 0.04
   Cost:
     Health: 0
     Mana: 0
     Endurance: 6
     AdditionalConditions: []
-  BaseKnockback: 5
-  BaseCritChance: 0.04
   WeaponPrefab: {fileID: 5533782398965989895, guid: b8a1958f21cf1e34c96f3a2c98f4beeb,
     type: 3}
   WeaponElement: 1

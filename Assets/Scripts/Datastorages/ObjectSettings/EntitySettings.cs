@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace EoE.Information
 {
-	public class EntitieSettings : ObjectSettings
+	public class EntitySettings : ObjectSettings
 	{
 		//Constants
 		public const float MIN_ENTITIE_MASS = 0.001f;
@@ -11,6 +11,7 @@ namespace EoE.Information
 		//Base Settings
 		public float EntitieMass = 1;
 		public Vector3 MassCenter = Vector3.zero;
+		public bool ShowEntitieLevel = true;
 
 		public ElementType EntitieElement = ElementType.None;
 		public DropTable PossibleDropsTable = null;
@@ -18,9 +19,8 @@ namespace EoE.Information
 		public int ExperienceWorth = 10;
 
 		//Basic Combat Data
-		public CombatData CombatData = new CombatData();
-		public float BaseAttackDamage = 4;
-		public float BaseMagicDamage = 3;
+		public float BasePhysicalDamage = 10;
+		public float BaseMagicalDamage = 10;
 		public float BaseDefense = 2;
 
 		//Health

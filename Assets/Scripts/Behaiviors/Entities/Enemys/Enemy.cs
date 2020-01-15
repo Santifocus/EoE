@@ -42,7 +42,7 @@ namespace EoE.Entities
 		//Getter Helpers
 		protected Player player => Player.Instance;
 		public override Vector3 CurVelocity => new Vector3(impactForce.x, 0, impactForce.y) + entitieForceController.currentTotalForce;
-		public override EntitieSettings SelfSettings => enemySettings;
+		public override EntitySettings SelfSettings => enemySettings;
 		public abstract EnemySettings enemySettings { get; }
 		public bool PlayerInAttackRange { get; private set; }
 		protected Vector3 GuessedPlayerPosition => lastConfirmedPlayerPos + new Vector3(lastPlayerSpeed.x, 0, lastPlayerSpeed.z) * lastSeenPlayer;

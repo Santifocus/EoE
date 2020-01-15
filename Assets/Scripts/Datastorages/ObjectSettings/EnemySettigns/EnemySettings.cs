@@ -1,6 +1,6 @@
 ﻿namespace EoE.Information
 {
-	public class EnemySettings : EntitieSettings
+	public class EnemySettings : EntitySettings
 	{
 		//Combat
 		public float AttackRange = 2;

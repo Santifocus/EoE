@@ -12,18 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc89a2906f120d45877860a48c8c4e2, type: 3}
   m_Name: ShadowBombSpell
   m_EditorClassIdentifier: 
-  BaseDamage: 20
+  BasePhysicalDamage: 0
+  BaseMagicalDamage: 20
+  BaseKnockback: 8
+  BaseCritChance: 0
   Cost:
     Health: 0
     Mana: 10
     Endurance: 0
     AdditionalConditions: []
-  BaseHealthCost: 0
-  BaseManaCost: 10
-  BaseEnduranceCost: 0
-  BaseKnockback: 8
-  BaseCritChance: 0
-  AdditionalConditions: []
   SpellCooldown: 1.5
   ContainedParts: 5
   MovementRestrictions: -1

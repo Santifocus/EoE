@@ -42,26 +42,26 @@ namespace EoE.Information
 		public bool Percent;
 		public float Amount;
 
-		public void Activate(Entity user)
+		public void Activate(Entity user, float multiplier = 1)
 		{
 			if (HealType == TargetStat.Endurance && !(user is Player))
 				return;
 
 			float targetStatAmount = HealType == TargetStat.Health ? user.curMaxHealth : (HealType == TargetStat.Mana ? user.curMaxMana : (user as Player).curMaxEndurance);
 			float amount = Percent ? (targetStatAmount * (Amount / 100)) : Amount;
-			amount *= -1;
+			amount *= -multiplier;
 
 			if (HealType == TargetStat.Health)
 			{
-				user.ChangeHealth(new ChangeInfo(user, amount > 0 ? CauseType.Magic : CauseType.Heal, HealType, amount));
+				user.ChangeHealth(new ChangeInfo(user, (amount > 0) ? CauseType.Magic : CauseType.Heal, TargetStat.Health, amount));
 			}
 			else if (HealType == TargetStat.Mana)
 			{
-				user.ChangeMana(new ChangeInfo(user, amount > 0 ? CauseType.Magic : CauseType.Heal, HealType, amount));
+				user.ChangeMana(new ChangeInfo(user, (amount > 0) ? CauseType.Magic : CauseType.Heal, TargetStat.Mana, amount));
 			}
 			else //t == HealTargetType.Endurance
 			{
-				(user as Player).ChangeEndurance(new ChangeInfo(user, amount > 0 ? CauseType.Magic : CauseType.Heal, HealType, amount));
+				(user as Player).ChangeEndurance(new ChangeInfo(user, (amount > 0) ? CauseType.Magic : CauseType.Heal, TargetStat.Endurance, amount));
 			}
 		}
 	}

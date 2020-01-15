@@ -2,7 +2,7 @@
 
 namespace EoE.Information
 {
-	public class PlayerSettings : EntitieSettings
+	public class PlayerSettings : EntitySettings
 	{
 		//Camera Settings
 		public float CameraToPlayerDistance = 7;

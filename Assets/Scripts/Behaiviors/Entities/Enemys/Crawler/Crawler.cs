@@ -51,7 +51,7 @@ namespace EoE.Entities
 					//Otherwise we calculate the distance between the player and the transform.forward of the Crawler
 					float distToForward = (1 - cosAngle) * distance;
 
-					//If the distance is greater then the widht of this crawler then we cant allow the dash
+					//If the distance is greater then the widht of this crawler then we cant allow the bash
 					if (distToForward > coll.bounds.extents.x * 0.95f)
 						allowedToBash = false;
 				}
@@ -108,8 +108,9 @@ namespace EoE.Entities
 		public void HitCollider(Collider other, Collider self)
 		{
 			float restForce = bashForce.Force.magnitude;
+			float normalizedRestForce = restForce / settings.BashSpeed;
 			bool wasCrit = Utils.Chance01(settings.CritChance);
-			float resultingDamage = restForce / settings.BashSpeed * settings.BaseAttackDamage;
+			float resultingDamage = normalizedRestForce * settings.BasePhysicalDamage;
 
 			bool shouldRemoveForces = true;
 			switch (other.gameObject.layer)
@@ -121,7 +122,7 @@ namespace EoE.Entities
 						{
 							hitEntity.ChangeHealth(new ChangeInfo(this, CauseType.Physical, settings.EntitieElement, TargetStat.Health, other.ClosestPoint(self.bounds.center), bashForce.Force / restForce, resultingDamage, wasCrit, restForce * settings.ForceTranslationMultiplier));
 
-							ActivateActivationEffects(settings.BashHitEntitieEffects);
+							ActivateActivationEffects(settings.BashHitEntitieEffects, normalizedRestForce);
 						}
 					}
 					break;
@@ -140,7 +141,7 @@ namespace EoE.Entities
 					break;
 				case ConstantCollector.TERRAIN_LAYER:
 					{
-						ActivateActivationEffects(settings.BashHitTerrainEffects);
+						ActivateActivationEffects(settings.BashHitTerrainEffects, normalizedRestForce);
 					}
 					break;
 			}
@@ -149,13 +150,6 @@ namespace EoE.Entities
 			{
 				entitieForceController.ForceRemoveForce(bashForce);
 				body.velocity = CurVelocity;
-			}
-		}
-		private void ActivateActivationEffects(ActivationEffect[] activationEffects)
-		{
-			for (int i = 0; i < activationEffects.Length; i++)
-			{
-				activationEffects[i].Activate(this, null);
 			}
 		}
 	}

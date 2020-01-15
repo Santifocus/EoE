@@ -5,7 +5,7 @@ using static EoE.EoEEditor;
 namespace EoE.Information
 {
 	[CustomEditor(typeof(PlayerSettings), true), CanEditMultipleObjects]
-	public class PlayerSettingsEditor : EntitieSettingsEditor
+	public class PlayerSettingsEditor : EntitySettingsEditor
 	{
 		private static bool CameraSettingsOpen;
 		private static bool DashSettingsOpen;
@@ -27,7 +27,7 @@ namespace EoE.Information
 			DrawInFoldoutHeader(new GUIContent("IFrames Settings"), ref IFramesSettingsOpen, IFramesSettingsArea);
 			DrawInFoldoutHeader(new GUIContent("Inventory Settings"), ref InventorySettingsOpen, InventorySettingsArea);
 			DrawInFoldoutHeader(new GUIContent("Animation Settings"), ref AnimationSettingsOpen, AnimationSettingsArea);
-			DrawInFoldoutHeader(new GUIContent("FX Settings"), ref VFXSettingsOpen, FXSettingsArea);
+			DrawInFoldoutHeader(new GUIContent("FX Settings"), ref EffectSettingsOpen, FXSettingsArea);
 		}
 
 		private void CameraSettingsArea()
@@ -59,8 +59,10 @@ namespace EoE.Information
 
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			Vector3Field(new GUIContent("Jump Power", "With which velocity does this Entitie jump? (X == Sideways, Y == Upward, Z == Foreward)"), ref settings.JumpPower, 1);
-			FloatField(new GUIContent("Jump Impulse Power"), ref settings.JumpImpulsePower, 1);
-			FloatField(new GUIContent("Jump Backward Multiplier"), ref settings.JumpBackwardMultiplier, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.JumpImpulsePower))), ref settings.JumpImpulsePower, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.JumpBackwardMultiplier))), ref settings.JumpBackwardMultiplier, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.JumpEnduranceCost))), ref settings.JumpEnduranceCost, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.RunEnduranceCost))), ref settings.RunEnduranceCost, 1);
 		}
 		private void EnduranceSettingsArea()
 		{

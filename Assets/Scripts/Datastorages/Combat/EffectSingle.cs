@@ -23,18 +23,25 @@ namespace EoE.Combatery
 
 		public CustomFXObject[] Effects = new CustomFXObject[0];
 		#region Activation
-		public void Activate(Entity effectCauser, Entity target, CombatData infoBase, Vector3 forceDirection, Vector3 hitPoint, EffectOverrides effectOverrides = null)
+		public void Activate(Entity effectCauser, Entity target, CombatObject infoBase, Vector3 forceDirection, Vector3 hitPoint, EffectOverrides effectOverrides = null)
 		{
+			//Override implementation
 			ElementType effectElement = (effectOverrides == null) ? DamageElement : (effectOverrides.OverridenElement.HasValue ? effectOverrides.OverridenElement.Value : DamageElement);
 			CauseType effectCause = (effectOverrides == null) ? CauseType : (effectOverrides.OverridenCauseType.HasValue ? effectOverrides.OverridenCauseType.Value : CauseType);
+			float overrideDamageMultiplier = effectOverrides == null ? 1 : effectOverrides.ExtraDamageMultiplier;
+			float overrideKnockbackMultiplier = effectOverrides == null ? 1 : effectOverrides.ExtraKnockbackMultiplier;
+			float overrideCritChanceMultiplier = effectOverrides == null ? 1 : effectOverrides.ExtraCritChanceMultiplier;
 
 			//Damage / Knockback
-			float baseDamage = (effectCause == CauseType.Physical ? (effectCauser.curPhysicalDamage) : (effectCause == CauseType.Magic ? effectCauser.curMagicalDamage : 0)) +
-								(effectCause == CauseType.Physical ? infoBase.BasePhysicalDamage : effectCauser.curMagicalDamage);
-			bool wasCrit = Utils.Chance01(CritChanceMultiplier * infoBase.BaseCritChance * (effectOverrides == null ? 1 : effectOverrides.ExtraCritChanceMultiplier));
+			float damage = (effectCause == CauseType.Physical ? infoBase.BasePhysicalDamage : infoBase.BaseMagicalDamage) * DamageMultiplier;
+			float knockback = infoBase.BaseKnockback * KnockbackMultiplier;
+			float critChance = infoBase.BaseCritChance * CritChanceMultiplier;
 
-			float damage = baseDamage * DamageMultiplier * (effectOverrides == null ? 1 : effectOverrides.ExtraDamageMultiplier);
-			float knockback = KnockbackMultiplier * infoBase.BaseKnockback * (effectOverrides == null ? 1 : effectOverrides.ExtraKnockbackMultiplier);
+			damage *= overrideDamageMultiplier;
+			knockback *= overrideKnockbackMultiplier;
+			critChance *= overrideCritChanceMultiplier;
+
+			bool isCrit = Utils.Chance01(critChance);
 
 			target.ChangeHealth(new ChangeInfo(
 								effectCauser,
@@ -44,8 +51,8 @@ namespace EoE.Combatery
 								hitPoint,
 								new Vector3(forceDirection.x * KnockbackAxisMultiplier.x, forceDirection.y * KnockbackAxisMultiplier.y, forceDirection.z * KnockbackAxisMultiplier.z),
 								damage,
-								wasCrit,
-								(knockback > 0) ? (float?)knockback : (null)
+								isCrit,
+								(knockback != 0) ? (float?)knockback : (null)
 								));
 
 			//Buffs

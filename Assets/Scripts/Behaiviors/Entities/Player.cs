@@ -77,7 +77,7 @@ namespace EoE.Entities
 		public float TotalVerticalVelocity => JumpVelocity * PlayerSettings.JumpImpulsePower + VerticalVelocity;
 		public override Vector3 CurVelocity => base.CurVelocity + new Vector3(0, TotalVerticalVelocity, 0);
 		public static Player Instance { get; private set; }
-		public override EntitieSettings SelfSettings => playerSettings;
+		public override EntitySettings SelfSettings => playerSettings;
 		public static PlayerSettings PlayerSettings => Instance.playerSettings;
 		public int TotalExperience { get; private set; }
 		public int CurrentCurrencyAmount { get; private set; }
@@ -1321,12 +1321,12 @@ namespace EoE.Entities
 					}
 				case TargetBaseStat.PhysicalDamage:
 					{
-						value += PlayerSettings.BaseAttackDamage;
+						value += PlayerSettings.BasePhysicalDamage;
 						break;
 					}
 				case TargetBaseStat.MagicalDamage:
 					{
-						value += PlayerSettings.BaseMagicDamage;
+						value += PlayerSettings.BaseMagicalDamage;
 						break;
 					}
 				case TargetBaseStat.Defense:

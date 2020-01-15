@@ -1,6 +1,6 @@
 ﻿namespace EoE.Entities
 {
-	public struct EntitieState
+	public struct EntityState
 	{
 		private byte state;
 

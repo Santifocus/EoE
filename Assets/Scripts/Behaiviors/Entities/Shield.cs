@@ -117,7 +117,7 @@ namespace EoE.Combatery
 		{
 			for (int i = 0; i < activationEffects.Length; i++)
 			{
-				FXInstance[] fxInstances = activationEffects[i].Activate(creator, info.BaseData, transform);
+				FXInstance[] fxInstances = activationEffects[i].Activate(creator, info.BaseData, 1, transform);
 				if (binding)
 					boundEffects.AddRange(fxInstances);
 			}

@@ -39,7 +39,7 @@ namespace EoE.Entities
 		public int RotationStops { get; set; }
 		public bool Alive { get; protected set; }
 		public List<BuffInstance> activeBuffs { get; protected set; }
-		public EntitieState curStates;
+		public EntityState curStates;
 		private float healthRegenCooldown;
 		private float healthRegenDelay;
 		private float combatEndCooldown;
@@ -62,7 +62,7 @@ namespace EoE.Entities
 
 		//Getter Helpers
 		protected enum ColliderType : byte { Box, Sphere, Capsule }
-		public abstract EntitieSettings SelfSettings { get; }
+		public abstract EntitySettings SelfSettings { get; }
 		protected ColliderType selfColliderType;
 		public Vector3 actuallWorldPosition => SelfSettings.MassCenter + transform.position;
 		public float lowestPos => coll.bounds.center.y - coll.bounds.extents.y;
@@ -79,7 +79,7 @@ namespace EoE.Entities
 		public BuffInstance ArmorBuff;
 
 		//Other
-		private EntitieStatDisplay statDisplay;
+		private EntityStatDisplay statDisplay;
 		public Buff LevelingBaseBuff { get; protected set; }
 		#endregion
 		#region Basic Monobehaivior
@@ -116,13 +116,13 @@ namespace EoE.Entities
 		protected virtual void FullEntitieReset()
 		{
 			Alive = true;
-			curStates = new EntitieState();
+			curStates = new EntityState();
 			entitieForceController = new ForceController();
 
 			if (!(this is Player))
 			{
 				statDisplay = Instantiate(GameController.CurrentGameSettings.EntitieStatDisplayPrefab, GameController.Instance.enemyHealthBarStorage);
-				statDisplay.Setup();
+				statDisplay.Setup(SelfSettings.ShowEntitieLevel ? (int?)(EntitieLevel + 1) : null);
 			}
 
 			ResetStats();
@@ -139,8 +139,8 @@ namespace EoE.Entities
 		{
 			curMaxHealth = SelfSettings.Health;
 			curMaxMana = SelfSettings.Mana;
-			curPhysicalDamage = SelfSettings.BaseAttackDamage;
-			curMagicalDamage = SelfSettings.BaseMagicDamage;
+			curPhysicalDamage = SelfSettings.BasePhysicalDamage;
+			curMagicalDamage = SelfSettings.BaseMagicalDamage;
 			curDefense = SelfSettings.BaseDefense;
 			curWalkSpeed = SelfSettings.WalkSpeed;
 			curJumpPowerMultiplier = 1;
@@ -1017,6 +1017,20 @@ namespace EoE.Entities
 					new Vector3(	target.coll.bounds.extents.x * (Random.value - 0.5f) * 2,
 									target.coll.bounds.extents.y * (Random.value - 0.5f) * 2,
 									target.coll.bounds.extents.z * (Random.value - 0.5f) * 2);
+			}
+		}
+		protected void ActivateActivationEffects(ActivationEffect[] activationEffects, float multiplier = 1)
+		{
+			CombatObject combatData = ScriptableObject.CreateInstance<CombatObject>();
+			combatData.BasePhysicalDamage = SelfSettings.BasePhysicalDamage;
+			combatData.BaseMagicalDamage = SelfSettings.BaseMagicalDamage;
+
+			//Crit and knockback are set to 1 because they will be used in multiplication
+			combatData.BaseCritChance = combatData.BaseKnockback = 1;
+
+			for (int i = 0; i < activationEffects.Length; i++)
+			{
+				activationEffects[i].Activate(this, combatData, multiplier);
 			}
 		}
 		#endregion

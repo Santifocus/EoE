@@ -14,12 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EntitieMass: 1
   MassCenter: {x: 0, y: 0, z: 0}
+  ShowEntitieLevel: 1
   EntitieElement: 1
   PossibleDropsTable: {fileID: 0}
   LevelSettings: {fileID: 11400000, guid: f274dc43aa7e69e4db13a311b4ea6d9e, type: 2}
   ExperienceWorth: 10
-  BaseAttackDamage: 2
-  BaseMagicDamage: 2
+  BasePhysicalDamage: 2
+  BaseMagicalDamage: 2
   BaseDefense: 2
   Health: 50
   DoHealthRegen: 1
