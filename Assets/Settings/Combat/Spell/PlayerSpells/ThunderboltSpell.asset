@@ -12,19 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc89a2906f120d45877860a48c8c4e2, type: 3}
   m_Name: ThunderboltSpell
   m_EditorClassIdentifier: 
-  BaseDamage: 22
+  BasePhysicalDamage: 0
+  BaseMagicalDamage: 22
+  BaseKnockback: 0
+  BaseCritChance: 0
   Cost:
     Health: 0
     Mana: 20
     Endurance: 0
     AdditionalConditions: []
-  BaseHealthCost: 0
-  BaseManaCost: 20
-  BaseEnduranceCost: 0
-  BaseKnockback: 0
-  BaseCritChance: 0
-  AdditionalConditions:
-  - {fileID: 11400000, guid: 280b76991508dc34cba8214296c979e6, type: 2}
   SpellCooldown: 10
   ContainedParts: -1
   MovementRestrictions: -1

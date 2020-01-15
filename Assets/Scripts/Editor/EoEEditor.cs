@@ -500,9 +500,11 @@ namespace EoE
 		#region DrawCustoms
 		public static void DrawCombatObjectBase(CombatObject settings, SerializedObject serializedObject, int offSet)
 		{
-			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseDamage))), ref settings.BaseDamage, offSet);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BasePhysicalDamage))), ref settings.BasePhysicalDamage, offSet);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseMagicalDamage))), ref settings.BaseMagicalDamage, offSet);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseKnockback))), ref settings.BaseKnockback, offSet);
 			SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseCritChance))), ref settings.BaseCritChance, 0, 1, offSet);
+
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			DrawObjectCost(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Cost))), ref settings.Cost, serializedObject.FindProperty(nameof(settings.Cost)), offSet);
 		}

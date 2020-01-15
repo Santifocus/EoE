@@ -12,14 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ab78e7538a021446a2451566185bbde, type: 3}
   m_Name: UsedSword
   m_EditorClassIdentifier: 
-  BaseDamage: 5
+  BasePhysicalDamage: 5
+  BaseMagicalDamage: 0
+  BaseKnockback: 10
+  BaseCritChance: 0.05
   Cost:
     Health: 0
     Mana: 0
     Endurance: 3
     AdditionalConditions: []
-  BaseKnockback: 10
-  BaseCritChance: 0.05
   WeaponPrefab: {fileID: 5533782398965989895, guid: 18284dacf122148419232919f51c45c2,
     type: 3}
   WeaponElement: 1

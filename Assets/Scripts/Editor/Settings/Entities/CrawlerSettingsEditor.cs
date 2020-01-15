@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using EoE.Combatery;
+using UnityEditor;
 using UnityEngine;
 using static EoE.EoEEditor;
 
@@ -10,24 +11,31 @@ namespace EoE.Information
 		protected override void CustomInspector()
 		{
 			base.CustomInspector();
-			DrawInFoldoutHeader("FX Settings", ref VFXSettingsOpen, FXSettingsArea);
+			DrawInFoldoutHeader("Effect Settings", ref EffectSettingsOpen, EffectSettingsArea);
 		}
 		protected override void CombatSettings()
 		{
 			CrawlerSettings settings = target as CrawlerSettings;
 			base.CombatSettings();
 
-			FloatField(new GUIContent("Attack Speed"), ref settings.BashChargeSpeed, 1);
-			FloatField(new GUIContent("Bash Speed"), ref settings.BashSpeed, 1);
-			FloatField(new GUIContent("Bash Distance"), ref settings.BashDistance, 1);
-			FloatField(new GUIContent("ForceTranslationMultiplier", "When the Crawler hits the player he will give the current speed multiplied by this amount to the Player"), ref settings.ForceTranslationMultiplier, 1);
+			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BashChargeSpeed))), ref settings.BashChargeSpeed, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BashSpeed))), ref settings.BashSpeed, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BashDistance))), ref settings.BashDistance, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ForceTranslationMultiplier))), ref settings.ForceTranslationMultiplier, 1);
 		}
-		private void FXSettingsArea()
+		private void EffectSettingsArea()
 		{
 			CrawlerSettings settings = target as CrawlerSettings;
-			FloatField(new GUIContent("Bash Announcement Delay", "If 'Bash Start' = T, then the BashAnnouncement will be played at 'T + Delay'"), ref settings.BashAnnouncementDelay, 1);
-			SerializedProperty fxArrayProperty = serializedObject.FindProperty(nameof(settings.BashAnnouncement));
-			ObjectArrayField(new GUIContent("Bash Announcement", "The particles that will be shown when the BashAnnouncement is played."), ref settings.BashAnnouncement, fxArrayProperty, new GUIContent(". Effect"), 1);
+
+			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BashChargeStartEffects))), ref settings.BashChargeStartEffects, serializedObject.FindProperty(nameof
+				(settings.BashChargeStartEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
+			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BashStartEffects))), ref settings.BashStartEffects, serializedObject.FindProperty(nameof
+				(settings.BashStartEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
+			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BashHitTerrainEffects))), ref settings.BashHitTerrainEffects, serializedObject.FindProperty(nameof
+				(settings.BashHitTerrainEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
+			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BashHitEntitieEffects))), ref settings.BashHitEntitieEffects, serializedObject.FindProperty(nameof
+				(settings.BashHitEntitieEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
 		}
 	}
 }

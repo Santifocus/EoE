@@ -13,10 +13,11 @@ namespace EoE.Combatery
 	[System.Flags] public enum EffectType { ImpulseVelocity = (1 << 0), FX = (1 << 1), AOE = (1 << 2), CreateProjectile = (1 << 3), HealOnCreator = (1 << 4), BuffOnCreator = (1 << 5), CreateRemenants = (1 << 6) }
 	public class CombatObject : ScriptableObject
 	{
-		public float BaseDamage = 10;
-		public ObjectCost Cost = default;
+		public float BasePhysicalDamage = 10;
+		public float BaseMagicalDamage = 0;
 		public float BaseKnockback = 0;
 		public float BaseCritChance = 0;
+		public ObjectCost Cost = new ObjectCost();
 
 		//Helper functions
 		public static (Vector3Int, bool) EnumDirToDir(DirectionBase direction)
@@ -219,59 +220,66 @@ namespace EoE.Combatery
 		//Remenants
 		public RemenantsData[] CreatedRemenants = new RemenantsData[0];
 
-		public FXInstance[] Activate(Entity activator, CombatObject baseObject, Transform overrideTransform = null, params Entity[] ignoredEntities)
+		public FXInstance[] Activate(Entity activator, CombatObject baseObject, float multiplier = 1, Transform overrideTransform = null, params Entity[] ignoredEntities)
 		{
 			FXInstance[] createdFXInstances = (HasMaskFlag(EffectType.FX) ? (new FXInstance[FXObjects.Length]) : (new FXInstance[0]));
 			if (HasMaskFlag(EffectType.ImpulseVelocity))
 			{
-				Player.Instance.FallDamageCooldown = 0.2f; //Prevents fall damage
+				if(activator is Player)
+					Player.Instance.FallDamageCooldown = 0.2f; //Prevents fall damage
 				Vector3 direction = CombatObject.CalculateDirection(ImpulseVelocityDirection, ImpulseVelocityFallbackDirection, ImpulseDirectionBase, activator, Vector3.zero);
-				activator.entitieForceController.ApplyForce(direction * ImpulseVelocity, 1 / ImpulseVelocityFallOffTime, true);
+				activator.entitieForceController.ApplyForce(direction * ImpulseVelocity * multiplier, 1 / ImpulseVelocityFallOffTime, true);
 			}
 			if (HasMaskFlag(EffectType.FX))
 			{
 				for (int i = 0; i < FXObjects.Length; i++)
 				{
-					createdFXInstances[i] = FXManager.PlayFX(FXObjects[i], overrideTransform ?? activator.transform, activator is Player);
+					createdFXInstances[i] = FXManager.PlayFX(FXObjects[i], overrideTransform ?? activator.transform, activator is Player, multiplier);
 				}
 			}
 			if (HasMaskFlag(EffectType.AOE))
 			{
+				EffectOverrides overrides = new EffectOverrides()
+				{
+					ExtraDamageMultiplier = multiplier,
+					ExtraKnockbackMultiplier = multiplier,
+					ExtraCritChanceMultiplier = multiplier,
+				};
 				for (int i = 0; i < AOEEffects.Length; i++)
 				{
-					AOEEffects[i].Activate(activator, overrideTransform ?? activator.transform, baseObject, null, ignoredEntities);
+					AOEEffects[i].Activate(activator, overrideTransform ?? activator.transform, baseObject, overrides, ignoredEntities);
 				}
 			}
 			if (HasMaskFlag(EffectType.CreateProjectile))
 			{
-				GameController.Instance.StartCoroutine(ProjectileCreation(activator, baseObject, overrideTransform));
+				GameController.Instance.StartCoroutine(ProjectileCreation(activator, baseObject, overrideTransform, multiplier));
 			}
 			if (HasMaskFlag(EffectType.HealOnCreator))
 			{
 				for(int i = 0; i < HealsOnUser.Length; i++)
 				{
-					HealsOnUser[i].Activate(activator);
+					HealsOnUser[i].Activate(activator, multiplier);
 				}
 			}
 			if (HasMaskFlag(EffectType.BuffOnCreator))
 			{
 				for (int i = 0; i < BuffsOnUser.Length; i++)
 				{
-					Buff.ApplyBuff(BuffsOnUser[i], activator, activator, StackingStyle);
+					Buff.ApplyBuff(BuffsOnUser[i], activator, activator, multiplier, StackingStyle);
 				}
 			}
 			if (HasMaskFlag(EffectType.CreateRemenants))
 			{
 				for (int i = 0; i < CreatedRemenants.Length; i++)
 				{
-					Remenants.CreateRemenants(baseObject, CreatedRemenants[i], activator, (overrideTransform ?? activator.transform).position);
+					Remenants.CreateRemenants(baseObject, CreatedRemenants[i], activator, (overrideTransform ?? activator.transform).position, multiplier);
 				}
 			}
 			return createdFXInstances;
 		}
 
 		#region ProjectileCreation
-		private IEnumerator ProjectileCreation(Entity activator, CombatObject baseObject, Transform overrideTransform)
+		private IEnumerator ProjectileCreation(Entity activator, CombatObject baseObject, Transform overrideTransform, float multiplier)
 		{
 			for (int i = 0; i < ProjectileInfos.Length; i++)
 			{
@@ -287,9 +295,9 @@ namespace EoE.Combatery
 				for (int j = 0; j < ProjectileInfos[i].ExecutionCount; j++)
 				{
 					if(overrideTransform)
-						CreateProjectile(activator, overrideTransform, baseObject, ProjectileInfos[i].Projectile);
+						CreateProjectile(activator, overrideTransform, baseObject, ProjectileInfos[i].Projectile, multiplier);
 					else
-						CreateProjectile(activator, baseObject, ProjectileInfos[i].Projectile);
+						CreateProjectile(activator, baseObject, ProjectileInfos[i].Projectile, multiplier);
 
 					if (j < ProjectileInfos[i].ExecutionCount - 1)
 					{
@@ -306,7 +314,7 @@ namespace EoE.Combatery
 			}
 		ProjectileCreationFinished:;
 		}
-		private void CreateProjectile(Entity activator, CombatObject baseObject, ProjectileData data)
+		private void CreateProjectile(Entity activator, CombatObject baseObject, ProjectileData data, float multiplier)
 		{
 			//Calculate the spawnoffset
 			Vector3 spawnOffset = data.CreateOffsetToCaster.x * activator.transform.right + data.CreateOffsetToCaster.y * activator.transform.up + data.CreateOffsetToCaster.z * activator.transform.forward;
@@ -318,9 +326,9 @@ namespace EoE.Combatery
 																activator,
 																spawnOffset
 																);
-			Projectile.CreateProjectile(baseObject, data, activator, direction, activator.actuallWorldPosition + spawnOffset);
+			Projectile.CreateProjectile(baseObject, data, activator, direction, activator.actuallWorldPosition + spawnOffset, multiplier);
 		}
-		private void CreateProjectile(Entity activator, Transform originTransform, CombatObject baseObject, ProjectileData data)
+		private void CreateProjectile(Entity activator, Transform originTransform, CombatObject baseObject, ProjectileData data, float multiplier)
 		{
 			//Calculate the spawnoffset
 			Vector3 spawnOffset = data.CreateOffsetToCaster.x * originTransform.right + data.CreateOffsetToCaster.y * originTransform.up + data.CreateOffsetToCaster.z * originTransform.forward;
@@ -332,7 +340,7 @@ namespace EoE.Combatery
 																originTransform,
 																spawnOffset
 																);
-			Projectile.CreateProjectile(baseObject, data, activator, direction, originTransform.transform.position + spawnOffset);
+			Projectile.CreateProjectile(baseObject, data, activator, direction, originTransform.transform.position + spawnOffset, multiplier);
 		}
 		#endregion
 

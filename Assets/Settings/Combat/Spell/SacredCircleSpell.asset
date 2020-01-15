@@ -12,18 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc89a2906f120d45877860a48c8c4e2, type: 3}
   m_Name: SacredCircleSpell
   m_EditorClassIdentifier: 
-  BaseDamage: 25
+  BasePhysicalDamage: 0
+  BaseMagicalDamage: 25
+  BaseKnockback: 10
+  BaseCritChance: 0
   Cost:
     Health: 0
     Mana: 15
     Endurance: 0
     AdditionalConditions: []
-  BaseHealthCost: 0
-  BaseManaCost: 15
-  BaseEnduranceCost: 0
-  BaseKnockback: 10
-  BaseCritChance: 0
-  AdditionalConditions: []
   SpellCooldown: 0
   ContainedParts: 1
   MovementRestrictions: 0

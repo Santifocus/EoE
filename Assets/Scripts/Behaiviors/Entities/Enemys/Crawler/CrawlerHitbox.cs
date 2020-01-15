@@ -20,6 +20,7 @@ namespace EoE.Entities
 		public void Setup(Crawler parent)
 		{
 			this.parent = parent;
+			CollisionActive = false;
 		}
 		private void OnTriggerEnter(Collider other)
 		{

@@ -505,9 +505,11 @@ namespace EoE.Combatery
 			float critChanceMultiplier = (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.CritChance) ? chargeMultiplier : 1);
 			float knockbackMultiplier = (ActiveAttackStyle.ChargeSettings.HasMaskFlag(AttackChargeEffectMask.Knockback) ? chargeMultiplier : 1);
 
-			float damage = ActiveAttackStyle.DamageMultiplier * curBaseData.BaseDamage * damageMultiplier;
-			bool isCrit = Utils.Chance01(ActiveAttackStyle.CritChanceMultiplier * curBaseData.BaseCritChance * critChanceMultiplier);
-			float? knockbackAmount = ActiveAttackStyle.KnockbackMultiplier * curBaseData.BaseKnockback * knockbackMultiplier;
+			float damage =				curBaseData.BasePhysicalDamage * ActiveAttackStyle.DamageMultiplier * damageMultiplier;
+			float critChance =			curBaseData.BaseCritChance * ActiveAttackStyle.CritChanceMultiplier * critChanceMultiplier;
+			float? knockbackAmount =	curBaseData.BaseKnockback * ActiveAttackStyle.KnockbackMultiplier * knockbackMultiplier;
+
+			bool isCrit = Utils.Chance01(critChance);
 
 			knockbackAmount = knockbackAmount.Value > 0 ? knockbackAmount : null;
 			ElementType attackElement = ActiveAttackStyle.OverrideElement ? ActiveAttackStyle.OverridenElement : weaponInfo.WeaponElement;

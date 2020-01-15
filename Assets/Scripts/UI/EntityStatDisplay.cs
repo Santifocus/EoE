@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace EoE.UI
 {
-	public class EntitieStatDisplay : MonoBehaviour
+	public class EntityStatDisplay : MonoBehaviour
 	{
 		private const float DONE_LERP_THRESHOLD = 0.01f;
-		[SerializeField] private Image healthBarSlider = default;
-		[SerializeField] private Image remenantHealthBarSlider = default;
 		[SerializeField] private RectTransform selfTransform = default;
+		[SerializeField] private Image remenantHealthBarSlider = default;
+		[SerializeField] private Image healthBarSlider = default;
+		[SerializeField] private TextMeshProUGUI levelDisplay = default;
 		[SerializeField] private GridLayoutGroup buffGrid = default;
 		[SerializeField] private Transform buffIconPrefab = default;
+
 		private float healthValue;
 		public float HealthValue
 		{
@@ -39,10 +42,16 @@ namespace EoE.UI
 		private float lerpWaitDelay;
 		private float remenantValue;
 
-		public void Setup()
+		public void Setup(int? level)
 		{
 			healthBarSlider.fillAmount = remenantHealthBarSlider.fillAmount = healthValue = remenantValue = 1;
 			buffIconLookup = new Dictionary<BuffInstance, Transform>();
+
+			levelDisplay.gameObject.SetActive(level.HasValue);
+			if (level.HasValue)
+			{
+				levelDisplay.text = "Lv. " + level.Value;
+			}
 		}
 		private void Update()
 		{

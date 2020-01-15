@@ -25,36 +25,47 @@ namespace EoE.Combatery
 		#region Activation
 		public void Activate(Entity effectCauser, Entity target, CombatObject infoBase, Vector3 forceDirection, Vector3 hitPoint, EffectOverrides effectOverrides = null)
 		{
+			//Override implementation
 			ElementType effectElement = (effectOverrides == null) ? DamageElement : (effectOverrides.OverridenElement.HasValue ? effectOverrides.OverridenElement.Value : DamageElement);
 			CauseType effectCause = (effectOverrides == null) ? CauseType : (effectOverrides.OverridenCauseType.HasValue ? effectOverrides.OverridenCauseType.Value : CauseType);
+			float overrideDamageMultiplier = effectOverrides == null ? 1 : effectOverrides.ExtraDamageMultiplier;
+			float overrideKnockbackMultiplier = effectOverrides == null ? 1 : effectOverrides.ExtraKnockbackMultiplier;
+			float overrideCritChanceMultiplier = effectOverrides == null ? 1 : effectOverrides.ExtraCritChanceMultiplier;
+			float overrideEffectMultiplier = effectOverrides == null ? 1 : effectOverrides.EffectMultiplier;
 
 			//Damage / Knockback
-			float casterBaseDamage = effectCause == CauseType.Physical ? (effectCauser.curPhysicalDamage) : (effectCause == CauseType.Magic ? effectCauser.curMagicalDamage : 0);
-			float damage = (infoBase.BaseDamage + casterBaseDamage) * DamageMultiplier * (effectOverrides == null ? 1 : effectOverrides.ExtraDamageMultiplier);
-			float knockback = KnockbackMultiplier * infoBase.BaseKnockback * (effectOverrides == null ? 1 : effectOverrides.ExtraKnockbackMultiplier);
+			float damage = (effectCause == CauseType.Physical ? infoBase.BasePhysicalDamage : infoBase.BaseMagicalDamage) * DamageMultiplier;
+			float knockback = infoBase.BaseKnockback * KnockbackMultiplier;
+			float critChance = infoBase.BaseCritChance * CritChanceMultiplier;
+
+			damage *= overrideDamageMultiplier;
+			knockback *= overrideKnockbackMultiplier;
+			critChance *= overrideCritChanceMultiplier;
+
+			bool isCrit = Utils.Chance01(critChance);
 
 			target.ChangeHealth(new ChangeInfo(
-				effectCauser,
-				effectCause,
-				effectElement,
-				TargetStat.Health,
-				hitPoint,
-				new Vector3(forceDirection.x * KnockbackAxisMultiplier.x, forceDirection.y * KnockbackAxisMultiplier.y, forceDirection.z * KnockbackAxisMultiplier.z),
-				damage,
-				Utils.Chance01(infoBase.BaseCritChance * CritChanceMultiplier * (effectOverrides == null ? 1 : effectOverrides.ExtraCritChanceMultiplier)),
-				(knockback > 0) ? (float?)knockback : (null)
-				));
+								effectCauser,
+								effectCause,
+								effectElement,
+								TargetStat.Health,
+								hitPoint,
+								new Vector3(forceDirection.x * KnockbackAxisMultiplier.x, forceDirection.y * KnockbackAxisMultiplier.y, forceDirection.z * KnockbackAxisMultiplier.z),
+								damage,
+								isCrit,
+								(knockback != 0) ? (float?)knockback : (null)
+								));
 
 			//Buffs
 			for (int j = 0; j < BuffsToApply.Length; j++)
 			{
-				Buff.ApplyBuff(BuffsToApply[j], target, effectCauser, BuffStackStyle);
+				Buff.ApplyBuff(BuffsToApply[j], target, effectCauser, overrideEffectMultiplier, BuffStackStyle);
 			}
 
 			//FXEffects
 			for (int j = 0; j < Effects.Length; j++)
 			{
-				FXManager.PlayFX(Effects[j], target.transform, target is Player);
+				FXManager.PlayFX(Effects[j], target.transform, target is Player, overrideEffectMultiplier);
 			}
 		}
 		#endregion
@@ -64,6 +75,7 @@ namespace EoE.Combatery
 		public float ExtraDamageMultiplier;
 		public float ExtraCritChanceMultiplier;
 		public float ExtraKnockbackMultiplier;
+		public float EffectMultiplier;
 		public ElementType? OverridenElement;
 		public CauseType? OverridenCauseType;
 	}

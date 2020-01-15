@@ -34,7 +34,7 @@ namespace EoE.Information
 		public GameObject HitEntitieParticles = default;
 		public GameObject HitTerrainParticles = default;
 
-		public EntitieStatDisplay EntitieStatDisplayPrefab = default;
+		public EntityStatDisplay EntitieStatDisplayPrefab = default;
 		public float EntitieHealthBarLerpSpeed = 2;
 		public float EntitieHealthBarLerpDelay = 0.5f;
 

@@ -16,8 +16,9 @@ namespace EoE.Combatery
 
 		private float delayToWhileCast;
 		private float remainingLifeTime;
+		private float effectMultiplier;
 		private Vector3 spawnPos;
-		public static Remenants CreateRemenants(CombatObject baseData, RemenantsData info, Entity creator, Vector3 spawnPos)
+		public static Remenants CreateRemenants(CombatObject baseData, RemenantsData info, Entity creator, Vector3 spawnPos, float effectMultiplier = 1)
 		{
 			Remenants newRemenants = Instantiate(GameController.RemenantsPrefab, Storage.ProjectileStorage);
 			newRemenants.baseData = baseData;
@@ -27,8 +28,8 @@ namespace EoE.Combatery
 			newRemenants.transform.position = newRemenants.spawnPos = spawnPos;
 			newRemenants.delayToWhileCast = info.WhileTickTime;
 
-
 			newRemenants.remainingLifeTime = info.Duration;
+			newRemenants.effectMultiplier = effectMultiplier;
 
 			newRemenants.body.useGravity = info.TryGroundRemenants;
 			if (info.TryGroundRemenants)
@@ -62,7 +63,7 @@ namespace EoE.Combatery
 		{
 			for (int i = 0; i < activationEffects.Length; i++)
 			{
-				FXInstance[] fxInstances = activationEffects[i].Activate(creator, baseData, transform);
+				FXInstance[] fxInstances = activationEffects[i].Activate(creator, baseData, effectMultiplier, transform);
 				if (binding)
 					boundEffects.AddRange(fxInstances);
 			}

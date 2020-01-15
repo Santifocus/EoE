@@ -19,6 +19,7 @@ namespace EoE.Combatery
 		private int remainingBounces;
 		private float remainingLifeTime;
 		private float bounceCooldown;
+		private float effectMultiplier;
 
 		private float delayToWhileCast;
 		private bool isDead;
@@ -30,7 +31,7 @@ namespace EoE.Combatery
 		{
 			AllProjectiles.Add(this);
 		}
-		public static Projectile CreateProjectile(CombatObject baseData, ProjectileData info, Entity creator, Vector3 direction, Vector3 spawnPos)
+		public static Projectile CreateProjectile(CombatObject baseData, ProjectileData info, Entity creator, Vector3 direction, Vector3 spawnPos, float effectMultiplier = 1)
 		{
 			Projectile projectile = Instantiate(GameController.ProjectilePrefab, Storage.ProjectileStorage);
 			projectile.transform.position = projectile.spawnPos = spawnPos;
@@ -46,6 +47,7 @@ namespace EoE.Combatery
 
 			projectile.remainingBounces = info.Bounces;
 			projectile.remainingLifeTime = info.Duration;
+			projectile.effectMultiplier = effectMultiplier;
 
 			projectile.SetupCollider();
 			projectile.ActivateActivationEffects(info.StartEffects, true);
@@ -120,7 +122,7 @@ namespace EoE.Combatery
 				if (hit.creator != creator)
 				{
 					bool isCrit = Utils.Chance01(info.DirectHit.CritChanceMultiplier * baseData.BaseCritChance);
-					float damage = info.DirectHit.DamageMultiplier * baseData.BaseDamage * (isCrit ? GameController.CurrentGameSettings.CritDamageMultiplier : 1);
+					float damage = info.DirectHit.DamageMultiplier * baseData.BaseMagicalDamage * (isCrit ? GameController.CurrentGameSettings.CritDamageMultiplier : 1);
 					hit.HitShield(damage);
 
 					if (hit.info.ReflectProjectiles)
@@ -163,7 +165,7 @@ namespace EoE.Combatery
 					{
 						for (int i = 0; i < info.CollisionEffects.Length; i++)
 						{
-							info.CollisionEffects[i].Activate(creator, baseData, transform, null, hit.creator);
+							info.CollisionEffects[i].Activate(creator, baseData, effectMultiplier, transform, hit.creator);
 						}
 						isDead = true;
 						Destroy(gameObject);
@@ -178,7 +180,7 @@ namespace EoE.Combatery
 							for(int j = 0; j < info.CollisionEffects[i].AOEEffects.Length; j++)
 							{
 								bool wasCrit = Utils.Chance01(info.CollisionEffects[i].AOEEffects[j].CritChanceMultiplier * baseData.BaseCritChance);
-								totalDamage += info.CollisionEffects[i].AOEEffects[j].DamageMultiplier * (wasCrit ? GameController.CurrentGameSettings.CritDamageMultiplier : 1) * baseData.BaseDamage;
+								totalDamage += info.CollisionEffects[i].AOEEffects[j].DamageMultiplier * (wasCrit ? GameController.CurrentGameSettings.CritDamageMultiplier : 1) * baseData.BaseMagicalDamage;
 							}
 						}
 					}
@@ -230,7 +232,7 @@ namespace EoE.Combatery
 		{
 			for (int i = 0; i < activationEffects.Length; i++)
 			{
-				FXInstance[] fxInstances = activationEffects[i].Activate(creator, baseData, transform);
+				FXInstance[] fxInstances = activationEffects[i].Activate(creator, baseData, effectMultiplier, transform);
 				if (binding)
 					boundEffects.AddRange(fxInstances);
 			}

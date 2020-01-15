@@ -5,7 +5,7 @@ using static EoE.EoEEditor;
 namespace EoE.Information
 {
 	[CustomEditor(typeof(EnemySettings), true), CanEditMultipleObjects]
-	public class EnemySettingsEditor : EntitieSettingsEditor
+	public class EnemySettingsEditor : EntitySettingsEditor
 	{
 		protected static bool PlayerChasingSettingsOpen;
 		protected static bool WanderSettingsOpen;
@@ -20,6 +20,7 @@ namespace EoE.Information
 		protected override void CombatSettings()
 		{
 			base.CombatSettings();
+			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			FloatField(new GUIContent("Attack Range", "At which distance to the player should this Enemy change into its combat behavior?"), ref (target as EnemySettings).AttackRange, 1);
 		}
 		protected virtual void PlayerChasingArea()

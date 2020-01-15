@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df8796acefb82bf4d948885a3e72382a, type: 3}
   m_Name: PlayerShield
   m_EditorClassIdentifier: 
-  BaseData: {fileID: 11400000, guid: 96dcb5c9bff843f4fa1ad4cf0c08cb1e, type: 2}
+  BaseData: {fileID: 11400000, guid: 88b33d189c8438a4ab496e8306d0852d, type: 2}
   FirstActivationCost:
     Health: 0
-    Mana: 0
+    Mana: 10
     Endurance: 0
     AdditionalConditions: []
   EffectOnUserOnShieldBreak: {fileID: 11400000, guid: eadfd855a332c49408281caac48a3346,
     type: 2}
-  ShieldResistance: 20
+  ShieldResistance: 30
   ShieldDrain: 5
   ShieldRegeneration: 3
   ShieldSize: 2

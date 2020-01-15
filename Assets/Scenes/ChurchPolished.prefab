@@ -18351,7 +18351,6 @@ GameObject:
   - component: {fileID: 4780248253048638666}
   - component: {fileID: 1163361604429770095}
   - component: {fileID: 6627566521473193919}
-  - component: {fileID: 1041142588679235706}
   m_Layer: 8
   m_Name: Teppich
   m_TagString: Untagged
@@ -18418,20 +18417,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &1041142588679235706
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2180869649010857702}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_Mesh: {fileID: -2222875496457782327, guid: 50c46ccd5cdabec479f931b3af5ed61f, type: 3}
 --- !u!1 &2186288820341498945
 GameObject:
   m_ObjectHideFlags: 0
@@ -85670,15 +85655,15 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: d30236cd42f3f7840acfad1f3c9d3899, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: df5074303546c8c439fcb0f1b33bcaac, type: 3}
---- !u!1 &1954412536910909410 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: df5074303546c8c439fcb0f1b33bcaac,
-    type: 3}
-  m_PrefabInstance: {fileID: 7511611440221542123}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3261782607669755377 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: df5074303546c8c439fcb0f1b33bcaac,
+    type: 3}
+  m_PrefabInstance: {fileID: 7511611440221542123}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1954412536910909410 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: df5074303546c8c439fcb0f1b33bcaac,
     type: 3}
   m_PrefabInstance: {fileID: 7511611440221542123}
   m_PrefabAsset: {fileID: 0}
@@ -86526,11 +86511,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1041142588828256189}
     m_Modifications:
-    - target: {fileID: 3554458282270140315, guid: cbf02171f1d84144c929f184275ae473,
-        type: 3}
-      propertyPath: m_Name
-      value: FogLight
-      objectReference: {fileID: 0}
     - target: {fileID: 5518085368368203971, guid: cbf02171f1d84144c929f184275ae473,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -86585,6 +86565,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3554458282270140315, guid: cbf02171f1d84144c929f184275ae473,
+        type: 3}
+      propertyPath: m_Name
+      value: FogLight
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cbf02171f1d84144c929f184275ae473, type: 3}
