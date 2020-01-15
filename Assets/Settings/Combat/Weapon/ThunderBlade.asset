@@ -28,7 +28,7 @@ MonoBehaviour:
   ContainedParts: 13
   FallBackPart: 1
   HasUltimate: 1
-  WeaponPositionOffset: {x: 0, y: 0, z: 1.05}
+  WeaponPositionOffset: {x: -0.03, y: 0.118, z: 0.58}
   WeaponRotationOffset: {x: 0, y: 0, z: 25}
   StandAttackSequence:
     AttackSequenceParts:
