@@ -9,22 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c475015d82123d4c9d421d67f39e273, type: 3}
-  m_Name: ShieldBreakStun
+  m_Script: {fileID: 11500000, guid: 3c871e95794c1664eb6ab3b44ed21f55, type: 3}
+  m_Name: ShieldBreakTimedilation
   m_EditorClassIdentifier: 
-  Name: ShieldBreakStun
-  Quality: 0
+  TimeIn: 0
+  TimeOut: 0.4
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 1
-    TimeStay: 2.5
+    TimeStay: 1
     OnConditionMet: 0
     Condition: {fileID: 0}
-  Icon: {fileID: 21300000, guid: 871f6ba8a83676d47aa256d92168c2ca, type: 3}
-  Effects: []
-  CustomEffects:
-    ApplyMoveStun: 1
-    Invincible: 0
-  DOTs: []
-  FXEffects:
-  - {fileID: 11400000, guid: a2c44824e9871b947aa563afbdb628a6, type: 2}
+  Scale: 0.23
+  Dominance: 0
+  OverwriteOtherTimeDilations: 0

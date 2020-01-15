@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
-  m_Name: PlayerShieldActive
+  m_Name: ShielbreakStun
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0.2
+  TimeOut: 1
   FinishConditions:
-    OnParentDeath: 0
-    OnTimeout: 0
-    TimeStay: 1
+    OnParentDeath: 1
+    OnTimeout: 1
+    TimeStay: 2.5
     OnConditionMet: 0
     Condition: {fileID: 0}
-  ParticleMainObject: {fileID: 5343186944594959281, guid: ba0b0f15332ce7044ac8ecf428dae92b,
+  ParticleMainObject: {fileID: 4611489114459693639, guid: c585c262b913b0842975465d76fbb4bc,
     type: 3}
   OffsetToTarget: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}
   FollowTarget: 1
-  InheritRotationOfTarget: 1
+  InheritRotationOfTarget: 0
   RotationInheritLerpSpeed: 4

@@ -15,13 +15,13 @@ MonoBehaviour:
   BaseData: {fileID: 11400000, guid: 88b33d189c8438a4ab496e8306d0852d, type: 2}
   FirstActivationCost:
     Health: 0
-    Mana: 10
+    Mana: 5
     Endurance: 0
     AdditionalConditions: []
   EffectOnUserOnShieldBreak: {fileID: 11400000, guid: eadfd855a332c49408281caac48a3346,
     type: 2}
   ShieldResistance: 30
-  ShieldDrain: 5
+  ShieldDrain: 0
   ShieldRegeneration: 3
   ShieldSize: 2
   ReflectProjectiles: 1
@@ -100,6 +100,13 @@ MonoBehaviour:
       HasCustomScale: 0
       CustomScale: {x: 1, y: 1, z: 1}
     - FX: {fileID: 11400000, guid: 8d36dd2a822b31042ab5e24f5d9bba0d, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 11400000, guid: a4ef436cf45d5a347a667a137785962d, type: 2}
       HasPositionOffset: 0
       PositionOffset: {x: 0, y: 0, z: 0}
       HasRotationOffset: 0
