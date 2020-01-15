@@ -20,5 +20,5 @@ MonoBehaviour:
     TimeStay: 0
     OnConditionMet: 0
     Condition: {fileID: 0}
-  TintColor: {r: 1, g: 0.026315786, b: 0, a: 0.15294118}
+  TintColor: {r: 1, g: 0, b: 0, a: 0.13333334}
   Dominance: 2

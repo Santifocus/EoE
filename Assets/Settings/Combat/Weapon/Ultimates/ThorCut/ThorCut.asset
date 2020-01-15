@@ -220,7 +220,7 @@ MonoBehaviour:
           ImpulseVelocityFallbackDirection: 1
           ImpulseDirectionBase: 1
           FXObjects:
-          - FX: {fileID: 0}
+          - FX: {fileID: 11400000, guid: 2e813e9c722c0cf4aa472ff6ffe86a2c, type: 2}
             HasPositionOffset: 0
             PositionOffset: {x: 0, y: 0, z: 0}
             HasRotationOffset: 0

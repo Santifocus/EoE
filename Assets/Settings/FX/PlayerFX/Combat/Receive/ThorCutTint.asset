@@ -9,17 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa0729519a808d449bdb777d2d35538b, type: 3}
-  m_Name: ElectroStun
+  m_Script: {fileID: 11500000, guid: f01d21cfe84eb5e4985cab77ea31a332, type: 3}
+  m_Name: ThorCutTint
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0
+  TimeOut: 0.5
   FinishConditions:
-    OnParentDeath: 1
-    OnTimeout: 0
-    TimeStay: 2.5
+    OnParentDeath: 0
+    OnTimeout: 1
+    TimeStay: 0.25
     OnConditionMet: 0
     Condition: {fileID: 0}
-  TargetSound: {fileID: 11400000, guid: 8500823b7d9cb6b42b8b8403a33cb641, type: 2}
-  FollowTarget: 0
-  OffsetToTarget: {x: 0, y: 0, z: 0}
+  TintColor: {r: 0.8578676, g: 0.9591937, b: 0.9622642, a: 0.84705883}
+  Dominance: 4
