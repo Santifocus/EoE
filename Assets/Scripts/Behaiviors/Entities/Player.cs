@@ -190,7 +190,7 @@ namespace EoE.Entities
 					};
 			}
 
-			AddBuff(LevelingPointsBuff, this);
+			Buff.ApplyBuff(LevelingPointsBuff, this, this);
 			RequiredExperienceForLevel = PlayerSettings.LevelSettings.curve.GetRequiredExperience(EntitieLevel);
 		}
 		private void SetupInventory()
@@ -747,7 +747,7 @@ namespace EoE.Entities
 			}
 		}
 		#endregion
-		#region Dashing
+		#region DashControl
 		private void DashControl()
 		{
 			if (dashCooldown > 0)

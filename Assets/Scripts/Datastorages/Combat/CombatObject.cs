@@ -244,6 +244,7 @@ namespace EoE.Combatery
 					ExtraDamageMultiplier = multiplier,
 					ExtraKnockbackMultiplier = multiplier,
 					ExtraCritChanceMultiplier = multiplier,
+					EffectMultiplier = multiplier,
 				};
 				for (int i = 0; i < AOEEffects.Length; i++)
 				{

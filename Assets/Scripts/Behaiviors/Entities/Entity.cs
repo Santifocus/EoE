@@ -183,8 +183,7 @@ namespace EoE.Entities
 						TargetBaseStat = (TargetBaseStat)i
 					};
 			}
-
-			AddBuff(LevelingBaseBuff, this, 1);
+			Buff.ApplyBuff(LevelingBaseBuff, this, this);
 			for (int i = 0; i < StartLevel; i++)
 				LevelUpEntitie();
 		}
@@ -487,7 +486,7 @@ namespace EoE.Entities
 				if (shouldBeRemoved)
 				{
 					requiresRecalculate = true;
-					RemoveBuff(activeBuffs[i]);
+					RemoveBuff(i);
 					i--;
 				}
 			}

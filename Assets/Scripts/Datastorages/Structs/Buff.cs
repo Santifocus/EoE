@@ -19,24 +19,33 @@ namespace EoE.Information
 		public DOT[] DOTs;
 		public FXObject[] FXEffects;
 
-		public static void ApplyBuff(Buff buff, Entity target, Entity applier, float multiplier = 1, BuffStackingStyle stackingStyle = BuffStackingStyle.Reapply)
+		public static BuffInstance ApplyBuff(Buff buff, Entity target, Entity applier, float multiplier = 1, BuffStackingStyle stackingStyle = BuffStackingStyle.Reapply)
 		{
 			if (stackingStyle == BuffStackingStyle.Stack)
 			{
-				target.AddBuff(buff, applier, multiplier);
+				return target.AddBuff(buff, applier, multiplier);
 			}
 			else if (stackingStyle == BuffStackingStyle.Reapply)
 			{
-				if (!(target.TryReapplyBuff(buff, applier).Item1))
+				(bool reApplied, BuffInstance reAppliedBuff) = target.TryReapplyBuff(buff, applier);
+				if (!reApplied)
 				{
-					target.AddBuff(buff, applier, multiplier);
+					return target.AddBuff(buff, applier, multiplier);
+				}
+				else
+				{
+					return reAppliedBuff;
 				}
 			}
 			else //stackingStyle == BuffStackingStyle.DoNothing
 			{
 				if (!(target.HasBuffActive(buff, applier).HasValue))
 				{
-					target.AddBuff(buff, applier, multiplier);
+					return target.AddBuff(buff, applier, multiplier);
+				}
+				else
+				{
+					return null;
 				}
 			}
 		}

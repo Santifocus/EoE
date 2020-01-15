@@ -377,7 +377,7 @@ namespace EoE.Combatery
 							chargeBoundBuffs = new BuffInstance[ActiveAttackStyle.ChargeSettings.BuffOnUserWhileCharging.Length];
 							for (int i = 0; i < chargeBoundBuffs.Length; i++)
 							{
-								chargeBoundBuffs[i] = Player.Instance.AddBuff(ActiveAttackStyle.ChargeSettings.BuffOnUserWhileCharging[i], Player.Instance);
+								chargeBoundBuffs[i] = Buff.ApplyBuff(ActiveAttackStyle.ChargeSettings.BuffOnUserWhileCharging[i], Player.Instance, Player.Instance);
 							}
 
 							//Begin the charging
@@ -545,6 +545,7 @@ namespace EoE.Combatery
 
 			if (ActiveAttackStyle.NeedsCharging)
 			{
+				activatedDirectHits.Capacity = System.Math.Max(activatedDirectHits.Capacity, activatedDirectHits.Count + ActiveAttackStyle.ChargeSettings.ChargeBasedDirectHits.Length);
 				for (int i = 0; i < ActiveAttackStyle.ChargeSettings.ChargeBasedDirectHits.Length; i++)
 				{
 					if (ActiveAttackStyle.ChargeSettings.ChargeBasedDirectHits[i].MinRequiredCharge <= curChargeMultiplier &&
@@ -570,11 +571,12 @@ namespace EoE.Combatery
 						ExtraDamageMultiplier = ActiveAttackStyle.DamageMultiplier * damageMultiplier,
 						ExtraCritChanceMultiplier = ActiveAttackStyle.CritChanceMultiplier * critChanceMultiplier,
 						ExtraKnockbackMultiplier = ActiveAttackStyle.KnockbackMultiplier * knockbackMultiplier,
+						EffectMultiplier = 1,
 						OverridenElement = ActiveAttackStyle.OverrideElement ? ((ElementType?)ActiveAttackStyle.OverridenElement) : null,
 						OverridenCauseType = ActiveAttackStyle.OverrideCauseType ? ((CauseType?)ActiveAttackStyle.OverridenCauseType) : null
 					};
 
-					activatedDirectHits[i].Activate(Player.Instance,
+					activatedDirectHits[i].Activate(			Player.Instance,
 																hitEntitie,
 																curBaseData,
 																direction,
@@ -615,15 +617,17 @@ namespace EoE.Combatery
 					}
 
 					//FX
+					comboBoundFX.Capacity = System.Math.Max(comboBoundFX.Capacity, comboBoundFX.Count + weaponInfo.ComboEffects.ComboData[i].Effect.EffectsTillComboEnds.Length);
 					for (int j = 0; j < weaponInfo.ComboEffects.ComboData[i].Effect.EffectsTillComboEnds.Length; j++)
 					{
 						comboBoundFX.Add(FXManager.PlayFX(weaponInfo.ComboEffects.ComboData[i].Effect.EffectsTillComboEnds[j], Player.Instance.transform, true));
 					}
 
 					//Buffs
+					comboBoundBuffs.Capacity = System.Math.Max(comboBoundBuffs.Capacity, comboBoundBuffs.Count + weaponInfo.ComboEffects.ComboData[i].Effect.BuffsTillComboEnds.Length);
 					for (int j = 0; j < weaponInfo.ComboEffects.ComboData[i].Effect.BuffsTillComboEnds.Length; j++)
 					{
-						comboBoundBuffs.Add(Player.Instance.AddBuff(weaponInfo.ComboEffects.ComboData[i].Effect.BuffsTillComboEnds[j], Player.Instance));
+						comboBoundBuffs.Add(Buff.ApplyBuff(weaponInfo.ComboEffects.ComboData[i].Effect.BuffsTillComboEnds[j], Player.Instance, Player.Instance));
 					}
 				}
 			}
