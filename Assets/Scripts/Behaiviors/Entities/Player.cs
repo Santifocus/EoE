@@ -675,7 +675,7 @@ namespace EoE.Entities
 				float damageAmount = GameController.CurrentGameSettings.FallDamageCurve.Evaluate(velDif);
 
 				if (damageAmount > 0)
-					ChangeHealth(new ChangeInfo(null, CauseType.Physical, ElementType.None, TargetStat.Health, actuallWorldPosition, Vector3.up, damageAmount, false));
+					ChangeHealth(new ChangeInfo(this, CauseType.Physical, TargetStat.Health, damageAmount));
 			}
 		}
 		#endregion
