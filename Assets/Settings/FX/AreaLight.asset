@@ -9,17 +9,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa0729519a808d449bdb777d2d35538b, type: 3}
-  m_Name: ElectroStun
+  m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
+  m_Name: AreaLight
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
   FinishConditions:
     OnParentDeath: 1
     OnTimeout: 0
-    TimeStay: 2.5
+    TimeStay: 1
     OnConditionMet: 0
     Condition: {fileID: 0}
-  TargetSound: {fileID: 11400000, guid: 8500823b7d9cb6b42b8b8403a33cb641, type: 2}
-  FollowTarget: 0
+  ParticleMainObject: {fileID: 5415629630197448939, guid: 65a0fb6ff66b7d64d925842f2284d6ae,
+    type: 3}
   OffsetToTarget: {x: 0, y: 0, z: 0}
+  RotationOffset: {x: 0, y: 0, z: 0}
+  FollowTarget: 1
+  InheritRotationOfTarget: 1
+  RotationInheritLerpSpeed: 4
