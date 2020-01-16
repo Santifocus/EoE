@@ -18,11 +18,17 @@ namespace EoE.Information
 			CrawlerSettings settings = target as CrawlerSettings;
 			base.CombatSettings();
 
-			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ForceTranslationMultiplier))), ref settings.ForceTranslationMultiplier, 1);
+
+			Header("Bash", 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BashChargeSpeed))), ref settings.BashChargeSpeed, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BashSpeed))), ref settings.BashSpeed, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BashDistance))), ref settings.BashDistance, 1);
-			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ForceTranslationMultiplier))), ref settings.ForceTranslationMultiplier, 1);
+
+			Header("Trick Bash", 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ChanceForTrickBash))), ref settings.ChanceForTrickBash, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.TrickBashSpeed))), ref settings.TrickBashSpeed, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.TrickBashDistance))), ref settings.TrickBashDistance, 1);
 		}
 		private void EffectSettingsArea()
 		{
@@ -30,6 +36,8 @@ namespace EoE.Information
 
 			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BashChargeStartEffects))), ref settings.BashChargeStartEffects, serializedObject.FindProperty(nameof
 				(settings.BashChargeStartEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
+			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.TrickBashChargeStartEffects))), ref settings.TrickBashChargeStartEffects, serializedObject.FindProperty(nameof
+				(settings.TrickBashChargeStartEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
 			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BashStartEffects))), ref settings.BashStartEffects, serializedObject.FindProperty(nameof
 				(settings.BashStartEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
 			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BashHitTerrainEffects))), ref settings.BashHitTerrainEffects, serializedObject.FindProperty(nameof
