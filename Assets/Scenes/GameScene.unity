@@ -4238,7 +4238,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 399510460}
     m_Modifications:
     - target: {fileID: 9030575685320503504, guid: aa9fa6c49e2060e40b47a00055fba138,
         type: 3}
@@ -4263,17 +4263,17 @@ PrefabInstance:
     - target: {fileID: 5406665247343248067, guid: aa9fa6c49e2060e40b47a00055fba138,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5406665247343248067, guid: aa9fa6c49e2060e40b47a00055fba138,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5406665247343248067, guid: aa9fa6c49e2060e40b47a00055fba138,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5406665247343248067, guid: aa9fa6c49e2060e40b47a00055fba138,
         type: 3}
@@ -4283,7 +4283,7 @@ PrefabInstance:
     - target: {fileID: 5406665247343248067, guid: aa9fa6c49e2060e40b47a00055fba138,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5406665247343248067, guid: aa9fa6c49e2060e40b47a00055fba138,
         type: 3}
@@ -4610,6 +4610,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1422176378}
+  - {fileID: 1699524263}
   - {fileID: 420151322}
   m_Father: {fileID: 1599754667}
   m_RootOrder: 5
@@ -16042,7 +16043,7 @@ PrefabInstance:
     - target: {fileID: 4991817753358917675, guid: 586c42ca28bf57d4e9f4a5f90af2373b,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4991817753358917675, guid: 586c42ca28bf57d4e9f4a5f90af2373b,
         type: 3}
@@ -21459,8 +21460,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 9
   m_Type: 1
-  m_Color: {r: 0.6933962, g: 0.9164974, b: 1, a: 1}
-  m_Intensity: 0.1
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 0.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -21521,7 +21522,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &1368984546
 GameObject:
@@ -26896,6 +26897,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1688988992}
   m_CullTransparentMesh: 0
+--- !u!4 &1699524263 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5406665247343248067, guid: aa9fa6c49e2060e40b47a00055fba138,
+    type: 3}
+  m_PrefabInstance: {fileID: 392599910}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1700511439
 GameObject:
   m_ObjectHideFlags: 0

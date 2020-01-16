@@ -1,4 +1,6 @@
-﻿namespace EoE.Information
+﻿using EoE.Combatery;
+
+namespace EoE.Information
 {
 	public class EnemySettings : EntitySettings
 	{
@@ -6,6 +8,7 @@
 		public float AttackRange = 2;
 		public float AttackKnockBack = 3;
 		public float CritChance = 0;
+		public ActivationEffect[] OnCombatTriggerEffect = new ActivationEffect[0];
 
 		//Player search
 		public float PlayerTrackSpeed = 4;

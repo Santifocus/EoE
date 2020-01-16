@@ -29,6 +29,7 @@ namespace EoE.Combatery
 		//Inspector variables
 		[SerializeField] private WeaponHitbox[] weaponHitboxes = default;
 		[SerializeField] private ParticleSystem[] particlesToActivateOnEnable = default;
+		[SerializeField] private GameObject dropCollision = default;
 
 		//Base Data
 		public Weapon weaponInfo { get; private set; }
@@ -162,9 +163,9 @@ namespace EoE.Combatery
 		}
 		private void FollowPlayer()
 		{
-			if (!Player.Targetable)
+			if (!Player.Existant)
 			{
-				Destroy(gameObject);
+				DropWeapon();
 				return;
 			}
 
@@ -727,6 +728,14 @@ namespace EoE.Combatery
 			newParticleSystem.transform.position = hitPos;
 			EffectUtils.FadeAndDestroyParticles(newParticleSystem, 1);
 		}
+		private void DropWeapon()
+		{
+			dropCollision.SetActive(true);
+			Rigidbody b = gameObject.AddComponent<Rigidbody>();
+			b.velocity = (Player.Instance.curMoveVelocity + Player.Instance.CurVelocity) + new Vector3(Random.Range(-1, 1), 0, Random.Range(-1, 1)) * 5;
+			b.angularVelocity = new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1)) * 540;
+			enabled = false;
+		}
 		private void OnDestroy()
 		{
 			if (this != Instance)
@@ -736,7 +745,7 @@ namespace EoE.Combatery
 			ComboFinish();
 			if(ActiveAttackStyle != null)
 			{
-				if (Player.Targetable)
+				if (Player.Existant)
 				{
 					if (ActiveAttackStyle.StopMovement)
 						Player.Instance.MovementStops--;

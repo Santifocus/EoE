@@ -344,10 +344,7 @@ namespace EoE.Entities
 			}
 
 			if (changeResult.finalChangeAmount > 0)
-			{
 				healthRegenCooldown = SelfSettings.HealthRegenCooldownAfterTakingDamage;
-				ReceivedHealthDamage(causedChange, changeResult);
-			}
 
 			//Below zero health means death
 			if (curHealth <= 0)
@@ -362,12 +359,15 @@ namespace EoE.Entities
 				}
 				Death();
 			}
+
+			if(changeResult.finalChangeAmount != 0 && Alive)
+				OnHealthChange(causedChange, changeResult);
 		}
 		protected virtual void ApplyKnockback(Vector3 causedKnockback)
 		{
 			impactForce += new Vector2(causedKnockback.x, causedKnockback.z);
 		}
-		protected virtual void ReceivedHealthDamage(ChangeInfo causedChange, ChangeInfo.ChangeResult resultInfo) { }
+		protected virtual void OnHealthChange(ChangeInfo causedChange, ChangeInfo.ChangeResult resultInfo) { }
 		public void ChangeMana(ChangeInfo change)
 		{
 			ChangeInfo.ChangeResult changeResult = new ChangeInfo.ChangeResult(change, this, true);
@@ -399,7 +399,7 @@ namespace EoE.Entities
 			if (statDisplay.gameObject.activeInHierarchy != intendedState)
 				statDisplay.gameObject.SetActive(intendedState);
 		}
-		protected void StartCombat()
+		public virtual void StartCombat()
 		{
 			curStates.Fighting = true;
 			combatEndCooldown = GameController.CurrentGameSettings.CombatCooldown;
@@ -1022,7 +1022,7 @@ namespace EoE.Entities
 									target.coll.bounds.extents.z * (Random.value - 0.5f) * 2);
 			}
 		}
-		protected void ActivateActivationEffects(ActivationEffect[] activationEffects, float multiplier = 1)
+		protected FXInstance[] ActivateActivationEffects(ActivationEffect[] activationEffects, float multiplier = 1)
 		{
 			CombatObject combatData = ScriptableObject.CreateInstance<CombatObject>();
 			combatData.BasePhysicalDamage = SelfSettings.BasePhysicalDamage;
@@ -1031,10 +1031,12 @@ namespace EoE.Entities
 			//Crit and knockback are set to 1 because they will be used in multiplication
 			combatData.BaseCritChance = combatData.BaseKnockback = 1;
 
+			List<FXInstance> createdFX = new List<FXInstance>();
 			for (int i = 0; i < activationEffects.Length; i++)
 			{
-				activationEffects[i].Activate(this, combatData, multiplier);
+				createdFX.AddRange(activationEffects[i].Activate(this, combatData, multiplier));
 			}
+			return createdFX.ToArray();
 		}
 		#endregion
 	}

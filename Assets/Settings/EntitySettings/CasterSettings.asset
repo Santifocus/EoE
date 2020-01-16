@@ -43,6 +43,7 @@ MonoBehaviour:
   AttackRange: 22
   AttackKnockBack: 3
   CritChance: 0
+  OnCombatTriggerEffect: []
   PlayerTrackSpeed: 4
   SightRange: 25
   FoundPlayerSightRange: 50
@@ -62,3 +63,7 @@ MonoBehaviour:
   - TargetSpell: {fileID: 11400000, guid: 475837ad527bdec4ba1ec549c2b3099e, type: 2}
     MinRange: 0
     MaxRange: 8
+  PanicModeThreshold: 0.35
+  PanicModeAlliedSearchRange: 50
+  PanicModeEffects: []
+  PanicModeFinishedEffects: []

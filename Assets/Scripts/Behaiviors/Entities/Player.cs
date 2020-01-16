@@ -50,7 +50,7 @@ namespace EoE.Entities
 
 		//Velocity
 		private float jumpCooldown;
-		private Vector3 curMoveVelocity => controllDirection * curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
+		public Vector3 curMoveVelocity => controllDirection * curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
 		private Vector3 controllDirection;
 		private float intendedAcceleration;
 		private float curAcceleration;
@@ -71,7 +71,7 @@ namespace EoE.Entities
 		private float switchTargetTimer;
 
 		//Getter Helpers
-		public static bool Targetable => Instance && Instance.Alive;
+		public static bool Existant => Instance && Instance.Alive;
 		public float JumpVelocity { get; private set; }
 		public float FallDamageCooldown { get; set; }
 		public float VerticalVelocity { get; private set; }
@@ -1208,8 +1208,11 @@ namespace EoE.Entities
 			animationControl.SetTrigger("Death");
 		}
 		#region IFrames
-		protected override void ReceivedHealthDamage(ChangeInfo baseChange, ChangeInfo.ChangeResult resultInfo)
+		protected override void OnHealthChange(ChangeInfo baseChange, ChangeInfo.ChangeResult resultInfo)
 		{
+			if (resultInfo.finalChangeAmount < 0)
+				return;
+
 			if (baseChange.attacker != this && baseChange.cause != CauseType.DOT)
 			{
 				if (PlayerSettings.InvincibleAfterHit)

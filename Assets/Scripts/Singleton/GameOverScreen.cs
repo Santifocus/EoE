@@ -71,7 +71,6 @@ namespace EoE.UI
 		private void FinishedFading()
 		{
 			fadingIn = false;
-			GameController.ActivePauses++;
 			for(int i = 0; i < onFadeFinishEnable.Length; i++)
 			{
 				onFadeFinishEnable[i].SetActive(true);

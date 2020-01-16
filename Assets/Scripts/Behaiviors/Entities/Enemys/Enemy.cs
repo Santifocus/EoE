@@ -16,7 +16,7 @@ namespace EoE.Entities
 
 		//Inspector Variables
 		[SerializeField] protected Rigidbody body = default;
-		[SerializeField] protected NavMeshAgent agent = default;
+		public NavMeshAgent agent = default;
 
 		protected Vector3 originalSpawnPosition;
 		protected NavMeshPath curPath;
@@ -49,6 +49,7 @@ namespace EoE.Entities
 		//Behaivior
 		protected bool behaviorSimpleStop;
 		protected bool isIdle => !(chasingPlayer || remainingInvestigationTime > 0);
+		protected Vector3? overrideTargetPosition;
 		#endregion
 		#region Basic Monobehaivior
 		protected override void Start()
@@ -89,7 +90,7 @@ namespace EoE.Entities
 		#region Behaivior
 		private void DecideOnBehaivior()
 		{
-			if (Player.Targetable)
+			if (Player.Existant)
 			{
 				bool prevInRange = PlayerInAttackRange;
 				float sqrPlayerDist = (Player.Instance.actuallWorldPosition - actuallWorldPosition).sqrMagnitude;
@@ -100,9 +101,7 @@ namespace EoE.Entities
 					chasingPlayer = true;
 					if (CheckIfCanSeeEntitie(transform, Player.Instance, true))
 					{
-						lastConfirmedPlayerPos = Player.Instance.actuallWorldPosition;
-						lastPlayerSpeed = Player.Instance.CurVelocity;
-						lastSeenPlayer = 0;
+						RefreshDataOnPlayer();
 
 						if (!prevInRange && PlayerInAttackRange)
 						{
@@ -114,11 +113,7 @@ namespace EoE.Entities
 				if (chasingPlayer)
 				{
 					targetPosition = Vector3.Lerp(targetPosition ?? GuessedPlayerPosition, GuessedPlayerPosition, Time.deltaTime * enemySettings.PlayerTrackSpeed);
-					if (GameController.CurrentGameSettings.IsDebugEnabled)
-					{
-						Debug.DrawLine(actuallWorldPosition, targetPosition.Value, Color.red, Time.unscaledDeltaTime);
-					}
-
+					
 					if (!prevInRange && PlayerInAttackRange)
 					{
 						PlayerJustEnteredAttackRangeBase();
@@ -136,59 +131,39 @@ namespace EoE.Entities
 			if (PlayerInAttackRange && chasingPlayer && !IsStunned)
 				InRangeBehaiviorBase();
 
-			if (IsStunned || IsMovementStopped)
+			bool cantMove = IsStunned || IsMovementStopped;
+			if (cantMove)
 			{
 				body.isKinematic = false;
 				body.velocity = CurVelocity;
-				SetAgentState(false);
-				LookAtTarget();
-				return;
 			}
-			else if (behaviorSimpleStop)
+
+			if(cantMove || behaviorSimpleStop)
 			{
 				SetAgentState(false);
-				LookAtTarget();
+				if(!IsStunned)
+					LookAtTarget();
 				return;
 			}
 
 			body.isKinematic = true;
 			SetAgentState(true);
 
-			if (CheckForPlayer())
+			if (CanSeePlayer())
 			{
-				//Update information on the player
-				chasingPlayer = true;
-				lastConfirmedPlayerPos = Player.Instance.actuallWorldPosition;
-				lastPlayerSpeed = Player.Instance.CurVelocity;
-				lastSeenPlayer = 0;
+				RefreshDataOnPlayer();
 
 				//Find a path
-				Vector3? destination = GetClosestPointOnNavmesh(lastConfirmedPlayerPos);
-
-				if (destination.HasValue && agent.enabled && agent.CalculatePath(destination.Value, curPath) && curPath.status != NavMeshPathStatus.PathInvalid)
+				if (TryWalkToTargetPosition() && (agent.remainingDistance < agent.stoppingDistance))
 				{
-					agent.SetPath(curPath);
-					agent.stoppingDistance = enemySettings.AttackRange * 0.95f;
-					bool reachedDestination = ReachedDestination(true);
-
-					if (reachedDestination)
-					{
-						LookAtTarget();
-					}
+					LookAtTarget();
 				}
 			}
 			else if (chasingPlayer)
 			{
 				lastSeenPlayer += Time.deltaTime;
-				Vector3? destination = GetClosestPointOnNavmesh(GuessedPlayerPosition);
 
-				if (destination.HasValue && agent.CalculatePath(destination.Value, curPath) && curPath.status != NavMeshPathStatus.PathInvalid)
-				{
-					agent.SetPath(curPath);
-					agent.stoppingDistance = REACH_DESTINATION_MIN;
-					ReachedDestination(true);
-				}
-				else
+				if(!TryWalkToTargetPosition())
 				{
 					//We cant reach the player so we force interest loss on chasing
 					lastSeenPlayer = enemySettings.ChaseInterest;
@@ -219,6 +194,38 @@ namespace EoE.Entities
 			}
 
 		}
+		private void RefreshDataOnPlayer()
+		{
+			chasingPlayer = true;
+			lastConfirmedPlayerPos = Player.Instance.actuallWorldPosition;
+			lastPlayerSpeed = Player.Instance.CurVelocity;
+			lastSeenPlayer = 0;
+		}
+		private bool TryWalkToTargetPosition()
+		{
+			Vector3? pos = overrideTargetPosition ?? targetPosition;
+			if (pos.HasValue)
+			{
+				Vector3? destination = GetClosestPointOnNavmesh(pos.Value);
+				if (destination.HasValue && agent.CalculatePath(destination.Value, curPath) && curPath.status != NavMeshPathStatus.PathInvalid)
+				{
+					agent.SetPath(curPath);
+					agent.stoppingDistance = REACH_DESTINATION_MIN;
+
+					bool reached = agent.remainingDistance < agent.stoppingDistance;
+					SetAgentState(!reached);
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return false;
+			}
+		}
 		protected void EnforceKnockback()
 		{
 			agent.nextPosition += CurVelocity * Time.deltaTime;
@@ -238,9 +245,9 @@ namespace EoE.Entities
 				agent.speed = curWalkSpeed;
 			}
 		}
-		private bool CheckForPlayer()
+		private bool CanSeePlayer()
 		{
-			if (!Player.Targetable)
+			if (!Player.Existant)
 				return false;
 
 			Vector3 dif = Player.Instance.actuallWorldPosition - actuallWorldPosition;
@@ -282,7 +289,9 @@ namespace EoE.Entities
 				return false;
 			}
 
-			if (ReachedDestination(true))
+			bool reached = agent.remainingDistance < agent.stoppingDistance;
+			SetAgentState(!reached);
+			if (reached)
 			{
 				lookAroundCooldown = Random.Range(enemySettings.LookAroundDelayMin, enemySettings.LookAroundDelayMax);
 				wanderingCooldown = lookAroundCooldown + Random.Range(enemySettings.WanderingDelayMin, enemySettings.WanderingDelayMax);
@@ -369,14 +378,6 @@ namespace EoE.Entities
 			else
 				return null;
 		}
-		protected bool ReachedDestination(bool setAgentState)
-		{
-			bool reached = agent.remainingDistance < agent.stoppingDistance;
-			if (setAgentState)
-				SetAgentState(!reached);
-
-			return reached;
-		}
 		protected void LookAtTarget()
 		{
 			if (IsRotationStopped || IsStunned || !targetPosition.HasValue)
@@ -387,6 +388,31 @@ namespace EoE.Entities
 			float rotation = -Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
 
 			transform.localEulerAngles = new Vector3(0, Mathf.LerpAngle(transform.localEulerAngles.y, rotation, Time.deltaTime * enemySettings.TurnSpeed / 90), 0);
+		}
+		private void OnDrawGizmos()
+		{
+			if (!Application.isPlaying)
+				return;
+
+			if (GameController.CurrentGameSettings.IsDebugEnabled)
+			{
+				if (targetPosition.HasValue)
+				{
+					Gizmos.color = Color.red;
+					Gizmos.DrawLine(actuallWorldPosition, targetPosition.Value);
+				}
+				if (overrideTargetPosition.HasValue)
+				{
+					Gizmos.color = Color.yellow;
+					Gizmos.DrawLine(actuallWorldPosition, overrideTargetPosition.Value);
+				}
+			}
+		}
+		public override void StartCombat()
+		{
+			ActivateActivationEffects(enemySettings.OnCombatTriggerEffect);
+			RefreshDataOnPlayer();
+			base.StartCombat();
 		}
 		#endregion
 	}
