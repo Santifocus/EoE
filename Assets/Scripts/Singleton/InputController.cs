@@ -47,9 +47,6 @@ namespace EoE.Controlls
 
 		public static Button LeftPage;
 		public static Button RightPage;
-
-		public static Vector2 CharacterRotate => Instance.characterRotate;
-		private Vector2 characterRotate;
 		#endregion
 
 		//Internal
@@ -204,10 +201,6 @@ namespace EoE.Controlls
 			RightPage = new Button("MenuPlayerMenu");
 			menuActions.RightPage.started += ctx => ButtonStarted(RightPage);
 			menuActions.RightPage.canceled += ctx => ButtonEnded(RightPage);
-
-			//CharacterRotate
-			menuActions.CharacterRotate.performed += ctx => characterRotate = ctx.ReadValue<Vector2>();
-			menuActions.CharacterRotate.canceled += ctx => characterRotate = Vector2.zero;
 		}
 
 		private void OnDestroy()

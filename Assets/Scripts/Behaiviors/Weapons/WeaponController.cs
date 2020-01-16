@@ -31,7 +31,7 @@ namespace EoE.Combatery
 		[SerializeField] private ParticleSystem[] particlesToActivateOnEnable = default;
 
 		//Base Data
-		private Weapon weaponInfo;
+		public Weapon weaponInfo { get; private set; }
 		public CombatObject overrideBaseObject { get; set; }
 		private CombatObject curBaseData => overrideBaseObject ?? weaponInfo;
 
@@ -162,7 +162,7 @@ namespace EoE.Combatery
 		}
 		private void FollowPlayer()
 		{
-			if (!Player.Instance)
+			if (!Player.Targetable)
 			{
 				Destroy(gameObject);
 				return;
@@ -736,7 +736,7 @@ namespace EoE.Combatery
 			ComboFinish();
 			if(ActiveAttackStyle != null)
 			{
-				if (Player.Instance)
+				if (Player.Targetable)
 				{
 					if (ActiveAttackStyle.StopMovement)
 						Player.Instance.MovementStops--;
