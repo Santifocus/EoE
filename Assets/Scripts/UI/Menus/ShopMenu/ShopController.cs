@@ -24,6 +24,8 @@ namespace EoE.UI
 		[SerializeField] private TextMeshProUGUI playerCurrencyDisplay = default;
 		[SerializeField] private TextMeshProUGUI worthEvaluationDisplay = default;
 		[SerializeField] private TextMeshProUGUI itemDescriptionDisplay = default;
+		[SerializeField] private FXObject[] onBuyFX = default;
+		[SerializeField] private FXObject[] onSellFX = default;
 
 		[Space(5)]
 		[Header("Canvases")]
@@ -367,16 +369,25 @@ namespace EoE.UI
 					curInventory.ShopItems[selectedSlotIndex].MaxPurchases -= actionAmount;
 					shopSlots[selectedSlotIndex].Stacksize -= actionAmount;
 					Player.Instance.Inventory.AddItem(new InventoryItem(curInventory.ShopItems[selectedSlotIndex].Item, actionAmount));
+					PlayFX(onBuyFX);
 				}
 				else
 				{
 					Player.Instance.ChangeCurrency(actionWorth);
 					Player.Instance.Inventory.RemoveStackSize(selectedSlotIndex, actionAmount);
+					PlayFX(onSellFX);
 				}
 
 				SetShopState(ShopState.ItemSelection);
 				UpdateSelectedItemSlot();
 				shopItemActions[selectedIndex[(int)ShopState.ActionSelection - 1]].DeSelect();
+			}
+		}
+		private void PlayFX(FXObject[] effects)
+		{
+			for(int i = 0; i < effects.Length; i++)
+			{
+				FXManager.PlayFX(effects[i], Player.Instance.transform, transform);
 			}
 		}
 		private void ResetShop()

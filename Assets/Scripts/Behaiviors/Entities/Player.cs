@@ -118,8 +118,6 @@ namespace EoE.Entities
 		}
 		protected override void EntitieUpdate()
 		{
-			if (Input.GetKeyDown(KeyCode.K))
-				ChangeHealth(new ChangeInfo(this, CauseType.Magic, TargetStat.Health, 10000));
 
 			if (ContextControl())
 				return;
@@ -137,6 +135,8 @@ namespace EoE.Entities
 			ShieldControl();
 
 			animationControl.SetBool("InCombat", curStates.Fighting);
+			if (Input.GetKeyDown(KeyCode.K))
+				ChangeHealth(new ChangeInfo(this, CauseType.Magic, TargetStat.Health, 10000));
 		}
 		protected override void EntitieFixedUpdate()
 		{
@@ -1200,12 +1200,46 @@ namespace EoE.Entities
 		{
 			PauseMenuController.Instance.ToggleState(false);
 			CharacterMenuController.Instance.ToggleState(false);
+			FinishAliveBoundFX();
 
 			if (TargetedEntitie)
 				TargetedEntitie = null;
 			Alive = false;
 
 			animationControl.SetTrigger("Death");
+		}
+		private void FinishAliveBoundFX()
+		{
+			if (HealthBelowThresholdBoundEffects != null)
+			{
+				for (int i = 0; i < HealthBelowThresholdBoundEffects.Length; i++)
+				{
+					if (HealthBelowThresholdBoundEffects[i] != null)
+						HealthBelowThresholdBoundEffects[i].FinishFX();
+				}
+				HealthBelowThresholdBoundEffects = null;
+			}
+
+			if (PlayerWalkingBoundEffects != null)
+			{
+				for (int i = 0; i < PlayerWalkingBoundEffects.Length; i++)
+				{
+					if (PlayerWalkingBoundEffects[i] != null)
+						PlayerWalkingBoundEffects[i].FinishFX();
+				}
+				PlayerWalkingBoundEffects = null;
+			}
+
+			if (PlayerRunningBoundEffects != null)
+			{
+
+				for (int i = 0; i < PlayerRunningBoundEffects.Length; i++)
+				{
+					if (PlayerRunningBoundEffects[i] != null)
+						PlayerRunningBoundEffects[i].FinishFX();
+				}
+				PlayerRunningBoundEffects = null;
+			}
 		}
 		#region IFrames
 		protected override void OnHealthChange(ChangeInfo baseChange, ChangeInfo.ChangeResult resultInfo)
