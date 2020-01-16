@@ -59,7 +59,7 @@ MonoBehaviour:
   BashChargeSpeed: 0.75
   BashSpeed: 35
   BashDistance: 9
-  ChanceForTrickBash: 0.5
+  ChanceForTrickBash: 0.3
   TrickBashSpeed: 20
   TrickBashDistance: 7
   DirectHitEntitieEffect: {fileID: 0}

@@ -61,8 +61,8 @@ MonoBehaviour:
   EnduranceRegenAfterUseMultiplier: 0.2
   JumpEnduranceCost: 3
   RunEnduranceCost: 5
-  JumpPower: {x: 0, y: 8, z: 12}
-  JumpImpulsePower: 1.75
+  JumpPower: {x: 0, y: 10, z: 12}
+  JumpImpulsePower: 1.5
   JumpBackwardMultiplier: 0.65
   DashPower: 5
   DashDuration: 0.15
@@ -135,9 +135,6 @@ MonoBehaviour:
     ItemCount: 1
     ForceEquip: 0
   - Item: {fileID: 11400000, guid: e1bfcada9c557e543945ec3581f0e8b5, type: 2}
-    ItemCount: 1
-    ForceEquip: 0
-  - Item: {fileID: 11400000, guid: 30ebf1ebbaed61b43b2d213f94515995, type: 2}
     ItemCount: 1
     ForceEquip: 0
   InventorySize: 55

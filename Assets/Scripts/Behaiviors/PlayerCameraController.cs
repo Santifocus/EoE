@@ -46,7 +46,7 @@ namespace EoE
 
 		private void AnchorToPlayer()
 		{
-			if (!Player.Targetable)
+			if (!Player.Existant)
 				return;
 
 			curOffset = Vector3.Lerp(curOffset, GetOffset(), Time.unscaledDeltaTime * 5);

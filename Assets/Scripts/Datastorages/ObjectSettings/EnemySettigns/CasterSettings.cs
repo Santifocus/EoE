@@ -5,6 +5,12 @@ namespace EoE.Information
 	public class CasterSettings : EnemySettings
 	{
 		public CasterBehaiviorPattern[] BehaiviorPatterns = new CasterBehaiviorPattern[0];
+
+		public float PanicModeThreshold = 0.2f;
+		public float PanicModeAlliedSearchRange = 50;
+		public ActivationEffect[] PanicModeEffects = new ActivationEffect[0];
+		public ActivationEffect[] PanicModeFinishedEffects = new ActivationEffect[0];
+
 		[System.Serializable]
 		public class CasterBehaiviorPattern
 		{

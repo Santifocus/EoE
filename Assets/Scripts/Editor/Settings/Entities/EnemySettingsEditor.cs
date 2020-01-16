@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using EoE.Combatery;
+using UnityEditor;
 using UnityEngine;
 using static EoE.EoEEditor;
 
@@ -20,8 +21,12 @@ namespace EoE.Information
 		protected override void CombatSettings()
 		{
 			base.CombatSettings();
+
+			EnemySettings settings = target as EnemySettings;
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
-			FloatField(new GUIContent("Attack Range", "At which distance to the player should this Enemy change into its combat behavior?"), ref (target as EnemySettings).AttackRange, 1);
+			FloatField(new GUIContent("Attack Range", "At which distance to the player should this Enemy change into its combat behavior?"), ref settings.AttackRange, 1);
+			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
+			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OnCombatTriggerEffect))), ref settings.OnCombatTriggerEffect, serializedObject.FindProperty(nameof(settings.OnCombatTriggerEffect)), DrawActivationEffect, new GUIContent(". Effect"), 1);
 		}
 		protected virtual void PlayerChasingArea()
 		{

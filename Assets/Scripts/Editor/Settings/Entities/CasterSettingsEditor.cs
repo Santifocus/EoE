@@ -20,6 +20,13 @@ namespace EoE.Information
 																DrawCasterBehaiviorPattern,
 																new GUIContent(". Pattern"),
 																1);
+
+			Header("Panic Mode", 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.PanicModeThreshold))), ref settings.PanicModeThreshold, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.PanicModeAlliedSearchRange))), ref settings.PanicModeAlliedSearchRange, 1);
+			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.PanicModeEffects))), ref settings.PanicModeEffects, serializedObject.FindProperty(nameof(settings.PanicModeEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
+			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.PanicModeFinishedEffects))), ref settings.PanicModeFinishedEffects, serializedObject.FindProperty(nameof(settings.PanicModeFinishedEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
+
 		}
 		private void DrawCasterBehaiviorPattern(GUIContent content, CasterSettings.CasterBehaiviorPattern settings, SerializedProperty property, int offSet)
 		{
