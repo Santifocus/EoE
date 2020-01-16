@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61aa25bca827b2f4e82c2787c39a67cd, type: 3}
+  m_Name: FireCasterSettings
+  m_EditorClassIdentifier: 
+  EntitieMass: 1
+  MassCenter: {x: 0, y: 0.5, z: 0}
+  ShowEntitieLevel: 1
+  EntitieElement: 16
+  PossibleDropsTable: {fileID: 11400000, guid: d3bb8e598d9ed604b8fed58e3635e765, type: 2}
+  LevelSettings: {fileID: 11400000, guid: 9ac078bc18c5ea34e923aa511403d3ee, type: 2}
+  ExperienceWorth: 3
+  BasePhysicalDamage: 0
+  BaseMagicalDamage: 20
+  BaseDefense: 3
+  Health: 60
+  DoHealthRegen: 0
+  HealthRegen: 0
+  HealthRegenCooldownAfterTakingDamage: 4
+  HealthRegenInCombatMultiplier: 0.5
+  HealthRegenParticles: {fileID: 0}
+  HealthRegenParticlesOffset: {x: 0, y: 0, z: 0}
+  Mana: 100
+  DoManaRegen: 1
+  ManaRegen: 5
+  ManaRegenInCombatMultiplier: 3
+  WalkSpeed: 15
+  RunSpeedMultiplicator: 1.25
+  TurnSpeed: 350
+  InAirTurnSpeedMultiplier: 0.25
+  MoveAcceleration: 10
+  NoMoveDeceleration: 15
+  InAirAccelerationMultiplier: 0.3
+  AttackRange: 22
+  AttackKnockBack: 3
+  CritChance: 0
+  PlayerTrackSpeed: 4
+  SightRange: 25
+  FoundPlayerSightRange: 50
+  SightAngle: 60
+  FoundPlayerSightAngle: 120
+  ChaseInterest: 6
+  InvestigationTime: 10
+  WanderingFactor: 15
+  WanderingDelayMin: 1
+  WanderingDelayMax: 5
+  LookAroundDelayMin: 0.5
+  LookAroundDelayMax: 2
+  BehaiviorPatterns:
+  - TargetSpell: {fileID: 11400000, guid: 937ba567e5b92f5408870a8f6079febc, type: 2}
+    MinRange: 0
+    MaxRange: 30
