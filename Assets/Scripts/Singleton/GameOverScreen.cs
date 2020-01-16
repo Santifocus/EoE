@@ -9,85 +9,91 @@ namespace EoE.UI
 {
 	public class GameOverScreen : MonoBehaviour
 	{
-		[SerializeField] private Graphic[] fadeInComponents = default;
+		[SerializeField] private Image blackPlane = default;
+		[SerializeField] private float finalBlackAlpha = 0.9f;
+		[SerializeField] private RawImage playerOnlyDisplay = default;
+		[SerializeField] private Camera playerOnlyCamera = default;
 		[SerializeField] private float fadeInTime = 2;
 		[SerializeField] private ControllerMenuItem startMenuItem = default;
+		[SerializeField] private GameObject[] onFadeFinishEnable = default;
 
-		private float[] alphaValues;
 		private bool fadingIn;
+		private float fadedTime;
+
 		private void Start()
 		{
 			gameObject.SetActive(false);
 			(transform as RectTransform).anchoredPosition = Vector2.zero;
 			EventManager.PlayerDiedEvent += Show;
+			for (int i = 0; i < onFadeFinishEnable.Length; i++)
+			{
+				onFadeFinishEnable[i].SetActive(false);
+			}
 		}
 		public void Show(Entities.Entity killer)
 		{
+			SetupCamera();
+
 			gameObject.SetActive(true);
-			StartCoroutine(StartFadeIn());
+			blackPlane.color = Color.clear;
+			playerOnlyDisplay.color = Color.clear;
+			fadingIn = true;
+
 		}
-		private void OnDestroy()
+		private void SetupCamera()
 		{
-			EventManager.PlayerDiedEvent -= Show;
+			RenderTexture rt = new RenderTexture(Screen.width, Screen.height, 1);
+
+			playerOnlyCamera.targetTexture = rt;
+			playerOnlyDisplay.texture = rt;
+			playerOnlyCamera.gameObject.SetActive(true);
+			playerOnlyCamera.Render();
 		}
 		private void Update()
 		{
-			if (fadingIn)
-			{
-				if (InputController.MenuRight.Down || InputController.MenuLeft.Down || InputController.MenuEnter.Down)
-				{
-					StopAllCoroutines();
-					FinishFadeIn();
-					startMenuItem.SetNavigationCooldown(0.3f);
-				}
+			if (!fadingIn)
 				return;
-			}
-		}
-		private IEnumerator StartFadeIn()
-		{
-			fadingIn = true;
-			alphaValues = new float[fadeInComponents.Length];
-			for (int i = 0; i < fadeInComponents.Length; i++)
-			{
-				Color col = fadeInComponents[i].color;
-				alphaValues[i] = col.a;
-				fadeInComponents[i].color = new Color(col.r, col.g, col.b, 0);
-			}
 
-			float timer = 0;
-			while (timer < fadeInTime)
+			if(fadedTime < fadeInTime)
 			{
-				yield return new WaitForEndOfFrame();
-				timer += Time.deltaTime;
-
-				float point = timer / fadeInTime;
-				for (int i = 0; i < fadeInComponents.Length; i++)
+				fadedTime += Time.unscaledDeltaTime;
+				if (fadedTime > fadeInTime)
 				{
-					Color col = fadeInComponents[i].color;
-					fadeInComponents[i].color = new Color(col.r, col.g, col.b, point * alphaValues[i]);
+					fadedTime = fadeInTime;
+					FinishedFading();
 				}
 			}
-			FinishFadeIn();
+
+			float alpha = (fadedTime / fadeInTime) * finalBlackAlpha;
+			blackPlane.color = new Color(0, 0, 0, alpha);
+			playerOnlyDisplay.color = new Color(1, 1, 1, alpha);
 		}
-		private void FinishFadeIn()
+		private void FinishedFading()
 		{
 			fadingIn = false;
-			for (int i = 0; i < fadeInComponents.Length; i++)
+			GameController.ActivePauses++;
+			for(int i = 0; i < onFadeFinishEnable.Length; i++)
 			{
-				Color col = fadeInComponents[i].color;
-				fadeInComponents[i].color = new Color(col.r, col.g, col.b, alphaValues[i]);
+				onFadeFinishEnable[i].SetActive(true);
 			}
+
 			startMenuItem.Select();
 		}
 		public void OnRestart()
 		{
+			GameController.ActivePauses = 0;
 			EffectUtils.ResetScreenEffects();
 			SceneManager.LoadScene(ConstantCollector.GAME_SCENE_INDEX);
 		}
 		public void OnQuit()
 		{
+			GameController.ActivePauses = 0;
 			EffectUtils.ResetScreenEffects();
 			SceneManager.LoadScene(ConstantCollector.MAIN_MENU_SCENE_INDEX);
+		}
+		private void OnDestroy()
+		{
+			EventManager.PlayerDiedEvent -= Show;
 		}
 	}
 }

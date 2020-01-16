@@ -36,7 +36,7 @@ namespace EoE.Entities
 				bool allowedToBash = true;
 
 				//Make sure the Crawler is looking at the player
-				Vector2 xzDif = new Vector2(player.actuallWorldPosition.x, player.actuallWorldPosition.z) - new Vector2(actuallWorldPosition.x, actuallWorldPosition.z);
+				Vector2 xzDif = new Vector2(Player.Instance.actuallWorldPosition.x, Player.Instance.actuallWorldPosition.z) - new Vector2(actuallWorldPosition.x, actuallWorldPosition.z);
 				float distance = xzDif.magnitude;
 				Vector2 directon = xzDif / distance;
 				float cosAngle = Vector2.Dot(new Vector2(transform.forward.x, transform.forward.z), directon);

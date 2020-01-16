@@ -93,11 +93,15 @@ namespace EoE.Entities
 		protected virtual void EntitieStart() { }
 		protected virtual void Update()
 		{
+			if (!Alive)
+				return;
 			EntitieStateControl();
 			EntitieUpdate();
 		}
 		protected virtual void FixedUpdate()
 		{
+			if (!Alive)
+				return;
 			entitieForceController.Update();
 
 			//Lerp knockback to zero based on the entities deceleration stat

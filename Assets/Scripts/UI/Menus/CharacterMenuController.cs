@@ -89,24 +89,33 @@ namespace EoE.UI
 		{
 			Sounds.SoundManager.SetSoundState(ConstantCollector.MENU_SCROLL_SOUND, true);
 		}
-		public void ToggleState()
+		public void ToggleState(bool? forcedState)
 		{
-			CharacterMenuOpen = !CharacterMenuOpen;
-			if (CharacterMenuOpen)
+			bool newState = forcedState ?? !CharacterMenuOpen;
+
+			if (newState)
 				OpenMenu();
 			else
-				HideMenu();
+				CloseMenu();
 		}
 		private void OpenMenu()
 		{
+			if (CharacterMenuOpen)
+				return;
+
+			CharacterMenuOpen = true;
 			GameController.ActivePauses++;
 			allowedSlide = false;
 			menuPages[0].ShowPage(LeftScreen, pageScrollTime / 2, AllowSlide);
 			curMenuIndex = 0;
 			characterMenuBackground.gameObject.SetActive(true);
 		}
-		private void HideMenu()
+		private void CloseMenu()
 		{
+			if (!CharacterMenuOpen)
+				return;
+
+			CharacterMenuOpen = false;
 			GameController.ActivePauses--;
 			allowedSlide = false;
 			menuPages[curMenuIndex].HidePage(RightScreen, pageScrollTime / 2);

@@ -396,14 +396,6 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
-                },
-                {
-                    "name": "CharacterRotate",
-                    "type": "Value",
-                    "id": "dfd9bd88-1915-4a2d-9ee4-b6fc91e70259",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -558,17 +550,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "RightPage",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "5745dc84-107d-409c-9cf2-cafecce56fdd",
-                    "path": "<Gamepad>/rightStick",
-                    "interactions": "",
-                    "processors": "StickDeadzone(min=0.3,max=1)",
-                    "groups": "",
-                    "action": "CharacterRotate",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

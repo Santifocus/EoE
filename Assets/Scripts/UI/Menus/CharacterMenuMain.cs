@@ -1,4 +1,5 @@
-﻿using EoE.Controlls;
+﻿using EoE.Combatery;
+using EoE.Controlls;
 using EoE.Entities;
 using TMPro;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace EoE.UI
 		[Space(10)]
 		[SerializeField] private TextMeshProUGUI levelDisplay = default;
 		[SerializeField] private RawImage modelDisplay = default;
+		[SerializeField] private Transform modelLight = default;
 		[SerializeField] private Camera modelRendererCameraPrefab = default;
 		[SerializeField] private Vector3 cameraStandardRotation = new Vector3(30, 180, 0);
 		[SerializeField] private Vector3 cameraToModelDistance = new Vector3(0, 2, 8);
@@ -19,7 +21,7 @@ namespace EoE.UI
 		[Space(5)]
 		[SerializeField] private Vector2 cameraVerticalAngleClamps = new Vector2(30, -30);
 		[SerializeField] private Vector2 cameraRotationSpeed = new Vector2(4, 2);
-		[SerializeField] private float cameraSmoothTime = 2;
+		[SerializeField] private float cameraSmoothSpeed = 2;
 
 		[Space(10)]
 		[SerializeField] private TextMeshProUGUI healthDisplay = default;
@@ -31,10 +33,15 @@ namespace EoE.UI
 		[SerializeField] private TextMeshProUGUI skillpointDisplay = default;
 		[SerializeField] private TextMeshProUGUI experienceDisplay = default;
 
+		[Space(10)]
+		[SerializeField] private int[] weaponHoldpointChildIndexes = new int[] { 0, 8, 1 };
+
 		private bool playerModelSetup;
 		private Transform cameraAnchor;
 		private Camera modelRenderer;
 		private Transform playerModel;
+		private Transform weaponHoldPoint;
+		private Transform playerWeapon;
 		private Vector2 curRotation;
 		private Vector2 targetRotation;
 
@@ -48,14 +55,15 @@ namespace EoE.UI
 			if (!ActivePage || !playerModelSetup)
 				return;
 
-			targetRotation += InputController.CharacterRotate * Time.unscaledDeltaTime * cameraRotationSpeed;
+			targetRotation += InputController.CameraMove * Time.unscaledDeltaTime * cameraRotationSpeed;
 
 			//targetRotation.x %= 360;
 			//curRotation.x %= 360;
 			targetRotation.y = Mathf.Clamp(targetRotation.y, cameraVerticalAngleClamps.x, cameraVerticalAngleClamps.y);
-			curRotation = new Vector2(Mathf.LerpAngle(curRotation.x, targetRotation.x, Time.unscaledDeltaTime / cameraSmoothTime), Mathf.LerpAngle(curRotation.y, targetRotation.y, Time.unscaledDeltaTime / cameraSmoothTime));
+			curRotation = new Vector2(Mathf.LerpAngle(curRotation.x, targetRotation.x, Time.unscaledDeltaTime * cameraSmoothSpeed), Mathf.LerpAngle(curRotation.y, targetRotation.y, Time.unscaledDeltaTime * cameraSmoothSpeed));
 
-			cameraAnchor.eulerAngles = new Vector3(curRotation.y, curRotation.x, 0);
+			cameraAnchor.eulerAngles = modelLight.eulerAngles = new Vector3(curRotation.y, curRotation.x, 0);
+			AnchorWeapon();
 		}
 
 		protected override void ResetPage()
@@ -63,6 +71,7 @@ namespace EoE.UI
 			if (!playerModelSetup)
 				SetupPlayerModel();
 
+			UpdatePlayerModel();
 			UpdateStatDisplay();
 			ResetPlayerModel();
 		}
@@ -92,10 +101,14 @@ namespace EoE.UI
 			RenderTexture targetTexture = new RenderTexture((int)modelDisplay.rectTransform.rect.width, (int)modelDisplay.rectTransform.rect.height, 1);
 
 			//Setup Playermodel
-			playerModel = Instantiate(Player.Instance.modelTransform, Storage.EntitieStorage);
+			playerModel = Instantiate(Player.Instance.modelTransform, Storage.ParticleStorage);
 			SetLayerForAllChildren(playerModel);
 			playerModel.transform.position = Player.Instance.modelTransform.localPosition;
 			playerModel.transform.localEulerAngles = new Vector3(0, 180, 0);
+
+			weaponHoldPoint = playerModel;
+			for (int i = 0; i < weaponHoldpointChildIndexes.Length; i++)
+				weaponHoldPoint = weaponHoldPoint.GetChild(weaponHoldpointChildIndexes[i]);
 
 			//Config the animator
 			Animator animator = playerModel.GetComponent<Animator>();
@@ -103,7 +116,7 @@ namespace EoE.UI
 
 			//Setup camera
 			cameraAnchor = new GameObject("PlayerModelDisplayCameraAnchor").transform;
-			cameraAnchor.SetParent(Storage.EntitieStorage);
+			cameraAnchor.SetParent(Storage.ParticleStorage);
 			modelRenderer = Instantiate(modelRendererCameraPrefab, cameraAnchor);
 			modelRenderer.transform.localPosition = new Vector3(cameraToModelDistance.x, cameraToModelDistance.y, -cameraToModelDistance.z);
 			modelRenderer.targetTexture = targetTexture;
@@ -111,23 +124,47 @@ namespace EoE.UI
 			modelRenderer.farClipPlane = cameraToModelDistance.z * 2;
 
 			modelDisplay.texture = targetTexture;
+		}
+		private void UpdatePlayerModel()
+		{
+			if (playerWeapon)
+				Destroy(playerWeapon.gameObject);
 
-			void SetLayerForAllChildren(Transform parent)
+			if (WeaponController.Instance)
 			{
-				parent.gameObject.layer = PLAYER_MODEL_DISPLAY_LAYER;
+				playerWeapon = WeaponController.Instance.CloneModel().transform;
+				SetLayerForAllChildren(playerWeapon);
+			}
+			AnchorWeapon();
+		}
+		private void AnchorWeapon()
+		{
+			if (!playerWeapon || !WeaponController.Instance)
+				return;
 
-				//Apply to children
-				int c = parent.childCount;
-				for (int i = 0; i < c; i++)
+
+			Vector3 worldOffset =	WeaponController.Instance.weaponInfo.WeaponPositionOffset.x * weaponHoldPoint.right +
+									WeaponController.Instance.weaponInfo.WeaponPositionOffset.y * weaponHoldPoint.up +
+									WeaponController.Instance.weaponInfo.WeaponPositionOffset.z * weaponHoldPoint.forward;
+
+			playerWeapon.transform.position = weaponHoldPoint.position + worldOffset;
+			playerWeapon.transform.eulerAngles = weaponHoldPoint.eulerAngles + WeaponController.Instance.weaponInfo.WeaponRotationOffset;
+		}
+		private void SetLayerForAllChildren(Transform parent)
+		{
+			parent.gameObject.layer = PLAYER_MODEL_DISPLAY_LAYER;
+
+			//Apply to children
+			int c = parent.childCount;
+			for (int i = 0; i < c; i++)
+			{
+				//Apply to children of child
+				if (parent.GetChild(i).childCount > 0)
 				{
-					//Apply to children of child
-					if (parent.GetChild(i).childCount > 0)
-					{
-						SetLayerForAllChildren(parent.GetChild(i));
-						continue;
-					}
-					parent.GetChild(i).gameObject.layer = PLAYER_MODEL_DISPLAY_LAYER;
+					SetLayerForAllChildren(parent.GetChild(i));
+					continue;
 				}
+				parent.GetChild(i).gameObject.layer = PLAYER_MODEL_DISPLAY_LAYER;
 			}
 		}
 		protected override void DeactivatePage()

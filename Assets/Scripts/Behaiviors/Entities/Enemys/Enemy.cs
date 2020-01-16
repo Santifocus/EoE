@@ -40,7 +40,6 @@ namespace EoE.Entities
 		protected Vector3 lostChaseInterestPos;
 
 		//Getter Helpers
-		protected Player player => Player.Instance;
 		public override Vector3 CurVelocity => new Vector3(impactForce.x, 0, impactForce.y) + entitieForceController.currentTotalForce;
 		public override EntitySettings SelfSettings => enemySettings;
 		public abstract EnemySettings enemySettings { get; }
@@ -90,19 +89,19 @@ namespace EoE.Entities
 		#region Behaivior
 		private void DecideOnBehaivior()
 		{
-			if (Player.Instance)
+			if (Player.Targetable)
 			{
 				bool prevInRange = PlayerInAttackRange;
-				float sqrPlayerDist = (player.actuallWorldPosition - actuallWorldPosition).sqrMagnitude;
+				float sqrPlayerDist = (Player.Instance.actuallWorldPosition - actuallWorldPosition).sqrMagnitude;
 				PlayerInAttackRange = sqrPlayerDist < (enemySettings.AttackRange * enemySettings.AttackRange);
 
 				if (curStates.Fighting)
 				{
 					chasingPlayer = true;
-					if (CheckIfCanSeeEntitie(transform, player, true))
+					if (CheckIfCanSeeEntitie(transform, Player.Instance, true))
 					{
-						lastConfirmedPlayerPos = player.actuallWorldPosition;
-						lastPlayerSpeed = player.CurVelocity;
+						lastConfirmedPlayerPos = Player.Instance.actuallWorldPosition;
+						lastPlayerSpeed = Player.Instance.CurVelocity;
 						lastSeenPlayer = 0;
 
 						if (!prevInRange && PlayerInAttackRange)
@@ -157,8 +156,8 @@ namespace EoE.Entities
 			{
 				//Update information on the player
 				chasingPlayer = true;
-				lastConfirmedPlayerPos = player.actuallWorldPosition;
-				lastPlayerSpeed = player.CurVelocity;
+				lastConfirmedPlayerPos = Player.Instance.actuallWorldPosition;
+				lastPlayerSpeed = Player.Instance.CurVelocity;
 				lastSeenPlayer = 0;
 
 				//Find a path
@@ -239,10 +238,10 @@ namespace EoE.Entities
 		}
 		private bool CheckForPlayer()
 		{
-			if (!Player.Instance)
+			if (!Player.Targetable)
 				return false;
 
-			Vector3 dif = player.actuallWorldPosition - actuallWorldPosition;
+			Vector3 dif = Player.Instance.actuallWorldPosition - actuallWorldPosition;
 			float sqrDist = dif.sqrMagnitude;
 			float sqrSightDist = chasingPlayer ? enemySettings.FoundPlayerSightRange : enemySettings.SightRange;
 			sqrSightDist *= sqrSightDist;
@@ -259,7 +258,7 @@ namespace EoE.Entities
 				return false;
 
 			//Lastly we do a Low priority check if this entitie can see any part of the player
-			return CheckIfCanSeeEntitie(transform, player, true);
+			return CheckIfCanSeeEntitie(transform, Player.Instance, true);
 		}
 		protected void SetAgentState(bool state)
 		{

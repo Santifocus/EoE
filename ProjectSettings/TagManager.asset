@@ -23,7 +23,7 @@ TagManager:
   - PlayerModelDisplay
   - TerrainColliding
   - EntitieColliding
-  - 
+  - PlayerRenderLayer
   - 
   - 
   - 

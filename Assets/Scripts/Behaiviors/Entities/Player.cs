@@ -71,6 +71,7 @@ namespace EoE.Entities
 		private float switchTargetTimer;
 
 		//Getter Helpers
+		public static bool Targetable => Instance && Instance.Alive;
 		public float JumpVelocity { get; private set; }
 		public float FallDamageCooldown { get; set; }
 		public float VerticalVelocity { get; private set; }
@@ -117,6 +118,9 @@ namespace EoE.Entities
 		}
 		protected override void EntitieUpdate()
 		{
+			if (Input.GetKeyDown(KeyCode.K))
+				ChangeHealth(new ChangeInfo(this, CauseType.Magic, TargetStat.Health, 10000));
+
 			if (ContextControl())
 				return;
 
@@ -146,6 +150,8 @@ namespace EoE.Entities
 		}
 		private void LateUpdate()
 		{
+			if (!Alive)
+				return;
 			ProceduralAnimationControl();
 		}
 		#endregion
@@ -1192,9 +1198,14 @@ namespace EoE.Entities
 		#region StateControl
 		protected override void Death()
 		{
+			PauseMenuController.Instance.ToggleState(false);
+			CharacterMenuController.Instance.ToggleState(false);
+
 			if (TargetedEntitie)
 				TargetedEntitie = null;
-			base.Death();
+			Alive = false;
+
+			animationControl.SetTrigger("Death");
 		}
 		#region IFrames
 		protected override void ReceivedHealthDamage(ChangeInfo baseChange, ChangeInfo.ChangeResult resultInfo)
@@ -1359,13 +1370,13 @@ namespace EoE.Entities
 			if ((InputController.Pause.Down || (PauseMenuController.Instance.PauseMenuOpen && InputController.MenuBack.Down)) && 
 				!(GameController.GameIsPaused && !PauseMenuController.Instance.PauseMenuOpen))
 			{
-				PauseMenuController.Instance.ToggleState();
+				PauseMenuController.Instance.ToggleState(null);
 				return true;
 			}
 			else if((InputController.PlayerMenu.Down || (CharacterMenuController.Instance.CharacterMenuOpen && InputController.MenuBack.Down)) && 
 				!(GameController.GameIsPaused && !CharacterMenuController.Instance.CharacterMenuOpen))
 			{
-				CharacterMenuController.Instance.ToggleState();
+				CharacterMenuController.Instance.ToggleState(null);
 				return true;
 			}
 			return false;

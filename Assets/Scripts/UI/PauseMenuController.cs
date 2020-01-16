@@ -19,9 +19,12 @@ namespace EoE.UI
 			 Instance = this;
 			SettingsMenuController.ChangeStateEvent += SettingsMenuChangedState;
 		}
-		public void ToggleState()
+		public void ToggleState(bool? forcedState)
 		{
-			SetState(!PauseMenuOpen);
+			if (forcedState.HasValue)
+				SetState(forcedState.Value);
+			else
+				SetState(!PauseMenuOpen);
 		}
 		public void Close()
 		{
@@ -29,6 +32,9 @@ namespace EoE.UI
 		}
 		private void SetState(bool state)
 		{
+			if (PauseMenuOpen == state)
+				return;
+
 			PauseMenuOpen = state;
 			SettingsMenuController.Instance.Close();
 			pauseMenuObject.gameObject.SetActive(PauseMenuOpen);

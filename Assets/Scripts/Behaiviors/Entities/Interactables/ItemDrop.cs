@@ -58,7 +58,7 @@ namespace EoE.Entities
 			if (FailedPickUpDelay > 0)
 				FailedPickUpDelay -= Time.deltaTime;
 
-			if (!isTarget || !Player.Instance)
+			if (!isTarget || !Player.Targetable)
 				return;
 
 			infoDisplay.transform.position = transform.position + infoDisplayOffset;
