@@ -27,7 +27,7 @@ MonoBehaviour:
   RotationRestrictions: 0
   SubtractManaAtPart: 2
   CastInfo:
-    Duration: 2.5
+    Duration: 1.8
     VisualEffects:
     - FX: {fileID: 11400000, guid: c2a8b237706e3d8468d14a935d523294, type: 2}
       HasPositionOffset: 0
