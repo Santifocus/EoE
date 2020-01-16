@@ -10,7 +10,6 @@ namespace EoE.Entities
 		public CasterSettings settings;
 		protected override void InRangeBehaivior()
 		{
-			LookAtTarget();
 			DecideOnbehaiviorPattern();
 		}
 		private void DecideOnbehaiviorPattern()

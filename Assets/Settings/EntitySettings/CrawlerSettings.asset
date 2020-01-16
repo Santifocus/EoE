@@ -35,7 +35,7 @@ MonoBehaviour:
   ManaRegenInCombatMultiplier: 0.5
   WalkSpeed: 15
   RunSpeedMultiplicator: 1.5
-  TurnSpeed: 400
+  TurnSpeed: 750
   InAirTurnSpeedMultiplier: 0.25
   MoveAcceleration: 12
   NoMoveDeceleration: 15
@@ -55,10 +55,13 @@ MonoBehaviour:
   WanderingDelayMax: 5
   LookAroundDelayMin: 0.5
   LookAroundDelayMax: 2
+  ForceTranslationMultiplier: 1.5
   BashChargeSpeed: 0.75
   BashSpeed: 35
   BashDistance: 9
-  ForceTranslationMultiplier: 1.5
+  ChanceForTrickBash: 1
+  TrickBashSpeed: 20
+  TrickBashDistance: 7
   DirectHitEntitieEffect: {fileID: 0}
   BashChargeStartEffects:
   - ChanceToActivate: 1
@@ -89,6 +92,7 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
+  TrickBashChargeStartEffects: []
   BashStartEffects: []
   BashHitTerrainEffects:
   - ChanceToActivate: 1

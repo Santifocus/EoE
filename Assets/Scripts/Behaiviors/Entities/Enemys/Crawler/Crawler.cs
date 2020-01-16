@@ -27,50 +27,58 @@ namespace EoE.Entities
 		}
 		protected override void InRangeBehaivior()
 		{
-			TryForBash();
+			if (!chargingBash && !bashing)
+			{
+				TryForBash();
+			}
 		}
 		private void TryForBash()
 		{
-			if (!chargingBash && !bashing)
+			bool allowedToBash = true;
+
+			//Make sure the Crawler is looking at the player
+			Vector2 xzDif = new Vector2(Player.Instance.actuallWorldPosition.x, Player.Instance.actuallWorldPosition.z) - new Vector2(actuallWorldPosition.x, actuallWorldPosition.z);
+			float distance = xzDif.magnitude;
+			Vector2 directon = xzDif / distance;
+			float cosAngle = Vector2.Dot(new Vector2(transform.forward.x, transform.forward.z), directon);
+
+			//Is the player behind the Crawler? Then just stop here
+			if (cosAngle <= 0)
 			{
-				bool allowedToBash = true;
+				allowedToBash = false;
+			}
+			else
+			{
+				//Otherwise we calculate the distance between the player and the transform.forward of the Crawler
+				float distToForward = (1 - cosAngle) * distance;
 
-				//Make sure the Crawler is looking at the player
-				Vector2 xzDif = new Vector2(Player.Instance.actuallWorldPosition.x, Player.Instance.actuallWorldPosition.z) - new Vector2(actuallWorldPosition.x, actuallWorldPosition.z);
-				float distance = xzDif.magnitude;
-				Vector2 directon = xzDif / distance;
-				float cosAngle = Vector2.Dot(new Vector2(transform.forward.x, transform.forward.z), directon);
-
-				//Is the player behind the Crawler? Then just stop here
-				if (cosAngle <= 0)
-				{
+				//If the distance is greater then the widht of this crawler then we cant allow the bash
+				if (distToForward > coll.bounds.extents.x * 0.95f)
 					allowedToBash = false;
+			}
+
+			if (allowedToBash)
+			{
+				if (Utils.Chance01(settings.ChanceForTrickBash))
+				{
+					StartCoroutine(ChargeBashC(TrickBash, settings.TrickBashChargeStartEffects));
+					
 				}
 				else
 				{
-					//Otherwise we calculate the distance between the player and the transform.forward of the Crawler
-					float distToForward = (1 - cosAngle) * distance;
-
-					//If the distance is greater then the widht of this crawler then we cant allow the bash
-					if (distToForward > coll.bounds.extents.x * 0.95f)
-						allowedToBash = false;
+					StartCoroutine(ChargeBashC(Bash, settings.BashChargeStartEffects));
 				}
-
-				if (allowedToBash)
-				{
-					SetAgentState(false);
-					StartCoroutine(ChargeUpBash());
-				}
-				else
-					LookAtTarget();
 			}
 		}
-		private IEnumerator ChargeUpBash()
+		private IEnumerator ChargeBashC(System.Action chargeFinishAction, ActivationEffect[] chargeEffects)
 		{
+			SetAgentState(false);
+			StartCombat();
+
 			chargingBash = true;
 			behaviorSimpleStop = true;
 
-			ActivateActivationEffects(settings.BashChargeStartEffects);
+			ActivateActivationEffects(chargeEffects);
 			float timer = 0;
 			while (timer < settings.BashChargeSpeed)
 			{
@@ -82,23 +90,40 @@ namespace EoE.Entities
 				}
 			}
 
+			chargeFinishAction?.Invoke();
+
+			CanceledBash:;
+			chargingBash = false;
+			behaviorSimpleStop = false;
+		}
+		private void Bash()
+		{
 			StartCombat();
 			bashing = true;
 			MovementStops++;
+			RotationStops++;
 			bashForce = entitieForceController.ApplyForce((transform.forward * settings.BashSpeed) * (curWalkSpeed / settings.WalkSpeed), settings.BashSpeed / settings.BashDistance, false, () => FinishedBash());
 			SetBashColliderState(true);
 			ActivateActivationEffects(settings.BashStartEffects);
-
-		CanceledBash:;
-
-			chargingBash = false;
-			behaviorSimpleStop = false;
+		}
+		private void TrickBash()
+		{
+			StartCombat();
+			bashing = true;
+			MovementStops++;
+			Vector3 bashDirection = transform.right;
+			if (Utils.Chance01(0.5f))
+			{
+				bashDirection *= -1; //Go left instead
+			}
+			entitieForceController.ApplyForce((bashDirection * settings.TrickBashSpeed) * (curWalkSpeed / settings.WalkSpeed), settings.TrickBashSpeed / settings.TrickBashDistance, true, () => { Bash(); MovementStops--; });
 		}
 		private void FinishedBash()
 		{
 			bashing = false;
 			SetBashColliderState(false);
 			MovementStops--;
+			RotationStops--;
 		}
 		private void SetBashColliderState(bool state)
 		{
@@ -141,6 +166,7 @@ namespace EoE.Entities
 						{
 							shouldRemoveForces = false;
 						}
+						ActivateActivationEffects(settings.BashHitTerrainEffects, normalizedRestForce);
 					}
 					break;
 				case ConstantCollector.TERRAIN_LAYER:

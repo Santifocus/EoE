@@ -141,11 +141,13 @@ namespace EoE.Entities
 				body.isKinematic = false;
 				body.velocity = CurVelocity;
 				SetAgentState(false);
+				LookAtTarget();
 				return;
 			}
 			else if (behaviorSimpleStop)
 			{
 				SetAgentState(false);
+				LookAtTarget();
 				return;
 			}
 
@@ -262,10 +264,11 @@ namespace EoE.Entities
 		}
 		protected void SetAgentState(bool state)
 		{
-			if (!state)
+			bool stopped = !state; //Better readability
+			if (stopped)
 				agent.velocity = Vector3.zero;
-			if (agent.enabled && agent.isStopped == state)
-				agent.isStopped = !state;
+			if (agent.enabled && agent.isStopped != stopped)
+				agent.isStopped = stopped;
 		}
 		private bool WanderAround()
 		{
@@ -376,10 +379,10 @@ namespace EoE.Entities
 		}
 		protected void LookAtTarget()
 		{
-			if (IsRotationStopped)
+			if (IsRotationStopped || IsStunned || !targetPosition.HasValue)
 				return;
 
-			Vector3 plyPos = GuessedPlayerPosition;
+			Vector3 plyPos = targetPosition.Value;
 			Vector2 direction = new Vector2(plyPos.x - actuallWorldPosition.x, plyPos.z - actuallWorldPosition.z).normalized;
 			float rotation = -Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
 
