@@ -48,6 +48,7 @@ MonoBehaviour:
     BuffsOnUser: []
     CreatedRemenants: []
   WhileEffects: []
+  WhileTickTime: 0.1
   TerrainHitboxSize: 0.25
   EntitieHitboxSize: 1
   CollideMask: -1

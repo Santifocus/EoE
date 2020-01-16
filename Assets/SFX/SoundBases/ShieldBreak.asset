@@ -18,7 +18,7 @@ MonoBehaviour:
   Loop: 0
   priority: 128
   pitch: 1
-  volume: 0.6
+  volume: 0.85
   spatialBlend: 0
   scaleStyle: 0
   soundCategory: 0

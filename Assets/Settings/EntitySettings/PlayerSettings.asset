@@ -137,6 +137,9 @@ MonoBehaviour:
   - Item: {fileID: 11400000, guid: e1bfcada9c557e543945ec3581f0e8b5, type: 2}
     ItemCount: 1
     ForceEquip: 0
+  - Item: {fileID: 11400000, guid: 83ae497e74f39aa439aa810e6c434479, type: 2}
+    ItemCount: 1
+    ForceEquip: 0
   InventorySize: 55
   MaxModelTilt: 8
   SideTurnSpringLerpSpeed: 13

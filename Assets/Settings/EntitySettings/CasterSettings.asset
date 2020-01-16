@@ -57,8 +57,8 @@ MonoBehaviour:
   LookAroundDelayMax: 2
   BehaiviorPatterns:
   - TargetSpell: {fileID: 11400000, guid: 434c6572f91508a49927ea0dc469f2c7, type: 2}
-    MinRange: 5
-    MaxRange: 50
-  - TargetSpell: {fileID: 11400000, guid: 9c73cac9cf3ee5f488b93e883a29e5e1, type: 2}
+    MinRange: 8
+    MaxRange: 25
+  - TargetSpell: {fileID: 11400000, guid: 475837ad527bdec4ba1ec549c2b3099e, type: 2}
     MinRange: 0
-    MaxRange: 5
+    MaxRange: 8
