@@ -55,4 +55,10 @@ MonoBehaviour:
   WanderingDelayMax: 5
   LookAroundDelayMin: 0.5
   LookAroundDelayMax: 2
-  CasterAttack: {fileID: 11400000, guid: 434c6572f91508a49927ea0dc469f2c7, type: 2}
+  BehaiviorPatterns:
+  - TargetSpell: {fileID: 11400000, guid: 434c6572f91508a49927ea0dc469f2c7, type: 2}
+    MinRange: 5
+    MaxRange: 50
+  - TargetSpell: {fileID: 11400000, guid: 9c73cac9cf3ee5f488b93e883a29e5e1, type: 2}
+    MinRange: 0
+    MaxRange: 5
