@@ -62,10 +62,7 @@ MonoBehaviour:
     MaxRange: 25
   - TargetSpell: {fileID: 11400000, guid: 475837ad527bdec4ba1ec549c2b3099e, type: 2}
     MinRange: 0
-<<<<<<< Updated upstream
     MaxRange: 8
-=======
-    MaxRange: 5
   PanicModeThreshold: 0.35
   PanicModeAlliedSearchRange: 50
   PanicModeEffects: []
