@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
-  m_Name: DarkMatterImpact
+  m_Name: DarkFlashCast
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
   FinishConditions:
     OnParentDeath: 1
-    OnTimeout: 1
+    OnTimeout: 0
     TimeStay: 1
     OnConditionMet: 0
     Condition: {fileID: 0}
-  ParticleMainObject: {fileID: 8190193551365947163, guid: f9b231a55a9053040845e98084d08e54,
+  ParticleMainObject: {fileID: 2880213225374481368, guid: 6a8d21abceb6eaa439bcfdf0e42720a9,
     type: 3}
   OffsetToTarget: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}

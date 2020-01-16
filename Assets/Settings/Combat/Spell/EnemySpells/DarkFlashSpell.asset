@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dbc89a2906f120d45877860a48c8c4e2, type: 3}
-  m_Name: DarkmatterSpell
+  m_Name: DarkFlashSpell
   m_EditorClassIdentifier: 
   BasePhysicalDamage: 0
   BaseMagicalDamage: 20
@@ -48,7 +48,7 @@ MonoBehaviour:
     WhileTickTime: 0.1
   StartInfo:
     VisualEffects:
-    - FX: {fileID: 11400000, guid: aa3c556bb910f7448a895bac71850e0d, type: 2}
+    - FX: {fileID: 11400000, guid: d9ca9d5bed63b804285069a126e92950, type: 2}
       HasPositionOffset: 0
       PositionOffset: {x: 0, y: 0, z: 0}
       HasRotationOffset: 0

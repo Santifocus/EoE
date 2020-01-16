@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
-  m_Name: DarkMatterCast
+  m_Name: DarkFlashExplosion
   m_EditorClassIdentifier: 
-  TimeIn: 0
-  TimeOut: 0
+  TimeIn: 0.1
+  TimeOut: 1
   FinishConditions:
-    OnParentDeath: 0
+    OnParentDeath: 1
     OnTimeout: 0
     TimeStay: 1
     OnConditionMet: 0
     Condition: {fileID: 0}
-  ParticleMainObject: {fileID: 2880213225374481368, guid: 6a8d21abceb6eaa439bcfdf0e42720a9,
+  ParticleMainObject: {fileID: 2601754040040216599, guid: aea546d6cdbc4d744886db9bb82f96d6,
     type: 3}
   OffsetToTarget: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}
-  FollowTarget: 0
-  InheritRotationOfTarget: 0
+  FollowTarget: 1
+  InheritRotationOfTarget: 1
   RotationInheritLerpSpeed: 4
