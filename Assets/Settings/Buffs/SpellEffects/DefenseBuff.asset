@@ -10,23 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c475015d82123d4c9d421d67f39e273, type: 3}
-  m_Name: ShortStun
+  m_Name: DefenseBuff
   m_EditorClassIdentifier: 
-  Name: ShortStun
-  Quality: 0
-  Permanent: 0
-  BuffTime: 1
+  Name: DefenseBuff
+  Quality: 2
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 1
-    TimeStay: 1
+    TimeStay: 10
     OnConditionMet: 0
     Condition: {fileID: 0}
-  Icon: {fileID: 21300000, guid: 871f6ba8a83676d47aa256d92168c2ca, type: 3}
-  Effects: []
+  Icon: {fileID: 21300000, guid: bb8829e2f5c16e04f947ff8fd3b5f049, type: 3}
+  Effects:
+  - TargetBaseStat: 5
+    Percent: 0
+    Amount: 3
   CustomEffects:
-    ApplyMoveStun: 1
+    ApplyMoveStun: 0
     Invincible: 0
   DOTs: []
   FXEffects:
-  - {fileID: 11400000, guid: 789236842c193a644ba6f34dcd844463, type: 2}
+  - {fileID: 11400000, guid: 73695c2c02100064bb6507ce4182b319, type: 2}
+  - {fileID: 11400000, guid: 3612b800a0e23c249a791ead6b6e15d2, type: 2}
