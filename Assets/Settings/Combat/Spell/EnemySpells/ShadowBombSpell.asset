@@ -43,6 +43,13 @@ MonoBehaviour:
       RotationOffset: {x: 0, y: 0, z: 0}
       HasCustomScale: 0
       CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 11400000, guid: c284d3b9a47a30149a30f2d5116b674f, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
     StartEffects: []
     WhileEffects: []
     WhileTickTime: 0.1

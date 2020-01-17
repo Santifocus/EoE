@@ -36,7 +36,14 @@ MonoBehaviour:
       RotationOffset: {x: 0, y: 0, z: 0}
       HasCustomScale: 0
       CustomScale: {x: 1, y: 1, z: 1}
-    - FX: {fileID: 11400000, guid: 200cf9ce338398441a0a208d04331942, type: 2}
+    - FX: {fileID: 11400000, guid: 3781ce1c80b97304eb6088094d2cbabb, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 11400000, guid: c284d3b9a47a30149a30f2d5116b674f, type: 2}
       HasPositionOffset: 0
       PositionOffset: {x: 0, y: 0, z: 0}
       HasRotationOffset: 0
@@ -49,6 +56,13 @@ MonoBehaviour:
   StartInfo:
     VisualEffects:
     - FX: {fileID: 11400000, guid: d9ca9d5bed63b804285069a126e92950, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 11400000, guid: e14fba5af26f81c4684e0834377d40bb, type: 2}
       HasPositionOffset: 0
       PositionOffset: {x: 0, y: 0, z: 0}
       HasRotationOffset: 0
