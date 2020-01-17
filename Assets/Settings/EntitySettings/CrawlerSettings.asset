@@ -43,6 +43,7 @@ MonoBehaviour:
   AttackRange: 3
   AttackKnockBack: 3
   CritChance: 0
+  OnCombatTriggerEffect: []
   PlayerTrackSpeed: 4
   SightRange: 15
   FoundPlayerSightRange: 50
@@ -108,7 +109,7 @@ MonoBehaviour:
       RotationOffset: {x: 0, y: 0, z: 0}
       HasCustomScale: 0
       CustomScale: {x: 1, y: 1, z: 1}
-    - FX: {fileID: 11400000, guid: 867882950b2e6be4084d45bd5c865251, type: 2}
+    - FX: {fileID: 11400000, guid: 484c54ebf899ece4b9d8826c68ce4f57, type: 2}
       HasPositionOffset: 0
       PositionOffset: {x: 0, y: 0, z: 0}
       HasRotationOffset: 0
@@ -130,14 +131,7 @@ MonoBehaviour:
     ImpulseVelocityFallbackDirection: 1
     ImpulseDirectionBase: 1
     FXObjects:
-    - FX: {fileID: 11400000, guid: dd68d9db5e90b2f449f0f973e984a2a8, type: 2}
-      HasPositionOffset: 0
-      PositionOffset: {x: 0, y: 0, z: 0}
-      HasRotationOffset: 0
-      RotationOffset: {x: 0, y: 0, z: 0}
-      HasCustomScale: 0
-      CustomScale: {x: 1, y: 1, z: 1}
-    - FX: {fileID: 11400000, guid: 867882950b2e6be4084d45bd5c865251, type: 2}
+    - FX: {fileID: 11400000, guid: ebd015c77faf82845a18fb2dc0284701, type: 2}
       HasPositionOffset: 0
       PositionOffset: {x: 0, y: 0, z: 0}
       HasRotationOffset: 0

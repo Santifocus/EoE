@@ -6858,9 +6858,10 @@ MonoBehaviour:
   playerCurrencyDisplay: {fileID: 164909564}
   worthEvaluationDisplay: {fileID: 483464720}
   itemDescriptionDisplay: {fileID: 1882353981}
-  onBuyFX: []
+  onBuyFX:
+  - {fileID: 11400000, guid: 70d0297a448fce34781f520fa39f581d, type: 2}
   onSellFX:
-  - {fileID: 11400000, guid: 33f4078c8a5dd4a44907009cea54301e, type: 2}
+  - {fileID: 11400000, guid: 3b5fba305e5f76542ad2c42a53b921cd, type: 2}
   modeChooseCanvas: {fileID: 1401992265}
   shopCanvas: {fileID: 1226123581}
   amountCanvas: {fileID: 87912586}

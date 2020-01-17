@@ -16,7 +16,7 @@ MonoBehaviour:
   TimeOut: 2
   FinishConditions:
     OnParentDeath: 0
-    OnTimeout: 0
+    OnTimeout: 1
     TimeStay: 1
     OnConditionMet: 0
     Condition: {fileID: 0}

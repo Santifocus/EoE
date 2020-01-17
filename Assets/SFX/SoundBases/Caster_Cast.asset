@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Caster_Cast
   m_EditorClassIdentifier: 
   soundName: Cast
-  clip: {fileID: 8300000, guid: 2131161452247754b89bd584e0d71f1d, type: 3}
+  clip: {fileID: 8300000, guid: 3e9a6f40c4080b945b00989757ff7575, type: 3}
   audioGroup: {fileID: 24300002, guid: b8b319c0096b4d34196070be7e374c0c, type: 2}
   Loop: 0
   priority: 128

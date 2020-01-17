@@ -73,7 +73,7 @@ MonoBehaviour:
   ShieldSettings: {fileID: 11400000, guid: 4ab47e41b78d9914db30d5fbfdad95d5, type: 2}
   InvincibleAfterHit: 1
   InvincibleAfterHitTime: 1.5
-  InvincibleModelFlashColor: {r: 1, g: 0, b: 0, a: 0.23137255}
+  InvincibleModelFlashColor: {r: 1, g: 0, b: 0, a: 0.15294118}
   InvincibleModelFlashDelay: 0.2
   InvincibleModelFlashTime: 0.1
   StartItems:

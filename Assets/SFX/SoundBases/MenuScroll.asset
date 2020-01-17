@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MenuScroll
   m_EditorClassIdentifier: 
   soundName: MenuScroll
-  clip: {fileID: 8300000, guid: 99df84f9ec4d42e4dacbd2c66f79dbb3, type: 3}
+  clip: {fileID: 8300000, guid: 331236b6e4d5a7c4da172889df601883, type: 3}
   audioGroup: {fileID: 24300002, guid: b8b319c0096b4d34196070be7e374c0c, type: 2}
   Loop: 0
   priority: 128

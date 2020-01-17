@@ -16,8 +16,8 @@ MonoBehaviour:
   TimeOut: 0
   FinishConditions:
     OnParentDeath: 1
-    OnTimeout: 0
-    TimeStay: 1
+    OnTimeout: 1
+    TimeStay: 2
     OnConditionMet: 0
     Condition: {fileID: 0}
   TargetSound: {fileID: 11400000, guid: 5c44c67925b1d6049b760c315dadeaaf, type: 2}
