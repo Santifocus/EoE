@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FreezeEnemySpell
   m_EditorClassIdentifier: 
   BasePhysicalDamage: 0
-  BaseMagicalDamage: 10
+  BaseMagicalDamage: 13
   BaseKnockback: 1
   BaseCritChance: 0
   Cost:
