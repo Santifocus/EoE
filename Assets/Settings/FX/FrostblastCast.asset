@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
-  m_Name: ShadowBombCast
+  m_Name: FrostblastCast
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
   FinishConditions:
     OnParentDeath: 1
     OnTimeout: 0
-    TimeStay: 2.5
+    TimeStay: 6
     OnConditionMet: 0
     Condition: {fileID: 0}
-  ParticleMainObject: {fileID: 242155299197559482, guid: b5cc45401c8cd5645b046797b03383f9,
+  ParticleMainObject: {fileID: 7552645261908487502, guid: 9f24d653f5b837a47b618f67d99e4398,
     type: 3}
   OffsetToTarget: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}
   FollowTarget: 1
-  InheritRotationOfTarget: 0
+  InheritRotationOfTarget: 1
   RotationInheritLerpSpeed: 4
