@@ -35501,7 +35501,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blackPlane: {fileID: 2723238918304582364}
-  finalBlackAlpha: 0.975
+  finalBlackAlpha: 1
   playerOnlyDisplay: {fileID: 1967107001}
   playerOnlyCamera: {fileID: 1415639595}
   fadeInTime: 2.5
