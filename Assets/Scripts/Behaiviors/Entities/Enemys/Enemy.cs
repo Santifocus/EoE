@@ -50,6 +50,7 @@ namespace EoE.Entities
 		protected bool behaviorSimpleStop;
 		protected bool isIdle => !(chasingPlayer || remainingInvestigationTime > 0);
 		protected Vector3? overrideTargetPosition;
+		protected Vector3? pointOfInterest;
 		#endregion
 		#region Basic Monobehaivior
 		protected override void Start()
@@ -203,7 +204,8 @@ namespace EoE.Entities
 		}
 		private bool TryWalkToTargetPosition()
 		{
-			Vector3? pos = overrideTargetPosition ?? targetPosition;
+			//Prefers override if both are not null, if override is null we goto to the standard target, if both are null we dont do anything
+			Vector3? pos = overrideTargetPosition ?? targetPosition; 
 			if (pos.HasValue)
 			{
 				Vector3? destination = GetClosestPointOnNavmesh(pos.Value);
@@ -380,14 +382,17 @@ namespace EoE.Entities
 		}
 		protected void LookAtTarget()
 		{
-			if (IsRotationStopped || IsStunned || !targetPosition.HasValue)
+			if (IsRotationStopped || IsStunned)
 				return;
 
-			Vector3 plyPos = targetPosition.Value;
-			Vector2 direction = new Vector2(plyPos.x - actuallWorldPosition.x, plyPos.z - actuallWorldPosition.z).normalized;
+			Vector3? aimPos = pointOfInterest ?? (overrideTargetPosition ?? targetPosition);
+			if(!aimPos.HasValue)
+				return;
+
+			Vector2 direction = new Vector2(aimPos.Value.x - actuallWorldPosition.x, aimPos.Value.z - actuallWorldPosition.z).normalized;
 			float rotation = -Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
 
-			transform.localEulerAngles = new Vector3(0, Mathf.LerpAngle(transform.localEulerAngles.y, rotation, Time.deltaTime * enemySettings.TurnSpeed / 90), 0);
+			transform.localEulerAngles = new Vector3(0, Mathf.MoveTowardsAngle(transform.localEulerAngles.y, rotation, Time.deltaTime * enemySettings.TurnSpeed), 0);
 		}
 		private void OnDrawGizmos()
 		{

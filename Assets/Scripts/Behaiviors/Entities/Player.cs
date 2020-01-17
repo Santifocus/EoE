@@ -101,8 +101,8 @@ namespace EoE.Entities
 		#region Leveling
 		public Buff LevelingPointsBuff { get; private set; }
 		public int RequiredExperienceForLevel { get; private set; }
-		public int AvailableSkillPoints;
-		public int AvailableAtributePoints;
+		public int AvailableSkillPoints { get; set; }
+		public int AvailableAtributePoints { get; set; }
 		#endregion
 
 		#endregion

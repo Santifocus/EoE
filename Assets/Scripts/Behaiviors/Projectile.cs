@@ -102,6 +102,7 @@ namespace EoE.Combatery
 			if(speed > 0)
 				transform.forward = body.velocity / speed;
 			body.velocity = transform.forward * info.FlightSpeed;
+			body.AddForce(Time.fixedDeltaTime * Physics.gravity * info.GravityEffect, ForceMode.Acceleration);
 		}
 		private void OnTriggerEnter(Collider other)
 		{

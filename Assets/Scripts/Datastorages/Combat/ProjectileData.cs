@@ -12,6 +12,7 @@ namespace EoE.Combatery
 		//Flight
 		public float Duration = 15;
 		public float FlightSpeed = 25;
+		public float GravityEffect = 0;
 		public Vector3 CreateOffsetToCaster = Vector3.forward;
 		public ActivationEffect[] StartEffects = new ActivationEffect[0];
 		public ActivationEffect[] WhileEffects = new ActivationEffect[0];

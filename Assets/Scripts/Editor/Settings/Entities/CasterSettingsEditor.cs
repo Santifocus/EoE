@@ -20,6 +20,16 @@ namespace EoE.Information
 																DrawCasterBehaiviorPattern,
 																new GUIContent(". Pattern"),
 																1);
+			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
+			EnumField<CastCooldownBehaivior>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CooldownBehaivior))), ref settings.CooldownBehaivior, 1);
+			if(settings.CooldownBehaivior == CastCooldownBehaivior.StayAtDistance)
+			{
+				FloatField(new GUIContent("Stay Distance"), ref settings.TargetDistance, 2);
+			}
+			else if(settings.CooldownBehaivior == CastCooldownBehaivior.FleeToAlly)
+			{
+				FloatField(new GUIContent("Ally Search Distance"), ref settings.TargetDistance, 2);
+			}
 
 			Header("Panic Mode", 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.PanicModeThreshold))), ref settings.PanicModeThreshold, 1);

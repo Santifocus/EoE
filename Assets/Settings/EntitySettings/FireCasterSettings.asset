@@ -35,14 +35,15 @@ MonoBehaviour:
   ManaRegenInCombatMultiplier: 3
   WalkSpeed: 15
   RunSpeedMultiplicator: 1.25
-  TurnSpeed: 350
+  TurnSpeed: 450
   InAirTurnSpeedMultiplier: 0.25
-  MoveAcceleration: 10
+  MoveAcceleration: 18
   NoMoveDeceleration: 15
   InAirAccelerationMultiplier: 0.3
   AttackRange: 22
   AttackKnockBack: 3
   CritChance: 0
+  OnCombatTriggerEffect: []
   PlayerTrackSpeed: 4
   SightRange: 25
   FoundPlayerSightRange: 50
@@ -59,3 +60,9 @@ MonoBehaviour:
   - TargetSpell: {fileID: 11400000, guid: 937ba567e5b92f5408870a8f6079febc, type: 2}
     MinRange: 0
     MaxRange: 30
+  CooldownBehaivior: 4
+  TargetDistance: 30
+  PanicModeThreshold: 0.2
+  PanicModeAlliedSearchRange: 50
+  PanicModeEffects: []
+  PanicModeFinishedEffects: []

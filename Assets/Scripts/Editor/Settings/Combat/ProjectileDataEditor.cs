@@ -38,8 +38,10 @@ namespace EoE.Combatery
 		{
 			ProjectileData settings = target as ProjectileData;
 
-			FloatField(new GUIContent("Max Lifetime"), ref settings.Duration, 1);
-			FloatField(new GUIContent("Flight Speed"), ref settings.FlightSpeed, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Duration))), ref settings.Duration, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.FlightSpeed))), ref settings.FlightSpeed, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.GravityEffect))), ref settings.GravityEffect, 1);
+
 			Vector3Field(new GUIContent("CreateOffsetToCaster"), ref settings.CreateOffsetToCaster, 1);
 
 			LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));

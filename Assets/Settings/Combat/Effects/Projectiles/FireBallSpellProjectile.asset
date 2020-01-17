@@ -17,6 +17,7 @@ MonoBehaviour:
   Direction: 1
   Duration: 10
   FlightSpeed: 40
+  GravityEffect: 0
   CreateOffsetToCaster: {x: 1, y: 0, z: 0}
   StartEffects:
   - ChanceToActivate: 1

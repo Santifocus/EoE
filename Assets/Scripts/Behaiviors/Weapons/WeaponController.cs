@@ -18,9 +18,9 @@ namespace EoE.Combatery
 		//Static info
 		private static readonly Dictionary<AttackAnimation, (float, float)> animationDelayLookup = new Dictionary<AttackAnimation, (float, float)>()
 		{
-			{ AttackAnimation.Attack1, (0.333f, 0.2f) },
-			{ AttackAnimation.Attack2, (0.5f, 0.22f) },
-			{ AttackAnimation.Attack3, (1f, 0.6f) },
+			{ AttackAnimation.Attack1, (0.833f, 0.566f) },
+			{ AttackAnimation.Attack2, (0.75f, 0.335f) },
+			{ AttackAnimation.Attack3, (1.067f, 0.75f) },
 		};
 		public static WeaponController Instance;
 		public bool InAttackSequence { get; private set; }

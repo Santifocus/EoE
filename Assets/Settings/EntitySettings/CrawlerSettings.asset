@@ -37,12 +37,13 @@ MonoBehaviour:
   RunSpeedMultiplicator: 1.5
   TurnSpeed: 750
   InAirTurnSpeedMultiplier: 0.25
-  MoveAcceleration: 12
+  MoveAcceleration: 20
   NoMoveDeceleration: 15
   InAirAccelerationMultiplier: 0.3
   AttackRange: 3
   AttackKnockBack: 3
   CritChance: 0
+  OnCombatTriggerEffect: []
   PlayerTrackSpeed: 4
   SightRange: 15
   FoundPlayerSightRange: 50

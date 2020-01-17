@@ -6,6 +6,8 @@ namespace EoE.Entities
 {
 	public class Caster : Enemy
 	{
+		private const float LAZY_ARRIVAL_DISTANCE = 8;
+		private const float LAZY_NEXT_TO_ALLY_MUL = 5;
 		public override EnemySettings enemySettings => settings;
 		public CasterSettings settings;
 
@@ -31,10 +33,62 @@ namespace EoE.Entities
 				}
 				else
 				{
-					FindNearestAlly();
+					FindNearestAlly(settings.PanicModeAlliedSearchRange);
 					if (!foundAlly || NextToAlly())
 						DeactivatePanicMode();
 				}
+			}
+			else if(CastingCooldown > 0)
+			{
+				switch (settings.CooldownBehaivior)
+				{
+					case CastCooldownBehaivior.WaitHere:
+						{
+							overrideTargetPosition = actuallWorldPosition;
+							PointOfInterestIsTarget(true);
+						}
+						break;
+
+					case CastCooldownBehaivior.StayAtDistance:
+						{
+							if (!targetPosition.HasValue)
+								break;
+
+							Vector3 intendedPosition = targetPosition.Value + (actuallWorldPosition - targetPosition.Value).normalized * settings.TargetDistance;
+							overrideTargetPosition = intendedPosition;
+							bool atIntendedPos = (intendedPosition - actuallWorldPosition).sqrMagnitude < (pointOfInterest.HasValue ? LAZY_ARRIVAL_DISTANCE : 0.5f);
+							PointOfInterestIsTarget(atIntendedPos);
+						}
+						break;
+
+					case CastCooldownBehaivior.GotoTarget:
+						{
+							if(overrideTargetPosition.HasValue)
+								overrideTargetPosition = null;
+						}
+						break;
+
+					case CastCooldownBehaivior.FleeToAlly:
+						{
+							if (foundAlly)
+							{
+								overrideTargetPosition = foundAlly.actuallWorldPosition;
+								PointOfInterestIsTarget(NextToAlly(pointOfInterest.HasValue));
+							}
+							else
+							{
+								FindNearestAlly(settings.TargetDistance);
+								if (foundAlly)
+									goto case CastCooldownBehaivior.WaitHere;
+							}
+						}
+						break;
+				}
+			}
+			else
+			{
+				PointOfInterestIsTarget(false);
+				overrideTargetPosition = null;
 			}
 
 			if (!completedPanicMode)
@@ -49,12 +103,31 @@ namespace EoE.Entities
 				}
 			}
 		}
-		private bool NextToAlly()
+		private void PointOfInterestIsTarget(bool state)
+		{
+			if (state)
+			{
+				if (!pointOfInterest.HasValue)
+				{
+					MovementStops++;
+				}
+				pointOfInterest = targetPosition;
+			}
+			else
+			{
+				if (pointOfInterest.HasValue)
+				{
+					pointOfInterest = null;
+					MovementStops--;
+				}
+			}
+		}
+		private bool NextToAlly(bool lazy = false)
 		{
 			float dif = (actuallWorldPosition - foundAlly.actuallWorldPosition).sqrMagnitude;
 			float maxDif = agent.radius + foundAlly.agent.radius;
 
-			bool nextToAlly = dif < ((maxDif * maxDif) * 3f);
+			bool nextToAlly = dif < ((maxDif * maxDif) * 10f * (lazy ? LAZY_NEXT_TO_ALLY_MUL : 1));
 			if (nextToAlly)
 			{
 				for(int i = 0; i < AllEntities.Count; i++)
@@ -71,11 +144,11 @@ namespace EoE.Entities
 		{
 			panicModeActive = true;
 			panicModeBoundFX = ActivateActivationEffects(settings.PanicModeEffects);
-			FindNearestAlly();
+			FindNearestAlly(settings.PanicModeAlliedSearchRange);
 		}
-		private void FindNearestAlly()
+		private void FindNearestAlly(float maxSearchRange)
 		{
-			float shortestDistance = settings.PanicModeAlliedSearchRange * settings.PanicModeAlliedSearchRange * 1.01f;
+			float shortestDistance = (maxSearchRange * maxSearchRange) * 1.01f;
 			for (int i = 0; i < AllEntities.Count; i++)
 			{
 				if (!(AllEntities[i] is Enemy) || AllEntities[i] == this)
@@ -100,7 +173,7 @@ namespace EoE.Entities
 		}
 		private void DecideOnbehaiviorPattern()
 		{
-			if (IsCasting)
+			if (IsCasting || CastingCooldown > 0)
 				return;
 
 			float distanceToPlayer = (Player.Instance.actuallWorldPosition - actuallWorldPosition).sqrMagnitude;

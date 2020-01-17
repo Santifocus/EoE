@@ -2,9 +2,12 @@
 
 namespace EoE.Information
 {
+	public enum CastCooldownBehaivior { WaitHere = 1, StayAtDistance = 2, GotoTarget = 3, FleeToAlly = 4 }
 	public class CasterSettings : EnemySettings
 	{
 		public CasterBehaiviorPattern[] BehaiviorPatterns = new CasterBehaiviorPattern[0];
+		public CastCooldownBehaivior CooldownBehaivior = CastCooldownBehaivior.WaitHere;
+		public float TargetDistance;
 
 		public float PanicModeThreshold = 0.2f;
 		public float PanicModeAlliedSearchRange = 50;
