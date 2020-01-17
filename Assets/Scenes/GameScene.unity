@@ -27105,6 +27105,7 @@ GameObject:
   - component: {fileID: 1712925552}
   - component: {fileID: 1712925554}
   - component: {fileID: 1712925553}
+  - component: {fileID: 1712925555}
   m_Layer: 5
   m_Name: StatBG
   m_TagString: Untagged
@@ -27172,6 +27173,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1712925551}
   m_CullTransparentMesh: 0
+--- !u!114 &1712925555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1712925551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 017fb67bac2cf3f46bdcacabb7c3d156, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelUpDisplayTime: 2
+  tookDamageDisplayTime: 1
+  display: {fileID: 1712925553}
+  normalState: {fileID: 21300000, guid: e3f4c9c7e2f7ff0439cb798338b18f2e, type: 3}
+  lowHealthState: {fileID: 21300000, guid: b0804e7e33309ad4c9c2db713bef5fb1, type: 3}
+  gotHitState: {fileID: 21300000, guid: 799750162dc2c5544a7bac42c74b5f69, type: 3}
+  levelUpState: {fileID: 21300000, guid: 070080759fd8a224d824f824f5c5afa3, type: 3}
 --- !u!4 &1718769340 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1041142588713003892, guid: aa9fa6c49e2060e40b47a00055fba138,

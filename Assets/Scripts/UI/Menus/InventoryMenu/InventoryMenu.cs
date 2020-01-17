@@ -452,7 +452,7 @@ namespace EoE.UI
 			gameObject.SetActive(false);
 			dropMenu.Hide();
 		}
-		private void OnDestroy()
+		private void OnDisable()
 		{
 			Player.Instance.Inventory.InventoryChanged -= UpdateAllSlots;
 			EventManager.PlayerCurrencyChangedEvent -= UpdateCurrencyDisplay;

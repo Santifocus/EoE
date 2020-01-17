@@ -20,7 +20,7 @@ namespace EoE
 			EventManager.EntitieDiedEvent += EnemyKilled;
 			EventManager.PlayerDiedEvent += PlayerDied;
 		}
-		private void OnDestroy()
+		private void OnDisable()
 		{
 			Unsubscribe();
 		}

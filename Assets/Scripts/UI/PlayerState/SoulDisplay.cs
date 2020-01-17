@@ -31,10 +31,6 @@ namespace EoE.UI
 			shownExperianceAmount = Player.Instance.TotalExperience;
 			textAmount.text = Mathf.CeilToInt(shownExperianceAmount) + " / " + experienceToLevelup;
 		}
-		private void OnDestroy()
-		{
-			EventManager.PlayerExperienceChangedEvent -= PlayerSoulCountChanged;
-		}
 		private void PlayerSoulCountChanged()
 		{
 			delayTillHide = showTime;
@@ -90,6 +86,10 @@ namespace EoE.UI
 			}
 
 			soulIcon.color = Color.Lerp(soulIconInActiveColor, soulIconActiveColor, iconTransitionPoint);
+		}
+		private void OnDisable()
+		{
+			EventManager.PlayerExperienceChangedEvent -= PlayerSoulCountChanged;
 		}
 	}
 }

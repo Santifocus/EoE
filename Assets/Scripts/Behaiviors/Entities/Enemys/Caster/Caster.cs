@@ -78,7 +78,7 @@ namespace EoE.Entities
 							else
 							{
 								FindNearestAlly(settings.TargetDistance);
-								if (foundAlly)
+								if (!foundAlly)
 									goto case CastCooldownBehaivior.WaitHere;
 							}
 						}
