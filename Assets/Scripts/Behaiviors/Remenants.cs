@@ -56,6 +56,7 @@ namespace EoE.Combatery
 
 			if (remainingLifeTime < 0)
 			{
+				ActivateActivationEffects(info.OnEndEffects, false);
 				Destroy(gameObject);
 			}
 		}
@@ -79,7 +80,6 @@ namespace EoE.Combatery
 		}
 		private void OnDestroy()
 		{
-			ActivateActivationEffects(info.OnEndEffects, false);
 			StopBoundFX();
 		}
 		private void OnDrawGizmos()

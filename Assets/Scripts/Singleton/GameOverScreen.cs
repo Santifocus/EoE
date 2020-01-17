@@ -90,7 +90,7 @@ namespace EoE.UI
 			EffectUtils.ResetScreenEffects();
 			SceneManager.LoadScene(ConstantCollector.MAIN_MENU_SCENE_INDEX);
 		}
-		private void OnDestroy()
+		private void OnDisable()
 		{
 			EventManager.PlayerDiedEvent -= Show;
 		}

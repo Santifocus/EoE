@@ -58,7 +58,7 @@ namespace EoE.UI
 			GameController.ActivePauses = 0;
 			SceneManager.LoadScene(ConstantCollector.MAIN_MENU_SCENE_INDEX);
 		}
-		private void OnDestroy()
+		private void OnDisable()
 		{
 			SettingsMenuController.ChangeStateEvent -= SettingsMenuChangedState;
 		}
