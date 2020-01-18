@@ -409,7 +409,7 @@ namespace EoE.Entities
 				//Player started walking or stopped running and kept walking
 				if (newWalkingEffectsOn)
 				{
-					BindFXObjects(PlayerSettings.EffectsWhileWalk, ref PlayerRunningBoundEffects);
+					BindFXObjects(PlayerSettings.EffectsWhileWalk, ref PlayerWalkingBoundEffects);
 				}
 				else //Player stopped walking or started running
 				{
