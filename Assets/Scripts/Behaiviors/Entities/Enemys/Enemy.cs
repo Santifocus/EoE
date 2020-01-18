@@ -197,6 +197,7 @@ namespace EoE.Entities
 		}
 		private void RefreshDataOnPlayer()
 		{
+			StartCombat();
 			chasingPlayer = true;
 			lastConfirmedPlayerPos = Player.Instance.actuallWorldPosition;
 			lastPlayerSpeed = Player.Instance.CurVelocity;
