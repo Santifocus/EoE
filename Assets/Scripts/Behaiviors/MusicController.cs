@@ -70,7 +70,18 @@ namespace EoE.Sounds
 				}
 			}
 
-			//Now update the sound player
+			//Now we apply the highest volume of all instances
+			//To do that we first set all volumes to 0
+			for(int i = 0; i < musicPlayer.Length; i++)
+			{
+				musicPlayer[i].FadePoint = 0;
+			}
+			//Then we go througth all instances and apply their volume if it is higher then the current volume
+			for(int i = 0; i < ActiveMusicInstances.Count; i++)
+			{
+				if(ActiveMusicInstances[i].Volume > musicPlayer[ActiveMusicInstances[i].MusicIndex].FadePoint)
+					musicPlayer[ActiveMusicInstances[i].MusicIndex].FadePoint = ActiveMusicInstances[i].Volume;
+			}
 		}
 	}
 

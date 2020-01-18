@@ -102,7 +102,7 @@ namespace EoE.Entities
 					chasingPlayer = true;
 					if (CheckIfCanSeeEntitie(transform, Player.Instance, true))
 					{
-						RefreshDataOnPlayer();
+						RefreshDataOnPlayer(false);
 
 						if (!prevInRange && PlayerInAttackRange)
 						{
@@ -152,7 +152,7 @@ namespace EoE.Entities
 
 			if (CanSeePlayer())
 			{
-				RefreshDataOnPlayer();
+				RefreshDataOnPlayer(false);
 
 				//Find a path
 				if (TryWalkToTargetPosition() && (agent.remainingDistance < agent.stoppingDistance))
@@ -195,9 +195,10 @@ namespace EoE.Entities
 			}
 
 		}
-		private void RefreshDataOnPlayer()
+		private void RefreshDataOnPlayer(bool fromCombatTrigger)
 		{
-			StartCombat();
+			if(!fromCombatTrigger)
+				StartCombat();
 			chasingPlayer = true;
 			lastConfirmedPlayerPos = Player.Instance.actuallWorldPosition;
 			lastPlayerSpeed = Player.Instance.CurVelocity;
@@ -416,9 +417,11 @@ namespace EoE.Entities
 		}
 		public override void StartCombat()
 		{
-			if(!curStates.Fighting)
+			if (!curStates.Fighting)
+			{
 				ActivateActivationEffects(enemySettings.OnCombatTriggerEffect);
-			RefreshDataOnPlayer();
+			}
+			RefreshDataOnPlayer(true);
 			base.StartCombat();
 		}
 		#endregion
