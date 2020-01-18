@@ -18,6 +18,7 @@ namespace EoE.Information
 			CrawlerSettings settings = target as CrawlerSettings;
 			base.CombatSettings();
 
+			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ForceTranslationMultiplier))), ref settings.ForceTranslationMultiplier, 1);
 
 			Header("Bash", 1);

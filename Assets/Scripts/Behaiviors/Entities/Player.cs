@@ -214,6 +214,8 @@ namespace EoE.Entities
 
 			for (int i = 0; i < PlayerSettings.StartItems.Length; i++)
 			{
+				if (!PlayerSettings.StartItems[i].Item)
+					continue;
 				//Add it to the inventory
 				List<int> targetSlots = Inventory.AddItem(new InventoryItem(PlayerSettings.StartItems[i].Item, PlayerSettings.StartItems[i].ItemCount));
 

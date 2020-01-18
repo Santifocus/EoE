@@ -415,7 +415,8 @@ namespace EoE.Entities
 		}
 		public override void StartCombat()
 		{
-			ActivateActivationEffects(enemySettings.OnCombatTriggerEffect);
+			if(!curStates.Fighting)
+				ActivateActivationEffects(enemySettings.OnCombatTriggerEffect);
 			RefreshDataOnPlayer();
 			base.StartCombat();
 		}
