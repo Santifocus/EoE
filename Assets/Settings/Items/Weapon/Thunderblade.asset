@@ -32,4 +32,4 @@ MonoBehaviour:
   MaxStack: 1
   ItemWorth: 450
   ItemFlags: 2
-  TargetWeapon: {fileID: 11400000, guid: 06b6b51412cb2d34c813125274104efd, type: 2}
+  TargetWeapon: {fileID: 11400000, guid: f43228e1209884147950953efec46373, type: 2}

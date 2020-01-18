@@ -62,7 +62,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       AnimationSpeedCurveTimeframe: 0.8
-      AnimationSpeedCurveMultiplier: 1.3
+      AnimationSpeedCurveMultiplier: 3
       NeedsCharging: 0
       ChargeSettings:
         EffectMask: 3
@@ -155,7 +155,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       AnimationSpeedCurveTimeframe: 0.8
-      AnimationSpeedCurveMultiplier: 1.2
+      AnimationSpeedCurveMultiplier: 1.5
       NeedsCharging: 0
       ChargeSettings:
         EffectMask: 3
@@ -450,37 +450,28 @@ MonoBehaviour:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
-          time: 0
-          value: 0.7
-          inSlope: -0.0033264423
-          outSlope: -0.0033264423
-          tangentMode: 0
+          time: 0.0029907227
+          value: 0.65
+          inSlope: 0.24196905
+          outSlope: 0.24196905
+          tangentMode: 34
           weightedMode: 0
           inWeight: 0
-          outWeight: 0.28128314
-        - serializedVersion: 3
-          time: 0.22582532
-          value: 1.5417807
-          inSlope: 0.93828005
-          outSlope: 0.93828005
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.16418724
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 1
-          value: 0.8
-          inSlope: -2.2526708
-          outSlope: -2.2526708
-          tangentMode: 0
+          time: 0.61364746
+          value: 0.79776
+          inSlope: 0.24196905
+          outSlope: 0.24196905
+          tangentMode: 34
           weightedMode: 0
-          inWeight: 0.023722649
+          inWeight: 0.33333334
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
       AnimationSpeedCurveTimeframe: 0.75
-      AnimationSpeedCurveMultiplier: 1.8
+      AnimationSpeedCurveMultiplier: 3
       NeedsCharging: 0
       ChargeSettings:
         EffectMask: 3
@@ -499,7 +490,7 @@ MonoBehaviour:
       WaitSettings:
       - WaitCondition: {fileID: 11400000, guid: d9a42b04b4b55a343aac23eba2be7f67,
           type: 2}
-        MinAnimtionPoint: 0.85
+        MinAnimtionPoint: 0.8
         MaxAnimtionPoint: 0.9
       DamageMultiplier: 2.25
       HealthCostMultiplier: 1
@@ -560,19 +551,19 @@ MonoBehaviour:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
-          time: 0.0033043437
-          value: 1.5786912
-          inSlope: -0.038626704
-          outSlope: -0.038626704
+          time: 0
+          value: 0.65
+          inSlope: 0.1902902
+          outSlope: 0.1902902
           tangentMode: 34
           weightedMode: 0
           inWeight: 0
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 1.0031738
-          value: 1.5400696
-          inSlope: -0.038626704
-          outSlope: -0.038626704
+          time: 0.77998716
+          value: 0.7984239
+          inSlope: 0.1902902
+          outSlope: 0.1902902
           tangentMode: 34
           weightedMode: 0
           inWeight: 0.33333334
@@ -581,7 +572,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       AnimationSpeedCurveTimeframe: 2
-      AnimationSpeedCurveMultiplier: 1.5
+      AnimationSpeedCurveMultiplier: 3
       NeedsCharging: 0
       ChargeSettings:
         EffectMask: 3
@@ -600,7 +591,7 @@ MonoBehaviour:
       WaitSettings:
       - WaitCondition: {fileID: 11400000, guid: d9a42b04b4b55a343aac23eba2be7f67,
           type: 2}
-        MinAnimtionPoint: 0.85
+        MinAnimtionPoint: 0.8
         MaxAnimtionPoint: 0.9
       DamageMultiplier: 3
       HealthCostMultiplier: 1
