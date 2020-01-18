@@ -15,10 +15,10 @@ MonoBehaviour:
   soundName: Game Over
   clip: {fileID: 8300000, guid: 2c6739c5bc589de479aa0e33312597be, type: 3}
   audioGroup: {fileID: 24300002, guid: b8b319c0096b4d34196070be7e374c0c, type: 2}
-  Loop: 1
+  Loop: 0
   priority: 0
   pitch: 1
-  volume: 0.5
+  volume: 1
   spatialBlend: 0
   scaleStyle: 1
   soundCategory: 1

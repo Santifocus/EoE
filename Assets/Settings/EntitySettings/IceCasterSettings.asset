@@ -18,7 +18,7 @@ MonoBehaviour:
   EntitieElement: 8
   PossibleDropsTable: {fileID: 11400000, guid: d3bb8e598d9ed604b8fed58e3635e765, type: 2}
   LevelSettings: {fileID: 11400000, guid: 9ac078bc18c5ea34e923aa511403d3ee, type: 2}
-  ExperienceWorth: 10
+  ExperienceWorth: 3
   BasePhysicalDamage: 0
   BaseMagicalDamage: 20
   BaseDefense: 3
