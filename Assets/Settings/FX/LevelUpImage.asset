@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: LevelUpImage
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0.2
+  TimeOut: 0
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 1
-    TimeStay: 2.5
+    TimeStay: 3.5
     OnConditionMet: 0
     Condition: {fileID: 0}
   UIPrefabObject: {fileID: 1001908304436691909, guid: 4f252de5624734f4884261a83e3be263,
