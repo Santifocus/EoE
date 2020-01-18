@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
-  m_Name: Panicmode
+  m_Name: CrawlerEntitiehit
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0.2
+  TimeOut: 0
   FinishConditions:
-    OnParentDeath: 1
-    OnTimeout: 0
-    TimeStay: 1
+    OnParentDeath: 0
+    OnTimeout: 1
+    TimeStay: 2
     OnConditionMet: 0
     Condition: {fileID: 0}
-  ParticleMainObject: {fileID: 372349343675522344, guid: 23d9c86a5d12cc54ba81ee065d5dd6f5,
+  ParticleMainObject: {fileID: 5050578066818043946, guid: 7f34d26781d490e4b9bb3c14b045be3d,
     type: 3}
-  OffsetToTarget: {x: 0, y: 0.8, z: 0}
+  OffsetToTarget: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}
-  FollowTarget: 1
+  FollowTarget: 0
   InheritRotationOfTarget: 1
   RotationInheritLerpSpeed: 4
