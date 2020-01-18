@@ -125,14 +125,15 @@ namespace EoE.Entities
 		private bool NextToAlly(bool lazy = false)
 		{
 			float dif = (actuallWorldPosition - foundAlly.actuallWorldPosition).sqrMagnitude;
-			float maxDif = agent.radius + foundAlly.agent.radius;
+			float agentSizes = agent.radius + foundAlly.agent.radius;
+			float allowedDif = (agentSizes * agentSizes) * 10f * (lazy ? LAZY_NEXT_TO_ALLY_MUL : 1);
 
-			bool nextToAlly = dif < ((maxDif * maxDif) * 10f * (lazy ? LAZY_NEXT_TO_ALLY_MUL : 1));
+			bool nextToAlly = dif < allowedDif;
 			if (nextToAlly)
 			{
 				for(int i = 0; i < AllEntities.Count; i++)
 				{
-					if(AllEntities[i] is Enemy && (AllEntities[i].actuallWorldPosition - actuallWorldPosition).sqrMagnitude < (10 * 10))
+					if(AllEntities[i] is Enemy && (AllEntities[i].actuallWorldPosition - actuallWorldPosition).sqrMagnitude < allowedDif)
 					{
 						AllEntities[i].StartCombat();
 					}

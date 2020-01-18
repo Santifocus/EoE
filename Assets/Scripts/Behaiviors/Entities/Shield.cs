@@ -8,6 +8,7 @@ namespace EoE.Combatery
 {
     public class Shield : MonoBehaviour
     {
+		private enum ShieldState { Destroyed = 0, OneQuarter = 1, TwoQuarter = 2, ThreeQuarter = 3, FourQuarter = 4 }
 		[SerializeField] private SphereCollider coll = default;
 
         public Entity creator { get; private set; }
@@ -16,6 +17,7 @@ namespace EoE.Combatery
 
 		private bool shieldActive;
 		private float curShieldResistance;
+		private ShieldState curState;
 
 		public static Shield CreateShield(ShieldData info, Entity creator, Vector3 spawnPosition = default)
 		{
@@ -26,6 +28,7 @@ namespace EoE.Combatery
 			newShield.creator = creator;
 			newShield.coll.radius = info.ShieldSize;
 			newShield.curShieldResistance = info.ShieldResistance;
+			newShield.curState = ShieldState.FourQuarter;
 			newShield.boundEffects = new List<FXInstance>();
 
 			newShield.AnchorShield();
