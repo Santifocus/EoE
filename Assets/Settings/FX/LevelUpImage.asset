@@ -17,7 +17,7 @@ MonoBehaviour:
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 1
-    TimeStay: 5
+    TimeStay: 2.5
     OnConditionMet: 0
     Condition: {fileID: 0}
   UIPrefabObject: {fileID: 1001908304436691909, guid: 4f252de5624734f4884261a83e3be263,
