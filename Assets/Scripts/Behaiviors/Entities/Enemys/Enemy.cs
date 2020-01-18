@@ -53,11 +53,6 @@ namespace EoE.Entities
 		protected Vector3? pointOfInterest;
 		#endregion
 		#region Basic Monobehaivior
-		protected override void Start()
-		{
-			base.Start();
-			EventManager.PlayerDiedEvent += PlayerDied;
-		}
 		protected override void FullEntitieReset()
 		{
 			base.FullEntitieReset();
@@ -352,12 +347,6 @@ namespace EoE.Entities
 		{
 			intendedRotation = Random.value * 360;
 			curRotation = transform.localEulerAngles.y;
-		}
-		private void PlayerDied(Entity killer)
-		{
-			curStates.Fighting = false;
-			chasingPlayer = false;
-			EventManager.PlayerDiedEvent -= PlayerDied;
 		}
 		private void PlayerJustEnteredAttackRangeBase()
 		{

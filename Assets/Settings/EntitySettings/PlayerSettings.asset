@@ -96,6 +96,7 @@ MonoBehaviour:
   HeadLookAngleClamps: {x: 60, y: 40, z: 60, w: 30}
   LookLerpSpeed: 15
   LookLerpSpringStiffness: 0.05
+  EffectsOnCombatStart: []
   EffectsOnCauseDamage:
   - {fileID: 11400000, guid: 597bda602a9441346a2e721049c28c87, type: 2}
   EffectsOnCauseCrit:

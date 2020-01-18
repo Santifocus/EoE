@@ -37,7 +37,7 @@ MonoBehaviour:
   RunSpeedMultiplicator: 1.5
   TurnSpeed: 750
   InAirTurnSpeedMultiplier: 0.25
-  MoveAcceleration: 20
+  MoveAcceleration: 40
   NoMoveDeceleration: 15
   InAirAccelerationMultiplier: 0.3
   AttackRange: 3

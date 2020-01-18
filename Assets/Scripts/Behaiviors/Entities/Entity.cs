@@ -405,7 +405,8 @@ namespace EoE.Entities
 		}
 		public virtual void StartCombat()
 		{
-			curStates.Fighting = true;
+			if(!curStates.Fighting)
+				curStates.Fighting = true;
 			combatEndCooldown = GameController.CurrentGameSettings.CombatCooldown;
 		}
 		protected virtual void LevelUpEntitie()
