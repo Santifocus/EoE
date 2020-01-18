@@ -93,6 +93,17 @@ namespace EoE.Sounds
 			//Then we go througth all instances and apply their volume if it is higher then the current volume
 			for(int i = 0; i < ActiveMusicInstances.Count; i++)
 			{
+				if (musicPlayer[ActiveMusicInstances[i].MusicIndex].FullyStopped)
+				{
+					if (ActiveMusicInstances[i].AllowedToRestart)
+					{
+						ActiveMusicInstances[i].TotalRestarts++;
+					}
+					else
+					{
+						continue;
+					}
+				}
 				if(ActiveMusicInstances[i].Volume > musicPlayer[ActiveMusicInstances[i].MusicIndex].FadePoint)
 				{
 					musicPlayer[ActiveMusicInstances[i].MusicIndex].FadePoint = ActiveMusicInstances[i].Volume;
@@ -132,12 +143,17 @@ namespace EoE.Sounds
 		public int Priority;
 		public int MusicIndex;
 
-		public MusicInstance(float volume, int priority, int musicIndex)
+		public bool AllowedToRestart => (MaxRestarts == -1) || (TotalRestarts < MaxRestarts);
+		private int MaxRestarts;
+		public int TotalRestarts;
+
+		public MusicInstance(float volume, int priority, int musicIndex, int maxRestarts = -1)
 		{
 			WantsToPlay = false;
 			Volume = volume;
 			Priority = priority;
 			MusicIndex = musicIndex;
+			MaxRestarts = maxRestarts;
 		}
 	}
 }

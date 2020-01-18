@@ -42,7 +42,7 @@ namespace EoE
 		{
 			Application.Quit();
 		}
-		private void OnDisable()
+		private void OnDestroy()
 		{
 			SettingsMenuController.ChangeStateEvent -= SettingsMenuChangedState;
 		}

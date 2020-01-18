@@ -87,7 +87,7 @@ namespace EoE.UI
 
 			soulIcon.color = Color.Lerp(soulIconInActiveColor, soulIconActiveColor, iconTransitionPoint);
 		}
-		private void OnDisable()
+		private void OnDestroy()
 		{
 			EventManager.PlayerExperienceChangedEvent -= PlayerSoulCountChanged;
 		}

@@ -102,7 +102,7 @@ namespace EoE.UI
 				display.sprite = this[topState];
 			}
 		}
-		private void OnDisable()
+		private void OnDestroy()
 		{
 			EventManager.PlayerTookDamageEvent -= PlayerTookDamage;
 			EventManager.PlayerLevelupEvent -= PlayerLevelup;

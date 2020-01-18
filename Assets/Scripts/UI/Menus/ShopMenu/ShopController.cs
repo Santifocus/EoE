@@ -501,7 +501,7 @@ namespace EoE.UI
 				selectedIndex[i] = 0;
 			}
 		}
-		private void OnDisable()
+		private void OnDestroy()
 		{
 			Player.Instance.Inventory.InventoryChanged -= UpdateInventorySlots;
 			EventManager.PlayerCurrencyChangedEvent -= UpdateCurrencyDisplay;

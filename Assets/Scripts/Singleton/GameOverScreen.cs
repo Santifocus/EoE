@@ -32,7 +32,7 @@ namespace EoE.UI
 			{
 				onFadeFinishEnable[i].SetActive(false);
 			}
-			gameOverMusic = new MusicInstance(1, 6, gameOverMusicIndex);
+			gameOverMusic = new MusicInstance(1, 6, gameOverMusicIndex, 1);
 		}
 		public void Show(Entities.Entity killer)
 		{
@@ -96,7 +96,7 @@ namespace EoE.UI
 			EffectUtils.ResetScreenEffects();
 			SceneManager.LoadScene(ConstantCollector.MAIN_MENU_SCENE_INDEX);
 		}
-		private void OnDisable()
+		private void OnDestroy()
 		{
 			EventManager.PlayerDiedEvent -= Show;
 		}

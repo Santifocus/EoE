@@ -93,7 +93,7 @@ namespace EoE.Sounds
 
 			isPaused = false;
 		}
-		private void OnDisable()
+		private void OnDestroy()
 		{
 			UI.SettingsMenuController.VolumeScalesChangedEvent -= UpdateVolumeScale;
 		}
