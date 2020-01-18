@@ -207,6 +207,9 @@ namespace EoE.Entities
 		}
 		private bool TryWalkToTargetPosition()
 		{
+			if (!agent.isActiveAndEnabled)
+				return false;
+
 			//Prefers override if both are not null, if override is null we goto to the standard target, if both are null we dont do anything
 			Vector3? pos = overrideTargetPosition ?? targetPosition; 
 			if (pos.HasValue)
@@ -307,6 +310,8 @@ namespace EoE.Entities
 		}
 		private bool CreateNewWanderPath()
 		{
+			if (!agent.isActiveAndEnabled)
+				return false;
 			bool investigating = remainingInvestigationTime > 0;
 			float wanderMaxRadius = investigating ? Mathf.Max(enemySettings.WanderingFactor, GameController.CurrentGameSettings.EnemyMinimumInvestigationArea) : enemySettings.WanderingFactor;
 			Vector3 wanderOrigin = investigating ? lostChaseInterestPos : originalSpawnPosition;
