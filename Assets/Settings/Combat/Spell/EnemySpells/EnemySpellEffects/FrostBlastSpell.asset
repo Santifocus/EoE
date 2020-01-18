@@ -24,7 +24,7 @@ MonoBehaviour:
   SpellCooldown: 2.5
   ContainedParts: 5
   MovementRestrictions: -1
-  RotationRestrictions: -1
+  RotationRestrictions: 0
   SubtractManaAtPart: 2
   CastInfo:
     Duration: 2.5

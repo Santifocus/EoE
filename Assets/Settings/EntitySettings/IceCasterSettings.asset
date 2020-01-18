@@ -108,6 +108,7 @@ MonoBehaviour:
     ProjectileInfos: []
     HealsOnUser: []
     StackingStyle: 2
-    BuffsOnUser: []
+    BuffsOnUser:
+    - {fileID: 0}
     CreatedRemenants: []
   PanicModeFinishedEffects: []
