@@ -27,5 +27,5 @@ MonoBehaviour:
   KnockbackAxisMultiplier: {x: 1, y: 1, z: 1}
   BuffStackStyle: 2
   BuffsToApply:
-  - {fileID: 11400000, guid: ad6a267aa2c585b41987105f27fc2a64, type: 2}
+  - {fileID: 11400000, guid: 52e0f12ca3092cc46b63bfe6edacac12, type: 2}
   Effects: []

@@ -18,6 +18,6 @@ MonoBehaviour:
   BaseCritChance: 0
   Cost:
     Health: 0
-    Mana: 5
+    Mana: 3
     Endurance: 0
     AdditionalConditions: []

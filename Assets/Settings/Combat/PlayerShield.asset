@@ -21,7 +21,7 @@ MonoBehaviour:
   EffectOnUserOnShieldBreak: {fileID: 11400000, guid: eadfd855a332c49408281caac48a3346,
     type: 2}
   ShieldResistance: 30
-  ShieldDrain: 0
+  ShieldDrain: 2
   ShieldRegeneration: 3
   ShieldSize: 2
   ReflectProjectiles: 1
@@ -41,6 +41,13 @@ MonoBehaviour:
     ImpulseDirectionBase: 1
     FXObjects:
     - FX: {fileID: 11400000, guid: b27480ab36b8ad5488bb73fea94037fd, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 11400000, guid: 5c7676eeb240f3044baa8aa436a43115, type: 2}
       HasPositionOffset: 0
       PositionOffset: {x: 0, y: 0, z: 0}
       HasRotationOffset: 0
