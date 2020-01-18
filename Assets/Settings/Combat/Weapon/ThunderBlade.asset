@@ -271,7 +271,7 @@ MonoBehaviour:
             type: 2}
         FXObjects: []
         FXObjectsWithMutliplier:
-        - FX: {fileID: 11400000, guid: b7ca0c9b1adf6044a871c15b7af6ea29, type: 2}
+        - FX: {fileID: 11400000, guid: 8ffc5205dbffe15439420481fd46f37c, type: 2}
           HasPositionOffset: 0
           PositionOffset: {x: 0, y: 0, z: 0}
           HasRotationOffset: 0
@@ -279,6 +279,13 @@ MonoBehaviour:
           HasCustomScale: 0
           CustomScale: {x: 1, y: 1, z: 1}
         - FX: {fileID: 11400000, guid: a1ac14100d656c84e8006d4bc848efbd, type: 2}
+          HasPositionOffset: 0
+          PositionOffset: {x: 0, y: 0, z: 0}
+          HasRotationOffset: 0
+          RotationOffset: {x: 0, y: 0, z: 0}
+          HasCustomScale: 0
+          CustomScale: {x: 1, y: 1, z: 1}
+        - FX: {fileID: 11400000, guid: 14a51361675ee9744b5cb5c300568758, type: 2}
           HasPositionOffset: 0
           PositionOffset: {x: 0, y: 0, z: 0}
           HasRotationOffset: 0
