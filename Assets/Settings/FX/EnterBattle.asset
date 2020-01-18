@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: EnterBattle
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0.2
+  TimeOut: 0
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 1
-    TimeStay: 1
+    TimeStay: 0.8
     OnConditionMet: 0
     Condition: {fileID: 0}
   UIPrefabObject: {fileID: 6398801336331914143, guid: 25da3635db6a1554dabbc4d656c485fe,
