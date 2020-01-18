@@ -108,6 +108,7 @@ MonoBehaviour:
   EffectsOnLevelup:
   - {fileID: 11400000, guid: 982aab948223d7044bfae67dc43bb77c, type: 2}
   - {fileID: 11400000, guid: 2a1f29303ceefa04d9d5508f74094d05, type: 2}
+  - {fileID: 11400000, guid: d035199abf3ed634aba5aa2938b2cadf, type: 2}
   EffectsWhileWalk:
   - {fileID: 11400000, guid: 0ca21d7cb4541c24185b997c58ef29a8, type: 2}
   EffectsWhileRun:
