@@ -1,5 +1,6 @@
 ﻿using EoE.Controlls;
 using EoE.Events;
+using EoE.Sounds;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,7 +17,9 @@ namespace EoE.UI
 		[SerializeField] private float fadeInTime = 2;
 		[SerializeField] private ControllerMenuItem startMenuItem = default;
 		[SerializeField] private GameObject[] onFadeFinishEnable = default;
+		[SerializeField] private int gameOverMusicIndex = 2;
 
+		private MusicInstance gameOverMusic = default;
 		private bool fadingIn;
 		private float fadedTime;
 
@@ -29,6 +32,7 @@ namespace EoE.UI
 			{
 				onFadeFinishEnable[i].SetActive(false);
 			}
+			gameOverMusic = new MusicInstance(1, 6, gameOverMusicIndex);
 		}
 		public void Show(Entities.Entity killer)
 		{
@@ -39,6 +43,8 @@ namespace EoE.UI
 			playerOnlyDisplay.color = Color.clear;
 			fadingIn = true;
 
+			gameOverMusic.WantsToPlay = true;
+			MusicController.Instance.AddMusicInstance(gameOverMusic);
 		}
 		private void SetupCamera()
 		{

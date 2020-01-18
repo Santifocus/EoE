@@ -2762,3 +2762,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startMenuItem: {fileID: 1570227520}
+  mainMenuMusicIndex: 0

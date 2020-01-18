@@ -6,6 +6,7 @@ using EoE.Controlls;
 using EoE.Events;
 using EoE.Information;
 using EoE.UI;
+using EoE.Sounds;
 
 namespace EoE.Entities
 {
@@ -30,6 +31,7 @@ namespace EoE.Entities
 		public Animator animationControl = default;
 
 		[SerializeField] private PlayerSettings playerSettings = default;
+		[SerializeField] private int combatMusicIndex = 1;
 		public PlayerBuffDisplay buffDisplay = default;
 
 		[SerializeField] private Transform head = default;
@@ -65,6 +67,8 @@ namespace EoE.Entities
 		private FXInstance[] PlayerWalkingBoundEffects;
 		private FXInstance[] PlayerRunningBoundEffects;
 		private FXInstance[] HealthBelowThresholdBoundEffects;
+
+		private MusicInstance combatMusic;
 
 		//Targeting
 		public Entity TargetedEntitie { get; private set; }
@@ -115,6 +119,7 @@ namespace EoE.Entities
 		protected override void EntitieStart()
 		{
 			SetupInventory();
+			combatMusic = new MusicInstance(0, 5, combatMusicIndex);
 		}
 		protected override void EntitieUpdate()
 		{
@@ -1209,6 +1214,19 @@ namespace EoE.Entities
 			Alive = false;
 
 			animationControl.SetTrigger("Death");
+		}
+		public override void StartCombat()
+		{
+			base.StartCombat();
+			if (!combatMusic.IsAdded)
+			{
+				combatMusic.WantsToPlay = true;
+				MusicController.Instance.AddMusicInstance(combatMusic);
+			}
+		}
+		protected override void CombatEnd()
+		{
+			combatMusic.WantsToPlay = false;
 		}
 		private void FinishAliveBoundFX()
 		{

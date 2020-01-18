@@ -203,6 +203,7 @@ namespace EoE.Entities
 			lastConfirmedPlayerPos = Player.Instance.actuallWorldPosition;
 			lastPlayerSpeed = Player.Instance.CurVelocity;
 			lastSeenPlayer = 0;
+			Player.Instance.StartCombat();
 		}
 		private bool TryWalkToTargetPosition()
 		{

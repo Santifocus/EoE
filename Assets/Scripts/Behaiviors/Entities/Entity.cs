@@ -254,13 +254,17 @@ namespace EoE.Entities
 			{
 				combatEndCooldown -= Time.deltaTime;
 				if (combatEndCooldown <= 0)
+				{
 					curStates.Fighting = false;
+					CombatEnd();
+				}
 			}
 
 			//Update buffs
 			BuffUpdate();
 			Regen();
 		}
+		protected virtual void CombatEnd() { }
 		protected virtual void Regen()
 		{
 			healthRegenDelay -= Time.deltaTime;

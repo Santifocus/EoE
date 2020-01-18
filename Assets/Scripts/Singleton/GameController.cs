@@ -54,21 +54,10 @@ namespace EoE
 		private void Start()
 		{
 			Instance = this;
-			GameIsPaused = false;
-
-			//PLACEHOLDER
-			StartCoroutine(StartMusic());
-		}
-		private IEnumerator StartMusic()
-		{
-			//PLACEHOLDER
-			yield return new WaitForEndOfFrame();
-			Sounds.SoundManager.SetSoundState("ChurchMusic", true);
+			ActivePauses = 0;
 		}
 		private static void SetPauseGamestate(bool state)
 		{
-			//Instance.mainCanvas?.gameObject?.SetActive(!state);
-
 			Time.timeScale = state ? 0 : 1;
 			GameIsPaused = state;
 		}

@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace EoE.Sounds
 {
 	public class MusicController : MonoBehaviour
 	{
+		private const float REMOVE_THRESHOLD = 0.01f;
 		public static MusicController Instance { get; private set; }
 
 		[SerializeField] private Sound[] MusicList = default;
@@ -17,6 +19,7 @@ namespace EoE.Sounds
 		private void Start()
 		{
 			Instance = this;
+			SceneManager.sceneLoaded += OnSceneLoaded;
 
 			//Setup Music player
 			musicPlayer = new SoundPlayer[MusicList.Length];
@@ -33,40 +36,51 @@ namespace EoE.Sounds
 		}
 		public void AddMusicInstance(MusicInstance newInstance)
 		{
+			newInstance.IsAdded = true;
 			ActiveMusicInstances.Add(newInstance);
 		}
-		public void RemoveMusicInstance(MusicInstance instance)
+		private void RemoveMusicInstance(MusicInstance instance)
 		{
+			instance.IsAdded = false;
 			ActiveMusicInstances.Remove(instance);
 		}
 		private void Update()
 		{
 			//Find the music instance with the highest index that wants to be played
-			int targetInstance = -1;
+			int targetInstanceIndex = -1;
 			int highestPriority = -1;
 			for(int i = 0; i < ActiveMusicInstances.Count; i++)
 			{
 				if (!ActiveMusicInstances[i].WantsToPlay)
+				{
+					if (ActiveMusicInstances[i].Volume < REMOVE_THRESHOLD)
+					{
+						RemoveMusicInstance(ActiveMusicInstances[i]);
+						i--;
+					}
 					continue;
+				}
 
 				if(ActiveMusicInstances[i].Priority > highestPriority)
 				{
 					highestPriority = ActiveMusicInstances[i].Priority;
-					targetInstance = -1;
+					targetInstanceIndex = i;
 				}
 			}
 
 			//Now update the volumes of all instances, the target instance will be increased to 1
 			//All other will be decreased to 0
+			float volumeIncrease = (musicFadeInTime > 0) ? (Time.unscaledDeltaTime / musicFadeInTime) : 1;
+			float volumeDecrease = (musicFadeOutTime > 0) ? (Time.unscaledDeltaTime / musicFadeOutTime) : 1;
 			for (int i = 0; i < ActiveMusicInstances.Count; i++)
 			{
-				if(i == targetInstance)
+				if(i == targetInstanceIndex)
 				{
-
+					ActiveMusicInstances[i].Volume = Mathf.Min(1, ActiveMusicInstances[i].Volume + volumeIncrease);
 				}
 				else
 				{
-
+					ActiveMusicInstances[i].Volume = Mathf.Max(0, ActiveMusicInstances[i].Volume - volumeDecrease);
 				}
 			}
 
@@ -80,7 +94,32 @@ namespace EoE.Sounds
 			for(int i = 0; i < ActiveMusicInstances.Count; i++)
 			{
 				if(ActiveMusicInstances[i].Volume > musicPlayer[ActiveMusicInstances[i].MusicIndex].FadePoint)
+				{
 					musicPlayer[ActiveMusicInstances[i].MusicIndex].FadePoint = ActiveMusicInstances[i].Volume;
+				}
+			}
+
+			//Set the state of the music players based on if there volume is above zero
+			for (int i = 0; i < musicPlayer.Length; i++)
+			{
+				if(musicPlayer[i].FadePoint > 0)
+				{
+					if (musicPlayer[i].FullyStopped)
+					{
+						musicPlayer[i].Play();
+					}
+				}
+				else
+				{
+					musicPlayer[i].Stop();
+				}
+			}
+		}
+		public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+		{
+			for(int i = 0; i < ActiveMusicInstances.Count; i++)
+			{
+				ActiveMusicInstances[i].WantsToPlay = false;
 			}
 		}
 	}
@@ -88,8 +127,17 @@ namespace EoE.Sounds
 	public class MusicInstance
 	{
 		public bool WantsToPlay;
+		public bool IsAdded;
 		public float Volume;
 		public int Priority;
 		public int MusicIndex;
+
+		public MusicInstance(float volume, int priority, int musicIndex)
+		{
+			WantsToPlay = false;
+			Volume = volume;
+			Priority = priority;
+			MusicIndex = musicIndex;
+		}
 	}
 }
