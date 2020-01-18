@@ -1126,7 +1126,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Hero_Passiv_Idle
-  m_Speed: 0.2
+  m_Speed: 0.25
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -7180328291497626162}

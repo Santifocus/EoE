@@ -70,6 +70,7 @@ namespace EoE.Information
 		public float LookLerpSpringStiffness = 0.05f;
 
 		///FX
+		public FXObject[] EffectsOnCombatStart = default;
 		//On Player do attack
 		public FXObject[] EffectsOnCauseDamage = default;
 		public FXObject[] EffectsOnCauseCrit = default;

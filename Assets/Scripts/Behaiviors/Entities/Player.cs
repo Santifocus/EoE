@@ -64,9 +64,10 @@ namespace EoE.Entities
 		private Vector2 curSpringLerpAcceleration;
 		private Vector2 curAnimationDirection;
 
+		private FXInstance[] HealthBelowThresholdBoundEffects;
 		private FXInstance[] PlayerWalkingBoundEffects;
 		private FXInstance[] PlayerRunningBoundEffects;
-		private FXInstance[] HealthBelowThresholdBoundEffects;
+		private FXInstance[] CombatBoundEffects;
 
 		private MusicInstance combatMusic;
 
@@ -392,20 +393,11 @@ namespace EoE.Entities
 				//Health fell below threshold
 				if (newBelowHealthThresholdState)
 				{
-					HealthBelowThresholdBoundEffects = new FXInstance[PlayerSettings.EffectsWhileHealthBelowThreshold.Length];
-					for (int i = 0; i < HealthBelowThresholdBoundEffects.Length; i++)
-					{
-						HealthBelowThresholdBoundEffects[i] = FXManager.PlayFX(PlayerSettings.EffectsWhileHealthBelowThreshold[i], transform, true);
-					}
+					BindFXObjects(PlayerSettings.EffectsWhileHealthBelowThreshold, ref HealthBelowThresholdBoundEffects);
 				}
 				else //Health went above threshold
 				{
-					for (int i = 0; i < HealthBelowThresholdBoundEffects.Length; i++)
-					{
-						if (HealthBelowThresholdBoundEffects[i] != null)
-							HealthBelowThresholdBoundEffects[i].FinishFX();
-					}
-					HealthBelowThresholdBoundEffects = null;
+					FinishBoundFX(ref HealthBelowThresholdBoundEffects);
 				}
 			}
 
@@ -417,20 +409,11 @@ namespace EoE.Entities
 				//Player started walking or stopped running and kept walking
 				if (newWalkingEffectsOn)
 				{
-					PlayerWalkingBoundEffects = new FXInstance[PlayerSettings.EffectsWhileWalk.Length];
-					for (int i = 0; i < PlayerWalkingBoundEffects.Length; i++)
-					{
-						PlayerWalkingBoundEffects[i] = FXManager.PlayFX(PlayerSettings.EffectsWhileWalk[i], transform, true);
-					}
+					BindFXObjects(PlayerSettings.EffectsWhileWalk, ref PlayerRunningBoundEffects);
 				}
 				else //Player stopped walking or started running
 				{
-					for (int i = 0; i < PlayerWalkingBoundEffects.Length; i++)
-					{
-						if (PlayerWalkingBoundEffects[i] != null)
-							PlayerWalkingBoundEffects[i].FinishFX();
-					}
-					PlayerWalkingBoundEffects = null;
+					FinishBoundFX(ref PlayerWalkingBoundEffects);
 				}
 			}
 
@@ -442,20 +425,11 @@ namespace EoE.Entities
 				//Player started running
 				if (newRunningEffectsOn)
 				{
-					PlayerRunningBoundEffects = new FXInstance[PlayerSettings.EffectsWhileRun.Length];
-					for (int i = 0; i < PlayerRunningBoundEffects.Length; i++)
-					{
-						PlayerRunningBoundEffects[i] = FXManager.PlayFX(PlayerSettings.EffectsWhileRun[i], transform, true);
-					}
+					BindFXObjects(PlayerSettings.EffectsWhileRun, ref PlayerRunningBoundEffects);
 				}
 				else //Player stopped running
 				{
-					for (int i = 0; i < PlayerRunningBoundEffects.Length; i++)
-					{
-						if (PlayerRunningBoundEffects[i] != null)
-							PlayerRunningBoundEffects[i].FinishFX();
-					}
-					PlayerRunningBoundEffects = null;
+					FinishBoundFX(ref PlayerRunningBoundEffects);
 				}
 			}
 		}
@@ -1217,6 +1191,9 @@ namespace EoE.Entities
 		}
 		public override void StartCombat()
 		{
+			if(!curStates.Fighting)
+				BindFXObjects(playerSettings.EffectsOnCombatStart, ref CombatBoundEffects);
+
 			base.StartCombat();
 			if (!combatMusic.IsAdded)
 			{
@@ -1227,39 +1204,34 @@ namespace EoE.Entities
 		protected override void CombatEnd()
 		{
 			combatMusic.WantsToPlay = false;
+			FinishBoundFX(ref CombatBoundEffects);
+		}
+		private void BindFXObjects(FXObject[] toPlay, ref FXInstance[] targetArray)
+		{
+			targetArray = new FXInstance[toPlay.Length];
+			for (int i = 0; i < toPlay.Length; i++)
+			{
+				targetArray[i] = FXManager.PlayFX(toPlay[i], transform, true);
+			}
+		}
+		private void FinishBoundFX(ref FXInstance[] instances)
+		{
+			if (instances != null)
+			{
+				for (int i = 0; i < instances.Length; i++)
+				{
+					if (instances[i] != null)
+						instances[i].FinishFX();
+				}
+				instances = null;
+			}
 		}
 		private void FinishAliveBoundFX()
 		{
-			if (HealthBelowThresholdBoundEffects != null)
-			{
-				for (int i = 0; i < HealthBelowThresholdBoundEffects.Length; i++)
-				{
-					if (HealthBelowThresholdBoundEffects[i] != null)
-						HealthBelowThresholdBoundEffects[i].FinishFX();
-				}
-				HealthBelowThresholdBoundEffects = null;
-			}
-
-			if (PlayerWalkingBoundEffects != null)
-			{
-				for (int i = 0; i < PlayerWalkingBoundEffects.Length; i++)
-				{
-					if (PlayerWalkingBoundEffects[i] != null)
-						PlayerWalkingBoundEffects[i].FinishFX();
-				}
-				PlayerWalkingBoundEffects = null;
-			}
-
-			if (PlayerRunningBoundEffects != null)
-			{
-
-				for (int i = 0; i < PlayerRunningBoundEffects.Length; i++)
-				{
-					if (PlayerRunningBoundEffects[i] != null)
-						PlayerRunningBoundEffects[i].FinishFX();
-				}
-				PlayerRunningBoundEffects = null;
-			}
+			FinishBoundFX(ref HealthBelowThresholdBoundEffects);
+			FinishBoundFX(ref PlayerWalkingBoundEffects);
+			FinishBoundFX(ref PlayerRunningBoundEffects);
+			FinishBoundFX(ref CombatBoundEffects);
 		}
 		#region IFrames
 		protected override void OnHealthChange(ChangeInfo baseChange, ChangeInfo.ChangeResult resultInfo)
