@@ -10,16 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e7eaa19f6624274b81d46198fa48d0a, type: 3}
-  m_Name: New CustomUI
+  m_Name: EnterBattle
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0
+  TimeOut: 0.2
   FinishConditions:
     OnParentDeath: 0
-    OnTimeout: 0
+    OnTimeout: 1
     TimeStay: 1
     OnConditionMet: 0
     Condition: {fileID: 0}
-  UIPrefabObject: {fileID: 0}
+  UIPrefabObject: {fileID: 6398801336331914143, guid: 25da3635db6a1554dabbc4d656c485fe,
+    type: 3}
   CustomChildIndex: 9999
   CanvasTarget: 1
