@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e7eaa19f6624274b81d46198fa48d0a, type: 3}
-  m_Name: UltimateBarready
+  m_Name: MeteoraChargedScreen
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 1
-    TimeStay: 0.45
+    TimeStay: 0.6
     OnConditionMet: 0
     Condition: {fileID: 0}
-  UIPrefabObject: {fileID: 1643061961288425982, guid: 7597f4d19c5eca442a55e71a7cc1dad9,
+  UIPrefabObject: {fileID: 6398801336331914143, guid: b11dc0c7bd6da1a408aeec05f04abe67,
     type: 3}
   CustomChildIndex: 9999
   CanvasTarget: 1

@@ -35265,8 +35265,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 180
-  m_fontSizeBase: 180
+  m_fontSize: 250
+  m_fontSizeBase: 250
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -35809,7 +35809,7 @@ MonoBehaviour:
   finalBlackAlpha: 1
   playerOnlyDisplay: {fileID: 1967107001}
   playerOnlyCamera: {fileID: 1415639595}
-  fadeInTime: 2.5
+  fadeInTime: 3.5
   startMenuItem: {fileID: 2723238917696720027}
   onFadeFinishEnable:
   - {fileID: 2080584139156528577}

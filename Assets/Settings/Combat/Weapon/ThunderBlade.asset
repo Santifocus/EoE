@@ -653,7 +653,15 @@ MonoBehaviour:
     Ultimate: {fileID: 11400000, guid: 870e27f2e49f188479010fa86ff71b7f, type: 2}
     TotalRequiredCharge: 1
     OnUseChargeRemove: 1
-    OnUltimateFullChargeEffects:
+    OnUltimateChargedEffects:
+    - FX: {fileID: 11400000, guid: 95843647cdc223c48b316e85ad8cd98e, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    WhileUltimateIsChargedEffects:
     - FX: {fileID: 11400000, guid: 41d3fb06b62b4d74ab42dc8d0f7adcb9, type: 2}
       HasPositionOffset: 0
       PositionOffset: {x: 0, y: 0, z: 0}
