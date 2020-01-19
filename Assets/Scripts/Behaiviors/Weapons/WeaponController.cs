@@ -22,7 +22,7 @@ namespace EoE.Combatery
 			{ AttackAnimation.Attack2, (0.75f, 0.335f) },
 			{ AttackAnimation.Attack3, (1.067f, 0.75f) },
 		};
-		public static WeaponController Instance;
+		public static WeaponController Instance { get; private set; }
 		public bool InAttackSequence { get; private set; }
 		public AttackStyle ActiveAttackStyle { get; private set; }
 
@@ -714,40 +714,55 @@ namespace EoE.Combatery
 		}
 		private void DropWeapon()
 		{
+			StopAllCoroutines();
+			RemoveBoundEffects();
 			dropCollision.SetActive(true);
 			Rigidbody b = gameObject.AddComponent<Rigidbody>();
 			b.velocity = (Player.Instance.curMoveVelocity + Player.Instance.CurVelocity) + new Vector3(Random.Range(-1, 1), 0, Random.Range(-1, 1)) * 5;
 			b.angularVelocity = new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1)) * 540;
 			enabled = false;
 		}
-		private void OnDestroy()
+		public void Remove()
 		{
 			if (this != Instance)
 			{
 				return;
 			}
-			EventManager.EntitieDiedEvent -= EntitieDeath;
+
+			Instance = null;
+			Destroy(gameObject);
 			ComboFinish();
-			if(ActiveAttackStyle != null)
+
+			if (ActiveAttackStyle != null)
 			{
 				if (Player.Existant)
 				{
 					if (ActiveAttackStyle.StopMovement)
 						Player.Instance.MovementStops--;
+					if (ActiveAttackStyle.StopRotation)
+						Player.Instance.RotationStops--;
 
 					SetAnimationSpeed(1);
 					Player.Instance.animationControl.SetBool("InFight", false);
 				}
-				if (isChargingAttack)
-					RemoveChargeBoundEffects();
 			}
+			RemoveBoundEffects();
 
-			FXManager.FinishFX(ref ultimateChargedBoundFX);
-			FXManager.FinishFX(ref ultimateChargedBoundFXPlayer);
 			if (UltimateBarController.Instance)
 				UltimateBarController.Instance.gameObject.SetActive(false);
 		}
+		private void RemoveBoundEffects()
+		{
+			if (isChargingAttack)
+				RemoveChargeBoundEffects();
 
+			FXManager.FinishFX(ref ultimateChargedBoundFX);
+			FXManager.FinishFX(ref ultimateChargedBoundFXPlayer);
+		}
+		private void OnDestroy()
+		{
+			EventManager.EntitieDiedEvent -= EntitieDeath;
+		}
 		private void SetAnimationSpeed(float speed) => Player.Instance.animationControl.SetFloat("AttackAnimationSpeed", speed);
 	}
 }

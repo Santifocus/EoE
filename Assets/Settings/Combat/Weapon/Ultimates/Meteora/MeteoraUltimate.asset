@@ -109,7 +109,7 @@ MonoBehaviour:
       - WaitCondition: {fileID: 11400000, guid: d9a42b04b4b55a343aac23eba2be7f67,
           type: 2}
         MinAnimtionPoint: 0.85
-        MaxAnimtionPoint: 0.9
+        MaxAnimtionPoint: 0.95
       DamageMultiplier: 1
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1

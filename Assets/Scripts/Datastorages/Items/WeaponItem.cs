@@ -17,7 +17,7 @@ namespace EoE.Information
 		protected override bool OnEquip(Entity user)
 		{
 			if (WeaponController.Instance)
-				Destroy(WeaponController.Instance.gameObject);
+				WeaponController.Instance.Remove();
 			WeaponController newWeapon = Instantiate(TargetWeapon.WeaponPrefab, Storage.ParticleStorage);
 			newWeapon.Setup(TargetWeapon);
 
@@ -26,7 +26,7 @@ namespace EoE.Information
 		protected override bool OnUnEquip(Entity user)
 		{
 			if (WeaponController.Instance)
-				Destroy(WeaponController.Instance.gameObject);
+				WeaponController.Instance.Remove();
 			ComboDisplayController.Instance.StopCombo();
 			return true;
 		}

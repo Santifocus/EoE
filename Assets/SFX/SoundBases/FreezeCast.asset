@@ -20,5 +20,5 @@ MonoBehaviour:
   pitch: 1
   volume: 1
   spatialBlend: 0
-  scaleStyle: 1
+  scaleStyle: 0
   soundCategory: 0
