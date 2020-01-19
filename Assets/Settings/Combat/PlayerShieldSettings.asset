@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df8796acefb82bf4d948885a3e72382a, type: 3}
-  m_Name: PlayerShield
+  m_Name: PlayerShieldSettings
   m_EditorClassIdentifier: 
   BaseData: {fileID: 11400000, guid: 88b33d189c8438a4ab496e8306d0852d, type: 2}
   FirstActivationCost:
@@ -29,37 +29,40 @@ MonoBehaviour:
   InheritOwnerRotation: 1
   OffsetToOwner: {x: 0, y: 0, z: 0}
   RotationOffsetToOwner: {x: 0, y: 0, z: 0}
+  ShieldLevelBasedEffects:
+  - MinShieldLevel: 0
+    MaxShieldLevel: 1
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: b27480ab36b8ad5488bb73fea94037fd, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      - FX: {fileID: 11400000, guid: 5c7676eeb240f3044baa8aa436a43115, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
   ShieldFailedStartEffects: []
   ShieldStartEffects: []
-  ShieldActiveEffects:
-  - ChanceToActivate: 1
-    ContainedEffectType: 2
-    ImpulseVelocity: 5
-    ImpulseVelocityFallOffTime: 0.5
-    ImpulseVelocityDirection: 2
-    ImpulseVelocityFallbackDirection: 1
-    ImpulseDirectionBase: 1
-    FXObjects:
-    - FX: {fileID: 11400000, guid: b27480ab36b8ad5488bb73fea94037fd, type: 2}
-      HasPositionOffset: 0
-      PositionOffset: {x: 0, y: 0, z: 0}
-      HasRotationOffset: 0
-      RotationOffset: {x: 0, y: 0, z: 0}
-      HasCustomScale: 0
-      CustomScale: {x: 1, y: 1, z: 1}
-    - FX: {fileID: 11400000, guid: 5c7676eeb240f3044baa8aa436a43115, type: 2}
-      HasPositionOffset: 0
-      PositionOffset: {x: 0, y: 0, z: 0}
-      HasRotationOffset: 0
-      RotationOffset: {x: 0, y: 0, z: 0}
-      HasCustomScale: 0
-      CustomScale: {x: 1, y: 1, z: 1}
-    AOEEffects: []
-    ProjectileInfos: []
-    HealsOnUser: []
-    StackingStyle: 2
-    BuffsOnUser: []
-    CreatedRemenants: []
   ShieldHitEffects:
   - ChanceToActivate: 1
     ContainedEffectType: 2

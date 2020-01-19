@@ -321,10 +321,7 @@ namespace EoE.Combatery
 						float point = ActiveAttackStyle.AttackEffects[i].AtAnimationPoint;
 						if ((point >= smallerPoint) && (point < biggerPoint))
 						{
-							if (Utils.Chance01(ActiveAttackStyle.AttackEffects[i].Effect.ChanceToActivate))
-							{
-								ActiveAttackStyle.AttackEffects[i].Effect.Activate(Player.Instance, curBaseData);
-							}
+							ActiveAttackStyle.AttackEffects[i].Effect.Activate(Player.Instance, curBaseData);
 						}
 					}
 

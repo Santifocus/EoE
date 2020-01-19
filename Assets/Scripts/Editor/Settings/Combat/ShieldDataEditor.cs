@@ -47,12 +47,25 @@ namespace EoE.Combatery
 		{
 			ShieldData settings = target as ShieldData;
 
+			DrawArray<ShieldLevelEffects>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ShieldLevelBasedEffects))), ref settings.ShieldLevelBasedEffects, serializedObject.FindProperty(nameof(settings.ShieldLevelBasedEffects)), DrawShieldLevelEffects, new GUIContent(". Shield Level"), 1);
+
+			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
+
 			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ShieldStartEffects))), ref settings.ShieldStartEffects, serializedObject.FindProperty(nameof(settings.ShieldStartEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
 			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ShieldFailedStartEffects))), ref settings.ShieldFailedStartEffects, serializedObject.FindProperty(nameof(settings.ShieldFailedStartEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
-			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ShieldActiveEffects))), ref settings.ShieldActiveEffects, serializedObject.FindProperty(nameof(settings.ShieldActiveEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
 			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ShieldHitEffects))), ref settings.ShieldHitEffects, serializedObject.FindProperty(nameof(settings.ShieldHitEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
 			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ShieldDisableEffects))), ref settings.ShieldDisableEffects, serializedObject.FindProperty(nameof(settings.ShieldDisableEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
 			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ShieldBreakEffects))), ref settings.ShieldBreakEffects, serializedObject.FindProperty(nameof(settings.ShieldBreakEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
+		}
+		private void DrawShieldLevelEffects(GUIContent content, ShieldLevelEffects settings, SerializedProperty property, int offSet)
+		{
+			Foldout(content, property, offSet);
+			if (property.isExpanded)
+			{
+				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MinShieldLevel))), ref settings.MinShieldLevel, 0, 1, offSet + 1);
+				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MaxShieldLevel))), ref settings.MaxShieldLevel, settings.MinShieldLevel, 1, offSet + 1);
+				DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effects))), ref settings.Effects, property.FindPropertyRelative(nameof(settings.Effects)), DrawActivationEffect, new GUIContent(". Effect"), offSet + 1);
+			}
 		}
 	}
 }
