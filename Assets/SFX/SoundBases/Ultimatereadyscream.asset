@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 469f7b848055e6b4f804fc4855292c28, type: 3}
-  m_Name: Ultimate_Scream
+  m_Name: Ultimatereadyscream
   m_EditorClassIdentifier: 
-  soundName: Scream
-  clip: {fileID: 8300000, guid: cd16ee0743ecf664b9694bc82b9e8e16, type: 3}
+  soundName: Ultiready
+  clip: {fileID: 8300000, guid: 666d78b8dfa6df0458b75af12b50e68d, type: 3}
   audioGroup: {fileID: 24300002, guid: b8b319c0096b4d34196070be7e374c0c, type: 2}
   Loop: 0
   priority: 128
   pitch: 1
-  volume: 1
+  volume: 0.6
   spatialBlend: 0
-  scaleStyle: 2
+  scaleStyle: 0
   soundCategory: 0
