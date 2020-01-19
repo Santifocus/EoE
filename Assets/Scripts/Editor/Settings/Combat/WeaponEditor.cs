@@ -49,7 +49,7 @@ namespace EoE.Combatery
 			if (settings.HasUltimate)
 			{
 				SerializedProperty ultimateSettingsProperty = serializedObject.FindProperty(nameof(settings.UltimateSettings));
-				DrawInFoldoutHeader(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.UltimateSettings))), ultimateSettingsProperty, DrawUltimateSettings);
+				DrawInFoldoutHeader(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.UltimateSettings))), ultimateSettingsProperty, () => DrawUltimateSettings(settings.UltimateSettings, ultimateSettingsProperty));
 				GUILayout.Space(1);
 			}
 		}
@@ -81,12 +81,14 @@ namespace EoE.Combatery
 			Vector3Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WeaponPositionOffset))), ref settings.WeaponPositionOffset, 1);
 			Vector3Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WeaponRotationOffset))), ref settings.WeaponRotationOffset, 1);
 		}
-		private void DrawUltimateSettings()
+		private void DrawUltimateSettings(WeaponUltimate settings, SerializedProperty property)
 		{
-			WeaponUltimate settings = (target as Weapon).UltimateSettings;
+
 			ObjectField<Ultimate>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Ultimate))), ref settings.Ultimate, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.TotalRequiredCharge))), ref settings.TotalRequiredCharge, 1);
 			SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OnUseChargeRemove))), ref settings.OnUseChargeRemove, 0, 1, 1);
+
+			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OnUltimateFullChargeEffects))), ref settings.OnUltimateFullChargeEffects, property.FindPropertyRelative(nameof(settings.OnUltimateFullChargeEffects)), DrawCustomFXObject, new GUIContent(". Effect"), 1);
 
 			LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OnHitCharge))), ref settings.OnHitCharge, 1);

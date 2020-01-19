@@ -64,6 +64,10 @@ namespace EoE.Sounds
 				if(ActiveMusicInstances[i].Priority > highestPriority)
 				{
 					highestPriority = ActiveMusicInstances[i].Priority;
+					if(targetInstanceIndex > -1 && ActiveMusicInstances[targetInstanceIndex].MusicIndex == 2)
+					{
+						Debug.Log("Here");
+					}
 					targetInstanceIndex = i;
 				}
 			}
@@ -88,7 +92,8 @@ namespace EoE.Sounds
 			//To do that we first set all volumes to 0
 			for(int i = 0; i < musicPlayer.Length; i++)
 			{
-				musicPlayer[i].FadePoint = 0;
+				if(musicPlayer[i].FadePoint > 0)
+					musicPlayer[i].FadePoint = 0;
 			}
 			//Then we go througth all instances and apply their volume if it is higher then the current volume
 			for(int i = 0; i < ActiveMusicInstances.Count; i++)
