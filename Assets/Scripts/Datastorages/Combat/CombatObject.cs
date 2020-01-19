@@ -222,6 +222,16 @@ namespace EoE.Combatery
 
 		public FXInstance[] Activate(Entity activator, CombatObject baseObject, float multiplier = 1, Transform overrideTransform = null, params Entity[] ignoredEntities)
 		{
+			//If we are going to create FX we want this array to be null because it will be re-created in the FXManager
+			//otherwise we create a array with the size of 0 so we dont return null
+			FXInstance[] createdFXInstances = (HasMaskFlag(EffectType.FX) ? (null) : (new FXInstance[0]));
+
+			//If the chance to activate doesnt work out we stop here and return the empty FXInstance array
+			if (!Utils.Chance01(ChanceToActivate))
+			{
+				return createdFXInstances;
+			}
+
 			//Impulse Velocity
 			if (HasMaskFlag(EffectType.ImpulseVelocity))
 			{
@@ -232,9 +242,6 @@ namespace EoE.Combatery
 			}
 
 			//FX
-			//If we are going to create FX we want this array to be null because it will be re-created in the FXManager
-			//otherwise we create a array with the size of 0 so we dont return null
-			FXInstance[] createdFXInstances = (HasMaskFlag(EffectType.FX) ? (null) : (new FXInstance[0]));
 			if (HasMaskFlag(EffectType.FX))
 			{
 				FXManager.ExecuteFX(FXObjects, overrideTransform ?? activator.transform, activator is Player, out createdFXInstances, multiplier);

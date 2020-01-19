@@ -8,16 +8,14 @@ namespace EoE.Combatery
 {
     public class Shield : MonoBehaviour
     {
-		private enum ShieldState { Destroyed = 0, OneQuarter = 1, TwoQuarter = 2, ThreeQuarter = 3, FourQuarter = 4 }
 		[SerializeField] private SphereCollider coll = default;
 
         public Entity creator { get; private set; }
 		public ShieldData info { get; private set; }
 
-		private List<FXInstance> boundEffects;
 		private bool shieldActive;
 		private float curShieldResistance;
-		private ShieldState curState;
+		private FXInstance[][] shieldLevelBoundEffects;
 
 		public static Shield CreateShield(ShieldData info, Entity creator, Vector3 spawnPosition = default)
 		{
@@ -28,7 +26,7 @@ namespace EoE.Combatery
 			newShield.creator = creator;
 			newShield.coll.radius = info.ShieldSize;
 			newShield.curShieldResistance = info.ShieldResistance;
-			newShield.curState = ShieldState.FourQuarter;
+			newShield.shieldLevelBoundEffects = new FXInstance[info.ShieldLevelBasedEffects.Length][];
 
 			newShield.AnchorShield();
 			newShield.coll.enabled = false;
@@ -37,7 +35,7 @@ namespace EoE.Combatery
 		public void HitShield(float damage)
 		{
 			curShieldResistance = Mathf.Min(curShieldResistance - damage, info.ShieldResistance);
-			ActivateActivationEffects(info.ShieldHitEffects, false);
+			ActivateActivationEffects(info.ShieldHitEffects);
 
 			if (curShieldResistance <= 0 && shieldActive)
 				BreakShield();
@@ -57,7 +55,7 @@ namespace EoE.Combatery
 				}
 				else
 				{
-					ActivateActivationEffects(info.ShieldFailedStartEffects, false);
+					ActivateActivationEffects(info.ShieldFailedStartEffects);
 					return;
 				}
 			}
@@ -66,13 +64,13 @@ namespace EoE.Combatery
 			coll.enabled = state;
 			if (shieldActive)
 			{
-				ActivateActivationEffects(info.ShieldStartEffects, false);
-				ActivateActivationEffects(info.ShieldActiveEffects, true);
+				ActivateActivationEffects(info.ShieldStartEffects);
+				UpdateActiveEffects();
 			}
 			else
 			{
-				FXManager.FinishFX(ref boundEffects);
-				ActivateActivationEffects(info.ShieldDisableEffects, false);
+				ActivateActivationEffects(info.ShieldDisableEffects);
+				FinishLevelBoundFX();
 			}
 		}
 		private void LateUpdate()
@@ -86,6 +84,7 @@ namespace EoE.Combatery
 				{
 					info.BaseData.Cost.Activate(creator, Time.deltaTime, Time.deltaTime, Time.deltaTime);
 					curShieldResistance -= resistanceCost;
+					UpdateActiveEffects();
 				}
 				else
 				{
@@ -94,7 +93,46 @@ namespace EoE.Combatery
 			}
 			else
 			{
-				curShieldResistance += info.ShieldRegeneration * Time.deltaTime;
+				curShieldResistance = Mathf.Clamp(curShieldResistance + info.ShieldRegeneration * Time.deltaTime, 0, info.ShieldResistance);
+			}
+		}
+		private void UpdateActiveEffects()
+		{
+			float normalizedResistance = curShieldResistance / info.ShieldResistance;
+			for(int i = 0; i < info.ShieldLevelBasedEffects.Length; i++)
+			{
+				//Check if this level should be played currently
+				bool shouldBePlayed = (normalizedResistance > info.ShieldLevelBasedEffects[i].MinShieldLevel) && (normalizedResistance < info.ShieldLevelBasedEffects[i].MaxShieldLevel);
+
+				//Then check if that matches up by checking if the corrosponding array index is null / notnull
+				if (shouldBePlayed == (shieldLevelBoundEffects[i] == null))
+				{
+					if (shouldBePlayed)
+					{
+						//First find out how big the array needs to be
+						int requiredCapacity = 0;
+						for(int j = 0; j < info.ShieldLevelBasedEffects[i].Effects.Length; j++)
+						{
+							requiredCapacity += info.ShieldLevelBasedEffects[i].Effects[j].FXObjects.Length;
+						}
+
+						//Now add the fx
+						shieldLevelBoundEffects[i] = new FXInstance[requiredCapacity];
+						int addedInstances = 0;
+						for (int j = 0; j < info.ShieldLevelBasedEffects[i].Effects.Length; j++)
+						{
+							FXInstance[] createdFXInstances = info.ShieldLevelBasedEffects[i].Effects[j].Activate(creator, info.BaseData, 1, transform);
+							for (int k = 0; k < createdFXInstances.Length; k++, addedInstances++)
+							{
+								shieldLevelBoundEffects[i][addedInstances] = createdFXInstances[k];
+							}
+						}
+					}
+					else
+					{
+						FXManager.FinishFX(ref shieldLevelBoundEffects[i]);
+					}
+				}
 			}
 		}
 		private void FixedUpdate()
@@ -115,32 +153,33 @@ namespace EoE.Combatery
 				transform.eulerAngles = creator.transform.eulerAngles + info.RotationOffsetToOwner;
 			}
 		}
-		private void ActivateActivationEffects(ActivationEffect[] activationEffects, bool binding)
+		private void ActivateActivationEffects(ActivationEffect[] activationEffects)
 		{
 			for (int i = 0; i < activationEffects.Length; i++)
 			{
-				FXInstance[] createdFXInstances = activationEffects[i].Activate(creator, info.BaseData, 1, transform);
-				if (binding)
-				{
-					if (boundEffects == null)
-						boundEffects = new List<FXInstance>(createdFXInstances);
-					else
-						boundEffects.AddRange(createdFXInstances);
-				}
+				activationEffects[i].Activate(creator, info.BaseData, 1, transform);
 			}
 		}
 		private void BreakShield()
 		{
-			FXManager.FinishFX(ref boundEffects);
 			if(info.EffectOnUserOnShieldBreak)
 				info.EffectOnUserOnShieldBreak.Activate(creator, creator, info.BaseData, Vector3.zero, creator.actuallWorldPosition);
-			ActivateActivationEffects(info.ShieldBreakEffects, false);
+
+			ActivateActivationEffects(info.ShieldBreakEffects);
+			FinishLevelBoundFX();
 
 			shieldActive = coll.enabled = false;
 		}
+		private void FinishLevelBoundFX()
+		{
+			for (int i = 0; i < info.ShieldLevelBasedEffects.Length; i++)
+			{
+				FXManager.FinishFX(ref shieldLevelBoundEffects[i]);
+			}
+		}
         private void OnDestroy()
 		{
-			FXManager.FinishFX(ref boundEffects);
+			FinishLevelBoundFX();
 		}
 	}
 }
