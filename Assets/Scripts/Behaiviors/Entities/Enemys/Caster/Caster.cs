@@ -143,9 +143,20 @@ namespace EoE.Entities
 		}
 		private void ActivatePanicMode()
 		{
+			PointOfInterestIsTarget(false);
+			overrideTargetPosition = null;
 			panicModeActive = true;
 			panicModeBoundFX = ActivateActivationEffects(settings.PanicModeEffects);
 			FindNearestAlly(settings.PanicModeAlliedSearchRange);
+		}
+		private void DeactivatePanicMode(bool becauseOfHeal = false)
+		{
+			panicModeActive = false;
+			FXManager.FinishFX(ref panicModeBoundFX);
+			overrideTargetPosition = null;
+
+			if (!becauseOfHeal)
+				completedPanicMode = true;
 		}
 		private void FindNearestAlly(float maxSearchRange)
 		{
@@ -162,15 +173,6 @@ namespace EoE.Entities
 					foundAlly = AllEntities[i] as Enemy;
 				}
 			}
-		}
-		private void DeactivatePanicMode(bool becauseOfHeal = false)
-		{
-			panicModeActive = false;
-			FXManager.FinishFX(ref panicModeBoundFX);
-			overrideTargetPosition = null;
-
-			if (!becauseOfHeal)
-				completedPanicMode = true;
 		}
 		private void DecideOnbehaiviorPattern()
 		{
