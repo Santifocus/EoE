@@ -362,19 +362,9 @@ namespace EoE.Combatery
 								Player.Instance.MovementStops++;
 
 							//FX
-							chargeBoundFX = new FXInstance[ActiveAttackStyle.ChargeSettings.FXObjects.Length];
-							for (int i = 0; i < chargeBoundFX.Length; i++)
-							{
-								chargeBoundFX[i] = FXManager.PlayFX(ActiveAttackStyle.ChargeSettings.FXObjects[i], transform, true, curChargeMultiplier);
-							}
-
-							chargeBoundFXMultiplied = new FXInstance[ActiveAttackStyle.ChargeSettings.FXObjectsWithMutliplier.Length];
-							for (int i = 0; i < chargeBoundFXMultiplied.Length; i++)
-							{
-								chargeBoundFXMultiplied[i] = FXManager.PlayFX(ActiveAttackStyle.ChargeSettings.FXObjectsWithMutliplier[i], transform, true, curChargeMultiplier);
-							}
-
-							//Buff
+							FXManager.ExecuteFX(ActiveAttackStyle.ChargeSettings.FXObjects, transform, true, out chargeBoundFX, curChargeMultiplier);
+							FXManager.ExecuteFX(ActiveAttackStyle.ChargeSettings.FXObjectsWithMutliplier, transform, true, out chargeBoundFXMultiplied, curChargeMultiplier);
+							//Buffs
 							chargeBoundBuffs = new BuffInstance[ActiveAttackStyle.ChargeSettings.BuffOnUserWhileCharging.Length];
 							for (int i = 0; i < chargeBoundBuffs.Length; i++)
 							{
@@ -535,7 +525,7 @@ namespace EoE.Combatery
 
 			float ultimateChargeAdd = isCrit ? weaponInfo.UltimateSettings.OnCritHitCharge : weaponInfo.UltimateSettings.OnHitCharge;
 			ultimateChargeAdd += comboIncrease * weaponInfo.UltimateSettings.PerComboPointCharge;
-			ultimateCharge = Mathf.Clamp(ultimateCharge + ultimateChargeAdd, 0, weaponInfo.UltimateSettings.TotalRequiredCharge);
+			AddUltimateCharge(ultimateChargeAdd);
 		}
 		private void ActivateSingleHitEffects(Entity hitEntitie, Vector3 direction, Vector3 hitPos)
 		{
@@ -618,11 +608,7 @@ namespace EoE.Combatery
 					}
 
 					//FX
-					comboBoundFX.Capacity = System.Math.Max(comboBoundFX.Capacity, comboBoundFX.Count + weaponInfo.ComboEffects.ComboData[i].Effect.EffectsTillComboEnds.Length);
-					for (int j = 0; j < weaponInfo.ComboEffects.ComboData[i].Effect.EffectsTillComboEnds.Length; j++)
-					{
-						comboBoundFX.Add(FXManager.PlayFX(weaponInfo.ComboEffects.ComboData[i].Effect.EffectsTillComboEnds[j], Player.Instance.transform, true));
-					}
+					FXManager.ExecuteFX(weaponInfo.ComboEffects.ComboData[i].Effect.EffectsTillComboEnds, Player.Instance.transform, true, ref comboBoundFX);
 
 					//Buffs
 					comboBoundBuffs.Capacity = System.Math.Max(comboBoundBuffs.Capacity, comboBoundBuffs.Count + weaponInfo.ComboEffects.ComboData[i].Effect.BuffsTillComboEnds.Length);
@@ -640,12 +626,7 @@ namespace EoE.Combatery
 		private void ComboFinish()
 		{
 			curCombo = 0;
-			for (int i = 0; i < comboBoundFX.Count; i++)
-			{
-				if(comboBoundFX[i] != null)
-				   comboBoundFX[i].FinishFX();
-			}
-			comboBoundFX = new List<FXInstance>();
+			FXManager.FinishFX(ref comboBoundFX);
 
 			for (int i = 0; i < comboBoundBuffs.Count; i++)
 			{
@@ -662,16 +643,8 @@ namespace EoE.Combatery
 			if (ActiveAttackStyle.ChargeSettings.StopRotationWhileCharging)
 				Player.Instance.MovementStops--;
 
-			for (int i = 0; i < chargeBoundFX.Length; i++)
-			{
-				if (chargeBoundFX[i] != null)
-					chargeBoundFX[i].FinishFX();
-			}
-			for (int i = 0; i < chargeBoundFXMultiplied.Length; i++)
-			{
-				if (chargeBoundFXMultiplied[i] != null)
-					chargeBoundFXMultiplied[i].FinishFX();
-			}
+			FXManager.FinishFX(ref chargeBoundFX);
+			FXManager.FinishFX(ref chargeBoundFXMultiplied);
 			for (int i = 0; i < chargeBoundBuffs.Length; i++)
 			{
 				Player.Instance.RemoveBuff(chargeBoundBuffs[i]);
@@ -685,21 +658,11 @@ namespace EoE.Combatery
 		{
 			if (Player.Instance.curStates.Fighting)
 			{
-				if(ultimateCharge < weaponInfo.UltimateSettings.TotalRequiredCharge)
-				{
-					ultimateCharge += weaponInfo.UltimateSettings.ChargeOverTimeOnCombat * Time.deltaTime;
-					if (ultimateCharge > weaponInfo.UltimateSettings.TotalRequiredCharge)
-						ultimateCharge = weaponInfo.UltimateSettings.TotalRequiredCharge;
-				}
+				AddUltimateCharge(weaponInfo.UltimateSettings.ChargeOverTimeOnCombat * Time.deltaTime);
 			}
 			else
 			{
-				if (ultimateCharge > 0)
-				{
-					ultimateCharge -= weaponInfo.UltimateSettings.OutOfCombatDecrease * Time.deltaTime;
-					if (ultimateCharge < 0)
-						ultimateCharge = 0;
-				}
+				AddUltimateCharge(weaponInfo.UltimateSettings.OutOfCombatDecrease * Time.deltaTime);
 			}
 
 			if(!InAttackSequence && !Player.Instance.IsCasting)
@@ -718,7 +681,18 @@ namespace EoE.Combatery
 		{
 			if(killer is Player)
 			{
-				ultimateCharge = Mathf.Clamp(ultimateCharge + weaponInfo.UltimateSettings.OnKillCharge, 0, weaponInfo.UltimateSettings.TotalRequiredCharge);
+				AddUltimateCharge(weaponInfo.UltimateSettings.OnKillCharge);
+			}
+		}
+		private void AddUltimateCharge(float value)
+		{
+			float preCharge = ultimateCharge;
+			ultimateCharge = Mathf.Clamp(ultimateCharge + value, 0, weaponInfo.UltimateSettings.TotalRequiredCharge);
+
+			if((ultimateCharge == weaponInfo.UltimateSettings.TotalRequiredCharge) && (preCharge < weaponInfo.UltimateSettings.TotalRequiredCharge))
+			{
+				FXManager.ExecuteFX(weaponInfo.UltimateSettings.OnUltimateFullChargeEffects, transform, true);
+				FXManager.ExecuteFX(Player.PlayerSettings.EffectsOnUltimateCharged, Player.Instance.transform, true);
 			}
 		}
 		private void CreateParticles(GameObject prefab, Vector3 hitPos, Vector3 direction)
@@ -726,7 +700,7 @@ namespace EoE.Combatery
 			GameObject newParticleSystem = Instantiate(prefab, Storage.ParticleStorage);
 			newParticleSystem.transform.forward = direction;
 			newParticleSystem.transform.position = hitPos;
-			EffectUtils.FadeAndDestroyParticles(newParticleSystem, 1);
+			EffectManager.FadeAndDestroyParticles(newParticleSystem, 1);
 		}
 		private void DropWeapon()
 		{

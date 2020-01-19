@@ -178,7 +178,7 @@ namespace EoE.Information
 					}
 					float sizeMultiplier = finalChangeAmount < 0 ? 1 : (Mathf.Clamp((finalChangeAmount / receiver.curMaxHealth) * 8, 0.75f, 4));
 
-					EffectUtils.CreateDamageNumber(	basis.impactPosition ?? receiver.actuallWorldPosition,
+					EffectManager.CreateDamageNumber(	basis.impactPosition ?? receiver.actuallWorldPosition,
 													colors,
 													forceDirection * GameController.CurrentGameSettings.DamageNumberFlySpeed * sizeMultiplier,
 													Mathf.Abs(finalChangeAmount),

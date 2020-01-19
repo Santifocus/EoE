@@ -804,11 +804,7 @@ namespace EoE.Entities
 				{
 					spell.CastInfo.StartEffects[i].Activate(this, transform, spell);
 				}
-				curBoundFX = new FXInstance[spell.CastInfo.VisualEffects.Length];
-				for (int i = 0; i < spell.CastInfo.VisualEffects.Length; i++)
-				{
-					curBoundFX[i] = FXManager.PlayFX(spell.CastInfo.VisualEffects[i], transform, this is Player, 1);
-				}
+				FXManager.ExecuteFX(spell.CastInfo.VisualEffects, transform, this is Player, out curBoundFX, 1);
 
 				float castTime = 0;
 				float effectTick = 0;
@@ -843,15 +839,7 @@ namespace EoE.Entities
 					RotationStops--;
 			}
 
-			if (curBoundFX != null)
-			{
-				for (int i = 0; i < curBoundFX.Length; i++)
-				{
-					if(curBoundFX[i] != null)
-						curBoundFX[i].FinishFX();
-				}
-				curBoundFX = null;
-			}
+			FXManager.FinishFX(ref curBoundFX);
 
 			//Start
 			if (spell.ContainedParts.HasFlag(SpellPart.Start))
@@ -860,21 +848,10 @@ namespace EoE.Entities
 				{
 					spell.StartInfo.Effects[i].Activate(this, transform, spell);
 				}
-				curBoundFX = new FXInstance[spell.StartInfo.VisualEffects.Length];
-				for (int i = 0; i < spell.StartInfo.VisualEffects.Length; i++)
-				{
-					curBoundFX[i] = FXManager.PlayFX(spell.StartInfo.VisualEffects[i], transform, this is Player, 1);
-				}
+				FXManager.ExecuteFX(spell.StartInfo.VisualEffects, transform, this is Player, out curBoundFX, 1);
 			}
 
-			if (curBoundFX != null)
-			{
-				for (int i = 0; i < curBoundFX.Length; i++)
-				{
-					if (curBoundFX[i] != null)
-						curBoundFX[i].FinishFX();
-				}
-			}
+			FXManager.FinishFX(ref curBoundFX);
 
 			//Projectile
 			if (spell.ContainedParts.HasFlag(SpellPart.Projectile))
@@ -936,14 +913,7 @@ namespace EoE.Entities
 			IsCasting = false;
 			CastingCooldown = spell.SpellCooldown;
 			spell.Cost.Activate(this, 1, 1, 1);
-			if (curBoundFX != null)
-			{
-				for (int i = 0; i < curBoundFX.Length; i++)
-				{
-					if (curBoundFX[i] != null)
-						curBoundFX[i].FinishFX();
-				}
-			}
+			FXManager.FinishFX(ref curBoundFX);
 		}
 		#region ProjectileCreation
 		private Projectile CreateProjectile(Spell spellBase, int index)

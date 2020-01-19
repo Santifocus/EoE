@@ -25,7 +25,7 @@ namespace EoE.Combatery
 		private bool isDead;
 		private Vector3 spawnPos;
 
-		private List<FXInstance> boundEffects = new List<FXInstance>();
+		private List<FXInstance> boundEffects;
 
 		private void Start()
 		{
@@ -233,19 +233,15 @@ namespace EoE.Combatery
 		{
 			for (int i = 0; i < activationEffects.Length; i++)
 			{
-				FXInstance[] fxInstances = activationEffects[i].Activate(creator, baseData, effectMultiplier, transform);
+				FXInstance[] createdFXInstances = activationEffects[i].Activate(creator, baseData, effectMultiplier, transform);
 				if (binding)
-					boundEffects.AddRange(fxInstances);
+				{
+					if (boundEffects == null)
+						boundEffects = new List<FXInstance>(createdFXInstances);
+					else
+						boundEffects.AddRange(createdFXInstances);
+				}
 			}
-		}
-		private void StopBoundFX()
-		{
-			for (int i = 0; i < boundEffects.Count; i++)
-			{
-				if(boundEffects[i] != null)
-					boundEffects[i].FinishFX();
-			}
-			boundEffects = new List<FXInstance>();
 		}
 		private void Reflect(Entity newOwner)
 		{
@@ -259,7 +255,7 @@ namespace EoE.Combatery
 		}
 		private void OnDestroy()
 		{
-			StopBoundFX();
+			FXManager.FinishFX(ref boundEffects);
 			AllProjectiles.Remove(this);
 		}
 		private void OnDrawGizmos()

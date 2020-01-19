@@ -54,10 +54,10 @@ namespace EoE.Entities
 						("{Experience}", soulCount.ToString()),
 						("{Currency}", totalCurrency.ToString())
 					};
-					FXManager.PlayFX((EffectsOnInteract[i] as TextBasedFX).CreateInstructedNotification(replaceInstructions), transform, true);
+					FXManager.ExecuteFX((EffectsOnInteract[i] as TextBasedFX).CreateInstructedNotification(replaceInstructions), transform, true);
 					continue;
 				}
-				FXManager.PlayFX(EffectsOnInteract[i], transform, true);
+				FXManager.ExecuteFX(EffectsOnInteract[i], transform, true);
 			}
 
 			StartCoroutine(FadeAway());
@@ -71,7 +71,7 @@ namespace EoE.Entities
 			ParticleSystem.EmissionModule em = soulParticles.emission;
 			em.rateOverTime = soulCount / fadeOutTime;
 			soulParticles.Play();
-			EffectUtils.FadeAndDestroyParticles(mainParticles, 0);
+			EffectManager.FadeAndDestroyParticles(mainParticles, 0);
 			bool emissionDisabled = false;
 
 			while (timer < fadeOutTime || mainParticles)

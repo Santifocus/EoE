@@ -6,7 +6,7 @@ namespace EoE.Entities
 {
 	public class CrawlerHitbox : MonoBehaviour
 	{
-		[SerializeField] private Collider coll;
+		[SerializeField] private Collider coll = default;
 		private bool collisionActive;
 		private Crawler parent;
 		public bool CollisionActive

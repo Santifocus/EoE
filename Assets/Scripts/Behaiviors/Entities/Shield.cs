@@ -12,9 +12,9 @@ namespace EoE.Combatery
 		[SerializeField] private SphereCollider coll = default;
 
         public Entity creator { get; private set; }
-		private List<FXInstance> boundEffects;
 		public ShieldData info { get; private set; }
 
+		private List<FXInstance> boundEffects;
 		private bool shieldActive;
 		private float curShieldResistance;
 		private ShieldState curState;
@@ -29,7 +29,6 @@ namespace EoE.Combatery
 			newShield.coll.radius = info.ShieldSize;
 			newShield.curShieldResistance = info.ShieldResistance;
 			newShield.curState = ShieldState.FourQuarter;
-			newShield.boundEffects = new List<FXInstance>();
 
 			newShield.AnchorShield();
 			newShield.coll.enabled = false;
@@ -72,7 +71,7 @@ namespace EoE.Combatery
 			}
 			else
 			{
-				StopBoundFX();
+				FXManager.FinishFX(ref boundEffects);
 				ActivateActivationEffects(info.ShieldDisableEffects, false);
 			}
 		}
@@ -120,26 +119,19 @@ namespace EoE.Combatery
 		{
 			for (int i = 0; i < activationEffects.Length; i++)
 			{
-				FXInstance[] fxInstances = activationEffects[i].Activate(creator, info.BaseData, 1, transform);
+				FXInstance[] createdFXInstances = activationEffects[i].Activate(creator, info.BaseData, 1, transform);
 				if (binding)
-					boundEffects.AddRange(fxInstances);
+				{
+					if (boundEffects == null)
+						boundEffects = new List<FXInstance>(createdFXInstances);
+					else
+						boundEffects.AddRange(createdFXInstances);
+				}
 			}
-		}
-		private void StopBoundFX()
-		{
-			if (boundEffects.Count == 0)
-				return;
-
-			for (int i = 0; i < boundEffects.Count; i++)
-			{
-				if (boundEffects[i] != null)
-					boundEffects[i].FinishFX();
-			}
-			boundEffects = new List<FXInstance>();
 		}
 		private void BreakShield()
 		{
-			StopBoundFX(); 
+			FXManager.FinishFX(ref boundEffects);
 			if(info.EffectOnUserOnShieldBreak)
 				info.EffectOnUserOnShieldBreak.Activate(creator, creator, info.BaseData, Vector3.zero, creator.actuallWorldPosition);
 			ActivateActivationEffects(info.ShieldBreakEffects, false);
@@ -147,8 +139,8 @@ namespace EoE.Combatery
 			shieldActive = coll.enabled = false;
 		}
         private void OnDestroy()
-        {
-			StopBoundFX();
+		{
+			FXManager.FinishFX(ref boundEffects);
 		}
 	}
 }

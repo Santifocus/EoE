@@ -71,11 +71,13 @@ namespace EoE.Information
 
 		///FX
 		public FXObject[] EffectsOnCombatStart = default;
+		public FXObject[] EffectsOnUltimateCharged = default;
+		public FXObject[] EffectsOnLevelup = default;
+
 		//On Player do attack
 		public FXObject[] EffectsOnCauseDamage = default;
 		public FXObject[] EffectsOnCauseCrit = default;
 		public FXObject[] EffectsOnEnemyKilled = default;
-		public FXObject[] EffectsOnLevelup = default;
 
 		//Player Movement
 		public FXObject[] EffectsWhileWalk = default;

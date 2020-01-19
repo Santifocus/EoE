@@ -160,6 +160,7 @@ namespace EoE.Information
 
 			Header("Generall");
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnCombatStart))), ref settings.EffectsOnCombatStart, serializedObject.FindProperty(nameof(settings.EffectsOnCombatStart)), new GUIContent(". Effect"), 1);
+			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnUltimateCharged))), ref settings.EffectsOnUltimateCharged, serializedObject.FindProperty(nameof(settings.EffectsOnUltimateCharged)), new GUIContent(". Effect"), 1);
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnLevelup))), ref settings.EffectsOnLevelup, serializedObject.FindProperty(nameof(settings.EffectsOnLevelup)), new GUIContent(". Effect"), 1);
 
 			Header("On Player Attacking");

@@ -32,17 +32,17 @@ namespace EoE.Entities
 							("{Name}", containedItem.data.ItemName.text.ToString()),
 							("{Amount}", (preStacksize - containedItem.stackSize).ToString())
 						};
-						FXManager.PlayFX((EffectsOnInteract[i] as TextBasedFX).CreateInstructedNotification(replaceInstructions), Player.Instance.transform, true);
+						FXManager.ExecuteFX((EffectsOnInteract[i] as TextBasedFX).CreateInstructedNotification(replaceInstructions), Player.Instance.transform, true);
 						continue;
 					}
-					FXManager.PlayFX(EffectsOnInteract[i], transform, true);
+					FXManager.ExecuteFX(EffectsOnInteract[i], transform, true);
 				}
 			}
 			else
 			{
 				if (FailedPickUpDelay <= 0)
 				{
-					FXManager.PlayFX(failedPickUpNotification, Player.Instance.transform, true);
+					FXManager.ExecuteFX(failedPickUpNotification, Player.Instance.transform, true);
 					FailedPickUpDelay = FAILED_PICKUP_DELAY;
 				}
 			}
@@ -62,7 +62,7 @@ namespace EoE.Entities
 				return;
 
 			infoDisplay.transform.position = transform.position + infoDisplayOffset;
-			Vector3 facingDir = Vector3.Lerp(Player.Instance.actuallWorldPosition, PlayerCameraController.PlayerCamera.transform.position, 0.35f);
+			Vector3 facingDir = Vector3.Lerp(Player.Instance.actuallWorldPosition, PlayerCameraController.PlayerCamera.transform.position, 0.45f);
 			Vector3 signDir = (infoDisplay.transform.position - facingDir).normalized;
 			infoDisplay.transform.forward = signDir;
 		}

@@ -54,7 +54,7 @@ namespace EoE.UI
 		}
 		public void Quit()
 		{
-			EffectUtils.ResetScreenEffects();
+			EffectManager.ResetScreenEffects();
 			GameController.ActivePauses = 0;
 			SceneManager.LoadScene(ConstantCollector.MAIN_MENU_SCENE_INDEX);
 		}

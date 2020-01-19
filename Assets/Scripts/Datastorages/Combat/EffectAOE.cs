@@ -208,11 +208,8 @@ namespace EoE.Combatery
 					Buff.ApplyBuff(BuffsToApply[j], eligibleTargets[i].Target, effectCauser, effectMultiplier, BuffStackStyle);
 				}
 
-				//FXEffects
-				for (int j = 0; j < Effects.Length; j++)
-				{
-					FXManager.PlayFX(Effects[j].FX, eligibleTargets[i].Target.transform, eligibleTargets[i].Target is Player, effectMultiplier);
-				}
+				//FX
+				FXManager.ExecuteFX(Effects, eligibleTargets[i].Target.transform, eligibleTargets[i].Target is Player, effectMultiplier);
 			}
 		}
 		private struct CollectedEntitieData

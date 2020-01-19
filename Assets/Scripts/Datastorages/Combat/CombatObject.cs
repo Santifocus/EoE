@@ -222,7 +222,7 @@ namespace EoE.Combatery
 
 		public FXInstance[] Activate(Entity activator, CombatObject baseObject, float multiplier = 1, Transform overrideTransform = null, params Entity[] ignoredEntities)
 		{
-			FXInstance[] createdFXInstances = (HasMaskFlag(EffectType.FX) ? (new FXInstance[FXObjects.Length]) : (new FXInstance[0]));
+			//Impulse Velocity
 			if (HasMaskFlag(EffectType.ImpulseVelocity))
 			{
 				if(activator is Player)
@@ -230,13 +230,17 @@ namespace EoE.Combatery
 				Vector3 direction = CombatObject.CalculateDirection(ImpulseVelocityDirection, ImpulseVelocityFallbackDirection, ImpulseDirectionBase, activator, Vector3.zero);
 				activator.entitieForceController.ApplyForce(direction * ImpulseVelocity * multiplier, 1 / ImpulseVelocityFallOffTime, true);
 			}
+
+			//FX
+			//If we are going to create FX we want this array to be null because it will be re-created in the FXManager
+			//otherwise we create a array with the size of 0 so we dont return null
+			FXInstance[] createdFXInstances = (HasMaskFlag(EffectType.FX) ? (null) : (new FXInstance[0]));
 			if (HasMaskFlag(EffectType.FX))
 			{
-				for (int i = 0; i < FXObjects.Length; i++)
-				{
-					createdFXInstances[i] = FXManager.PlayFX(FXObjects[i], overrideTransform ?? activator.transform, activator is Player, multiplier);
-				}
+				FXManager.ExecuteFX(FXObjects, overrideTransform ?? activator.transform, activator is Player, out createdFXInstances, multiplier);
 			}
+
+			//AOE
 			if (HasMaskFlag(EffectType.AOE))
 			{
 				EffectOverrides overrides = new EffectOverrides()
@@ -251,10 +255,14 @@ namespace EoE.Combatery
 					AOEEffects[i].Activate(activator, overrideTransform ?? activator.transform, baseObject, overrides, ignoredEntities);
 				}
 			}
+
+			//CreateProjectile
 			if (HasMaskFlag(EffectType.CreateProjectile))
 			{
 				GameController.Instance.StartCoroutine(ProjectileCreation(activator, baseObject, overrideTransform, multiplier));
 			}
+
+			//HealOnCreator
 			if (HasMaskFlag(EffectType.HealOnCreator))
 			{
 				for(int i = 0; i < HealsOnUser.Length; i++)
@@ -262,6 +270,8 @@ namespace EoE.Combatery
 					HealsOnUser[i].Activate(activator, multiplier);
 				}
 			}
+
+			//BuffOnCreator
 			if (HasMaskFlag(EffectType.BuffOnCreator))
 			{
 				for (int i = 0; i < BuffsOnUser.Length; i++)
@@ -269,6 +279,8 @@ namespace EoE.Combatery
 					Buff.ApplyBuff(BuffsOnUser[i], activator, activator, multiplier, StackingStyle);
 				}
 			}
+
+			//CreateRemenants
 			if (HasMaskFlag(EffectType.CreateRemenants))
 			{
 				for (int i = 0; i < CreatedRemenants.Length; i++)

@@ -296,15 +296,7 @@ namespace EoE.Information
 		}
 		public void StopBoundEffects()
 		{
-			if (BoundFXInstances != null)
-			{
-				for (int i = 0; i < BoundFXInstances.Length; i++)
-				{
-					if(BoundFXInstances[i] != null)
-						BoundFXInstances[i].FinishFX();
-				}
-			}
-			BoundFXInstances = null;
+			FXManager.FinishFX(ref BoundFXInstances);
 		}
 	}
 }

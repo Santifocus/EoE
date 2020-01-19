@@ -369,25 +369,18 @@ namespace EoE.UI
 					curInventory.ShopItems[selectedSlotIndex].MaxPurchases -= actionAmount;
 					shopSlots[selectedSlotIndex].Stacksize -= actionAmount;
 					Player.Instance.Inventory.AddItem(new InventoryItem(curInventory.ShopItems[selectedSlotIndex].Item, actionAmount));
-					PlayFX(onBuyFX);
+					FXManager.ExecuteFX(onBuyFX, Player.Instance.transform, transform);
 				}
 				else
 				{
 					Player.Instance.ChangeCurrency(actionWorth);
 					Player.Instance.Inventory.RemoveStackSize(selectedSlotIndex, actionAmount);
-					PlayFX(onSellFX);
+					FXManager.ExecuteFX(onSellFX, Player.Instance.transform, transform);
 				}
 
 				SetShopState(ShopState.ItemSelection);
 				UpdateSelectedItemSlot();
 				shopItemActions[selectedIndex[(int)ShopState.ActionSelection - 1]].DeSelect();
-			}
-		}
-		private void PlayFX(FXObject[] effects)
-		{
-			for(int i = 0; i < effects.Length; i++)
-			{
-				FXManager.PlayFX(effects[i], Player.Instance.transform, transform);
 			}
 		}
 		private void ResetShop()

@@ -393,11 +393,11 @@ namespace EoE.Entities
 				//Health fell below threshold
 				if (newBelowHealthThresholdState)
 				{
-					BindFXObjects(PlayerSettings.EffectsWhileHealthBelowThreshold, ref HealthBelowThresholdBoundEffects);
+					FXManager.ExecuteFX(PlayerSettings.EffectsWhileHealthBelowThreshold, transform, true, out HealthBelowThresholdBoundEffects);
 				}
 				else //Health went above threshold
 				{
-					FinishBoundFX(ref HealthBelowThresholdBoundEffects);
+					FXManager.FinishFX(ref HealthBelowThresholdBoundEffects);
 				}
 			}
 
@@ -409,11 +409,11 @@ namespace EoE.Entities
 				//Player started walking or stopped running and kept walking
 				if (newWalkingEffectsOn)
 				{
-					BindFXObjects(PlayerSettings.EffectsWhileWalk, ref PlayerWalkingBoundEffects);
+					FXManager.ExecuteFX(PlayerSettings.EffectsWhileWalk, transform, true, out PlayerWalkingBoundEffects);
 				}
 				else //Player stopped walking or started running
 				{
-					FinishBoundFX(ref PlayerWalkingBoundEffects);
+					FXManager.FinishFX(ref PlayerWalkingBoundEffects);
 				}
 			}
 
@@ -425,11 +425,11 @@ namespace EoE.Entities
 				//Player started running
 				if (newRunningEffectsOn)
 				{
-					BindFXObjects(PlayerSettings.EffectsWhileRun, ref PlayerRunningBoundEffects);
+					FXManager.ExecuteFX(PlayerSettings.EffectsWhileRun, transform, true, out PlayerRunningBoundEffects);
 				}
 				else //Player stopped running
 				{
-					FinishBoundFX(ref PlayerRunningBoundEffects);
+					FXManager.FinishFX(ref PlayerRunningBoundEffects);
 				}
 			}
 		}
@@ -596,10 +596,7 @@ namespace EoE.Entities
 			FallDamageCooldown = FALLDAMAGE_COOLDOWN;
 			animationControl.SetTrigger("Jump");
 
-			for (int i = 0; i < PlayerSettings.EffectsOnJump.Length; i++)
-			{
-				FXManager.PlayFX(PlayerSettings.EffectsOnJump[i], transform, true);
-			}
+			FXManager.ExecuteFX(PlayerSettings.EffectsOnJump, transform, true);
 		}
 		private void CheckForFalling()
 		{
@@ -639,10 +636,7 @@ namespace EoE.Entities
 			//Create FX
 			if (velDif > PlayerSettings.PlayerLandingVelocityThreshold)
 			{
-				for (int i = 0; i < PlayerSettings.EffectsOnPlayerLanding.Length; i++)
-				{
-					FXManager.PlayFX(PlayerSettings.EffectsOnPlayerLanding[i], transform, true);
-				}
+				FXManager.ExecuteFX(PlayerSettings.EffectsOnPlayerLanding, transform, true);
 			}
 
 			float velocityMultiplier = 0;
@@ -760,12 +754,8 @@ namespace EoE.Entities
 				targetAngle = -(Mathf.Atan2(controllDirection.z, controllDirection.x) * Mathf.Rad2Deg - 90);
 			}
 
-			//Play FX
-			FXInstance[] dashEffects = new FXInstance[PlayerSettings.EffectsOnPlayerDash.Length];
-			for (int i = 0; i < PlayerSettings.EffectsOnPlayerDash.Length; i++)
-			{
-				dashEffects[i] = FXManager.PlayFX(PlayerSettings.EffectsOnPlayerDash[i], transform, true);
-			}
+			//FX
+			FXManager.ExecuteFX(PlayerSettings.EffectsOnPlayerDash, transform, true, out FXInstance[] dashEffects);
 
 			Vector3 newForce = new Vector3(Mathf.Sin(targetAngle * Mathf.Deg2Rad), 0, Mathf.Cos(targetAngle * Mathf.Deg2Rad)) * PlayerSettings.DashPower * curWalkSpeed;
 
@@ -805,11 +795,7 @@ namespace EoE.Entities
 			if (weaponCopy)
 				Destroy(weaponCopy.gameObject);
 
-			for (int i = 0; i < dashEffects.Length; i++)
-			{
-				if(dashEffects[i] != null)
-					dashEffects[i].FinishFX();
-			}
+			FXManager.FinishFX(ref dashEffects);
 
 			void ApplyMaterialToAllChildren(Transform parent)
 			{
@@ -1192,7 +1178,7 @@ namespace EoE.Entities
 		public override void StartCombat()
 		{
 			if(!curStates.Fighting)
-				BindFXObjects(playerSettings.EffectsOnCombatStart, ref CombatBoundEffects);
+				FXManager.ExecuteFX(playerSettings.EffectsOnCombatStart, transform, true, out CombatBoundEffects);
 
 			base.StartCombat();
 			if (!combatMusic.IsAdded)
@@ -1204,34 +1190,14 @@ namespace EoE.Entities
 		protected override void CombatEnd()
 		{
 			combatMusic.WantsToPlay = false;
-			FinishBoundFX(ref CombatBoundEffects);
-		}
-		private void BindFXObjects(FXObject[] toPlay, ref FXInstance[] targetArray)
-		{
-			targetArray = new FXInstance[toPlay.Length];
-			for (int i = 0; i < toPlay.Length; i++)
-			{
-				targetArray[i] = FXManager.PlayFX(toPlay[i], transform, true);
-			}
-		}
-		private void FinishBoundFX(ref FXInstance[] instances)
-		{
-			if (instances != null)
-			{
-				for (int i = 0; i < instances.Length; i++)
-				{
-					if (instances[i] != null)
-						instances[i].FinishFX();
-				}
-				instances = null;
-			}
+			FXManager.FinishFX(ref CombatBoundEffects);
 		}
 		private void FinishAliveBoundFX()
 		{
-			FinishBoundFX(ref HealthBelowThresholdBoundEffects);
-			FinishBoundFX(ref PlayerWalkingBoundEffects);
-			FinishBoundFX(ref PlayerRunningBoundEffects);
-			FinishBoundFX(ref CombatBoundEffects);
+			FXManager.FinishFX(ref HealthBelowThresholdBoundEffects);
+			FXManager.FinishFX(ref PlayerWalkingBoundEffects);
+			FXManager.FinishFX(ref PlayerRunningBoundEffects);
+			FXManager.FinishFX(ref CombatBoundEffects);
 		}
 		#region IFrames
 		protected override void OnHealthChange(ChangeInfo baseChange, ChangeInfo.ChangeResult resultInfo)

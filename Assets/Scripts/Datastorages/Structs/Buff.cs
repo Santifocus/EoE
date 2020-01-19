@@ -71,12 +71,7 @@ namespace EoE.Information
 
 			this.TimeMultiplier = TimeMultiplier;
 			Reset();
-
-			BoundEffects = new FXInstance[Base.FXEffects != null ? Base.FXEffects.Length : 0];
-			for (int i = 0; i < BoundEffects.Length; i++)
-			{
-				BoundEffects[i] = FXManager.PlayFX(Base.FXEffects[i], Target.transform, Target is Player);
-			}
+			FXManager.ExecuteFX(Base.FXEffects, Target.transform, Target is Player, out BoundEffects);
 		}
 		public void Reset()
 		{
@@ -96,11 +91,7 @@ namespace EoE.Information
 		}
 		public void OnRemove()
 		{
-			for (int i = 0; i < BoundEffects.Length; i++)
-			{
-				if (BoundEffects[i] != null)
-					BoundEffects[i].FinishFX();
-			}
+			FXManager.FinishFX(ref BoundEffects);
 		}
 	}
 

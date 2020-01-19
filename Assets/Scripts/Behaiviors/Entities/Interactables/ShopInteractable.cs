@@ -36,7 +36,7 @@ namespace EoE.Entities
 			if (!showingInteractInfo)
 			{
 				showingInteractInfo = true;
-				FXInstance info = FXManager.PlayFX(interactInfo, Player.Instance.transform, true);
+				FXInstance info = FXManager.ExecuteFX(interactInfo, Player.Instance.transform, true);
 				GameController.BeginDelayedCall(() => { GameController.Shop.BuildShop(shopDataInstance); showingInteractInfo = false; },
 												0,
 												TimeType.Realtime,

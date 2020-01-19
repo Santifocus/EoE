@@ -87,13 +87,13 @@ namespace EoE.UI
 		public void OnRestart()
 		{
 			GameController.ActivePauses = 0;
-			EffectUtils.ResetScreenEffects();
+			EffectManager.ResetScreenEffects();
 			SceneManager.LoadScene(ConstantCollector.GAME_SCENE_INDEX);
 		}
 		public void OnQuit()
 		{
 			GameController.ActivePauses = 0;
-			EffectUtils.ResetScreenEffects();
+			EffectManager.ResetScreenEffects();
 			SceneManager.LoadScene(ConstantCollector.MAIN_MENU_SCENE_INDEX);
 		}
 		private void OnDestroy()

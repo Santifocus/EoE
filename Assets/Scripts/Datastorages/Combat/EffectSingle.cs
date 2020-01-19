@@ -62,11 +62,8 @@ namespace EoE.Combatery
 				Buff.ApplyBuff(BuffsToApply[j], target, effectCauser, overrideEffectMultiplier, BuffStackStyle);
 			}
 
-			//FXEffects
-			for (int j = 0; j < Effects.Length; j++)
-			{
-				FXManager.PlayFX(Effects[j], target.transform, target is Player, overrideEffectMultiplier);
-			}
+			//FX
+			FXManager.ExecuteFX(Effects, target.transform, target is Player, overrideEffectMultiplier);
 		}
 		#endregion
 	}

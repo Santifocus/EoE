@@ -166,7 +166,7 @@ namespace EoE.Entities
 		private void DeactivatePanicMode(bool becauseOfHeal = false)
 		{
 			panicModeActive = false;
-			ReleaseBoundEffects();
+			FXManager.FinishFX(ref panicModeBoundFX);
 			overrideTargetPosition = null;
 
 			if (!becauseOfHeal)
@@ -195,18 +195,6 @@ namespace EoE.Entities
 				int targetPatternIndex = possiblePatterns[Random.Range(0, possiblePatterns.Count)];
 				CastSpell(settings.BehaiviorPatterns[targetPatternIndex].TargetSpell);
 			}
-		}
-		private void ReleaseBoundEffects()
-		{
-			if (panicModeBoundFX == null)
-				return;
-
-			for(int i = 0; i < panicModeBoundFX.Length; i++)
-			{
-				if(panicModeBoundFX[i] != null)
-					panicModeBoundFX[i].FinishFX();
-			}
-			panicModeBoundFX = null;
 		}
 	}
 }

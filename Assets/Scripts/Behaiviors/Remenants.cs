@@ -12,7 +12,7 @@ namespace EoE.Combatery
 		private Entity creator;
 		private CombatObject baseData;
 		private RemenantsData info;
-		private List<FXInstance> boundEffects = new List<FXInstance>();
+		private List<FXInstance> boundEffects;
 
 		private float delayToWhileCast;
 		private float remainingLifeTime;
@@ -64,24 +64,21 @@ namespace EoE.Combatery
 		{
 			for (int i = 0; i < activationEffects.Length; i++)
 			{
-				FXInstance[] fxInstances = activationEffects[i].Activate(creator, baseData, effectMultiplier, transform);
+				FXInstance[] createdFXInstances = activationEffects[i].Activate(creator, baseData, effectMultiplier, transform);
 				if (binding)
-					boundEffects.AddRange(fxInstances);
+				{
+					if (boundEffects == null)
+						boundEffects = new List<FXInstance>(createdFXInstances);
+					else
+						boundEffects.AddRange(createdFXInstances);
+				}
 			}
-		}
-		private void StopBoundFX()
-		{
-			for (int i = 0; i < boundEffects.Count; i++)
-			{
-				if (boundEffects[i] != null)
-					boundEffects[i].FinishFX();
-			}
-			boundEffects = new List<FXInstance>();
 		}
 		private void OnDestroy()
 		{
-			StopBoundFX();
+			FXManager.FinishFX(ref boundEffects);
 		}
+		#region Gizmos
 		private void OnDrawGizmos()
 		{
 			if (info.Duration - remainingLifeTime < 0.5f)
@@ -108,5 +105,6 @@ namespace EoE.Combatery
 				}
 			}
 		}
+		#endregion
 	}
 }

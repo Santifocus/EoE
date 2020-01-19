@@ -59,7 +59,7 @@ namespace EoE.Information
 			//give us the info that the item cannot be used if that is the case we dont do any of the base mechanics
 			if (OnUse(user))
 			{
-				PlayEffects(user, FXEffectsOnUse);
+				FXManager.ExecuteFX(FXEffectsOnUse, user.transform, user is Player);
 				curCooldown = UseCooldown;
 				if (RemoveOnUse)
 				{
@@ -72,7 +72,7 @@ namespace EoE.Information
 			if (OnEquip(user))
 			{
 				originStack.StopBoundEffects();
-				originStack.BoundFXInstances = PlayEffects(user, FXEffectsWhenEquipped);
+				FXManager.ExecuteFX(FXEffectsWhenEquipped, user.transform, user is Player, out originStack.BoundFXInstances);
 			}
 		}
 		public void UnEquip(InventoryItem originStack, Entity user)
@@ -81,15 +81,6 @@ namespace EoE.Information
 			{
 				originStack.StopBoundEffects();
 			}
-		}
-		private FXInstance[] PlayEffects(Entity user, FXObject[] effects)
-		{
-			FXInstance[] playedEffects = new FXInstance[effects.Length];
-			for (int i = 0; i < effects.Length; i++)
-			{
-				playedEffects[i] = FXManager.PlayFX(effects[i], user.transform, user is Player);
-			}
-			return playedEffects;
 		}
 		protected virtual bool OnEquip(Entity user) => false;
 		protected virtual bool OnUnEquip(Entity user) => true;

@@ -10,11 +10,10 @@ using UnityEngine.UI;
 
 namespace EoE
 {
-	public class EffectUtils : MonoBehaviour
+	public class EffectManager : MonoBehaviour
 	{
 		#region Fields
-		private const string INVALID_INSTRUCTION_MESSAGE = "{Invalid Replace Instruction}";
-		private static EffectUtils Instance;
+		private static EffectManager Instance;
 		[SerializeField] private Material screenEffectMaterial = default;
 		[SerializeField] private Transform cameraShakeCore = default;
 		[SerializeField] private DamageNumber damageNumberPrefab = default;
