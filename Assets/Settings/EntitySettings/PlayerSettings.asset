@@ -98,8 +98,7 @@ MonoBehaviour:
   LookLerpSpringStiffness: 0.05
   EffectsOnCombatStart:
   - {fileID: 11400000, guid: 841005440ef020843a19f9880ce3ac1f, type: 2}
-  EffectsOnUltimateCharged:
-  - {fileID: 11400000, guid: 0f8ade59f9600be4dae425e0227c2177, type: 2}
+  EffectsOnUltimateCharged: []
   EffectsOnLevelup:
   - {fileID: 11400000, guid: 982aab948223d7044bfae67dc43bb77c, type: 2}
   - {fileID: 11400000, guid: 2a1f29303ceefa04d9d5508f74094d05, type: 2}

@@ -716,6 +716,7 @@ namespace EoE.Combatery
 			{
 				return;
 			}
+			EventManager.EntitieDiedEvent -= EntitieDeath;
 			ComboFinish();
 			if(ActiveAttackStyle != null)
 			{
