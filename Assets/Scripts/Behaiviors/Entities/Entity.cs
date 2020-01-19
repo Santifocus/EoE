@@ -411,6 +411,8 @@ namespace EoE.Entities
 		}
 		protected virtual void LevelUpEntitie()
 		{
+			if (!SelfSettings.LevelSettings)
+				return;
 			EntitieLevel++;
 			const int enumOffset = (int)TargetBaseStat.PhysicalDamage;
 

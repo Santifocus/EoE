@@ -7094,7 +7094,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1041142588487098850}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Crystals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12880,7 +12880,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1041142589877555813}
   m_Layer: 8
-  m_Name: Fog+Light+Crystals
+  m_Name: ParticlesLightsCrystals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15425,7 +15425,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1041142590550340110}
   m_Layer: 8
-  m_Name: Collisions+
+  m_Name: Collisions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -64261,7 +64261,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7511611442009769078}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Glowy Crystals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -80677,7 +80677,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5406665247343248067}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: ChurchPolished
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86511,6 +86511,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1041142588828256189}
     m_Modifications:
+    - target: {fileID: 3554458282270140315, guid: cbf02171f1d84144c929f184275ae473,
+        type: 3}
+      propertyPath: m_Name
+      value: FogLight
+      objectReference: {fileID: 0}
     - target: {fileID: 5518085368368203971, guid: cbf02171f1d84144c929f184275ae473,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -86565,11 +86570,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3554458282270140315, guid: cbf02171f1d84144c929f184275ae473,
-        type: 3}
-      propertyPath: m_Name
-      value: FogLight
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cbf02171f1d84144c929f184275ae473, type: 3}

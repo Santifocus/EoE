@@ -25,16 +25,15 @@ namespace EoE
 		private Vector3 curOffset;
 		private float curLerpAcceleration;
 
-		private PlayerSettings playerSettigns => Player.Instance.SelfSettings as PlayerSettings;
-
 		private void Start()
 		{
-			TargetRotation = CurRotation = new Vector2(transform.eulerAngles.y, transform.eulerAngles.x);
 			Instance = this;
-			playerCamera.transform.localPosition = new Vector3(0, 0, -playerSettigns.CameraToPlayerDistance);
+			CameraFOV = Player.PlayerSettings.CameraBaseFOV;
+
 			curOffset = GetOffset();
+			playerCamera.transform.localPosition = new Vector3(0, 0, -Player.PlayerSettings.CameraToPlayerDistance);
 			transform.position = Player.Instance.transform.position + curOffset;
-			CameraFOV = playerSettigns.CameraBaseFOV;
+			TargetRotation = CurRotation = new Vector2(Player.Instance.transform.eulerAngles.y, Player.PlayerSettings.CameraVerticalAngleClamps.y / 2);
 
 			AnchorToPlayer();
 		}
@@ -43,7 +42,6 @@ namespace EoE
 			AnchorToPlayer();
 			RotateCamera();
 		}
-
 		private void AnchorToPlayer()
 		{
 			if (!Player.Existant)
@@ -52,7 +50,7 @@ namespace EoE
 			curOffset = Vector3.Lerp(curOffset, GetOffset(), Time.unscaledDeltaTime * 5);
 			Vector3 targetPos = Player.Instance.transform.position + curOffset;
 			transform.position = new Vector3(	targetPos.x,
-												Utils.SpringLerp(transform.position.y, targetPos.y, ref curLerpAcceleration, playerSettigns.CameraYLerpSringStiffness, Time.unscaledDeltaTime *										playerSettigns.CameraYLerpSpeed),
+												Utils.SpringLerp(transform.position.y, targetPos.y, ref curLerpAcceleration, Player.PlayerSettings.CameraYLerpSringStiffness, Time.unscaledDeltaTime * Player.PlayerSettings.CameraYLerpSpeed),
 												targetPos.z
 												);
 
@@ -86,7 +84,7 @@ namespace EoE
 			float sinPart = Mathf.Sin((CurRotation.x + 90) * Mathf.Deg2Rad);
 			float cosPart = Mathf.Cos((CurRotation.x + 90) * Mathf.Deg2Rad);
 
-			Vector3 baseOffset = Player.Instance.TargetedEntitie ? playerSettigns.CameraAnchorOffsetWhenTargeting : playerSettigns.CameraAnchorOffset;
+			Vector3 baseOffset = Player.Instance.TargetedEntitie ? Player.PlayerSettings.CameraAnchorOffsetWhenTargeting : Player.PlayerSettings.CameraAnchorOffset;
 			Vector3 offset =	baseOffset.x	*	new Vector3(sinPart, 0, cosPart) +
 								1				*	new Vector3(0, baseOffset.y, 0) +
 								baseOffset.z	*	new Vector3(cosPart, 0, sinPart);
@@ -99,12 +97,12 @@ namespace EoE
 			RaycastHit hit;
 			float distance;
 
-			if (Physics.Raycast(transform.position, rayDir, out hit, playerSettigns.CameraToPlayerDistance, ConstantCollector.TERRAIN_LAYER_MASK))
+			if (Physics.Raycast(transform.position, rayDir, out hit, Player.PlayerSettings.CameraToPlayerDistance, ConstantCollector.TERRAIN_LAYER_MASK))
 			{
 				distance = -(transform.position - hit.point).magnitude;
 			}
 			else
-				distance = -playerSettigns.CameraToPlayerDistance * (1 + rayDir.y * playerSettigns.CameraExtraZoomOnVertical);
+				distance = -Player.PlayerSettings.CameraToPlayerDistance * (1 + rayDir.y * Player.PlayerSettings.CameraExtraZoomOnVertical);
 
 			return distance;
 		}
@@ -112,8 +110,8 @@ namespace EoE
 		{
 			bool targeting = Player.Instance.TargetedEntitie;
 			CurRotation.x %= 360;
-			TargetRotation.y = Mathf.Clamp(TargetRotation.y, targeting ? playerSettigns.CameraClampsWhenTargeting.x : playerSettigns.CameraVerticalAngleClamps.x, targeting ? playerSettigns.CameraClampsWhenTargeting.y : playerSettigns.CameraVerticalAngleClamps.y);
-			CurRotation = new Vector2(Mathf.LerpAngle(CurRotation.x, TargetRotation.x, Time.unscaledDeltaTime * playerSettigns.CameraRotationSpeed), Mathf.LerpAngle(CurRotation.y, TargetRotation.y, Time.unscaledDeltaTime * playerSettigns.CameraRotationSpeed));
+			TargetRotation.y = Mathf.Clamp(TargetRotation.y, targeting ? Player.PlayerSettings.CameraClampsWhenTargeting.x : Player.PlayerSettings.CameraVerticalAngleClamps.x, targeting ? Player.PlayerSettings.CameraClampsWhenTargeting.y : Player.PlayerSettings.CameraVerticalAngleClamps.y);
+			CurRotation = new Vector2(Mathf.LerpAngle(CurRotation.x, TargetRotation.x, Time.unscaledDeltaTime * Player.PlayerSettings.CameraRotationSpeed), Mathf.LerpAngle(CurRotation.y, TargetRotation.y, Time.unscaledDeltaTime * Player.PlayerSettings.CameraRotationSpeed));
 		}
 	}
 }

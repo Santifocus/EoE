@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f45224d9a3f4302499b94633602e6182, type: 3}
+  m_Name: DummySettings
+  m_EditorClassIdentifier: 
+  EntitieMass: 1
+  MassCenter: {x: 0, y: 0, z: 0}
+  ShowEntitieLevel: 0
+  EntitieElement: 1
+  PossibleDropsTable: {fileID: 0}
+  LevelSettings: {fileID: 0}
+  ExperienceWorth: 0
+  BasePhysicalDamage: 0
+  BaseMagicalDamage: 0
+  BaseDefense: 0
+  Health: 1000
+  DoHealthRegen: 1
+  HealthRegen: 100
+  HealthRegenCooldownAfterTakingDamage: 0
+  HealthRegenInCombatMultiplier: 1
+  HealthRegenParticles: {fileID: 0}
+  HealthRegenParticlesOffset: {x: 0, y: 0, z: 0}
+  Mana: 0
+  DoManaRegen: 0
+  ManaRegen: 0
+  ManaRegenInCombatMultiplier: 0
+  WalkSpeed: 0
+  RunSpeedMultiplicator: 0
+  TurnSpeed: 0
+  InAirTurnSpeedMultiplier: 0
+  MoveAcceleration: 0
+  NoMoveDeceleration: 0
+  InAirAccelerationMultiplier: 0

@@ -324,7 +324,7 @@ namespace EoE.Entities
 		{
 			if (!TargetedEntitie)
 			{
-				if (InputController.ResetCamera.Pressed)
+				if (InputController.ResetCamera.Down)
 				{
 					PlayerCameraController.Instance.LookInDirection(transform.forward);
 					PlayerCameraController.TargetRotation = new Vector2(PlayerCameraController.TargetRotation.x, PlayerSettings.CameraVerticalAngleClamps.y / 2);
