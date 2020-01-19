@@ -646,7 +646,14 @@ MonoBehaviour:
     Ultimate: {fileID: 11400000, guid: 94da0838ebc07b34c83b553d2ddf4f90, type: 2}
     TotalRequiredCharge: 1
     OnUseChargeRemove: 1
-    OnUltimateFullChargeEffects: []
+    OnUltimateFullChargeEffects:
+    - FX: {fileID: 11400000, guid: 9d4857f9764135b4fbc8971098614985, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
     OnHitCharge: 1
     OnCritHitCharge: 2
     OnKillCharge: 2
