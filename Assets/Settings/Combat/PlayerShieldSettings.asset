@@ -30,7 +30,7 @@ MonoBehaviour:
   OffsetToOwner: {x: 0, y: 0, z: 0}
   RotationOffsetToOwner: {x: 0, y: 0, z: 0}
   ShieldLevelBasedEffects:
-  - MinShieldLevel: 0
+  - MinShieldLevel: 0.76
     MaxShieldLevel: 1
     Effects:
     - ChanceToActivate: 1
@@ -41,7 +41,7 @@ MonoBehaviour:
       ImpulseVelocityFallbackDirection: 1
       ImpulseDirectionBase: 1
       FXObjects:
-      - FX: {fileID: 11400000, guid: b27480ab36b8ad5488bb73fea94037fd, type: 2}
+      - FX: {fileID: 11400000, guid: 8181d961f87aabb49996ff84dd9cf2fd, type: 2}
         HasPositionOffset: 0
         PositionOffset: {x: 0, y: 0, z: 0}
         HasRotationOffset: 0
@@ -61,7 +61,128 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
-  ShieldFailedStartEffects: []
+  - MinShieldLevel: 0.51
+    MaxShieldLevel: 0.75
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 5d305fe620bbabc429d7586bb78ccb80, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      - FX: {fileID: 11400000, guid: 5c7676eeb240f3044baa8aa436a43115, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+  - MinShieldLevel: 0.26
+    MaxShieldLevel: 0.5
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 5521b6b164abd804994ee2e3547ae5e7, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      - FX: {fileID: 11400000, guid: 5c7676eeb240f3044baa8aa436a43115, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+  - MinShieldLevel: 0.01
+    MaxShieldLevel: 0.25
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 716a874777321034a93569f25e91bc32, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      - FX: {fileID: 11400000, guid: 5c7676eeb240f3044baa8aa436a43115, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+  ShieldFailedStartEffects:
+  - ChanceToActivate: 1
+    ContainedEffectType: 2
+    ImpulseVelocity: 5
+    ImpulseVelocityFallOffTime: 0.5
+    ImpulseVelocityDirection: 2
+    ImpulseVelocityFallbackDirection: 1
+    ImpulseDirectionBase: 1
+    FXObjects:
+    - FX: {fileID: 11400000, guid: ad838fa62185bac44aa30f3daf0dbc4e, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 0}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    AOEEffects: []
+    ProjectileInfos: []
+    HealsOnUser: []
+    StackingStyle: 2
+    BuffsOnUser: []
+    CreatedRemenants: []
   ShieldStartEffects: []
   ShieldHitEffects:
   - ChanceToActivate: 1
