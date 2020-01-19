@@ -88,7 +88,8 @@ namespace EoE.Combatery
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.TotalRequiredCharge))), ref settings.TotalRequiredCharge, 1);
 			SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OnUseChargeRemove))), ref settings.OnUseChargeRemove, 0, 1, 1);
 
-			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OnUltimateFullChargeEffects))), ref settings.OnUltimateFullChargeEffects, property.FindPropertyRelative(nameof(settings.OnUltimateFullChargeEffects)), DrawCustomFXObject, new GUIContent(". Effect"), 1);
+			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OnUltimateChargedEffects))), ref settings.OnUltimateChargedEffects, property.FindPropertyRelative(nameof(settings.OnUltimateChargedEffects)), DrawCustomFXObject, new GUIContent(". Effect"), 1);
+			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WhileUltimateIsChargedEffects))), ref settings.WhileUltimateIsChargedEffects, property.FindPropertyRelative(nameof(settings.WhileUltimateIsChargedEffects)), DrawCustomFXObject, new GUIContent(". Effect"), 1);
 
 			LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OnHitCharge))), ref settings.OnHitCharge, 1);

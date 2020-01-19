@@ -72,6 +72,7 @@ namespace EoE.Information
 		///FX
 		public FXObject[] EffectsOnCombatStart = default;
 		public FXObject[] EffectsOnUltimateCharged = default;
+		public FXObject[] EffectsWhileUltimateCharged = default;
 		public FXObject[] EffectsOnLevelup = default;
 
 		//On Player do attack

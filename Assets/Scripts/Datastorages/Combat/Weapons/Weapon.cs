@@ -167,7 +167,8 @@ namespace EoE.Combatery
 		public Ultimate Ultimate;
 		public float TotalRequiredCharge = 20;
 		public float OnUseChargeRemove = 1;
-		public CustomFXObject[] OnUltimateFullChargeEffects = new CustomFXObject[0];
+		public CustomFXObject[] OnUltimateChargedEffects = new CustomFXObject[0];
+		public CustomFXObject[] WhileUltimateIsChargedEffects = new CustomFXObject[0];
 
 		//Charge options
 		public float OnHitCharge = 1;

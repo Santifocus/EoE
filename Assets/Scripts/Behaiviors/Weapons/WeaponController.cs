@@ -54,6 +54,8 @@ namespace EoE.Combatery
 
 		//Ultimate control
 		public float ultimateCharge { get; set; }
+		private FXInstance[] ultimateChargedBoundFX;
+		private FXInstance[] ultimateChargedBoundFXPlayer;
 
 		//Charge effects
 		private FXInstance[] chargeBoundFX;
@@ -669,7 +671,7 @@ namespace EoE.Combatery
 					if (weaponInfo.UltimateSettings.Ultimate.CanActivate())
 					{
 						weaponInfo.UltimateSettings.Ultimate.Activate();
-						ultimateCharge -= weaponInfo.UltimateSettings.OnUseChargeRemove * weaponInfo.UltimateSettings.TotalRequiredCharge;
+						AddUltimateCharge(-weaponInfo.UltimateSettings.OnUseChargeRemove * weaponInfo.UltimateSettings.TotalRequiredCharge);
 					}
 				}
 			}
@@ -683,13 +685,24 @@ namespace EoE.Combatery
 		}
 		private void AddUltimateCharge(float value)
 		{
-			float preCharge = ultimateCharge;
+			bool ultimateWasReady = ultimateCharge >= weaponInfo.UltimateSettings.TotalRequiredCharge;
 			ultimateCharge = Mathf.Clamp(ultimateCharge + value, 0, weaponInfo.UltimateSettings.TotalRequiredCharge);
+			bool ultimateIsReady = ultimateCharge >= weaponInfo.UltimateSettings.TotalRequiredCharge;
 
-			if((ultimateCharge == weaponInfo.UltimateSettings.TotalRequiredCharge) && (preCharge < weaponInfo.UltimateSettings.TotalRequiredCharge))
+			//Was not ready, but now is
+			if (!ultimateWasReady && ultimateIsReady)
 			{
-				FXManager.ExecuteFX(weaponInfo.UltimateSettings.OnUltimateFullChargeEffects, transform, true);
+				FXManager.ExecuteFX(weaponInfo.UltimateSettings.OnUltimateChargedEffects, transform, true);
 				FXManager.ExecuteFX(Player.PlayerSettings.EffectsOnUltimateCharged, Player.Instance.transform, true);
+
+				FXManager.ExecuteFX(weaponInfo.UltimateSettings.WhileUltimateIsChargedEffects, transform, true, out ultimateChargedBoundFX);
+				FXManager.ExecuteFX(Player.PlayerSettings.EffectsWhileUltimateCharged, Player.Instance.transform, true, out ultimateChargedBoundFXPlayer);
+			}
+			//Was ready, but not anymore
+			else if(ultimateWasReady && !ultimateIsReady)
+			{
+				FXManager.FinishFX(ref ultimateChargedBoundFX);
+				FXManager.FinishFX(ref ultimateChargedBoundFXPlayer);
 			}
 		}
 		private void CreateParticles(GameObject prefab, Vector3 hitPos, Vector3 direction)
@@ -729,6 +742,8 @@ namespace EoE.Combatery
 					RemoveChargeBoundEffects();
 			}
 
+			FXManager.FinishFX(ref ultimateChargedBoundFX);
+			FXManager.FinishFX(ref ultimateChargedBoundFXPlayer);
 			if (UltimateBarController.Instance)
 				UltimateBarController.Instance.gameObject.SetActive(false);
 		}
