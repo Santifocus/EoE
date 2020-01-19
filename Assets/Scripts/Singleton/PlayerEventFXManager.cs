@@ -10,7 +10,7 @@ namespace EoE
 {
 	public class PlayerEventFXManager : MonoBehaviour
 	{
-		private const float KNOCKBACK_VALUE_DIVIDER = 8;
+		private const float KNOCKBACK_VALUE_DIVIDER = 16;
 		public static PlayerEventFXManager Instance { get; private set; }
 		private PlayerSettings playerSettings => Player.PlayerSettings;
 		private void Start()

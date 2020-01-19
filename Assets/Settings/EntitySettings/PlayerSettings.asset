@@ -102,6 +102,7 @@ MonoBehaviour:
   EffectsOnUltimateCharged:
   - {fileID: 11400000, guid: 46b89e5d282b6f140972a23a82dddb23, type: 2}
   - {fileID: 11400000, guid: eaea715fe463b3243ba6ec89567da35a, type: 2}
+  EffectsWhileUltimateCharged: []
   EffectsOnLevelup:
   - {fileID: 11400000, guid: 982aab948223d7044bfae67dc43bb77c, type: 2}
   - {fileID: 11400000, guid: 2a1f29303ceefa04d9d5508f74094d05, type: 2}

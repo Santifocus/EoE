@@ -124,7 +124,6 @@ namespace EoE.Entities
 		}
 		protected override void EntitieUpdate()
 		{
-
 			if (ContextControl())
 				return;
 
@@ -1066,6 +1065,8 @@ namespace EoE.Entities
 		}
 		private void ItemUseControl()
 		{
+			if (IsStunned)
+				return;
 			if (EquipedWeapon != null && (InputController.Attack.Down || (EquipedWeapon.data.AllowHoldUse && InputController.Attack.Pressed)))
 			{
 				if (EquipedWeapon.data.curCooldown <= 0)
@@ -1155,11 +1156,12 @@ namespace EoE.Entities
 		#region ShieldControl
 		private void ShieldControl()
 		{
-			if(InputController.Block.Down)
+			if (IsStunned)
+				return;
+			if (InputController.Block.Down)
 				playerShield.SetShieldState(true);
 			else if(InputController.Block.Up)
 				playerShield.SetShieldState(false);
-
 		}
 		#endregion
 		#region StateControl
