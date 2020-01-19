@@ -170,7 +170,7 @@ MonoBehaviour:
       RotationOffset: {x: 0, y: 0, z: 0}
       HasCustomScale: 0
       CustomScale: {x: 1, y: 1, z: 1}
-    - FX: {fileID: 0}
+    - FX: {fileID: 11400000, guid: 92c3800d22b2bcf45bbd572fe3405260, type: 2}
       HasPositionOffset: 0
       PositionOffset: {x: 0, y: 0, z: 0}
       HasRotationOffset: 0

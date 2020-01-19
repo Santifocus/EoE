@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 469f7b848055e6b4f804fc4855292c28, type: 3}
-  m_Name: Shieldfailed
+  m_Name: EnemyWarned
   m_EditorClassIdentifier: 
-  soundName: shieldfail
-  clip: {fileID: 8300000, guid: 67239da724ff2454e8a6ef3468922e49, type: 3}
+  soundName: enemywarned
+  clip: {fileID: 8300000, guid: 89b5191e4ac1d964b9d1d7f3303930f8, type: 3}
   audioGroup: {fileID: 24300002, guid: b8b319c0096b4d34196070be7e374c0c, type: 2}
   Loop: 0
   priority: 128
   pitch: 1
-  volume: 0.6
+  volume: 1
   spatialBlend: 0
   scaleStyle: 1
   soundCategory: 0

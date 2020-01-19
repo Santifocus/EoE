@@ -647,7 +647,7 @@ MonoBehaviour:
     TotalRequiredCharge: 1
     OnUseChargeRemove: 1
     OnUltimateFullChargeEffects:
-    - FX: {fileID: 11400000, guid: 9d4857f9764135b4fbc8971098614985, type: 2}
+    - FX: {fileID: 11400000, guid: 773c4bdd15a420c44ae4a2208dadcfcb, type: 2}
       HasPositionOffset: 0
       PositionOffset: {x: 0, y: 0, z: 0}
       HasRotationOffset: 0

@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: MeteoraReady
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0.1
+  TimeOut: 0.25
   FinishConditions:
-    OnParentDeath: 1
+    OnParentDeath: 0
     OnTimeout: 0
-    TimeStay: 1
+    TimeStay: 2
     OnConditionMet: 0
-    Condition: {fileID: 0}
+    Condition: {fileID: 11400000, guid: 66c96c85de6bc284c850c7a19b149d27, type: 2}
   ParticleMainObject: {fileID: 6584800956893413052, guid: 4aace3ae44d5ccb4883fd0c758979c8e,
     type: 3}
-  OffsetToTarget: {x: 0, y: 0, z: 0}
+  OffsetToTarget: {x: 0, y: -0.1, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}
   FollowTarget: 1
   InheritRotationOfTarget: 1
-  RotationInheritLerpSpeed: 4
+  RotationInheritLerpSpeed: 45
