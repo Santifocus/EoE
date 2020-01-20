@@ -86,7 +86,7 @@ namespace EoE.Combatery
 
 			ObjectField<Ultimate>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Ultimate))), ref settings.Ultimate, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.TotalRequiredCharge))), ref settings.TotalRequiredCharge, 1);
-			SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OnUseChargeRemove))), ref settings.OnUseChargeRemove, 0, 1, 1);
+			FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OnUseChargeRemove))), ref settings.OnUseChargeRemove, 0, 1, 1);
 
 			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OnUltimateChargedEffects))), ref settings.OnUltimateChargedEffects, property.FindPropertyRelative(nameof(settings.OnUltimateChargedEffects)), DrawCustomFXObject, new GUIContent(". Effect"), 1);
 			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WhileUltimateIsChargedEffects))), ref settings.WhileUltimateIsChargedEffects, property.FindPropertyRelative(nameof(settings.WhileUltimateIsChargedEffects)), DrawCustomFXObject, new GUIContent(". Effect"), 1);

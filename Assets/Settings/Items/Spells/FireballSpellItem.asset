@@ -32,4 +32,5 @@ MonoBehaviour:
   MaxStack: 1
   ItemWorth: 300
   ItemFlags: 1
-  TargetSpell: {fileID: 11400000, guid: 0671c0a9f08b5a14e83b4da25a2b6c7a, type: 2}
+  TargetSpell: {fileID: 0}
+  TargetComound: {fileID: 11400000, guid: 03e9950b808aee74cb0a4fd53098ef73, type: 2}

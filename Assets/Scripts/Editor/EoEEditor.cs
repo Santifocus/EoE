@@ -3,6 +3,8 @@ using UnityEngine;
 using EoE.Information;
 using EoE.Combatery;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace EoE
 {
@@ -29,28 +31,12 @@ namespace EoE
 			}
 			return false;
 		}
-		public static bool SliderField(string content, ref float curValue, float minValue, float maxValue, int offSet = 0) => SliderField(new GUIContent(content), ref curValue, minValue, maxValue, offSet);
-		public static bool SliderField(GUIContent content, ref float curValue, float minValue, float maxValue, int offSet = 0)
+		public static bool FloatSliderField(string content, ref float curValue, float minValue, float maxValue, int offSet = 0) => FloatSliderField(new GUIContent(content), ref curValue, minValue, maxValue, offSet);
+		public static bool FloatSliderField(GUIContent content, ref float curValue, float minValue, float maxValue, int offSet = 0)
 		{
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Space(offSet * STANDARD_OFFSET);
 			float newValue = EditorGUILayout.Slider(content, curValue, minValue, maxValue);
-			EditorGUILayout.EndHorizontal();
-
-			if (newValue != curValue)
-			{
-				isDirty = true;
-				curValue = newValue;
-				return true;
-			}
-			return false;
-		}
-		public static bool DoubleField(string content, ref double curValue, int offSet = 0) => DoubleField(new GUIContent(content), ref curValue, offSet);
-		public static bool DoubleField(GUIContent content, ref double curValue, int offSet = 0)
-		{
-			EditorGUILayout.BeginHorizontal();
-			GUILayout.Space(offSet * STANDARD_OFFSET);
-			double newValue = EditorGUILayout.DoubleField(content, curValue);
 			EditorGUILayout.EndHorizontal();
 
 			if (newValue != curValue)
@@ -77,12 +63,44 @@ namespace EoE
 			}
 			return false;
 		}
+		public static bool IntSliderField(string content, ref int curValue, int minValue, int maxValue, int offSet = 0) => IntSliderField(new GUIContent(content), ref curValue, minValue, maxValue, offSet);
+		public static bool IntSliderField(GUIContent content, ref int curValue, int minValue, int maxValue, int offSet = 0)
+		{
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(offSet * STANDARD_OFFSET);
+			int newValue = EditorGUILayout.IntSlider(content, curValue, minValue, maxValue);
+			EditorGUILayout.EndHorizontal();
+
+			if (newValue != curValue)
+			{
+				isDirty = true;
+				curValue = newValue;
+				return true;
+			}
+			return false;
+		}
 		public static bool DelayedIntField(string content, ref int curValue, int offSet = 0) => DelayedIntField(new GUIContent(content), ref curValue, offSet);
 		public static bool DelayedIntField(GUIContent content, ref int curValue, int offSet = 0)
 		{
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Space(offSet * STANDARD_OFFSET);
 			int newValue = EditorGUILayout.DelayedIntField(content, curValue);
+			EditorGUILayout.EndHorizontal();
+
+			if (newValue != curValue)
+			{
+				isDirty = true;
+				curValue = newValue;
+				return true;
+			}
+			return false;
+		}
+		public static bool DoubleField(string content, ref double curValue, int offSet = 0) => DoubleField(new GUIContent(content), ref curValue, offSet);
+		public static bool DoubleField(GUIContent content, ref double curValue, int offSet = 0)
+		{
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(offSet * STANDARD_OFFSET);
+			double newValue = EditorGUILayout.DoubleField(content, curValue);
 			EditorGUILayout.EndHorizontal();
 
 			if (newValue != curValue)
@@ -503,7 +521,7 @@ namespace EoE
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BasePhysicalDamage))), ref settings.BasePhysicalDamage, offSet);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseMagicalDamage))), ref settings.BaseMagicalDamage, offSet);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseKnockback))), ref settings.BaseKnockback, offSet);
-			SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseCritChance))), ref settings.BaseCritChance, 0, 1, offSet);
+			FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseCritChance))), ref settings.BaseCritChance, 0, 1, offSet);
 
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			DrawObjectCost(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Cost))), ref settings.Cost, serializedObject.FindProperty(nameof(settings.Cost)), offSet);
@@ -531,7 +549,7 @@ namespace EoE
 			if (property.isExpanded)
 			{
 				//Activation Info
-				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ChanceToActivate))), ref settings.ChanceToActivate, 0, 1, offSet + 1);
+				FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ChanceToActivate))), ref settings.ChanceToActivate, 0, 1, offSet + 1);
 				EnumFlagField<EffectType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ContainedEffectType))), ref settings.ContainedEffectType, offSet + 1);
 				LineBreak(new Color(0.25f, 0.25f, 0.65f, 1), false);
 
@@ -675,8 +693,8 @@ namespace EoE
 			if (selfProperty.isExpanded)
 			{
 				ObjectField<ConditionObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WaitCondition))), ref settings.WaitCondition, offSet + 1);
-				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MinAnimtionPoint))), ref settings.MinAnimtionPoint, 0, 1, offSet + 1);
-				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MaxAnimtionPoint))), ref settings.MaxAnimtionPoint, settings.MinAnimtionPoint, 1, offSet + 1);
+				FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MinAnimtionPoint))), ref settings.MinAnimtionPoint, 0, 1, offSet + 1);
+				FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MaxAnimtionPoint))), ref settings.MaxAnimtionPoint, settings.MinAnimtionPoint, 1, offSet + 1);
 			}
 		}
 		public static bool NullableVector3Field(string content, string valueContent, ref Vector3 curValue, ref bool hasValue, int offSet = 0) => NullableVector3Field(new GUIContent(content), new GUIContent(valueContent), ref curValue, ref hasValue, offSet);
@@ -866,7 +884,7 @@ namespace EoE
 					EnumFlagField<AttackChargeEffectMask>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectMask))), ref settings.EffectMask, offSet + 1);
 
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
-					SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationChargeStartpoint))), ref settings.AnimationChargeStartpoint, 0, 1, offSet + 1);
+					FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationChargeStartpoint))), ref settings.AnimationChargeStartpoint, 0, 1, offSet + 1);
 					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StopMovementWhileCharging))), ref settings.StopMovementWhileCharging, offSet + 1);
 					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StopRotationWhileCharging))), ref settings.StopRotationWhileCharging, offSet + 1);
 					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WaitAtFullChargeForRelease))), ref settings.WaitAtFullChargeForRelease, offSet + 1);
@@ -877,7 +895,7 @@ namespace EoE
 					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartCharge))), ref settings.StartCharge, offSet + 1);
 					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MaximumCharge))), ref settings.MaximumCharge, offSet + 1);
 
-					SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MinRequiredCharge))), ref settings.MinRequiredCharge, settings.StartCharge, settings.MaximumCharge, offSet + 1);
+					FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MinRequiredCharge))), ref settings.MinRequiredCharge, settings.StartCharge, settings.MaximumCharge, offSet + 1);
 
 					//DirectHit overrides
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
@@ -910,7 +928,7 @@ namespace EoE
 				Foldout(content, property, offSet);
 				if (property.isExpanded)
 				{
-					SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AtAnimationPoint))), ref settings.AtAnimationPoint, 0, 1, offSet + 1);
+					FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AtAnimationPoint))), ref settings.AtAnimationPoint, 0, 1, offSet + 1);
 					DrawActivationEffect(new GUIContent("Effect Data"), settings.Effect, property.FindPropertyRelative(nameof(settings.Effect)), offSet + 1);
 				}
 			}
@@ -925,8 +943,8 @@ namespace EoE
 				Foldout(content, selfProperty, offSet);
 				if (selfProperty.isExpanded)
 				{
-					SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfSettings.MinRequiredCharge))), ref selfSettings.MinRequiredCharge, CurMinCharge, CurMaxCharge, offSet + 1);
-					SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfSettings.MaxRequiredCharge))), ref selfSettings.MaxRequiredCharge, selfSettings.MinRequiredCharge, CurMaxCharge, offSet + 1);
+					FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfSettings.MinRequiredCharge))), ref selfSettings.MinRequiredCharge, CurMinCharge, CurMaxCharge, offSet + 1);
+					FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfSettings.MaxRequiredCharge))), ref selfSettings.MaxRequiredCharge, selfSettings.MinRequiredCharge, CurMaxCharge, offSet + 1);
 
 					GUILayout.Space(4);
 					ObjectField<EffectSingle>(new GUIContent(ObjectNames.NicifyVariableName(nameof(selfSettings.DirectHitOverride))), ref selfSettings.DirectHitOverride, offSet + 1);

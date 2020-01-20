@@ -33,17 +33,28 @@ namespace EoE.Entities
 		public float curTrueDamageDamageMultiplier { get; protected set; }
 
 		//Entitie states
-		public int Invincibilities { get; set; }
-		public int Stuns { get; set; }
-		public int MovementStops { get; set; }
-		public int RotationStops { get; set; }
 		public bool Alive { get; protected set; }
+
 		public List<BuffInstance> activeBuffs { get; protected set; }
 		public EntityState curStates;
 		private float healthRegenCooldown;
 		private float healthRegenDelay;
 		private float combatEndCooldown;
 		public Vector3? targetPosition = null;
+
+		//Iteratable States
+		public int Invincibilities { get; set; }
+		public int Stuns { get; set; }
+		public int MovementStops { get; set; }
+		public int TurnStops { get; set; }
+		public int AttackStops { get; set; }
+		public int CastingStops { get; set; }
+		public bool IsInvincible => Invincibilities > 0;
+		public bool IsStunned => Stuns > 0;
+		public bool IsMovementStopped => MovementStops > 0;
+		public bool IsTurnStopped => TurnStops > 0;
+		public bool IsAttackStopped => MovementStops > 0;
+		public bool IsCastingStopped => CastingStops > 0;
 
 		//Velocity Control
 		protected Vector2 impactForce;
@@ -58,6 +69,7 @@ namespace EoE.Entities
 
 		//Spell Casting
 		public bool IsCasting { get; private set; }
+		public float AttackCooldown { get; private set; }
 		public float CastingCooldown { get; private set; }
 
 		//Getter Helpers
@@ -69,10 +81,7 @@ namespace EoE.Entities
 		public float highestPos => coll.bounds.center.y + coll.bounds.extents.y;
 		public ForceController entitieForceController;
 		public virtual Vector3 CurVelocity => new Vector3(impactForce.x, 0, impactForce.y) + entitieForceController.currentTotalForce;
-		public bool IsInvincible => Invincibilities > 0;
-		public bool IsStunned => Stuns > 0;
-		public bool IsMovementStopped => MovementStops > 0;
-		public bool IsRotationStopped => RotationStops > 0;
+
 
 		//Armor
 		public InventoryItem EquipedArmor;
@@ -778,14 +787,161 @@ namespace EoE.Entities
 		}
 		#endregion
 		#region Spell Casting
-		public bool CastSpell(Spell spell)
+		public bool ActivateCompound(ActivationCompound compound)
 		{
-			bool asPlayerCurrentlyAttacking = this is Player && WeaponController.Instance != null && WeaponController.Instance.InAttackSequence;
-			if (!spell.Cost.CanActivate(this, 1, 1, 1) || IsCasting || CastingCooldown > 0 || asPlayerCurrentlyAttacking)
+			if (!compound.NoDefinedActionType)
+			{
+				if (compound.CompoundActionType == ActionType.Casting)
+				{
+					if (IsCastingStopped || CastingCooldown > 0)
+						return false;
+				}
+				else //compound.CompoundActionType == ActionType.Attacking
+				{
+					if (IsAttackStopped || AttackCooldown > 0)
+						return false;
+				}
+			}
+
+			if (!compound.Cost.CanActivate(this, 1, 1, 1))
 				return false;
 
-			StartCoroutine(CastSpellC(spell));
+			StartCoroutine(ActivateCompoundC(compound));
 			return true;
+		}
+		private IEnumerator ActivateCompoundC(ActivationCompound compound)
+		{
+			ApplyCooldown();
+
+			for (int i = 0; i < compound.Elements.Length; i++)
+			{
+				if(compound.CostActivationIndex == i)
+				{
+					if(compound.CancelIfCostActivationIsImpossible && !compound.Cost.CanActivate(this, 1, 1, 1))
+					{
+						break;
+					}
+					compound.Cost.Activate(this, 1, 1, 1);
+				}
+
+				//Activate start effects
+				RestrictionChange(compound.Elements[i], true);
+				FXInstance[] elementBoundFX = ActivateElementActivationEffects(compound.Elements[i].StartEffects, true);
+
+				//Setup the loop for this element
+				float elementTime = 0;
+				float whileTickTime = 0;
+
+				while(elementTime < compound.Elements[i].ElementDuration)
+				{
+					ApplyCooldown();
+					yield return new WaitForEndOfFrame();
+
+					//If this compound can be canceled by stuns and this entity is stunned => we stop the nested loop
+					if(compound.CancelFromStun && IsStunned)
+					{
+						//Get rid of any restrictions/FXInstances and then exit the nested loop
+						RestrictionChange(compound.Elements[i], false);
+						FXManager.FinishFX(ref elementBoundFX);
+						goto CompoundFinished;
+					}
+
+					//Check if any condition is true if so we set their associated boolean
+					for (int j = 0; j < compound.Elements[i].StopConditions.Length; i++)
+					{
+						if (compound.Elements[i].StopConditions[j].ConditionMet())
+						{
+							//Get rid of any restrictions/FXInstances and then exit the nested loop
+							FXManager.FinishFX(ref elementBoundFX);
+							RestrictionChange(compound.Elements[i], false);
+							goto CompoundFinished;
+						}
+					}
+
+					//Yield conditions
+					bool yielded = false;
+					for (int j = 0; j < compound.Elements[i].YieldConditions.Length; i++)
+					{
+						if(compound.Elements[i].YieldConditions[j].ConditionMet())
+						{
+							yielded = true;
+							break;
+						}
+					}
+
+					//Pause conditions
+					//We only need to check pause conditions if yielded is false
+					bool paused = false;
+					if (!yielded)
+					{
+						for (int j = 0; j < compound.Elements[i].PauseConditions.Length; i++)
+						{
+							if (compound.Elements[i].PauseConditions[j].ConditionMet())
+							{
+								paused = true;
+								break;
+							}
+						}
+					}
+
+					if (!yielded && !paused)
+						elementTime += Time.deltaTime;
+
+					if (!yielded)
+					{
+						whileTickTime += Time.deltaTime;
+
+						while (whileTickTime >= compound.Elements[i].WhileTickTime)
+						{
+							whileTickTime -= compound.Elements[i].WhileTickTime;
+							ActivateElementActivationEffects(compound.Elements[i].WhileEffects, false);
+						}
+					}
+				}
+
+				//Finish fx if needed
+				FXManager.FinishFX(ref elementBoundFX);
+				//Undo any restrictions
+				RestrictionChange(compound.Elements[i], false);
+			}
+
+		CompoundFinished:;
+
+			void RestrictionChange(ActivationElement element, bool state)
+			{
+				int change = state ? 1 : -1;
+				if (element.ShouldRestrictAction(ActionType.Casting))
+					CastingStops += change;
+				if (element.ShouldRestrictAction(ActionType.Attacking))
+					AttackStops += change;
+
+				if (element.ShouldRestrictMovement(MovementType.Walk))
+					MovementStops += change;
+				if (element.ShouldRestrictMovement(MovementType.Turn))
+					TurnStops += change;
+			}
+			FXInstance[] ActivateElementActivationEffects(ActivationEffect[] effects, bool binding)
+			{
+				List<FXInstance> createdFXInstances = new List<FXInstance>();
+				for (int i = 0; i < effects.Length; i++)
+				{
+					if (binding)
+						createdFXInstances.AddRange(effects[i].Activate(this, compound));
+					else
+						effects[i].Activate(this, compound);
+				}
+				if (binding)
+					return createdFXInstances.ToArray();
+				else
+					return null;
+			}
+			void ApplyCooldown()
+			{
+				if (compound.CompoundActionType == ActionType.Casting)
+					CastingCooldown = compound.CausedCooldown;
+				else if (compound.CompoundActionType == ActionType.Attacking)
+					AttackCooldown = compound.CausedCooldown;
+			}
 		}
 		private IEnumerator CastSpellC(Spell spell)
 		{
@@ -800,7 +956,7 @@ namespace EoE.Entities
 				if (movementStopper)
 					MovementStops++;
 				if (rotationStopper)
-					RotationStops++;
+					TurnStops++;
 
 				for (int i = 0; i < spell.CastInfo.StartEffects.Length; i++)
 				{
@@ -821,7 +977,7 @@ namespace EoE.Entities
 						if (movementStopper)
 							MovementStops--;
 						if (rotationStopper)
-							RotationStops--;
+							TurnStops--;
 						goto StoppedSpell;
 					}
 
@@ -838,7 +994,7 @@ namespace EoE.Entities
 				if (movementStopper)
 					MovementStops--;
 				if (rotationStopper)
-					RotationStops--;
+					TurnStops--;
 			}
 
 			FXManager.FinishFX(ref curBoundFX);
@@ -863,7 +1019,7 @@ namespace EoE.Entities
 				if (movementStopper)
 					MovementStops++;
 				if (rotationStopper)
-					RotationStops++;
+					TurnStops++;
 
 				for (int i = 0; i < spell.ProjectileInfos.Length; i++)
 				{
@@ -877,7 +1033,7 @@ namespace EoE.Entities
 							if (movementStopper)
 								MovementStops--;
 							if (rotationStopper)
-								RotationStops--;
+								TurnStops--;
 							goto StoppedSpell;
 						}
 					}
@@ -897,7 +1053,7 @@ namespace EoE.Entities
 									if (movementStopper)
 										MovementStops--;
 									if (rotationStopper)
-										RotationStops--;
+										TurnStops--;
 									goto StoppedSpell;
 								}
 							}
@@ -907,7 +1063,7 @@ namespace EoE.Entities
 				if (movementStopper)
 					MovementStops--;
 				if (rotationStopper)
-					RotationStops--;
+					TurnStops--;
 			}
 
 		//If the spell cast / shooting was canceled we jump here

@@ -191,7 +191,7 @@ MonoBehaviour:
   StartLevel: 0
   body: {fileID: 8095854218189230376}
   agent: {fileID: 8095854218189230379}
-  settings: {fileID: 11400000, guid: ac583c8de2667cc4fb07da4bd968c52b, type: 2}
+  settings: {fileID: 11400000, guid: b570e9e7d185da045a638db72429621d, type: 2}
 --- !u!54 &8095854218189230376
 Rigidbody:
   m_ObjectHideFlags: 0

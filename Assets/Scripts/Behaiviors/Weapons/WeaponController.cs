@@ -247,7 +247,7 @@ namespace EoE.Combatery
 				if (ActiveAttackStyle.StopMovement)
 					Player.Instance.MovementStops++;
 				if (ActiveAttackStyle.StopRotation)
-					Player.Instance.RotationStops++;
+					Player.Instance.TurnStops++;
 
 				//First check if this attack sequence is allowed if not we stop the while loop here
 				if (curBaseData.Cost.CanActivate(Player.Instance, ActiveAttackStyle.HealthCostMultiplier, ActiveAttackStyle.ManaCostMultiplier, ActiveAttackStyle.EnduranceCostMultiplier))
@@ -448,7 +448,7 @@ namespace EoE.Combatery
 					if (ActiveAttackStyle.StopMovement)
 						Player.Instance.MovementStops--;
 					if (ActiveAttackStyle.StopRotation)
-						Player.Instance.RotationStops--;
+						Player.Instance.TurnStops--;
 					continue;
 				}
 
@@ -460,7 +460,7 @@ namespace EoE.Combatery
 			if (ActiveAttackStyle.StopMovement)
 				Player.Instance.MovementStops--;
 			if (ActiveAttackStyle.StopRotation)
-				Player.Instance.RotationStops--;
+				Player.Instance.TurnStops--;
 
 			SetAnimationSpeed(1);
 			Player.Instance.animationControl.SetBool("InFight", false);
@@ -740,7 +740,7 @@ namespace EoE.Combatery
 					if (ActiveAttackStyle.StopMovement)
 						Player.Instance.MovementStops--;
 					if (ActiveAttackStyle.StopRotation)
-						Player.Instance.RotationStops--;
+						Player.Instance.TurnStops--;
 
 					SetAnimationSpeed(1);
 					Player.Instance.animationControl.SetBool("InFight", false);

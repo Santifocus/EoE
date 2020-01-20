@@ -42,7 +42,7 @@ namespace EoE.Information
 					if (settings.MaxDropAmount < settings.MinDropAmount)
 						settings.MinDropAmount = settings.MaxDropAmount;
 				}
-				SliderField(new GUIContent("Drop Chance", "What is the chance to drop this Drop? (0 = 0%; 1 = 100%)"), ref settings.DropChance, 0, 1, offSet + 1);
+				FloatSliderField(new GUIContent("Drop Chance", "What is the chance to drop this Drop? (0 = 0%; 1 = 100%)"), ref settings.DropChance, 0, 1, offSet + 1);
 			}
 		}
 	}

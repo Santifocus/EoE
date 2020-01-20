@@ -73,7 +73,7 @@ MonoBehaviour:
   ShieldSettings: {fileID: 11400000, guid: 4ab47e41b78d9914db30d5fbfdad95d5, type: 2}
   InvincibleAfterHit: 1
   InvincibleAfterHitTime: 1.5
-  InvincibleModelFlashColor: {r: 1, g: 0, b: 0, a: 0.15294118}
+  InvincibleModelFlashColor: {r: 1, g: 0, b: 0, a: 0.5372549}
   InvincibleModelFlashDelay: 0.2
   InvincibleModelFlashTime: 0.1
   StartItems:
@@ -83,6 +83,9 @@ MonoBehaviour:
   - Item: {fileID: 11400000, guid: 2252417659472824aa2c5e20738fa998, type: 2}
     ItemCount: 1
     ForceEquip: 0
+  - Item: {fileID: 11400000, guid: 24bf8e4451a0cc84589f3c9af971978e, type: 2}
+    ItemCount: 1
+    ForceEquip: 1
   - Item: {fileID: 11400000, guid: 428f279ff073bb54c81150df9f36247e, type: 2}
     ItemCount: 1
     ForceEquip: 1

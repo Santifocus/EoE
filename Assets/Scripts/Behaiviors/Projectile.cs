@@ -70,6 +70,7 @@ namespace EoE.Combatery
 
 			if ((info.CollideMask | ColliderMask.Entities) == info.CollideMask)
 			{
+
 				entitieColl.radius = entitieTriggerColl.radius = info.EntitieHitboxSize;
 			}
 			else
@@ -106,33 +107,13 @@ namespace EoE.Combatery
 		}
 		private void OnTriggerEnter(Collider other)
 		{
-			if (info.DirectHit == null)
+			if ((info.CollideMask | ColliderMask.Entities) == info.CollideMask) //Dont try for direct hit if the normal collision will do it anyway
 				return;
-
-			if (other.gameObject.layer == ConstantCollector.ENTITIE_LAYER)
-			{
-				Entity hit = other.GetComponent<Entity>();
-				if (CombatObject.IsAllowedEntitie(hit, creator, info.DirectHit.AffectedTargets))
-				{
-					DirectTargetHit(hit);
-				}
-			}
-			else //other.gameObject.layer == ConstantCollector.SHIELD_LAYER
-			{
-				Shield hit = other.GetComponent<Shield>();
-				if (hit.creator != creator)
-				{
-					bool isCrit = Utils.Chance01(info.DirectHit.CritChanceMultiplier * baseData.BaseCritChance);
-					float damage = info.DirectHit.DamageMultiplier * baseData.BaseMagicalDamage * (isCrit ? GameController.CurrentGameSettings.CritDamageMultiplier : 1);
-					hit.HitShield(damage);
-
-					if (hit.info.ReflectProjectiles)
-						Reflect(hit.creator);
-				}
-			}
+			TryForDirectHit(other);
 		}
 		private void OnCollisionEnter(Collision collision)
 		{
+			TryForDirectHit(collision.collider);
 			if (collision.gameObject.layer != ConstantCollector.SHIELD_LAYER)
 			{
 				if (bounceCooldown > 0)
@@ -186,6 +167,33 @@ namespace EoE.Combatery
 						}
 					}
 					hit.HitShield(totalDamage);
+				}
+			}
+		}
+		private void TryForDirectHit(Collider other)
+		{
+			if (info.DirectHit == null)
+				return;
+
+			if (other.gameObject.layer == ConstantCollector.ENTITIE_LAYER)
+			{
+				Entity hit = other.GetComponent<Entity>();
+				if (CombatObject.IsAllowedEntitie(hit, creator, info.DirectHit.AffectedTargets))
+				{
+					DirectTargetHit(hit);
+				}
+			}
+			else //other.gameObject.layer == ConstantCollector.SHIELD_LAYER
+			{
+				Shield hit = other.GetComponent<Shield>();
+				if (hit.creator != creator)
+				{
+					bool isCrit = Utils.Chance01(info.DirectHit.CritChanceMultiplier * baseData.BaseCritChance);
+					float damage = info.DirectHit.DamageMultiplier * baseData.BaseMagicalDamage * (isCrit ? GameController.CurrentGameSettings.CritDamageMultiplier : 1);
+					hit.HitShield(damage);
+
+					if (hit.info.ReflectProjectiles)
+						Reflect(hit.creator);
 				}
 			}
 		}

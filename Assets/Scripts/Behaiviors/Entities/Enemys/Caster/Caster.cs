@@ -187,7 +187,7 @@ namespace EoE.Entities
 			{
 				if(	distanceToPlayer > (settings.BehaiviorPatterns[i].MinRange * settings.BehaiviorPatterns[i].MinRange) &&
 					distanceToPlayer < (settings.BehaiviorPatterns[i].MaxRange * settings.BehaiviorPatterns[i].MaxRange) &&
-					settings.BehaiviorPatterns[i].TargetSpell.Cost.CanActivate(this, 1, 1, 1))
+					settings.BehaiviorPatterns[i].TargetCompound.Cost.CanActivate(this, 1, 1, 1))
 				{
 					possiblePatterns.Add(i);
 				}
@@ -195,7 +195,7 @@ namespace EoE.Entities
 			if(possiblePatterns.Count > 0)
 			{
 				int targetPatternIndex = possiblePatterns[Random.Range(0, possiblePatterns.Count)];
-				CastSpell(settings.BehaiviorPatterns[targetPatternIndex].TargetSpell);
+				ActivateCompound(settings.BehaiviorPatterns[targetPatternIndex].TargetCompound);
 			}
 		}
 	}

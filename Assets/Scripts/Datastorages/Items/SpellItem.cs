@@ -7,9 +7,10 @@ namespace EoE.Information
 	{
 		public override InUIUses Uses => InUIUses.Equip | InUIUses.Drop | InUIUses.Back;
 		public Spell TargetSpell;
+		[UnityEngine.Serialization.FormerlySerializedAs("TargetComound")]public ActivationCompound TargetCompound;
 		protected override bool OnUse(Entity user)
 		{
-			return user.CastSpell(TargetSpell);
+			return user.ActivateCompound(TargetCompound);
 		}
 		protected override bool OnEquip(Entity user) => true;
 	}

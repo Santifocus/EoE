@@ -150,7 +150,7 @@ namespace EoE.Entities
 			CheckForFalling();
 			UpdateAcceleration();
 
-			if (!IsStunned && !IsRotationStopped)
+			if (!IsStunned && !IsTurnStopped)
 				TurnControl();
 		}
 		private void LateUpdate()
@@ -368,11 +368,6 @@ namespace EoE.Entities
 										);
 			modelTransform.localEulerAngles = new Vector3(curModelTilt.y, 0, curModelTilt.x);
 
-			if (GameController.CurrentGameSettings.IsDebugEnabled)
-			{
-				Debug.DrawLine(modelTransform.position, modelTransform.position + modelTransform.up * 2.5f, Color.blue, Time.unscaledDeltaTime);
-			}
-
 			//Move direction
 			float forwardValue = Vector2.Dot(velocityDirection, forward);
 			int xMultiplier = Vector2.Dot(velocityDirection, right) > 0 ? 1 : -1;
@@ -499,7 +494,10 @@ namespace EoE.Entities
 
 			//Is the player not trying to move? Then stop here
 			if (!moving)
+			{
+				controllDirection = Vector3.zero;
 				return;
+			}
 
 			//Check if the player intends to run and is able to
 			bool running = curStates.Running;
@@ -540,11 +538,6 @@ namespace EoE.Entities
 			camRight = camRight.normalized;
 
 			controllDirection = inputDirection.y * camForward + inputDirection.x * camRight;
-
-			if (GameController.CurrentGameSettings.IsDebugEnabled)
-			{
-				Debug.DrawLine(transform.position, transform.position + controllDirection * 2, Color.green, Time.unscaledDeltaTime);
-			}
 
 			if ((!TargetedEntitie) && (intendedControl > MIN_WALK_ACCELERATION * 0.95f))
 				intendedRotation = -(Mathf.Atan2(controllDirection.z, controllDirection.x) * Mathf.Rad2Deg - 90);
@@ -1377,6 +1370,19 @@ namespace EoE.Entities
 				return true;
 			}
 			return false;
+		}
+		#endregion
+		#region  Debug
+		private void OnDrawGizmos()
+		{
+			if (!Application.isPlaying)
+				return;
+
+			Gizmos.color = Color.green;
+			Gizmos.DrawLine(transform.position, transform.position + controllDirection * 2);
+
+			Gizmos.color = Color.cyan;
+			Gizmos.DrawLine(modelTransform.position, modelTransform.position + modelTransform.up * 2.5f);
 		}
 		#endregion
 	}

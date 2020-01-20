@@ -17,7 +17,7 @@ namespace EoE.Information
 		[System.Serializable]
 		public class CasterBehaiviorPattern
 		{
-			public Spell TargetSpell = default;
+			public ActivationCompound TargetCompound = default;
 			public float MinRange = default;
 			public float MaxRange = default;
 		}

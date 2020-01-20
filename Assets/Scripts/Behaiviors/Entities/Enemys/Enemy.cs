@@ -321,7 +321,7 @@ namespace EoE.Entities
 		}
 		private void LookAroundArea()
 		{
-			if (IsRotationStopped)
+			if (IsTurnStopped)
 				return;
 
 			if (lookAroundCooldown > 0)
@@ -379,7 +379,7 @@ namespace EoE.Entities
 		}
 		protected void LookAtTarget()
 		{
-			if (IsRotationStopped || IsStunned)
+			if (IsTurnStopped || IsStunned)
 				return;
 
 			Vector3? aimPos = pointOfInterest ?? (overrideTargetPosition ?? targetPosition);
