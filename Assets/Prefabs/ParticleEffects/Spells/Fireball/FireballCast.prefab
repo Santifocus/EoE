@@ -8598,7 +8598,7 @@ ParticleSystem:
     intensityCurve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2
+      scalar: 1.2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -8648,7 +8648,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    maxLights: 25
+    maxLights: 12
   TrailModule:
     enabled: 0
     mode: 0
@@ -13370,7 +13370,7 @@ ParticleSystem:
     intensityCurve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2
+      scalar: 1.2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -13420,7 +13420,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    maxLights: 25
+    maxLights: 12
   TrailModule:
     enabled: 0
     mode: 0
@@ -18142,7 +18142,7 @@ ParticleSystem:
     intensityCurve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2
+      scalar: 1.2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -18192,7 +18192,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    maxLights: 25
+    maxLights: 12
   TrailModule:
     enabled: 0
     mode: 0
