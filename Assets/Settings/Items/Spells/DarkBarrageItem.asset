@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c474321604ce4b049877fabd5c1797aa, type: 3}
-  m_Name: DarkBarrageSpellItem
+  m_Name: DarkBarrageItem
   m_EditorClassIdentifier: 
   ItemName:
     textColor: {r: 0, g: 0.89411765, b: 1, a: 1}
@@ -26,7 +26,7 @@ MonoBehaviour:
     text: ' Targeted'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: .
-  SortingID: 0
+  SortingID: 13
   ItemIcon: {fileID: 21300000, guid: c5e5c289c5639b94ab3ff3ef314a151e, type: 3}
   FXEffectsOnUse: []
   FXEffectsWhenEquipped:

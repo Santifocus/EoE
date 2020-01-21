@@ -10,27 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 943f6c1bb4ab1e346adf9d15310d236d, type: 3}
-  m_Name: StoneOfWisdom
+  m_Name: SmallSoulCrystalItem
   m_EditorClassIdentifier: 
   ItemName:
     textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Stone of Wisdom
+    text: Small Soul Crystal
   ItemDescription:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Permanent increase of Mana
-  SortingID: 0
-  ItemIcon: {fileID: 21300000, guid: 137b6b88e97fbfc4eb3445b7bbf892b4, type: 3}
+    text: Souls transformed into a shiny Crystal. Can be dismanteled into Soul Dust.
+  SortingID: 12
+  ItemIcon: {fileID: 21300000, guid: 9700e2b50b9849844942817c966061ab, type: 3}
   FXEffectsOnUse: []
   FXEffectsWhenEquipped: []
   AllowHoldUse: 0
   UseCooldown: 0
-  RemoveOnUse: 1
+  RemoveOnUse: 0
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 1
-  ItemWorth: 1000
-  ItemFlags: 1
+  ItemWorth: 120
+  ItemFlags: 3
   HealEffects: []
-  BuffsToApply:
-  - {fileID: 11400000, guid: 2a9abbd42bed6b648be4ef0fdfac81a6, type: 2}
+  BuffsToApply: []
   StackingStyle: 2

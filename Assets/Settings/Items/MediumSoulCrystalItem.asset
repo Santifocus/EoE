@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 943f6c1bb4ab1e346adf9d15310d236d, type: 3}
-  m_Name: Medium Soul Crystal
+  m_Name: MediumSoulCrystalItem
   m_EditorClassIdentifier: 
   ItemName:
     textColor: {r: 1, g: 1, b: 1, a: 1}
@@ -18,7 +18,7 @@ MonoBehaviour:
   ItemDescription:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Souls transformed into a shiny Crystal. Can be dismanteled into Soul Dust.
-  SortingID: 0
+  SortingID: 8
   ItemIcon: {fileID: 21300000, guid: 679b45581ecd10c429e6205ac21111ca, type: 3}
   FXEffectsOnUse: []
   FXEffectsWhenEquipped: []

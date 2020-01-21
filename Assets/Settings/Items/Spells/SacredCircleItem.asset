@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c474321604ce4b049877fabd5c1797aa, type: 3}
-  m_Name: SacredCircleSpellItem
+  m_Name: SacredCircleItem
   m_EditorClassIdentifier: 
   ItemName:
     textColor: {r: 0, g: 0.89411765, b: 1, a: 1}
@@ -30,7 +30,7 @@ MonoBehaviour:
     text: ' Applies short Stun'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: .
-  SortingID: 0
+  SortingID: 16
   ItemIcon: {fileID: 21300000, guid: 374d407a75a57a54fa1459f7011ce8ff, type: 3}
   FXEffectsOnUse: []
   FXEffectsWhenEquipped:

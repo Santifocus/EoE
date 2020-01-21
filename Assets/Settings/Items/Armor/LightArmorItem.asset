@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc95605a26843bb4a8fa9bbbc0196106, type: 3}
+  m_Name: LightArmorItem
+  m_EditorClassIdentifier: 
+  ItemName:
+    textColor: {r: 0.66415983, g: 0.6697992, b: 0.7075472, a: 1}
+    text: Light Armor
+  ItemDescription:
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: 'Simple armor. '
+  - textColor: {r: 0, g: 1, b: 0.116532326, a: 1}
+    text: DEF +1.
+  SortingID: 1
+  ItemIcon: {fileID: 21300000, guid: f778a96a9b33a4f439365ce0388ccd47, type: 3}
+  FXEffectsOnUse: []
+  FXEffectsWhenEquipped: []
+  AllowHoldUse: 0
+  UseCooldown: 0
+  RemoveOnUse: 0
+  ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
+    type: 3}
+  MaxStack: 1
+  ItemWorth: 100
+  ItemFlags: 1
+  buffToApply: {fileID: 11400000, guid: 5a3a475bf7cc2e64ba47b51c2c83cc9d, type: 2}

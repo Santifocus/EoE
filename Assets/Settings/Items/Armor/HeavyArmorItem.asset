@@ -10,18 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc95605a26843bb4a8fa9bbbc0196106, type: 3}
-  m_Name: LightArmor
+  m_Name: HeavyArmorItem
   m_EditorClassIdentifier: 
   ItemName:
-    textColor: {r: 0.66415983, g: 0.6697992, b: 0.7075472, a: 1}
-    text: Light Armor
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: Heavy Armor
   ItemDescription:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: 'Simple armor. '
-  - textColor: {r: 0, g: 1, b: 0.116532326, a: 1}
-    text: DEF +1.
-  SortingID: 4
-  ItemIcon: {fileID: 21300000, guid: f778a96a9b33a4f439365ce0388ccd47, type: 3}
+    text: 'Full Metal Armor. '
+  - textColor: {r: 0, g: 1, b: 0.13166785, a: 1}
+    text: 'DEF +3 '
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: 'and '
+  - textColor: {r: 1, g: 0.07898478, b: 0, a: 1}
+    text: Movement Speed -20%
+  SortingID: 0
+  ItemIcon: {fileID: 21300000, guid: a1fcd1fc27f476846a96d93236150024, type: 3}
   FXEffectsOnUse: []
   FXEffectsWhenEquipped: []
   AllowHoldUse: 0
@@ -30,5 +34,6 @@ MonoBehaviour:
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 1
-  ItemWorth: 100
-  buffToApply: {fileID: 11400000, guid: 5a3a475bf7cc2e64ba47b51c2c83cc9d, type: 2}
+  ItemWorth: 400
+  ItemFlags: 1
+  buffToApply: {fileID: 11400000, guid: a27cb54fb6a890c4fb62f2273585252d, type: 2}

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c474321604ce4b049877fabd5c1797aa, type: 3}
-  m_Name: ThunderboltSpellItem
+  m_Name: ThunderboltItem
   m_EditorClassIdentifier: 
   ItemName:
     textColor: {r: 0, g: 0.89411765, b: 1, a: 1}
@@ -34,7 +34,7 @@ MonoBehaviour:
     text: ' Applies Stun'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: .
-  SortingID: 0
+  SortingID: 18
   ItemIcon: {fileID: 21300000, guid: 035d5755a8edc404eab1016c018d751b, type: 3}
   FXEffectsOnUse: []
   FXEffectsWhenEquipped:

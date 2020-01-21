@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c474321604ce4b049877fabd5c1797aa, type: 3}
-  m_Name: ShadowBombSpellItem
+  m_Name: FireBallItem
   m_EditorClassIdentifier: 
   ItemName:
     textColor: {r: 0, g: 0.89411765, b: 1, a: 1}
-    text: Shadow Bomb
+    text: Fire Ball
   ItemDescription:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Creates a
+    text: Casts
   - textColor: {r: 0, g: 1, b: 0.39215687, a: 1}
-    text: ' Big Ball of Darkness'
+    text: ' 3 Fireballs'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: .
   - textColor: {r: 0.9699626, g: 0, b: 1, a: 1}
@@ -30,20 +30,22 @@ MonoBehaviour:
     text: ' Small AOE'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: ','
-  - textColor: {r: 1, g: 0.13774179, b: 0, a: 1}
-    text: ' Consumes the Item'
+  - textColor: {r: 1, g: 0.64280605, b: 0, a: 1}
+    text: ' Applies Burn'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: .
-  SortingID: 0
-  ItemIcon: {fileID: 21300000, guid: 1d017a4066fbcb74fb8b66dffbd891d0, type: 3}
+  SortingID: 14
+  ItemIcon: {fileID: 21300000, guid: 526c5c20d4cdb084aa067013c19ad903, type: 3}
   FXEffectsOnUse: []
-  FXEffectsWhenEquipped: []
+  FXEffectsWhenEquipped:
+  - {fileID: 11400000, guid: 14caeaaac290abb42b3406dc40b51fc7, type: 2}
+  - {fileID: 11400000, guid: f4224c356d0585c4a9a49f0199a90bba, type: 2}
   AllowHoldUse: 1
   UseCooldown: 0
-  RemoveOnUse: 1
+  RemoveOnUse: 0
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 1
-  ItemWorth: 60
+  ItemWorth: 300
   ItemFlags: 1
-  TargetCompound: {fileID: 11400000, guid: 021a705ecba577540b2aa377f8caa4d4, type: 2}
+  TargetCompound: {fileID: 11400000, guid: 03e9950b808aee74cb0a4fd53098ef73, type: 2}

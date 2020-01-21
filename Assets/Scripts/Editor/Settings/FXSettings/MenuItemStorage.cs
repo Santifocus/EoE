@@ -53,8 +53,8 @@ namespace EoE.Information
 		[MenuItem("EoE/ShopInventory")] public static void CreateShopInventory() => AssetCreator<ShopInventory>("Settings", "InteractableSettings");
 		[MenuItem("EoE/ConditionObject")] public static void CreateConditionObject() => AssetCreator<ConditionObject>("Settings", "ConditionObjects");
 
-		//Data Collectors
-		[MenuItem("EoE/DataCollection/Collect Items")]
+		//Data Managers
+		[MenuItem("EoE/DataManagement/Collect Items")]
 		public static void CollectItemData()
 		{
 			string[] itemCollectorGUID = AssetDatabase.FindAssets("t:ItemCollector");
@@ -78,6 +78,19 @@ namespace EoE.Information
 				ItemCollector itemCollector = (ItemCollector)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(itemCollectorGUID[0]), typeof(ItemCollector));
 				itemCollector.CollectData();
 				EditorUtility.SetDirty(itemCollector);
+			}
+		}
+		[MenuItem("EoE/DataManagement/Consistant Item Names")]
+		public static void ConsistantItemNames()
+		{
+			string[] itemGUIDs = AssetDatabase.FindAssets("t:Item");
+			for (int i = 0; i < itemGUIDs.Length; i++)
+			{
+				string path = AssetDatabase.GUIDToAssetPath(itemGUIDs[i]);
+				Item tItem = (Item)AssetDatabase.LoadAssetAtPath(path, typeof(Item));
+				string newName = tItem.ItemName.text.Replace(" ", "").Replace("_", "") + "Item";
+				AssetDatabase.RenameAsset(path, newName);
+				EditorUtility.SetDirty(tItem);
 			}
 		}
 		//Context menu

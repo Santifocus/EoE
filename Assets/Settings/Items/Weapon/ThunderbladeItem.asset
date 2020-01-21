@@ -9,28 +9,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 943f6c1bb4ab1e346adf9d15310d236d, type: 3}
-  m_Name: TearOfLife
+  m_Script: {fileID: 11500000, guid: ee899c0a2c8e9f34e89325bc7784ff48, type: 3}
+  m_Name: ThunderbladeItem
   m_EditorClassIdentifier: 
   ItemName:
-    textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Tear of Life
+    textColor: {r: 0.6981132, g: 0.6981132, b: 0.2272161, a: 1}
+    text: Thunderblade
   ItemDescription:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Permanent increase of your Health Points.
-  SortingID: 0
-  ItemIcon: {fileID: 21300000, guid: 78fc26b1278e9094e96134dd5a0b55c1, type: 3}
+    text: A Sword with the power of Thunder
+  - textColor: {r: 0.21681976, g: 1, b: 0, a: 1}
+    text: ' + 7 ATK.'
+  SortingID: 19
+  ItemIcon: {fileID: 21300000, guid: 647ad7791ee4f234ea78f067b2c09496, type: 3}
   FXEffectsOnUse: []
   FXEffectsWhenEquipped: []
   AllowHoldUse: 0
   UseCooldown: 0
-  RemoveOnUse: 1
+  RemoveOnUse: 0
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 1
-  ItemWorth: 1000
-  ItemFlags: 1
-  HealEffects: []
-  BuffsToApply:
-  - {fileID: 11400000, guid: 9b3da859abe8a994187580ca155b0faf, type: 2}
-  StackingStyle: 2
+  ItemWorth: 450
+  ItemFlags: 2
+  TargetWeapon: {fileID: 11400000, guid: f43228e1209884147950953efec46373, type: 2}
