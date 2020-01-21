@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TryGroundRemenants: 1
   Duration: 1
-  WhileTickTime: 0.1
+  WhileTickTime: 10
   StartEffects:
   - ChanceToActivate: 1
     ContainedEffectType: 2

@@ -277,7 +277,7 @@ namespace EoE.Entities
 			bool stopped = !state; //Better readability
 			if (stopped)
 				agent.velocity = Vector3.zero;
-			if (agent.enabled && agent.isStopped != stopped)
+			if (agent.isActiveAndEnabled && agent.isStopped != stopped)
 				agent.isStopped = stopped;
 		}
 		private bool WanderAround()

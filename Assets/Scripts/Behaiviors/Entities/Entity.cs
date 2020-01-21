@@ -444,7 +444,9 @@ namespace EoE.Entities
 			BuildDrops();
 			if (statDisplay)
 				Destroy(statDisplay.gameObject);
-			Destroy(gameObject);
+
+			gameObject.SetActive(false);
+			AllEntities.Remove(this);
 		}
 		private void OnDestroy()
 		{

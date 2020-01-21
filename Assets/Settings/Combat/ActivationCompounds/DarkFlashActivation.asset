@@ -28,7 +28,7 @@ MonoBehaviour:
   CancelFromStun: 1
   CancelIfCostActivationIsImpossible: 1
   Elements:
-  - ActionRestrictions: 3
+  - ActionRestrictions: -1
     MovementRestrictions: 1
     ElementDuration: 1.8
     WhileTickTime: 10
@@ -74,7 +74,7 @@ MonoBehaviour:
     PauseConditions: []
     YieldConditions: []
     StopConditions: []
-  - ActionRestrictions: 3
+  - ActionRestrictions: -1
     MovementRestrictions: 1
     ElementDuration: 0
     WhileTickTime: 10

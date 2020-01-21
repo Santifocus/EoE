@@ -870,6 +870,9 @@ namespace EoE.Entities
 		#region EnemyTargeting
 		private void TargetEnemyControl()
 		{
+			if (TargetedEntitie && !TargetedEntitie.gameObject.activeSelf)
+				TargetedEntitie = null;
+
 			if (TargetedEntitie)
 			{
 				Vector3 direction = (TargetedEntitie.actuallWorldPosition - actuallWorldPosition).normalized;

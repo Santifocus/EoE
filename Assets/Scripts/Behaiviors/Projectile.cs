@@ -172,7 +172,7 @@ namespace EoE.Combatery
 		}
 		private void TryForDirectHit(Collider other)
 		{
-			if (info.DirectHit == null)
+			if (info.DirectHit == null || other.gameObject.layer == ConstantCollector.TERRAIN_LAYER)
 				return;
 
 			if (other.gameObject.layer == ConstantCollector.ENTITIE_LAYER)

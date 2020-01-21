@@ -52,7 +52,10 @@ namespace EoE.UI
 			statFill.fillAmount = curValue / maxValue;
 			if (statAmount)
 			{
-				statAmount.text = Mathf.Ceil(curValue).ToString();
+				if(targetStat == TargetStat.Health)
+					statAmount.text = Mathf.Ceil(curValue).ToString();
+				else
+					statAmount.text = Mathf.Floor(curValue).ToString();
 			}
 		}
 	}
