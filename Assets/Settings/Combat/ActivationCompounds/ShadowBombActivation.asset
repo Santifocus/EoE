@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f5e2446ee84d62b4caf07d6b7037486e, type: 3}
-  m_Name: DarkFlashActivation
+  m_Name: ShadowBombActivation
   m_EditorClassIdentifier: 
   BasePhysicalDamage: 0
   BaseMagicalDamage: 20
@@ -30,7 +30,7 @@ MonoBehaviour:
   Elements:
   - ActionRestrictions: 3
     MovementRestrictions: 1
-    ElementDuration: 1.8
+    ElementDuration: 2.5
     WhileTickTime: 10
     StartEffects:
     - ChanceToActivate: 1
@@ -41,14 +41,14 @@ MonoBehaviour:
       ImpulseVelocityFallbackDirection: 1
       ImpulseDirectionBase: 1
       FXObjects:
-      - FX: {fileID: 11400000, guid: c2a8b237706e3d8468d14a935d523294, type: 2}
+      - FX: {fileID: 11400000, guid: 2bd48134fcb3222429adde541c21e0a7, type: 2}
         HasPositionOffset: 0
         PositionOffset: {x: 0, y: 0, z: 0}
         HasRotationOffset: 0
         RotationOffset: {x: 0, y: 0, z: 0}
         HasCustomScale: 0
         CustomScale: {x: 1, y: 1, z: 1}
-      - FX: {fileID: 11400000, guid: 3781ce1c80b97304eb6088094d2cbabb, type: 2}
+      - FX: {fileID: 11400000, guid: 200cf9ce338398441a0a208d04331942, type: 2}
         HasPositionOffset: 0
         PositionOffset: {x: 0, y: 0, z: 0}
         HasRotationOffset: 0
@@ -69,6 +69,8 @@ MonoBehaviour:
       BuffsOnUser: []
       CreatedRemenants: []
     WhileEffects: []
+    AtTargetStartEffects: []
+    AtTargetWhileEffects: []
     PauseConditions: []
     YieldConditions: []
     StopConditions: []
@@ -78,35 +80,26 @@ MonoBehaviour:
     WhileTickTime: 10
     StartEffects:
     - ChanceToActivate: 1
-      ContainedEffectType: 6
+      ContainedEffectType: 8
       ImpulseVelocity: 5
       ImpulseVelocityFallOffTime: 0.5
       ImpulseVelocityDirection: 2
       ImpulseVelocityFallbackDirection: 1
       ImpulseDirectionBase: 1
-      FXObjects:
-      - FX: {fileID: 11400000, guid: d9ca9d5bed63b804285069a126e92950, type: 2}
-        HasPositionOffset: 0
-        PositionOffset: {x: 0, y: 0, z: 0}
-        HasRotationOffset: 0
-        RotationOffset: {x: 0, y: 0, z: 0}
-        HasCustomScale: 0
-        CustomScale: {x: 1, y: 1, z: 1}
-      - FX: {fileID: 11400000, guid: e14fba5af26f81c4684e0834377d40bb, type: 2}
-        HasPositionOffset: 0
-        PositionOffset: {x: 0, y: 0, z: 0}
-        HasRotationOffset: 0
-        RotationOffset: {x: 0, y: 0, z: 0}
-        HasCustomScale: 0
-        CustomScale: {x: 1, y: 1, z: 1}
-      AOEEffects:
-      - {fileID: 11400000, guid: 9fdf69d9214a33344bc27f499e033b50, type: 2}
-      ProjectileInfos: []
+      FXObjects: []
+      AOEEffects: []
+      ProjectileInfos:
+      - Projectile: {fileID: 11400000, guid: 70ef7e6b30666ba45ab2d649706b9a7d, type: 2}
+        ExecutionDelay: 0
+        ExecutionCount: 1
+        ExecutionRepeatDelay: 0.2
       HealsOnUser: []
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
     WhileEffects: []
+    AtTargetStartEffects: []
+    AtTargetWhileEffects: []
     PauseConditions: []
     YieldConditions: []
     StopConditions: []

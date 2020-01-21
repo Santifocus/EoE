@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5e2446ee84d62b4caf07d6b7037486e, type: 3}
+  m_Name: SacredCircleActivation
+  m_EditorClassIdentifier: 
+  BasePhysicalDamage: 0
+  BaseMagicalDamage: 25
+  BaseKnockback: 10
+  BaseCritChance: 0
+  Cost:
+    Health: 0
+    Mana: 15
+    Endurance: 0
+    AdditionalConditions: []
+  NoDefinedActionType: 0
+  CompoundActionType: 1
+  CostActivationIndex: 0
+  CausedCooldown: 5
+  CancelFromStun: 1
+  CancelIfCostActivationIsImpossible: 1
+  Elements:
+  - ActionRestrictions: -1
+    MovementRestrictions: 0
+    ElementDuration: 0
+    WhileTickTime: 10
+    StartEffects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 6
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: d51ee1224ea2f3545a6d3018c4b11c1e, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      - FX: {fileID: 11400000, guid: ffdc619f8d38f5c4cb13da2be8aa7ce9, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects:
+      - {fileID: 11400000, guid: ba44429a7ba4fd840a9133d6e8c55966, type: 2}
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    WhileEffects: []
+    AtTargetStartEffects: []
+    AtTargetWhileEffects: []
+    PauseConditions: []
+    YieldConditions: []
+    StopConditions: []

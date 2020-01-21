@@ -14,7 +14,7 @@ namespace EoE.Combatery
 	{
 		#region Fields
 		private const float COMBO_WAIT_THRESHOLD = 0.25f;
-		private const float ATTACK_END_COOLDOWN = 0.35f;
+		private const float ANIMATION_RESET_COOLDOWN = 0.35f;
 		//Static info
 		private static readonly Dictionary<AttackAnimation, (float, float)> animationDelayLookup = new Dictionary<AttackAnimation, (float, float)>()
 		{
@@ -37,7 +37,7 @@ namespace EoE.Combatery
 		private CombatObject curBaseData => overrideBaseObject ?? weaponInfo;
 
 		//Behaivior Control
-		private float attackEndCooldown;
+		private float animationResetCooldown;
 		private bool colliderActive;
 		private bool isChargingAttack;
 		private float curChargeMultiplier;
@@ -133,9 +133,9 @@ namespace EoE.Combatery
 		#region BasicMonobehaivior
 		private void Update()
 		{
-			if(attackEndCooldown > 0)
+			if(animationResetCooldown > 0)
 			{
-				attackEndCooldown -= Time.deltaTime;
+				animationResetCooldown -= Time.deltaTime;
 			}
 
 			if (timeToNextCombo > 0)
@@ -181,7 +181,7 @@ namespace EoE.Combatery
 		#endregion
 		public void StartAttack()
 		{
-			if (Player.Instance.IsCasting || attackEndCooldown > 0)
+			if (Player.Instance.IsCasting || animationResetCooldown > 0)
 				return;
 
 			if (InAttackSequence)
@@ -464,7 +464,7 @@ namespace EoE.Combatery
 
 			SetAnimationSpeed(1);
 			Player.Instance.animationControl.SetBool("InFight", false);
-			attackEndCooldown = ATTACK_END_COOLDOWN;
+			animationResetCooldown = ANIMATION_RESET_COOLDOWN;
 			ChangeWeaponState(InAttackSequence = false, ActiveAttackStyle = null);
 		}
 		public void HitObject(Vector3 hitPos, Collider hit, Vector3 direction)

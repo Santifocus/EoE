@@ -10,26 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f5e2446ee84d62b4caf07d6b7037486e, type: 3}
-  m_Name: MeteorActivation
+  m_Name: DarkBarrageActivation
   m_EditorClassIdentifier: 
   BasePhysicalDamage: 0
-  BaseMagicalDamage: 25
-  BaseKnockback: 0
+  BaseMagicalDamage: 6
+  BaseKnockback: 1
   BaseCritChance: 0
   Cost:
     Health: 0
-    Mana: 2
+    Mana: 1.5
     Endurance: 0
     AdditionalConditions: []
   NoDefinedActionType: 0
   CompoundActionType: 1
   CostActivationIndex: 0
-  CausedCooldown: 3
+  CausedCooldown: 0.2
   CancelFromStun: 1
   CancelIfCostActivationIsImpossible: 1
   Elements:
-  - ActionRestrictions: 3
-    MovementRestrictions: 0
+  - ActionRestrictions: -1
+    MovementRestrictions: 2
     ElementDuration: 0
     WhileTickTime: 10
     StartEffects:
@@ -41,7 +41,7 @@ MonoBehaviour:
       ImpulseVelocityFallbackDirection: 1
       ImpulseDirectionBase: 1
       FXObjects:
-      - FX: {fileID: 11400000, guid: 4025b44e8a8bf514b955bf579c6b2a3e, type: 2}
+      - FX: {fileID: 11400000, guid: af1fb4d57241dff499bbc9d8fb74c299, type: 2}
         HasPositionOffset: 0
         PositionOffset: {x: 0, y: 0, z: 0}
         HasRotationOffset: 0
@@ -50,8 +50,8 @@ MonoBehaviour:
         CustomScale: {x: 1, y: 1, z: 1}
       AOEEffects: []
       ProjectileInfos:
-      - Projectile: {fileID: 11400000, guid: b6ef68cc889db284593f5c1e9bcee04e, type: 2}
-        ExecutionDelay: 0
+      - Projectile: {fileID: 11400000, guid: c3281c7dc8e32964bbfdf634a35a86df, type: 2}
+        ExecutionDelay: 0.1
         ExecutionCount: 1
         ExecutionRepeatDelay: 0.2
       HealsOnUser: []
@@ -59,6 +59,8 @@ MonoBehaviour:
       BuffsOnUser: []
       CreatedRemenants: []
     WhileEffects: []
+    AtTargetStartEffects: []
+    AtTargetWhileEffects: []
     PauseConditions: []
     YieldConditions: []
     StopConditions: []

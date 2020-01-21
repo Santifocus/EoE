@@ -99,9 +99,9 @@ namespace EoE.Entities
 		public InventoryItem EquipedItem => SelectableItems[selectedItemIndex];
 
 		//Spell Items
-		public InventoryItem[] SelectableSpellItems;
+		public InventoryItem[] SelectableActivationCompoundItems;
 		public int selectedSpellItemIndex { get; private set; }
-		public InventoryItem EquipedSpell => SelectableSpellItems[selectedSpellItemIndex];
+		public InventoryItem EquipedSpell => SelectableActivationCompoundItems[selectedSpellItemIndex];
 		#endregion
 		#region Leveling
 		public Buff LevelingPointsBuff { get; private set; }
@@ -215,7 +215,7 @@ namespace EoE.Entities
 			selectedItemIndex = 0;
 			SelectableItems = new InventoryItem[SELECTABLE_ITEMS_AMOUNT];
 			selectedSpellItemIndex = 0;
-			SelectableSpellItems = new InventoryItem[SELECTABLE_ITEMS_AMOUNT];
+			SelectableActivationCompoundItems = new InventoryItem[SELECTABLE_ITEMS_AMOUNT];
 
 			for (int i = 0; i < PlayerSettings.StartItems.Length; i++)
 			{
@@ -243,31 +243,31 @@ namespace EoE.Entities
 						targetItem.isEquiped = true;
 						targetItem.data.Equip(targetItem, this);
 					}
-					else if (PlayerSettings.StartItems[i].Item is SpellItem)
+					else if (PlayerSettings.StartItems[i].Item is ActivationCompoundItem)
 					{
 						bool added = false;
 
 						//Try to find a slot that is null and put the item there
-						for (int j = 0; j < SelectableSpellItems.Length; j++)
+						for (int j = 0; j < SelectableActivationCompoundItems.Length; j++)
 						{
-							if (SelectableSpellItems[j] == null)
+							if (SelectableActivationCompoundItems[j] == null)
 							{
-								SelectableSpellItems[j] = targetItem;
-								SelectableSpellItems[j].isEquiped = true;
+								SelectableActivationCompoundItems[j] = targetItem;
+								SelectableActivationCompoundItems[j].isEquiped = true;
 								added = true;
 								if (j == 0)
 								{
-									SelectableSpellItems[j].data.Equip(targetItem, this);
+									SelectableActivationCompoundItems[j].data.Equip(targetItem, this);
 								}
 								break;
 							}
 						}
 						//couldnt find a null slot, put it in the first one, (just a fallback)
-						if (!added && SelectableSpellItems.Length > 0)
+						if (!added && SelectableActivationCompoundItems.Length > 0)
 						{
-							SelectableSpellItems[0] = targetItem;
-							SelectableSpellItems[0].isEquiped = true;
-							SelectableSpellItems[0].data.Equip(targetItem, this);
+							SelectableActivationCompoundItems[0] = targetItem;
+							SelectableActivationCompoundItems[0].isEquiped = true;
+							SelectableActivationCompoundItems[0].data.Equip(targetItem, this);
 						}
 					}
 					else
@@ -1034,7 +1034,7 @@ namespace EoE.Entities
 				{
 					t += selectedSpellIndexChange;
 					int valIndex = ValidatedID(t + selectedSpellItemIndex);
-					if (SelectableSpellItems[valIndex] != null)
+					if (SelectableActivationCompoundItems[valIndex] != null)
 					{
 						if (EquipedSpell != null)
 							EquipedSpell.data.UnEquip(EquipedSpell, this);
@@ -1091,10 +1091,10 @@ namespace EoE.Entities
 					selectablesChanged = true;
 					SelectableItems[i] = null;
 				}
-				if (SelectableSpellItems[i] != null && SelectableSpellItems[i].stackSize <= 0)
+				if (SelectableActivationCompoundItems[i] != null && SelectableActivationCompoundItems[i].stackSize <= 0)
 				{
 					selectablesChanged = true;
-					SelectableSpellItems[i] = null;
+					SelectableActivationCompoundItems[i] = null;
 				}
 			}
 			if (selectablesChanged)
@@ -1126,7 +1126,7 @@ namespace EoE.Entities
 				for (int i = 0; i < SELECTABLE_ITEMS_AMOUNT; i++)
 				{
 					int valIndex = ValidatedID(i + selectedSpellItemIndex);
-					if (SelectableSpellItems[valIndex] != null)
+					if (SelectableActivationCompoundItems[valIndex] != null)
 					{
 						selectedSpellItemIndex = valIndex;
 						EquipedSpell.data.Equip(EquipedSpell, this);

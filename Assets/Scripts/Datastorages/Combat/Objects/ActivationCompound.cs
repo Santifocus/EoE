@@ -29,6 +29,9 @@ namespace EoE.Combatery
 		public ActivationEffect[] StartEffects = new ActivationEffect[0];
 		public ActivationEffect[] WhileEffects = new ActivationEffect[0];
 
+		public ActivationEffect[] AtTargetStartEffects = new ActivationEffect[0];
+		public ActivationEffect[] AtTargetWhileEffects = new ActivationEffect[0];
+
 		public ConditionObject[] PauseConditions = new ConditionObject[0];
 		public ConditionObject[] YieldConditions = new ConditionObject[0];
 		public ConditionObject[] StopConditions = new ConditionObject[0];

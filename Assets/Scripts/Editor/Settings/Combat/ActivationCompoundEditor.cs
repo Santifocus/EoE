@@ -82,6 +82,10 @@ namespace EoE.Information
 				LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 				DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartEffects))), ref settings.StartEffects, property.FindPropertyRelative(nameof(settings.StartEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
 				DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WhileEffects))), ref settings.WhileEffects, property.FindPropertyRelative(nameof(settings.WhileEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
+
+				LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
+				DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AtTargetStartEffects))), ref settings.AtTargetStartEffects, property.FindPropertyRelative(nameof(settings.AtTargetStartEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
+				DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AtTargetWhileEffects))), ref settings.AtTargetWhileEffects, property.FindPropertyRelative(nameof(settings.AtTargetWhileEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
 			}
 			EndFoldoutHeader();
 		}

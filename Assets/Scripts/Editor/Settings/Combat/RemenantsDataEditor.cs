@@ -30,6 +30,12 @@ namespace EoE.Combatery
 			BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.TryGroundRemenants))), ref settings.TryGroundRemenants, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Duration))), ref settings.Duration, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WhileTickTime))), ref settings.WhileTickTime, 1);
+			if (settings.WhileTickTime <= 0)
+			{
+				settings.WhileTickTime = 0.0001f;
+				isDirty = true;
+			}
+			Header("Executed While Ticks: " + (long)((settings.Duration - float.Epsilon) / settings.WhileTickTime), 1, false);
 		}
 	}
 }

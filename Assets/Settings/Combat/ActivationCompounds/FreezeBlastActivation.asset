@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f5e2446ee84d62b4caf07d6b7037486e, type: 3}
-  m_Name: EnemyFreezeActivation
+  m_Name: FreezeBlastActivation
   m_EditorClassIdentifier: 
   BasePhysicalDamage: 0
-  BaseMagicalDamage: 13
+  BaseMagicalDamage: 25
   BaseKnockback: 1
   BaseCritChance: 0
   Cost:
@@ -24,17 +24,19 @@ MonoBehaviour:
   NoDefinedActionType: 0
   CompoundActionType: 1
   CostActivationIndex: 0
-  CausedCooldown: 4
+  CausedCooldown: 6
   CancelFromStun: 1
   CancelIfCostActivationIsImpossible: 1
   Elements:
-  - ActionRestrictions: 3
+  - ActionRestrictions: 0
     MovementRestrictions: 0
     ElementDuration: 0
     WhileTickTime: 10
-    StartEffects:
+    StartEffects: []
+    WhileEffects: []
+    AtTargetStartEffects:
     - ChanceToActivate: 1
-      ContainedEffectType: 8
+      ContainedEffectType: 64
       ImpulseVelocity: 5
       ImpulseVelocityFallOffTime: 0.5
       ImpulseVelocityDirection: 2
@@ -42,16 +44,13 @@ MonoBehaviour:
       ImpulseDirectionBase: 1
       FXObjects: []
       AOEEffects: []
-      ProjectileInfos:
-      - Projectile: {fileID: 11400000, guid: 27022a90624eb3548be6d42686959842, type: 2}
-        ExecutionDelay: 0
-        ExecutionCount: 1
-        ExecutionRepeatDelay: 0.2
+      ProjectileInfos: []
       HealsOnUser: []
       StackingStyle: 2
       BuffsOnUser: []
-      CreatedRemenants: []
-    WhileEffects: []
+      CreatedRemenants:
+      - {fileID: 11400000, guid: 0c5aa56ae8cca0a438e950b4ab216fcc, type: 2}
+    AtTargetWhileEffects: []
     PauseConditions: []
     YieldConditions: []
     StopConditions: []

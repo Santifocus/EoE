@@ -10,55 +10,47 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f5e2446ee84d62b4caf07d6b7037486e, type: 3}
-  m_Name: DarkBarrageActivation
+  m_Name: EnemyFreezeBlastActivation
   m_EditorClassIdentifier: 
   BasePhysicalDamage: 0
-  BaseMagicalDamage: 6
+  BaseMagicalDamage: 13
   BaseKnockback: 1
   BaseCritChance: 0
   Cost:
     Health: 0
-    Mana: 1.5
+    Mana: 10
     Endurance: 0
     AdditionalConditions: []
   NoDefinedActionType: 0
   CompoundActionType: 1
   CostActivationIndex: 0
-  CausedCooldown: 0.2
+  CausedCooldown: 4
   CancelFromStun: 1
   CancelIfCostActivationIsImpossible: 1
   Elements:
-  - ActionRestrictions: -1
-    MovementRestrictions: 2
+  - ActionRestrictions: 3
+    MovementRestrictions: 0
     ElementDuration: 0
     WhileTickTime: 10
-    StartEffects:
+    StartEffects: []
+    WhileEffects: []
+    AtTargetStartEffects:
     - ChanceToActivate: 1
-      ContainedEffectType: 10
+      ContainedEffectType: 64
       ImpulseVelocity: 5
       ImpulseVelocityFallOffTime: 0.5
       ImpulseVelocityDirection: 2
       ImpulseVelocityFallbackDirection: 1
       ImpulseDirectionBase: 1
-      FXObjects:
-      - FX: {fileID: 11400000, guid: af1fb4d57241dff499bbc9d8fb74c299, type: 2}
-        HasPositionOffset: 0
-        PositionOffset: {x: 0, y: 0, z: 0}
-        HasRotationOffset: 0
-        RotationOffset: {x: 0, y: 0, z: 0}
-        HasCustomScale: 0
-        CustomScale: {x: 1, y: 1, z: 1}
+      FXObjects: []
       AOEEffects: []
-      ProjectileInfos:
-      - Projectile: {fileID: 11400000, guid: c3281c7dc8e32964bbfdf634a35a86df, type: 2}
-        ExecutionDelay: 0.1
-        ExecutionCount: 1
-        ExecutionRepeatDelay: 0.2
+      ProjectileInfos: []
       HealsOnUser: []
       StackingStyle: 2
       BuffsOnUser: []
-      CreatedRemenants: []
-    WhileEffects: []
+      CreatedRemenants:
+      - {fileID: 11400000, guid: c97c556c383add148b7c67de09752a99, type: 2}
+    AtTargetWhileEffects: []
     PauseConditions: []
     YieldConditions: []
     StopConditions: []

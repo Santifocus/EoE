@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8a5696ca97738146afd005d2d983fa0, type: 3}
-  m_Name: Freezeenemybombremenant
+  m_Name: FreezeEnemyBombRemenant
   m_EditorClassIdentifier: 
   TryGroundRemenants: 1
   Duration: 1
+  WhileTickTime: 0.1
   StartEffects:
   - ChanceToActivate: 1
     ContainedEffectType: 2
@@ -44,7 +45,6 @@ MonoBehaviour:
     BuffsOnUser: []
     CreatedRemenants: []
   WhileEffects: []
-  WhileTickTime: 0.1
   OnEndEffects:
   - ChanceToActivate: 1
     ContainedEffectType: 6

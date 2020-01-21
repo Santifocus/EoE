@@ -786,7 +786,7 @@ namespace EoE.Entities
 				(this as Player).ClampEndurance();
 		}
 		#endregion
-		#region Spell Casting
+		#region Compound Casting
 		public bool ActivateCompound(ActivationCompound compound)
 		{
 			if (!compound.NoDefinedActionType)
@@ -812,6 +812,8 @@ namespace EoE.Entities
 		private IEnumerator ActivateCompoundC(ActivationCompound compound)
 		{
 			ApplyCooldown();
+			Transform targeterTransform = new GameObject("Targeter Transform").transform;
+			targeterTransform.SetParent(Storage.ProjectileStorage);
 
 			for (int i = 0; i < compound.Elements.Length; i++)
 			{
@@ -827,6 +829,8 @@ namespace EoE.Entities
 				//Activate start effects
 				RestrictionChange(compound.Elements[i], true);
 				FXInstance[] elementBoundFX = ActivateElementActivationEffects(compound.Elements[i].StartEffects, true);
+				PositionTargeterTranform();
+				FXInstance[] elementAtTargetBoundFX = ActivateElementActivationEffects(compound.Elements[i].AtTargetStartEffects, true, targeterTransform);
 
 				//Setup the loop for this element
 				float elementTime = 0;
@@ -883,7 +887,7 @@ namespace EoE.Entities
 							}
 						}
 					}
-
+					
 					if (!yielded && !paused)
 						elementTime += Time.deltaTime;
 
@@ -895,17 +899,20 @@ namespace EoE.Entities
 						{
 							whileTickTime -= compound.Elements[i].WhileTickTime;
 							ActivateElementActivationEffects(compound.Elements[i].WhileEffects, false);
+							ActivateElementActivationEffects(compound.Elements[i].AtTargetWhileEffects, false, targeterTransform);
 						}
 					}
 				}
 
 				//Finish fx if needed
 				FXManager.FinishFX(ref elementBoundFX);
+				FXManager.FinishFX(ref elementAtTargetBoundFX);
 				//Undo any restrictions
 				RestrictionChange(compound.Elements[i], false);
 			}
 
-		CompoundFinished:;
+			CompoundFinished:;
+			Destroy(targeterTransform.gameObject);
 
 			void RestrictionChange(ActivationElement element, bool state)
 			{
@@ -920,15 +927,15 @@ namespace EoE.Entities
 				if (element.ShouldRestrictMovement(MovementType.Turn))
 					TurnStops += change;
 			}
-			FXInstance[] ActivateElementActivationEffects(ActivationEffect[] effects, bool binding)
+			FXInstance[] ActivateElementActivationEffects(ActivationEffect[] effects, bool binding, Transform overrideTransform = null)
 			{
 				List<FXInstance> createdFXInstances = new List<FXInstance>();
 				for (int i = 0; i < effects.Length; i++)
 				{
 					if (binding)
-						createdFXInstances.AddRange(effects[i].Activate(this, compound));
+						createdFXInstances.AddRange(effects[i].Activate(this, compound, 1, overrideTransform));
 					else
-						effects[i].Activate(this, compound);
+						effects[i].Activate(this, compound, 1, overrideTransform);
 				}
 				if (binding)
 					return createdFXInstances.ToArray();
@@ -942,153 +949,12 @@ namespace EoE.Entities
 				else if (compound.CompoundActionType == ActionType.Attacking)
 					AttackCooldown = compound.CausedCooldown;
 			}
-		}
-		private IEnumerator CastSpellC(Spell spell)
-		{
-			IsCasting = true;
-			//Casting
-			FXInstance[] curBoundFX = null;
-			if (spell.ContainedParts.HasFlag(SpellPart.Cast))
+			void PositionTargeterTranform()
 			{
-				bool movementStopper = spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting);
-				bool rotationStopper = spell.RotationRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileCasting);
-
-				if (movementStopper)
-					MovementStops++;
-				if (rotationStopper)
-					TurnStops++;
-
-				for (int i = 0; i < spell.CastInfo.StartEffects.Length; i++)
-				{
-					spell.CastInfo.StartEffects[i].Activate(this, transform, spell);
-				}
-				FXManager.ExecuteFX(spell.CastInfo.VisualEffects, transform, this is Player, out curBoundFX, 1);
-
-				float castTime = 0;
-				float effectTick = 0;
-				while (castTime < spell.CastInfo.Duration)
-				{
-					yield return new WaitForEndOfFrame();
-					castTime += Time.deltaTime;
-					effectTick += Time.deltaTime;
-
-					if (IsStunned)
-					{
-						if (movementStopper)
-							MovementStops--;
-						if (rotationStopper)
-							TurnStops--;
-						goto StoppedSpell;
-					}
-
-					if (effectTick > spell.CastInfo.WhileTickTime)
-					{
-						effectTick -= spell.CastInfo.WhileTickTime;
-						for (int i = 0; i < spell.CastInfo.WhileEffects.Length; i++)
-						{
-							spell.CastInfo.WhileEffects[i].Activate(this, transform, spell);
-						}
-					}
-				}
-
-				if (movementStopper)
-					MovementStops--;
-				if (rotationStopper)
-					TurnStops--;
+				targeterTransform.rotation = transform.rotation;
+				targeterTransform.position = targetPosition ?? transform.position;
 			}
-
-			FXManager.FinishFX(ref curBoundFX);
-
-			//Start
-			if (spell.ContainedParts.HasFlag(SpellPart.Start))
-			{
-				for (int i = 0; i < spell.StartInfo.Effects.Length; i++)
-				{
-					spell.StartInfo.Effects[i].Activate(this, transform, spell);
-				}
-				FXManager.ExecuteFX(spell.StartInfo.VisualEffects, transform, this is Player, out curBoundFX, 1);
-			}
-
-			FXManager.FinishFX(ref curBoundFX);
-
-			//Projectile
-			if (spell.ContainedParts.HasFlag(SpellPart.Projectile))
-			{
-				bool movementStopper = spell.MovementRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileShooting);
-				bool rotationStopper = spell.RotationRestrictions.HasFlag(SpellMovementRestrictionsMask.WhileShooting);
-				if (movementStopper)
-					MovementStops++;
-				if (rotationStopper)
-					TurnStops++;
-
-				for (int i = 0; i < spell.ProjectileInfos.Length; i++)
-				{
-					float timer = 0;
-					while (timer < spell.ProjectileInfos[i].ExecutionDelay)
-					{
-						yield return new WaitForEndOfFrame();
-						timer += Time.deltaTime;
-						if (IsStunned)
-						{
-							if (movementStopper)
-								MovementStops--;
-							if (rotationStopper)
-								TurnStops--;
-							goto StoppedSpell;
-						}
-					}
-
-					for (int j = 0; j < spell.ProjectileInfos[i].ExecutionCount; j++)
-					{
-						CreateProjectile(spell, i);
-						if (j < spell.ProjectileInfos[i].ExecutionCount - 1)
-						{
-							float repeatTimer = 0;
-							while (repeatTimer < spell.ProjectileInfos[i].ExecutionRepeatDelay)
-							{
-								yield return new WaitForEndOfFrame();
-								repeatTimer += Time.deltaTime;
-								if (IsStunned)
-								{
-									if (movementStopper)
-										MovementStops--;
-									if (rotationStopper)
-										TurnStops--;
-									goto StoppedSpell;
-								}
-							}
-						}
-					}
-				}
-				if (movementStopper)
-					MovementStops--;
-				if (rotationStopper)
-					TurnStops--;
-			}
-
-		//If the spell cast / shooting was canceled we jump here
-		StoppedSpell:;
-			IsCasting = false;
-			CastingCooldown = spell.SpellCooldown;
-			spell.Cost.Activate(this, 1, 1, 1);
-			FXManager.FinishFX(ref curBoundFX);
 		}
-		#region ProjectileCreation
-		private Projectile CreateProjectile(Spell spellBase, int index)
-		{
-			//Calculate the spawnoffset
-			Vector3 spawnOffset = spellBase.ProjectileInfos[index].Projectile.CreateOffsetToCaster.x * transform.right + spellBase.ProjectileInfos[index].Projectile.CreateOffsetToCaster.y * transform.up + spellBase.ProjectileInfos[index].Projectile.CreateOffsetToCaster.z * transform.forward;
-
-			//First find out what direction the projectile should fly
-			Vector3 direction = CombatObject.CalculateDirection(spellBase.ProjectileInfos[index].Projectile.DirectionStyle,
-																spellBase.ProjectileInfos[index].Projectile.FallbackDirectionStyle,
-																spellBase.ProjectileInfos[index].Projectile.Direction,
-																this,
-																spawnOffset
-																);
-			return Projectile.CreateProjectile(spellBase, spellBase.ProjectileInfos[index].Projectile, this, direction, actuallWorldPosition + spawnOffset);
-		}
-		#endregion
 		#endregion
 		#region Helper Functions
 		protected bool CheckIfCanSeeEntitie(Transform eye, Entity target, bool lowPriority = false)

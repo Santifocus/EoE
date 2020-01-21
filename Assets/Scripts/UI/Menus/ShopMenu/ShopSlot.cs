@@ -83,7 +83,7 @@ namespace EoE.UI
 			{
 				itemTypeDisplay.sprite = armorItemIcon;
 			}
-			else if (containedItem is SpellItem)
+			else if (containedItem is ActivationCompoundItem)
 			{
 				itemTypeDisplay.sprite = spellItemIcon;
 			}

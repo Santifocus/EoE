@@ -9,15 +9,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b68c3564075a204ab65946eb6308666, type: 3}
+  m_Script: {fileID: 11500000, guid: c474321604ce4b049877fabd5c1797aa, type: 3}
   m_Name: DarkBarrageSpellItem
   m_EditorClassIdentifier: 
   ItemName:
-    textColor: {r: 0, g: 0.9388051, b: 1, a: 1}
-    text: Shadow Ring
+    textColor: {r: 0, g: 0.89411765, b: 1, a: 1}
+    text: Dark Barrage
   ItemDescription:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Dark Magic with massive firerate
+    text: Shoots
+  - textColor: {r: 0, g: 1, b: 0.39215687, a: 1}
+    text: ' Balls of Darkness'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ' with a high firerate.'
+  - textColor: {r: 0.9699626, g: 0, b: 1, a: 1}
+    text: ' Targeted'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: .
   SortingID: 0
   ItemIcon: {fileID: 21300000, guid: c5e5c289c5639b94ab3ff3ef314a151e, type: 3}
   FXEffectsOnUse: []
@@ -32,5 +40,4 @@ MonoBehaviour:
   MaxStack: 1
   ItemWorth: 250
   ItemFlags: 1
-  TargetSpell: {fileID: 0}
   TargetCompound: {fileID: 11400000, guid: 3c35069285173c14cbae3b02687b536b, type: 2}
