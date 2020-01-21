@@ -518,6 +518,10 @@ namespace EoE
 		#region DrawCustoms
 		public static void DrawCombatObjectBase(CombatObject settings, SerializedObject serializedObject, int offSet)
 		{
+			BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.NoDefinedActionType))), ref settings.NoDefinedActionType, 1);
+			if (!settings.NoDefinedActionType)
+				EnumField<ActionType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ActionType))), ref settings.ActionType, 1);
+
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BasePhysicalDamage))), ref settings.BasePhysicalDamage, offSet);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseMagicalDamage))), ref settings.BaseMagicalDamage, offSet);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseKnockback))), ref settings.BaseKnockback, offSet);
@@ -614,15 +618,30 @@ namespace EoE
 				}
 			}
 		}
-		public static void DrawProjectileInfo(GUIContent content, ProjectileInfo settings, SerializedProperty projectileProperty, int offSet)
+		public static void DrawRestrictionData(GUIContent content, RestrictionData settings, SerializedProperty property, int offSet)
+		{
+			if (settings == null)
+			{
+				settings = new RestrictionData();
+				isDirty = true;
+			}
+
+			Foldout(content, property, offSet);
+			if (property.isExpanded)
+			{
+				EnumFlagField<ActionType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ActionRestrictions))), ref settings.ActionRestrictions, offSet + 1);
+				EnumFlagField<MovementType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MovementRestrictions))), ref settings.MovementRestrictions, offSet + 1);
+			}
+		}
+		public static void DrawProjectileInfo(GUIContent content, ProjectileInfo settings, SerializedProperty property, int offSet)
 		{
 			if(settings == null)
 			{
 				settings = new ProjectileInfo();
 				isDirty = true;
 			}
-			Foldout(content, projectileProperty, offSet);
-			if (projectileProperty.isExpanded)
+			Foldout(content, property, offSet);
+			if (property.isExpanded)
 			{
 				ObjectField<ProjectileData>(new GUIContent("ProjectileData"), ref settings.Projectile, offSet + 1);
 
@@ -785,8 +804,7 @@ namespace EoE
 					//Animation
 					Header("Animation Settings", offSet);
 					EnumField<AttackAnimation>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationTarget))), ref settings.AnimationTarget, offSet + 1);
-					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StopMovement))), ref settings.StopMovement, offSet + 1);
-					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StopRotation))), ref settings.StopRotation, offSet + 1);
+					DrawRestrictionData(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Restrictions))), settings.Restrictions, property.FindPropertyRelative(nameof(settings.Restrictions)), offSet + 1);
 
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 0.25f));
 					EnumField<MultiplicationType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationMultiplicationType))), ref settings.AnimationMultiplicationType, offSet + 1);
@@ -876,18 +894,17 @@ namespace EoE
 					}
 				}
 			}
-			private static void DrawChargeSettings(AttackChargeSettings settings, SerializedProperty settingsProperty, int offSet)
+			private static void DrawChargeSettings(AttackChargeSettings settings, SerializedProperty property, int offSet)
 			{
-				Foldout(new GUIContent("Charge Settings"), settingsProperty, offSet);
-				if (settingsProperty.isExpanded)
+				Foldout(new GUIContent("Charge Settings"), property, offSet);
+				if (property.isExpanded)
 				{
 					EnumFlagField<AttackChargeEffectMask>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectMask))), ref settings.EffectMask, offSet + 1);
 
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 					FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationChargeStartpoint))), ref settings.AnimationChargeStartpoint, 0, 1, offSet + 1);
-					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StopMovementWhileCharging))), ref settings.StopMovementWhileCharging, offSet + 1);
-					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StopRotationWhileCharging))), ref settings.StopRotationWhileCharging, offSet + 1);
 					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WaitAtFullChargeForRelease))), ref settings.WaitAtFullChargeForRelease, offSet + 1);
+					DrawRestrictionData(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Restrictions))), settings.Restrictions, property.FindPropertyRelative(nameof(settings.Restrictions)), offSet + 1);
 
 					//Charge values
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
@@ -899,22 +916,22 @@ namespace EoE
 
 					//DirectHit overrides
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
-					SerializedProperty hitOverridesProperty = settingsProperty.FindPropertyRelative(nameof(settings.ChargeBasedDirectHits));
+					SerializedProperty hitOverridesProperty = property.FindPropertyRelative(nameof(settings.ChargeBasedDirectHits));
 					CurMinCharge = settings.MinRequiredCharge;
 					CurMaxCharge = settings.MaximumCharge;
 					DrawArray<ChargeBasedDirectHit>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ChargeBasedDirectHits))), ref settings.ChargeBasedDirectHits, hitOverridesProperty, DrawDirectHitOverride, new GUIContent(". Charge Based Direct Hit"), offSet + 1);
 
 					//FX
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
-					SerializedProperty fxProperty = settingsProperty.FindPropertyRelative(nameof(settings.FXObjects));
+					SerializedProperty fxProperty = property.FindPropertyRelative(nameof(settings.FXObjects));
 					DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.FXObjects))), ref settings.FXObjects, fxProperty, DrawCustomFXObject, new GUIContent(". Effect"), offSet + 1);
 
-					SerializedProperty fxMultipliedProperty = settingsProperty.FindPropertyRelative(nameof(settings.FXObjectsWithMutliplier));
+					SerializedProperty fxMultipliedProperty = property.FindPropertyRelative(nameof(settings.FXObjectsWithMutliplier));
 					DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.FXObjectsWithMutliplier))), ref settings.FXObjectsWithMutliplier, fxMultipliedProperty, DrawCustomFXObject, new GUIContent(". Effect"), offSet + 1);
 
 					//Buffs
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
-					SerializedProperty buffProperty = settingsProperty.FindPropertyRelative(nameof(settings.BuffOnUserWhileCharging));
+					SerializedProperty buffProperty = property.FindPropertyRelative(nameof(settings.BuffOnUserWhileCharging));
 					ObjectArrayField<Buff>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BuffOnUserWhileCharging))), ref settings.BuffOnUserWhileCharging, buffProperty, new GUIContent(". Buff"), offSet + 1);
 				}
 			}

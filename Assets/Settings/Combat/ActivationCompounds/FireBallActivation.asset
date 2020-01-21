@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5e2446ee84d62b4caf07d6b7037486e, type: 3}
   m_Name: FireBallActivation
   m_EditorClassIdentifier: 
+  NoDefinedActionType: 0
+  ActionType: 1
   BasePhysicalDamage: 0
   BaseMagicalDamage: 5
   BaseKnockback: 10
@@ -21,15 +23,14 @@ MonoBehaviour:
     Mana: 15
     Endurance: 0
     AdditionalConditions: []
-  NoDefinedActionType: 0
-  CompoundActionType: 1
   CostActivationIndex: 1
   CausedCooldown: 1
   CancelFromStun: 1
   CancelIfCostActivationIsImpossible: 1
   Elements:
-  - ActionRestrictions: -1
-    MovementRestrictions: 0
+  - Restrictions:
+      ActionRestrictions: -1
+      MovementRestrictions: 0
     ElementDuration: 1.7
     WhileTickTime: 10
     StartEffects:
@@ -67,8 +68,9 @@ MonoBehaviour:
     PauseConditions: []
     YieldConditions: []
     StopConditions: []
-  - ActionRestrictions: -1
-    MovementRestrictions: 1
+  - Restrictions:
+      ActionRestrictions: -1
+      MovementRestrictions: 1
     ElementDuration: 0.6
     WhileTickTime: 10
     StartEffects:

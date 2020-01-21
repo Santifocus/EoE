@@ -176,9 +176,6 @@ namespace EoE.Entities
 		}
 		private void DecideOnbehaiviorPattern()
 		{
-			if (IsCasting || CastingCooldown > 0)
-				return;
-
 			float distanceToPlayer = (Player.Instance.actuallWorldPosition - actuallWorldPosition).sqrMagnitude;
 
 			List<int> possiblePatterns = new List<int>(settings.BehaiviorPatterns.Length);
@@ -187,7 +184,7 @@ namespace EoE.Entities
 			{
 				if(	distanceToPlayer > (settings.BehaiviorPatterns[i].MinRange * settings.BehaiviorPatterns[i].MinRange) &&
 					distanceToPlayer < (settings.BehaiviorPatterns[i].MaxRange * settings.BehaiviorPatterns[i].MaxRange) &&
-					settings.BehaiviorPatterns[i].TargetCompound.Cost.CanActivate(this, 1, 1, 1))
+					settings.BehaiviorPatterns[i].TargetCompound.CanActivate(this, 1, 1, 1))
 				{
 					possiblePatterns.Add(i);
 				}

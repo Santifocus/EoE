@@ -12,7 +12,7 @@ namespace EoE.Information
 		protected override void ActivateInternal()
 		{
 			for(int i = 0; i < ActivationEffects.Length; i++)
-				ActivationEffects[i].Activate(Player.Instance, BaseSettings);
+				ActivationEffects[i].Activate(Player.Instance, this);
 		}
 	}
 }

@@ -13,7 +13,7 @@ namespace EoE.Information
 		protected override void ActivateInternal()
 		{
 			base.ActivateInternal();
-			WeaponController.Instance.overrideBaseObject = BaseSettings;
+			WeaponController.Instance.overrideBaseObject = this;
 			WeaponController.Instance.ForceAttackStart(AttackData);
 
 			//Now we check if the attack sequence start was successfull, if not we do nothing, otherwise we start a delayed call that will end the moment the attack sequence is over,
@@ -25,9 +25,9 @@ namespace EoE.Information
 			}
 		}
 
-		public override bool CanActivate()
+		public override bool CanActivate(Entity target, float healthCostMultiplier, float manaCostMultiplier, float enduranceCostMultiplier)
 		{
-			return base.CanActivate() && WeaponController.Instance;
+			return base.CanActivate(target, healthCostMultiplier, manaCostMultiplier, enduranceCostMultiplier) && WeaponController.Instance;
 		}
 	}
 }

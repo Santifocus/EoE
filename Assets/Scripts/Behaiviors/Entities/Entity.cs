@@ -67,8 +67,7 @@ namespace EoE.Entities
 		private GameObject mainHealthRegenParticleObject;
 		private ParticleSystem[] healthRegenParticleSystems;
 
-		//Spell Casting
-		public bool IsCasting { get; private set; }
+		//Action Cooldowns
 		public float AttackCooldown { get; private set; }
 		public float CastingCooldown { get; private set; }
 
@@ -791,21 +790,7 @@ namespace EoE.Entities
 		#region Compound Casting
 		public bool ActivateCompound(ActivationCompound compound)
 		{
-			if (!compound.NoDefinedActionType)
-			{
-				if (compound.CompoundActionType == ActionType.Casting)
-				{
-					if (IsCastingStopped || CastingCooldown > 0)
-						return false;
-				}
-				else //compound.CompoundActionType == ActionType.Attacking
-				{
-					if (IsAttackStopped || AttackCooldown > 0)
-						return false;
-				}
-			}
-
-			if (!compound.Cost.CanActivate(this, 1, 1, 1))
+			if (!compound.CanActivate(this, 1, 1, 1))
 				return false;
 
 			StartCoroutine(ActivateCompoundC(compound));
@@ -821,15 +806,15 @@ namespace EoE.Entities
 			{
 				if(compound.CostActivationIndex == i)
 				{
-					if(compound.CancelIfCostActivationIsImpossible && !compound.Cost.CanActivate(this, 1, 1, 1))
+					if(compound.CancelIfCostActivationIsImpossible && !compound.Cost.CanAfford(this, 1, 1, 1))
 					{
 						break;
 					}
-					compound.Cost.Activate(this, 1, 1, 1);
+					compound.Cost.PayCost(this, 1, 1, 1);
 				}
 
 				//Activate start effects
-				RestrictionChange(compound.Elements[i], true);
+				compound.Elements[i].Restrictions.ApplyRestriction(this, true);
 				FXInstance[] elementBoundFX = ActivateElementActivationEffects(compound.Elements[i].StartEffects, true);
 				PositionTargeterTranform();
 				FXInstance[] elementAtTargetBoundFX = ActivateElementActivationEffects(compound.Elements[i].AtTargetStartEffects, true, targeterTransform);
@@ -847,7 +832,7 @@ namespace EoE.Entities
 					if(compound.CancelFromStun && IsStunned)
 					{
 						//Get rid of any restrictions/FXInstances and then exit the nested loop
-						RestrictionChange(compound.Elements[i], false);
+						compound.Elements[i].Restrictions.ApplyRestriction(this, false);
 						FXManager.FinishFX(ref elementBoundFX);
 						goto CompoundFinished;
 					}
@@ -859,7 +844,7 @@ namespace EoE.Entities
 						{
 							//Get rid of any restrictions/FXInstances and then exit the nested loop
 							FXManager.FinishFX(ref elementBoundFX);
-							RestrictionChange(compound.Elements[i], false);
+							compound.Elements[i].Restrictions.ApplyRestriction(this, false);
 							goto CompoundFinished;
 						}
 					}
@@ -910,25 +895,12 @@ namespace EoE.Entities
 				FXManager.FinishFX(ref elementBoundFX);
 				FXManager.FinishFX(ref elementAtTargetBoundFX);
 				//Undo any restrictions
-				RestrictionChange(compound.Elements[i], false);
+				compound.Elements[i].Restrictions.ApplyRestriction(this, false);
 			}
 
 			CompoundFinished:;
 			Destroy(targeterTransform.gameObject);
 
-			void RestrictionChange(ActivationElement element, bool state)
-			{
-				int change = state ? 1 : -1;
-				if (element.ShouldRestrictAction(ActionType.Casting))
-					CastingStops += change;
-				if (element.ShouldRestrictAction(ActionType.Attacking))
-					AttackStops += change;
-
-				if (element.ShouldRestrictMovement(MovementType.Walk))
-					MovementStops += change;
-				if (element.ShouldRestrictMovement(MovementType.Turn))
-					TurnStops += change;
-			}
 			FXInstance[] ActivateElementActivationEffects(ActivationEffect[] effects, bool binding, Transform overrideTransform = null)
 			{
 				List<FXInstance> createdFXInstances = new List<FXInstance>();
@@ -946,9 +918,9 @@ namespace EoE.Entities
 			}
 			void ApplyCooldown()
 			{
-				if (compound.CompoundActionType == ActionType.Casting)
+				if (compound.ActionType == ActionType.Casting)
 					CastingCooldown = compound.CausedCooldown;
-				else if (compound.CompoundActionType == ActionType.Attacking)
+				else if (compound.ActionType == ActionType.Attacking)
 					AttackCooldown = compound.CausedCooldown;
 			}
 			void PositionTargeterTranform()

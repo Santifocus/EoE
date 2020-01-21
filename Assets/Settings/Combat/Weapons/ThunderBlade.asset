@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ab78e7538a021446a2451566185bbde, type: 3}
   m_Name: ThunderBlade
   m_EditorClassIdentifier: 
+  NoDefinedActionType: 0
+  ActionType: 2
   BasePhysicalDamage: 7
   BaseMagicalDamage: 0
   BaseKnockback: 5
@@ -33,8 +35,9 @@ MonoBehaviour:
   StandAttackSequence:
     AttackSequenceParts:
     - AnimationTarget: 1
-      StopMovement: 0
-      StopRotation: 0
+      Restrictions:
+        ActionRestrictions: -1
+        MovementRestrictions: 0
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:
@@ -67,8 +70,9 @@ MonoBehaviour:
       ChargeSettings:
         EffectMask: 3
         AnimationChargeStartpoint: 0.1
-        StopMovementWhileCharging: 0
-        StopRotationWhileCharging: 0
+        Restrictions:
+          ActionRestrictions: -1
+          MovementRestrictions: 0
         WaitAtFullChargeForRelease: 1
         ChargeTime: 1
         StartCharge: 0
@@ -126,8 +130,9 @@ MonoBehaviour:
           BuffsOnUser: []
           CreatedRemenants: []
     - AnimationTarget: 2
-      StopMovement: 0
-      StopRotation: 0
+      Restrictions:
+        ActionRestrictions: -1
+        MovementRestrictions: 0
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:
@@ -160,8 +165,9 @@ MonoBehaviour:
       ChargeSettings:
         EffectMask: 3
         AnimationChargeStartpoint: 0.1
-        StopMovementWhileCharging: 0
-        StopRotationWhileCharging: 0
+        Restrictions:
+          ActionRestrictions: -1
+          MovementRestrictions: 0
         WaitAtFullChargeForRelease: 1
         ChargeTime: 1
         StartCharge: 0
@@ -219,8 +225,9 @@ MonoBehaviour:
           BuffsOnUser: []
           CreatedRemenants: []
     - AnimationTarget: 4
-      StopMovement: 1
-      StopRotation: 1
+      Restrictions:
+        ActionRestrictions: -1
+        MovementRestrictions: 3
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 2
       AnimationSpeedCurve:
@@ -253,8 +260,9 @@ MonoBehaviour:
       ChargeSettings:
         EffectMask: 3
         AnimationChargeStartpoint: 0.45
-        StopMovementWhileCharging: 0
-        StopRotationWhileCharging: 0
+        Restrictions:
+          ActionRestrictions: -1
+          MovementRestrictions: 0
         WaitAtFullChargeForRelease: 1
         ChargeTime: 2
         StartCharge: 1
@@ -353,8 +361,9 @@ MonoBehaviour:
   RunAttackSequence:
     AttackSequenceParts:
     - AnimationTarget: 2
-      StopMovement: 0
-      StopRotation: 0
+      Restrictions:
+        ActionRestrictions: -1
+        MovementRestrictions: -1
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:
@@ -387,8 +396,9 @@ MonoBehaviour:
       ChargeSettings:
         EffectMask: 3
         AnimationChargeStartpoint: 0.1
-        StopMovementWhileCharging: 0
-        StopRotationWhileCharging: 0
+        Restrictions:
+          ActionRestrictions: -1
+          MovementRestrictions: -1
         WaitAtFullChargeForRelease: 1
         ChargeTime: 1
         StartCharge: 0
@@ -449,8 +459,9 @@ MonoBehaviour:
   JumpAttackSequence:
     AttackSequenceParts:
     - AnimationTarget: 4
-      StopMovement: 1
-      StopRotation: 1
+      Restrictions:
+        ActionRestrictions: -1
+        MovementRestrictions: 3
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:
@@ -483,8 +494,9 @@ MonoBehaviour:
       ChargeSettings:
         EffectMask: 3
         AnimationChargeStartpoint: 0.1
-        StopMovementWhileCharging: 0
-        StopRotationWhileCharging: 0
+        Restrictions:
+          ActionRestrictions: -1
+          MovementRestrictions: 0
         WaitAtFullChargeForRelease: 1
         ChargeTime: 1
         StartCharge: 0
@@ -550,8 +562,9 @@ MonoBehaviour:
   RunJumpAttackSequence:
     AttackSequenceParts:
     - AnimationTarget: 4
-      StopMovement: 1
-      StopRotation: 1
+      Restrictions:
+        ActionRestrictions: -1
+        MovementRestrictions: 3
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:
@@ -584,8 +597,9 @@ MonoBehaviour:
       ChargeSettings:
         EffectMask: 3
         AnimationChargeStartpoint: 0.1
-        StopMovementWhileCharging: 0
-        StopRotationWhileCharging: 0
+        Restrictions:
+          ActionRestrictions: -1
+          MovementRestrictions: 0
         WaitAtFullChargeForRelease: 1
         ChargeTime: 1
         StartCharge: 0

@@ -22,11 +22,6 @@ namespace EoE.Information
 		private void DrawBaseInfo()
 		{
 			ActivationCompound settings = target as ActivationCompound;
-			BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.NoDefinedActionType))), ref settings.NoDefinedActionType, 1);
-
-			if(!settings.NoDefinedActionType)
-				EnumField<ActionType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CompoundActionType))), ref settings.CompoundActionType, 1);
-
 			DrawCombatObjectBase(settings, serializedObject, 1);
 			if(settings.Elements.Length > 0)
 				IntSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CostActivationIndex))), ref settings.CostActivationIndex, 0, settings.Elements.Length - 1, 1);
@@ -61,8 +56,7 @@ namespace EoE.Information
 			
 			if (settings != null && property.isExpanded)
 			{
-				EnumFlagField<ActionType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ActionRestrictions))), ref settings.ActionRestrictions, 1);
-				EnumFlagField<MovementType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MovementRestrictions))), ref settings.MovementRestrictions, 1);
+				DrawRestrictionData(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Restrictions))), settings.Restrictions, property.FindPropertyRelative(nameof(settings.Restrictions)), 1);
 
 				LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 				ObjectArrayField<ConditionObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.PauseConditions)), "While Effects will still be executed but the Duration will not be changed."), ref settings.PauseConditions, property.FindPropertyRelative(nameof(settings.PauseConditions)), new GUIContent(". Condition"), 1);

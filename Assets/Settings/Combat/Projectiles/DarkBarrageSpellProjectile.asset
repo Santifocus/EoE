@@ -83,6 +83,6 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
-  Bounces: 1
+  Bounces: 0
   DestroyOnEntiteBounce: 0
   CollisionEffectsOnBounce: 1

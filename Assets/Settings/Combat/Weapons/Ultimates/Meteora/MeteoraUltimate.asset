@@ -12,8 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f668e22fb629a4409275a25b2c92f34, type: 3}
   m_Name: MeteoraUltimate
   m_EditorClassIdentifier: 
+  NoDefinedActionType: 0
+  ActionType: 2
+  BasePhysicalDamage: 8
+  BaseMagicalDamage: 0
+  BaseKnockback: 5
+  BaseCritChance: 0
+  Cost:
+    Health: 0
+    Mana: 0
+    Endurance: 0
+    AdditionalConditions: []
   UltimateIcon: {fileID: 21300000, guid: 518175f4993c7c94b8ad8a4ba3db1338, type: 3}
-  BaseSettings: {fileID: 11400000, guid: 96dcb5c9bff843f4fa1ad4cf0c08cb1e, type: 2}
   ActivationEffects:
   - ChanceToActivate: 1
     ContainedEffectType: 2
@@ -60,8 +70,9 @@ MonoBehaviour:
   AttackData:
     AttackSequenceParts:
     - AnimationTarget: 4
-      StopMovement: 1
-      StopRotation: 1
+      Restrictions:
+        ActionRestrictions: 0
+        MovementRestrictions: -1
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 2
       AnimationSpeedCurve:
@@ -94,8 +105,9 @@ MonoBehaviour:
       ChargeSettings:
         EffectMask: 3
         AnimationChargeStartpoint: 0.1
-        StopMovementWhileCharging: 0
-        StopRotationWhileCharging: 0
+        Restrictions:
+          ActionRestrictions: -1
+          MovementRestrictions: 0
         WaitAtFullChargeForRelease: 1
         ChargeTime: 1
         StartCharge: 0
@@ -199,8 +211,7 @@ MonoBehaviour:
           AOEEffects:
           - {fileID: 11400000, guid: 1d8ebfed7c135e54f9ec85cae386f553, type: 2}
           ProjectileInfos:
-          - Projectile: {fileID: 11400000, guid: 3ffc6dbdcbb3b1b48b8e6d01c62fea4d,
-              type: 2}
+          - Projectile: {fileID: 0}
             ExecutionDelay: 0.2
             ExecutionCount: 1
             ExecutionRepeatDelay: 0.2

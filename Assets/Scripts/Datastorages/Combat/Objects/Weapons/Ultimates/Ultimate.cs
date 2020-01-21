@@ -4,16 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace EoE.Information
+namespace EoE.Combatery
 {
-	public abstract class Ultimate : ScriptableObject
+	public abstract class Ultimate : CombatObject
 	{
 		public Sprite UltimateIcon = default;
-		public CombatObject BaseSettings;
-        public virtual bool CanActivate()
-		{
-			return BaseSettings.Cost.CanActivate(Player.Instance, 1, 1, 1);
-		}
 		public void Activate()
 		{
 			CostActivation();
@@ -21,7 +16,7 @@ namespace EoE.Information
 		}
 		protected virtual void CostActivation()
 		{
-			BaseSettings.Cost.Activate(Player.Instance, 1, 1, 1);
+			Cost.PayCost(Player.Instance, 1, 1, 1);
 		}
 		protected abstract void ActivateInternal();
 	}

@@ -181,7 +181,7 @@ namespace EoE.Combatery
 		#endregion
 		public void StartAttack()
 		{
-			if (Player.Instance.IsCasting || animationResetCooldown > 0)
+			if (!(weaponInfo.AllowedAction(Player.Instance)) || animationResetCooldown > 0)
 				return;
 
 			if (InAttackSequence)
@@ -244,21 +244,17 @@ namespace EoE.Combatery
 			{
 				ActiveAttackStyle = targetSequence.AttackSequenceParts[curSequenceIndex];
 
-				if (ActiveAttackStyle.StopMovement)
-					Player.Instance.MovementStops++;
-				if (ActiveAttackStyle.StopRotation)
-					Player.Instance.TurnStops++;
-
 				//First check if this attack sequence is allowed if not we stop the while loop here
-				if (curBaseData.Cost.CanActivate(Player.Instance, ActiveAttackStyle.HealthCostMultiplier, ActiveAttackStyle.ManaCostMultiplier, ActiveAttackStyle.EnduranceCostMultiplier))
+				if (curBaseData.CanActivate(Player.Instance, ActiveAttackStyle.HealthCostMultiplier, ActiveAttackStyle.ManaCostMultiplier, ActiveAttackStyle.EnduranceCostMultiplier))
 				{
-					curBaseData.Cost.Activate(Player.Instance, ActiveAttackStyle.HealthCostMultiplier, ActiveAttackStyle.ManaCostMultiplier, ActiveAttackStyle.EnduranceCostMultiplier);
+					curBaseData.Cost.PayCost(Player.Instance, ActiveAttackStyle.HealthCostMultiplier, ActiveAttackStyle.ManaCostMultiplier, ActiveAttackStyle.EnduranceCostMultiplier);
 				}
 				else
 				{
-					break;
+					goto AttackFinished;
 				}
 
+				ActiveAttackStyle.Restrictions.ApplyRestriction(Player.Instance, true);
 
 				//Setup timers and blend variables
 				float totalTime = 0;
@@ -355,10 +351,7 @@ namespace EoE.Combatery
 							float chargeTime = curChargeMultiplier * ActiveAttackStyle.ChargeSettings.ChargeTime;
 
 							//Setup effects of charge
-							if (ActiveAttackStyle.ChargeSettings.StopMovementWhileCharging)
-								Player.Instance.MovementStops++;
-							if (ActiveAttackStyle.ChargeSettings.StopRotationWhileCharging)
-								Player.Instance.MovementStops++;
+							ActiveAttackStyle.ChargeSettings.Restrictions.ApplyRestriction(Player.Instance, true);
 
 							//FX
 							FXManager.ExecuteFX(ActiveAttackStyle.ChargeSettings.FXObjects, transform, true, out chargeBoundFX, curChargeMultiplier);
@@ -445,10 +438,7 @@ namespace EoE.Combatery
 					curSequenceIndex++;
 					wantsToBeginNextSequence = false;
 
-					if (ActiveAttackStyle.StopMovement)
-						Player.Instance.MovementStops--;
-					if (ActiveAttackStyle.StopRotation)
-						Player.Instance.TurnStops--;
+					ActiveAttackStyle.Restrictions.ApplyRestriction(Player.Instance, false);
 					continue;
 				}
 
@@ -456,11 +446,8 @@ namespace EoE.Combatery
 				break;
 			}
 
+			ActiveAttackStyle.Restrictions.ApplyRestriction(Player.Instance, false);
 		AttackFinished:;
-			if (ActiveAttackStyle.StopMovement)
-				Player.Instance.MovementStops--;
-			if (ActiveAttackStyle.StopRotation)
-				Player.Instance.TurnStops--;
 
 			SetAnimationSpeed(1);
 			Player.Instance.animationControl.SetBool("InFight", false);
@@ -637,10 +624,7 @@ namespace EoE.Combatery
 		private void RemoveChargeBoundEffects()
 		{
 			isChargingAttack = false;
-			if (ActiveAttackStyle.ChargeSettings.StopMovementWhileCharging)
-				Player.Instance.MovementStops--;
-			if (ActiveAttackStyle.ChargeSettings.StopRotationWhileCharging)
-				Player.Instance.MovementStops--;
+			ActiveAttackStyle.ChargeSettings.Restrictions.ApplyRestriction(Player.Instance, false);
 
 			FXManager.FinishFX(ref chargeBoundFX);
 			FXManager.FinishFX(ref chargeBoundFXMultiplied);
@@ -664,15 +648,12 @@ namespace EoE.Combatery
 				AddUltimateCharge(weaponInfo.UltimateSettings.OutOfCombatDecrease * Time.deltaTime);
 			}
 
-			if(!InAttackSequence && !Player.Instance.IsCasting)
+			if (InputController.HeavyAttack.Down && ultimateCharge == weaponInfo.UltimateSettings.TotalRequiredCharge)
 			{
-				if (InputController.HeavyAttack.Down && ultimateCharge == weaponInfo.UltimateSettings.TotalRequiredCharge)
+				if (weaponInfo.UltimateSettings.Ultimate.CanActivate(Player.Instance, 1, 1, 1))
 				{
-					if (weaponInfo.UltimateSettings.Ultimate.CanActivate())
-					{
-						weaponInfo.UltimateSettings.Ultimate.Activate();
-						AddUltimateCharge(-weaponInfo.UltimateSettings.OnUseChargeRemove * weaponInfo.UltimateSettings.TotalRequiredCharge);
-					}
+					weaponInfo.UltimateSettings.Ultimate.Activate();
+					AddUltimateCharge(-weaponInfo.UltimateSettings.OnUseChargeRemove * weaponInfo.UltimateSettings.TotalRequiredCharge);
 				}
 			}
 		}
@@ -737,11 +718,7 @@ namespace EoE.Combatery
 			{
 				if (Player.Existant)
 				{
-					if (ActiveAttackStyle.StopMovement)
-						Player.Instance.MovementStops--;
-					if (ActiveAttackStyle.StopRotation)
-						Player.Instance.TurnStops--;
-
+					ActiveAttackStyle.Restrictions.ApplyRestriction(Player.Instance, false);
 					SetAnimationSpeed(1);
 					Player.Instance.animationControl.SetBool("InFight", false);
 				}

@@ -64,8 +64,7 @@ namespace EoE.Combatery
 	{
 		//Animation Settings
 		public AttackAnimation AnimationTarget = AttackAnimation.Attack1;
-		public bool StopMovement;
-		public bool StopRotation;
+		public RestrictionData Restrictions = new RestrictionData();
 
 		public MultiplicationType AnimationMultiplicationType = MultiplicationType.FlatValue;
 		public float AnimationSpeedFlatValue = 1;
@@ -131,8 +130,7 @@ namespace EoE.Combatery
 		public AttackChargeEffectMask EffectMask = AttackChargeEffectMask.Damage | AttackChargeEffectMask.Knockback;
 
 		public float AnimationChargeStartpoint = 0.1f;
-		public bool StopMovementWhileCharging = false;
-		public bool StopRotationWhileCharging = false;
+		public RestrictionData Restrictions = new RestrictionData();
 		public bool WaitAtFullChargeForRelease = true;
 
 		public float ChargeTime = 1;

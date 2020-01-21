@@ -150,8 +150,14 @@ namespace EoE.Entities
 			CheckForFalling();
 			UpdateAcceleration();
 
-			if (!IsStunned && !IsTurnStopped)
+			if (IsStunned || IsTurnStopped)
+			{
+				curStates.Turning = false;
+			}
+			else
+			{
 				TurnControl();
+			}
 		}
 		private void LateUpdate()
 		{
@@ -310,7 +316,6 @@ namespace EoE.Entities
 			if (IsStunned || IsMovementStopped)
 			{
 				curStates.Moving = curStates.Running = false;
-				curStates.Turning = IsCasting ? curStates.Turning : false;
 				if (IsStunned)
 					curAcceleration = 0;
 				return;
@@ -1009,6 +1014,7 @@ namespace EoE.Entities
 		}
 		private void ScrollItemControll()
 		{
+			//Consumable Scrolling
 			int selectedItemIndexChange = InputController.ItemScrollUp.Down ? 1 : (InputController.ItemScrollDown.Down ? -1 : 0);
 			if (selectedItemIndexChange != 0)
 			{
@@ -1029,7 +1035,20 @@ namespace EoE.Entities
 				}
 			}
 
-			int selectedSpellIndexChange = IsCasting ? 0 : (InputController.MagicScrollUp.Down ? 1 : (InputController.MagicScrollDown.Down ? -1 : 0));
+			//ActivationCompound Scrolling
+			InventoryItem selectedItem = SelectableActivationCompoundItems[selectedSpellItemIndex];
+			ActivationCompoundItem selectedAC = selectedItem == null ? null : (selectedItem.data as ActivationCompoundItem);
+			bool cannotScrollMagic = false;
+			if (selectedAC == null)
+			{
+				cannotScrollMagic = true;
+			}
+			else if (!selectedAC.TargetCompound.NoDefinedActionType)
+			{
+				cannotScrollMagic = (selectedAC.TargetCompound.ActionType == ActionType.Attacking) ? IsAttackStopped : IsCastingStopped;
+			}
+
+			int selectedSpellIndexChange = cannotScrollMagic ? 0 : (InputController.MagicScrollUp.Down ? 1 : (InputController.MagicScrollDown.Down ? -1 : 0));
 			if (selectedSpellIndexChange != 0)
 			{
 				int t = 0;

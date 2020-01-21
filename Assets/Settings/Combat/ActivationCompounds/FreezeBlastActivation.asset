@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5e2446ee84d62b4caf07d6b7037486e, type: 3}
   m_Name: FreezeBlastActivation
   m_EditorClassIdentifier: 
+  NoDefinedActionType: 0
+  ActionType: 1
   BasePhysicalDamage: 0
   BaseMagicalDamage: 25
   BaseKnockback: 1
@@ -21,15 +23,14 @@ MonoBehaviour:
     Mana: 10
     Endurance: 0
     AdditionalConditions: []
-  NoDefinedActionType: 0
-  CompoundActionType: 1
   CostActivationIndex: 0
   CausedCooldown: 6
   CancelFromStun: 1
   CancelIfCostActivationIsImpossible: 1
   Elements:
-  - ActionRestrictions: 0
-    MovementRestrictions: 0
+  - Restrictions:
+      ActionRestrictions: 0
+      MovementRestrictions: 0
     ElementDuration: 0
     WhileTickTime: 10
     StartEffects: []

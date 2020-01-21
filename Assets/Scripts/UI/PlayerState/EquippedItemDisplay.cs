@@ -154,11 +154,11 @@ namespace EoE.UI
 				if (target.data is ActivationCompoundItem)
 				{
 					ActivationCompoundItem data = target.data as ActivationCompoundItem;
-					if(data.TargetCompound.CompoundActionType == Combatery.ActionType.Attacking)
+					if(data.TargetCompound.ActionType == Combatery.ActionType.Attacking)
 					{
 						return Player.Instance.AttackCooldown;
 					}
-					else if(data.TargetCompound.CompoundActionType == Combatery.ActionType.Casting)
+					else if(data.TargetCompound.ActionType == Combatery.ActionType.Casting)
 					{
 						return Player.Instance.CastingCooldown;
 					}

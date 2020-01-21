@@ -48,9 +48,9 @@ namespace EoE.Combatery
 			if (state)
 			{
 				float resistanceCost = Time.deltaTime * info.ShieldDrain;
-				if (info.FirstActivationCost.CanActivate(creator, 1, 1, 1) && curShieldResistance >= resistanceCost)
+				if (info.FirstActivationCost.CanAfford(creator, 1, 1, 1) && curShieldResistance >= resistanceCost)
 				{
-					info.FirstActivationCost.Activate(creator, 1, 1, 1);
+					info.FirstActivationCost.PayCost(creator, 1, 1, 1);
 					curShieldResistance -= resistanceCost;
 				}
 				else
@@ -80,9 +80,9 @@ namespace EoE.Combatery
 			if (shieldActive)
 			{
 				float resistanceCost = Time.deltaTime * info.ShieldDrain;
-				if ((resistanceCost <= curShieldResistance) && (info.BaseData.Cost.CanActivate(creator, Time.deltaTime, Time.deltaTime, Time.deltaTime))) 
+				if ((resistanceCost <= curShieldResistance) && (info.BaseData.CanActivate(creator, Time.deltaTime, Time.deltaTime, Time.deltaTime))) 
 				{
-					info.BaseData.Cost.Activate(creator, Time.deltaTime, Time.deltaTime, Time.deltaTime);
+					info.BaseData.Cost.PayCost(creator, Time.deltaTime, Time.deltaTime, Time.deltaTime);
 					curShieldResistance -= resistanceCost;
 					UpdateActiveEffects();
 				}
