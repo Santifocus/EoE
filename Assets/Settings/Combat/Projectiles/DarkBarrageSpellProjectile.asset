@@ -49,9 +49,9 @@ MonoBehaviour:
     BuffsOnUser: []
     CreatedRemenants: []
   WhileEffects: []
-  WhileTickTime: 0.1
-  TerrainHitboxSize: 0.5
-  EntitieHitboxSize: 1
+  WhileTickTime: 20
+  TerrainHitboxSize: 0.25
+  EntitieHitboxSize: 0.5
   CollideMask: -1
   DirectHit: {fileID: 11400000, guid: 5d1f684f5b9e8bf4ba61d0e1de4d68b5, type: 2}
   CollisionEffects:
@@ -83,6 +83,6 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
-  Bounces: 0
+  Bounces: 1
   DestroyOnEntiteBounce: 0
   CollisionEffectsOnBounce: 1

@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c474321604ce4b049877fabd5c1797aa, type: 3}
+  m_Name: MeteorInvokeItem
+  m_EditorClassIdentifier: 
+  ItemName:
+    textColor: {r: 0, g: 0.89411765, b: 1, a: 1}
+    text: Meteor Invoke
+  ItemDescription:
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: Summons a
+  - textColor: {r: 0, g: 1, b: 0.39215687, a: 1}
+    text: ' Meteor'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ' after a short delay.'
+  - textColor: {r: 0.9699626, g: 0, b: 1, a: 1}
+    text: ' Targeted'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ','
+  - textColor: {r: 0, g: 1, b: 0.8232899, a: 1}
+    text: ' AOE'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ','
+  - textColor: {r: 1, g: 0.64280605, b: 0, a: 1}
+    text: Applies Burn
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: .
+  - textColor: {r: 1, g: 0.13774179, b: 0, a: 1}
+    text: ' Consumes the Item'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: .
+  SortingID: 21
+  ItemIcon: {fileID: 21300000, guid: 14b2a47444220c047bfba1f20f22f643, type: 3}
+  FXEffectsOnUse: []
+  FXEffectsWhenEquipped: []
+  AllowHoldUse: 1
+  UseCooldown: 0
+  RemoveOnUse: 1
+  ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
+    type: 3}
+  MaxStack: 10
+  ItemWorth: 80
+  ItemFlags: 1
+  TargetCompound: {fileID: 11400000, guid: 0ba787cc18b92d2419858c62ad53db31, type: 2}

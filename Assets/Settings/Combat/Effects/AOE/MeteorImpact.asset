@@ -28,4 +28,18 @@ MonoBehaviour:
   BuffStackStyle: 2
   BuffsToApply:
   - {fileID: 11400000, guid: 23e1ab5c5ac8dba46b691279a20574b8, type: 2}
-  Effects: []
+  Effects:
+  - FX: {fileID: 11400000, guid: e840a1eafcd96a047bbe880545aaa1d0, type: 2}
+    HasPositionOffset: 0
+    PositionOffset: {x: 0, y: 0, z: 0}
+    HasRotationOffset: 0
+    RotationOffset: {x: 0, y: 0, z: 0}
+    HasCustomScale: 0
+    CustomScale: {x: 1, y: 1, z: 1}
+  - FX: {fileID: 11400000, guid: 19ca080591f90b4409c8dc487b8df2fb, type: 2}
+    HasPositionOffset: 0
+    PositionOffset: {x: 0, y: 0, z: 0}
+    HasRotationOffset: 0
+    RotationOffset: {x: 0, y: 0, z: 0}
+    HasCustomScale: 0
+    CustomScale: {x: 1, y: 1, z: 1}
