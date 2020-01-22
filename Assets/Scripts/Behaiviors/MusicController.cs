@@ -64,10 +64,6 @@ namespace EoE.Sounds
 				if(ActiveMusicInstances[i].Priority > highestPriority)
 				{
 					highestPriority = ActiveMusicInstances[i].Priority;
-					if(targetInstanceIndex > -1 && ActiveMusicInstances[targetInstanceIndex].MusicIndex == 2)
-					{
-						Debug.Log("Here");
-					}
 					targetInstanceIndex = i;
 				}
 			}

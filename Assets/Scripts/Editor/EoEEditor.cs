@@ -806,6 +806,8 @@ namespace EoE
 					EnumField<AttackAnimation>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationTarget))), ref settings.AnimationTarget, offSet + 1);
 					DrawRestrictionData(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Restrictions))), settings.Restrictions, property.FindPropertyRelative(nameof(settings.Restrictions)), offSet + 1);
 
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CausedCooldown))), ref settings.CausedCooldown, offSet + 1);
+
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 0.25f));
 					EnumField<MultiplicationType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationMultiplicationType))), ref settings.AnimationMultiplicationType, offSet + 1);
 					if (settings.AnimationMultiplicationType == MultiplicationType.FlatValue)

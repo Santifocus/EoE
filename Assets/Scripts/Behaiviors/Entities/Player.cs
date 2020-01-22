@@ -34,7 +34,7 @@ namespace EoE.Entities
 		[SerializeField] private int combatMusicIndex = 1;
 		public PlayerBuffDisplay buffDisplay = default;
 
-		[SerializeField] private Transform head = default;
+		public Transform head = default;
 		[SerializeField] private Transform torso = default;
 
 		//Endurance

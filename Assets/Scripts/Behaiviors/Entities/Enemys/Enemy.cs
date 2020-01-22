@@ -190,7 +190,7 @@ namespace EoE.Entities
 			}
 
 		}
-		private void RefreshDataOnPlayer(bool fromCombatTrigger)
+		protected void RefreshDataOnPlayer(bool fromCombatTrigger)
 		{
 			if(!fromCombatTrigger)
 				StartCombat();

@@ -38,6 +38,7 @@ MonoBehaviour:
       Restrictions:
         ActionRestrictions: -1
         MovementRestrictions: 0
+      CausedCooldown: 0
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:
@@ -133,6 +134,7 @@ MonoBehaviour:
       Restrictions:
         ActionRestrictions: -1
         MovementRestrictions: 0
+      CausedCooldown: 0
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:
@@ -228,6 +230,7 @@ MonoBehaviour:
       Restrictions:
         ActionRestrictions: -1
         MovementRestrictions: 3
+      CausedCooldown: 0
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 2
       AnimationSpeedCurve:
@@ -357,6 +360,7 @@ MonoBehaviour:
       Restrictions:
         ActionRestrictions: -1
         MovementRestrictions: -1
+      CausedCooldown: 0
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:
@@ -455,6 +459,7 @@ MonoBehaviour:
       Restrictions:
         ActionRestrictions: -1
         MovementRestrictions: 3
+      CausedCooldown: 0
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:
@@ -558,6 +563,7 @@ MonoBehaviour:
       Restrictions:
         ActionRestrictions: -1
         MovementRestrictions: 3
+      CausedCooldown: 0
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:

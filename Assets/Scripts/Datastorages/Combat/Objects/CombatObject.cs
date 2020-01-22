@@ -31,17 +31,42 @@ namespace EoE.Combatery
 		{
 			if (!NoDefinedActionType)
 			{
-				if (ActionType == ActionType.Casting)
-				{
-					return (!target.IsCastingStopped) && (target.CastingCooldown <= 0);
-				}
-				else//ActionType == ActionType.Attacking
-				{
-					return (!target.IsAttackStopped) && (target.AttackCooldown <= 0);
-				}
+				return !IsStoppedAction(target) && !IsActionOnCooldown(target);
 			}
 			else
 				return true;
+		}
+		public bool IsStoppedAction(Entity target)
+		{
+			if (!NoDefinedActionType)
+			{
+				if (ActionType == ActionType.Casting)
+				{
+					return target.IsCastingStopped;
+				}
+				else//ActionType == ActionType.Attacking
+				{
+					return target.IsAttackStopped;
+				}
+			}
+			else
+				return false;
+		}
+		public bool IsActionOnCooldown(Entity target)
+		{
+			if (!NoDefinedActionType)
+			{
+				if (ActionType == ActionType.Casting)
+				{
+					return target.CastingCooldown > 0;
+				}
+				else//ActionType == ActionType.Attacking
+				{
+					return target.AttackCooldown > 0;
+				}
+			}
+			else
+				return false;
 		}
 
 		//Helper functions

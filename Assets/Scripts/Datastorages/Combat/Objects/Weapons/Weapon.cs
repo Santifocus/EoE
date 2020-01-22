@@ -65,6 +65,7 @@ namespace EoE.Combatery
 		//Animation Settings
 		public AttackAnimation AnimationTarget = AttackAnimation.Attack1;
 		public RestrictionData Restrictions = new RestrictionData();
+		public float CausedCooldown = 0;
 
 		public MultiplicationType AnimationMultiplicationType = MultiplicationType.FlatValue;
 		public float AnimationSpeedFlatValue = 1;

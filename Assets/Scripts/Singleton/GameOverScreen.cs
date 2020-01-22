@@ -45,6 +45,7 @@ namespace EoE.UI
 		}
 		public void Show(Entities.Entity killer)
 		{
+			EventManager.PlayerDiedEvent -= Show;
 			SetupCamera();
 
 			gameObject.SetActive(true);

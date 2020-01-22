@@ -93,6 +93,48 @@ namespace EoE.Information
 				EditorUtility.SetDirty(tItem);
 			}
 		}
+		[MenuItem("EoE/DataManagement/Clean Object Names")]
+		public static void CleanObjectNames()
+		{
+#pragma warning disable
+			return;
+			bool onlyAllowLocalNamespace = true;
+			System.Type typeToClean = typeof(ScriptableObject);
+			string[] GUIDs = AssetDatabase.FindAssets("t:" + typeToClean.Name, new[] { "Assets/Settings" });
+
+			for (int i = 0; i < GUIDs.Length; i++)
+			{
+				string path = AssetDatabase.GUIDToAssetPath(GUIDs[i]);
+				Object obj = (Object)AssetDatabase.LoadAssetAtPath(path, typeof(Object));
+
+				if (onlyAllowLocalNamespace && !(obj.GetType()).Namespace.StartsWith("EoE"))
+					continue;
+
+				string spacedName = obj.name.Replace("_", " ").Replace(".", " ");
+				string pascalCasedName = "";
+				bool lastWasSpace = true;
+				for (int j = 0; j < spacedName.Length; j++)
+				{
+					if (spacedName[j] == ' ')
+					{
+						lastWasSpace = true;
+					}
+					else if (lastWasSpace)
+					{
+						pascalCasedName += spacedName[j].ToString().ToUpper();
+						lastWasSpace = false;
+					}
+					else
+					{
+						pascalCasedName += spacedName[j];
+					}
+				}
+
+				string newName = pascalCasedName.Replace(" ", "");
+				AssetDatabase.RenameAsset(path, newName);
+			}
+#pragma warning enable
+		}
 		//Context menu
 		[MenuItem("GameObject/UI/EoEButton")]
 		public static void CreateEoEButton(MenuCommand menuCommand)

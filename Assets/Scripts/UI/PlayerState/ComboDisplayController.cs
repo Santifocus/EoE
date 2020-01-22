@@ -95,7 +95,7 @@ namespace EoE.UI
 
 			punchTime = curPunchResetTime;
 			displayedCombo = amount;
-			comboDisplay.text = displayedCombo.ToString();
+			comboDisplay.text = displayedCombo.ToString()+ "<size=" + (comboDisplay.fontSize * 0.5f) + "> Hit</size>";
 		}
 		public void OverrideColorSettings(Gradient textColor, float textColorScrollSpeed)
 		{

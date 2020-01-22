@@ -68,8 +68,9 @@ namespace EoE.Entities
 		private ParticleSystem[] healthRegenParticleSystems;
 
 		//Action Cooldowns
-		public float AttackCooldown { get; private set; }
-		public float CastingCooldown { get; private set; }
+		public bool InActivationCompound { get; set; }
+		public float AttackCooldown { get; set; }
+		public float CastingCooldown { get; set; }
 
 		//Getter Helpers
 		protected enum ColliderType : byte { Box, Sphere, Capsule }
@@ -333,6 +334,9 @@ namespace EoE.Entities
 
 		public void ChangeHealth(ChangeInfo causedChange)
 		{
+			if (!Alive)
+				return;
+
 			if (causedChange.attacker != null && causedChange.attacker != this)
 			{
 				StartCombat();
@@ -798,6 +802,7 @@ namespace EoE.Entities
 		}
 		private IEnumerator ActivateCompoundC(ActivationCompound compound)
 		{
+			InActivationCompound = true;
 			ApplyCooldown();
 			Transform targeterTransform = new GameObject("Targeter Transform").transform;
 			targeterTransform.SetParent(Storage.ProjectileStorage);
@@ -829,7 +834,7 @@ namespace EoE.Entities
 					yield return new WaitForEndOfFrame();
 
 					//If this compound can be canceled by stuns and this entity is stunned => we stop the nested loop
-					if(compound.CancelFromStun && IsStunned)
+					if((compound.CancelFromStun && IsStunned) || !Alive)
 					{
 						//Get rid of any restrictions/FXInstances and then exit the nested loop
 						compound.Elements[i].Restrictions.ApplyRestriction(this, false);
@@ -899,6 +904,7 @@ namespace EoE.Entities
 			}
 
 			CompoundFinished:;
+			InActivationCompound = false;
 			Destroy(targeterTransform.gameObject);
 
 			FXInstance[] ActivateElementActivationEffects(ActivationEffect[] effects, bool binding, Transform overrideTransform = null)
@@ -919,9 +925,9 @@ namespace EoE.Entities
 			void ApplyCooldown()
 			{
 				if (compound.ActionType == ActionType.Casting)
-					CastingCooldown = compound.CausedCooldown;
+					CastingCooldown = Mathf.Max(CastingCooldown, compound.CausedCooldown);
 				else if (compound.ActionType == ActionType.Attacking)
-					AttackCooldown = compound.CausedCooldown;
+					AttackCooldown = Mathf.Max(AttackCooldown, compound.CausedCooldown);
 			}
 			void PositionTargeterTranform()
 			{

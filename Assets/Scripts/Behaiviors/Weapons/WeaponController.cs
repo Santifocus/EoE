@@ -181,15 +181,15 @@ namespace EoE.Combatery
 		#endregion
 		public void StartAttack()
 		{
-			if (!(weaponInfo.AllowedAction(Player.Instance)) || animationResetCooldown > 0)
-				return;
-
 			if (InAttackSequence)
 			{
 				if (curAttackAnimationPoint > COMBO_WAIT_THRESHOLD && !isChargingAttack)
 					wantsToBeginNextSequence = true;
 				return;
 			}
+
+			if (!weaponInfo.AllowedAction(Player.Instance) || animationResetCooldown > 0)
+				return;
 
 			//Find out what attacksequence the player should start
 			//Then check if that sequence is enabled and the player has enougth resources
@@ -261,6 +261,7 @@ namespace EoE.Combatery
 				float animationTime = animationDelayLookup[ActiveAttackStyle.AnimationTarget].Item1;
 				float animationActivationDelay = animationDelayLookup[ActiveAttackStyle.AnimationTarget].Item2;
 				float animationTimer = 0;
+				wantsToBeginNextSequence = false;
 				curChargeMultiplier = ActiveAttackStyle.ChargeSettings.StartCharge;
 				curAttackAnimationPoint = 0;
 				ChangeWeaponState(false, null);
@@ -449,10 +450,18 @@ namespace EoE.Combatery
 			ActiveAttackStyle.Restrictions.ApplyRestriction(Player.Instance, false);
 		AttackFinished:;
 
+			//Apply cooldowns
+			animationResetCooldown = ANIMATION_RESET_COOLDOWN;
+			if (curBaseData.ActionType == ActionType.Casting)
+				Player.Instance.CastingCooldown = Mathf.Max(Player.Instance.CastingCooldown, ActiveAttackStyle.CausedCooldown);
+			else if (curBaseData.ActionType == ActionType.Attacking)
+				Player.Instance.AttackCooldown = Mathf.Max(Player.Instance.AttackCooldown, ActiveAttackStyle.CausedCooldown);
+
+			//Reset all states
 			SetAnimationSpeed(1);
 			Player.Instance.animationControl.SetBool("InFight", false);
-			animationResetCooldown = ANIMATION_RESET_COOLDOWN;
 			ChangeWeaponState(InAttackSequence = false, ActiveAttackStyle = null);
+
 		}
 		public void HitObject(Vector3 hitPos, Collider hit, Vector3 direction)
 		{
@@ -699,7 +708,7 @@ namespace EoE.Combatery
 			RemoveBoundEffects();
 			dropCollision.SetActive(true);
 			Rigidbody b = gameObject.AddComponent<Rigidbody>();
-			b.velocity = (Player.Instance.curMoveVelocity + Player.Instance.CurVelocity) + new Vector3(Random.Range(-1, 1), 0, Random.Range(-1, 1)) * 5;
+			b.velocity = new Vector3(Random.Range(-1, 1), 0, Random.Range(-1, 1)) * 5;
 			b.angularVelocity = new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1)) * 540;
 			enabled = false;
 		}
