@@ -7626,6 +7626,11 @@ PrefabInstance:
       propertyPath: graphicsFadeInTime
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 3851637758478667075, guid: 21e629fb6237643449bbca1b6f13b118,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 21e629fb6237643449bbca1b6f13b118, type: 3}
 --- !u!198 &4991817753414190101

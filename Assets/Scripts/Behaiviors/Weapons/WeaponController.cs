@@ -682,11 +682,15 @@ namespace EoE.Combatery
 		{
 			if (Player.Instance.curStates.Fighting)
 			{
-				AddUltimateCharge(weaponInfo.UltimateSettings.ChargeOverTimeOnCombat * Time.deltaTime);
+				float change = weaponInfo.UltimateSettings.ChargeOverTimeOnCombat * Time.deltaTime;
+				if (change != 0)
+					AddUltimateCharge(change);
 			}
 			else
 			{
-				AddUltimateCharge(weaponInfo.UltimateSettings.OutOfCombatDecrease * Time.deltaTime);
+				float change = weaponInfo.UltimateSettings.OutOfCombatDecrease * Time.deltaTime;
+				if(change != 0)
+					AddUltimateCharge(change);
 			}
 
 			if (InputController.HeavyAttack.Down && ultimateCharge == weaponInfo.UltimateSettings.TotalRequiredCharge)

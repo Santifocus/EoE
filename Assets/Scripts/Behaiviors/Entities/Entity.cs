@@ -508,9 +508,12 @@ namespace EoE.Entities
 						{
 							ChangeMana(new ChangeInfo(activeBuffs[i].Applier, CauseType.DOT, TargetStat.Mana, cd * activeBuffs[i].Base.DOTs[j].BaseDamage));
 						}
-						else if (this is Player)//TargetStat.Endurance
+						else if (this is Player)
 						{
-							(this as Player).ChangeEndurance(new ChangeInfo(activeBuffs[i].Applier, CauseType.DOT, TargetStat.Endurance, cd * activeBuffs[i].Base.DOTs[j].BaseDamage));
+							if (activeBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Endurance)
+								(this as Player).ChangeEndurance(new ChangeInfo(activeBuffs[i].Applier, CauseType.DOT, TargetStat.Endurance, cd * activeBuffs[i].Base.DOTs[j].BaseDamage));
+							else if (activeBuffs[i].Base.DOTs[j].TargetStat == TargetStat.UltimateCharge && WeaponController.Instance)
+								WeaponController.Instance.AddUltimateCharge(cd * activeBuffs[i].Base.DOTs[j].BaseDamage);
 						}
 					}
 				}

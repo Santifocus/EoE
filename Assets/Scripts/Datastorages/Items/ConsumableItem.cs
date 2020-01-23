@@ -1,4 +1,5 @@
-﻿using EoE.Entities;
+﻿using EoE.Combatery;
+using EoE.Entities;
 using UnityEngine;
 
 namespace EoE.Information
@@ -59,9 +60,12 @@ namespace EoE.Information
 			{
 				user.ChangeMana(new ChangeInfo(user, (amount > 0) ? CauseType.Magic : CauseType.Heal, TargetStat.Mana, amount));
 			}
-			else //t == HealTargetType.Endurance
+			else
 			{
-				(user as Player).ChangeEndurance(new ChangeInfo(user, (amount > 0) ? CauseType.Magic : CauseType.Heal, TargetStat.Endurance, amount));
+				if (HealType == TargetStat.Mana)
+					(user as Player).ChangeEndurance(new ChangeInfo(user, (amount > 0) ? CauseType.Magic : CauseType.Heal, TargetStat.Endurance, amount));
+				else if (HealType == TargetStat.UltimateCharge && WeaponController.Instance)
+					WeaponController.Instance.AddUltimateCharge(-amount);
 			}
 		}
 	}

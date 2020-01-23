@@ -17,7 +17,23 @@ MonoBehaviour:
     text: Rage Herbs
   ItemDescription:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Increases your damage and movement speed for 10 seconds.
+    text: Increases your
+  - textColor: {r: 0, g: 1, b: 0.39215687, a: 1}
+    text: ' Damage / Speed'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ' by'
+  - textColor: {r: 0, g: 0.48171186, b: 1, a: 1}
+    text: ' 2 / 10%'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ' for'
+  - textColor: {r: 1, g: 0.64280605, b: 0, a: 1}
+    text: ' 10 Seconds'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: .
+  - textColor: {r: 1, g: 0.13774179, b: 0, a: 1}
+    text: ' Consumes the Item'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: .
   SortingID: 4
   ItemIcon: {fileID: 21300000, guid: f39df57c63bd70f48bdacaf2966b6081, type: 3}
   FXEffectsOnUse: []
@@ -33,4 +49,4 @@ MonoBehaviour:
   HealEffects: []
   BuffsToApply:
   - {fileID: 11400000, guid: 52ad545648cc419459d1ce15ab20ed2f, type: 2}
-  StackingStyle: 1
+  StackingStyle: 2

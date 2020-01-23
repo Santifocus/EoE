@@ -13,12 +13,26 @@ MonoBehaviour:
   m_Name: TearOfLifeItem
   m_EditorClassIdentifier: 
   ItemName:
-    textColor: {r: 1, g: 1, b: 1, a: 1}
+    textColor: {r: 1, g: 0.76555127, b: 0, a: 1}
     text: Tear Of Life
   ItemDescription:
+  - textColor: {r: 1, g: 0.76555127, b: 0, a: 1}
+    text: Permanently
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Permanent increase of your Health Points.
-  SortingID: 11
+    text: ' increases your'
+  - textColor: {r: 0, g: 1, b: 0.39215687, a: 1}
+    text: ' Health'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ' by'
+  - textColor: {r: 0, g: 0.48171186, b: 1, a: 1}
+    text: ' 5'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: .
+  - textColor: {r: 1, g: 0.13774179, b: 0, a: 1}
+    text: ' Consumes the Item'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: .
+  SortingID: 9
   ItemIcon: {fileID: 21300000, guid: 78fc26b1278e9094e96134dd5a0b55c1, type: 3}
   FXEffectsOnUse: []
   FXEffectsWhenEquipped: []
@@ -33,4 +47,4 @@ MonoBehaviour:
   HealEffects: []
   BuffsToApply:
   - {fileID: 11400000, guid: 9b3da859abe8a994187580ca155b0faf, type: 2}
-  StackingStyle: 2
+  StackingStyle: 1

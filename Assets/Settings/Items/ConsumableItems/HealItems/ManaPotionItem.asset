@@ -18,10 +18,16 @@ MonoBehaviour:
   ItemDescription:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Heals you for
-  - textColor: {r: 0, g: 0.17029119, b: 1, a: 1}
-    text: ' 20 '
+  - textColor: {r: 0, g: 0.48171186, b: 1, a: 1}
+    text: ' 20'
+  - textColor: {r: 0, g: 1, b: 0.39215687, a: 1}
+    text: ' Mana'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: MP on use.
+    text: ' on use.'
+  - textColor: {r: 1, g: 0.13774179, b: 0, a: 1}
+    text: ' Consumes the Item'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: .
   SortingID: 7
   ItemIcon: {fileID: 21300000, guid: 03a8a9a9df71a594c942c860d740eb6a, type: 3}
   FXEffectsOnUse:

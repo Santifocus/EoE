@@ -1,4 +1,5 @@
-﻿using EoE.Entities;
+﻿using EoE.Combatery;
+using EoE.Entities;
 using EoE.Information;
 using TMPro;
 using UnityEngine;
@@ -24,6 +25,8 @@ namespace EoE.UI
 						return player.curMana;
 					case TargetStat.Endurance:
 						return player.curEndurance;
+					case TargetStat.UltimateCharge:
+						return (WeaponController.Instance ? WeaponController.Instance.ultimateCharge : 0);
 					default:
 						return 1;
 				}
@@ -41,6 +44,8 @@ namespace EoE.UI
 						return player.curMaxMana;
 					case TargetStat.Endurance:
 						return player.curMaxEndurance;
+					case TargetStat.UltimateCharge:
+						return ((WeaponController.Instance && WeaponController.Instance.weaponInfo.HasUltimate) ? WeaponController.Instance.weaponInfo.UltimateSettings.TotalRequiredCharge : 0);
 					default:
 						return 1;
 				}
