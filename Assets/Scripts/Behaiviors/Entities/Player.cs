@@ -1197,7 +1197,6 @@ namespace EoE.Entities
 
 			if (TargetedEntitie)
 				TargetedEntitie = null;
-			Alive = false;
 
 			animationControl.SetTrigger("Death");
 		}

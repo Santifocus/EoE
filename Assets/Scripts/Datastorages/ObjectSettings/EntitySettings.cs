@@ -18,6 +18,8 @@ namespace EoE.Information
 		public LevelingSettings LevelSettings = null;
 		public int ExperienceWorth = 10;
 
+		public ActivationEffect[] DeathEffects = new ActivationEffect[0];
+
 		//Basic Combat Data
 		public float BasePhysicalDamage = 10;
 		public float BaseMagicalDamage = 10;

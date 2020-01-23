@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using EoE.Combatery;
+using UnityEditor;
 using UnityEngine;
 using static EoE.EoEEditor;
 
@@ -193,7 +194,9 @@ namespace EoE.Information
 				FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsHealthThreshold))), ref settings.EffectsHealthThreshold, 0, 1, 2);
 				ObjectArrayField<FXObject>(new GUIContent("Effects"), ref settings.EffectsWhileHealthBelowThreshold, serializedObject.FindProperty(nameof(settings.EffectsWhileHealthBelowThreshold)), new GUIContent(". Effect"), 2);
 			}
-			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnPlayerDeath))), ref settings.EffectsOnPlayerDeath, serializedObject.FindProperty(nameof(settings.EffectsOnPlayerDeath)), new GUIContent(". Effect"), 1);
+
+			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
+			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DeathEffects))), ref settings.DeathEffects, serializedObject.FindProperty(nameof(settings.DeathEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
 		}
 	}
 }

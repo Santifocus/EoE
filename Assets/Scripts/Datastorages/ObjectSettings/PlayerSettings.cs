@@ -94,7 +94,6 @@ namespace EoE.Information
 		public FXObject[] EffectsOnReceiveKnockback = default;
 		public float EffectsHealthThreshold = 0.3f;
 		public FXObject[] EffectsWhileHealthBelowThreshold = default;
-		public FXObject[] EffectsOnPlayerDeath = default;
 
 		[System.Serializable]
 		public class StartItem

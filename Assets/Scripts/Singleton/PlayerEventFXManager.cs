@@ -29,6 +29,7 @@ namespace EoE
 			EventManager.EntitieDiedEvent -= EnemyKilled;
 			EventManager.PlayerDiedEvent -= PlayerDied;
 		}
+		private void PlayerDied(Entity killer) => Unsubscribe();
 		private void OnDestroy()
 		{
 			Unsubscribe();
@@ -55,11 +56,6 @@ namespace EoE
 			{
 				FXManager.ExecuteFX(playerSettings.EffectsOnEnemyKilled, Player.Instance.transform, true);
 			}
-		}
-		private void PlayerDied(Entity killer)
-		{
-			FXManager.ExecuteFX(playerSettings.EffectsOnPlayerDeath, Player.Instance.transform, true);
-			Unsubscribe();
 		}
 		private void PlayerCausedDamage(Entity receiver, bool wasCrit)
 		{

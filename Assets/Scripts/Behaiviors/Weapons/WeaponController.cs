@@ -179,6 +179,7 @@ namespace EoE.Combatery
 			transform.eulerAngles = Player.Instance.weaponHoldPoint.eulerAngles + weaponInfo.WeaponRotationOffset;
 		}
 		#endregion
+		#region Attack Execution
 		public void StartAttack()
 		{
 			if (InAttackSequence)
@@ -463,6 +464,8 @@ namespace EoE.Combatery
 			ChangeWeaponState(InAttackSequence = false, ActiveAttackStyle = null);
 
 		}
+		#endregion
+		#region Events
 		public void HitObject(Vector3 hitPos, Collider hit, Vector3 direction)
 		{
 			for (int i = 0; i < weaponHitboxes.Length; i++)
@@ -630,6 +633,16 @@ namespace EoE.Combatery
 			comboBoundBuffs = new List<BuffInstance>();
 			ComboDisplayController.Instance?.ResetCombo(weaponInfo.ComboEffects);
 		}
+		private void EntitieDeath(Entity killed, Entity killer)
+		{
+			if(killer is Player)
+			{
+				AddUltimateCharge(weaponInfo.UltimateSettings.OnKillCharge);
+			}
+		}
+		#endregion
+		#region Effect Control
+		private void SetAnimationSpeed(float speed) => Player.Instance.animationControl.SetFloat("AttackAnimationSpeed", speed);
 		private void RemoveChargeBoundEffects()
 		{
 			isChargingAttack = false;
@@ -646,6 +659,25 @@ namespace EoE.Combatery
 			chargeBoundFXMultiplied = null;
 			chargeBoundBuffs = null;
 		}
+		private void CreateParticles(GameObject prefab, Vector3 hitPos, Vector3 direction)
+		{
+			GameObject newParticleSystem = Instantiate(prefab, Storage.ParticleStorage);
+			newParticleSystem.transform.forward = direction;
+			newParticleSystem.transform.position = hitPos;
+			EffectManager.FadeAndDestroyParticles(newParticleSystem, 1);
+		}
+		private void DropWeapon()
+		{
+			StopAllCoroutines();
+			RemoveBoundEffects();
+			dropCollision.SetActive(true);
+			Rigidbody b = gameObject.AddComponent<Rigidbody>();
+			b.velocity = new Vector3(Random.Range(-1, 1), 0, Random.Range(-1, 1)) * 5;
+			b.angularVelocity = new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1)) * 540;
+			enabled = false;
+		}
+		#endregion
+		#region Ultimate Control
 		private void UltimateControl()
 		{
 			if (Player.Instance.curStates.Fighting)
@@ -666,14 +698,7 @@ namespace EoE.Combatery
 				}
 			}
 		}
-		private void EntitieDeath(Entity killed, Entity killer)
-		{
-			if(killer is Player)
-			{
-				AddUltimateCharge(weaponInfo.UltimateSettings.OnKillCharge);
-			}
-		}
-		private void AddUltimateCharge(float value)
+		public void AddUltimateCharge(float value)
 		{
 			bool ultimateWasReady = ultimateCharge >= weaponInfo.UltimateSettings.TotalRequiredCharge;
 			ultimateCharge = Mathf.Clamp(ultimateCharge + value, 0, weaponInfo.UltimateSettings.TotalRequiredCharge);
@@ -695,23 +720,8 @@ namespace EoE.Combatery
 				FXManager.FinishFX(ref ultimateChargedBoundFXPlayer);
 			}
 		}
-		private void CreateParticles(GameObject prefab, Vector3 hitPos, Vector3 direction)
-		{
-			GameObject newParticleSystem = Instantiate(prefab, Storage.ParticleStorage);
-			newParticleSystem.transform.forward = direction;
-			newParticleSystem.transform.position = hitPos;
-			EffectManager.FadeAndDestroyParticles(newParticleSystem, 1);
-		}
-		private void DropWeapon()
-		{
-			StopAllCoroutines();
-			RemoveBoundEffects();
-			dropCollision.SetActive(true);
-			Rigidbody b = gameObject.AddComponent<Rigidbody>();
-			b.velocity = new Vector3(Random.Range(-1, 1), 0, Random.Range(-1, 1)) * 5;
-			b.angularVelocity = new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1)) * 540;
-			enabled = false;
-		}
+		#endregion
+		#region Remove Control
 		public void Remove()
 		{
 			if (this != Instance)
@@ -749,6 +759,6 @@ namespace EoE.Combatery
 		{
 			EventManager.EntitieDiedEvent -= EntitieDeath;
 		}
-		private void SetAnimationSpeed(float speed) => Player.Instance.animationControl.SetFloat("AttackAnimationSpeed", speed);
+		#endregion
 	}
 }

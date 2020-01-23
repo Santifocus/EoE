@@ -373,7 +373,7 @@ namespace EoE.Entities
 				{
 					EventManager.EntitieDiedInvoke(this, causedChange.attacker);
 				}
-				Death();
+				BaseDeath();
 			}
 
 			if(changeResult.finalChangeAmount != 0 && Alive)
@@ -438,18 +438,24 @@ namespace EoE.Entities
 			}
 			RecalculateBuffs();
 		}
-		protected virtual void Death()
+		private void BaseDeath()
 		{
 			if (!Alive)
 				return;
 
 			Alive = false;
+			AllEntities.Remove(this);
+			ActivateActivationEffects(SelfSettings.DeathEffects, 1);
+
+			Death();
+		}
+		protected virtual void Death()
+		{
 			BuildDrops();
 			if (statDisplay)
 				Destroy(statDisplay.gameObject);
 
 			gameObject.SetActive(false);
-			AllEntities.Remove(this);
 		}
 		private void OnDestroy()
 		{

@@ -96,8 +96,6 @@ namespace EoE.Information
 		[MenuItem("EoE/DataManagement/Clean Object Names")]
 		public static void CleanObjectNames()
 		{
-#pragma warning disable
-			return;
 			bool onlyAllowLocalNamespace = true;
 			System.Type typeToClean = typeof(ScriptableObject);
 			string[] GUIDs = AssetDatabase.FindAssets("t:" + typeToClean.Name, new[] { "Assets/Settings" });
@@ -133,7 +131,6 @@ namespace EoE.Information
 				string newName = pascalCasedName.Replace(" ", "");
 				AssetDatabase.RenameAsset(path, newName);
 			}
-#pragma warning enable
 		}
 		//Context menu
 		[MenuItem("GameObject/UI/EoEButton")]

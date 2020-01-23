@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using EoE.Combatery;
+using UnityEditor;
 using UnityEngine;
 using static EoE.EoEEditor;
 
@@ -36,6 +37,9 @@ namespace EoE.Information
 			{
 				ObjectField(new GUIContent("Possible Drops", "When the Entitie dies, this DropTable will be used for calculation of what to drop. If there is no DropTable nothing will be dropped."), ref settings.PossibleDropsTable, 1);
 				IntField(new GUIContent("Experience Worth", "How many Experience should this Entitie dsrop on death?"), ref settings.ExperienceWorth, 1);
+
+				LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
+				DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DeathEffects))), ref settings.DeathEffects, serializedObject.FindProperty(nameof(settings.DeathEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
 			}
 		}
 

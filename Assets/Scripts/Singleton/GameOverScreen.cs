@@ -103,7 +103,7 @@ namespace EoE.UI
 		{
 			GameController.ActivePauses = 0;
 			EffectManager.ResetScreenEffects();
-			SceneManager.LoadScene(ConstantCollector.GAME_SCENE_INDEX);
+			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 		}
 		public void OnQuit()
 		{
