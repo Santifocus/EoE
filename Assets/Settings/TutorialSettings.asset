@@ -16,23 +16,44 @@ MonoBehaviour:
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
-      ContainedEffectType: 2
+      ContainedEffectType: 16
       ImpulseVelocity: 5
       ImpulseVelocityFallOffTime: 0.5
       ImpulseVelocityDirection: 2
       ImpulseVelocityFallbackDirection: 1
       ImpulseDirectionBase: 1
-      FXObjects:
-      - FX: {fileID: 11400000, guid: d442d132051b4174780fa18c920b46f8, type: 2}
-        HasPositionOffset: 0
-        PositionOffset: {x: 0, y: 0, z: 0}
-        HasRotationOffset: 0
-        RotationOffset: {x: 0, y: 0, z: 0}
-        HasCustomScale: 0
-        CustomScale: {x: 1, y: 1, z: 1}
+      FXObjects: []
       AOEEffects: []
       ProjectileInfos: []
-      HealsOnUser: []
+      HealsOnUser:
+      - HealType: 3
+        Percent: 1
+        Amount: 100
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+    SpawnDummy: 1
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 16
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects: []
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser:
+      - HealType: 3
+        Percent: 1
+        Amount: -200
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using EoE.Entities;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace EoE.Information
 {
@@ -54,7 +56,7 @@ namespace EoE.Information
 		public float InvincibleModelFlashTime = 0.4f;
 
 		//Inventory
-		public StartItem[] StartItems = new StartItem[0];
+		public ItemGiveInfo[] StartItems = new ItemGiveInfo[0];
 		public int InventorySize = 24;
 
 		//Animation
@@ -95,12 +97,96 @@ namespace EoE.Information
 		public float EffectsHealthThreshold = 0.3f;
 		public FXObject[] EffectsWhileHealthBelowThreshold = default;
 
-		[System.Serializable]
-		public class StartItem
+	}
+	[System.Serializable]
+	public class ItemGiveInfo
+	{
+		public Item Item;
+		public int ItemCount = 1;
+		public bool ForceEquip;
+
+		public void GiveToPlayer()
 		{
-			public Item Item;
-			public int ItemCount = 1;
-			public bool ForceEquip;
+			if (!Item)
+				return;
+
+			//Add it to the inventory
+			List<int> targetSlots = Player.Instance.Inventory.AddItem(new InventoryItem(Item, ItemCount));
+
+			//Force equipp
+			if (ForceEquip)
+			{
+				InventoryItem targetItem = Player.Instance.Inventory[targetSlots[targetSlots.Count - 1]];
+				targetItem.isEquiped = true;
+				//Find out what slot it belongs to, if it is a spell / normal item we try
+				//to put it in a open slot, if all slots are filled we put it in the first
+				if (Item is WeaponItem)
+				{
+					Player.Instance.EquipedWeapon = targetItem;
+					targetItem.isEquiped = true;
+					targetItem.data.Equip(targetItem, Player.Instance);
+				}
+				else if (Item is ArmorItem)
+				{
+					Player.Instance.EquipedArmor = targetItem;
+					targetItem.isEquiped = true;
+					targetItem.data.Equip(targetItem, Player.Instance);
+				}
+				else if (Item is ActivationCompoundItem)
+				{
+					bool added = false;
+
+					//Try to find a slot that is null and put the item there
+					for (int j = 0; j < Player.Instance.SelectableActivationCompoundItems.Length; j++)
+					{
+						if (Player.Instance.SelectableActivationCompoundItems[j] == null)
+						{
+							Player.Instance.SelectableActivationCompoundItems[j] = targetItem;
+							Player.Instance.SelectableActivationCompoundItems[j].isEquiped = true;
+							added = true;
+							if (j == 0)
+							{
+								Player.Instance.SelectableActivationCompoundItems[j].data.Equip(targetItem, Player.Instance);
+							}
+							break;
+						}
+					}
+					//couldnt find a null slot, put it in the first one, (just a fallback)
+					if (!added && Player.Instance.SelectableActivationCompoundItems.Length > 0)
+					{
+						Player.Instance.SelectableActivationCompoundItems[0] = targetItem;
+						Player.Instance.SelectableActivationCompoundItems[0].isEquiped = true;
+						Player.Instance.SelectableActivationCompoundItems[0].data.Equip(targetItem, Player.Instance);
+					}
+				}
+				else
+				{
+					bool added = false;
+
+					//Try to find a slot that is null and put the item there
+					for (int j = 0; j < Player.Instance.SelectableItems.Length; j++)
+					{
+						if (Player.Instance.SelectableItems[j] == null)
+						{
+							Player.Instance.SelectableItems[j] = targetItem;
+							Player.Instance.SelectableItems[j].isEquiped = true;
+							added = true;
+							if (j == 0)
+							{
+								Player.Instance.SelectableItems[j].data.Equip(targetItem, Player.Instance);
+							}
+							break;
+						}
+					}
+					//couldnt find a null slot, put it in the first one, (just a fallback)
+					if (!added && Player.Instance.SelectableItems.Length > 0)
+					{
+						Player.Instance.SelectableItems[0] = targetItem;
+						Player.Instance.SelectableItems[0].isEquiped = true;
+						Player.Instance.SelectableItems[0].data.Equip(targetItem, Player.Instance);
+					}
+				}
+			}
 		}
 	}
 }

@@ -127,7 +127,7 @@ MonoBehaviour:
     ItemCount: 10
     ForceEquip: 0
   InventorySize: 55
-  MaxModelTilt: 8
+  MaxModelTilt: 6
   SideTurnSpringLerpSpeed: 13
   SideTurnLerpSpringStiffness: 0.1
   WalkAnimationLerpSpeed: 4

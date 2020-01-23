@@ -14,5 +14,10 @@ namespace EoE.Information
 	{
 		public float DelayTime = 3;
 		public ActivationEffect[] Effects = default;
+
+		public bool SpawnDummy = false;
+		public bool DeleteDummyOnFinish = false;
+
+		public ItemGiveInfo[] ItemsToGive = default;
 	}
 }
