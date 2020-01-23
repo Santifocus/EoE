@@ -109,6 +109,7 @@ MonoBehaviour:
   SideTurnSpringLerpSpeed: 13
   SideTurnLerpSpringStiffness: 0.1
   WalkAnimationLerpSpeed: 4
+  AnimationWalkSpeedDivider: 10
   BodyTurnHorizontalClamp: 30
   BodyTurnWeight: 0.5
   HeadLookAngleClamps: {x: 60, y: 40, z: 60, w: 30}

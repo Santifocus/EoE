@@ -53,7 +53,7 @@ namespace EoE.Entities
 		public bool IsStunned => Stuns > 0;
 		public bool IsMovementStopped => MovementStops > 0;
 		public bool IsTurnStopped => TurnStops > 0;
-		public bool IsAttackStopped => MovementStops > 0;
+		public bool IsAttackStopped => AttackStops > 0;
 		public bool IsCastingStopped => CastingStops > 0;
 
 		//Velocity Control

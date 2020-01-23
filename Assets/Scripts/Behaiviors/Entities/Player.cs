@@ -34,9 +34,6 @@ namespace EoE.Entities
 		[SerializeField] private int combatMusicIndex = 1;
 		public PlayerBuffDisplay buffDisplay = default;
 
-		public Transform head = default;
-		[SerializeField] private Transform torso = default;
-
 		//Endurance
 		public float curEndurance { get; set; }
 		public float curMaxEndurance { get; set; }
@@ -54,6 +51,7 @@ namespace EoE.Entities
 		private float jumpCooldown;
 		public Vector3 curMoveVelocity => controllDirection * curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
 		private Vector3 controllDirection;
+		private Vector3 lastMove;
 		private float intendedAcceleration;
 		private float curAcceleration;
 		private bool lastOnGroundState = true;
@@ -158,12 +156,6 @@ namespace EoE.Entities
 			{
 				TurnControl();
 			}
-		}
-		private void LateUpdate()
-		{
-			if (!Alive)
-				return;
-			ProceduralAnimationControl();
 		}
 		#endregion
 		#region Setups
@@ -343,26 +335,14 @@ namespace EoE.Entities
 		}
 		private void PlayerFeedbackControl()
 		{
-			bool turning = curStates.Turning;
-			bool moving = curStates.Moving && curAcceleration >= MIN_WALK_ACCELERATION && intendedAcceleration >= MIN_WALK_ACCELERATION;
-			bool running = curStates.Running;
-
-			//If the Player doesnt move intentionally but is in run mode, then stop the run mode
-			if (running && !moving)
-				curStates.Running = false;
-
-			//Set all the animation states
-			animationControl.SetBool("Walking", !turning && curAcceleration > 0);
-
 			//Model tilt
 			Vector2 forward = new Vector2(transform.forward.x, transform.forward.z);
 			Vector2 right = new Vector2(transform.right.x, transform.right.z);
-			Vector3 moveVelocity = curMoveVelocity;
 
-			float velocity = new Vector2(moveVelocity.x, moveVelocity.z).magnitude;
-			float maxVelocity = curWalkSpeed * SelfSettings.RunSpeedMultiplicator;
-			Vector2 velocityDirection = (velocity > 0) ? (new Vector2(moveVelocity.x, moveVelocity.z) / velocity) : (new Vector2(transform.forward.x, transform.forward.z));
-			float normalizedMoveVelocity = (velocity / maxVelocity);
+			float moveVelocity = new Vector2(lastMove.x, lastMove.z).magnitude;
+			float normalizedMoveVelocity = moveVelocity / playerSettings.AnimationWalkSpeedDivider;
+
+			Vector2 velocityDirection = (moveVelocity > 0) ? (new Vector2(lastMove.x, lastMove.z) / moveVelocity) : (new Vector2(transform.forward.x, transform.forward.z));
 
 			float targetTiltAngle = normalizedMoveVelocity * PlayerSettings.MaxModelTilt;
 			Vector2 targetTilt = velocityDirection * targetTiltAngle;
@@ -379,11 +359,29 @@ namespace EoE.Entities
 
 			curAnimationDirection = Vector2.Lerp(curAnimationDirection, new Vector2(forwardValue * normalizedMoveVelocity, (1 - Mathf.Abs(forwardValue)) * xMultiplier * normalizedMoveVelocity), Time.deltaTime * PlayerSettings.WalkAnimationLerpSpeed);
 
+			UpdateAnimationStates(moveVelocity, normalizedMoveVelocity);
+		}
+		private void UpdateAnimationStates(float moveVelocity, float normalizedMoveVelocity)
+		{
+			bool turning = curStates.Turning;
+			bool running = curStates.Running;
+
+			bool moving = curStates.Moving && moveVelocity >= MIN_WALK_ACCELERATION && intendedAcceleration >= MIN_WALK_ACCELERATION;
+			curStates.Moving = moving;
+
+			if (running && !moving)
+				curStates.Running = false;
+
+			//Set the animation states based on the calculated values and bools
+			animationControl.SetBool("Walking", !turning && moving);
 			animationControl.SetFloat("ZMove", curAnimationDirection.x);
 			animationControl.SetFloat("XMove", curAnimationDirection.y);
 			animationControl.SetFloat("CurWalkSpeed", normalizedMoveVelocity);
 
-			///Control FX
+			PlayerStateFXControl(moving, running, turning);
+		}
+		private void PlayerStateFXControl(bool moving, bool running, bool turning)
+		{
 			//Health critical effects
 			bool curBelowHealthThreshold = HealthBelowThresholdBoundEffects != null;
 			bool newBelowHealthThresholdState = (curHealth / curMaxHealth) < PlayerSettings.EffectsHealthThreshold;
@@ -432,6 +430,10 @@ namespace EoE.Entities
 				}
 			}
 		}
+		/*
+		[SerializeField] private Transform head = default;
+		[SerializeField] private Transform torso = default;
+
 		private float curTosoTurn;
 		private float bodyLookSpringAcceleration;
 
@@ -475,6 +477,7 @@ namespace EoE.Entities
 
 			head.eulerAngles = new Vector3(curHeadTurn.y * vAngleSinPart, curHeadTurn.x, curHeadTurn.y * vAngleCosPart);
 		}
+		*/
 		#region Walking
 		private void TurnControl()
 		{
@@ -606,7 +609,7 @@ namespace EoE.Entities
 			animationControl.SetBool("Fall", falling);
 			if (falling)
 			{
-				ApplyGravity(GameController.CurrentGameSettings.WhenFallingExtraGravity);
+				GravityControl(GameController.CurrentGameSettings.WhenFallingExtraGravity);
 			}
 		}
 		private void CheckForLanding()
@@ -690,13 +693,19 @@ namespace EoE.Entities
 		}
 		private void ApplyForces()
 		{
-			Vector3 appliedForce = curMoveVelocity + CurVelocity;
+			//Apply move velocity and find out how far we moved
+			Vector3 prePos = transform.position;
+			charController.Move(curMoveVelocity * Time.fixedDeltaTime);
+			Vector3 newPos = transform.position;
+			lastMove = (newPos - prePos) / Time.fixedDeltaTime;
 
-			charController.Move(appliedForce * Time.fixedDeltaTime);
+			//Apply Curvelocity
+			charController.Move(CurVelocity * Time.fixedDeltaTime);
+
 			animationControl.SetBool("OnGround", charController.isGrounded);
-			ApplyGravity();
+			GravityControl();
 		}
-		private void ApplyGravity(float scale = 1)
+		private void GravityControl(float scale = 1)
 		{
 			float lowerFallThreshold = Physics.gravity.y / 2;
 			float force = scale * Physics.gravity.y * Time.fixedDeltaTime;

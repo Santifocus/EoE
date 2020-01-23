@@ -145,6 +145,9 @@ namespace EoE.Information
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.SideTurnLerpSpringStiffness))), ref settings.SideTurnLerpSpringStiffness, 1);
 
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationWalkSpeedDivider))), ref settings.AnimationWalkSpeedDivider, 1);
+
+			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			Header("Player Look Turning");
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BodyTurnHorizontalClamp))), ref settings.BodyTurnHorizontalClamp, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BodyTurnWeight))), ref settings.BodyTurnWeight, 1);
