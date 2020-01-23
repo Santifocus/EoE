@@ -55,6 +55,7 @@ namespace EoE.Information
 		public float DelayToNextDialogue = 1.5f;
 
 		//Other
+		public float MinDamage = 1;
 		public float CritDamageMultiplier = 2;
 		public float SecondsPerEntitieHealthRegen = 0.5f;
 		public float ItemDropRandomVelocityStrenght = 2;

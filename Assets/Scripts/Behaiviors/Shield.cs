@@ -163,7 +163,7 @@ namespace EoE.Combatery
 		private void BreakShield()
 		{
 			if(info.EffectOnUserOnShieldBreak)
-				info.EffectOnUserOnShieldBreak.Activate(creator, creator, info.BaseData, Vector3.zero, creator.actuallWorldPosition);
+				info.EffectOnUserOnShieldBreak.Activate(null, creator, info.BaseData, Vector3.zero, creator.actuallWorldPosition);
 
 			ActivateActivationEffects(info.ShieldBreakEffects);
 			FinishLevelBoundFX();

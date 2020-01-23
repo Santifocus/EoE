@@ -139,7 +139,7 @@ namespace EoE.Entities
 
 			animationControl.SetBool("InCombat", curStates.Fighting);
 			if (Input.GetKeyDown(KeyCode.K))
-				ChangeHealth(new ChangeInfo(this, CauseType.Magic, TargetStat.Health, 10000));
+				ChangeHealth(new ChangeInfo(null, CauseType.Magic, TargetStat.Health, 10000));
 		}
 		protected override void EntitieFixedUpdate()
 		{
@@ -437,7 +437,7 @@ namespace EoE.Entities
 
 				if (curEndurance >= runCost)
 				{
-					ChangeEndurance(new ChangeInfo(this, CauseType.Magic, TargetStat.Endurance, runCost));
+					ChangeEndurance(new ChangeInfo(null, CauseType.Magic, TargetStat.Endurance, runCost));
 				}
 				else
 				{
@@ -450,7 +450,7 @@ namespace EoE.Entities
 
 				if (curEndurance >= runCost)
 				{
-					ChangeEndurance(new ChangeInfo(this, CauseType.Magic, TargetStat.Endurance, runCost));
+					ChangeEndurance(new ChangeInfo(null, CauseType.Magic, TargetStat.Endurance, runCost));
 					running = curStates.Running = true;
 				}
 			}
@@ -501,7 +501,7 @@ namespace EoE.Entities
 				if (curEndurance >= PlayerSettings.JumpEnduranceCost)
 				{
 					Jump();
-					ChangeEndurance(new ChangeInfo(this, CauseType.Magic, TargetStat.Endurance, PlayerSettings.JumpEnduranceCost));
+					ChangeEndurance(new ChangeInfo(null, CauseType.Magic, TargetStat.Endurance, PlayerSettings.JumpEnduranceCost));
 				}
 			}
 		}
@@ -578,7 +578,7 @@ namespace EoE.Entities
 				float damageAmount = GameController.CurrentGameSettings.FallDamageCurve.Evaluate(velDif);
 
 				if (damageAmount > 0)
-					ChangeHealth(new ChangeInfo(this, CauseType.Physical, TargetStat.Health, damageAmount));
+					ChangeHealth(new ChangeInfo(null, CauseType.Physical, TargetStat.Health, damageAmount));
 			}
 		}
 		#endregion
@@ -668,7 +668,7 @@ namespace EoE.Entities
 			if (InputController.Dodge.Down && !currentlyDashing && curEndurance >= PlayerSettings.DashEnduranceCost)
 			{
 				EventManager.PlayerDashInvoke();
-				ChangeEndurance(new ChangeInfo(this, CauseType.Magic, TargetStat.Endurance, PlayerSettings.DashEnduranceCost));
+				ChangeEndurance(new ChangeInfo(null, CauseType.Magic, TargetStat.Endurance, PlayerSettings.DashEnduranceCost));
 				StartCoroutine(DashCoroutine());
 			}
 		}

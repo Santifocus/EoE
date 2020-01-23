@@ -135,7 +135,7 @@ namespace EoE.Entities
 			if (!(this is Player))
 			{
 				statDisplay = Instantiate(GameController.CurrentGameSettings.EntitieStatDisplayPrefab, GameController.Instance.enemyHealthBarStorage);
-				statDisplay.Setup(SelfSettings.ShowEntitieLevel ? (int?)(EntitieLevel + 1) : null);
+				statDisplay.Setup(SelfSettings.ShowEntitieLevel ? (int?)(StartLevel + 1) : null);
 			}
 
 			ResetStats();

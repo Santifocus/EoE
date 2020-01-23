@@ -56,7 +56,7 @@ namespace EoE.Information
 			{
 				bool changeOnHealth = basis.targetStat == TargetStat.Health;
 				float attackerExtraDamage = 0;
-				if (changeOnHealth)
+				if (changeOnHealth && basis.attacker)
 					attackerExtraDamage = (basis.cause == CauseType.Physical) ? basis.attacker.curPhysicalDamage : ((basis.cause == CauseType.Magic) ? basis.attacker.curMagicalDamage : 0);
 
 				finalChangeAmount = basis.baseDamageAmount + attackerExtraDamage;
@@ -79,11 +79,11 @@ namespace EoE.Information
 						finalChangeAmount = (((basis.attacker ? basis.attacker.EntitieLevel : 0) + GameController.CurrentGameSettings.MagicDamageLevelAdd) * basis.baseDamageAmount) / GameController.CurrentGameSettings.MagicDamageDivider;
 					}
 
-					//If the chages caused the final damage change from positive to negative we want to set it to zero
+					//If the chages caused the final damage change from positive to negative we want to set it to the set minimum damage
 					//This will prevent situations in which very weak attacks would heal the receiver
 					if (finalChangeAmount < 0)
 					{
-						finalChangeAmount = 0;
+						finalChangeAmount = GameController.CurrentGameSettings.MinDamage;
 					}
 				}
 

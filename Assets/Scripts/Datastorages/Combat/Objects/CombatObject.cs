@@ -207,11 +207,11 @@ namespace EoE.Combatery
 			float totalEnduranceCost = Endurance * enduranceCostMultiplier;
 
 			if (totalHealthCost != 0)
-				target.ChangeHealth(new ChangeInfo(Player.Instance, CauseType.Magic, TargetStat.Health, totalHealthCost));
+				target.ChangeHealth(new ChangeInfo(null, CauseType.Magic, TargetStat.Health, totalHealthCost));
 			if (totalManaCost != 0)
-				target.ChangeMana(new ChangeInfo(Player.Instance, CauseType.Magic, TargetStat.Mana, totalManaCost));
-			if (totalEnduranceCost != 0 && target is Player)
-				(target as Player).ChangeEndurance(new ChangeInfo(Player.Instance, CauseType.Magic, TargetStat.Endurance, totalEnduranceCost));
+				target.ChangeMana(new ChangeInfo(null, CauseType.Magic, TargetStat.Mana, totalManaCost));
+			if ((totalEnduranceCost != 0) && (target is Player))
+				(target as Player).ChangeEndurance(new ChangeInfo(null, CauseType.Magic, TargetStat.Endurance, totalEnduranceCost));
 		}
 	}
 	[System.Serializable]

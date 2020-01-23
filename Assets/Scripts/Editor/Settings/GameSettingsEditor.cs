@@ -100,6 +100,7 @@ namespace EoE.Information
 			GameSettings settings = target as GameSettings;
 
 			FloatField(new GUIContent("Seconds Per Entitie Health Regen", "How many seconds for each regeneration cyle? This will not change the amount of healing only the frequency. (In Seconds)"), ref settings.SecondsPerEntitieHealthRegen, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MinDamage))), ref settings.MinDamage, 1);
 			FloatField(new GUIContent("Crit Damage Multiplier", "If a ability / attack was counted as criticall for much should the damage be multiplied?"), ref settings.CritDamageMultiplier, 1);
 			FloatField(new GUIContent("Item Drop Random Velocity Strenght"), ref settings.ItemDropRandomVelocityStrenght, 1);
 
