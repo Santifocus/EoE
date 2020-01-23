@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
+  m_Name: MeteoraReadyParticles
+  m_EditorClassIdentifier: 
+  TimeIn: 0
+  TimeOut: 0.25
+  FinishConditions:
+    OnParentDeath: 1
+    OnTimeout: 0
+    TimeStay: 2
+    OnConditionMet: 0
+    Condition: {fileID: 11400000, guid: 66c96c85de6bc284c850c7a19b149d27, type: 2}
+  ParticleMainObject: {fileID: 6584800956893413052, guid: 4aace3ae44d5ccb4883fd0c758979c8e,
+    type: 3}
+  OffsetToTarget: {x: 0, y: -0.1, z: 0}
+  RotationOffset: {x: 0, y: 0, z: 0}
+  FollowTarget: 1
+  InheritRotationOfTarget: 1
+  RotationInheritLerpSpeed: 45

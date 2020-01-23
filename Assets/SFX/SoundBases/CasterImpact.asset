@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 469f7b848055e6b4f804fc4855292c28, type: 3}
-  m_Name: Caster_Impact
+  m_Name: CasterImpact
   m_EditorClassIdentifier: 
   soundName: Impact
   clip: {fileID: 8300000, guid: fd9391306e78b0c48b50782fea4fbea8, type: 3}

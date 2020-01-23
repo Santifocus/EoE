@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 469f7b848055e6b4f804fc4855292c28, type: 3}
-  m_Name: FreezeImpactSFX
+  m_Name: FreezeImpact
   m_EditorClassIdentifier: 
   soundName: FreezeImpact
   clip: {fileID: 8300000, guid: 43a735fd2eb93474cb64d7efd3bb4fc7, type: 3}

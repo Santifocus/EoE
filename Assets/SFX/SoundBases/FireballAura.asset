@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 469f7b848055e6b4f804fc4855292c28, type: 3}
-  m_Name: FireballAuraSFX
+  m_Name: FireballAura
   m_EditorClassIdentifier: 
   soundName: FireAura
   clip: {fileID: 8300000, guid: 3697a9be83dc3d0479f32621a73b0d33, type: 3}

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 469f7b848055e6b4f804fc4855292c28, type: 3}
-  m_Name: Item_PickUp
+  m_Name: ItemPickUp
   m_EditorClassIdentifier: 
   soundName: PickUpItem
   clip: {fileID: 8300000, guid: feee4fafe6fcaef43a75677c7a335cef, type: 3}

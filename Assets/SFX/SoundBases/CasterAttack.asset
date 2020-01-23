@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 469f7b848055e6b4f804fc4855292c28, type: 3}
-  m_Name: Caster_Attack
+  m_Name: CasterAttack
   m_EditorClassIdentifier: 
   soundName: Casterattack
   clip: {fileID: 8300000, guid: 50318aff7aa705442933debeafcdeec1, type: 3}

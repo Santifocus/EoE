@@ -97,13 +97,14 @@ namespace EoE.Information
 		public static void CleanObjectNames()
 		{
 			bool onlyAllowLocalNamespace = true;
-			string[] textToReplaceWithSpaces = new string[] { "_", ".", ",", "SFX", "FX", "Effect", "Particles", "Particle" };
+			string[] textToReplaceWithSpaces = new string[] { "_", ".", "," };
 
-			System.Type typeToClean = typeof(Sounds.Sound);
-			string[] GUIDs = AssetDatabase.FindAssets("t:" + typeToClean.Name, new[] { "Assets/Settings/FX" });
+			System.Type typeToClean = typeof(ScriptableObject);
+			string[] GUIDs = AssetDatabase.FindAssets("t:" + typeToClean.Name, new[] { "Assets" });
 			Debug.Log("Found: " + GUIDs.Length + " targeted objects");
 
-			string addToEnd = "";
+#pragma warning disable
+			return;
 			for (int i = 0; i < GUIDs.Length; i++)
 			{
 				string path = AssetDatabase.GUIDToAssetPath(GUIDs[i]);
@@ -139,37 +140,10 @@ namespace EoE.Information
 
 				string newName = pascalCasedName.Replace(" ", "");
 
-				string toAdd = GetEnding(objType);
-				if(!newName.EndsWith(toAdd))
-					newName += toAdd;
-
 				if(newName != obj.name)
 					AssetDatabase.RenameAsset(path, newName);
 			}
-		}
-		private static string GetEnding(System.Type type)
-		{
-			switch (type.Name)
-			{
-				case "SoundEffect":
-					return "SFX";
-				case "ParticleEffect":
-					return "Particles";
-				case "ScreenBlur":
-					return "Blur";
-				case "ScreenShake":
-					return "Shake";
-				case "ScreenBorderColor":
-					return "BorderColor";
-				case "CameraFOVWarp":
-					return "FOVWarp";
-				case "CustomUI":
-					return "UI";
-				case "ControllerRumble":
-					return "Rumble";
-				default:
-					return type.Name;
-			}
+#pragma warning enable
 		}
 		//Context menu
 		[MenuItem("GameObject/UI/EoEButton")]

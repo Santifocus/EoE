@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 469f7b848055e6b4f804fc4855292c28, type: 3}
-  m_Name: Use_Permanent_Item
+  m_Name: UsePermanentItem
   m_EditorClassIdentifier: 
   soundName: UsePermanentItem
   clip: {fileID: 8300000, guid: 5470615c80398f847a7f552d89fafba7, type: 3}

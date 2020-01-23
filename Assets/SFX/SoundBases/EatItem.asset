@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 469f7b848055e6b4f804fc4855292c28, type: 3}
-  m_Name: Eat_Item
+  m_Name: EatItem
   m_EditorClassIdentifier: 
   soundName: Eat_Item
   clip: {fileID: 8300000, guid: e7ed4981dced1bd498eafe72eea91985, type: 3}

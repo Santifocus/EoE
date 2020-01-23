@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 469f7b848055e6b4f804fc4855292c28, type: 3}
-  m_Name: Caster_Particle
+  m_Name: CasterParticle
   m_EditorClassIdentifier: 
   soundName: Projectile
   clip: {fileID: 8300000, guid: 55185fb1af4b9214da3d21d28d512520, type: 3}

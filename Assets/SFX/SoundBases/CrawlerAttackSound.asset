@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 469f7b848055e6b4f804fc4855292c28, type: 3}
-  m_Name: Crawler_Attack_Sound
+  m_Name: CrawlerAttackSound
   m_EditorClassIdentifier: 
   soundName: Crawler_Attack_Sound
   clip: {fileID: 8300000, guid: f3233d4347123904cb039437afe5e178, type: 3}

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 469f7b848055e6b4f804fc4855292c28, type: 3}
-  m_Name: Player_Death_SFX
+  m_Name: PlayerDeath
   m_EditorClassIdentifier: 
   soundName: Player_Death
   clip: {fileID: 8300000, guid: 53d9501b33fa6564380d985ea1343c81, type: 3}

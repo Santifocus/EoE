@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 469f7b848055e6b4f804fc4855292c28, type: 3}
-  m_Name: Shop_SellItem
+  m_Name: ShopSellItem
   m_EditorClassIdentifier: 
   soundName: Sell
   clip: {fileID: 8300000, guid: aad709f185165aa4a9bd624e0f4de82a, type: 3}
