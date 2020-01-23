@@ -21,11 +21,11 @@ MonoBehaviour:
     OnConditionMet: 0
     Condition: {fileID: 0}
   parts:
-  - textColor: {r: 0, g: 0, b: 0, a: 1}
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: The 3. Comboattack can be charged. After the second attack press
   - textColor: {r: 0, g: 0.23424363, b: 1, a: 1}
     text: X
-  - textColor: {r: 0, g: 0, b: 0, a: 1}
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: 'and hold to charge. Release the button to attack with a powerful swordslash. '
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0

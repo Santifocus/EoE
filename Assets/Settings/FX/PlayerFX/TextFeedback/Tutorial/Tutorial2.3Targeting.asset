@@ -21,16 +21,16 @@ MonoBehaviour:
     OnConditionMet: 0
     Condition: {fileID: 0}
   parts:
-  - textColor: {r: 0, g: 0, b: 0, a: 1}
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: 'Press '
   - textColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     text: LT
-  - textColor: {r: 0, g: 0, b: 0, a: 1}
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: to target your enemy and focus on him. If there are more than one enemy,
       you can switch targets with
   - textColor: {r: 1, g: 0, b: 0.88550186, a: 1}
     text: the right analogstick
-  - textColor: {r: 0, g: 0, b: 0, a: 1}
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: .
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0

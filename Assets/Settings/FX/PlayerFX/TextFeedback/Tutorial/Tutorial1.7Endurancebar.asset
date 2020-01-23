@@ -21,17 +21,17 @@ MonoBehaviour:
     OnConditionMet: 0
     Condition: {fileID: 0}
   parts:
-  - textColor: {r: 0, g: 0, b: 0, a: 1}
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Run, jump Dodge and Attack needs
   - textColor: {r: 1, g: 0.99959075, b: 0, a: 1}
     text: Endurance
-  - textColor: {r: 0, g: 0, b: 0, a: 1}
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: .
-  - textColor: {r: 0, g: 0, b: 0, a: 1}
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: 'Keep always an eye on your '
   - textColor: {r: 0.9100466, g: 0, b: 1, a: 1}
     text: Endurancebar
-  - textColor: {r: 0, g: 0, b: 0, a: 1}
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: .
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0

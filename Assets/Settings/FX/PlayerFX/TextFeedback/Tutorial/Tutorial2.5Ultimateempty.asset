@@ -21,7 +21,7 @@ MonoBehaviour:
     OnConditionMet: 0
     Condition: {fileID: 0}
   parts:
-  - textColor: {r: 0, g: 0, b: 0, a: 1}
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Casting a Ultimate empties your bar totally, so use this move whisely.
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0

@@ -10,27 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
-  m_Name: Tutorial2.4Ultimatebar
+  m_Name: Tutorial5.3 Level Up
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
   FinishConditions:
     OnParentDeath: 0
-    OnTimeout: 1
+    OnTimeout: 0
     TimeStay: 3
-    OnConditionMet: 0
-    Condition: {fileID: 0}
+    OnConditionMet: 1
+    Condition: {fileID: 11400000, guid: 7d17a4d91bd2bef488886d92d02313f4, type: 2}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Melee attacks on your enemy charges your
-  - textColor: {r: 1, g: 0, b: 0.98310184, a: 1}
-    text: Ultimate Bar
-  - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: .If it is fully charged, you can cast a very powerful attack. Press
-  - textColor: {r: 1, g: 0.9538098, b: 0, a: 1}
-    text: Y
-  - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: to release your ultimate.
+    text: You collected enough Souls. To improve your stats open the character menu.
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

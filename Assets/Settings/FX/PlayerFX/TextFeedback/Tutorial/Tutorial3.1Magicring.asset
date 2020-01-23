@@ -10,27 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
-  m_Name: Tutorial2.4Ultimatebar
+  m_Name: Tutorial3.1Magicring
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 1
-    TimeStay: 3
+    TimeStay: 2
     OnConditionMet: 0
     Condition: {fileID: 0}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Melee attacks on your enemy charges your
-  - textColor: {r: 1, g: 0, b: 0.98310184, a: 1}
-    text: Ultimate Bar
-  - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: .If it is fully charged, you can cast a very powerful attack. Press
-  - textColor: {r: 1, g: 0.9538098, b: 0, a: 1}
-    text: Y
-  - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: to release your ultimate.
+    text: During your journey, you will find powerful items to cast magic on your
+      enemys. These items will be stored in your inventory.
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

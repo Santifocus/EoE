@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
-  m_Name: Tutorial2.4Ultimatebar
+  m_Name: Tutorial4.8SwitchItem
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
@@ -19,18 +19,18 @@ MonoBehaviour:
     OnTimeout: 1
     TimeStay: 3
     OnConditionMet: 0
-    Condition: {fileID: 0}
+    Condition: {fileID: 11400000, guid: db867c11bf9e6c849bf2b6c3d6d02e81, type: 2}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Melee attacks on your enemy charges your
-  - textColor: {r: 1, g: 0, b: 0.98310184, a: 1}
-    text: Ultimate Bar
+    text: You can equip up to
+  - textColor: {r: 0.9601507, g: 0, b: 1, a: 1}
+    text: 4 Items
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: .If it is fully charged, you can cast a very powerful attack. Press
-  - textColor: {r: 1, g: 0.9538098, b: 0, a: 1}
-    text: Y
+    text: .Switch them in game by pressing
+  - textColor: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}
+    text: LEFT or RIGHT
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: to release your ultimate.
+    text: on your D-Pad.
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

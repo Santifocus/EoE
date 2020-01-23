@@ -21,15 +21,15 @@ MonoBehaviour:
     OnConditionMet: 0
     Condition: {fileID: 0}
   parts:
-  - textColor: {r: 0, g: 0, b: 0, a: 1}
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: 'The shield costs '
   - textColor: {r: 0, g: 0.67276335, b: 1, a: 1}
     text: Mana
-  - textColor: {r: 0, g: 0, b: 0, a: 1}
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: 'on activation and for using over time. If your '
   - textColor: {r: 0, g: 0.6745098, b: 1, a: 1}
     text: Mana
-  - textColor: {r: 0, g: 0, b: 0, a: 1}
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: runs out while using the shield, it will break and you will be stunned for
       a few seconds.
   dialogueIcon: {fileID: 0}

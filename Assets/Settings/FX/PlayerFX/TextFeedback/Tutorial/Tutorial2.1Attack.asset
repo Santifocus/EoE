@@ -21,15 +21,15 @@ MonoBehaviour:
     OnConditionMet: 0
     Condition: {fileID: 0}
   parts:
-  - textColor: {r: 0, g: 0, b: 0, a: 1}
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: 'Press '
   - textColor: {r: 0, g: 0.14202714, b: 1, a: 1}
     text: X
-  - textColor: {r: 0, g: 0, b: 0, a: 1}
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: 'to attack. By pressing '
   - textColor: {r: 0, g: 0.13172197, b: 1, a: 1}
     text: X
-  - textColor: {r: 0, g: 0, b: 0, a: 1}
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: multiple times you can do combo attacks.
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
