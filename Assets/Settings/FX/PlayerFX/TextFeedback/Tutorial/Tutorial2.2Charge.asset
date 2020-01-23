@@ -10,22 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
-  m_Name: TutorialLevelUpDialogue
+  m_Name: Tutorial2.2Charge
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
   FinishConditions:
     OnParentDeath: 0
-    OnTimeout: 0
-    TimeStay: 1
+    OnTimeout: 1
+    TimeStay: 3
     OnConditionMet: 0
     Condition: {fileID: 0}
   parts:
   - textColor: {r: 0, g: 0, b: 0, a: 1}
-    text: 'When you get a Level Up, you earn '
-  - textColor: {r: 1, g: 0, b: 0.8960533, a: 1}
-    text: Skillpoints and Attributepoints
+    text: The 3. Comboattack can be charged. After the second attack press
+  - textColor: {r: 0, g: 0.23424363, b: 1, a: 1}
+    text: X
   - textColor: {r: 0, g: 0, b: 0, a: 1}
-    text: . You can use them in your Charactermenu to get stronger!
+    text: 'and hold to charge. Release the button to attack with a powerful swordslash. '
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
+  CanvasTarget: 1

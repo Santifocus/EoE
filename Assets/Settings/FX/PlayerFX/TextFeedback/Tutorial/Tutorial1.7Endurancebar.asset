@@ -10,22 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
-  m_Name: TutorialAttackDialogue
+  m_Name: Tutorial1.7Endurancebar
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
   FinishConditions:
     OnParentDeath: 0
-    OnTimeout: 0
-    TimeStay: 1
+    OnTimeout: 1
+    TimeStay: 3
     OnConditionMet: 0
     Condition: {fileID: 0}
   parts:
   - textColor: {r: 0, g: 0, b: 0, a: 1}
-    text: 'Press '
-  - textColor: {r: 1, g: 0, b: 0.81939316, a: 1}
-    text: X
+    text: Run, jump Dodge and Attack needs
+  - textColor: {r: 1, g: 0.99959075, b: 0, a: 1}
+    text: Endurance
   - textColor: {r: 0, g: 0, b: 0, a: 1}
-    text: ' to attack with your sword.'
+    text: .
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
+    text: 'Keep always an eye on your '
+  - textColor: {r: 0.9100466, g: 0, b: 1, a: 1}
+    text: Endurancebar
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
+    text: .
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
+  CanvasTarget: 1

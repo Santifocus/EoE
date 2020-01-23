@@ -32,8 +32,8 @@ MonoBehaviour:
   HealthRegenParticlesOffset: {x: 0, y: 0, z: 0}
   Mana: 100
   DoManaRegen: 1
-  ManaRegen: 5
-  ManaRegenInCombatMultiplier: 3
+  ManaRegen: 10
+  ManaRegenInCombatMultiplier: 5
   WalkSpeed: 15
   RunSpeedMultiplicator: 1.25
   TurnSpeed: 450

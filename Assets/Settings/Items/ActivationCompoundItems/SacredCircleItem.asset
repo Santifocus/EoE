@@ -30,6 +30,10 @@ MonoBehaviour:
     text: ' Applies short Stun'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: .
+  - textColor: {r: 0, g: 0.060156107, b: 1, a: 1}
+    text: Manacost 15
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: .
   SortingID: 16
   ItemIcon: {fileID: 21300000, guid: 374d407a75a57a54fa1459f7011ce8ff, type: 3}
   FXEffectsOnUse: []

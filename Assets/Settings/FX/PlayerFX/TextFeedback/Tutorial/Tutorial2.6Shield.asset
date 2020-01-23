@@ -10,18 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
-  m_Name: TutorialSoulsplittersDialogue
+  m_Name: Tutorial2.6Shield
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
   FinishConditions:
     OnParentDeath: 0
-    OnTimeout: 0
-    TimeStay: 1
+    OnTimeout: 1
+    TimeStay: 2
     OnConditionMet: 0
     Condition: {fileID: 0}
   parts:
   - textColor: {r: 0, g: 0, b: 0, a: 1}
-    text: You get some Soulsplitters. Use them in a Checkpoint to buy useful equipment!
+    text: By pressing
+  - textColor: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 1}
+    text: RT
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
+    text: you can activate a magic shield that blocks all enemy attacks.
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
+  CanvasTarget: 1

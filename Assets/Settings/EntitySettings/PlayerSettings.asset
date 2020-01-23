@@ -121,10 +121,10 @@ MonoBehaviour:
     ItemCount: 1
     ForceEquip: 0
   - Item: {fileID: 11400000, guid: d2ee9fc8bc00d1a48b0e3a8bcee338f0, type: 2}
-    ItemCount: 10
+    ItemCount: 1
     ForceEquip: 0
   - Item: {fileID: 11400000, guid: dfff77569092e90428e801b345e3e493, type: 2}
-    ItemCount: 10
+    ItemCount: 1
     ForceEquip: 0
   InventorySize: 55
   MaxModelTilt: 6

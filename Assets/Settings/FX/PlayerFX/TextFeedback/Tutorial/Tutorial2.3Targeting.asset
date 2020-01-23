@@ -10,32 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
-  m_Name: TutorialUseSpellDialogue
+  m_Name: Tutorial2.3Targeting
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
   FinishConditions:
     OnParentDeath: 0
-    OnTimeout: 0
-    TimeStay: 1
+    OnTimeout: 1
+    TimeStay: 3
     OnConditionMet: 0
     Condition: {fileID: 0}
   parts:
   - textColor: {r: 0, g: 0, b: 0, a: 1}
-    text: Press
-  - textColor: {r: 1, g: 0, b: 0.8970642, a: 1}
-    text: RB
-  - textColor: {r: 0, g: 0, b: 0, a: 1}
-    text: to switch into the Spellcast mode.
-  - textColor: {r: 0, g: 0, b: 0, a: 1}
-    text: Cast the equiped Spell by pressing
-  - textColor: {r: 1, g: 0, b: 0.8980393, a: 1}
-    text: X
-  - textColor: {r: 0, g: 0, b: 0, a: 1}
     text: 'Press '
-  - textColor: {r: 1, g: 0, b: 0.8980393, a: 1}
-    text: 'RB '
+  - textColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    text: LT
   - textColor: {r: 0, g: 0, b: 0, a: 1}
-    text: again to switch back into Combat Mode.
+    text: to target your enemy and focus on him. If there are more than one enemy,
+      you can switch targets with
+  - textColor: {r: 1, g: 0, b: 0.88550186, a: 1}
+    text: the right analogstick
+  - textColor: {r: 0, g: 0, b: 0, a: 1}
+    text: .
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
+  CanvasTarget: 1

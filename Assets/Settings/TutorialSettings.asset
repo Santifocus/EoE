@@ -16,7 +16,7 @@ MonoBehaviour:
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
-      ContainedEffectType: 16
+      ContainedEffectType: 0
       ImpulseVelocity: 5
       ImpulseVelocityFallOffTime: 0.5
       ImpulseVelocityDirection: 2
@@ -32,7 +32,7 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
-    SpawnDummy: 1
+    SpawnDummy: 0
     DeleteDummyOnFinish: 0
     ItemsToGive: []
   - DelayTime: 3
@@ -54,6 +54,21 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
     ItemsToGive: []
