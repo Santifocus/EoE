@@ -43,7 +43,7 @@ namespace EoE.Information
 			Foldout(content, property, offSet);
 			if (property.isExpanded)
 			{
-				ObjectField<Spell>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.TargetSpell))), ref settings.TargetSpell, offSet + 1);
+				ObjectField<ActivationCompound>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.TargetCompound))), ref settings.TargetCompound, offSet + 1);
 				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MinRange))), ref settings.MinRange, offSet + 1);
 				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MaxRange))), ref settings.MaxRange, offSet + 1);
 

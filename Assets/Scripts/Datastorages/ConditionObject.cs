@@ -198,7 +198,7 @@ namespace EoE.Information
 					wasMet = Player.Instance ? Player.Instance.IsMovementStopped : false;
 					break;
 				case StateTarget.PlayerIsRotationStopped:
-					wasMet = Player.Instance ? Player.Instance.IsRotationStopped : false;
+					wasMet = Player.Instance ? Player.Instance.IsTurnStopped : false;
 					break;
 				case StateTarget.PlayerIsInvincible:
 					wasMet = Player.Instance ? Player.Instance.IsInvincible : false;

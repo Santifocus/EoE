@@ -1,5 +1,4 @@
-﻿using EoE.Combatery;
-using EoE.Entities;
+﻿using EoE.Entities;
 using EoE.Events;
 using EoE.Information;
 using EoE.UI;

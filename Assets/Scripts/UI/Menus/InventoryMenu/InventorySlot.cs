@@ -49,7 +49,7 @@ namespace EoE.UI
 				{
 					itemTypeDisplay.sprite = armorItemIcon;
 				}
-				else if (targetInventory[inventoryIndex].data is SpellItem)
+				else if (targetInventory[inventoryIndex].data is ActivationCompoundItem)
 				{
 					itemTypeDisplay.sprite = spellItemIcon;
 				}

@@ -10,7 +10,7 @@ namespace EoE.UI
 	public class EquippedItemDisplay : MonoBehaviour
 	{
 		private const int DISPLAYED_ITEMS = 3;
-		private enum TargetItemType { Spell, Consumable }
+		private enum TargetItemType { ActivationCompound, Consumable }
 		[SerializeField] private TargetItemType targetType = default;
 
 		[SerializeField] private Image flashBorder = default;
@@ -19,7 +19,7 @@ namespace EoE.UI
 		[SerializeField] private ItemDisplayCombo[] targetDisplays = new ItemDisplayCombo[DISPLAYED_ITEMS];
 		private (InventoryItem, float, int)[] targets = new (InventoryItem, float, int)[DISPLAYED_ITEMS];
 
-		private int curSelectIndex => (targetType == TargetItemType.Spell) ? Player.Instance.selectedSpellItemIndex : Player.Instance.selectedItemIndex;
+		private int curSelectIndex => (targetType == TargetItemType.ActivationCompound) ? Player.Instance.selectedSpellItemIndex : Player.Instance.selectedItemIndex;
 		private int lastSelectIndex;
 		private float flashTimer;
 		private float flashMaxFlashAlpha;
@@ -57,9 +57,9 @@ namespace EoE.UI
 		}
 		private void UpdateDisplay(int index)
 		{
-			int curIndex = (targetType == TargetItemType.Spell) ? Player.Instance.selectedSpellItemIndex : Player.Instance.selectedItemIndex;
+			int curIndex = (targetType == TargetItemType.ActivationCompound) ? Player.Instance.selectedSpellItemIndex : Player.Instance.selectedItemIndex;
 			int targetIndex = ValidateID(curIndex + index - 1);
-			InventoryItem target = (targetType == TargetItemType.Spell) ? Player.Instance.SelectableSpellItems[targetIndex] : Player.Instance.SelectableItems[targetIndex];
+			InventoryItem target = (targetType == TargetItemType.ActivationCompound) ? Player.Instance.SelectableActivationCompoundItems[targetIndex] : Player.Instance.SelectableItems[targetIndex];
 
 			if (targets[index].Item1 != target)
 			{
@@ -136,7 +136,7 @@ namespace EoE.UI
 		}
 		private int ValidateID(int input)
 		{
-			int maxIndex = targetType == TargetItemType.Spell ? Player.Instance.SelectableSpellItems.Length : Player.Instance.SelectableItems.Length;
+			int maxIndex = targetType == TargetItemType.ActivationCompound ? Player.Instance.SelectableActivationCompoundItems.Length : Player.Instance.SelectableItems.Length;
 			while (input < 0)
 				input += maxIndex;
 
@@ -150,18 +150,35 @@ namespace EoE.UI
 			if (target == null)
 				return 0;
 			else
-				return (targetType == TargetItemType.Spell) ? Mathf.Max(Player.Instance.CastingCooldown, target.data.curCooldown) : target.data.curCooldown;
+			{
+				if (target.data is ActivationCompoundItem)
+				{
+					ActivationCompoundItem data = target.data as ActivationCompoundItem;
+					if(data.TargetCompound.ActionType == Combatery.ActionType.Attacking)
+					{
+						return Player.Instance.AttackCooldown;
+					}
+					else if(data.TargetCompound.ActionType == Combatery.ActionType.Casting)
+					{
+						return Player.Instance.CastingCooldown;
+					}
+					else
+					{
+						return data.curCooldown;
+					}
+				}
+				else
+				{
+					return target.data.curCooldown;
+				}
+			}
 		}
 		private float GetMaxCooldown(InventoryItem target)
 		{
-			if (target.data is SpellItem)
-				return Mathf.Max(target.data.UseCooldown, (target.data as SpellItem).TargetSpell.SpellCooldown);
+			if (target.data is ActivationCompoundItem)
+				return (target.data as ActivationCompoundItem).TargetCompound.CausedCooldown;
 			else
 				return target.data.UseCooldown;
-		}
-		private IEnumerator BlinkIcon()
-		{
-			yield return null;
 		}
 
 		[System.Serializable]

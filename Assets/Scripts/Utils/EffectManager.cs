@@ -1182,7 +1182,7 @@ namespace EoE
 		{
 			if (currentState != FXState.End)
 			{
-				if (BaseInfo.FinishConditions.OnParentDeath && !parent)
+				if (BaseInfo.FinishConditions.OnParentDeath && (!parent || !parent.gameObject.activeSelf))
 					FinishFX();
 				else if (BaseInfo.FinishConditions.OnConditionMet && BaseInfo.FinishConditions.Condition.ConditionMet())
 					FinishFX();

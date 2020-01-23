@@ -62,8 +62,8 @@ namespace EoE.Combatery
 			Foldout(content, property, offSet);
 			if (property.isExpanded)
 			{
-				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MinShieldLevel))), ref settings.MinShieldLevel, 0, 1, offSet + 1);
-				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MaxShieldLevel))), ref settings.MaxShieldLevel, settings.MinShieldLevel, 1, offSet + 1);
+				FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MinShieldLevel))), ref settings.MinShieldLevel, 0, 1, offSet + 1);
+				FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MaxShieldLevel))), ref settings.MaxShieldLevel, settings.MinShieldLevel, 1, offSet + 1);
 				DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effects))), ref settings.Effects, property.FindPropertyRelative(nameof(settings.Effects)), DrawActivationEffect, new GUIContent(". Effect"), offSet + 1);
 			}
 		}

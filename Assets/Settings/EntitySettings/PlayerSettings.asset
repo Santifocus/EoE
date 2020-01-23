@@ -32,8 +32,8 @@ MonoBehaviour:
   HealthRegenParticlesOffset: {x: 0, y: 0, z: 0}
   Mana: 30
   DoManaRegen: 1
-  ManaRegen: 1
-  ManaRegenInCombatMultiplier: 0.2
+  ManaRegen: 1.5
+  ManaRegenInCombatMultiplier: 0.6
   WalkSpeed: 8
   RunSpeedMultiplicator: 1.4
   TurnSpeed: 540
@@ -73,7 +73,7 @@ MonoBehaviour:
   ShieldSettings: {fileID: 11400000, guid: 4ab47e41b78d9914db30d5fbfdad95d5, type: 2}
   InvincibleAfterHit: 1
   InvincibleAfterHitTime: 1.5
-  InvincibleModelFlashColor: {r: 1, g: 0, b: 0, a: 0.15294118}
+  InvincibleModelFlashColor: {r: 1, g: 0, b: 0, a: 0.5372549}
   InvincibleModelFlashDelay: 0.2
   InvincibleModelFlashTime: 0.1
   StartItems:
@@ -83,14 +83,33 @@ MonoBehaviour:
   - Item: {fileID: 11400000, guid: 2252417659472824aa2c5e20738fa998, type: 2}
     ItemCount: 1
     ForceEquip: 0
+  - Item: {fileID: 11400000, guid: 24bf8e4451a0cc84589f3c9af971978e, type: 2}
+    ItemCount: 1
+    ForceEquip: 1
   - Item: {fileID: 11400000, guid: 428f279ff073bb54c81150df9f36247e, type: 2}
     ItemCount: 1
     ForceEquip: 1
+  - Item: {fileID: 11400000, guid: 328dc4ced1e3d1f43ad1d209ac2b013e, type: 2}
+    ItemCount: 1
+    ForceEquip: 1
+  - Item: {fileID: 11400000, guid: f8b0ecbc61980774a811b21215e17673, type: 2}
+    ItemCount: 1
+    ForceEquip: 1
+  - Item: {fileID: 11400000, guid: e2175b767068abe49ad244c5541e84fd, type: 2}
+    ItemCount: 1
+    ForceEquip: 0
+  - Item: {fileID: 11400000, guid: d2ee9fc8bc00d1a48b0e3a8bcee338f0, type: 2}
+    ItemCount: 10
+    ForceEquip: 0
+  - Item: {fileID: 11400000, guid: dfff77569092e90428e801b345e3e493, type: 2}
+    ItemCount: 10
+    ForceEquip: 0
   InventorySize: 55
   MaxModelTilt: 8
   SideTurnSpringLerpSpeed: 13
   SideTurnLerpSpringStiffness: 0.1
   WalkAnimationLerpSpeed: 4
+  AnimationWalkSpeedDivider: 10
   BodyTurnHorizontalClamp: 30
   BodyTurnWeight: 0.5
   HeadLookAngleClamps: {x: 60, y: 40, z: 60, w: 30}

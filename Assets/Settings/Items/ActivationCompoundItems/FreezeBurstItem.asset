@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c474321604ce4b049877fabd5c1797aa, type: 3}
+  m_Name: FreezeBurstItem
+  m_EditorClassIdentifier: 
+  ItemName:
+    textColor: {r: 0, g: 0.89411765, b: 1, a: 1}
+    text: Freeze Burst
+  ItemDescription:
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: Creates a
+  - textColor: {r: 0, g: 1, b: 0.39215687, a: 1}
+    text: ' Burst of Ice'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: .
+  - textColor: {r: 0, g: 1, b: 0.8232899, a: 1}
+    text: ' AOE'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ','
+  - textColor: {r: 1, g: 0.64280605, b: 0, a: 1}
+    text: ' Applies Slow'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: .
+  SortingID: 15
+  ItemIcon: {fileID: 21300000, guid: 34a39a63d45b70d4784154ea0a26de29, type: 3}
+  FXEffectsOnUse: []
+  FXEffectsWhenEquipped:
+  - {fileID: 11400000, guid: 53cbd187787d0e74e86d9b2eb2eb79f1, type: 2}
+  - {fileID: 11400000, guid: f5fb6fec427744242897d3e6b103ac71, type: 2}
+  AllowHoldUse: 1
+  UseCooldown: 0
+  RemoveOnUse: 0
+  ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
+    type: 3}
+  MaxStack: 1
+  ItemWorth: 250
+  ItemFlags: 1
+  TargetCompound: {fileID: 11400000, guid: de13bb3817aa3884daaa19aca1777a79, type: 2}

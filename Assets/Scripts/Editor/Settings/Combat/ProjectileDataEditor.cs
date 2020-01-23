@@ -38,9 +38,16 @@ namespace EoE.Combatery
 		{
 			ProjectileData settings = target as ProjectileData;
 
-			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Duration))), ref settings.Duration, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.FlightSpeed))), ref settings.FlightSpeed, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.GravityEffect))), ref settings.GravityEffect, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Duration))), ref settings.Duration, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WhileTickTime))), ref settings.WhileTickTime, 1);
+			if (settings.WhileTickTime <= 0)
+			{
+				settings.WhileTickTime = 0.0001f;
+				isDirty = true;
+			}
+			Header("Executed While Ticks: " + (long)((settings.Duration - float.Epsilon) / settings.WhileTickTime), 1, false);
 
 			Vector3Field(new GUIContent("CreateOffsetToCaster"), ref settings.CreateOffsetToCaster, 1);
 
@@ -53,7 +60,6 @@ namespace EoE.Combatery
 
 			SerializedProperty whileEffectsProperty = serializedObject.FindProperty(nameof(settings.WhileEffects));
 			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WhileEffects))), ref settings.WhileEffects, whileEffectsProperty, DrawActivationEffect, new GUIContent(". Effect"), 1);
-			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WhileTickTime))), ref settings.WhileTickTime, 1);
 		}
 		private void CollisionSettingsArea()
 		{

@@ -297,7 +297,7 @@ namespace EoE.UI
 						{
 							if (unequip)
 							{
-								InventoryItem[] targetArray = (target is SpellItem) ? Player.Instance.SelectableSpellItems : Player.Instance.SelectableItems;
+								InventoryItem[] targetArray = (target is ActivationCompoundItem) ? Player.Instance.SelectableActivationCompoundItems : Player.Instance.SelectableItems;
 								for (int i = 0; i < targetArray.Length; i++)
 								{
 									if (targetArray[i] == item)
@@ -315,7 +315,7 @@ namespace EoE.UI
 							{
 								actionMenuOpen = false;
 								equipSlotsOpen = true;
-								equippedItemsSelected = !(target is SpellItem);
+								equippedItemsSelected = !(target is ActivationCompoundItem);
 								(equippedItemsSelected ? equippedItemDisplays : equippedSpellDisplays)[equipedSlotIndex = 0].Select();
 							}
 						}
@@ -336,7 +336,7 @@ namespace EoE.UI
 			}
 			else if (equipSlotsOpen)
 			{
-				InventoryItem[] targetArray = equippedItemsSelected ? Player.Instance.SelectableItems : Player.Instance.SelectableSpellItems;
+				InventoryItem[] targetArray = equippedItemsSelected ? Player.Instance.SelectableItems : Player.Instance.SelectableActivationCompoundItems;
 				if (targetArray[equipedSlotIndex] != null)
 				{
 					targetArray[equipedSlotIndex].isEquiped = false;
@@ -390,9 +390,9 @@ namespace EoE.UI
 
 			for (int i = 0; i < equippedSpellDisplays.Length; i++)
 			{
-				if (Player.Instance.SelectableSpellItems[i] != null)
+				if (Player.Instance.SelectableActivationCompoundItems[i] != null)
 				{
-					equippedSpellDisplays[i].sprite = Player.Instance.SelectableSpellItems[i].data.ItemIcon;
+					equippedSpellDisplays[i].sprite = Player.Instance.SelectableActivationCompoundItems[i].data.ItemIcon;
 					equippedSpellDisplays[i].color = Color.white;
 				}
 				else

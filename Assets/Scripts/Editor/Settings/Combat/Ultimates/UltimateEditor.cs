@@ -10,18 +10,19 @@ namespace EoE.Information
 	[CustomEditor(typeof(Ultimate)), CanEditMultipleObjects]
 	public class UltimateEditor : ScriptableObjectEditor
 	{
+		private static bool BaseSettingsOpen;
 		protected override void CustomInspector()
 		{
 			Ultimate settings = target as Ultimate;
-			SerializedProperty baseSettingsProperty = serializedObject.FindProperty(nameof(settings.BaseSettings));
-			DrawInFoldoutHeader(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseSettings))), baseSettingsProperty, DrawBaseSettings);
+			DrawInFoldoutHeader(new GUIContent("Base Settings"), ref BaseSettingsOpen, DrawBaseSettings);
 		}
 
 		protected virtual void DrawBaseSettings()
 		{
 			Ultimate settings = target as Ultimate;
+			DrawCombatObjectBase(settings, serializedObject, 1);
+			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			ObjectField<Sprite>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.UltimateIcon))), ref settings.UltimateIcon, 1);
-			ObjectField<CombatObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BaseSettings))), ref settings.BaseSettings, 1);
 		}
 	}
 }

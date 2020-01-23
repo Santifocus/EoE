@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5e2446ee84d62b4caf07d6b7037486e, type: 3}
+  m_Name: FreezeBlastActivation
+  m_EditorClassIdentifier: 
+  NoDefinedActionType: 0
+  ActionType: 1
+  BasePhysicalDamage: 0
+  BaseMagicalDamage: 25
+  BaseKnockback: 1
+  BaseCritChance: 0
+  Cost:
+    Health: 0
+    Mana: 10
+    Endurance: 0
+    AdditionalConditions: []
+  CostActivationIndex: 0
+  CausedCooldown: 6
+  CancelFromStun: 1
+  CancelIfCostActivationIsImpossible: 1
+  Elements:
+  - Restrictions:
+      ActionRestrictions: 0
+      MovementRestrictions: 0
+    ElementDuration: 0
+    WhileTickTime: 10
+    StartEffects: []
+    WhileEffects: []
+    AtTargetStartEffects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 64
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects: []
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants:
+      - {fileID: 11400000, guid: 0c5aa56ae8cca0a438e950b4ab216fcc, type: 2}
+    AtTargetWhileEffects: []
+    PauseConditions: []
+    YieldConditions: []
+    StopConditions: []

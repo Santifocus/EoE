@@ -101,7 +101,7 @@ namespace EoE.Entities
 			StartCombat();
 			bashing = true;
 			MovementStops++;
-			RotationStops++;
+			TurnStops++;
 			bashForce = entitieForceController.ApplyForce((transform.forward * settings.BashSpeed) * (curWalkSpeed / settings.WalkSpeed), settings.BashSpeed / settings.BashDistance, false, () => FinishedBash());
 			SetBashColliderState(true);
 			ActivateActivationEffects(settings.BashStartEffects);
@@ -123,7 +123,7 @@ namespace EoE.Entities
 			bashing = false;
 			SetBashColliderState(false);
 			MovementStops--;
-			RotationStops--;
+			TurnStops--;
 		}
 		private void SetBashColliderState(bool state)
 		{

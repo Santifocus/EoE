@@ -145,6 +145,9 @@ namespace EoE.Information
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.SideTurnLerpSpringStiffness))), ref settings.SideTurnLerpSpringStiffness, 1);
 
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationWalkSpeedDivider))), ref settings.AnimationWalkSpeedDivider, 1);
+
+			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			Header("Player Look Turning");
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BodyTurnHorizontalClamp))), ref settings.BodyTurnHorizontalClamp, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BodyTurnWeight))), ref settings.BodyTurnWeight, 1);
@@ -187,7 +190,7 @@ namespace EoE.Information
 			Foldout(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsWhileHealthBelowThreshold))), ref OnHealthCriticalEffectsOpen, 1);
 			if (OnHealthCriticalEffectsOpen)
 			{
-				SliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsHealthThreshold))), ref settings.EffectsHealthThreshold, 0, 1, 2);
+				FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsHealthThreshold))), ref settings.EffectsHealthThreshold, 0, 1, 2);
 				ObjectArrayField<FXObject>(new GUIContent("Effects"), ref settings.EffectsWhileHealthBelowThreshold, serializedObject.FindProperty(nameof(settings.EffectsWhileHealthBelowThreshold)), new GUIContent(". Effect"), 2);
 			}
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnPlayerDeath))), ref settings.EffectsOnPlayerDeath, serializedObject.FindProperty(nameof(settings.EffectsOnPlayerDeath)), new GUIContent(". Effect"), 1);

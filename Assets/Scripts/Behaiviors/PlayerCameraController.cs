@@ -22,6 +22,7 @@ namespace EoE
 
 		[SerializeField] private Camera playerCamera = default;
 		[SerializeField] private Camera overlayCamera = default;
+		private float rotationSpeedMutliplier = 1;
 		private Vector3 curOffset;
 		private float curLerpAcceleration;
 
@@ -45,7 +46,10 @@ namespace EoE
 		private void AnchorToPlayer()
 		{
 			if (!Player.Existant)
-				return;
+			{
+				rotationSpeedMutliplier = 0.05f;
+				LookInDirection(-Player.Instance.transform.up);
+			}
 
 			curOffset = Vector3.Lerp(curOffset, GetOffset(), Time.unscaledDeltaTime * 5);
 			Vector3 targetPos = Player.Instance.transform.position + curOffset;
@@ -111,7 +115,7 @@ namespace EoE
 			bool targeting = Player.Instance.TargetedEntitie;
 			CurRotation.x %= 360;
 			TargetRotation.y = Mathf.Clamp(TargetRotation.y, targeting ? Player.PlayerSettings.CameraClampsWhenTargeting.x : Player.PlayerSettings.CameraVerticalAngleClamps.x, targeting ? Player.PlayerSettings.CameraClampsWhenTargeting.y : Player.PlayerSettings.CameraVerticalAngleClamps.y);
-			CurRotation = new Vector2(Mathf.LerpAngle(CurRotation.x, TargetRotation.x, Time.unscaledDeltaTime * Player.PlayerSettings.CameraRotationSpeed), Mathf.LerpAngle(CurRotation.y, TargetRotation.y, Time.unscaledDeltaTime * Player.PlayerSettings.CameraRotationSpeed));
+			CurRotation = new Vector2(Mathf.LerpAngle(CurRotation.x, TargetRotation.x, Time.unscaledDeltaTime * Player.PlayerSettings.CameraRotationSpeed * rotationSpeedMutliplier), Mathf.LerpAngle(CurRotation.y, TargetRotation.y, Time.unscaledDeltaTime * Player.PlayerSettings.CameraRotationSpeed * rotationSpeedMutliplier));
 		}
 	}
 }

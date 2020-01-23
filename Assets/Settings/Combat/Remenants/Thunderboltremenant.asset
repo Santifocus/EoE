@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Thunderboltremenant
   m_EditorClassIdentifier: 
   TryGroundRemenants: 1
-  Duration: 0.1
+  Duration: 0.125
+  WhileTickTime: 0.1
   StartEffects: []
   WhileEffects:
   - ChanceToActivate: 1
@@ -37,7 +38,6 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
-  WhileTickTime: 0.1
   OnEndEffects:
   - ChanceToActivate: 1
     ContainedEffectType: 6

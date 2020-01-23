@@ -11,10 +11,10 @@ namespace EoE.Information
 	public static class MenuItemStorage
 	{
 		//Items
-		[MenuItem("EoE/Item/ConsumableItem")] public static void CreateBuffItem() => AssetCreator<ConsumableItem>("Settings", "Items");
-		[MenuItem("EoE/Item/WeaponItem")] public static void CreateWeaponItem() => AssetCreator<WeaponItem>("Settings", "Items");
-		[MenuItem("EoE/Item/SpellItem")] public static void CreateSpellItem() => AssetCreator<SpellItem>("Settings", "Items");
-		[MenuItem("EoE/Item/ArmorItem")] public static void CreateArmorItem() => AssetCreator<ArmorItem>("Settings", "Items");
+		[MenuItem("EoE/Item/ConsumableItem")] public static void CreateBuffItem() => AssetCreator<ConsumableItem>("Settings", "Items", "ConsumableItems");
+		[MenuItem("EoE/Item/WeaponItem")] public static void CreateWeaponItem() => AssetCreator<WeaponItem>("Settings", "Items", "WeaponItems");
+		[MenuItem("EoE/Item/ActivationCompoundItem")] public static void CreateActivationCompoundItem() => AssetCreator<ActivationCompoundItem>("Settings", "Items", "ActivationCompoundItems");
+		[MenuItem("EoE/Item/ArmorItem")] public static void CreateArmorItem() => AssetCreator<ArmorItem>("Settings", "Items", "ArmorItems");
 
 		//VFX
 		[MenuItem("EoE/FX/ScreenShake")] public static void CreateScreenShake() => AssetCreator<ScreenShake>("Settings", "FX");
@@ -35,16 +35,16 @@ namespace EoE.Information
 
 		//Combat
 		[MenuItem("EoE/Combat/Object/BaseObject")] public static void CreateBaseCombatObject() => AssetCreator<CombatObject>("Settings", "Combat");
-		[MenuItem("EoE/Combat/Object/Weapon")] public static void CreateWeapon() => AssetCreator<Weapon>("Settings", "Combat", "Weapon");
-		[MenuItem("EoE/Combat/Object/Spell")] public static void CreateSpell() => AssetCreator<Spell>("Settings", "Combat", "Spell");
+		[MenuItem("EoE/Combat/Object/Weapon")] public static void CreateWeapon() => AssetCreator<Weapon>("Settings", "Combat", "Weapons");
+		[MenuItem("EoE/Combat/Object/ActivationCompound")] public static void CreateActivationCompound() => AssetCreator<ActivationCompound>("Settings", "Combat", "ActivationCompounds");
 		[MenuItem("EoE/Combat/ProjectileData")] public static void CreateProjectileData() => AssetCreator<ProjectileData>("Settings", "Combat");
 		[MenuItem("EoE/Combat/ShieldData")] public static void CreateShieldData() => AssetCreator<ShieldData>("Settings", "Combat");
 		[MenuItem("EoE/Combat/Effect/EffectSingle")] public static void CreateEffectSingle() => AssetCreator<EffectSingle>("Settings", "Combat");
 		[MenuItem("EoE/Combat/Effect/EffectAOE")] public static void CreateEffectAOE() => AssetCreator<EffectAOE>("Settings", "Combat");
 		[MenuItem("EoE/Combat/Effect/RemenantsData")] public static void CreateRemenantsData() => AssetCreator<RemenantsData>("Settings", "Combat");
-		[MenuItem("EoE/Combat/Physical/ComboSet")] public static void CreateComboSet() => AssetCreator<ComboSet>("Settings", "Combat", "Weapon", "ComboSets");
-		[MenuItem("EoE/Combat/Physical/Ultimate/Basic")] public static void CreateBasicUltimate() => AssetCreator<BasicUltimate>("Settings", "Combat", "Weapon", "Ultimates");
-		[MenuItem("EoE/Combat/Physical/Ultimate/Attack")] public static void CreateAttackUltimate() => AssetCreator<AttackUltimate>("Settings", "Combat", "Weapon", "Ultimates");
+		[MenuItem("EoE/Combat/Physical/ComboSet")] public static void CreateComboSet() => AssetCreator<ComboSet>("Settings", "Combat", "Weapons", "ComboSets");
+		[MenuItem("EoE/Combat/Physical/Ultimate/Basic")] public static void CreateBasicUltimate() => AssetCreator<BasicUltimate>("Settings", "Combat", "Weapons", "Ultimates");
+		[MenuItem("EoE/Combat/Physical/Ultimate/Attack")] public static void CreateAttackUltimate() => AssetCreator<AttackUltimate>("Settings", "Combat", "Weapons", "Ultimates");
 
 		//Other
 		[MenuItem("EoE/Buff")] public static void CreateBuff() => AssetCreator<Buff>("Settings", "Buffs");
@@ -53,8 +53,8 @@ namespace EoE.Information
 		[MenuItem("EoE/ShopInventory")] public static void CreateShopInventory() => AssetCreator<ShopInventory>("Settings", "InteractableSettings");
 		[MenuItem("EoE/ConditionObject")] public static void CreateConditionObject() => AssetCreator<ConditionObject>("Settings", "ConditionObjects");
 
-		//Data Collectors
-		[MenuItem("EoE/DataCollection/Collect Items")]
+		//Data Managers
+		[MenuItem("EoE/DataManagement/Collect Items")]
 		public static void CollectItemData()
 		{
 			string[] itemCollectorGUID = AssetDatabase.FindAssets("t:ItemCollector");
@@ -79,6 +79,61 @@ namespace EoE.Information
 				itemCollector.CollectData();
 				EditorUtility.SetDirty(itemCollector);
 			}
+		}
+		[MenuItem("EoE/DataManagement/Consistant Item Names")]
+		public static void ConsistantItemNames()
+		{
+			string[] itemGUIDs = AssetDatabase.FindAssets("t:Item");
+			for (int i = 0; i < itemGUIDs.Length; i++)
+			{
+				string path = AssetDatabase.GUIDToAssetPath(itemGUIDs[i]);
+				Item tItem = (Item)AssetDatabase.LoadAssetAtPath(path, typeof(Item));
+				string newName = tItem.ItemName.text.Replace(" ", "").Replace("_", "") + "Item";
+				AssetDatabase.RenameAsset(path, newName);
+				EditorUtility.SetDirty(tItem);
+			}
+		}
+		[MenuItem("EoE/DataManagement/Clean Object Names")]
+		public static void CleanObjectNames()
+		{
+#pragma warning disable
+			return;
+			bool onlyAllowLocalNamespace = true;
+			System.Type typeToClean = typeof(ScriptableObject);
+			string[] GUIDs = AssetDatabase.FindAssets("t:" + typeToClean.Name, new[] { "Assets/Settings" });
+
+			for (int i = 0; i < GUIDs.Length; i++)
+			{
+				string path = AssetDatabase.GUIDToAssetPath(GUIDs[i]);
+				Object obj = (Object)AssetDatabase.LoadAssetAtPath(path, typeof(Object));
+
+				if (onlyAllowLocalNamespace && !(obj.GetType()).Namespace.StartsWith("EoE"))
+					continue;
+
+				string spacedName = obj.name.Replace("_", " ").Replace(".", " ");
+				string pascalCasedName = "";
+				bool lastWasSpace = true;
+				for (int j = 0; j < spacedName.Length; j++)
+				{
+					if (spacedName[j] == ' ')
+					{
+						lastWasSpace = true;
+					}
+					else if (lastWasSpace)
+					{
+						pascalCasedName += spacedName[j].ToString().ToUpper();
+						lastWasSpace = false;
+					}
+					else
+					{
+						pascalCasedName += spacedName[j];
+					}
+				}
+
+				string newName = pascalCasedName.Replace(" ", "");
+				AssetDatabase.RenameAsset(path, newName);
+			}
+#pragma warning enable
 		}
 		//Context menu
 		[MenuItem("GameObject/UI/EoEButton")]

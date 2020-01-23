@@ -15,7 +15,8 @@ namespace EoE.Entities
 		private FXInstance[] panicModeBoundFX;
 		private Enemy foundAlly;
 		private bool completedPanicMode;
-		
+		private bool disallowNormalMode;
+
 		protected override void InRangeBehaivior()
 		{
 			if(!panicModeActive)
@@ -27,6 +28,7 @@ namespace EoE.Entities
 			{
 				if (foundAlly)
 				{
+					RefreshDataOnPlayer(false);
 					overrideTargetPosition = foundAlly.actuallWorldPosition;
 					if (NextToAlly())
 						DeactivatePanicMode();
@@ -38,7 +40,7 @@ namespace EoE.Entities
 						DeactivatePanicMode();
 				}
 			}
-			else if(CastingCooldown > 0)
+			else if((disallowNormalMode || CastingCooldown > 0) && !InActivationCompound)
 			{
 				switch (settings.CooldownBehaivior)
 				{
@@ -73,10 +75,13 @@ namespace EoE.Entities
 							if (foundAlly)
 							{
 								overrideTargetPosition = foundAlly.actuallWorldPosition;
-								PointOfInterestIsTarget(NextToAlly(pointOfInterest.HasValue));
+								bool reachedAlly = NextToAlly(pointOfInterest.HasValue);
+								disallowNormalMode = !reachedAlly;
+								PointOfInterestIsTarget(reachedAlly);
 							}
 							else
 							{
+								disallowNormalMode = false;
 								FindNearestAlly(settings.TargetDistance);
 								if (!foundAlly)
 									goto case CastCooldownBehaivior.WaitHere;
@@ -163,7 +168,7 @@ namespace EoE.Entities
 			float shortestDistance = (maxSearchRange * maxSearchRange) * 1.01f;
 			for (int i = 0; i < AllEntities.Count; i++)
 			{
-				if (!(AllEntities[i] is Enemy) || AllEntities[i] == this)
+				if (!(AllEntities[i] is Enemy) || !AllEntities[i].Alive || AllEntities[i] == this)
 					continue;
 
 				float dist = (AllEntities[i].actuallWorldPosition - actuallWorldPosition).sqrMagnitude;
@@ -176,9 +181,6 @@ namespace EoE.Entities
 		}
 		private void DecideOnbehaiviorPattern()
 		{
-			if (IsCasting || CastingCooldown > 0)
-				return;
-
 			float distanceToPlayer = (Player.Instance.actuallWorldPosition - actuallWorldPosition).sqrMagnitude;
 
 			List<int> possiblePatterns = new List<int>(settings.BehaiviorPatterns.Length);
@@ -187,7 +189,7 @@ namespace EoE.Entities
 			{
 				if(	distanceToPlayer > (settings.BehaiviorPatterns[i].MinRange * settings.BehaiviorPatterns[i].MinRange) &&
 					distanceToPlayer < (settings.BehaiviorPatterns[i].MaxRange * settings.BehaiviorPatterns[i].MaxRange) &&
-					settings.BehaiviorPatterns[i].TargetSpell.Cost.CanActivate(this, 1, 1, 1))
+					settings.BehaiviorPatterns[i].TargetCompound.CanActivate(this, 1, 1, 1))
 				{
 					possiblePatterns.Add(i);
 				}
@@ -195,7 +197,7 @@ namespace EoE.Entities
 			if(possiblePatterns.Count > 0)
 			{
 				int targetPatternIndex = possiblePatterns[Random.Range(0, possiblePatterns.Count)];
-				CastSpell(settings.BehaiviorPatterns[targetPatternIndex].TargetSpell);
+				ActivateCompound(settings.BehaiviorPatterns[targetPatternIndex].TargetCompound);
 			}
 		}
 	}

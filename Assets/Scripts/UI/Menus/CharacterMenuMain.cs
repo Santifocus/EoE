@@ -57,8 +57,6 @@ namespace EoE.UI
 
 			targetRotation += InputController.CameraMove * Time.unscaledDeltaTime * cameraRotationSpeed;
 
-			//targetRotation.x %= 360;
-			//curRotation.x %= 360;
 			targetRotation.y = Mathf.Clamp(targetRotation.y, cameraVerticalAngleClamps.x, cameraVerticalAngleClamps.y);
 			curRotation = new Vector2(Mathf.LerpAngle(curRotation.x, targetRotation.x, Time.unscaledDeltaTime * cameraSmoothSpeed), Mathf.LerpAngle(curRotation.y, targetRotation.y, Time.unscaledDeltaTime * cameraSmoothSpeed));
 

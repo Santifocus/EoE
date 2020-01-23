@@ -62,6 +62,7 @@ namespace EoE.Information
 		public float SideTurnSpringLerpSpeed = 13;
 		public float SideTurnLerpSpringStiffness = 0.1f;
 		public float WalkAnimationLerpSpeed = 4;
+		public float AnimationWalkSpeedDivider = 10;
 
 		public float BodyTurnHorizontalClamp = 30;
 		public float BodyTurnWeight = 0.5f;

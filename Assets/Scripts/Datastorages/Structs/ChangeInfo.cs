@@ -5,7 +5,7 @@ using UnityEngine;
 namespace EoE.Information
 {
 	public enum CauseType { Physical, Magic, Heal, DOT }
-	public enum ElementType { None = 1, Fire = 2, Earth = 4, Water = 8, Electro = 16, Light = 32 }
+	public enum ElementType { None = (1 << 0), Fire = (1 << 1), Earth = (1 << 2), Water = (1 << 3), Electro = (1 << 4), Light = (1 << 5) , Dark = (1 << 6) }
 	public struct ChangeInfo
 	{
 		public readonly Entity attacker;

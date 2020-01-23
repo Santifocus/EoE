@@ -190,7 +190,7 @@ namespace EoE.Entities
 			}
 
 		}
-		private void RefreshDataOnPlayer(bool fromCombatTrigger)
+		protected void RefreshDataOnPlayer(bool fromCombatTrigger)
 		{
 			if(!fromCombatTrigger)
 				StartCombat();
@@ -277,7 +277,7 @@ namespace EoE.Entities
 			bool stopped = !state; //Better readability
 			if (stopped)
 				agent.velocity = Vector3.zero;
-			if (agent.enabled && agent.isStopped != stopped)
+			if (agent.isActiveAndEnabled && agent.isStopped != stopped)
 				agent.isStopped = stopped;
 		}
 		private bool WanderAround()
@@ -321,7 +321,7 @@ namespace EoE.Entities
 		}
 		private void LookAroundArea()
 		{
-			if (IsRotationStopped)
+			if (IsTurnStopped)
 				return;
 
 			if (lookAroundCooldown > 0)
@@ -379,7 +379,7 @@ namespace EoE.Entities
 		}
 		protected void LookAtTarget()
 		{
-			if (IsRotationStopped || IsStunned)
+			if (IsTurnStopped || IsStunned)
 				return;
 
 			Vector3? aimPos = pointOfInterest ?? (overrideTargetPosition ?? targetPosition);

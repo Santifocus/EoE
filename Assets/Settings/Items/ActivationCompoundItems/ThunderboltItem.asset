@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c474321604ce4b049877fabd5c1797aa, type: 3}
+  m_Name: ThunderboltItem
+  m_EditorClassIdentifier: 
+  ItemName:
+    textColor: {r: 0, g: 0.89411765, b: 1, a: 1}
+    text: Thunderbolt
+  ItemDescription:
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: Summons a
+  - textColor: {r: 0, g: 1, b: 0.39215687, a: 1}
+    text: ' Bolt of Lightning'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: .
+  - textColor: {r: 0.9699626, g: 0, b: 1, a: 1}
+    text: ' Targeted'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ','
+  - textColor: {r: 0, g: 1, b: 0.8232899, a: 1}
+    text: ' AOE'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ','
+  - textColor: {r: 1, g: 0.64280605, b: 0, a: 1}
+    text: ' Applies Stun'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: .
+  SortingID: 18
+  ItemIcon: {fileID: 21300000, guid: 035d5755a8edc404eab1016c018d751b, type: 3}
+  FXEffectsOnUse: []
+  FXEffectsWhenEquipped:
+  - {fileID: 11400000, guid: 18b8b73a4bf945e4eb4a23f08280aeef, type: 2}
+  - {fileID: 11400000, guid: b1ef8dd70c88e1e428a7edb76c4b3cb3, type: 2}
+  AllowHoldUse: 1
+  UseCooldown: 0
+  RemoveOnUse: 0
+  ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
+    type: 3}
+  MaxStack: 1
+  ItemWorth: 400
+  ItemFlags: 1
+  TargetCompound: {fileID: 11400000, guid: 5a5cd477662cf8045a5d23a2ef246215, type: 2}

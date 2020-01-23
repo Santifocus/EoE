@@ -34,9 +34,6 @@ namespace EoE.Entities
 		[SerializeField] private int combatMusicIndex = 1;
 		public PlayerBuffDisplay buffDisplay = default;
 
-		[SerializeField] private Transform head = default;
-		[SerializeField] private Transform torso = default;
-
 		//Endurance
 		public float curEndurance { get; set; }
 		public float curMaxEndurance { get; set; }
@@ -54,6 +51,7 @@ namespace EoE.Entities
 		private float jumpCooldown;
 		public Vector3 curMoveVelocity => controllDirection * curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
 		private Vector3 controllDirection;
+		private Vector3 lastMove;
 		private float intendedAcceleration;
 		private float curAcceleration;
 		private bool lastOnGroundState = true;
@@ -99,9 +97,9 @@ namespace EoE.Entities
 		public InventoryItem EquipedItem => SelectableItems[selectedItemIndex];
 
 		//Spell Items
-		public InventoryItem[] SelectableSpellItems;
+		public InventoryItem[] SelectableActivationCompoundItems;
 		public int selectedSpellItemIndex { get; private set; }
-		public InventoryItem EquipedSpell => SelectableSpellItems[selectedSpellItemIndex];
+		public InventoryItem EquipedSpell => SelectableActivationCompoundItems[selectedSpellItemIndex];
 		#endregion
 		#region Leveling
 		public Buff LevelingPointsBuff { get; private set; }
@@ -150,14 +148,14 @@ namespace EoE.Entities
 			CheckForFalling();
 			UpdateAcceleration();
 
-			if (!IsStunned && !IsRotationStopped)
+			if (IsStunned || IsTurnStopped)
+			{
+				curStates.Turning = false;
+			}
+			else
+			{
 				TurnControl();
-		}
-		private void LateUpdate()
-		{
-			if (!Alive)
-				return;
-			ProceduralAnimationControl();
+			}
 		}
 		#endregion
 		#region Setups
@@ -215,7 +213,7 @@ namespace EoE.Entities
 			selectedItemIndex = 0;
 			SelectableItems = new InventoryItem[SELECTABLE_ITEMS_AMOUNT];
 			selectedSpellItemIndex = 0;
-			SelectableSpellItems = new InventoryItem[SELECTABLE_ITEMS_AMOUNT];
+			SelectableActivationCompoundItems = new InventoryItem[SELECTABLE_ITEMS_AMOUNT];
 
 			for (int i = 0; i < PlayerSettings.StartItems.Length; i++)
 			{
@@ -243,31 +241,31 @@ namespace EoE.Entities
 						targetItem.isEquiped = true;
 						targetItem.data.Equip(targetItem, this);
 					}
-					else if (PlayerSettings.StartItems[i].Item is SpellItem)
+					else if (PlayerSettings.StartItems[i].Item is ActivationCompoundItem)
 					{
 						bool added = false;
 
 						//Try to find a slot that is null and put the item there
-						for (int j = 0; j < SelectableSpellItems.Length; j++)
+						for (int j = 0; j < SelectableActivationCompoundItems.Length; j++)
 						{
-							if (SelectableSpellItems[j] == null)
+							if (SelectableActivationCompoundItems[j] == null)
 							{
-								SelectableSpellItems[j] = targetItem;
-								SelectableSpellItems[j].isEquiped = true;
+								SelectableActivationCompoundItems[j] = targetItem;
+								SelectableActivationCompoundItems[j].isEquiped = true;
 								added = true;
 								if (j == 0)
 								{
-									SelectableSpellItems[j].data.Equip(targetItem, this);
+									SelectableActivationCompoundItems[j].data.Equip(targetItem, this);
 								}
 								break;
 							}
 						}
 						//couldnt find a null slot, put it in the first one, (just a fallback)
-						if (!added && SelectableSpellItems.Length > 0)
+						if (!added && SelectableActivationCompoundItems.Length > 0)
 						{
-							SelectableSpellItems[0] = targetItem;
-							SelectableSpellItems[0].isEquiped = true;
-							SelectableSpellItems[0].data.Equip(targetItem, this);
+							SelectableActivationCompoundItems[0] = targetItem;
+							SelectableActivationCompoundItems[0].isEquiped = true;
+							SelectableActivationCompoundItems[0].data.Equip(targetItem, this);
 						}
 					}
 					else
@@ -310,7 +308,6 @@ namespace EoE.Entities
 			if (IsStunned || IsMovementStopped)
 			{
 				curStates.Moving = curStates.Running = false;
-				curStates.Turning = IsCasting ? curStates.Turning : false;
 				if (IsStunned)
 					curAcceleration = 0;
 				return;
@@ -338,26 +335,14 @@ namespace EoE.Entities
 		}
 		private void PlayerFeedbackControl()
 		{
-			bool turning = curStates.Turning;
-			bool moving = curStates.Moving && curAcceleration >= MIN_WALK_ACCELERATION && intendedAcceleration >= MIN_WALK_ACCELERATION;
-			bool running = curStates.Running;
-
-			//If the Player doesnt move intentionally but is in run mode, then stop the run mode
-			if (running && !moving)
-				curStates.Running = false;
-
-			//Set all the animation states
-			animationControl.SetBool("Walking", !turning && curAcceleration > 0);
-
 			//Model tilt
 			Vector2 forward = new Vector2(transform.forward.x, transform.forward.z);
 			Vector2 right = new Vector2(transform.right.x, transform.right.z);
-			Vector3 moveVelocity = curMoveVelocity;
 
-			float velocity = new Vector2(moveVelocity.x, moveVelocity.z).magnitude;
-			float maxVelocity = curWalkSpeed * SelfSettings.RunSpeedMultiplicator;
-			Vector2 velocityDirection = (velocity > 0) ? (new Vector2(moveVelocity.x, moveVelocity.z) / velocity) : (new Vector2(transform.forward.x, transform.forward.z));
-			float normalizedMoveVelocity = (velocity / maxVelocity);
+			float moveVelocity = new Vector2(lastMove.x, lastMove.z).magnitude;
+			float normalizedMoveVelocity = moveVelocity / playerSettings.AnimationWalkSpeedDivider;
+
+			Vector2 velocityDirection = (moveVelocity > 0) ? (new Vector2(lastMove.x, lastMove.z) / moveVelocity) : (new Vector2(transform.forward.x, transform.forward.z));
 
 			float targetTiltAngle = normalizedMoveVelocity * PlayerSettings.MaxModelTilt;
 			Vector2 targetTilt = velocityDirection * targetTiltAngle;
@@ -368,22 +353,35 @@ namespace EoE.Entities
 										);
 			modelTransform.localEulerAngles = new Vector3(curModelTilt.y, 0, curModelTilt.x);
 
-			if (GameController.CurrentGameSettings.IsDebugEnabled)
-			{
-				Debug.DrawLine(modelTransform.position, modelTransform.position + modelTransform.up * 2.5f, Color.blue, Time.unscaledDeltaTime);
-			}
-
 			//Move direction
 			float forwardValue = Vector2.Dot(velocityDirection, forward);
 			int xMultiplier = Vector2.Dot(velocityDirection, right) > 0 ? 1 : -1;
 
 			curAnimationDirection = Vector2.Lerp(curAnimationDirection, new Vector2(forwardValue * normalizedMoveVelocity, (1 - Mathf.Abs(forwardValue)) * xMultiplier * normalizedMoveVelocity), Time.deltaTime * PlayerSettings.WalkAnimationLerpSpeed);
 
+			UpdateAnimationStates(moveVelocity, normalizedMoveVelocity);
+		}
+		private void UpdateAnimationStates(float moveVelocity, float normalizedMoveVelocity)
+		{
+			bool turning = curStates.Turning;
+			bool running = curStates.Running;
+
+			bool moving = curStates.Moving && moveVelocity >= MIN_WALK_ACCELERATION && intendedAcceleration >= MIN_WALK_ACCELERATION;
+			curStates.Moving = moving;
+
+			if (running && !moving)
+				curStates.Running = false;
+
+			//Set the animation states based on the calculated values and bools
+			animationControl.SetBool("Walking", !turning && moving);
 			animationControl.SetFloat("ZMove", curAnimationDirection.x);
 			animationControl.SetFloat("XMove", curAnimationDirection.y);
 			animationControl.SetFloat("CurWalkSpeed", normalizedMoveVelocity);
 
-			///Control FX
+			PlayerStateFXControl(moving, running, turning);
+		}
+		private void PlayerStateFXControl(bool moving, bool running, bool turning)
+		{
 			//Health critical effects
 			bool curBelowHealthThreshold = HealthBelowThresholdBoundEffects != null;
 			bool newBelowHealthThresholdState = (curHealth / curMaxHealth) < PlayerSettings.EffectsHealthThreshold;
@@ -432,6 +430,10 @@ namespace EoE.Entities
 				}
 			}
 		}
+		/*
+		[SerializeField] private Transform head = default;
+		[SerializeField] private Transform torso = default;
+
 		private float curTosoTurn;
 		private float bodyLookSpringAcceleration;
 
@@ -475,6 +477,7 @@ namespace EoE.Entities
 
 			head.eulerAngles = new Vector3(curHeadTurn.y * vAngleSinPart, curHeadTurn.x, curHeadTurn.y * vAngleCosPart);
 		}
+		*/
 		#region Walking
 		private void TurnControl()
 		{
@@ -499,7 +502,10 @@ namespace EoE.Entities
 
 			//Is the player not trying to move? Then stop here
 			if (!moving)
+			{
+				controllDirection = Vector3.zero;
 				return;
+			}
 
 			//Check if the player intends to run and is able to
 			bool running = curStates.Running;
@@ -540,11 +546,6 @@ namespace EoE.Entities
 			camRight = camRight.normalized;
 
 			controllDirection = inputDirection.y * camForward + inputDirection.x * camRight;
-
-			if (GameController.CurrentGameSettings.IsDebugEnabled)
-			{
-				Debug.DrawLine(transform.position, transform.position + controllDirection * 2, Color.green, Time.unscaledDeltaTime);
-			}
 
 			if ((!TargetedEntitie) && (intendedControl > MIN_WALK_ACCELERATION * 0.95f))
 				intendedRotation = -(Mathf.Atan2(controllDirection.z, controllDirection.x) * Mathf.Rad2Deg - 90);
@@ -608,7 +609,7 @@ namespace EoE.Entities
 			animationControl.SetBool("Fall", falling);
 			if (falling)
 			{
-				ApplyGravity(GameController.CurrentGameSettings.WhenFallingExtraGravity);
+				GravityControl(GameController.CurrentGameSettings.WhenFallingExtraGravity);
 			}
 		}
 		private void CheckForLanding()
@@ -692,13 +693,19 @@ namespace EoE.Entities
 		}
 		private void ApplyForces()
 		{
-			Vector3 appliedForce = curMoveVelocity + CurVelocity;
+			//Apply move velocity and find out how far we moved
+			Vector3 prePos = transform.position;
+			charController.Move(curMoveVelocity * Time.fixedDeltaTime);
+			Vector3 newPos = transform.position;
+			lastMove = (newPos - prePos) / Time.fixedDeltaTime;
 
-			charController.Move(appliedForce * Time.fixedDeltaTime);
+			//Apply Curvelocity
+			charController.Move(CurVelocity * Time.fixedDeltaTime);
+
 			animationControl.SetBool("OnGround", charController.isGrounded);
-			ApplyGravity();
+			GravityControl();
 		}
-		private void ApplyGravity(float scale = 1)
+		private void GravityControl(float scale = 1)
 		{
 			float lowerFallThreshold = Physics.gravity.y / 2;
 			float force = scale * Physics.gravity.y * Time.fixedDeltaTime;
@@ -877,6 +884,9 @@ namespace EoE.Entities
 		#region EnemyTargeting
 		private void TargetEnemyControl()
 		{
+			if (TargetedEntitie && !TargetedEntitie.gameObject.activeSelf)
+				TargetedEntitie = null;
+
 			if (TargetedEntitie)
 			{
 				Vector3 direction = (TargetedEntitie.actuallWorldPosition - actuallWorldPosition).normalized;
@@ -1013,6 +1023,7 @@ namespace EoE.Entities
 		}
 		private void ScrollItemControll()
 		{
+			//Consumable Scrolling
 			int selectedItemIndexChange = InputController.ItemScrollUp.Down ? 1 : (InputController.ItemScrollDown.Down ? -1 : 0);
 			if (selectedItemIndexChange != 0)
 			{
@@ -1033,7 +1044,20 @@ namespace EoE.Entities
 				}
 			}
 
-			int selectedSpellIndexChange = IsCasting ? 0 : (InputController.MagicScrollUp.Down ? 1 : (InputController.MagicScrollDown.Down ? -1 : 0));
+			//ActivationCompound Scrolling
+			InventoryItem selectedItem = SelectableActivationCompoundItems[selectedSpellItemIndex];
+			ActivationCompoundItem selectedAC = selectedItem == null ? null : (selectedItem.data as ActivationCompoundItem);
+			bool cannotScrollMagic = false;
+			if (selectedAC == null)
+			{
+				cannotScrollMagic = true;
+			}
+			else if (!selectedAC.TargetCompound.NoDefinedActionType)
+			{
+				cannotScrollMagic = (selectedAC.TargetCompound.ActionType == ActionType.Attacking) ? IsAttackStopped : IsCastingStopped;
+			}
+
+			int selectedSpellIndexChange = cannotScrollMagic ? 0 : (InputController.MagicScrollUp.Down ? 1 : (InputController.MagicScrollDown.Down ? -1 : 0));
 			if (selectedSpellIndexChange != 0)
 			{
 				int t = 0;
@@ -1041,7 +1065,7 @@ namespace EoE.Entities
 				{
 					t += selectedSpellIndexChange;
 					int valIndex = ValidatedID(t + selectedSpellItemIndex);
-					if (SelectableSpellItems[valIndex] != null)
+					if (SelectableActivationCompoundItems[valIndex] != null)
 					{
 						if (EquipedSpell != null)
 							EquipedSpell.data.UnEquip(EquipedSpell, this);
@@ -1098,10 +1122,10 @@ namespace EoE.Entities
 					selectablesChanged = true;
 					SelectableItems[i] = null;
 				}
-				if (SelectableSpellItems[i] != null && SelectableSpellItems[i].stackSize <= 0)
+				if (SelectableActivationCompoundItems[i] != null && SelectableActivationCompoundItems[i].stackSize <= 0)
 				{
 					selectablesChanged = true;
-					SelectableSpellItems[i] = null;
+					SelectableActivationCompoundItems[i] = null;
 				}
 			}
 			if (selectablesChanged)
@@ -1133,7 +1157,7 @@ namespace EoE.Entities
 				for (int i = 0; i < SELECTABLE_ITEMS_AMOUNT; i++)
 				{
 					int valIndex = ValidatedID(i + selectedSpellItemIndex);
-					if (SelectableSpellItems[valIndex] != null)
+					if (SelectableActivationCompoundItems[valIndex] != null)
 					{
 						selectedSpellItemIndex = valIndex;
 						EquipedSpell.data.Equip(EquipedSpell, this);
@@ -1377,6 +1401,19 @@ namespace EoE.Entities
 				return true;
 			}
 			return false;
+		}
+		#endregion
+		#region  Debug
+		private void OnDrawGizmos()
+		{
+			if (!Application.isPlaying)
+				return;
+
+			Gizmos.color = Color.green;
+			Gizmos.DrawLine(transform.position, transform.position + controllDirection * 2);
+
+			Gizmos.color = Color.cyan;
+			Gizmos.DrawLine(modelTransform.position, modelTransform.position + modelTransform.up * 2.5f);
 		}
 		#endregion
 	}

@@ -104,7 +104,7 @@ namespace EoE.Information
 			FloatField(new GUIContent("Item Drop Random Velocity Strenght"), ref settings.ItemDropRandomVelocityStrenght, 1);
 
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
-			SliderField(new GUIContent("Item Sell Multiplier"), ref settings.ItemSellMultiplier, 0, 1, 1);
+			FloatSliderField(new GUIContent("Item Sell Multiplier"), ref settings.ItemSellMultiplier, 0, 1, 1);
 			IntField(new GUIContent("Base Currency Per Soul"), ref settings.BaseCurrencyPerSoul, 1);
 			IntField(new GUIContent("Extra Random Currency Per Soul"), ref settings.ExtraRandomCurrencyPerSoul, 1);
 		}

@@ -85,10 +85,10 @@ MonoBehaviour:
   LookAroundDelayMin: 0.5
   LookAroundDelayMax: 2
   BehaiviorPatterns:
-  - TargetSpell: {fileID: 11400000, guid: defef5ad8c8e8bd439af319acc00f9c1, type: 2}
+  - TargetCompound: {fileID: 11400000, guid: d1a413eb4f2c804488f2c61892b9d9e8, type: 2}
     MinRange: 8
     MaxRange: 25
-  - TargetSpell: {fileID: 11400000, guid: bb6dd2d14c707074980d88c8fcb02b8b, type: 2}
+  - TargetCompound: {fileID: 11400000, guid: 1427a68c8a1ff1747bc67c8053391444, type: 2}
     MinRange: 0
     MaxRange: 8
   CooldownBehaivior: 2
