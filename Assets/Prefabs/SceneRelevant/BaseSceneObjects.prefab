@@ -7256,6 +7256,7 @@ MonoBehaviour:
   playerSettings: {fileID: 11400000, guid: 3d517d6da82d5bf4a9f88e6e105f9701, type: 2}
   combatMusicIndex: 1
   buffDisplay: {fileID: 3851637758163964485}
+  head: {fileID: 7146123351138628662}
   modelTransform: {fileID: 3596067884162313355}
 --- !u!143 &3194758928428608329
 CharacterController:

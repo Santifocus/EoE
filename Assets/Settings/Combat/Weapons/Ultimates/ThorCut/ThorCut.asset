@@ -80,6 +80,7 @@ MonoBehaviour:
       Restrictions:
         ActionRestrictions: -1
         MovementRestrictions: -1
+      CausedCooldown: 0
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 1
       AnimationSpeedCurve:

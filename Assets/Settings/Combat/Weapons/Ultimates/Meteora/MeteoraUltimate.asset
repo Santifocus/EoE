@@ -71,8 +71,9 @@ MonoBehaviour:
     AttackSequenceParts:
     - AnimationTarget: 4
       Restrictions:
-        ActionRestrictions: 0
+        ActionRestrictions: -1
         MovementRestrictions: -1
+      CausedCooldown: 0
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 2
       AnimationSpeedCurve:
