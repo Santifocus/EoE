@@ -37,7 +37,7 @@ namespace EoE.UI
 			ChangeOnScreenState(true);
 			ChangeOnScreenState(false);
 		}
-		private void Update()
+		private void LateUpdate()
 		{
 			isShown = Player.Instance.TargetedEntitie != null;
 			bool changedColor = false;

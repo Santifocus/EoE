@@ -7,5 +7,7 @@ namespace EoE.Information
 	{
 		public Sprite dialogueIcon = default;
 		public bool pauseTimeWhenDisplaying = false;
+		[Tooltip("On which canvas should this Object be spawned on?")]
+		public CanvasTarget CanvasTarget = CanvasTarget.Main;
 	}
 }

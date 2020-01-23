@@ -1010,7 +1010,7 @@ namespace EoE.Entities
 									target.coll.bounds.extents.z * (Random.value - 0.5f) * 2);
 			}
 		}
-		protected FXInstance[] ActivateActivationEffects(ActivationEffect[] activationEffects, float multiplier = 1)
+		public FXInstance[] ActivateActivationEffects(ActivationEffect[] activationEffects, float multiplier = 1)
 		{
 			CombatObject combatData = ScriptableObject.CreateInstance<CombatObject>();
 			combatData.BasePhysicalDamage = SelfSettings.BasePhysicalDamage;

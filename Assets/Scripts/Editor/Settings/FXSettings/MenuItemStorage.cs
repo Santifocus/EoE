@@ -52,6 +52,7 @@ namespace EoE.Information
 		[MenuItem("EoE/LevelingSettings")] public static void CreateLevelingSettings() => AssetCreator<LevelingSettings>("Settings", "EntitieSettings", "LevelingSettings");
 		[MenuItem("EoE/ShopInventory")] public static void CreateShopInventory() => AssetCreator<ShopInventory>("Settings", "InteractableSettings");
 		[MenuItem("EoE/ConditionObject")] public static void CreateConditionObject() => AssetCreator<ConditionObject>("Settings", "ConditionObjects");
+		[MenuItem("EoE/TutorialSettings")] public static void CreateTutorialSettings() => AssetCreator<TutorialSettings>("Settings");
 
 		//Data Managers
 		[MenuItem("EoE/DataManagement/Collect Items")]

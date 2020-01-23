@@ -10,15 +10,18 @@ namespace EoE.UI
 		public static DialogueController Instance { get; private set; }
 		private const string SPLITTER = ColoredText.COLOR_CLOSER + "<color=#00000000>";
 
-		[SerializeField] private RectTransform dialogueBoxParent = default;
-		private DialogueBox dialogueContainer;
+		[SerializeField] private RectTransform dialogueBoxParentMain = default;
+		[SerializeField] private RectTransform dialogueBoxParentMenu = default;
+		private DialogueBox dialogueContainerMain;
+		private DialogueBox dialogueContainerMenu;
 		private List<QueuedDialogue> quedDialogues;
 		private bool displayingDialogue;
 
 		private void Start()
 		{
 			Instance = this;
-			dialogueContainer = Instantiate(GameController.CurrentGameSettings.DialogueBoxPrefab, dialogueBoxParent);
+			dialogueContainerMain = Instantiate(GameController.CurrentGameSettings.DialogueBoxPrefab, dialogueBoxParentMain);
+			dialogueContainerMenu = Instantiate(GameController.CurrentGameSettings.DialogueBoxPrefab, dialogueBoxParentMenu);
 			quedDialogues = new List<QueuedDialogue>();
 			ClearDisplay();
 		}
@@ -38,9 +41,15 @@ namespace EoE.UI
 
 			while (quedDialogues.Count > 0)
 			{
-				dialogueContainer.gameObject.SetActive(true);
 				QueuedDialogue targetDialogue = quedDialogues[0];
 				quedDialogues.RemoveAt(0);
+
+				dialogueContainerMain.gameObject.SetActive(false);
+				dialogueContainerMenu.gameObject.SetActive(false);
+
+				bool inMain = targetDialogue.BaseInfo.CanvasTarget == CanvasTarget.Main;
+				DialogueBox dialogueContainer = inMain ? dialogueContainerMain : dialogueContainerMenu;
+				dialogueContainer.gameObject.SetActive(true);
 
 				dialogueContainer.icon = targetDialogue.BaseInfo.dialogueIcon;
 				dialogueContainer.TextDisplay.text = "";
@@ -61,7 +70,9 @@ namespace EoE.UI
 
 						yield return new WaitForEndOfFrame();
 
-						indexTimer += Time.unscaledDeltaTime;
+						if(!inMain || !GameController.GameIsPaused)
+							indexTimer += Time.unscaledDeltaTime;
+
 						while ((indexTimer >= GameController.CurrentGameSettings.DialogueDelayPerLetter) && (curInsertIndex < nonColoredText.Length))
 						{
 							if (!GameController.CurrentGameSettings.SkipDelayOnSpace || nonColoredText[curInsertIndex] != ' ')
@@ -87,8 +98,11 @@ namespace EoE.UI
 
 		private void ClearDisplay()
 		{
-			dialogueContainer.TextDisplay.text = "";
-			dialogueContainer.gameObject.SetActive(false);
+			dialogueContainerMain.TextDisplay.text = "";
+			dialogueContainerMenu.TextDisplay.text = "";
+
+			dialogueContainerMain.gameObject.SetActive(false);
+			dialogueContainerMenu.gameObject.SetActive(false);
 		}
 	}
 

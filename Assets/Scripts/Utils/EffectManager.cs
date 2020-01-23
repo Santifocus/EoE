@@ -110,7 +110,7 @@ namespace EoE
 						AllScreenShakes[i].Update(Time.deltaTime);
 						if (AllScreenShakes[i].ShouldBeRemoved && AllScreenShakes[i].AllowedToRemove())
 						{
-							AllScreenShakes[i].OnRemove();
+							AllScreenShakes[i].Remove();
 							AllScreenShakes.RemoveAt(i);
 							i--;
 						}
@@ -207,7 +207,7 @@ namespace EoE
 					AllRumbles[i].Update(Time.unscaledDeltaTime);
 					if (AllRumbles[i].ShouldBeRemoved && AllRumbles[i].AllowedToRemove())
 					{
-						AllRumbles[i].OnRemove();
+						AllRumbles[i].Remove();
 						AllRumbles.RemoveAt(i);
 						i--;
 					}
@@ -288,7 +288,7 @@ namespace EoE
 					AllScreenColorEffects[i].Update(Time.deltaTime);
 					if (AllScreenColorEffects[i].ShouldBeRemoved && AllScreenColorEffects[i].AllowedToRemove())
 					{
-						AllScreenColorEffects[i].OnRemove();
+						AllScreenColorEffects[i].Remove();
 						AllScreenColorEffects.RemoveAt(i);
 						i--;
 					}
@@ -363,7 +363,7 @@ namespace EoE
 					AllBlurScreenEffects[i].Update(Time.deltaTime);
 					if (AllBlurScreenEffects[i].ShouldBeRemoved && AllBlurScreenEffects[i].AllowedToRemove())
 					{
-						AllBlurScreenEffects[i].OnRemove();
+						AllBlurScreenEffects[i].Remove();
 						AllBlurScreenEffects.RemoveAt(i);
 						i--;
 					}
@@ -436,7 +436,7 @@ namespace EoE
 					AllTintScreenEffects[i].Update(Time.deltaTime);
 					if (AllTintScreenEffects[i].ShouldBeRemoved && AllTintScreenEffects[i].AllowedToRemove())
 					{
-						AllTintScreenEffects[i].OnRemove();
+						AllTintScreenEffects[i].Remove();
 						AllTintScreenEffects.RemoveAt(i);
 						i--;
 					}
@@ -518,7 +518,7 @@ namespace EoE
 					AllTimeDilationsEffects[i].Update(Time.unscaledDeltaTime);
 					if (AllTimeDilationsEffects[i].ShouldBeRemoved && AllTimeDilationsEffects[i].AllowedToRemove())
 					{
-						AllTimeDilationsEffects[i].OnRemove();
+						AllTimeDilationsEffects[i].Remove();
 						AllTimeDilationsEffects.RemoveAt(i);
 						i--;
 					}
@@ -599,7 +599,7 @@ namespace EoE
 						AllCameraFOVWarpEffects[i].Update(Time.deltaTime);
 						if (AllCameraFOVWarpEffects[i].ShouldBeRemoved && AllCameraFOVWarpEffects[i].AllowedToRemove())
 						{
-							AllCameraFOVWarpEffects[i].OnRemove();
+							AllCameraFOVWarpEffects[i].Remove();
 							AllCameraFOVWarpEffects.RemoveAt(i);
 							i--;
 						}
@@ -672,7 +672,7 @@ namespace EoE
 					AllDialogues[i].Update(Time.unscaledDeltaTime);
 					if (AllDialogues[i].ShouldBeRemoved && AllDialogues[i].AllowedToRemove())
 					{
-						AllDialogues[i].OnRemove();
+						AllDialogues[i].Remove();
 						AllDialogues.RemoveAt(i);
 						i--;
 					}
@@ -738,7 +738,7 @@ namespace EoE
 					AllNotifications[i].Update(Time.deltaTime);
 					if (AllNotifications[i].ShouldBeRemoved && AllNotifications[i].AllowedToRemove())
 					{
-						AllNotifications[i].OnRemove();
+						AllNotifications[i].Remove();
 						AllNotifications.RemoveAt(i);
 						i--;
 					}
@@ -799,7 +799,7 @@ namespace EoE
 					AllCustomUIs[i].Update(Time.deltaTime);
 					if (AllCustomUIs[i].ShouldBeRemoved && AllCustomUIs[i].AllowedToRemove())
 					{
-						AllCustomUIs[i].OnRemove();
+						AllCustomUIs[i].Remove();
 						AllCustomUIs.RemoveAt(i);
 						i--;
 					}
@@ -887,7 +887,7 @@ namespace EoE
 					AllSoundFXs[i].Update(Time.fixedDeltaTime);
 					if (AllSoundFXs[i].ShouldBeRemoved && AllSoundFXs[i].AllowedToRemove())
 					{
-						AllSoundFXs[i].OnRemove();
+						AllSoundFXs[i].Remove();
 						AllSoundFXs.RemoveAt(i);
 						i--;
 					}
@@ -976,7 +976,7 @@ namespace EoE
 					AllParticleFXs[i].Update(Time.fixedDeltaTime);
 					if (AllParticleFXs[i].ShouldBeRemoved && AllParticleFXs[i].AllowedToRemove())
 					{
-						AllParticleFXs[i].OnRemove();
+						AllParticleFXs[i].Remove();
 						AllParticleFXs.RemoveAt(i);
 						i--;
 					}
@@ -1156,6 +1156,7 @@ namespace EoE
 		public abstract FXType Type { get; }
 		public abstract FXObject BaseInfo { get; }
 		public bool ShouldBeRemoved { get; private set; }
+		public bool IsRemoved { get; private set; }
 		public float baseMultiplier;
 
 		protected Transform parent;
@@ -1253,6 +1254,11 @@ namespace EoE
 		}
 		public virtual bool AllowedToRemove() => true;
 		protected virtual void InternalUpdate() { }
+		public void Remove()
+		{
+			IsRemoved = true;
+			OnRemove();
+		}
 		public virtual void OnRemove() { }
 	}
 	#endregion
