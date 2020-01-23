@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
-  m_Name: Tutorial_Souls
+  m_Name: TutorialLevelUp
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
@@ -18,10 +18,14 @@ MonoBehaviour:
     OnParentDeath: 0
     OnTimeout: 0
     TimeStay: 1
+    OnConditionMet: 0
+    Condition: {fileID: 0}
   parts:
   - textColor: {r: 0, g: 0, b: 0, a: 1}
-    text: 'Killing Enemys releases Souls. Collect enough of them to get a '
-  - textColor: {r: 1, g: 0, b: 0.77600336, a: 1}
-    text: Level Up
+    text: 'When you get a Level Up, you earn '
+  - textColor: {r: 1, g: 0, b: 0.8960533, a: 1}
+    text: Skillpoints and Attributepoints
   - textColor: {r: 0, g: 0, b: 0, a: 1}
-    text: '!'
+    text: . You can use them in your Charactermenu to get stronger!
+  dialogueIcon: {fileID: 0}
+  pauseTimeWhenDisplaying: 0

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
-  m_Name: Tutorial_FallDamage
+  m_Name: TutorialJump
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
@@ -18,10 +18,14 @@ MonoBehaviour:
     OnParentDeath: 0
     OnTimeout: 0
     TimeStay: 1
+    OnConditionMet: 0
+    Condition: {fileID: 0}
   parts:
   - textColor: {r: 0, g: 0, b: 0, a: 1}
-    text: Watch Out! If you fall down from too high, you will
-  - textColor: {r: 1, g: 0, b: 0.9137182, a: 1}
-    text: receive damage
+    text: Press
+  - textColor: {r: 1, g: 0, b: 0.93979645, a: 1}
+    text: A
   - textColor: {r: 0, g: 0, b: 0, a: 1}
-    text: '!'
+    text: to jump and get on higher terrain.
+  dialogueIcon: {fileID: 0}
+  pauseTimeWhenDisplaying: 0

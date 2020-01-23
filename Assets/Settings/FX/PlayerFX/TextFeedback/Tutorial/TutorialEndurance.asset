@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
-  m_Name: Tutorial_Equip
+  m_Name: TutorialEndurance
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
@@ -18,14 +18,15 @@ MonoBehaviour:
     OnParentDeath: 0
     OnTimeout: 0
     TimeStay: 1
+    OnConditionMet: 0
+    Condition: {fileID: 0}
   parts:
   - textColor: {r: 0, g: 0, b: 0, a: 1}
-    text: You picked up an
-  - textColor: {r: 1, g: 0, b: 0.9371233, a: 1}
-    text: item.
+    text: 'Take care of your '
+  - textColor: {r: 1, g: 0.0047169924, b: 0.85295177, a: 1}
+    text: Endurance Bar
   - textColor: {r: 0, g: 0, b: 0, a: 1}
-    text: They will be saved in your Inventory. Press
-  - textColor: {r: 1, g: 0, b: 0.93725497, a: 1}
-    text: Select
-  - textColor: {r: 0, g: 0, b: 0, a: 1}
-    text: to open your Character Menu.
+    text: .Your character needs endurance to attack or dodge. If the bar gets empty,
+      you still can walk around.
+  dialogueIcon: {fileID: 0}
+  pauseTimeWhenDisplaying: 0

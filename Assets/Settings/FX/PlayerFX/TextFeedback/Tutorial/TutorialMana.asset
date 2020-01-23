@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
-  m_Name: Tutorial_Jump
+  m_Name: TutorialMana
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
@@ -18,10 +18,14 @@ MonoBehaviour:
     OnParentDeath: 0
     OnTimeout: 0
     TimeStay: 1
+    OnConditionMet: 0
+    Condition: {fileID: 0}
   parts:
   - textColor: {r: 0, g: 0, b: 0, a: 1}
-    text: Press
-  - textColor: {r: 1, g: 0, b: 0.93979645, a: 1}
-    text: A
+    text: 'Casting Spells needs '
+  - textColor: {r: 1, g: 0, b: 0.95985556, a: 1}
+    text: Mana
   - textColor: {r: 0, g: 0, b: 0, a: 1}
-    text: to jump and get on higher terrain.
+    text: . Take care of your Manabar! it regenerates very slowly.
+  dialogueIcon: {fileID: 0}
+  pauseTimeWhenDisplaying: 0

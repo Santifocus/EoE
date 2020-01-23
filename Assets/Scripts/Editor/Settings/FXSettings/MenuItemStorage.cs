@@ -25,7 +25,7 @@ namespace EoE.Information
 		[MenuItem("EoE/FX/TimeDilation")] public static void CreateTimeDilation() => AssetCreator<TimeDilation>("Settings", "FX");
 		[MenuItem("EoE/FX/ParticleEffect")] public static void CreateParticleEffect() => AssetCreator<ParticleEffect>("Settings", "FX");
 		[MenuItem("EoE/FX/CameraFOVWarp")] public static void CreateCameraFOVWarp() => AssetCreator<CameraFOVWarp>("Settings", "FX");
-		[MenuItem("EoE/FX/DialogueInput")] public static void CreateDialogueInput() => AssetCreator<Dialogue>("Settings", "FX");
+		[MenuItem("EoE/FX/Dialogue")] public static void CreateDialogu() => AssetCreator<Dialogue>("Settings", "FX");
 		[MenuItem("EoE/FX/Notification")] public static void CreateNotification() => AssetCreator<Notification>("Settings", "FX");
 		[MenuItem("EoE/FX/CustomUI")] public static void CreateCustomUI() => AssetCreator<CustomUI>("Settings", "FX");
 
@@ -97,18 +97,27 @@ namespace EoE.Information
 		public static void CleanObjectNames()
 		{
 			bool onlyAllowLocalNamespace = true;
-			System.Type typeToClean = typeof(ScriptableObject);
-			string[] GUIDs = AssetDatabase.FindAssets("t:" + typeToClean.Name, new[] { "Assets/Settings" });
+			string[] textToReplaceWithSpaces = new string[] { "_", ".", ",", "SFX", "FX", "Effect", "Particles", "Particle" };
 
+			System.Type typeToClean = typeof(Sounds.Sound);
+			string[] GUIDs = AssetDatabase.FindAssets("t:" + typeToClean.Name, new[] { "Assets/Settings/FX" });
+			Debug.Log("Found: " + GUIDs.Length + " targeted objects");
+
+			string addToEnd = "";
 			for (int i = 0; i < GUIDs.Length; i++)
 			{
 				string path = AssetDatabase.GUIDToAssetPath(GUIDs[i]);
 				Object obj = (Object)AssetDatabase.LoadAssetAtPath(path, typeof(Object));
+				System.Type objType = obj.GetType();
 
-				if (onlyAllowLocalNamespace && !(obj.GetType()).Namespace.StartsWith("EoE"))
+				if (onlyAllowLocalNamespace && !(objType).Namespace.StartsWith("EoE"))
 					continue;
 
-				string spacedName = obj.name.Replace("_", " ").Replace(".", " ");
+				string spacedName = obj.name;
+				for(int j = 0; j < textToReplaceWithSpaces.Length; j++)
+				{
+					spacedName = spacedName.Replace(textToReplaceWithSpaces[j], " ");
+				}
 				string pascalCasedName = "";
 				bool lastWasSpace = true;
 				for (int j = 0; j < spacedName.Length; j++)
@@ -129,7 +138,37 @@ namespace EoE.Information
 				}
 
 				string newName = pascalCasedName.Replace(" ", "");
-				AssetDatabase.RenameAsset(path, newName);
+
+				string toAdd = GetEnding(objType);
+				if(!newName.EndsWith(toAdd))
+					newName += toAdd;
+
+				if(newName != obj.name)
+					AssetDatabase.RenameAsset(path, newName);
+			}
+		}
+		private static string GetEnding(System.Type type)
+		{
+			switch (type.Name)
+			{
+				case "SoundEffect":
+					return "SFX";
+				case "ParticleEffect":
+					return "Particles";
+				case "ScreenBlur":
+					return "Blur";
+				case "ScreenShake":
+					return "Shake";
+				case "ScreenBorderColor":
+					return "BorderColor";
+				case "CameraFOVWarp":
+					return "FOVWarp";
+				case "CustomUI":
+					return "UI";
+				case "ControllerRumble":
+					return "Rumble";
+				default:
+					return type.Name;
 			}
 		}
 		//Context menu
