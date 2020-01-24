@@ -187,6 +187,50 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1150218645, guid: 0757910cd8dd9de46a029eadd8331155, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1535357390727112187, guid: 0757910cd8dd9de46a029eadd8331155,
+        type: 3}
+      propertyPath: m_fontColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1535357390727112187, guid: 0757910cd8dd9de46a029eadd8331155,
+        type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278190079
+      objectReference: {fileID: 0}
+    - target: {fileID: 1037198068667889194, guid: 0757910cd8dd9de46a029eadd8331155,
+        type: 3}
+      propertyPath: m_fontColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1037198068667889194, guid: 0757910cd8dd9de46a029eadd8331155,
+        type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 1509949439
+      objectReference: {fileID: 0}
+    - target: {fileID: 3362099839159233378, guid: 0757910cd8dd9de46a029eadd8331155,
+        type: 3}
+      propertyPath: m_fontColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3362099839159233378, guid: 0757910cd8dd9de46a029eadd8331155,
+        type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 1509949439
+      objectReference: {fileID: 0}
+    - target: {fileID: 3252536383967698435, guid: 0757910cd8dd9de46a029eadd8331155,
+        type: 3}
+      propertyPath: m_fontColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3252536383967698435, guid: 0757910cd8dd9de46a029eadd8331155,
+        type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 1509949439
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0757910cd8dd9de46a029eadd8331155, type: 3}
 --- !u!1001 &264524231
@@ -1679,6 +1723,31 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!1 &1122428061 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3524210061452703458, guid: 0757910cd8dd9de46a029eadd8331155,
+    type: 3}
+  m_PrefabInstance: {fileID: 49953027}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1122428065
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1122428061}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 132df8337b770b14a81fcc76e5bfe23b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1131026301
 GameObject:
   m_ObjectHideFlags: 0
