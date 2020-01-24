@@ -879,10 +879,12 @@ namespace EoE
 					GUILayout.Space(6);
 					LineBreak(new Color(0.5f, 0.25f, 0.65f, 1), false);
 					LineBreak(new Color(0.5f, 0.25f, 0.65f, 1), false);
-					Header("Attack Effects", offSet);
+					Header("Effects", offSet);
 
-					SerializedProperty attackEffectsProperty = property.FindPropertyRelative(nameof(settings.AttackEffects));
-					DrawArray<AttackActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AttackEffects))), ref settings.AttackEffects, attackEffectsProperty, DrawAttackActivationEffect, new GUIContent(". Effect"), offSet + 1);
+					DrawArray<AttackActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartEffectsOnUser))), ref settings.StartEffectsOnUser, property.FindPropertyRelative(nameof(settings.StartEffectsOnUser)), DrawAttackActivationEffect, new GUIContent(". Effect"), offSet + 1);
+					DrawArray<AttackActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WhileEffectsOnUser))), ref settings.WhileEffectsOnUser, property.FindPropertyRelative(nameof(settings.WhileEffectsOnUser)), DrawAttackActivationEffect, new GUIContent(". Effect"), offSet + 1);
+					DrawArray<AttackActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartEffectsOnWeapon))), ref settings.StartEffectsOnWeapon, property.FindPropertyRelative(nameof(settings.StartEffectsOnWeapon)), DrawAttackActivationEffect, new GUIContent(". Effect"), offSet + 1);
+					DrawArray<AttackActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WhileEffectsOnWeapon))), ref settings.WhileEffectsOnWeapon, property.FindPropertyRelative(nameof(settings.WhileEffectsOnWeapon)), DrawAttackActivationEffect, new GUIContent(". Effect"), offSet + 1);
 				}
 				string IndexToName()
 				{

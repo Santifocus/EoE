@@ -99,7 +99,7 @@ MonoBehaviour:
       OverridenCauseType: 0
       ComboIncreaseMaxDelay: 3
       OnHitComboWorth: 1
-      AttackEffects:
+      StartEffectsOnUser:
       - AtAnimationPoint: 0.1
         Effect:
           ChanceToActivate: 1
@@ -130,6 +130,9 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+      WhileEffectsOnUser: []
+      StartEffectsOnWeapon: []
+      WhileEffectsOnWeapon: []
     - AnimationTarget: 2
       Restrictions:
         ActionRestrictions: -1
@@ -195,7 +198,7 @@ MonoBehaviour:
       OverridenCauseType: 0
       ComboIncreaseMaxDelay: 4
       OnHitComboWorth: 1
-      AttackEffects:
+      StartEffectsOnUser:
       - AtAnimationPoint: 0.1
         Effect:
           ChanceToActivate: 1
@@ -226,6 +229,9 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+      WhileEffectsOnUser: []
+      StartEffectsOnWeapon: []
+      WhileEffectsOnWeapon: []
     - AnimationTarget: 4
       Restrictions:
         ActionRestrictions: -1
@@ -320,7 +326,7 @@ MonoBehaviour:
       OverridenCauseType: 0
       ComboIncreaseMaxDelay: 3
       OnHitComboWorth: 1
-      AttackEffects:
+      StartEffectsOnUser:
       - AtAnimationPoint: 0.55
         Effect:
           ChanceToActivate: 1
@@ -351,6 +357,9 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+      WhileEffectsOnUser: []
+      StartEffectsOnWeapon: []
+      WhileEffectsOnWeapon: []
     PartsMaxDelays:
     - 0.2
     - 0.2
@@ -421,7 +430,7 @@ MonoBehaviour:
       OverridenCauseType: 0
       ComboIncreaseMaxDelay: 1
       OnHitComboWorth: 1
-      AttackEffects:
+      StartEffectsOnUser:
       - AtAnimationPoint: 0.1
         Effect:
           ChanceToActivate: 1
@@ -452,6 +461,9 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+      WhileEffectsOnUser: []
+      StartEffectsOnWeapon: []
+      WhileEffectsOnWeapon: []
     PartsMaxDelays: []
   JumpAttackSequence:
     AttackSequenceParts:
@@ -524,7 +536,7 @@ MonoBehaviour:
       OverridenCauseType: 0
       ComboIncreaseMaxDelay: 1
       OnHitComboWorth: 1
-      AttackEffects:
+      StartEffectsOnUser:
       - AtAnimationPoint: 0.3
         Effect:
           ChanceToActivate: 1
@@ -555,6 +567,9 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+      WhileEffectsOnUser: []
+      StartEffectsOnWeapon: []
+      WhileEffectsOnWeapon: []
     PartsMaxDelays:
     - 0
   RunJumpAttackSequence:
@@ -628,7 +643,7 @@ MonoBehaviour:
       OverridenCauseType: 0
       ComboIncreaseMaxDelay: 1
       OnHitComboWorth: 1
-      AttackEffects:
+      StartEffectsOnUser:
       - AtAnimationPoint: 0.35
         Effect:
           ChanceToActivate: 1
@@ -659,6 +674,9 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+      WhileEffectsOnUser: []
+      StartEffectsOnWeapon: []
+      WhileEffectsOnWeapon: []
     PartsMaxDelays:
     - 0
   ComboEffects: {fileID: 11400000, guid: 4e7be449530b2d44fb6413e980a881e2, type: 2}

@@ -241,6 +241,7 @@ namespace EoE.Combatery
 			InAttackSequence = true;
 			Player.Instance.animationControl.SetBool("InFight", true);
 			int curSequenceIndex = 0;
+			List<FXInstance> whileBoundEffects = null;
 			while (true)
 			{
 				ActiveAttackStyle = targetSequence.AttackSequenceParts[curSequenceIndex];
@@ -266,6 +267,9 @@ namespace EoE.Combatery
 				curChargeMultiplier = ActiveAttackStyle.ChargeSettings.StartCharge;
 				curAttackAnimationPoint = 0;
 				ChangeWeaponState(false, null);
+
+				FXManager.FinishFX(ref whileBoundEffects);
+				whileBoundEffects = new List<FXInstance>();
 
 				float multiplier;
 				if (ActiveAttackStyle.AnimationMultiplicationType == MultiplicationType.FlatValue)
@@ -316,19 +320,51 @@ namespace EoE.Combatery
 					float smallerPoint = Mathf.Min(newAnimationPoint, curAttackAnimationPoint);
 					float biggerPoint = Mathf.Max(newAnimationPoint, curAttackAnimationPoint);
 					curAttackAnimationPoint = newAnimationPoint;
-					for (int i = 0; i < ActiveAttackStyle.AttackEffects.Length; i++)
+
+					//OnUserStart
+					for (int i = 0; i < ActiveAttackStyle.StartEffectsOnUser.Length; i++)
 					{
-						float point = ActiveAttackStyle.AttackEffects[i].AtAnimationPoint;
+						float point = ActiveAttackStyle.StartEffectsOnUser[i].AtAnimationPoint;
 						if ((point >= smallerPoint) && (point < biggerPoint))
 						{
-							ActiveAttackStyle.AttackEffects[i].Effect.Activate(Player.Instance, curBaseData);
+							ActiveAttackStyle.StartEffectsOnUser[i].Effect.Activate(Player.Instance, curBaseData);
+						}
+					}
+
+					//OnUserWhile
+					for (int i = 0; i < ActiveAttackStyle.WhileEffectsOnUser.Length; i++)
+					{
+						float point = ActiveAttackStyle.WhileEffectsOnUser[i].AtAnimationPoint;
+						if ((point >= smallerPoint) && (point < biggerPoint))
+						{
+							whileBoundEffects.AddRange(ActiveAttackStyle.WhileEffectsOnUser[i].Effect.Activate(Player.Instance, curBaseData));
+						}
+					}
+
+					//OnWeaponStart
+					for (int i = 0; i < ActiveAttackStyle.StartEffectsOnWeapon.Length; i++)
+					{
+						float point = ActiveAttackStyle.StartEffectsOnWeapon[i].AtAnimationPoint;
+						if ((point >= smallerPoint) && (point < biggerPoint))
+						{
+							ActiveAttackStyle.StartEffectsOnWeapon[i].Effect.Activate(Player.Instance, curBaseData, 1, transform);
+						}
+					}
+
+					//OnWeaponWhile
+					for (int i = 0; i < ActiveAttackStyle.WhileEffectsOnWeapon.Length; i++)
+					{
+						float point = ActiveAttackStyle.WhileEffectsOnWeapon[i].AtAnimationPoint;
+						if ((point >= smallerPoint) && (point < biggerPoint))
+						{
+							whileBoundEffects.AddRange(ActiveAttackStyle.WhileEffectsOnWeapon[i].Effect.Activate(Player.Instance, curBaseData, 1, transform));
 						}
 					}
 
 					//Check if any wait conditions are true
 					//First check if the animation point is correct, and then check the condition state
 					//if both are true: stop the animation and wait until they are false
-					for(int i = 0; i < ActiveAttackStyle.WaitSettings.Length; i++)
+					for (int i = 0; i < ActiveAttackStyle.WaitSettings.Length; i++)
 					{
 						if((ActiveAttackStyle.WaitSettings[i].MinAnimtionPoint <= curAttackAnimationPoint) && (ActiveAttackStyle.WaitSettings[i].MaxAnimtionPoint > curAttackAnimationPoint))
 						{
@@ -450,6 +486,8 @@ namespace EoE.Combatery
 
 			ActiveAttackStyle.Restrictions.ApplyRestriction(Player.Instance, false);
 		AttackFinished:;
+
+			FXManager.FinishFX(ref whileBoundEffects);
 
 			//Apply cooldowns
 			animationResetCooldown = ANIMATION_RESET_COOLDOWN;

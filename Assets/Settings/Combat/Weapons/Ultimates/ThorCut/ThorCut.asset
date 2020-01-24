@@ -151,7 +151,7 @@ MonoBehaviour:
       OverridenCauseType: 0
       ComboIncreaseMaxDelay: 1
       OnHitComboWorth: 1
-      AttackEffects:
+      StartEffectsOnUser:
       - AtAnimationPoint: 0
         Effect:
           ChanceToActivate: 1
@@ -275,5 +275,8 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+      WhileEffectsOnUser: []
+      StartEffectsOnWeapon: []
+      WhileEffectsOnWeapon: []
     PartsMaxDelays:
     - 0

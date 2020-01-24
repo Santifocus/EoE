@@ -105,7 +105,10 @@ namespace EoE.Combatery
 		public int OnHitComboWorth = 1;
 
 		//Attack effects
-		public AttackActivationEffect[] AttackEffects = new AttackActivationEffect[0];
+		public AttackActivationEffect[] StartEffectsOnUser = new AttackActivationEffect[0];
+		public AttackActivationEffect[] WhileEffectsOnUser = new AttackActivationEffect[0];
+		public AttackActivationEffect[] StartEffectsOnWeapon = new AttackActivationEffect[0];
+		public AttackActivationEffect[] WhileEffectsOnWeapon = new AttackActivationEffect[0];
 
 		public static bool HasCollisionMask(ColliderMask collisionMask, ColliderMask flag)
 		{
