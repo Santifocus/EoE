@@ -31,12 +31,18 @@ namespace EoE
 			Instance = this;
 			CameraFOV = Player.PlayerSettings.CameraBaseFOV;
 
-			curOffset = GetOffset();
-			playerCamera.transform.localPosition = new Vector3(0, 0, -Player.PlayerSettings.CameraToPlayerDistance);
-			transform.position = Player.Instance.transform.position + curOffset;
+			//Anchor Rotation
 			TargetRotation = CurRotation = new Vector2(Player.Instance.transform.eulerAngles.y, Player.PlayerSettings.CameraVerticalAngleClamps.y / 2);
+			transform.eulerAngles = new Vector3(CurRotation.y, CurRotation.x, 0);
 
-			AnchorToPlayer();
+			//Anchor Position
+			curOffset = GetOffset();
+			transform.position = Player.Instance.transform.position + curOffset;
+
+			//Camera Position
+			playerCamera.transform.localPosition = new Vector3(0, 0, -1);
+			float camDist = GetCameraDistance();
+			playerCamera.transform.localPosition = new Vector3(0, 0, camDist);
 		}
 		private void LateUpdate()
 		{
@@ -45,7 +51,7 @@ namespace EoE
 		}
 		private void AnchorToPlayer()
 		{
-			if (!Player.Existant)
+			if (!Player.Instance.Alive)
 			{
 				rotationSpeedMutliplier = 0.05f;
 				LookInDirection(-Player.Instance.transform.up);
@@ -59,7 +65,16 @@ namespace EoE
 												);
 
 			transform.eulerAngles = new Vector3(CurRotation.y, CurRotation.x, 0);
+			UpdateLocalCameraPosition();
 
+			if (Player.Instance.TargetedEntitie)
+			{
+				Vector3 dir = (Player.Instance.TargetedEntitie.actuallWorldPosition - playerCamera.transform.position).normalized;
+				LookInDirection(dir);
+			}
+		}
+		private void UpdateLocalCameraPosition()
+		{
 			float camDist = GetCameraDistance();
 			if (camDist > playerCamera.transform.localPosition.z)
 			{
@@ -68,12 +83,6 @@ namespace EoE
 			else
 			{
 				playerCamera.transform.localPosition = new Vector3(0, 0, Mathf.Lerp(playerCamera.transform.localPosition.z, camDist, Time.deltaTime * 3));
-			}
-
-			if (Player.Instance.TargetedEntitie)
-			{
-				Vector3 dir = (Player.Instance.TargetedEntitie.actuallWorldPosition - playerCamera.transform.position).normalized;
-				LookInDirection(dir);
 			}
 		}
 		public void LookInDirection(Vector3 direction)

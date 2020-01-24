@@ -56,6 +56,7 @@ namespace EoE.Entities
 		private float curAcceleration;
 		private bool lastOnGroundState = true;
 		private float lastFallVelocity;
+		private int disallowFallingAnimFrames = 10;
 
 		//Feedback
 		private Vector2 curModelTilt;
@@ -528,7 +529,17 @@ namespace EoE.Entities
 
 			//If so: we enable the falling animation and add extra velocity for a better looking fallcurve
 			curStates.Falling = falling;
-			animationControl.SetBool("Fall", falling);
+
+			if (disallowFallingAnimFrames > 0)
+			{
+				disallowFallingAnimFrames--;
+				animationControl.SetBool("Fall", false);
+			}
+			else
+			{
+				animationControl.SetBool("Fall", falling);
+			}
+
 			if (falling)
 			{
 				GravityControl(GameController.CurrentGameSettings.WhenFallingExtraGravity);
