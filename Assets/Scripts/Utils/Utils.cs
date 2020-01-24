@@ -26,10 +26,10 @@ namespace EoE
 			iterations--;
 			return iterations == 0 ? value : Polarize01(value, iterations);
 		}
-		public static float SpringLerp(float curValue, float targetValue, ref float acceleration, float springStiffness, float lerpPoint)
+		public static float SpringLerp(float curValue, float targetValue, ref float acceleration, float springStiffness, float lerpStep)
 		{
-			acceleration = Mathf.Lerp(acceleration, (targetValue - curValue) * springStiffness, lerpPoint);
-			return curValue + acceleration;
+			acceleration = Mathf.Lerp(acceleration, (targetValue - curValue) * springStiffness, lerpStep);
+			return curValue + acceleration * lerpStep;
 		}
 	}
 }

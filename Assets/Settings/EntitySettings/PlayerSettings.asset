@@ -64,8 +64,8 @@ MonoBehaviour:
   NoMoveDeceleration: 3
   InAirAccelerationMultiplier: 0.3
   CameraToPlayerDistance: 7
-  CameraYLerpSpeed: 20
-  CameraYLerpSringStiffness: 0.1
+  CameraYLerpSpeed: 15
+  CameraYLerpSringStiffness: 0.7
   CameraAnchorOffset: {x: 0, y: 1.4, z: 0}
   CameraAnchorOffsetWhenTargeting: {x: 1.4, y: 1.7, z: 0}
   CameraRotationPower: {x: 200, y: 75}
@@ -127,9 +127,9 @@ MonoBehaviour:
     ItemCount: 1
     ForceEquip: 0
   InventorySize: 55
-  MaxModelTilt: 6
-  SideTurnSpringLerpSpeed: 13
-  SideTurnLerpSpringStiffness: 0.1
+  MaxModelTilt: 7
+  SideTurnSpringLerpSpeed: 10
+  SideTurnLerpSpringStiffness: 0.85
   WalkAnimationLerpSpeed: 4
   AnimationWalkSpeedDivider: 10
   BodyTurnHorizontalClamp: 30
