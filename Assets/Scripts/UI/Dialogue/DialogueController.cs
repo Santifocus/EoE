@@ -70,7 +70,7 @@ namespace EoE.UI
 
 						yield return new WaitForEndOfFrame();
 
-						if(!inMain || !GameController.GameIsPaused)
+						if(!inMain || targetDialogue.BaseInfo.pauseTimeWhenDisplaying || !GameController.GameIsPaused)
 							indexTimer += Time.unscaledDeltaTime;
 
 						while ((indexTimer >= GameController.CurrentGameSettings.DialogueDelayPerLetter) && (curInsertIndex < nonColoredText.Length))

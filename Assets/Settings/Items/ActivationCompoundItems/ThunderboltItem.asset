@@ -34,7 +34,7 @@ MonoBehaviour:
     text: ' Applies Stun'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: .
-  - textColor: {r: 0, g: 0.05755472, b: 1, a: 1}
+  - textColor: {r: 0, g: 0.42751026, b: 1, a: 1}
     text: Manacost 22
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: .

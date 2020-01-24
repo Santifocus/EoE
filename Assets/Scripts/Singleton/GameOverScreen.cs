@@ -101,15 +101,19 @@ namespace EoE.UI
 		}
 		public void OnRestart()
 		{
-			GameController.ActivePauses = 0;
+			if (SceneLoader.Transitioning)
+				return;
+
 			EffectManager.ResetScreenEffects();
-			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+			SceneLoader.TransitionToScene(SceneManager.GetActiveScene().buildIndex);
 		}
 		public void OnQuit()
 		{
-			GameController.ActivePauses = 0;
+			if (SceneLoader.Transitioning)
+				return;
+
 			EffectManager.ResetScreenEffects();
-			SceneManager.LoadScene(ConstantCollector.MAIN_MENU_SCENE_INDEX);
+			SceneLoader.TransitionToScene(ConstantCollector.MAIN_MENU_SCENE_INDEX);
 		}
 		private void OnDestroy()
 		{

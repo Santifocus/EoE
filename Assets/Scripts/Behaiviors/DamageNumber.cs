@@ -1,7 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 
-namespace EoE
+namespace EoE.UI
 {
 	public class DamageNumber : MonoBehaviour, IPoolableObject<DamageNumber>
 	{

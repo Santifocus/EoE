@@ -26,7 +26,7 @@ namespace EoE
 		   get => activePauses;
 			set
 			{
-				activePauses = value;
+				activePauses = Math.Max(0, value);
 				bool newPauseState = activePauses > 0;
 				if (newPauseState != GameIsPaused)
 					SetPauseGamestate(newPauseState);

@@ -26,8 +26,8 @@ MonoBehaviour:
     text: ' Targeted'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: .
-  - textColor: {r: 0.011712551, g: 0, b: 1, a: 1}
-    text: Manacost 2 for each Projectile
+  - textColor: {r: 0, g: 0.42751026, b: 1, a: 1}
+    text: Manacost 2
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: .
   SortingID: 13

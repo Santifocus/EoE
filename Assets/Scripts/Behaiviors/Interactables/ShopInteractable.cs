@@ -40,7 +40,7 @@ namespace EoE.Entities
 				GameController.BeginDelayedCall(() => { GameController.Shop.BuildShop(shopDataInstance); showingInteractInfo = false; },
 												0,
 												TimeType.Realtime,
-												() => info.ShouldBeRemoved
+												() => info.IsRemoved
 												);
 												
 			}

@@ -25,3 +25,4 @@ MonoBehaviour:
     text: It's dangerous out there.... you could need some supplies...
   dialogueIcon: {fileID: 21300000, guid: 7ac5b50b5a024fd4f9d2cc3e4de77eeb, type: 3}
   pauseTimeWhenDisplaying: 1
+  CanvasTarget: 1

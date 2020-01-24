@@ -23,7 +23,10 @@ namespace EoE
 		}
 		public void StartGame()
 		{
-			SceneManager.LoadScene(ConstantCollector.GAME_SCENE_INDEX);
+			if (SceneLoader.Transitioning)
+				return;
+
+			SceneLoader.TransitionToScene(ConstantCollector.GAME_SCENE_INDEX);
 		}
 		public void OpenSettings()
 		{

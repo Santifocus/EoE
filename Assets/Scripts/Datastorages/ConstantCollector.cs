@@ -15,6 +15,8 @@
 
 		public const int MAIN_MENU_SCENE_INDEX = 0;
 		public const int GAME_SCENE_INDEX = 1;
+		public const int TUTORIAL_SCENE_INDEX = 2;
+		public const int LOAD_SCENE_INDEX = 3;
 
 		public const string MENU_NAV_SOUND = "MenuNavigation";
 		public const string FAILED_MENU_NAV_SOUND = "FailedMenuNavigation";
