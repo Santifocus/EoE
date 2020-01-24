@@ -34,7 +34,8 @@ MonoBehaviour:
   WeaponRotationOffset: {x: 0, y: 0, z: 25}
   StandAttackSequence:
     AttackSequenceParts:
-    - AnimationTarget: 1
+    - AnimationStartPoint: 0
+      AnimationTarget: 1
       Restrictions:
         ActionRestrictions: -1
         MovementRestrictions: 0
@@ -133,7 +134,8 @@ MonoBehaviour:
       WhileEffectsOnUser: []
       StartEffectsOnWeapon: []
       WhileEffectsOnWeapon: []
-    - AnimationTarget: 2
+    - AnimationStartPoint: 0
+      AnimationTarget: 2
       Restrictions:
         ActionRestrictions: -1
         MovementRestrictions: 0
@@ -232,7 +234,8 @@ MonoBehaviour:
       WhileEffectsOnUser: []
       StartEffectsOnWeapon: []
       WhileEffectsOnWeapon: []
-    - AnimationTarget: 4
+    - AnimationStartPoint: 0
+      AnimationTarget: 4
       Restrictions:
         ActionRestrictions: -1
         MovementRestrictions: 3
@@ -365,7 +368,8 @@ MonoBehaviour:
     - 0.2
   RunAttackSequence:
     AttackSequenceParts:
-    - AnimationTarget: 2
+    - AnimationStartPoint: 0
+      AnimationTarget: 2
       Restrictions:
         ActionRestrictions: -1
         MovementRestrictions: -1
@@ -467,7 +471,8 @@ MonoBehaviour:
     PartsMaxDelays: []
   JumpAttackSequence:
     AttackSequenceParts:
-    - AnimationTarget: 4
+    - AnimationStartPoint: 0
+      AnimationTarget: 4
       Restrictions:
         ActionRestrictions: -1
         MovementRestrictions: 3
@@ -574,7 +579,8 @@ MonoBehaviour:
     - 0
   RunJumpAttackSequence:
     AttackSequenceParts:
-    - AnimationTarget: 4
+    - AnimationStartPoint: 0
+      AnimationTarget: 4
       Restrictions:
         ActionRestrictions: -1
         MovementRestrictions: 3

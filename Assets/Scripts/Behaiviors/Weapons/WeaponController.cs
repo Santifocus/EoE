@@ -265,7 +265,7 @@ namespace EoE.Combatery
 				float animationTimer = 0;
 				wantsToBeginNextSequence = false;
 				curChargeMultiplier = ActiveAttackStyle.ChargeSettings.StartCharge;
-				curAttackAnimationPoint = 0;
+				curAttackAnimationPoint = ActiveAttackStyle.AnimationStartPoint;
 				ChangeWeaponState(false, null);
 
 				FXManager.FinishFX(ref whileBoundEffects);
@@ -278,11 +278,16 @@ namespace EoE.Combatery
 				}
 				else
 				{
-					multiplier = ActiveAttackStyle.AnimationSpeedCurve.Evaluate(1) * ActiveAttackStyle.AnimationSpeedCurveMultiplier;
+					multiplier = ActiveAttackStyle.AnimationSpeedCurve.Evaluate(curAttackAnimationPoint) * ActiveAttackStyle.AnimationSpeedCurveMultiplier;
 				}
 				multiplier = Mathf.Round(multiplier * 10) / 10;
 				SetAnimationSpeed(multiplier);
-				Player.Instance.animationControl.SetTrigger(ActiveAttackStyle.AnimationTarget.ToString());
+
+				if (ActiveAttackStyle.AnimationStartPoint == 0)
+					Player.Instance.animationControl.SetTrigger(ActiveAttackStyle.AnimationTarget.ToString());
+				else
+					Player.Instance.animationControl.Play(ActiveAttackStyle.AnimationTarget.ToString(), -1, ActiveAttackStyle.AnimationStartPoint);
+
 				do
 				{
 					yield return new WaitForEndOfFrame();

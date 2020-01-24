@@ -63,6 +63,7 @@ namespace EoE.Combatery
 	public class AttackStyle
 	{
 		//Animation Settings
+		public float AnimationStartPoint = 0;
 		public AttackAnimation AnimationTarget = AttackAnimation.Attack1;
 		public RestrictionData Restrictions = new RestrictionData();
 		public float CausedCooldown = 0;

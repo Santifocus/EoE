@@ -804,12 +804,10 @@ namespace EoE
 					//Animation
 					Header("Animation Settings", offSet);
 					EnumField<AttackAnimation>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationTarget))), ref settings.AnimationTarget, offSet + 1);
-					DrawRestrictionData(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Restrictions))), settings.Restrictions, property.FindPropertyRelative(nameof(settings.Restrictions)), offSet + 1);
-
-					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CausedCooldown))), ref settings.CausedCooldown, offSet + 1);
+					EnumField<MultiplicationType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationMultiplicationType))), ref settings.AnimationMultiplicationType, offSet + 1);
 
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 0.25f));
-					EnumField<MultiplicationType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationMultiplicationType))), ref settings.AnimationMultiplicationType, offSet + 1);
+					FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationStartPoint))), ref settings.AnimationStartPoint, 0, 1, offSet + 1);
 					if (settings.AnimationMultiplicationType == MultiplicationType.FlatValue)
 					{
 						if (FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationSpeedFlatValue))), ref settings.AnimationSpeedFlatValue, offSet + 1))
@@ -826,6 +824,10 @@ namespace EoE
 							settings.AnimationSpeedCurveTimeframe = Mathf.Max(settings.AnimationSpeedCurveTimeframe, 0);
 						}
 					}
+					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
+					DrawRestrictionData(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Restrictions))), settings.Restrictions, property.FindPropertyRelative(nameof(settings.Restrictions)), offSet + 1);
+
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CausedCooldown))), ref settings.CausedCooldown, offSet + 1);
 
 					//Wait Settings
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));

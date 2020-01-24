@@ -76,7 +76,8 @@ MonoBehaviour:
     CreatedRemenants: []
   AttackData:
     AttackSequenceParts:
-    - AnimationTarget: 2
+    - AnimationStartPoint: 0
+      AnimationTarget: 2
       Restrictions:
         ActionRestrictions: -1
         MovementRestrictions: -1
