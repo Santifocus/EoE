@@ -12,7 +12,7 @@ namespace EoE
 		public static SceneLoader Instance { get; private set; }
 		public static bool Transitioning => Instance.transitioning;
 
-		[SerializeField] private Image blackPlane = default;
+		[SerializeField] private GameObject blackPlane = default;
 		[SerializeField] private float fadeTime = 0.5f;
 		[SerializeField] private float minLoadSceneTime = 2;
 
@@ -23,14 +23,26 @@ namespace EoE
 		private bool transitioning;
 		private int targetSceneID;
 
+		private Graphic[] blackPlaneGraphics;
+		private float[] blackPlaneAlphaValues;
+
 		private void Start()
 		{
 			Instance = this;
-			blackPlane.gameObject.SetActive(false);
 
 			for(int i = 0; i < possibleHints.Length; i++)
 			{
 				possibleHints[i].SetActive(false);
+			}
+
+			//Fetch alpha values of the blackplane and its children
+			blackPlane.SetActive(false);
+			blackPlaneGraphics = blackPlane.GetComponentsInChildren<Graphic>();
+			blackPlaneAlphaValues = new float[blackPlaneGraphics.Length];
+			for (int i = 0; i < blackPlaneGraphics.Length; i++)
+			{
+				blackPlaneAlphaValues[i] = blackPlaneGraphics[i].color.a;
+				blackPlaneGraphics[i].color = new Color(blackPlaneGraphics[i].color.r, blackPlaneGraphics[i].color.g, blackPlaneGraphics[i].color.b, 0);
 			}
 		}
 		public static void TransitionToScene(int sceneID)
@@ -44,18 +56,22 @@ namespace EoE
 		private IEnumerator TransitionControl()
 		{
 			transitioning = true;
-			blackPlane.gameObject.SetActive(true);
-
 			AsyncOperation loadingSceneLoadOperation = SceneManager.LoadSceneAsync(ConstantCollector.LOAD_SCENE_INDEX);
 			loadingSceneLoadOperation.allowSceneActivation = false;
 
+			blackPlane.SetActive(true);
 			//Fade in blackout
 			float timer = 0;
 			while (timer < fadeTime)
 			{
 				yield return new WaitForEndOfFrame();
 				timer += Time.unscaledDeltaTime;
-				blackPlane.color = new Color(0, 0, 0, timer / fadeTime);
+
+				float alphaMul = timer / fadeTime;
+				for (int i = 0; i < blackPlaneGraphics.Length; i++)
+				{
+					blackPlaneGraphics[i].color = new Color(blackPlaneGraphics[i].color.r, blackPlaneGraphics[i].color.g, blackPlaneGraphics[i].color.b, blackPlaneAlphaValues[i] * alphaMul);
+				}
 			}
 
 			//Switch to loading scene
@@ -107,23 +123,33 @@ namespace EoE
 				timer += Time.unscaledDeltaTime;
 				float alphaMul = 1 - (timer / fadeTime);
 
-				blackPlane.color = new Color(0, 0, 0, alphaMul);
+				//BlackPlane graphics
+				for (int i = 0; i < blackPlaneGraphics.Length; i++)
+				{
+					blackPlaneGraphics[i].color = new Color(blackPlaneGraphics[i].color.r, blackPlaneGraphics[i].color.g, blackPlaneGraphics[i].color.b, blackPlaneAlphaValues[i] * alphaMul);
+				}
+				//Hint graphics
 				for (int i = 0; i < hintAlphaValues.Length; i++)
 				{
 					hintGraphics[i].color = new Color(hintGraphics[i].color.r, hintGraphics[i].color.g, hintGraphics[i].color.b, alphaMul * hintAlphaValues[i]);
 				}
 			}
 
-			//Disable the hint
-			targetTipp.SetActive(false);
 			//Reset all alpha values
+			//BlackPlane graphics
+			for (int i = 0; i < blackPlaneGraphics.Length; i++)
+			{
+				blackPlaneGraphics[i].color = new Color(blackPlaneGraphics[i].color.r, blackPlaneGraphics[i].color.g, blackPlaneGraphics[i].color.b, 0);
+			}
+			//Hint graphics
 			for (int i = 0; i < hintAlphaValues.Length; i++)
 			{
 				hintGraphics[i].color = new Color(hintGraphics[i].color.r, hintGraphics[i].color.g, hintGraphics[i].color.b, hintAlphaValues[i]);
 			}
 
 			transitioning = false;
-			blackPlane.gameObject.SetActive(false);
+			blackPlane.SetActive(false);
+			targetTipp.SetActive(false);
 		}
 	}
 }

@@ -16,8 +16,13 @@ namespace EoE.Sounds
 		private void Start()
 		{
 			selfInstance = new MusicInstance(startVolume, priority, targetMusicIndex);
+			CheckRange();
 		}
 		private void Update()
+		{
+			CheckRange();
+		}
+		private void CheckRange()
 		{
 			if (Player.Existant)
 			{
@@ -25,7 +30,7 @@ namespace EoE.Sounds
 				bool playerInRange = dist < (radius * radius);
 				selfInstance.WantsToPlay = playerInRange;
 
-				if(!selfInstance.IsAdded && playerInRange)
+				if (!selfInstance.IsAdded && playerInRange)
 				{
 					MusicController.Instance.AddMusicInstance(selfInstance);
 				}

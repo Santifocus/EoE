@@ -30,6 +30,7 @@ namespace EoE.Sounds
 
 				soundPlayer.transform.SetParent(transform);
 				soundPlayer.Setup(MusicList[i]);
+				soundPlayer.FadePoint = 0;
 
 				musicPlayer[i] = soundPlayer;
 			}
