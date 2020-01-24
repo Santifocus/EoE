@@ -13,6 +13,7 @@ namespace EoE
 	public class EffectManager : MonoBehaviour
 	{
 		#region Fields
+		private const int DAMAGE_NUMBER_BASE_POOLSIZE = 50;
 		private static EffectManager Instance;
 		[SerializeField] private Material screenEffectMaterial = default;
 		[SerializeField] private Transform cameraShakeCore = default;
@@ -27,8 +28,21 @@ namespace EoE
 
 			BaseFixedDeltaTime = Time.fixedDeltaTime;
 			ResetScreenEffectMat();
-			damageNumberPool = new PoolableObject<DamageNumber>(50, true, damageNumberPrefab, Storage.ParticleStorage);
 			Instance = this;
+			StartCoroutine(DamageNumberPoolCreation());
+		}
+		private IEnumerator DamageNumberPoolCreation()
+		{
+			//We slowly add objects to the pool so the stress on the first frame is reduced
+			//In case of a sudden spike of required damage numbers the pool will automatically create missing ones
+			//So we dont have to worry about running out of instances
+			damageNumberPool = new PoolableObject<DamageNumber>(0, true, damageNumberPrefab, Storage.ParticleStorage);
+
+			while(damageNumberPool.PoolSize < DAMAGE_NUMBER_BASE_POOLSIZE)
+			{ 
+				yield return new WaitForEndOfFrame();
+				damageNumberPool.PoolSize += 1;
+			}
 		}
 		public static void ResetScreenEffects()
 		{

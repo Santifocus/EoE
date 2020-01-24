@@ -400,9 +400,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blackPlane: {fileID: 1150218647}
-  fadeTime: 0.8
-  minLoadSceneTime: 3.5
-  hintFadeTime: 0.5
+  fadeTime: 0.5
+  minLoadSceneTime: 5
+  hintFadeTime: 1
   possibleHints:
   - {fileID: 321488846}
   - {fileID: 5976066184677773384}

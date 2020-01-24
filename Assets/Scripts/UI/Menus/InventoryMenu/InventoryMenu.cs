@@ -34,6 +34,7 @@ namespace EoE.UI
 		private bool equipSlotsOpen;
 		private bool equippedItemsSelected;
 		private bool dropMenuOpen;
+		private bool isSetup;
 
 		public int curSlotIndex { get; private set; }
 
@@ -41,9 +42,24 @@ namespace EoE.UI
 		private int equipedSlotIndex;
 		private List<ItemAction> allowedActions = new List<ItemAction>();
 
-		protected override void Start()
+		protected override void ResetPage()
 		{
-			base.Start();
+			if (!isSetup)
+				Setup();
+
+			curSlotIndex = 0;
+			SelectSlot(false);
+			actionMenuOpen = dropMenuOpen = equipSlotsOpen = false;
+
+			if (dropMenuOpen)
+				HideDropMenu();
+			UpdateEquippedSlots();
+			UpdateCurrencyDisplay();
+		}
+		private void Setup()
+		{
+			isSetup = true;
+
 			slots = new InventorySlot[Player.Instance.Inventory.Length];
 			for (int i = 0; i < Player.Instance.Inventory.Length; i++)
 			{
@@ -57,29 +73,18 @@ namespace EoE.UI
 			EventManager.PlayerCurrencyChangedEvent += UpdateCurrencyDisplay;
 			UpdateAllSlots();
 		}
+		private void Update()
+		{
+			if (!ActivePage)
+				return;
+			SelectControll();
+		}
 		private void UpdateAllSlots()
 		{
 			for (int i = 0; i < slots.Length; i++)
 			{
 				slots[i].UpdateDisplay();
 			}
-		}
-		protected override void ResetPage()
-		{
-			curSlotIndex = 0;
-			SelectSlot(false);
-			actionMenuOpen = dropMenuOpen = equipSlotsOpen = false;
-
-			if (dropMenuOpen)
-				HideDropMenu();
-			UpdateEquippedSlots();
-			UpdateCurrencyDisplay();
-		}
-		private void Update()
-		{
-			if (!ActivePage)
-				return;
-			SelectControll();
 		}
 		private void SelectControll()
 		{

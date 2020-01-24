@@ -8,7 +8,7 @@ namespace EoE.Sounds
 	public class MusicArea : MonoBehaviour
 	{
 		[SerializeField] private float radius = 20;
-		[SerializeField] private float startVolume = 0;
+		[Range(0, 1)] [SerializeField] private float startVolume = 0;
 		[SerializeField] private int priority = 1;
 		[SerializeField] private int targetMusicIndex = 0;
 		private MusicInstance selfInstance;

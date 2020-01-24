@@ -34,7 +34,7 @@ namespace EoE.UI
 		[SerializeField] private TextMeshProUGUI experienceDisplay = default;
 
 		[Space(10)]
-		[SerializeField] private int[] weaponHoldpointChildIndexes = new int[] { 0, 8, 1 };
+		[SerializeField] private int[] weaponHoldpointChildIndexes = default;
 
 		private bool playerModelSetup;
 		private Transform cameraAnchor;
@@ -45,11 +45,6 @@ namespace EoE.UI
 		private Vector2 curRotation;
 		private Vector2 targetRotation;
 
-		protected override void Start()
-		{
-			SetupPlayerModel();
-			base.Start();
-		}
 		private void Update()
 		{
 			if (!ActivePage || !playerModelSetup)
