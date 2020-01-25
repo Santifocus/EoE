@@ -10,23 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
-  m_Name: Tutorial2.2Charge
+  m_Name: Tutorial2.2Targeting
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0
+  TimeOut: 2
   FinishConditions:
     OnParentDeath: 0
-    OnTimeout: 1
+    OnTimeout: 0
     TimeStay: 3
-    OnConditionMet: 0
-    Condition: {fileID: 0}
+    OnConditionMet: 1
+    Conditions:
+    - {fileID: 11400000, guid: 280b76991508dc34cba8214296c979e6, type: 2}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: The 3. Comboattack can be charged. After the second attack press
-  - textColor: {r: 0, g: 0.23424363, b: 1, a: 1}
-    text: X
+    text: Press
+  - textColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    text: ' LT'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: 'and hold to charge. Release the button to attack with a powerful swordslash. '
+    text: ' to target your enemy and focus on him. If there are more than one enemy,
+      you can switch targets with'
+  - textColor: {r: 1, g: 0, b: 0.88550186, a: 1}
+    text: ' the right analogstick'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: .
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

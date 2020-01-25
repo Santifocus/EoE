@@ -13,24 +13,25 @@ MonoBehaviour:
   m_Name: Tutorial2.1Attack
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0
+  TimeOut: 1
   FinishConditions:
     OnParentDeath: 0
-    OnTimeout: 1
+    OnTimeout: 0
     TimeStay: 3
-    OnConditionMet: 0
-    Condition: {fileID: 0}
+    OnConditionMet: 1
+    Conditions:
+    - {fileID: 11400000, guid: 829d566ffa6523145a2c846d6b3c0097, type: 2}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: 'Press '
+    text: Press
   - textColor: {r: 0, g: 0.14202714, b: 1, a: 1}
-    text: X
+    text: ' X'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: 'to attack. By pressing '
+    text: ' to attack. By pressing'
   - textColor: {r: 0, g: 0.13172197, b: 1, a: 1}
-    text: X
+    text: ' X'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: multiple times you can do combo attacks.
+    text: ' multiple times you can do combo attacks.'
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

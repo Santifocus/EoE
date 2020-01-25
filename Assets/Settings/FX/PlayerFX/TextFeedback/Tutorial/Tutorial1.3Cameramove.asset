@@ -13,20 +13,21 @@ MonoBehaviour:
   m_Name: Tutorial1.3Cameramove
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0
+  TimeOut: 1
   FinishConditions:
     OnParentDeath: 0
-    OnTimeout: 1
+    OnTimeout: 0
     TimeStay: 3
-    OnConditionMet: 0
-    Condition: {fileID: 0}
+    OnConditionMet: 1
+    Conditions:
+    - {fileID: 11400000, guid: 01dac211d4fe82444a4dfcad4451f94d, type: 2}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Use the
   - textColor: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}
-    text: Right Analogstick
+    text: ' Right Analogstick'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: to look around.
+    text: ' to look around.'
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

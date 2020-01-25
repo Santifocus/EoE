@@ -13,20 +13,21 @@ MonoBehaviour:
   m_Name: Tutorial3.3InMenu
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0
+  TimeOut: 1
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 0
     TimeStay: 2
     OnConditionMet: 1
-    Condition: {fileID: 11400000, guid: db867c11bf9e6c849bf2b6c3d6d02e81, type: 2}
+    Conditions:
+    - {fileID: 11400000, guid: db867c11bf9e6c849bf2b6c3d6d02e81, type: 2}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: On this page you can see your character stats. Press
   - textColor: {r: 0.4433962, g: 0.4433962, b: 0.4433962, a: 1}
-    text: LB
+    text: ' LB'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: to switch into your inventory
+    text: ' to switch into your inventory.'
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 2

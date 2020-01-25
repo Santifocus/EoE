@@ -87,7 +87,7 @@ namespace EoE.Information
 				DOTCooldowns[i] -= Time.deltaTime;
 			}
 
-			return (RemainingTime <= 0) || (Base.FinishConditions.OnConditionMet && Base.FinishConditions.Condition.ConditionMet());
+			return (RemainingTime <= 0) || (Base.FinishConditions.OnConditionMet && Base.FinishConditions.ConditionMet());
 		}
 		public void OnRemove()
 		{

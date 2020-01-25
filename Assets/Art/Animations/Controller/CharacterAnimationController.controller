@@ -609,7 +609,7 @@ AnimatorController:
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
   - serializedVersion: 5
-    m_Name: ArmLayer
+    m_Name: AttackLayer
     m_StateMachine: {fileID: 7772141983199357097}
     m_Mask: {fileID: 0}
     m_Motions: []
@@ -1303,7 +1303,7 @@ AnimatorStateMachine:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ArmLayer
+  m_Name: AttackLayer
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 3265468208156040598}

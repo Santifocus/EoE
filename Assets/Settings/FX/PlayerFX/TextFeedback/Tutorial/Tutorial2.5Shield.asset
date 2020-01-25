@@ -10,25 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
-  m_Name: TutorialWelcome
+  m_Name: Tutorial2.5Shield
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0
+  TimeOut: 1
   FinishConditions:
     OnParentDeath: 0
-    OnTimeout: 1
-    TimeStay: 3
-    OnConditionMet: 0
-    Condition: {fileID: 0}
+    OnTimeout: 0
+    TimeStay: 2
+    OnConditionMet: 1
+    Conditions:
+    - {fileID: 11400000, guid: 3985d2a5d356b3a4485a816935b3611e, type: 2}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: 'Welcome to '
-  - textColor: {r: 1, g: 0, b: 0.95985556, a: 1}
-    text: Echoes of Erynnia
+    text: By pressing
+  - textColor: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 1}
+    text: ' RT'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: .
-  - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Before you start your Journey you need to learn how to play
+    text: ' you can activate a magic shield that blocks all enemy attacks.'
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

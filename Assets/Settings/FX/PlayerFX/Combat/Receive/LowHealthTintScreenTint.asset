@@ -19,6 +19,6 @@ MonoBehaviour:
     OnTimeout: 0
     TimeStay: 0
     OnConditionMet: 0
-    Condition: {fileID: 0}
+    Conditions: []
   TintColor: {r: 1, g: 0, b: 0, a: 0.13333334}
   Dominance: 2

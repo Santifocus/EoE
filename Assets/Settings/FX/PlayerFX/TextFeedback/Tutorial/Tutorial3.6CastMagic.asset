@@ -19,7 +19,7 @@ MonoBehaviour:
     OnTimeout: 1
     TimeStay: 3
     OnConditionMet: 0
-    Condition: {fileID: 11400000, guid: db867c11bf9e6c849bf2b6c3d6d02e81, type: 2}
+    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: 'Your equiped ring is shown '

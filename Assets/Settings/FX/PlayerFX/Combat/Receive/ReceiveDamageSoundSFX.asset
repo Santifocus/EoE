@@ -19,7 +19,7 @@ MonoBehaviour:
     OnTimeout: 0
     TimeStay: 1
     OnConditionMet: 0
-    Condition: {fileID: 0}
+    Conditions: []
   TargetSound: {fileID: 11400000, guid: d89549f45a8e6c843af0b4221b09a602, type: 2}
   FollowTarget: 1
   OffsetToTarget: {x: 0, y: 0, z: 0}

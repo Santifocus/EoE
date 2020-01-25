@@ -13,20 +13,21 @@ MonoBehaviour:
   m_Name: Tutorial1.5Jump
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0
+  TimeOut: 1
   FinishConditions:
     OnParentDeath: 0
-    OnTimeout: 1
+    OnTimeout: 0
     TimeStay: 3
-    OnConditionMet: 0
-    Condition: {fileID: 0}
+    OnConditionMet: 1
+    Conditions:
+    - {fileID: 11400000, guid: 620d22bd17b3ac3468a8971c1855826b, type: 2}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: 'Press '
   - textColor: {r: 0.027350426, g: 1, b: 0, a: 1}
-    text: A
+    text: ' A'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: to jump.
+    text: ' to jump.'
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

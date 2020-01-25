@@ -41,20 +41,22 @@ namespace EoE.Information
 		}
 		public enum InputTarget
 		{
-			Enter = 1,
-			Back = 2,
-			Action = 3,
-			Special = 4,
-			Up = 5,
-			Down = 6,
-			Right = 7,
-			Left = 8,
+			A = 1,
+			B = 2,
+			X = 3,
+			Y = 4,
+			UpArrow = 5,
+			DownArrow = 6,
+			RightArrow = 7,
+			LeftArrow = 8,
 			RightBumper = 9,
 			LeftBumper = 10,
 			RightTrigger = 11,
 			LeftTrigger = 12,
 			Menu = 13,
 			Pause = 14,
+			CameraReset = 15,
+			MovingCamera = 16,
 		}
 		public enum InputCheckStyle
 		{
@@ -78,7 +80,7 @@ namespace EoE.Information
 		public StateTarget stateTarget = StateTarget.PlayerOnGround;
 
 		//Input
-		public InputTarget inputTarget = InputTarget.Enter;
+		public InputTarget inputTarget = InputTarget.A;
 		public InputCheckStyle inputCheckStyle = InputCheckStyle.Down;
 		#endregion
 		#region ConditionMetRequest
@@ -212,34 +214,38 @@ namespace EoE.Information
 		{
 			switch (inputTarget)
 			{
-				case InputTarget.Enter:
+				case InputTarget.A:
 					return InputValidation(InputController.MenuEnter);
-				case InputTarget.Back:
+				case InputTarget.B:
 					return InputValidation(InputController.MenuBack);
-				case InputTarget.Action:
+				case InputTarget.X:
 					return InputValidation(InputController.Attack);
-				case InputTarget.Special:
-					return InputValidation(InputController.HeavyAttack);
-				case InputTarget.Up:
+				case InputTarget.Y:
+					return InputValidation(InputController.Special);
+				case InputTarget.UpArrow:
 					return InputValidation(InputController.MenuUp);
-				case InputTarget.Down:
+				case InputTarget.DownArrow:
 					return InputValidation(InputController.MenuDown);
-				case InputTarget.Right:
+				case InputTarget.RightArrow:
 					return InputValidation(InputController.MenuRight);
-				case InputTarget.Left:
+				case InputTarget.LeftArrow:
 					return InputValidation(InputController.MenuLeft);
 				case InputTarget.RightBumper:
-					return InputValidation(InputController.MagicCast);
+					return InputValidation(InputController.Cast);
 				case InputTarget.LeftBumper:
 					return InputValidation(InputController.UseItem);
 				case InputTarget.RightTrigger:
-					return InputValidation(InputController.Block);
+					return InputValidation(InputController.Shield);
 				case InputTarget.LeftTrigger:
 					return InputValidation(InputController.Aim);
 				case InputTarget.Menu:
 					return InputValidation(InputController.PlayerMenu);
 				case InputTarget.Pause:
 					return InputValidation(InputController.Pause);
+				case InputTarget.CameraReset:
+					return InputValidation(InputController.ResetCamera);
+				case InputTarget.MovingCamera:
+					return InputValidation(InputController.CameraMove);
 			}
 			return false;
 		}
@@ -255,6 +261,11 @@ namespace EoE.Information
 					return button.Up;
 			}
 			return false;
+		}
+		private bool InputValidation(Vector2 inputValue)
+		{
+			const float valueThreshold = 0.35f;
+			return (Mathf.Abs(inputValue.x) > valueThreshold) || (Mathf.Abs(inputValue.x) > valueThreshold);
 		}
 		#endregion
 	}

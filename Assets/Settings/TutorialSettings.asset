@@ -16,13 +16,283 @@ MonoBehaviour:
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
-      ContainedEffectType: 0
+      ContainedEffectType: 2
       ImpulseVelocity: 5
       ImpulseVelocityFallOffTime: 0.5
       ImpulseVelocityDirection: 2
       ImpulseVelocityFallbackDirection: 1
       ImpulseDirectionBase: 1
-      FXObjects: []
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 46a830e2c1c2cfb4cb89436306ac0b7b, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 3bd89bd4034800c46b8d91a0fcf51d4a, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 547badf0aa7e07f45927d144fa0bfde2, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: c762d82327bcba3498f50bb480f77186, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 58a163710be11ec479ec909a52c7e4ff, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: a148d94267f97504899acb48a3bc5134, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 1def975daa90b784d90d0d0fd0751aa3, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: ce7c0b8b9251a3747a2b87191e20174e, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 79991fa66465d5f43baf25b6f9feaafd, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 1
+    DeleteDummyOnFinish: 0
+    ItemsToGive:
+    - Item: {fileID: 11400000, guid: 4389e543531ad0d4c91543a950d48174, type: 2}
+      ItemCount: 1
+      ForceEquip: 1
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 6b8418d06cf656b4b90811015d0e8526, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 18
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 5be5076af0e26924ab087644148a2302, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
       AOEEffects: []
       ProjectileInfos: []
       HealsOnUser:
@@ -38,19 +308,23 @@ MonoBehaviour:
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
-      ContainedEffectType: 16
+      ContainedEffectType: 2
       ImpulseVelocity: 5
       ImpulseVelocityFallOffTime: 0.5
       ImpulseVelocityDirection: 2
       ImpulseVelocityFallbackDirection: 1
       ImpulseDirectionBase: 1
-      FXObjects: []
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 7fda31524fe843e40aca38c2b45ced54, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
       AOEEffects: []
       ProjectileInfos: []
-      HealsOnUser:
-      - HealType: 3
-        Percent: 1
-        Amount: -200
+      HealsOnUser: []
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
@@ -58,17 +332,652 @@ MonoBehaviour:
     DeleteDummyOnFinish: 0
     ItemsToGive: []
   - DelayTime: 3
-    Effects: []
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: cc174767d5bcda146a0806ae1ac8d553, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
     ItemsToGive: []
   - DelayTime: 3
-    Effects: []
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: f70b3165b44ff044d8e38f86767ce8b8, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
     ItemsToGive: []
   - DelayTime: 3
-    Effects: []
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 0a7c8196e1624ec448df3f24c2b80c0c, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 6b6aea0083c76ac4ea7401b9edfce653, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 2f927c6823089b74f91fafdb7ad06589, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 1c2aea0f5c97c1c44920b445ca3f9e9a, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 5d367fed5f80e314bb9af1a3116148b3, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: c8390718cf7ef9246b625afd74852624, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 3fdd5543f4c951f4689a42ebb07da2ce, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 509605e81e44c7b4d9c96a09cb73f36f, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 7cb96c0eaed05124094111d7e6762424, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 2ab0073b4f07f2d4bbdf3e72b0b75fac, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: a4e56b576864c19429a7c314e05475fe, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: d40053e3881a5484ab97fb2217223b0c, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: ce64499febf0a0d42acfefbeb0f81941, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: d5d474f2e0655f149bfdc3351d46db78, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: d083bdf7da1899f40aec34c984535de1, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 494e54636409dab4b923c1c3783ebd5b, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 67a3a4955ad6aaa4f83f8ca23207dcb4, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: f58299627194f5d4daa03399f97b7e7e, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 4018156bc54919f44a062fe7004e3ff3, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 7f9297dd0ad93b248aa2959136ee4ac2, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: d58c0a66d45cdd94d9b91325a3c0c1bc, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 79604e9fefb69a54a89cc76a0cb5eede, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+    ItemsToGive: []
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 8286a18f0bf1c404e9aed50b15f1401b, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
     ItemsToGive: []

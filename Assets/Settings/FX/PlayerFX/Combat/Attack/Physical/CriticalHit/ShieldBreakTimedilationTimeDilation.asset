@@ -19,7 +19,7 @@ MonoBehaviour:
     OnTimeout: 1
     TimeStay: 1
     OnConditionMet: 0
-    Condition: {fileID: 0}
+    Conditions: []
   Scale: 0.23
   Dominance: 0
   OverwriteOtherTimeDilations: 0

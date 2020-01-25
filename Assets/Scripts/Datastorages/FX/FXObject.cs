@@ -15,6 +15,14 @@ namespace EoE.Information
 		public bool OnTimeout = false;
 		public float TimeStay = 1;
 		public bool OnConditionMet = false;
-		public ConditionObject Condition;
+		public ConditionObject[] Conditions = new ConditionObject[0];
+		public bool ConditionMet()
+		{
+			for (int i = 0; i < Conditions.Length; i++)
+				if (Conditions[i].ConditionMet())
+					return true;
+
+			return false;
+		}
 	}
 }

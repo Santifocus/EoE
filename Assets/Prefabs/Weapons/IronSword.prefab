@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8049748948004881917}
   - component: {fileID: 5533782398965989895}
   m_Layer: 0
-  m_Name: UsedSword
+  m_Name: IronSword
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,6 +29,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5605336370859891512}
+  - {fileID: 3834768772027487049}
   - {fileID: 4681802395916416683}
   - {fileID: 8229913768148886633}
   - {fileID: 6353380438990354743}
@@ -49,10 +50,75 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponHitboxes:
   - {fileID: 2820046996984904547}
-  customHitboxGroups: []
+  customHitboxGroups:
+  - Identifier: Bigger Hitbox
+    Hitboxes:
+    - {fileID: 3244832062601553662}
   particlesToActivateOnEnable:
   - {fileID: 1529624887139239058}
   dropCollision: {fileID: 5992421874928617461}
+--- !u!1 &5076659682454475381
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3834768772027487049}
+  - component: {fileID: 3244832062601553662}
+  - component: {fileID: 2610599216863348274}
+  m_Layer: 0
+  m_Name: BiggerHitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3834768772027487049
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5076659682454475381}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 9164928601959459779}
+  m_Father: {fileID: 8049748948004881917}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3244832062601553662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5076659682454475381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc3415bc752bcf74a91fc28c0f140d25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coll: {fileID: 2530495055347306632}
+--- !u!54 &2610599216863348274
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5076659682454475381}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 1
 --- !u!1 &5992421874928617461
 GameObject:
   m_ObjectHideFlags: 0
@@ -83,7 +149,7 @@ Transform:
   m_Children:
   - {fileID: 1988478697178057013}
   m_Father: {fileID: 8049748948004881917}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &7277917689014792681
 BoxCollider:
@@ -110,7 +176,7 @@ GameObject:
   - component: {fileID: 2820046996984904547}
   - component: {fileID: 2774931154231415961}
   m_Layer: 0
-  m_Name: Weapon Hitbox
+  m_Name: StandardHitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -160,6 +226,50 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 1
+--- !u!1 &7977088109660232289
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9164928601959459779}
+  - component: {fileID: 2530495055347306632}
+  m_Layer: 0
+  m_Name: Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9164928601959459779
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7977088109660232289}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3834768772027487049}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2530495055347306632
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7977088109660232289}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.75, y: 0.25, z: 2.25}
+  m_Center: {x: 0, y: 0, z: 0.375}
 --- !u!1 &8419329722186018171
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,7 +300,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8049748948004881917}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 180}
 --- !u!198 &1529624887139239058
 ParticleSystem:
@@ -5055,7 +5165,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: c68e849468d7eb949a3266651db2f287,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: c68e849468d7eb949a3266651db2f287,
         type: 3}

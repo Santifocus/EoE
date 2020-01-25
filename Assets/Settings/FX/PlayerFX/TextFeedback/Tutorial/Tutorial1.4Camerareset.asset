@@ -13,20 +13,21 @@ MonoBehaviour:
   m_Name: Tutorial1.4Camerareset
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0
+  TimeOut: 1
   FinishConditions:
     OnParentDeath: 0
-    OnTimeout: 1
+    OnTimeout: 0
     TimeStay: 3
-    OnConditionMet: 0
-    Condition: {fileID: 0}
+    OnConditionMet: 1
+    Conditions:
+    - {fileID: 11400000, guid: 78e24d27b39227b40a5143b3d8c57e82, type: 2}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: 'Press '
+    text: Press
   - textColor: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
-    text: R3
+    text: ' R3'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: to reposition the Camera to normal.
+    text: ' to reposition the Camera to normal.'
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

@@ -14,14 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Burn
   Quality: 0
-  Permanent: 0
-  BuffTime: 5
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 1
     TimeStay: 5
     OnConditionMet: 0
-    Condition: {fileID: 0}
+    Conditions: []
   Icon: {fileID: 21300000, guid: 14b2a47444220c047bfba1f20f22f643, type: 3}
   Effects: []
   CustomEffects:

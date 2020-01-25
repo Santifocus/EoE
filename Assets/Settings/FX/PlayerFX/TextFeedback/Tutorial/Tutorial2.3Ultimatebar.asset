@@ -10,32 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
-  m_Name: Tutorial2.8Shielddurability
+  m_Name: Tutorial2.3Ultimatebar
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0
+  TimeOut: 2
   FinishConditions:
     OnParentDeath: 0
-    OnTimeout: 1
+    OnTimeout: 0
     TimeStay: 3
-    OnConditionMet: 0
-    Condition: {fileID: 0}
+    OnConditionMet: 1
+    Conditions:
+    - {fileID: 11400000, guid: d9092fa191a917148ae6762f7e6197de, type: 2}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Also your Shield has a
-  - textColor: {r: 0.9699626, g: 0, b: 1, a: 1}
-    text: durability
+    text: Melee attacks on your enemy charges your
+  - textColor: {r: 1, g: 0, b: 0.98310184, a: 1}
+    text: ' Ultimate Bar'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: which goes down over use in time and by hit. It regenerates over time, but
-      if the
-  - textColor: {r: 1, g: 0, b: 0.99777555, a: 1}
-    text: durability
+    text: . If it is fully charged, you can cast a very powerful attack. Press
+  - textColor: {r: 1, g: 0.9538098, b: 0, a: 1}
+    text: ' Y'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: reaches zero, your shield will break. The
-  - textColor: {r: 1, g: 0, b: 0.90825653, a: 1}
-    text: durability
-  - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: is shown as the colour of your shield from green to red.
+    text: ' to release your ultimate.'
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

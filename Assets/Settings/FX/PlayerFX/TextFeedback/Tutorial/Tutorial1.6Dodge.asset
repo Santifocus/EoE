@@ -13,20 +13,21 @@ MonoBehaviour:
   m_Name: Tutorial1.6Dodge
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0
+  TimeOut: 1
   FinishConditions:
     OnParentDeath: 0
-    OnTimeout: 1
+    OnTimeout: 0
     TimeStay: 3
-    OnConditionMet: 0
-    Condition: {fileID: 0}
+    OnConditionMet: 1
+    Conditions:
+    - {fileID: 11400000, guid: 4f34612be4fb7ce478dec6bfa4152ffc, type: 2}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Press
   - textColor: {r: 1, g: 0, b: 0.01999569, a: 1}
-    text: B
+    text: ' B'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: to dodge and avoind enemy attacks.
+    text: ' to dodge and avoind enemy attacks.'
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

@@ -18,9 +18,12 @@ MonoBehaviour:
     OnParentDeath: 0
     OnTimeout: 0
     TimeStay: 1
+    OnConditionMet: 0
+    Conditions: []
   ParticleMainObject: {fileID: 4786585486759666015, guid: fbad92c39d5e79c45919b8db8fb1f469,
     type: 3}
   OffsetToTarget: {x: 0, y: -0.35, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}
   FollowTarget: 0
   InheritRotationOfTarget: 0
+  RotationInheritLerpSpeed: 4

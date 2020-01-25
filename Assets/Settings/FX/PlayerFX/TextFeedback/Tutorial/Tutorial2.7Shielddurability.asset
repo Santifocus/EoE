@@ -10,28 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
-  m_Name: Tutorial2.7ShieldMana
+  m_Name: Tutorial2.7Shielddurability
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 1
-    TimeStay: 2
+    TimeStay: 5
     OnConditionMet: 0
-    Condition: {fileID: 0}
+    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: 'The shield costs '
-  - textColor: {r: 0, g: 0.67276335, b: 1, a: 1}
-    text: Mana
+    text: Also your Shield has a
+  - textColor: {r: 0.9699626, g: 0, b: 1, a: 1}
+    text: ' Durability'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: 'on activation and for using over time. If your '
-  - textColor: {r: 0, g: 0.6745098, b: 1, a: 1}
-    text: Mana
+    text: ' which goes down over use in time and by hit. It regenerates over time,
+      but if the'
+  - textColor: {r: 1, g: 0, b: 0.99777555, a: 1}
+    text: ' Durability'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: runs out while using the shield, it will break and you will be stunned for
-      a few seconds.
+    text: ' reaches zero, your shield will break. The'
+  - textColor: {r: 1, g: 0, b: 0.90825653, a: 1}
+    text: ' Durability'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ' is shown as the colour of your shield from green to red.'
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

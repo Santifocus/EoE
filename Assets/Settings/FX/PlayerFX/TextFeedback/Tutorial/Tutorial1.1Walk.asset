@@ -13,20 +13,21 @@ MonoBehaviour:
   m_Name: Tutorial1.1Walk
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0
+  TimeOut: 1
   FinishConditions:
     OnParentDeath: 0
-    OnTimeout: 1
+    OnTimeout: 0
     TimeStay: 3
-    OnConditionMet: 0
-    Condition: {fileID: 0}
+    OnConditionMet: 1
+    Conditions:
+    - {fileID: 11400000, guid: a70df72b4defff240ba4694bf67f9abc, type: 2}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Use the
   - textColor: {r: 0.5943396, g: 0.5943396, b: 0.5943396, a: 1}
-    text: Left Analogstick
+    text: ' Left Analogstick'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: to walk around.
+    text: ' to walk around.'
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

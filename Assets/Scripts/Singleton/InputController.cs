@@ -14,19 +14,19 @@ namespace EoE.Controlls
 		public static Button Jump;
 		public static Button Dodge;
 		public static Button Attack;
-		public static Button HeavyAttack;
+		public static Button Special;
 
 		public static Button Run;
 		public static Button ResetCamera;
 
 		public static Button Aim;
-		public static Button Block;
+		public static Button Shield;
 
 		public static Button UseItem;
-		public static Button MagicCast;
+		public static Button Cast;
 
-		public static Button MagicScrollUp;
-		public static Button MagicScrollDown;
+		public static Button CastsScrollUp;
+		public static Button CastsScrollDown;
 		public static Button ItemScrollUp;
 		public static Button ItemScrollDown;
 
@@ -91,10 +91,10 @@ namespace EoE.Controlls
 			gameActions.NormalAttack.started += ctx => ButtonStarted(Attack);
 			gameActions.NormalAttack.canceled += ctx => ButtonEnded(Attack);
 
-			//HeavyAttack
-			HeavyAttack = new Button("HeavyAttack");
-			gameActions.HeavyAttack.started += ctx => ButtonStarted(HeavyAttack);
-			gameActions.HeavyAttack.canceled += ctx => ButtonEnded(HeavyAttack);
+			//Special
+			Special = new Button("Special");
+			gameActions.Special.started += ctx => ButtonStarted(Special);
+			gameActions.Special.canceled += ctx => ButtonEnded(Special);
 
 			//Run
 			Run = new Button("Run");
@@ -111,30 +111,30 @@ namespace EoE.Controlls
 			gameActions.Aim.started += ctx => ButtonStarted(Aim);
 			gameActions.Aim.canceled += ctx => ButtonEnded(Aim);
 
-			//Block
-			Block = new Button("Block");
-			gameActions.Block.started += ctx => ButtonStarted(Block);
-			gameActions.Block.canceled += ctx => ButtonEnded(Block);
+			//Shield
+			Shield = new Button("Shield");
+			gameActions.Shield.started += ctx => ButtonStarted(Shield);
+			gameActions.Shield.canceled += ctx => ButtonEnded(Shield);
 
 			//UseItem
 			UseItem = new Button("UseItem");
 			gameActions.UseItem.started += ctx => ButtonStarted(UseItem);
 			gameActions.UseItem.canceled += ctx => ButtonEnded(UseItem);
 
-			//MagicCast
-			MagicCast = new Button("MagicCast");
-			gameActions.MagicCast.started += ctx => ButtonStarted(MagicCast);
-			gameActions.MagicCast.canceled += ctx => ButtonEnded(MagicCast);
+			//Cast
+			Cast = new Button("Cast");
+			gameActions.Cast.started += ctx => ButtonStarted(Cast);
+			gameActions.Cast.canceled += ctx => ButtonEnded(Cast);
 
-			//MagicScrollUp
-			MagicScrollUp = new Button("MagicScrollUp");
-			gameActions.MagicScrollUp.started += ctx => ButtonStarted(MagicScrollUp);
-			gameActions.MagicScrollUp.canceled += ctx => ButtonEnded(MagicScrollUp);
+			//CastsScrollUp
+			CastsScrollUp = new Button("CastsScrollUp");
+			gameActions.CastsScrollUp.started += ctx => ButtonStarted(CastsScrollUp);
+			gameActions.CastsScrollUp.canceled += ctx => ButtonEnded(CastsScrollUp);
 
-			//MagicScrollDown
-			MagicScrollDown = new Button("MagicScrollDown");
-			gameActions.MagicScrollDown.started += ctx => ButtonStarted(MagicScrollDown);
-			gameActions.MagicScrollDown.canceled += ctx => ButtonEnded(MagicScrollDown);
+			//CastsScrollDown
+			CastsScrollDown = new Button("CastsScrollDown");
+			gameActions.CastsScrollDown.started += ctx => ButtonStarted(CastsScrollDown);
+			gameActions.CastsScrollDown.canceled += ctx => ButtonEnded(CastsScrollDown);
 
 			//ItemScrollUp
 			ItemScrollUp = new Button("ItemScrollUp");
@@ -198,7 +198,7 @@ namespace EoE.Controlls
 			menuActions.LeftPage.canceled += ctx => ButtonEnded(LeftPage);
 
 			//RightPage
-			RightPage = new Button("MenuPlayerMenu");
+			RightPage = new Button("RightPage");
 			menuActions.RightPage.started += ctx => ButtonStarted(RightPage);
 			menuActions.RightPage.canceled += ctx => ButtonEnded(RightPage);
 		}

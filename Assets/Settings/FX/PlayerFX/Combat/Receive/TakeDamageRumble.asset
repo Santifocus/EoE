@@ -19,7 +19,7 @@ MonoBehaviour:
     OnTimeout: 1
     TimeStay: 0.3
     OnConditionMet: 0
-    Condition: {fileID: 0}
+    Conditions: []
   LeftMinIntensity: 0.6
   RightMinIntensity: 0.9
   LeftMaxIntensity: 0.5

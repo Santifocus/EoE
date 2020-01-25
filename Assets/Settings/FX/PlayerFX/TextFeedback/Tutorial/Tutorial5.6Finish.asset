@@ -19,7 +19,7 @@ MonoBehaviour:
     OnTimeout: 1
     TimeStay: 3
     OnConditionMet: 0
-    Condition: {fileID: 11400000, guid: 6eb9d90b34ba45f4bb18dedd445b246a, type: 2}
+    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Congratulation for finishing the Tutorial. And now have fun and experience

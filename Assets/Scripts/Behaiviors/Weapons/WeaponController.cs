@@ -81,10 +81,12 @@ namespace EoE.Combatery
 		{
 			Instance = this;
 			this.weaponInfo = weaponInfo;
+			colliderActive = false;
 			//Standard hitboxes
 			for (int i = 0; i < weaponHitboxes.Length; i++)
 			{
 				weaponHitboxes[i].Setup(this);
+				weaponHitboxes[i].SetColliderStyle(null);
 			}
 			//Custom hitboxes
 			for (int i = 0; i < customHitboxGroups.Length; i++)
@@ -92,12 +94,13 @@ namespace EoE.Combatery
 				for (int j = 0; j < customHitboxGroups[i].Hitboxes.Length; j++)
 				{
 					customHitboxGroups[i].Hitboxes[j].Setup(this);
+					customHitboxGroups[i].Hitboxes[j].SetColliderStyle(null);
 				}
 			}
 
 			ComboDisplayController.Instance.ResetCombo(weaponInfo.ComboEffects);
-			ChangeWeaponState(false, null);
-			FollowPlayer();
+			SetParticlesState(false);
+			AnchorToWeaponHoldPoint();
 
 			if (weaponInfo.HasUltimate)
 				EventManager.EntitieDiedEvent += EntitieDeath;
@@ -118,6 +121,11 @@ namespace EoE.Combatery
 					}
 				}
 			}
+			ignoredColliders = new List<Collider>();
+			SetParticlesState(state);
+		}
+		private void SetParticlesState(bool state)
+		{
 			for (int i = 0; i < particlesToActivateOnEnable.Length; i++)
 			{
 				if(state)
@@ -125,7 +133,6 @@ namespace EoE.Combatery
 				else
 					particlesToActivateOnEnable[i].Stop(true, ParticleSystemStopBehavior.StopEmitting);
 			}
-			ignoredColliders = new List<Collider>();
 		}
 		public GameObject CloneModel()
 		{
@@ -189,13 +196,13 @@ namespace EoE.Combatery
 		#region FollowPlayer
 		private void LateUpdate()
 		{
-			FollowPlayer();
+			AnchorToWeaponHoldPoint();
 		}
 		private void FixedUpdate()
 		{
-			FollowPlayer();
+			AnchorToWeaponHoldPoint();
 		}
-		private void FollowPlayer()
+		private void AnchorToWeaponHoldPoint()
 		{
 			if (!Player.Existant)
 			{
@@ -772,7 +779,7 @@ namespace EoE.Combatery
 					AddUltimateCharge(change);
 			}
 
-			if (InputController.HeavyAttack.Down && ultimateCharge == weaponInfo.UltimateSettings.TotalRequiredCharge)
+			if (InputController.Special.Down && ultimateCharge == weaponInfo.UltimateSettings.TotalRequiredCharge)
 			{
 				if (weaponInfo.UltimateSettings.Ultimate.CanActivate(Player.Instance, 1, 1, 1))
 				{

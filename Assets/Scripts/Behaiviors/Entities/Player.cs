@@ -1015,7 +1015,7 @@ namespace EoE.Entities
 				cannotScrollMagic = (selectedAC.TargetCompound.ActionType == ActionType.Attacking) ? IsAttackStopped : IsCastingStopped;
 			}
 
-			int selectedSpellIndexChange = cannotScrollMagic ? 0 : (InputController.MagicScrollUp.Down ? 1 : (InputController.MagicScrollDown.Down ? -1 : 0));
+			int selectedSpellIndexChange = cannotScrollMagic ? 0 : (InputController.CastsScrollUp.Down ? 1 : (InputController.CastsScrollDown.Down ? -1 : 0));
 			if (selectedSpellIndexChange != 0)
 			{
 				int t = 0;
@@ -1054,7 +1054,7 @@ namespace EoE.Entities
 				if (EquipedWeapon.data.curCooldown <= 0)
 					EquipedWeapon.data.Use(EquipedWeapon, this, Inventory);
 			}
-			else if (EquipedSpell != null && (InputController.MagicCast.Down || (EquipedSpell.data.AllowHoldUse && InputController.MagicCast.Pressed)))
+			else if (EquipedSpell != null && (InputController.Cast.Down || (EquipedSpell.data.AllowHoldUse && InputController.Cast.Pressed)))
 			{
 				if (EquipedSpell.data.curCooldown <= 0)
 					EquipedSpell.data.Use(EquipedSpell, this, Inventory);
@@ -1140,9 +1140,9 @@ namespace EoE.Entities
 		{
 			if (IsStunned)
 				return;
-			if (InputController.Block.Down)
+			if (InputController.Shield.Down)
 				playerShield.SetShieldState(true);
-			else if(InputController.Block.Up)
+			else if(InputController.Shield.Up)
 				playerShield.SetShieldState(false);
 		}
 		#endregion

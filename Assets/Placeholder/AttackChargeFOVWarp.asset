@@ -18,6 +18,8 @@ MonoBehaviour:
     OnParentDeath: 1
     OnTimeout: 0
     TimeStay: 1
+    OnConditionMet: 0
+    Conditions: []
   TargetFOV: 75
   Dominance: 1
   OverwriteOtherFOVWarps: 0

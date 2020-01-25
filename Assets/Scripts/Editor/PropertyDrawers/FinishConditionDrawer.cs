@@ -49,7 +49,7 @@ namespace EoE.Information
 				{
 					EditorGUI.indentLevel++;
 					Rect conditionRect = new Rect(curIndentOff, position.y + linePos * line++, position.width - curIndentOff + 15, lineHeight);
-					EditorGUI.PropertyField(conditionRect, property.FindPropertyRelative(nameof(exampleInstance.Condition)));
+					EditorGUI.PropertyField(conditionRect, property.FindPropertyRelative(nameof(exampleInstance.Conditions)), true);
 					EditorGUI.indentLevel--;
 				}
 
@@ -61,9 +61,18 @@ namespace EoE.Information
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{
 			float mul = property.isExpanded ? 4 : 1;
-			mul += TimeOpen(property) && property.isExpanded ? 1 : 0;
-			mul += ConditionMetOpen(property) && property.isExpanded ? 1 : 0;
+			if (property.isExpanded)
+			{
+				mul += TimeOpen(property) ? 1 : 0;
 
+				bool conditionsOpen = ConditionMetOpen(property);
+				mul += conditionsOpen ? 1 : 0;
+				if (conditionsOpen)
+				{
+					SerializedProperty arrayProperty = property.FindPropertyRelative(nameof(exampleInstance.Conditions));
+					mul += arrayProperty.isExpanded ? (1 + arrayProperty.arraySize) : 0;
+				}
+			}
 			return EditorGUIUtility.singleLineHeight * mul + EditorGUIUtility.standardVerticalSpacing * (mul - 1);
 		}
 	}

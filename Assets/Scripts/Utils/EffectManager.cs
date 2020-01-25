@@ -1199,7 +1199,7 @@ namespace EoE
 			{
 				if (BaseInfo.FinishConditions.OnParentDeath && (!parent || !parent.gameObject.activeSelf))
 					FinishFX();
-				else if (BaseInfo.FinishConditions.OnConditionMet && BaseInfo.FinishConditions.Condition.ConditionMet())
+				else if (BaseInfo.FinishConditions.OnConditionMet && BaseInfo.FinishConditions.ConditionMet())
 					FinishFX();
 			}
 		}

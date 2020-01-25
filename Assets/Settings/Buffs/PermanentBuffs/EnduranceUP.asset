@@ -19,7 +19,7 @@ MonoBehaviour:
     OnTimeout: 0
     TimeStay: 5
     OnConditionMet: 0
-    Condition: {fileID: 0}
+    Conditions: []
   Icon: {fileID: 0}
   Effects:
   - TargetBaseStat: 2

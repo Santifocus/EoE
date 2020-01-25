@@ -18,6 +18,8 @@ MonoBehaviour:
     OnParentDeath: 0
     OnTimeout: 1
     TimeStay: 0.2
+    OnConditionMet: 0
+    Conditions: []
   AxisIntensity: 1
   AngleIntensity: 4
   CustomAxisMultiplier: {x: 1, y: 1, z: 1}

@@ -14,14 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: HeavyArmorBuff
   Quality: 2
-  Permanent: 1
-  BuffTime: 0
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 0
     TimeStay: 0
     OnConditionMet: 0
-    Condition: {fileID: 0}
+    Conditions: []
   Icon: {fileID: 0}
   Effects:
   - TargetBaseStat: 6

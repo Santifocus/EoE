@@ -19,7 +19,7 @@ MonoBehaviour:
     OnTimeout: 1
     TimeStay: 3.5
     OnConditionMet: 0
-    Condition: {fileID: 0}
+    Conditions: []
   UIPrefabObject: {fileID: 68513167013389138, guid: eaf521b517cd26a4b9ee8a8853e0993a,
     type: 3}
   CustomChildIndex: 9999

@@ -19,7 +19,7 @@ MonoBehaviour:
     OnTimeout: 1
     TimeStay: 2
     OnConditionMet: 0
-    Condition: {fileID: 0}
+    Conditions: []
   ParticleMainObject: {fileID: 5050578066818043946, guid: 7f34d26781d490e4b9bb3c14b045be3d,
     type: 3}
   OffsetToTarget: {x: 0, y: 0, z: 0}

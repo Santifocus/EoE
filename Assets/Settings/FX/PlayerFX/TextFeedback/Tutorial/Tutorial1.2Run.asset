@@ -13,20 +13,21 @@ MonoBehaviour:
   m_Name: Tutorial1.2Run
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0
+  TimeOut: 1
   FinishConditions:
     OnParentDeath: 0
-    OnTimeout: 1
+    OnTimeout: 0
     TimeStay: 3
-    OnConditionMet: 0
-    Condition: {fileID: 0}
+    OnConditionMet: 1
+    Conditions:
+    - {fileID: 11400000, guid: 57dadbbff31f0124bacfd7ba5464e479, type: 2}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Press
   - textColor: {r: 0.3679245, g: 0.3679245, b: 0.3679245, a: 1}
-    text: L3
+    text: ' L3'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: to run.
+    text: ' to run.'
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

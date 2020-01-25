@@ -707,7 +707,7 @@ MonoBehaviour:
   ComboEffects: {fileID: 11400000, guid: 4e7be449530b2d44fb6413e980a881e2, type: 2}
   UltimateSettings:
     Ultimate: {fileID: 11400000, guid: 870e27f2e49f188479010fa86ff71b7f, type: 2}
-    TotalRequiredCharge: 0
+    TotalRequiredCharge: 25
     OnUseChargeRemove: 1
     OnUltimateChargedEffects:
     - FX: {fileID: 11400000, guid: 95843647cdc223c48b316e85ad8cd98e, type: 2}

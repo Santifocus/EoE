@@ -18,6 +18,8 @@ MonoBehaviour:
     OnParentDeath: 1
     OnTimeout: 1
     TimeStay: 5
+    OnConditionMet: 0
+    Conditions: []
   TargetSound: {fileID: 11400000, guid: 3d959b5bc469d524bafd962868558b30, type: 2}
   FollowTarget: 1
   OffsetToTarget: {x: 0, y: 0, z: 0}

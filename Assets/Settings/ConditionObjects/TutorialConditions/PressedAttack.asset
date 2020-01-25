@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bb072dc3dd9595340a5e51bec101e6e9, type: 3}
-  m_Name: PressLB
+  m_Name: PressedAttack
   m_EditorClassIdentifier: 
   Inverse: 0
   conditionType: 3
@@ -23,5 +23,5 @@ MonoBehaviour:
     compareStyle: 5
     compareValue: 1
   stateTarget: 3
-  inputTarget: 10
+  inputTarget: 3
   inputCheckStyle: 1

@@ -19,7 +19,7 @@ MonoBehaviour:
     OnTimeout: 0
     TimeStay: 0.2
     OnConditionMet: 0
-    Condition: {fileID: 0}
+    Conditions: []
   TargetFOV: 70
   Dominance: 1
   OverwriteOtherFOVWarps: 0

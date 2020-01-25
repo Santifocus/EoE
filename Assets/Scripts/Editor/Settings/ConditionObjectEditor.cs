@@ -47,7 +47,8 @@ namespace EoE.Information
 			else
 			{
 				EnumField<ConditionObject.InputTarget>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.inputTarget))), ref settings.inputTarget);
-				EnumField<ConditionObject.InputCheckStyle>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.inputCheckStyle))), ref settings.inputCheckStyle);
+				if(settings.inputTarget < ConditionObject.InputTarget.MovingCamera)
+					EnumField<ConditionObject.InputCheckStyle>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.inputCheckStyle))), ref settings.inputCheckStyle);
 			}
 		}
 		private bool DrawValueComparer(GUIContent content, ConditionObject.ValueComparer settings, SerializedProperty property, int offSet = 0)

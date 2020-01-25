@@ -19,7 +19,7 @@ MonoBehaviour:
     OnTimeout: 1
     TimeStay: 0.3
     OnConditionMet: 0
-    Condition: {fileID: 0}
+    Conditions: []
   AxisIntensity: 0.6
   AngleIntensity: 0.45
   CustomAxisMultiplier: {x: 1, y: 1, z: 1}

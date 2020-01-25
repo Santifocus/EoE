@@ -10,19 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
-  m_Name: Tutorial2.5Ultimateempty
+  m_Name: Tutorial2.6ShieldMana
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 1
-    TimeStay: 3
+    TimeStay: 4
     OnConditionMet: 0
-    Condition: {fileID: 0}
+    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Casting a Ultimate empties your bar totally, so use this move whisely.
+    text: The shield costs
+  - textColor: {r: 0, g: 0.67276335, b: 1, a: 1}
+    text: ' Mana'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ' on activation and for using over time. If your'
+  - textColor: {r: 0, g: 0.6745098, b: 1, a: 1}
+    text: ' Mana'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ' runs out while using the shield, it will break and you will be stunned
+      for a few seconds.'
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

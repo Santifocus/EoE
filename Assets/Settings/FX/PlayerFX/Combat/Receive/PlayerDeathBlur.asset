@@ -19,6 +19,6 @@ MonoBehaviour:
     OnTimeout: 0
     TimeStay: 1
     OnConditionMet: 0
-    Condition: {fileID: 0}
+    Conditions: []
   Intensity: 1
   BlurDistance: 6
