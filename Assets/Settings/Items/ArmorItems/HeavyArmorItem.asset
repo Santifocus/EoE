@@ -13,17 +13,31 @@ MonoBehaviour:
   m_Name: HeavyArmorItem
   m_EditorClassIdentifier: 
   ItemName:
-    textColor: {r: 1, g: 1, b: 1, a: 1}
+    textColor: {r: 0.75294125, g: 0.75294125, b: 0.75294125, a: 1}
     text: Heavy Armor
   ItemDescription:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: 'Full Metal Armor. '
+    text: Full Metal Armor. Increases your
   - textColor: {r: 0, g: 1, b: 0.13166785, a: 1}
-    text: 'DEF +3 '
+    text: ' Defence'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: 'and '
-  - textColor: {r: 1, g: 0.07898478, b: 0, a: 1}
-    text: Movement Speed -20%
+    text: ' by'
+  - textColor: {r: 0, g: 0.48171186, b: 1, a: 1}
+    text: ' 3'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ' but'
+  - textColor: {r: 1, g: 0.13774179, b: 0, a: 1}
+    text: ' decreases'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ' your'
+  - textColor: {r: 0, g: 1, b: 0.13166785, a: 1}
+    text: ' Movement Speed'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ' by'
+  - textColor: {r: 0, g: 0.48171186, b: 1, a: 1}
+    text: ' 20%'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: .
   SortingID: 0
   ItemIcon: {fileID: 21300000, guid: a1fcd1fc27f476846a96d93236150024, type: 3}
   FXEffectsOnUse: []

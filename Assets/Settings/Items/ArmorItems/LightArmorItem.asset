@@ -13,13 +13,19 @@ MonoBehaviour:
   m_Name: LightArmorItem
   m_EditorClassIdentifier: 
   ItemName:
-    textColor: {r: 0.66415983, g: 0.6697992, b: 0.7075472, a: 1}
+    textColor: {r: 0.75294125, g: 0.75294125, b: 0.75294125, a: 1}
     text: Light Armor
   ItemDescription:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: 'Simple armor. '
-  - textColor: {r: 0, g: 1, b: 0.116532326, a: 1}
-    text: DEF +1.
+    text: Simple armor. Increases your
+  - textColor: {r: 0, g: 1, b: 0.13166785, a: 1}
+    text: ' Defence'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ' by'
+  - textColor: {r: 0, g: 0.48171186, b: 1, a: 1}
+    text: ' 1'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: .
   SortingID: 1
   ItemIcon: {fileID: 21300000, guid: f778a96a9b33a4f439365ce0388ccd47, type: 3}
   FXEffectsOnUse: []

@@ -10,16 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ee899c0a2c8e9f34e89325bc7784ff48, type: 3}
-  m_Name: UsedSwordItem
+  m_Name: IronSwordItem
   m_EditorClassIdentifier: 
   ItemName:
-    textColor: {r: 0.6981132, g: 0.6981132, b: 0.2272161, a: 1}
-    text: Used Sword
+    textColor: {r: 1, g: 0.4119591, b: 0.24056602, a: 1}
+    text: Iron Sword
   ItemDescription:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: A simple and sturdy sword.
-  - textColor: {r: 0.21681976, g: 1, b: 0, a: 1}
-    text: ' + 5 ATK.'
+    text: A simple Iron sword.
+  - textColor: {r: 0, g: 1, b: 0.39215687, a: 1}
+    text: ' Strenght'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ':'
+  - textColor: {r: 0, g: 0.48171186, b: 1, a: 1}
+    text: ' 5'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: .
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ' Element:'
+  - textColor: {r: 0, g: 1, b: 0.63036776, a: 1}
+    text: ' None'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: .
   SortingID: 20
   ItemIcon: {fileID: 21300000, guid: cecff3dc8ed3ee84e8a28d2ca39a6862, type: 3}
   FXEffectsOnUse: []

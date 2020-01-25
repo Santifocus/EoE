@@ -817,8 +817,32 @@ namespace EoE.Entities
 		#region EnemyTargeting
 		private void TargetEnemyControl()
 		{
-			if (TargetedEntitie && !TargetedEntitie.gameObject.activeSelf)
+			if(TargetedEntitie && !TargetedEntitie.Alive)
+			{
 				TargetedEntitie = null;
+				int closestIndex = -1;
+				float closestDist = PlayerSettings.MaxEnemyTargetingDistance * PlayerSettings.MaxEnemyTargetingDistance;
+				for (int i = 0; i < AllEntities.Count; i++)
+				{
+					if (!(AllEntities[i] is Enemy) || !AllEntities[i].Alive)
+						continue;
+
+					if (AllEntities[i].curStates.Fighting)
+					{
+						float dist = (AllEntities[i].actuallWorldPosition - actuallWorldPosition).sqrMagnitude;
+						if(dist < closestDist)
+						{
+							closestIndex = i;
+							closestDist = dist;
+						}
+					}
+				}
+
+				if(closestIndex > -1)
+				{
+					TargetedEntitie = AllEntities[closestIndex];
+				}
+			}
 
 			if (TargetedEntitie)
 			{
@@ -905,13 +929,14 @@ namespace EoE.Entities
 		{
 			List<(Entity, float)> possibleTargets = new List<(Entity, float)>();
 
+			float maxDist = PlayerSettings.MaxEnemyTargetingDistance * PlayerSettings.MaxEnemyTargetingDistance;
 			for (int i = 0; i < AllEntities.Count; i++)
 			{
 				if (AllEntities[i] is Player) //We ignore the player
 					continue;
 
 				float distance = (AllEntities[i].actuallWorldPosition - PlayerCameraController.PlayerCamera.transform.position).sqrMagnitude;
-				if (distance > PlayerSettings.MaxEnemyTargetingDistance * PlayerSettings.MaxEnemyTargetingDistance)
+				if (distance > maxDist)
 					continue;
 
 				distance = Mathf.Sqrt(distance);

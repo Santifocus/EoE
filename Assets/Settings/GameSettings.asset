@@ -186,6 +186,7 @@ MonoBehaviour:
   DialogueDelayPerLetter: 0.04
   SkipDelayOnSpace: 1
   DelayToNextDialogue: 1
+  MinDamage: 1
   CritDamageMultiplier: 2
   SecondsPerEntitieHealthRegen: 1
   ItemDropRandomVelocityStrenght: 2

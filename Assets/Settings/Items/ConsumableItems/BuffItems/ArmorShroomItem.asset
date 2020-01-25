@@ -27,7 +27,7 @@ MonoBehaviour:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: ' for'
   - textColor: {r: 1, g: 0.64280605, b: 0, a: 1}
-    text: ' 10  Seconds'
+    text: ' 10 Seconds'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: .
   - textColor: {r: 1, g: 0.13774179, b: 0, a: 1}
