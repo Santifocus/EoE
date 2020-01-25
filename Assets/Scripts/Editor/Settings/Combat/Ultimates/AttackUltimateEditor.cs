@@ -15,7 +15,7 @@ namespace EoE.Information
 
 			AttackUltimate settings = (target as AttackUltimate);
 			SerializedProperty standAttackProperty = serializedObject.FindProperty(nameof(settings.AttackData));
-			DrawAttackSequence(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AttackData))), settings.AttackData, standAttackProperty, 0, true);
+			DrawAttackSequence(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AttackData))), settings.AttackData, null, standAttackProperty, 0, true);
 		}
 	}
 }

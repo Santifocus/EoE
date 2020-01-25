@@ -69,7 +69,8 @@ MonoBehaviour:
     CreatedRemenants: []
   AttackData:
     AttackSequenceParts:
-    - AnimationTarget: 4
+    - AnimationStartPoint: 0
+      AnimationTarget: 4
       Restrictions:
         ActionRestrictions: -1
         MovementRestrictions: -1
@@ -100,8 +101,8 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      AnimationSpeedCurveTimeframe: 2
-      AnimationSpeedCurveMultiplier: 1
+      AnimationSpeedCurveTimeframe: 1
+      AnimationSpeedCurveMultiplier: 1.25
       NeedsCharging: 0
       ChargeSettings:
         EffectMask: 3
@@ -121,7 +122,7 @@ MonoBehaviour:
       WaitSettings:
       - WaitCondition: {fileID: 11400000, guid: d9a42b04b4b55a343aac23eba2be7f67,
           type: 2}
-        MinAnimtionPoint: 0.85
+        MinAnimtionPoint: 0.925
         MaxAnimtionPoint: 0.95
       DamageMultiplier: 1
       HealthCostMultiplier: 1
@@ -132,6 +133,8 @@ MonoBehaviour:
       CollisionMask: -1
       StopOnCollisionMask: -1
       DirectHit: {fileID: 0}
+      UseCustomHitboxGroup: 0
+      CustomHitboxGroup: -1
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -178,7 +181,7 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
-      - AtAnimationPoint: 0.92
+      - AtAnimationPoint: 0.95
         Effect:
           ChanceToActivate: 1
           ContainedEffectType: 6

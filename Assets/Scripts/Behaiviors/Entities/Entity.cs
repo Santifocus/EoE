@@ -257,6 +257,8 @@ namespace EoE.Entities
 		#region State Control
 		private void EntitieStateControl()
 		{
+			if (AttackCooldown > 0)
+				AttackCooldown -= Time.deltaTime;
 			if (CastingCooldown > 0)
 				CastingCooldown -= Time.deltaTime;
 			if (combatEndCooldown > 0)

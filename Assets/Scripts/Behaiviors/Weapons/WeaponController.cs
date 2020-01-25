@@ -28,6 +28,7 @@ namespace EoE.Combatery
 
 		//Inspector variables
 		[SerializeField] private WeaponHitbox[] weaponHitboxes = default;
+		public CustomHitboxGroup[] customHitboxGroups = default;
 		[SerializeField] private ParticleSystem[] particlesToActivateOnEnable = default;
 		[SerializeField] private GameObject dropCollision = default;
 
@@ -44,6 +45,7 @@ namespace EoE.Combatery
 		private bool wantsToBeginNextSequence;
 		private List<Collider> ignoredColliders = new List<Collider>();
 		private Coroutine attackCoroutine;
+		private int targetHitboxGroup = -1;
 
 		//Combo Control
 		private float curAttackAnimationPoint = 0;
@@ -62,16 +64,37 @@ namespace EoE.Combatery
 		private FXInstance[] chargeBoundFXMultiplied;
 		private BuffInstance[] chargeBoundBuffs;
 
+		private WeaponHitbox[] activeHitboxGroup
+		{
+			get
+			{
+				if (targetHitboxGroup == -1)
+					return weaponHitboxes;
+				else
+					return customHitboxGroups[targetHitboxGroup].Hitboxes;
+			}
+		}
+
 		#endregion
 		#region Setups
 		public void Setup(Weapon weaponInfo)
 		{
 			Instance = this;
 			this.weaponInfo = weaponInfo;
+			//Standard hitboxes
 			for (int i = 0; i < weaponHitboxes.Length; i++)
 			{
 				weaponHitboxes[i].Setup(this);
 			}
+			//Custom hitboxes
+			for (int i = 0; i < customHitboxGroups.Length; i++)
+			{
+				for (int j = 0; j < customHitboxGroups[i].Hitboxes.Length; j++)
+				{
+					customHitboxGroups[i].Hitboxes[j].Setup(this);
+				}
+			}
+
 			ComboDisplayController.Instance.ResetCombo(weaponInfo.ComboEffects);
 			ChangeWeaponState(false, null);
 			FollowPlayer();
@@ -84,14 +107,14 @@ namespace EoE.Combatery
 		private void ChangeWeaponState(bool state, AttackStyle style)
 		{
 			colliderActive = state;
-			for (int i = 0; i < weaponHitboxes.Length; i++)
+			for (int i = 0; i < activeHitboxGroup.Length; i++)
 			{
-				weaponHitboxes[i].SetColliderStyle(state ? style : null);
+				activeHitboxGroup[i].SetColliderStyle(state ? style : null);
 				if (!state)
 				{
 					for (int j = 0; j < ignoredColliders.Count; j++)
 					{
-						weaponHitboxes[i].IgnoreCollision(ignoredColliders[j], false);
+						activeHitboxGroup[i].IgnoreCollision(ignoredColliders[j], false);
 					}
 				}
 			}
@@ -109,10 +132,19 @@ namespace EoE.Combatery
 			WeaponController clone = Instantiate(this, Storage.ParticleStorage);
 
 			//deactivate behaiviors
+			//Standard hitboxes
 			clone.enabled = false;
 			for (int i = 0; i < clone.weaponHitboxes.Length; i++)
 			{
 				clone.weaponHitboxes[i].enabled = false;
+			}
+			//Custom hitboxes
+			for (int i = 0; i < clone.customHitboxGroups.Length; i++)
+			{
+				for (int j = 0; j < clone.customHitboxGroups[i].Hitboxes.Length; j++)
+				{
+					clone.customHitboxGroups[i].Hitboxes[j].enabled = false;
+				}
 			}
 
 			//deactivate all custom objects
@@ -257,19 +289,22 @@ namespace EoE.Combatery
 				}
 
 				ActiveAttackStyle.Restrictions.ApplyRestriction(Player.Instance, true);
+				targetHitboxGroup = ActiveAttackStyle.UseCustomHitboxGroup ? ActiveAttackStyle.CustomHitboxGroup : -1;
 
 				//Setup timers and blend variables
+				curAttackAnimationPoint = ActiveAttackStyle.AnimationStartPoint;
+
 				float totalTime = 0;
 				float animationTime = animationDelayLookup[ActiveAttackStyle.AnimationTarget].Item1;
 				float animationActivationDelay = animationDelayLookup[ActiveAttackStyle.AnimationTarget].Item2;
-				float animationTimer = 0;
+				float animationTimer = curAttackAnimationPoint * animationTime;
 				wantsToBeginNextSequence = false;
 				curChargeMultiplier = ActiveAttackStyle.ChargeSettings.StartCharge;
-				curAttackAnimationPoint = ActiveAttackStyle.AnimationStartPoint;
 				ChangeWeaponState(false, null);
 
 				FXManager.FinishFX(ref whileBoundEffects);
 				whileBoundEffects = new List<FXInstance>();
+				TryForEventEffects(0, curAttackAnimationPoint);
 
 				float multiplier;
 				if (ActiveAttackStyle.AnimationMultiplicationType == MultiplicationType.FlatValue)
@@ -278,9 +313,8 @@ namespace EoE.Combatery
 				}
 				else
 				{
-					multiplier = ActiveAttackStyle.AnimationSpeedCurve.Evaluate(curAttackAnimationPoint) * ActiveAttackStyle.AnimationSpeedCurveMultiplier;
+					multiplier = ActiveAttackStyle.AnimationSpeedCurve.Evaluate(0) * ActiveAttackStyle.AnimationSpeedCurveMultiplier;
 				}
-				multiplier = Mathf.Round(multiplier * 10) / 10;
 				SetAnimationSpeed(multiplier);
 
 				if (ActiveAttackStyle.AnimationStartPoint == 0)
@@ -301,7 +335,6 @@ namespace EoE.Combatery
 					if (ActiveAttackStyle.AnimationMultiplicationType == MultiplicationType.Curve)
 					{
 						multiplier = ActiveAttackStyle.AnimationSpeedCurve.Evaluate(Mathf.Clamp01(totalTime / ActiveAttackStyle.AnimationSpeedCurveTimeframe)) * ActiveAttackStyle.AnimationSpeedCurveMultiplier;
-						multiplier = Mathf.Round(multiplier * 10) / 10;
 						SetAnimationSpeed(multiplier);
 					}
 
@@ -320,51 +353,12 @@ namespace EoE.Combatery
 						Debug.DrawLine(transform.position - Vector3.right / 4, transform.position + Vector3.right / 4, Color.cyan / 1.5f, 1.5f);
 					}
 
-					//Check if we crossed any attack event point
+					//Update the animationPoint and try for event effects
 					float newAnimationPoint = animationTimer / animationTime;
 					float smallerPoint = Mathf.Min(newAnimationPoint, curAttackAnimationPoint);
 					float biggerPoint = Mathf.Max(newAnimationPoint, curAttackAnimationPoint);
+					TryForEventEffects(smallerPoint, biggerPoint);
 					curAttackAnimationPoint = newAnimationPoint;
-
-					//OnUserStart
-					for (int i = 0; i < ActiveAttackStyle.StartEffectsOnUser.Length; i++)
-					{
-						float point = ActiveAttackStyle.StartEffectsOnUser[i].AtAnimationPoint;
-						if ((point >= smallerPoint) && (point < biggerPoint))
-						{
-							ActiveAttackStyle.StartEffectsOnUser[i].Effect.Activate(Player.Instance, curBaseData);
-						}
-					}
-
-					//OnUserWhile
-					for (int i = 0; i < ActiveAttackStyle.WhileEffectsOnUser.Length; i++)
-					{
-						float point = ActiveAttackStyle.WhileEffectsOnUser[i].AtAnimationPoint;
-						if ((point >= smallerPoint) && (point < biggerPoint))
-						{
-							whileBoundEffects.AddRange(ActiveAttackStyle.WhileEffectsOnUser[i].Effect.Activate(Player.Instance, curBaseData));
-						}
-					}
-
-					//OnWeaponStart
-					for (int i = 0; i < ActiveAttackStyle.StartEffectsOnWeapon.Length; i++)
-					{
-						float point = ActiveAttackStyle.StartEffectsOnWeapon[i].AtAnimationPoint;
-						if ((point >= smallerPoint) && (point < biggerPoint))
-						{
-							ActiveAttackStyle.StartEffectsOnWeapon[i].Effect.Activate(Player.Instance, curBaseData, 1, transform);
-						}
-					}
-
-					//OnWeaponWhile
-					for (int i = 0; i < ActiveAttackStyle.WhileEffectsOnWeapon.Length; i++)
-					{
-						float point = ActiveAttackStyle.WhileEffectsOnWeapon[i].AtAnimationPoint;
-						if ((point >= smallerPoint) && (point < biggerPoint))
-						{
-							whileBoundEffects.AddRange(ActiveAttackStyle.WhileEffectsOnWeapon[i].Effect.Activate(Player.Instance, curBaseData, 1, transform));
-						}
-					}
 
 					//Check if any wait conditions are true
 					//First check if the animation point is correct, and then check the condition state
@@ -447,8 +441,50 @@ namespace EoE.Combatery
 							SetAnimationSpeed(multiplier);
 						}
 					}
-
 				} while (((curAttackAnimationPoint > 0 || multiplier > 0) && (curAttackAnimationPoint < 1)) || GameController.GameIsPaused);
+
+				void TryForEventEffects(float smallerPoint, float biggerPoint)
+				{
+					//OnUserStart
+					for (int i = 0; i < ActiveAttackStyle.StartEffectsOnUser.Length; i++)
+					{
+						float point = ActiveAttackStyle.StartEffectsOnUser[i].AtAnimationPoint;
+						if ((point >= smallerPoint) && (point < biggerPoint))
+						{
+							ActiveAttackStyle.StartEffectsOnUser[i].Effect.Activate(Player.Instance, curBaseData);
+						}
+					}
+
+					//OnUserWhile
+					for (int i = 0; i < ActiveAttackStyle.WhileEffectsOnUser.Length; i++)
+					{
+						float point = ActiveAttackStyle.WhileEffectsOnUser[i].AtAnimationPoint;
+						if ((point >= smallerPoint) && (point < biggerPoint))
+						{
+							whileBoundEffects.AddRange(ActiveAttackStyle.WhileEffectsOnUser[i].Effect.Activate(Player.Instance, curBaseData));
+						}
+					}
+
+					//OnWeaponStart
+					for (int i = 0; i < ActiveAttackStyle.StartEffectsOnWeapon.Length; i++)
+					{
+						float point = ActiveAttackStyle.StartEffectsOnWeapon[i].AtAnimationPoint;
+						if ((point >= smallerPoint) && (point < biggerPoint))
+						{
+							ActiveAttackStyle.StartEffectsOnWeapon[i].Effect.Activate(Player.Instance, curBaseData, 1, transform);
+						}
+					}
+
+					//OnWeaponWhile
+					for (int i = 0; i < ActiveAttackStyle.WhileEffectsOnWeapon.Length; i++)
+					{
+						float point = ActiveAttackStyle.WhileEffectsOnWeapon[i].AtAnimationPoint;
+						if ((point >= smallerPoint) && (point < biggerPoint))
+						{
+							whileBoundEffects.AddRange(ActiveAttackStyle.WhileEffectsOnWeapon[i].Effect.Activate(Player.Instance, curBaseData, 1, transform));
+						}
+					}
+				}
 
 				//Debug for attackstyle end
 				if (GameController.CurrentGameSettings.IsDebugEnabled)
@@ -511,9 +547,9 @@ namespace EoE.Combatery
 		#region Events
 		public void HitObject(Vector3 hitPos, Collider hit, Vector3 direction)
 		{
-			for (int i = 0; i < weaponHitboxes.Length; i++)
+			for (int i = 0; i < activeHitboxGroup.Length; i++)
 			{
-				weaponHitboxes[i].IgnoreCollision(hit, true);
+				activeHitboxGroup[i].IgnoreCollision(hit, true);
 			}
 			ignoredColliders.Add(hit);
 
@@ -807,5 +843,11 @@ namespace EoE.Combatery
 			EventManager.EntitieDiedEvent -= EntitieDeath;
 		}
 		#endregion
+	}
+	[System.Serializable]
+	public class CustomHitboxGroup
+	{
+		public string Identifier = "New Hitbox Group";
+		public WeaponHitbox[] Hitboxes = new WeaponHitbox[0];
 	}
 }

@@ -49,6 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponHitboxes:
   - {fileID: 2820046996984904547}
+  customHitboxGroups: []
   particlesToActivateOnEnable:
   - {fileID: 1529624887139239058}
   dropCollision: {fileID: 5992421874928617461}
@@ -5006,6 +5007,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8049748948004881917}
     m_Modifications:
+    - target: {fileID: -927199367670048503, guid: c68e849468d7eb949a3266651db2f287,
+        type: 3}
+      propertyPath: m_Name
+      value: Sword
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: c68e849468d7eb949a3266651db2f287,
+        type: 3}
+      propertyPath: m_Layer
+      value: 17
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: c68e849468d7eb949a3266651db2f287,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5074,16 +5085,6 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: c68e849468d7eb949a3266651db2f287,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 17
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: c68e849468d7eb949a3266651db2f287,
-        type: 3}
-      propertyPath: m_Name
-      value: Sword
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: c68e849468d7eb949a3266651db2f287,
-        type: 3}
-      propertyPath: m_Layer
       value: 17
       objectReference: {fileID: 0}
     m_RemovedComponents: []

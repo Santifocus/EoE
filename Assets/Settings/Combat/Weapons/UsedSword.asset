@@ -94,6 +94,8 @@ MonoBehaviour:
       CollisionMask: -1
       StopOnCollisionMask: 0
       DirectHit: {fileID: 11400000, guid: b2224e95e2fd03742845a26029bcb0dc, type: 2}
+      UseCustomHitboxGroup: 0
+      CustomHitboxGroup: -1
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -194,6 +196,8 @@ MonoBehaviour:
       CollisionMask: -1
       StopOnCollisionMask: 0
       DirectHit: {fileID: 11400000, guid: b2224e95e2fd03742845a26029bcb0dc, type: 2}
+      UseCustomHitboxGroup: 0
+      CustomHitboxGroup: -1
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -323,6 +327,8 @@ MonoBehaviour:
       CollisionMask: -1
       StopOnCollisionMask: 0
       DirectHit: {fileID: 0}
+      UseCustomHitboxGroup: 0
+      CustomHitboxGroup: -1
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -428,6 +434,8 @@ MonoBehaviour:
       CollisionMask: -1
       StopOnCollisionMask: -1
       DirectHit: {fileID: 11400000, guid: b2224e95e2fd03742845a26029bcb0dc, type: 2}
+      UseCustomHitboxGroup: 0
+      CustomHitboxGroup: -1
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -483,19 +491,19 @@ MonoBehaviour:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
-          time: 0.0029907227
+          time: 0
           value: 0.65
-          inSlope: 0.24196905
-          outSlope: 0.24196905
+          inSlope: 0.14776003
+          outSlope: 0.14776003
           tangentMode: 34
           weightedMode: 0
           inWeight: 0
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 0.61364746
+          time: 1
           value: 0.79776
-          inSlope: 0.24196905
-          outSlope: 0.24196905
+          inSlope: 0.14776003
+          outSlope: 0.14776003
           tangentMode: 34
           weightedMode: 0
           inWeight: 0.33333334
@@ -535,6 +543,8 @@ MonoBehaviour:
       CollisionMask: -1
       StopOnCollisionMask: -1
       DirectHit: {fileID: 11400000, guid: bfb7e1ecec740634fb4282d888a3b9ed, type: 2}
+      UseCustomHitboxGroup: 0
+      CustomHitboxGroup: -1
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -643,6 +653,8 @@ MonoBehaviour:
       CollisionMask: -1
       StopOnCollisionMask: -1
       DirectHit: {fileID: 11400000, guid: ef39d8966b001e245a7f7d4cf21cef44, type: 2}
+      UseCustomHitboxGroup: 0
+      CustomHitboxGroup: -1
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0

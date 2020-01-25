@@ -293,6 +293,43 @@ namespace EoE
 			}
 			return false;
 		}
+		public static bool PopupField(string content, ref int curValue, string[] options, int offSet = 0) => PopupField(new GUIContent(content), ref curValue, options, offSet);
+		public static bool PopupField(GUIContent content, ref int curValue, string[] options, int offSet = 0)
+		{
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(offSet * STANDARD_OFFSET);
+			int newValue = EditorGUILayout.Popup(content, curValue, options);
+			EditorGUILayout.EndHorizontal();
+
+			if (newValue != curValue)
+			{
+				isDirty = true;
+				curValue = newValue;
+				return true;
+			}
+			return false;
+		}
+		public static bool PopupField(string content, ref int curValue, string[] options, int[] optionValues, int offSet = 0) => PopupField(new GUIContent(content), ref curValue, options, optionValues, offSet);
+		public static bool PopupField(GUIContent content, ref int curValue, string[] options, int[] optionValues, int offSet = 0)
+		{
+			GUIContent[] displayedOptions = new GUIContent[options.Length];
+			for(int i = 0; i < options.Length; i++)
+			{
+				displayedOptions[i] = new GUIContent(options[i]);
+			}
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(offSet * STANDARD_OFFSET);
+			int newValue = EditorGUILayout.IntPopup(content, curValue, displayedOptions, optionValues);
+			EditorGUILayout.EndHorizontal();
+
+			if (newValue != curValue)
+			{
+				isDirty = true;
+				curValue = newValue;
+				return true;
+			}
+			return false;
+		}
 		public static bool EnumFlagField<T>(string content, ref T curValue, int offSet = 0) where T : System.Enum => EnumFlagField(new GUIContent(content), ref curValue, offSet);
 		public static bool EnumFlagField<T>(GUIContent content, ref T curValue, int offSet = 0) where T : System.Enum
 		{
@@ -733,7 +770,7 @@ namespace EoE
 		{
 			private static float CurMinCharge = 0;
 			private static float CurMaxCharge = 0;
-			public static void DrawAttackSequence(GUIContent content, AttackSequence settings, SerializedProperty property, int offSet, bool asHeader)
+			public static void DrawAttackSequence(GUIContent content, AttackSequence settings, Weapon dataProvider, SerializedProperty property, int offSet, bool asHeader)
 			{
 				Foldout(content, property, offSet, asHeader);
 
@@ -742,7 +779,7 @@ namespace EoE
 					SerializedProperty sequenceArray = property.FindPropertyRelative(nameof(settings.AttackSequenceParts));
 					for (int i = 0; i < settings.AttackSequenceParts.Length; i++)
 					{
-						DrawAttackStyle(settings.AttackSequenceParts[i], sequenceArray.GetArrayElementAtIndex(i), i, offSet + 1);
+						DrawAttackStyle(settings.AttackSequenceParts[i], dataProvider, sequenceArray.GetArrayElementAtIndex(i), i, offSet + 1);
 						if (i < settings.AttackSequenceParts.Length - 1)
 						{
 							LineBreak(new Color(0.8f, 0.5f, 0f, 1));
@@ -796,7 +833,7 @@ namespace EoE
 				if (asHeader)
 					EndFoldoutHeader();
 			}
-			private static void DrawAttackStyle(AttackStyle settings, SerializedProperty property, int index, int offSet)
+			private static void DrawAttackStyle(AttackStyle settings, Weapon dataProvider, SerializedProperty property, int index, int offSet)
 			{
 				Foldout(new GUIContent(IndexToName()), property, offSet);
 				if (property.isExpanded)
@@ -860,6 +897,40 @@ namespace EoE
 					EnumFlagField<ColliderMask>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CollisionMask))), ref settings.CollisionMask, offSet + 1);
 					EnumFlagField<ColliderMask>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StopOnCollisionMask))), ref settings.StopOnCollisionMask, offSet + 1);
 					ObjectField<EffectSingle>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DirectHit))), ref settings.DirectHit, offSet + 1);
+
+					//Custom hitbox group drawing
+					LineBreak(new Color(0.25f, 0.25f, 0.65f, 0.5f));
+					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.UseCustomHitboxGroup))), ref settings.UseCustomHitboxGroup, offSet + 1);
+
+					if (settings.UseCustomHitboxGroup)
+					{
+						if(dataProvider != null && dataProvider.WeaponPrefab)
+						{
+							if (settings.CustomHitboxGroup >= dataProvider.WeaponPrefab.customHitboxGroups.Length)
+							{
+								Debug.Log(settings.CustomHitboxGroup);
+								settings.CustomHitboxGroup = dataProvider.WeaponPrefab.customHitboxGroups.Length - 1;
+							}
+
+							string[] options = new string[dataProvider.WeaponPrefab.customHitboxGroups.Length + 1];
+							int[] optionValues = new int[dataProvider.WeaponPrefab.customHitboxGroups.Length + 1];
+
+							options[0] = "Standard";
+							optionValues[0] = -1;
+
+							for (int i = 1; i < options.Length; i++)
+							{
+								options[i] = dataProvider.WeaponPrefab.customHitboxGroups[i - 1].Identifier;
+								optionValues[i] = i - 1;
+							}
+
+							PopupField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CustomHitboxGroup))), ref settings.CustomHitboxGroup, options, optionValues, offSet + 1);
+						}
+						else
+						{
+							EditorGUILayout.HelpBox("This object either does not support custom hitboxes or has no WeaponPrefab referenced.", MessageType.Warning);
+						}
+					}
 
 					//Overrides
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));

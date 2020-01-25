@@ -24,25 +24,25 @@ namespace EoE.Combatery
 			if (settings.HasMaskFlag(AttackStylePart.StandAttack))
 			{
 				SerializedProperty standAttackProperty = serializedObject.FindProperty(nameof(settings.StandAttackSequence));
-				DrawAttackSequence(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StandAttackSequence))), settings.StandAttackSequence, standAttackProperty, 0, true);
+				DrawAttackSequence(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StandAttackSequence))), settings.StandAttackSequence, settings, standAttackProperty, 0, true);
 				GUILayout.Space(1);
 			}
 			if (settings.HasMaskFlag(AttackStylePart.RunAttack))
 			{
 				SerializedProperty runAttackProperty = serializedObject.FindProperty(nameof(settings.RunAttackSequence));
-				DrawAttackSequence(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.RunAttackSequence))), settings.RunAttackSequence, runAttackProperty, 0, true);
+				DrawAttackSequence(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.RunAttackSequence))), settings.RunAttackSequence, settings, runAttackProperty, 0, true);
 				GUILayout.Space(1);
 			}
 			if (settings.HasMaskFlag(AttackStylePart.JumpAttack))
 			{
 				SerializedProperty jumpAttackProperty = serializedObject.FindProperty(nameof(settings.JumpAttackSequence));
-				DrawAttackSequence(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.JumpAttackSequence))), settings.JumpAttackSequence, jumpAttackProperty, 0, true);
+				DrawAttackSequence(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.JumpAttackSequence))), settings.JumpAttackSequence, settings, jumpAttackProperty, 0, true);
 				GUILayout.Space(1);
 			}
 			if (settings.HasMaskFlag(AttackStylePart.RunJumpAttack))
 			{
 				SerializedProperty runJumpAttackProperty = serializedObject.FindProperty(nameof(settings.RunJumpAttackSequence));
-				DrawAttackSequence(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.RunJumpAttackSequence))), settings.RunJumpAttackSequence, runJumpAttackProperty, 0, true);
+				DrawAttackSequence(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.RunJumpAttackSequence))), settings.RunJumpAttackSequence, settings, runJumpAttackProperty, 0, true);
 				GUILayout.Space(1);
 			}
 

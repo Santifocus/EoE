@@ -34,7 +34,8 @@ MonoBehaviour:
   WeaponRotationOffset: {x: 0, y: 0, z: 25}
   StandAttackSequence:
     AttackSequenceParts:
-    - AnimationTarget: 1
+    - AnimationStartPoint: 0
+      AnimationTarget: 1
       Restrictions:
         ActionRestrictions: -1
         MovementRestrictions: 0
@@ -93,6 +94,8 @@ MonoBehaviour:
       CollisionMask: -1
       StopOnCollisionMask: 0
       DirectHit: {fileID: 11400000, guid: 370c9ec2a63887748b041f9075022b73, type: 2}
+      UseCustomHitboxGroup: 0
+      CustomHitboxGroup: -1
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -133,7 +136,8 @@ MonoBehaviour:
       WhileEffectsOnUser: []
       StartEffectsOnWeapon: []
       WhileEffectsOnWeapon: []
-    - AnimationTarget: 2
+    - AnimationStartPoint: 0
+      AnimationTarget: 2
       Restrictions:
         ActionRestrictions: -1
         MovementRestrictions: 0
@@ -192,6 +196,8 @@ MonoBehaviour:
       CollisionMask: -1
       StopOnCollisionMask: 0
       DirectHit: {fileID: 11400000, guid: 370c9ec2a63887748b041f9075022b73, type: 2}
+      UseCustomHitboxGroup: 0
+      CustomHitboxGroup: -1
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -232,7 +238,8 @@ MonoBehaviour:
       WhileEffectsOnUser: []
       StartEffectsOnWeapon: []
       WhileEffectsOnWeapon: []
-    - AnimationTarget: 4
+    - AnimationStartPoint: 0
+      AnimationTarget: 4
       Restrictions:
         ActionRestrictions: -1
         MovementRestrictions: 3
@@ -327,6 +334,8 @@ MonoBehaviour:
       CollisionMask: -1
       StopOnCollisionMask: 0
       DirectHit: {fileID: 0}
+      UseCustomHitboxGroup: 0
+      CustomHitboxGroup: -1
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -372,7 +381,8 @@ MonoBehaviour:
     - 0.2
   RunAttackSequence:
     AttackSequenceParts:
-    - AnimationTarget: 2
+    - AnimationStartPoint: 0
+      AnimationTarget: 2
       Restrictions:
         ActionRestrictions: -1
         MovementRestrictions: -1
@@ -431,6 +441,8 @@ MonoBehaviour:
       CollisionMask: -1
       StopOnCollisionMask: -1
       DirectHit: {fileID: 11400000, guid: b2224e95e2fd03742845a26029bcb0dc, type: 2}
+      UseCustomHitboxGroup: 0
+      CustomHitboxGroup: -1
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -474,7 +486,8 @@ MonoBehaviour:
     PartsMaxDelays: []
   JumpAttackSequence:
     AttackSequenceParts:
-    - AnimationTarget: 4
+    - AnimationStartPoint: 0
+      AnimationTarget: 4
       Restrictions:
         ActionRestrictions: -1
         MovementRestrictions: 3
@@ -537,6 +550,8 @@ MonoBehaviour:
       CollisionMask: -1
       StopOnCollisionMask: -1
       DirectHit: {fileID: 11400000, guid: 370c9ec2a63887748b041f9075022b73, type: 2}
+      UseCustomHitboxGroup: 0
+      CustomHitboxGroup: -1
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -581,7 +596,8 @@ MonoBehaviour:
     - 0
   RunJumpAttackSequence:
     AttackSequenceParts:
-    - AnimationTarget: 4
+    - AnimationStartPoint: 0
+      AnimationTarget: 4
       Restrictions:
         ActionRestrictions: -1
         MovementRestrictions: 3
@@ -644,6 +660,8 @@ MonoBehaviour:
       CollisionMask: -1
       StopOnCollisionMask: -1
       DirectHit: {fileID: 11400000, guid: 370c9ec2a63887748b041f9075022b73, type: 2}
+      UseCustomHitboxGroup: 0
+      CustomHitboxGroup: -1
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0

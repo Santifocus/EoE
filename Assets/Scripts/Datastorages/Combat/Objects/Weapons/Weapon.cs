@@ -95,6 +95,9 @@ namespace EoE.Combatery
 		public ColliderMask StopOnCollisionMask = (ColliderMask)(-1);
 		public EffectSingle DirectHit;
 
+		public bool UseCustomHitboxGroup = false;
+		public int CustomHitboxGroup = 0;
+
 		//Overrides Info
 		public bool OverrideElement = false;
 		public ElementType OverridenElement = ElementType.None;

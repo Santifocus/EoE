@@ -76,7 +76,7 @@ MonoBehaviour:
     CreatedRemenants: []
   AttackData:
     AttackSequenceParts:
-    - AnimationStartPoint: 0
+    - AnimationStartPoint: 1
       AnimationTarget: 2
       Restrictions:
         ActionRestrictions: -1
@@ -146,6 +146,8 @@ MonoBehaviour:
       CollisionMask: 0
       StopOnCollisionMask: 2
       DirectHit: {fileID: 0}
+      UseCustomHitboxGroup: 0
+      CustomHitboxGroup: -1
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
