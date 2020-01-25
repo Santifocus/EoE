@@ -9,17 +9,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa0729519a808d449bdb777d2d35538b, type: 3}
-  m_Name: AttackChargeSFX
+  m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
+  m_Name: UsedSwordcomboeffect3
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 1
-    TimeStay: 0.8
+    TimeStay: 2
     OnConditionMet: 0
     Condition: {fileID: 0}
-  TargetSound: {fileID: 11400000, guid: 2c58214673a768b45ba7c60a446d5e79, type: 2}
-  FollowTarget: 1
+  ParticleMainObject: {fileID: 7767343647658838908, guid: e2d3823f5d5657e49848faa0c6a7de71,
+    type: 3}
   OffsetToTarget: {x: 0, y: 0, z: 0}
+  RotationOffset: {x: 0, y: 0, z: 0}
+  FollowTarget: 1
+  InheritRotationOfTarget: 1
+  RotationInheritLerpSpeed: 45

@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 469f7b848055e6b4f804fc4855292c28, type: 3}
-  m_Name: AttackCharge
+  m_Name: BattleCry4
   m_EditorClassIdentifier: 
-  soundName: Charging
-  clip: {fileID: 8300000, guid: 9e68679ae1f9fbc489f92d0a2018cd63, type: 3}
+  soundName: Battle4
+  clip: {fileID: 8300000, guid: 2e0de9cc0d580ad4093506144ff95d83, type: 3}
   audioGroup: {fileID: 24300002, guid: b8b319c0096b4d34196070be7e374c0c, type: 2}
-  Loop: 1
+  Loop: 0
   priority: 128
-  pitch: 1.2
-  volume: 0.5
+  pitch: 1
+  volume: 0.8
   spatialBlend: 0
-  scaleStyle: 2
+  scaleStyle: 1
   soundCategory: 0

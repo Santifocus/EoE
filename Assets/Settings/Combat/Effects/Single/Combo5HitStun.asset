@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6012763415ced2a4684da0b169ee66eb, type: 3}
-  m_Name: Combo3HitStun
+  m_Name: Combo5HitStun
   m_EditorClassIdentifier: 
   AffectedTargets: 4
   DamageElement: 1
   CauseType: 0
-  DamageMultiplier: 0
+  DamageMultiplier: 1.2
   CritChanceMultiplier: 0
-  KnockbackMultiplier: 0
+  KnockbackMultiplier: 1
   KnockbackOrigin: 2
   KnockbackDirection: 1
   KnockbackAxisMultiplier: {x: 1, y: 1, z: 1}
@@ -46,7 +46,7 @@ MonoBehaviour:
     RotationOffset: {x: 0, y: 0, z: 0}
     HasCustomScale: 0
     CustomScale: {x: 1, y: 1, z: 1}
-  - FX: {fileID: 11400000, guid: cc82e69e5a4cc40429dc05ca5b3c40ef, type: 2}
+  - FX: {fileID: 11400000, guid: 03836726f8ec18e459b518595bbfc569, type: 2}
     HasPositionOffset: 0
     PositionOffset: {x: 0, y: 0, z: 0}
     HasRotationOffset: 0
