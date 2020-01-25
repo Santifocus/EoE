@@ -27,7 +27,7 @@ MonoBehaviour:
   - textColor: {r: 1, g: 0, b: 0.01999569, a: 1}
     text: ' B'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: ' to dodge and avoind enemy attacks.'
+    text: ' to dodge and avoid enemy attacks.'
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1
