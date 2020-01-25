@@ -295,6 +295,7 @@ namespace EoE.Combatery
 					goto AttackFinished;
 				}
 
+				ChangeWeaponState(false, null);
 				ActiveAttackStyle.Restrictions.ApplyRestriction(Player.Instance, true);
 				targetHitboxGroup = ActiveAttackStyle.UseCustomHitboxGroup ? ActiveAttackStyle.CustomHitboxGroup : -1;
 

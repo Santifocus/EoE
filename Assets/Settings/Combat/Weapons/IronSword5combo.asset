@@ -609,7 +609,7 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
-      - AtAnimationPoint: 0.7
+      - AtAnimationPoint: 0.8
         Effect:
           ChanceToActivate: 1
           ContainedEffectType: 2
