@@ -20,7 +20,6 @@ MonoBehaviour:
     TimeStay: 3.2
     OnConditionMet: 0
     Conditions: []
-  UIPrefabObject: {fileID: 1001908304436691909, guid: 4f252de5624734f4884261a83e3be263,
-    type: 3}
+  UIPrefabObject: {fileID: 0}
   CustomChildIndex: 9999
   CanvasTarget: 1

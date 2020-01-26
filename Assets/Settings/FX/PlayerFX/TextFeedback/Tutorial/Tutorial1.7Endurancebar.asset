@@ -22,7 +22,7 @@ MonoBehaviour:
     Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Run, jump Dodge and Attack needs
+    text: Running, jumping, dodging and attacking use
   - textColor: {r: 1, g: 0.99959075, b: 0, a: 1}
     text: ' Endurance'
   - textColor: {r: 1, g: 1, b: 1, a: 1}

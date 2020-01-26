@@ -31,6 +31,7 @@ namespace EoE.Combatery
 		public CustomHitboxGroup[] customHitboxGroups = default;
 		[SerializeField] private ParticleSystem[] particlesToActivateOnEnable = default;
 		[SerializeField] private GameObject dropCollision = default;
+		[SerializeField] private GameObject[] nonClonable = default;
 
 		//Base Data
 		public Weapon weaponInfo { get; private set; }
@@ -157,7 +158,11 @@ namespace EoE.Combatery
 			//deactivate all custom objects
 			for (int i = 0; i < clone.particlesToActivateOnEnable.Length; i++)
 			{
-				particlesToActivateOnEnable[i].Stop(true, ParticleSystemStopBehavior.StopEmitting);
+				Destroy(clone.particlesToActivateOnEnable[i]);
+			}
+			for (int i = 0; i < clone.nonClonable.Length; i++)
+			{
+				Destroy(clone.nonClonable[i]);
 			}
 
 			//Set layers to default

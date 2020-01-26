@@ -21,5 +21,6 @@
 		public const string MENU_NAV_SOUND = "MenuNavigation";
 		public const string FAILED_MENU_NAV_SOUND = "FailedMenuNavigation";
 		public const string MENU_SCROLL_SOUND = "MenuScroll";
+		public const string DIALOGUE_SOUND = "DialgoueSound";
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using EoE.Information;
+using EoE.Sounds;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -55,6 +56,9 @@ namespace EoE.UI
 				dialogueContainer.TextDisplay.text = "";
 				string totalText = "";
 
+				SoundManager.SetSoundState(ConstantCollector.DIALOGUE_SOUND, true);
+				bool soundOn = true;
+
 				for(int i = 0; i < targetDialogue.BaseInfo.parts.Length; i++)
 				{
 					string partText = targetDialogue.BaseInfo.parts[i].ToString();
@@ -71,7 +75,18 @@ namespace EoE.UI
 						yield return new WaitForEndOfFrame();
 
 						if(!inMain || targetDialogue.BaseInfo.pauseTimeWhenDisplaying || !GameController.GameIsPaused)
+						{
 							indexTimer += Time.unscaledDeltaTime;
+							if (!soundOn)
+							{
+								soundOn = true;
+								SoundManager.SetSoundState(ConstantCollector.DIALOGUE_SOUND, soundOn);
+							}
+						}
+						else if (soundOn)
+						{
+							SoundManager.SetSoundState(ConstantCollector.DIALOGUE_SOUND, soundOn = false);
+						}
 
 						while ((indexTimer >= GameController.CurrentGameSettings.DialogueDelayPerLetter) && (curInsertIndex < nonColoredText.Length))
 						{
@@ -87,10 +102,20 @@ namespace EoE.UI
 					dialogueContainer.TextDisplay.text = totalText;
 				}
 
+				if (soundOn)
+				{
+					SoundManager.SetSoundState(ConstantCollector.DIALOGUE_SOUND, soundOn = false);
+				}
+
 				targetDialogue.DoneDisplaying = true;
 				yield return new WaitUntil(() => targetDialogue.ShouldRemove);
 			DoneDisplaying:;
+
 				ClearDisplay();
+				if (soundOn)
+				{
+					SoundManager.SetSoundState(ConstantCollector.DIALOGUE_SOUND, false);
+				}
 			}
 
 			displayingDialogue = false;
@@ -103,6 +128,10 @@ namespace EoE.UI
 
 			dialogueContainerMain.gameObject.SetActive(false);
 			dialogueContainerMenu.gameObject.SetActive(false);
+		}
+		private void OnDestroy()
+		{
+			SoundManager.SetSoundState(ConstantCollector.DIALOGUE_SOUND, false);
 		}
 	}
 

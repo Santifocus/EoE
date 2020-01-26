@@ -23,7 +23,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 620d22bd17b3ac3468a8971c1855826b, type: 2}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: 'Press '
+    text: Press
   - textColor: {r: 0.027350426, g: 1, b: 0, a: 1}
     text: ' A'
   - textColor: {r: 1, g: 1, b: 1, a: 1}

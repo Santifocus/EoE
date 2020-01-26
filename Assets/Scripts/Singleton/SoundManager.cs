@@ -37,10 +37,13 @@ namespace EoE.Sounds
 		{
 			if(Instance.globalSounds.TryGetValue(soundName, out SoundPlayer result))
 			{
-				if (state)
-					result.Play();
-				else
-					result.Stop();
+				if (result.Exists)
+				{
+					if (state)
+						result.Play();
+					else
+						result.Stop();
+				}
 			}
 			else
 			{
