@@ -212,6 +212,13 @@ MonoBehaviour:
         RotationOffset: {x: 0, y: 0, z: 0}
         HasCustomScale: 0
         CustomScale: {x: 1, y: 1, z: 1}
+      - FX: {fileID: 11400000, guid: 9b033f7c65c3a4144beceb4623dcb3a9, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
       AOEEffects: []
       ProjectileInfos: []
       HealsOnUser: []
@@ -293,6 +300,13 @@ MonoBehaviour:
         RotationOffset: {x: 0, y: 0, z: 0}
         HasCustomScale: 0
         CustomScale: {x: 1, y: 1, z: 1}
+      - FX: {fileID: 11400000, guid: 4d418662b73406240a9352ea02400122, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
       AOEEffects: []
       ProjectileInfos: []
       HealsOnUser:
@@ -368,6 +382,13 @@ MonoBehaviour:
       ImpulseDirectionBase: 1
       FXObjects:
       - FX: {fileID: 11400000, guid: f70b3165b44ff044d8e38f86767ce8b8, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      - FX: {fileID: 11400000, guid: 76bc5c2d165c42247a7e6e97eb82703f, type: 2}
         HasPositionOffset: 0
         PositionOffset: {x: 0, y: 0, z: 0}
         HasRotationOffset: 0
@@ -550,6 +571,13 @@ MonoBehaviour:
       ImpulseDirectionBase: 1
       FXObjects:
       - FX: {fileID: 11400000, guid: 3fdd5543f4c951f4689a42ebb07da2ce, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      - FX: {fileID: 11400000, guid: e4cce52a862bea84aba426b38ec454d5, type: 2}
         HasPositionOffset: 0
         PositionOffset: {x: 0, y: 0, z: 0}
         HasRotationOffset: 0
@@ -764,6 +792,13 @@ MonoBehaviour:
         RotationOffset: {x: 0, y: 0, z: 0}
         HasCustomScale: 0
         CustomScale: {x: 1, y: 1, z: 1}
+      - FX: {fileID: 11400000, guid: b738728c0a9c5d149a828e96f159b2be, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
       AOEEffects: []
       ProjectileInfos: []
       HealsOnUser: []
@@ -849,7 +884,7 @@ MonoBehaviour:
       BuffsOnUser: []
       CreatedRemenants: []
     SpawnDummy: 0
-    DeleteDummyOnFinish: 0
+    DeleteDummyOnFinish: 1
     ItemsToGive: []
   - DelayTime: 3
     Effects:

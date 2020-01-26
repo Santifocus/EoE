@@ -24,15 +24,15 @@ MonoBehaviour:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Select the Fire Ring. Press
   - textColor: {r: 0, g: 1, b: 0.23211956, a: 1}
-    text: A
+    text: ' A'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: and choose
   - textColor: {r: 1, g: 0, b: 0.8646321, a: 1}
-    text: Equip
+    text: ' Equip'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: to select an equip space. Press
   - textColor: {r: 0, g: 0.8745099, b: 0.20392159, a: 1}
-    text: A
+    text: ' A'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: again to equip the ring on the selected equip space.
   dialogueIcon: {fileID: 0}

@@ -18,7 +18,8 @@ MonoBehaviour:
   EntitieElement: 1
   PossibleDropsTable: {fileID: 0}
   LevelSettings: {fileID: 0}
-  ExperienceWorth: 0
+  ExperienceWorth: 10
+  DeathEffects: []
   BasePhysicalDamage: 0
   BaseMagicalDamage: 0
   BaseDefense: 0

@@ -17,7 +17,7 @@ MonoBehaviour:
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 0
-    TimeStay: 2
+    TimeStay: 3
     OnConditionMet: 1
     Conditions:
     - {fileID: 11400000, guid: 7d17a4d91bd2bef488886d92d02313f4, type: 2}
