@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6012763415ced2a4684da0b169ee66eb, type: 3}
-  m_Name: Thunderbladehit
+  m_Name: Frostrapierhit
   m_EditorClassIdentifier: 
   AffectedTargets: 4
-  DamageElement: 16
+  DamageElement: 8
   CauseType: 0
   DamageMultiplier: 0
   CritChanceMultiplier: 0
@@ -31,14 +31,14 @@ MonoBehaviour:
     RotationOffset: {x: 0, y: 0, z: 0}
     HasCustomScale: 0
     CustomScale: {x: 1, y: 1, z: 1}
-  - FX: {fileID: 11400000, guid: 33ed1e6c408275943b4e553c7436787a, type: 2}
+  - FX: {fileID: 11400000, guid: 433216e61ec36064c847eceac51860f0, type: 2}
     HasPositionOffset: 0
     PositionOffset: {x: 0, y: 0, z: 0}
     HasRotationOffset: 0
     RotationOffset: {x: 0, y: 0, z: 0}
     HasCustomScale: 0
     CustomScale: {x: 1, y: 1, z: 1}
-  - FX: {fileID: 11400000, guid: 85df57590017f8246b5c277ff2638d81, type: 2}
+  - FX: {fileID: 11400000, guid: 2818b0eac2cb4484b955b4da0826e4ab, type: 2}
     HasPositionOffset: 0
     PositionOffset: {x: 0, y: 0, z: 0}
     HasRotationOffset: 0

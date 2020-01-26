@@ -1,0 +1,202 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f668e22fb629a4409275a25b2c92f34, type: 3}
+  m_Name: FrostnovaUltimate
+  m_EditorClassIdentifier: 
+  NoDefinedActionType: 0
+  ActionType: 2
+  BasePhysicalDamage: 10
+  BaseMagicalDamage: 0
+  BaseKnockback: 0
+  BaseCritChance: 0
+  Cost:
+    Health: 0
+    Mana: 0
+    Endurance: 0
+    AdditionalConditions: []
+  UltimateIcon: {fileID: 21300000, guid: 90e92c3d5e058a74da4ac18b249e0de3, type: 3}
+  ActivationEffects:
+  - ChanceToActivate: 1
+    ContainedEffectType: 34
+    ImpulseVelocity: 5
+    ImpulseVelocityFallOffTime: 0.5
+    ImpulseVelocityDirection: 2
+    ImpulseVelocityFallbackDirection: 1
+    ImpulseDirectionBase: 1
+    FXObjects:
+    - FX: {fileID: 11400000, guid: 8530ca1f603a5704ebd54df3117ff76b, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 11400000, guid: 2e0694b3d2549f940b10a74333586538, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 11400000, guid: 4f5931432b092ab4d963d5d61171b66e, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 11400000, guid: ee279f9f4023b0640a69efd86578d463, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    AOEEffects: []
+    ProjectileInfos: []
+    HealsOnUser: []
+    StackingStyle: 2
+    BuffsOnUser:
+    - {fileID: 11400000, guid: b62d1893094847845a6a883ffc575992, type: 2}
+    CreatedRemenants: []
+  AttackData:
+    AttackSequenceParts:
+    - AnimationStartPoint: 0
+      AnimationTarget: 4
+      Restrictions:
+        ActionRestrictions: -1
+        MovementRestrictions: -1
+      CausedCooldown: 0
+      AnimationMultiplicationType: 2
+      AnimationSpeedFlatValue: 1
+      AnimationSpeedCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: -0.0041656494
+          value: 0.9952698
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.9916687
+          value: 0.25235748
+          inSlope: 2
+          outSlope: 2
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AnimationSpeedCurveTimeframe: 2
+      AnimationSpeedCurveMultiplier: 1
+      NeedsCharging: 0
+      ChargeSettings:
+        EffectMask: 3
+        AnimationChargeStartpoint: 0.1
+        Restrictions:
+          ActionRestrictions: -1
+          MovementRestrictions: -1
+        WaitAtFullChargeForRelease: 1
+        ChargeTime: 1
+        StartCharge: 0
+        MaximumCharge: 1
+        MinRequiredCharge: 0.1
+        ChargeBasedDirectHits: []
+        FXObjects: []
+        FXObjectsWithMutliplier: []
+        BuffOnUserWhileCharging: []
+      WaitSettings: []
+      DamageMultiplier: 1
+      HealthCostMultiplier: 1
+      ManaCostMultiplier: 1
+      EnduranceCostMultiplier: 1
+      KnockbackMultiplier: 1
+      CritChanceMultiplier: 1
+      CollisionMask: -1
+      StopOnCollisionMask: -1
+      DirectHit: {fileID: 0}
+      UseCustomHitboxGroup: 0
+      CustomHitboxGroup: 0
+      OverrideElement: 0
+      OverridenElement: 1
+      OverrideCauseType: 0
+      OverridenCauseType: 0
+      ComboIncreaseMaxDelay: 1
+      OnHitComboWorth: 1
+      StartEffectsOnUser:
+      - AtAnimationPoint: 0.75
+        Effect:
+          ChanceToActivate: 1
+          ContainedEffectType: 2
+          ImpulseVelocity: 5
+          ImpulseVelocityFallOffTime: 0.5
+          ImpulseVelocityDirection: 2
+          ImpulseVelocityFallbackDirection: 1
+          ImpulseDirectionBase: 1
+          FXObjects:
+          - FX: {fileID: 11400000, guid: c67c34406e2f4e441aad597ba53c4657, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          AOEEffects: []
+          ProjectileInfos: []
+          HealsOnUser: []
+          StackingStyle: 2
+          BuffsOnUser:
+          - {fileID: 11400000, guid: 04c40735dbf85f54ab1effad039fed11, type: 2}
+          CreatedRemenants: []
+      - AtAnimationPoint: 0.95
+        Effect:
+          ChanceToActivate: 1
+          ContainedEffectType: 70
+          ImpulseVelocity: 5
+          ImpulseVelocityFallOffTime: 0.5
+          ImpulseVelocityDirection: 2
+          ImpulseVelocityFallbackDirection: 1
+          ImpulseDirectionBase: 1
+          FXObjects:
+          - FX: {fileID: 11400000, guid: 7b298c3f4f849ef4abeb89d51d389677, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          - FX: {fileID: 11400000, guid: b6a8347197ccbbb4e9518273fb6c8fd9, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          AOEEffects:
+          - {fileID: 11400000, guid: b6e81a14f1497314eb7ae3a3888b93b7, type: 2}
+          ProjectileInfos: []
+          HealsOnUser: []
+          StackingStyle: 2
+          BuffsOnUser: []
+          CreatedRemenants:
+          - {fileID: 11400000, guid: b1c5de0789443554abba1f6fd9cddc02, type: 2}
+      WhileEffectsOnUser: []
+      StartEffectsOnWeapon: []
+      WhileEffectsOnWeapon: []
+    PartsMaxDelays:
+    - 0
