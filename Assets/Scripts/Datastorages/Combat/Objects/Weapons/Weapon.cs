@@ -39,6 +39,16 @@ namespace EoE.Combatery
 		public Vector3 WeaponPositionOffset;
 		public Vector3 WeaponRotationOffset;
 
+		//Base Particles
+		public GameObject HitEntitieParticles = default;
+		public GameObject HitTerrainParticles = default;
+
+		public CustomFXObject[] EntitieHitEffectsOnUser = new CustomFXObject[0];
+		public CustomFXObject[] TerrainHitEffectsOnUser = new CustomFXObject[0];
+
+		public CustomFXObject[] EntitieHitEffectsOnWeapon = new CustomFXObject[0];
+		public CustomFXObject[] TerrainHitEffectsOnWeapon = new CustomFXObject[0];
+
 		//Attack styles
 		public AttackSequence StandAttackSequence = new AttackSequence();
 		public AttackSequence RunAttackSequence = new AttackSequence();

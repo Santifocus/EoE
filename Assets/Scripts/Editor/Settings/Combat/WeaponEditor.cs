@@ -60,6 +60,7 @@ namespace EoE.Combatery
 
 			DrawCombatObjectBase(settings, serializedObject, 1);
 
+			//Weapon flags & Base data
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			ObjectField<WeaponController>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WeaponPrefab))), ref settings.WeaponPrefab, 1);
 			EnumField<ElementType>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WeaponElement))), ref settings.WeaponElement, 1);
@@ -73,10 +74,23 @@ namespace EoE.Combatery
 				isDirty = true;
 			}
 
+			//Feedback
+			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
+			ObjectField<GameObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.HitEntitieParticles))), ref settings.HitEntitieParticles, 1);
+			ObjectField<GameObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.HitTerrainParticles))), ref settings.HitTerrainParticles, 1);
+
+			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EntitieHitEffectsOnUser))), ref settings.EntitieHitEffectsOnUser, serializedObject.FindProperty(nameof(settings.EntitieHitEffectsOnUser)), DrawCustomFXObject, new GUIContent(". Effect"), 1);
+			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.TerrainHitEffectsOnUser))), ref settings.TerrainHitEffectsOnUser, serializedObject.FindProperty(nameof(settings.TerrainHitEffectsOnUser)), DrawCustomFXObject, new GUIContent(". Effect"), 1);
+
+			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EntitieHitEffectsOnWeapon))), ref settings.EntitieHitEffectsOnWeapon, serializedObject.FindProperty(nameof(settings.EntitieHitEffectsOnWeapon)), DrawCustomFXObject, new GUIContent(". Effect"), 1);
+			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.TerrainHitEffectsOnWeapon))), ref settings.TerrainHitEffectsOnWeapon, serializedObject.FindProperty(nameof(settings.TerrainHitEffectsOnWeapon)), DrawCustomFXObject, new GUIContent(". Effect"), 1);
+
+			//Combo / Ultimate
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			ObjectField<ComboSet>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ComboEffects))), ref settings.ComboEffects, 1);
 			BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.HasUltimate))), ref settings.HasUltimate, 1);
 
+			//Prefab positioning
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			Vector3Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WeaponPositionOffset))), ref settings.WeaponPositionOffset, 1);
 			Vector3Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WeaponRotationOffset))), ref settings.WeaponRotationOffset, 1);

@@ -32,6 +32,14 @@ MonoBehaviour:
   HasUltimate: 1
   WeaponPositionOffset: {x: -0.03, y: 0.1, z: 0.58}
   WeaponRotationOffset: {x: 0, y: 0, z: 25}
+  HitEntitieParticles: {fileID: 5613424165658157339, guid: acabb441da6e305419f76f495652f36f,
+    type: 3}
+  HitTerrainParticles: {fileID: 1857673866051879923, guid: f9fe722d9325bd746a25f57f4ca800d5,
+    type: 3}
+  EntitieHitEffectsOnUser: []
+  TerrainHitEffectsOnUser: []
+  EntitieHitEffectsOnWeapon: []
+  TerrainHitEffectsOnWeapon: []
   StandAttackSequence:
     AttackSequenceParts:
     - AnimationStartPoint: 0

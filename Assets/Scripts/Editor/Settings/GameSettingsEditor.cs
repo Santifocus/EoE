@@ -65,8 +65,6 @@ namespace EoE.Information
 			ObjectField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EntitieStatDisplayPrefab))), ref settings.EntitieStatDisplayPrefab, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EntitieHealthBarLerpSpeed)), "How fast should the Healthbar value of Enemy healthbars lerp?"), ref settings.EntitieHealthBarLerpSpeed, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EntitieHealthBarLerpDelay))), ref settings.EntitieHealthBarLerpDelay, 1);
-			ObjectField("Hit Entitie Particles", ref settings.HitEntitieParticles, 1);
-			ObjectField("Hit Terrain Particles", ref settings.HitTerrainParticles, 1);
 		}
 
 		private void DamageNumberSettingsArea()

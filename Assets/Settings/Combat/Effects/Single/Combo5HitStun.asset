@@ -15,7 +15,7 @@ MonoBehaviour:
   AffectedTargets: 4
   DamageElement: 1
   CauseType: 0
-  DamageMultiplier: 1.2
+  DamageMultiplier: 0
   CritChanceMultiplier: 0
   KnockbackMultiplier: 1
   KnockbackOrigin: 2

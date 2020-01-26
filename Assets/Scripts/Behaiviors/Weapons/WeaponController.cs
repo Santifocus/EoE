@@ -283,6 +283,7 @@ namespace EoE.Combatery
 			List<FXInstance> whileBoundEffects = null;
 			while (true)
 			{
+				ChangeWeaponState(false, null);
 				ActiveAttackStyle = targetSequence.AttackSequenceParts[curSequenceIndex];
 
 				//First check if this attack sequence is allowed if not we stop the while loop here
@@ -295,7 +296,6 @@ namespace EoE.Combatery
 					goto AttackFinished;
 				}
 
-				ChangeWeaponState(false, null);
 				ActiveAttackStyle.Restrictions.ApplyRestriction(Player.Instance, true);
 				targetHitboxGroup = ActiveAttackStyle.UseCustomHitboxGroup ? ActiveAttackStyle.CustomHitboxGroup : -1;
 
@@ -565,11 +565,22 @@ namespace EoE.Combatery
 			{
 				Entity hitEntitie = hit.gameObject.GetComponent<Entity>();
 				OnEntitieHit(hitEntitie, direction, hitPos);
-				CreateParticles(GameController.CurrentGameSettings.HitEntitieParticles, hitPos, direction);
+
+				//Entitie hit Feedback
+				if(weaponInfo.HitEntitieParticles)
+					CreateParticles(weaponInfo.HitEntitieParticles, hitPos, direction);
+
+				FXManager.ExecuteFX(weaponInfo.EntitieHitEffectsOnUser, Player.Instance.transform, true);
+				FXManager.ExecuteFX(weaponInfo.EntitieHitEffectsOnWeapon, transform, true);
 			}
 			else
 			{
-				CreateParticles(GameController.CurrentGameSettings.HitTerrainParticles, hitPos, direction);
+				//Terrain hit Feedback
+				if (weaponInfo.HitTerrainParticles)
+					CreateParticles(weaponInfo.HitTerrainParticles, hitPos, direction);
+
+				FXManager.ExecuteFX(weaponInfo.TerrainHitEffectsOnUser, Player.Instance.transform, true);
+				FXManager.ExecuteFX(weaponInfo.TerrainHitEffectsOnWeapon, transform, true);
 			}
 		}
 		private void OnEntitieHit(Entity hitEntitie, Vector3 direction, Vector3 hitPos)
