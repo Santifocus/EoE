@@ -26,16 +26,11 @@ MonoBehaviour:
   - textColor: {r: 0.9699626, g: 0, b: 1, a: 1}
     text: ' Durability'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: ' which goes down over use in time and by hit. It regenerates over time,
-      but if the'
+    text: which regenerates over time. If the
   - textColor: {r: 1, g: 0, b: 0.99777555, a: 1}
     text: ' Durability'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: ' reaches zero, your shield will break. The'
-  - textColor: {r: 1, g: 0, b: 0.90825653, a: 1}
-    text: ' Durability'
-  - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: ' is shown as the colour of your shield from green to red.'
+    text: ' reaches zero, your shield will break. '
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1
