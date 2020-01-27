@@ -24,6 +24,8 @@ namespace EoE.Entities
 		}
 		protected override void EntitieUpdate()
 		{
+			if (foundAlly && !foundAlly.Alive)
+				foundAlly = null;
 			if (panicModeActive)
 			{
 				if (foundAlly)

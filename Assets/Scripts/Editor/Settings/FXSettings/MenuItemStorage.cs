@@ -5,11 +5,8 @@ using System.IO;
 using TMPro;
 using UnityEditor;
 using UnityEditor.Events;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 namespace EoE.Information
 {
@@ -106,10 +103,9 @@ namespace EoE.Information
 				EditorUtility.SetDirty(tItem);
 			}
 		}
-		[MenuItem("EoE/DataManagement/Fetch")]
-		public static void Fetch()
+		[MenuItem("EoE/DataManagement/Fetch Tutorial Dialogues")]
+		public static void FetchTutorialDialogues()
 		{
-			return;
 #pragma warning disable
 			string tutorialSettingsGUID = AssetDatabase.FindAssets("t:TutorialSettings")[0];
 			TutorialSettings settings = (TutorialSettings)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(tutorialSettingsGUID), typeof(TutorialSettings));
