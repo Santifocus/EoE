@@ -15,6 +15,8 @@ namespace EoE.UI
 		[SerializeField] private InventorySlot slotPrefab = default;
 		[SerializeField] private GridLayoutGroup slotGrid = default;
 		[SerializeField] private ItemAction[] itemActions = default;
+		[SerializeField] private GameObject equipOption = default;
+		[SerializeField] private GameObject unEquipOption = default;
 		[SerializeField] private DropMenu dropMenu = default;
 		[SerializeField] private ItemDescriptionDisplay itemDescriptionDisplay = default;
 		[SerializeField] private TextMeshProUGUI currencyDisplay = default;
@@ -23,9 +25,6 @@ namespace EoE.UI
 		[SerializeField] private Image equippedArmorDisplay = default;
 		[SerializeField] private ItemEquipSlot[] equippedSpellDisplays = default;
 		[SerializeField] private ItemEquipSlot[] equippedItemDisplays = default;
-
-		[SerializeField] private string EquipText = "Equip";
-		[SerializeField] private string UnEquipText = "Unequip";
 
 		private InventorySlot[] slots;
 		private float navigationCooldown;
@@ -202,6 +201,10 @@ namespace EoE.UI
 		{
 			allowedActions = new List<ItemAction>(itemActions.Length);
 			InventoryItem item = Player.Instance.Inventory[curSlotIndex];
+			bool isEquipped = ((item != null) && item.isEquiped);
+			equipOption.SetActive(!isEquipped);
+			unEquipOption.SetActive(isEquipped);
+
 			for (int i = 0; i < itemActions.Length; i++)
 			{
 				if (item != null)
@@ -219,10 +222,6 @@ namespace EoE.UI
 				{
 					itemActions[i].SetAllowed(false);
 				}
-
-				//Update equip text
-				if (itemActions[i].actionType == InUIUses.Equip)
-					itemActions[i].displayText = ((item != null) && item.isEquiped) ? UnEquipText : EquipText;
 			}
 		}
 		private void PlayFeedback(bool succesSound)
