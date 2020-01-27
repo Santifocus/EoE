@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ab78e7538a021446a2451566185bbde, type: 3}
-  m_Name: Thunderblade
+  m_Name: ThunderBlade
   m_EditorClassIdentifier: 
   NoDefinedActionType: 0
   ActionType: 2
-  BasePhysicalDamage: 5
+  BasePhysicalDamage: 7
   BaseMagicalDamage: 0
   BaseKnockback: 2
   BaseCritChance: 0.05
