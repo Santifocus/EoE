@@ -1139,7 +1139,7 @@ RectTransform:
   - {fileID: 6279358088501850143}
   - {fileID: 5951451891409767512}
   m_Father: {fileID: 3851637756703449809}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
@@ -11092,7 +11092,7 @@ RectTransform:
   - {fileID: 3851637757913683871}
   - {fileID: 3851637757996498246}
   m_Father: {fileID: 3851637756703449809}
-  m_RootOrder: 1
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
@@ -11354,11 +11354,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3851637757418429725}
-  - {fileID: 3851637756675812056}
-  - {fileID: 3851637758674606136}
+  - {fileID: 3851637757102871802}
   - {fileID: 3851637757904786816}
   - {fileID: 5909056977855423959}
-  - {fileID: 3851637757102871802}
+  - {fileID: 3851637758674606136}
+  - {fileID: 3851637756675812056}
   m_Father: {fileID: 3851637756768421269}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -12493,13 +12493,13 @@ MonoBehaviour:
   slotPrefab: {fileID: 7594501266705301675, guid: 2c3b8b5ff04d7d345868116c7611c617,
     type: 3}
   slotGrid: {fileID: 3851637757097691473}
-  itemActions:
-  - {fileID: 3851637757102871803}
-  - {fileID: 3851637757904786817}
-  - {fileID: 3851637758674606137}
-  - {fileID: 3851637756675812057}
-  equipOption: {fileID: 3851637757904786819}
-  unEquipOption: {fileID: 840366458067632581}
+  useOption: {fileID: 3851637757102871803}
+  equipOption: {fileID: 3851637757904786817}
+  unEquipOption: {fileID: 5572526686353342329}
+  dropOption: {fileID: 3851637758674606137}
+  backOption: {fileID: 3851637756675812057}
+  equipOptionObject: {fileID: 3851637757904786819}
+  unEquipOptionObject: {fileID: 840366458067632581}
   dropMenu: {fileID: 3851637757926898239}
   itemDescriptionDisplay: {fileID: 3851637757140763364}
   currencyDisplay: {fileID: 3851637757475051571}
@@ -18270,7 +18270,7 @@ RectTransform:
   - {fileID: 3851637757551403641}
   - {fileID: 3851637757057710816}
   m_Father: {fileID: 3851637756703449809}
-  m_RootOrder: 5
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
@@ -27918,7 +27918,7 @@ RectTransform:
   - {fileID: 3851637757179806426}
   - {fileID: 3851637757789591031}
   m_Father: {fileID: 3851637756703449809}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
@@ -39856,7 +39856,7 @@ RectTransform:
   - {fileID: 3851637758325607769}
   - {fileID: 3851637756710589991}
   m_Father: {fileID: 3851637756703449809}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
