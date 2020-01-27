@@ -603,7 +603,7 @@ MonoBehaviour:
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
       WaitSettings: []
-      DamageMultiplier: 4.2
+      DamageMultiplier: 3.5
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1.5

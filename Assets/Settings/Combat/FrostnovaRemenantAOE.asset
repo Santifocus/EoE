@@ -15,8 +15,8 @@ MonoBehaviour:
   AffectedTargets: 4
   DamageElement: 8
   CauseType: 0
-  BaseEffectRadius: 15
-  ZeroOutDistance: 15
+  BaseEffectRadius: 18.5
+  ZeroOutDistance: 18.5
   HasMaximumHits: 0
   MaximumHits: 0
   DamageMultiplier: 0.5
