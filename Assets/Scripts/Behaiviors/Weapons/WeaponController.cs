@@ -772,6 +772,7 @@ namespace EoE.Combatery
 		private void DropWeapon()
 		{
 			StopAllCoroutines();
+			ChangeWeaponState(false, null);
 			RemoveBoundEffects();
 			dropCollision.SetActive(true);
 			Rigidbody b = gameObject.AddComponent<Rigidbody>();

@@ -36,12 +36,12 @@ namespace EoE.UI
 
 			display.text = displayedText;
 			display.color = curColor;
-			display.ForceMeshUpdate();
 
 			this.velocity = velocity + GetPseudoRandomVelocity();
 
 			if (wasCritcal)
 			{
+				display.ForceMeshUpdate();
 				critIcon.color = curColor;
 				critIcon.gameObject.SetActive(true);
 				critIcon.transform.localPosition = new Vector3(display.textBounds.extents.x + 0.25f, 0, 0);
