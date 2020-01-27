@@ -1123,7 +1123,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5909056977855423959
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8785,8 +8785,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -45, y: 15}
+  m_AnchoredPosition: {x: 0.66999817, y: 2.1875}
+  m_SizeDelta: {x: -80.26, y: 4.375}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2991830189072938679
 GameObject:
@@ -41168,8 +41168,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -45, y: 15}
+  m_AnchoredPosition: {x: 0.22000122, y: 0.48999977}
+  m_SizeDelta: {x: -78.69, y: 5.86}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4239733038932786588
 GameObject:
@@ -42002,8 +42002,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -45, y: 15}
+  m_AnchoredPosition: {x: -0.26999664, y: 1.5699997}
+  m_SizeDelta: {x: -95.86, y: 9.47}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4967492316321005108
 GameObject:
@@ -42611,8 +42611,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -24, y: 15}
+  m_AnchoredPosition: {x: -0.37000275, y: 2.6499996}
+  m_SizeDelta: {x: -35.37, y: 11.96}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6000399500169648025
 GameObject:
@@ -45095,8 +45095,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -45, y: 15}
+  m_AnchoredPosition: {x: -0.27999878, y: -0.030000687}
+  m_SizeDelta: {x: -77.25, y: 8.29}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &8868618957170599718
 GameObject:
