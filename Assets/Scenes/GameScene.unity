@@ -7885,21 +7885,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 25
       objectReference: {fileID: 0}
-    - target: {fileID: 1205037789288205563, guid: 21e629fb6237643449bbca1b6f13b118,
-        type: 3}
-      propertyPath: blackPlaneFadeInTime
-      value: 2.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1205037789288205563, guid: 21e629fb6237643449bbca1b6f13b118,
-        type: 3}
-      propertyPath: graphicsFadeInTime
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3851637758478667075, guid: 21e629fb6237643449bbca1b6f13b118,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 893576657966884441, guid: 21e629fb6237643449bbca1b6f13b118,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -7961,6 +7946,21 @@ PrefabInstance:
       value: -41.1
       objectReference: {fileID: 0}
     - target: {fileID: 893576657331026722, guid: 21e629fb6237643449bbca1b6f13b118,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1205037789288205563, guid: 21e629fb6237643449bbca1b6f13b118,
+        type: 3}
+      propertyPath: blackPlaneFadeInTime
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1205037789288205563, guid: 21e629fb6237643449bbca1b6f13b118,
+        type: 3}
+      propertyPath: graphicsFadeInTime
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3851637758478667075, guid: 21e629fb6237643449bbca1b6f13b118,
         type: 3}
       propertyPath: m_IsActive
       value: 0
