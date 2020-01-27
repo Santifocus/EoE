@@ -16,11 +16,10 @@ MonoBehaviour:
   TimeOut: 0
   FinishConditions:
     OnParentDeath: 0
-    OnTimeout: 0
+    OnTimeout: 1
     TimeStay: 3
-    OnConditionMet: 1
-    Conditions:
-    - {fileID: 11400000, guid: 7d17a4d91bd2bef488886d92d02313f4, type: 2}
+    OnConditionMet: 0
+    Condition: {fileID: 0}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: You collected enough Souls. To improve your stats open the character menu.

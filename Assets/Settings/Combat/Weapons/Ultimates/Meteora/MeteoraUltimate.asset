@@ -120,10 +120,9 @@ MonoBehaviour:
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
       WaitSettings:
-      - WaitCondition: {fileID: 11400000, guid: d9a42b04b4b55a343aac23eba2be7f67,
-          type: 2}
-        MinAnimtionPoint: 0.925
+      - MinAnimtionPoint: 0.925
         MaxAnimtionPoint: 0.95
+        Condition: {fileID: 11400000, guid: 05063fee59cc1ba40b98d06dcf75b926, type: 2}
       DamageMultiplier: 1
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11d7e0516c6f76b42b4579f9a066a26e, type: 3}
+  m_Name: PlayerLevelTwo
+  m_EditorClassIdentifier: 
+  Inverse: 0
+  comparisonTarget: 5
+  firstComparer:
+    compareStyle: 1
+    compareValue: 1
+  useSecondComparer: 0
+  secondComparer:
+    compareStyle: 5
+    compareValue: 1

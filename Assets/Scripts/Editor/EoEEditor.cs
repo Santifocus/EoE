@@ -5,6 +5,7 @@ using EoE.Combatery;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using EoE.Information.Logic;
 
 namespace EoE
 {
@@ -576,7 +577,7 @@ namespace EoE
 				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Mana))), ref settings.Mana, offSet + 1);
 				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Endurance))), ref settings.Endurance, offSet + 1);
 
-				ObjectArrayField<ConditionObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AdditionalConditions))), ref settings.AdditionalConditions, property.FindPropertyRelative(nameof(settings.AdditionalConditions)), new GUIContent(". Condtion"), offSet + 1);
+				ObjectArrayField<LogicComponent>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AdditionalConditions))), ref settings.AdditionalConditions, property.FindPropertyRelative(nameof(settings.AdditionalConditions)), new GUIContent(". Condtion"), offSet + 1);
 			}
 		}
 		public static void DrawActivationEffect(GUIContent content, ActivationEffect settings, SerializedProperty property, int offSet)
@@ -748,9 +749,9 @@ namespace EoE
 
 			if (selfProperty.isExpanded)
 			{
-				ObjectField<ConditionObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WaitCondition))), ref settings.WaitCondition, offSet + 1);
 				FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MinAnimtionPoint))), ref settings.MinAnimtionPoint, 0, 1, offSet + 1);
 				FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MaxAnimtionPoint))), ref settings.MaxAnimtionPoint, settings.MinAnimtionPoint, 1, offSet + 1);
+				ObjectField<LogicComponent>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Condition))), ref settings.Condition, offSet + 1);
 			}
 		}
 		public static bool NullableVector3Field(string content, string valueContent, ref Vector3 curValue, ref bool hasValue, int offSet = 0) => NullableVector3Field(new GUIContent(content), new GUIContent(valueContent), ref curValue, ref hasValue, offSet);

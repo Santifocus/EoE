@@ -19,12 +19,13 @@ MonoBehaviour:
     OnTimeout: 1
     TimeStay: 3
     OnConditionMet: 0
+    Condition: {fileID: 0}
     Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: If your Health drop down to 0
   - textColor: {r: 1, g: 0.02020948, b: 0, a: 1}
-    text: you loose the game
+    text: ' you lose the game'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: . Your Health regenerates slowly out of combat, but if you are in battle
       you will need items to regenerate.

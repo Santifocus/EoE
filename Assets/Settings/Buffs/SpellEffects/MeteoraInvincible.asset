@@ -19,8 +19,7 @@ MonoBehaviour:
     OnTimeout: 0
     TimeStay: 10
     OnConditionMet: 1
-    Conditions:
-    - {fileID: 11400000, guid: b5f22c2e3627928488936eccdd71633a, type: 2}
+    Condition: {fileID: 11400000, guid: 4e10461a1491000409b243e88ef139c9, type: 2}
   Icon: {fileID: 0}
   Effects: []
   CustomEffects:

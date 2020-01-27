@@ -1,4 +1,5 @@
 ﻿using EoE.Combatery;
+using EoE.Information.Logic;
 using UnityEditor;
 using UnityEngine;
 using static EoE.EoEEditor;
@@ -59,9 +60,9 @@ namespace EoE.Information
 				DrawRestrictionData(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Restrictions))), settings.Restrictions, property.FindPropertyRelative(nameof(settings.Restrictions)), 1);
 
 				LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
-				ObjectArrayField<ConditionObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.PauseConditions)), "While Effects will still be executed but the Duration will not be changed."), ref settings.PauseConditions, property.FindPropertyRelative(nameof(settings.PauseConditions)), new GUIContent(". Condition"), 1);
-				ObjectArrayField<ConditionObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.YieldConditions)), "While Effects will NOT be executed and the Duration will not be changed."), ref settings.YieldConditions, property.FindPropertyRelative(nameof(settings.YieldConditions)), new GUIContent(". Condition"), 1);
-				ObjectArrayField<ConditionObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StopConditions)), "If any of these conditions are true the compound will be canceled."), ref settings.StopConditions, property.FindPropertyRelative(nameof(settings.StopConditions)), new GUIContent(". Condition"), 1);
+				ObjectField<LogicComponent>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.PauseCondition)), "While Effects will still be executed but the Duration will not be changed."), ref settings.PauseCondition, 1);
+				ObjectField<LogicComponent>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.YieldCondition)), "While Effects will NOT be executed and the Duration will not be changed."), ref settings.YieldCondition, 1);
+				ObjectField<LogicComponent>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StopCondition)), "If any of these conditions are true the compound will be canceled."), ref settings.StopCondition, 1);
 
 				LineBreak(new Color(0.25f, 0.5f, 0.25f, 1));
 				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ElementDuration))), ref settings.ElementDuration, 1);

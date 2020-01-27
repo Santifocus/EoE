@@ -1,5 +1,6 @@
 ﻿using EoE.Entities;
 using EoE.Information;
+using EoE.Information.Logic;
 using System.Collections;
 using UnityEngine;
 
@@ -185,12 +186,12 @@ namespace EoE.Combatery
 		public float Health;
 		public float Mana;
 		public float Endurance;
-		public ConditionObject[] AdditionalConditions = new ConditionObject[0];
+		public LogicComponent[] AdditionalConditions = new LogicComponent[0];
 		public bool CanAfford(Entity target, float healthCostMultiplier, float manaCostMultiplier, float enduranceCostMultiplier)
 		{
 			for (int i = 0; i < AdditionalConditions.Length; i++)
 			{
-				if (!AdditionalConditions[i].ConditionMet())
+				if (!AdditionalConditions[i].True)
 					return false;
 			}
 			float totalHealthCost = Health * healthCostMultiplier;

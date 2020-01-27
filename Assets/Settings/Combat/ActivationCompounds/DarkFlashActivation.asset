@@ -72,9 +72,9 @@ MonoBehaviour:
     WhileEffects: []
     AtTargetStartEffects: []
     AtTargetWhileEffects: []
-    PauseConditions: []
-    YieldConditions: []
-    StopConditions: []
+    PauseCondition: {fileID: 0}
+    YieldCondition: {fileID: 0}
+    StopCondition: {fileID: 0}
   - Restrictions:
       ActionRestrictions: -1
       MovementRestrictions: 1
@@ -113,6 +113,6 @@ MonoBehaviour:
     WhileEffects: []
     AtTargetStartEffects: []
     AtTargetWhileEffects: []
-    PauseConditions: []
-    YieldConditions: []
-    StopConditions: []
+    PauseCondition: {fileID: 0}
+    YieldCondition: {fileID: 0}
+    StopCondition: {fileID: 0}

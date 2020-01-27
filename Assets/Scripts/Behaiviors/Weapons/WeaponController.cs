@@ -380,10 +380,10 @@ namespace EoE.Combatery
 					{
 						if((ActiveAttackStyle.WaitSettings[i].MinAnimtionPoint <= curAttackAnimationPoint) && (ActiveAttackStyle.WaitSettings[i].MaxAnimtionPoint > curAttackAnimationPoint))
 						{
-							if (ActiveAttackStyle.WaitSettings[i].WaitCondition.ConditionMet())
+							if (ActiveAttackStyle.WaitSettings[i].Condition.True)
 							{
 								SetAnimationSpeed(0);
-								while (ActiveAttackStyle.WaitSettings[i].WaitCondition.ConditionMet())
+								while (ActiveAttackStyle.WaitSettings[i].Condition.True)
 								{
 									yield return new WaitForEndOfFrame();
 								}

@@ -19,8 +19,8 @@ MonoBehaviour:
     OnTimeout: 0
     TimeStay: 3
     OnConditionMet: 1
-    Conditions:
-    - {fileID: 11400000, guid: 78e24d27b39227b40a5143b3d8c57e82, type: 2}
+    Condition: {fileID: 11400000, guid: 988d65072aed4684c88df80cea580c2d, type: 2}
+    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Press

@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ab78e7538a021446a2451566185bbde, type: 3}
-  m_Name: ThunderBlade
+  m_Name: Thunderblade
   m_EditorClassIdentifier: 
   NoDefinedActionType: 0
   ActionType: 2
-  BasePhysicalDamage: 7
+  BasePhysicalDamage: 5
   BaseMagicalDamage: 0
-  BaseKnockback: 5
-  BaseCritChance: 0.04
+  BaseKnockback: 2
+  BaseCritChance: 0.05
   Cost:
     Health: 0
     Mana: 0
-    Endurance: 6
+    Endurance: 3
     AdditionalConditions: []
   WeaponPrefab: {fileID: 5533782398965989895, guid: b8a1958f21cf1e34c96f3a2c98f4beeb,
     type: 3}
@@ -36,7 +36,14 @@ MonoBehaviour:
     type: 3}
   HitTerrainParticles: {fileID: 1857673866051879923, guid: f9fe722d9325bd746a25f57f4ca800d5,
     type: 3}
-  EntitieHitEffectsOnUser: []
+  EntitieHitEffectsOnUser:
+  - FX: {fileID: 11400000, guid: 9343519dab36da44687a7c22aaf999a5, type: 2}
+    HasPositionOffset: 0
+    PositionOffset: {x: 0, y: 0, z: 0}
+    HasRotationOffset: 0
+    RotationOffset: {x: 0, y: 0, z: 0}
+    HasCustomScale: 0
+    CustomScale: {x: 1, y: 1, z: 1}
   TerrainHitEffectsOnUser: []
   EntitieHitEffectsOnWeapon: []
   TerrainHitEffectsOnWeapon: []
@@ -93,7 +100,7 @@ MonoBehaviour:
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
       WaitSettings: []
-      DamageMultiplier: 1.5
+      DamageMultiplier: 0.8
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 0.5
@@ -156,28 +163,28 @@ MonoBehaviour:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
-          time: 0.124620944
-          value: 1.5341715
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
+          time: 0
+          value: 1
+          inSlope: -0.052460775
+          outSlope: -0.052460775
+          tangentMode: 34
           weightedMode: 0
           inWeight: 0
-          outWeight: 0
+          outWeight: 0.33333334
         - serializedVersion: 3
-          time: 1
-          value: 2.0037842
-          inSlope: 5.118835
-          outSlope: 5.118835
-          tangentMode: 0
+          time: 1.0249939
+          value: 0.946228
+          inSlope: -0.052460775
+          outSlope: -0.052460775
+          tangentMode: 34
           weightedMode: 0
-          inWeight: 0.027223468
+          inWeight: 0.33333334
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
       AnimationSpeedCurveTimeframe: 0.8
-      AnimationSpeedCurveMultiplier: 1.5
+      AnimationSpeedCurveMultiplier: 2
       NeedsCharging: 0
       ChargeSettings:
         EffectMask: 3
@@ -195,7 +202,7 @@ MonoBehaviour:
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
       WaitSettings: []
-      DamageMultiplier: 1.6
+      DamageMultiplier: 1
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
@@ -244,7 +251,23 @@ MonoBehaviour:
           BuffsOnUser: []
           CreatedRemenants: []
       WhileEffectsOnUser: []
-      StartEffectsOnWeapon: []
+      StartEffectsOnWeapon:
+      - AtAnimationPoint: 0.5
+        Effect:
+          ChanceToActivate: 1
+          ContainedEffectType: 2
+          ImpulseVelocity: 5
+          ImpulseVelocityFallOffTime: 0.5
+          ImpulseVelocityDirection: 2
+          ImpulseVelocityFallbackDirection: 1
+          ImpulseDirectionBase: 1
+          FXObjects: []
+          AOEEffects: []
+          ProjectileInfos: []
+          HealsOnUser: []
+          StackingStyle: 2
+          BuffsOnUser: []
+          CreatedRemenants: []
       WhileEffectsOnWeapon: []
     - AnimationStartPoint: 0
       AnimationTarget: 4
@@ -258,8 +281,8 @@ MonoBehaviour:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
-          time: 0.049999237
-          value: 1.2947658
+          time: 0
+          value: 1.4978603
           inSlope: -2.924757
           outSlope: -2.924757
           tangentMode: 0
@@ -267,19 +290,37 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0.028130665
         - serializedVersion: 3
-          time: 0.98031616
-          value: 1.8721695
-          inSlope: 5.118835
-          outSlope: 5.118835
+          time: 0.49668893
+          value: 1.339858
+          inSlope: 4.9363723
+          outSlope: 4.9363723
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.027223468
+          inWeight: 0.33333334
+          outWeight: 0.035066195
+        - serializedVersion: 3
+          time: 0.6209561
+          value: 1.0437387
+          inSlope: -2.3081653
+          outSlope: -2.3081653
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.07825011
+        - serializedVersion: 3
+          time: 1
+          value: 0.8
+          inSlope: 0.025694609
+          outSlope: 0.025694609
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.12927805
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      AnimationSpeedCurveTimeframe: 0.8
-      AnimationSpeedCurveMultiplier: 2.8
+      AnimationSpeedCurveTimeframe: 0.7
+      AnimationSpeedCurveMultiplier: 1.5
       NeedsCharging: 0
       ChargeSettings:
         EffectMask: 3
@@ -295,15 +336,15 @@ MonoBehaviour:
         ChargeBasedDirectHits:
         - MinRequiredCharge: 1
           MaxRequiredCharge: 2
-          DirectHitOverride: {fileID: 11400000, guid: 55b51d3b6452e93468136d47761a8377,
+          DirectHitOverride: {fileID: 11400000, guid: 265e6994fdfd23549bf67df632fcc179,
             type: 2}
         - MinRequiredCharge: 2
           MaxRequiredCharge: 2.5
-          DirectHitOverride: {fileID: 11400000, guid: 4bfccf338e5e38946a72ae0f84e38614,
+          DirectHitOverride: {fileID: 11400000, guid: ae95f75fc2b7e104b80d2b36faf8abd2,
             type: 2}
         FXObjects: []
         FXObjectsWithMutliplier:
-        - FX: {fileID: 11400000, guid: 8ffc5205dbffe15439420481fd46f37c, type: 2}
+        - FX: {fileID: 11400000, guid: b7ca0c9b1adf6044a871c15b7af6ea29, type: 2}
           HasPositionOffset: 0
           PositionOffset: {x: 0, y: 0, z: 0}
           HasRotationOffset: 0
@@ -311,13 +352,6 @@ MonoBehaviour:
           HasCustomScale: 0
           CustomScale: {x: 1, y: 1, z: 1}
         - FX: {fileID: 11400000, guid: a1ac14100d656c84e8006d4bc848efbd, type: 2}
-          HasPositionOffset: 0
-          PositionOffset: {x: 0, y: 0, z: 0}
-          HasRotationOffset: 0
-          RotationOffset: {x: 0, y: 0, z: 0}
-          HasCustomScale: 0
-          CustomScale: {x: 1, y: 1, z: 1}
-        - FX: {fileID: 11400000, guid: 14a51361675ee9744b5cb5c300568758, type: 2}
           HasPositionOffset: 0
           PositionOffset: {x: 0, y: 0, z: 0}
           HasRotationOffset: 0
@@ -333,17 +367,17 @@ MonoBehaviour:
           CustomScale: {x: 1, y: 1, z: 1}
         BuffOnUserWhileCharging: []
       WaitSettings: []
-      DamageMultiplier: 2.2
+      DamageMultiplier: 1.5
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
-      EnduranceCostMultiplier: 2
-      KnockbackMultiplier: 4
+      EnduranceCostMultiplier: 1.5
+      KnockbackMultiplier: 1
       CritChanceMultiplier: 0
       CollisionMask: -1
       StopOnCollisionMask: 0
-      DirectHit: {fileID: 0}
-      UseCustomHitboxGroup: 0
-      CustomHitboxGroup: -1
+      DirectHit: {fileID: 11400000, guid: 4bfccf338e5e38946a72ae0f84e38614, type: 2}
+      UseCustomHitboxGroup: 1
+      CustomHitboxGroup: 0
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -382,10 +416,301 @@ MonoBehaviour:
           BuffsOnUser: []
           CreatedRemenants: []
       WhileEffectsOnUser: []
+      StartEffectsOnWeapon:
+      - AtAnimationPoint: 0.4
+        Effect:
+          ChanceToActivate: 1
+          ContainedEffectType: 2
+          ImpulseVelocity: 5
+          ImpulseVelocityFallOffTime: 0.5
+          ImpulseVelocityDirection: 2
+          ImpulseVelocityFallbackDirection: 1
+          ImpulseDirectionBase: 1
+          FXObjects:
+          - FX: {fileID: 11400000, guid: b4d2fb59942332149b919e5cbafc2448, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          AOEEffects: []
+          ProjectileInfos: []
+          HealsOnUser: []
+          StackingStyle: 2
+          BuffsOnUser: []
+          CreatedRemenants: []
+      WhileEffectsOnWeapon: []
+    - AnimationStartPoint: 0
+      AnimationTarget: 2
+      Restrictions:
+        ActionRestrictions: -1
+        MovementRestrictions: -1
+      CausedCooldown: 0
+      AnimationMultiplicationType: 2
+      AnimationSpeedFlatValue: 1
+      AnimationSpeedCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0.8
+          inSlope: 0.32065496
+          outSlope: 0.32065496
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.08080139
+        - serializedVersion: 3
+          time: 0.9833374
+          value: 0.49764252
+          inSlope: -0.30748093
+          outSlope: -0.30748093
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AnimationSpeedCurveTimeframe: 0.8
+      AnimationSpeedCurveMultiplier: 1.8
+      NeedsCharging: 0
+      ChargeSettings:
+        EffectMask: 3
+        AnimationChargeStartpoint: 0.1
+        Restrictions:
+          ActionRestrictions: -1
+          MovementRestrictions: -1
+        WaitAtFullChargeForRelease: 1
+        ChargeTime: 1
+        StartCharge: 0
+        MaximumCharge: 1
+        MinRequiredCharge: 0.1
+        ChargeBasedDirectHits: []
+        FXObjects: []
+        FXObjectsWithMutliplier: []
+        BuffOnUserWhileCharging: []
+      WaitSettings: []
+      DamageMultiplier: 1.5
+      HealthCostMultiplier: 1
+      ManaCostMultiplier: 1
+      EnduranceCostMultiplier: 1
+      KnockbackMultiplier: 2
+      CritChanceMultiplier: 1
+      CollisionMask: -1
+      StopOnCollisionMask: -1
+      DirectHit: {fileID: 11400000, guid: 370c9ec2a63887748b041f9075022b73, type: 2}
+      UseCustomHitboxGroup: 0
+      CustomHitboxGroup: 0
+      OverrideElement: 0
+      OverridenElement: 1
+      OverrideCauseType: 0
+      OverridenCauseType: 0
+      ComboIncreaseMaxDelay: 3
+      OnHitComboWorth: 1
+      StartEffectsOnUser:
+      - AtAnimationPoint: 0.1
+        Effect:
+          ChanceToActivate: 1
+          ContainedEffectType: 2
+          ImpulseVelocity: 5
+          ImpulseVelocityFallOffTime: 0.5
+          ImpulseVelocityDirection: 2
+          ImpulseVelocityFallbackDirection: 1
+          ImpulseDirectionBase: 1
+          FXObjects:
+          - FX: {fileID: 11400000, guid: 37f86251f341af245a90869520ab23cd, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          - FX: {fileID: 11400000, guid: 570ad84cc1492cb43a4cce2162e3b9f9, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          AOEEffects: []
+          ProjectileInfos: []
+          HealsOnUser: []
+          StackingStyle: 2
+          BuffsOnUser: []
+          CreatedRemenants: []
+      WhileEffectsOnUser: []
       StartEffectsOnWeapon: []
+      WhileEffectsOnWeapon: []
+    - AnimationStartPoint: 0
+      AnimationTarget: 4
+      Restrictions:
+        ActionRestrictions: -1
+        MovementRestrictions: -1
+      CausedCooldown: 0
+      AnimationMultiplicationType: 2
+      AnimationSpeedFlatValue: 1
+      AnimationSpeedCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0.50412476
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.85482126
+          value: 0.83989435
+          inSlope: 2.5083764
+          outSlope: 2.5083764
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.04623378
+          outWeight: 0.18743233
+        - serializedVersion: 3
+          time: 1
+          value: 1.35
+          inSlope: 4.6769314
+          outSlope: 4.6769314
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AnimationSpeedCurveTimeframe: 1.35
+      AnimationSpeedCurveMultiplier: 1
+      NeedsCharging: 0
+      ChargeSettings:
+        EffectMask: 3
+        AnimationChargeStartpoint: 0.1
+        Restrictions:
+          ActionRestrictions: -1
+          MovementRestrictions: -1
+        WaitAtFullChargeForRelease: 1
+        ChargeTime: 1
+        StartCharge: 0
+        MaximumCharge: 1
+        MinRequiredCharge: 0.1
+        ChargeBasedDirectHits: []
+        FXObjects: []
+        FXObjectsWithMutliplier: []
+        BuffOnUserWhileCharging: []
+      WaitSettings: []
+      DamageMultiplier: 4.2
+      HealthCostMultiplier: 1
+      ManaCostMultiplier: 1
+      EnduranceCostMultiplier: 1.5
+      KnockbackMultiplier: 15
+      CritChanceMultiplier: 1
+      CollisionMask: -1
+      StopOnCollisionMask: -1
+      DirectHit: {fileID: 11400000, guid: 4bfccf338e5e38946a72ae0f84e38614, type: 2}
+      UseCustomHitboxGroup: 1
+      CustomHitboxGroup: 0
+      OverrideElement: 0
+      OverridenElement: 1
+      OverrideCauseType: 0
+      OverridenCauseType: 0
+      ComboIncreaseMaxDelay: 3
+      OnHitComboWorth: 1
+      StartEffectsOnUser:
+      - AtAnimationPoint: 0.55
+        Effect:
+          ChanceToActivate: 1
+          ContainedEffectType: 2
+          ImpulseVelocity: 5
+          ImpulseVelocityFallOffTime: 0.5
+          ImpulseVelocityDirection: 2
+          ImpulseVelocityFallbackDirection: 1
+          ImpulseDirectionBase: 1
+          FXObjects:
+          - FX: {fileID: 11400000, guid: 84ef57a18570adf40a428739056526da, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          - FX: {fileID: 11400000, guid: 33f4078c8a5dd4a44907009cea54301e, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          AOEEffects: []
+          ProjectileInfos: []
+          HealsOnUser: []
+          StackingStyle: 2
+          BuffsOnUser: []
+          CreatedRemenants: []
+      - AtAnimationPoint: 0.825
+        Effect:
+          ChanceToActivate: 1
+          ContainedEffectType: 2
+          ImpulseVelocity: 5
+          ImpulseVelocityFallOffTime: 0.5
+          ImpulseVelocityDirection: 2
+          ImpulseVelocityFallbackDirection: 1
+          ImpulseDirectionBase: 1
+          FXObjects:
+          - FX: {fileID: 11400000, guid: 19ca080591f90b4409c8dc487b8df2fb, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          - FX: {fileID: 11400000, guid: e9a7041c1b96b544d9be0195facd23e7, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          AOEEffects: []
+          ProjectileInfos: []
+          HealsOnUser: []
+          StackingStyle: 2
+          BuffsOnUser: []
+          CreatedRemenants: []
+      WhileEffectsOnUser: []
+      StartEffectsOnWeapon:
+      - AtAnimationPoint: 0.1
+        Effect:
+          ChanceToActivate: 1
+          ContainedEffectType: 2
+          ImpulseVelocity: 5
+          ImpulseVelocityFallOffTime: 0.5
+          ImpulseVelocityDirection: 2
+          ImpulseVelocityFallbackDirection: 1
+          ImpulseDirectionBase: 1
+          FXObjects:
+          - FX: {fileID: 11400000, guid: 3b6da5c9e8609d04a989dd8b0a6636b3, type: 2}
+            HasPositionOffset: 0
+            PositionOffset: {x: 0, y: 0, z: 0}
+            HasRotationOffset: 0
+            RotationOffset: {x: 0, y: 0, z: 0}
+            HasCustomScale: 0
+            CustomScale: {x: 1, y: 1, z: 1}
+          AOEEffects: []
+          ProjectileInfos: []
+          HealsOnUser: []
+          StackingStyle: 2
+          BuffsOnUser: []
+          CreatedRemenants: []
       WhileEffectsOnWeapon: []
     PartsMaxDelays:
     - 0.2
+    - 0.2
+    - 0.5
     - 0.2
   RunAttackSequence:
     AttackSequenceParts:
@@ -498,7 +823,7 @@ MonoBehaviour:
       AnimationTarget: 4
       Restrictions:
         ActionRestrictions: -1
-        MovementRestrictions: 3
+        MovementRestrictions: 2
       CausedCooldown: 0
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 1
@@ -506,19 +831,19 @@ MonoBehaviour:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
-          time: 0.0029907227
+          time: 0
           value: 0.65
-          inSlope: 0.24196905
-          outSlope: 0.24196905
+          inSlope: 0.14776003
+          outSlope: 0.14776003
           tangentMode: 34
           weightedMode: 0
           inWeight: 0
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 0.61364746
+          time: 1
           value: 0.79776
-          inSlope: 0.24196905
-          outSlope: 0.24196905
+          inSlope: 0.14776003
+          outSlope: 0.14776003
           tangentMode: 34
           weightedMode: 0
           inWeight: 0.33333334
@@ -545,11 +870,10 @@ MonoBehaviour:
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
       WaitSettings:
-      - WaitCondition: {fileID: 11400000, guid: d9a42b04b4b55a343aac23eba2be7f67,
-          type: 2}
-        MinAnimtionPoint: 0.8
+      - MinAnimtionPoint: 0.8
         MaxAnimtionPoint: 0.9
-      DamageMultiplier: 1.8
+        Condition: {fileID: 11400000, guid: 05063fee59cc1ba40b98d06dcf75b926, type: 2}
+      DamageMultiplier: 1.6
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
@@ -558,8 +882,8 @@ MonoBehaviour:
       CollisionMask: -1
       StopOnCollisionMask: -1
       DirectHit: {fileID: 11400000, guid: 370c9ec2a63887748b041f9075022b73, type: 2}
-      UseCustomHitboxGroup: 0
-      CustomHitboxGroup: -1
+      UseCustomHitboxGroup: 1
+      CustomHitboxGroup: 1
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -608,7 +932,7 @@ MonoBehaviour:
       AnimationTarget: 4
       Restrictions:
         ActionRestrictions: -1
-        MovementRestrictions: 3
+        MovementRestrictions: 2
       CausedCooldown: 0
       AnimationMultiplicationType: 2
       AnimationSpeedFlatValue: 1
@@ -655,10 +979,9 @@ MonoBehaviour:
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
       WaitSettings:
-      - WaitCondition: {fileID: 11400000, guid: d9a42b04b4b55a343aac23eba2be7f67,
-          type: 2}
-        MinAnimtionPoint: 0.8
+      - MinAnimtionPoint: 0.8
         MaxAnimtionPoint: 0.9
+        Condition: {fileID: 11400000, guid: 05063fee59cc1ba40b98d06dcf75b926, type: 2}
       DamageMultiplier: 2
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
@@ -668,8 +991,8 @@ MonoBehaviour:
       CollisionMask: -1
       StopOnCollisionMask: -1
       DirectHit: {fileID: 11400000, guid: 370c9ec2a63887748b041f9075022b73, type: 2}
-      UseCustomHitboxGroup: 0
-      CustomHitboxGroup: -1
+      UseCustomHitboxGroup: 1
+      CustomHitboxGroup: 1
       OverrideElement: 0
       OverridenElement: 1
       OverrideCauseType: 0
@@ -715,7 +1038,7 @@ MonoBehaviour:
   ComboEffects: {fileID: 11400000, guid: 4e7be449530b2d44fb6413e980a881e2, type: 2}
   UltimateSettings:
     Ultimate: {fileID: 11400000, guid: 870e27f2e49f188479010fa86ff71b7f, type: 2}
-    TotalRequiredCharge: 25
+    TotalRequiredCharge: 30
     OnUseChargeRemove: 1
     OnUltimateChargedEffects:
     - FX: {fileID: 11400000, guid: 95843647cdc223c48b316e85ad8cd98e, type: 2}

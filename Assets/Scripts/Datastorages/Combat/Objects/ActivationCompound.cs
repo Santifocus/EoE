@@ -1,4 +1,5 @@
 ﻿using EoE.Information;
+using EoE.Information.Logic;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,8 +28,8 @@ namespace EoE.Combatery
 		public ActivationEffect[] AtTargetStartEffects = new ActivationEffect[0];
 		public ActivationEffect[] AtTargetWhileEffects = new ActivationEffect[0];
 
-		public ConditionObject[] PauseConditions = new ConditionObject[0];
-		public ConditionObject[] YieldConditions = new ConditionObject[0];
-		public ConditionObject[] StopConditions = new ConditionObject[0];
+		public LogicComponent PauseCondition;
+		public LogicComponent YieldCondition;
+		public LogicComponent StopCondition;
 	}
 }

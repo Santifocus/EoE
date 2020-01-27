@@ -702,6 +702,7 @@ namespace EoE
 			public override FXObject BaseInfo => DialogueInfo;
 			private Dialogue DialogueInfo;
 			private QueuedDialogue queuedDialogue;
+			private bool wantsToBeRemoved;
 			public DialogueInstance(Dialogue DialogueInfo)
 			{
 				this.DialogueInfo = DialogueInfo;
@@ -712,8 +713,14 @@ namespace EoE
 			}
 			protected override void InternalUpdate()
 			{
+				if (!wantsToBeRemoved)
+					wantsToBeRemoved = CheckForFinishCondition();
 				if (!allowBaseUpdate && queuedDialogue.DoneDisplaying)
+				{
 					allowBaseUpdate = true;
+					if (wantsToBeRemoved)
+						FinishFX();
+				}
 			}
 			public override void OnRemove()
 			{
@@ -1187,21 +1194,23 @@ namespace EoE
 				if (!ShouldBeRemoved)
 					passedTime += timeStep;
 
-				CheckForFinishCondition();
+				if (CheckForFinishCondition())
+					FinishFX();
 				UpdateCurrentState();
 				UpdateMultiplier();
 			}
 			InternalUpdate();
 		}
-		private void CheckForFinishCondition()
+		protected bool CheckForFinishCondition()
 		{
 			if (currentState != FXState.End)
 			{
 				if (BaseInfo.FinishConditions.OnParentDeath && (!parent || !parent.gameObject.activeSelf))
-					FinishFX();
+					return true;
 				else if (BaseInfo.FinishConditions.OnConditionMet && BaseInfo.FinishConditions.ConditionMet())
-					FinishFX();
+					return true;
 			}
+			return false;
 		}
 		private void UpdateCurrentState()
 		{

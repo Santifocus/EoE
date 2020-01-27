@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22c0b73711e86cc45ac898c120dae6f9, type: 3}
+  m_Name: ScrollingMagicItems
+  m_EditorClassIdentifier: 
+  Inverse: 0
+  LogicalComponents:
+  - {fileID: 11400000, guid: 74da1567c5ad54d4ba0fa11d2b53c2b5, type: 2}
+  - {fileID: 11400000, guid: 8b3e78f0ff8dc604c96132eeb9739fcd, type: 2}

@@ -13,24 +13,24 @@ MonoBehaviour:
   m_Name: Tutorial3.9SwitchMagic
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0
+  TimeOut: 1
   FinishConditions:
     OnParentDeath: 0
-    OnTimeout: 1
+    OnTimeout: 0
     TimeStay: 3
-    OnConditionMet: 0
-    Conditions: []
+    OnConditionMet: 1
+    Condition: {fileID: 11400000, guid: 936e9e9b73cfcf04b94d9573b1bc510d, type: 2}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: You can equip up to
   - textColor: {r: 0.9601507, g: 0, b: 1, a: 1}
-    text: 4 Spells
+    text: ' 4 Spells'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: .Switch them in game by pressing
+    text: . Switch them in game by pressing
   - textColor: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}
-    text: UP or DOWN
+    text: ' UP or DOWN'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: on your D-Pad.
+    text: ' on your D-Pad.'
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

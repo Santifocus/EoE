@@ -1,4 +1,5 @@
 ﻿using EoE.Combatery;
+using EoE.Information.Logic;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
@@ -47,12 +48,19 @@ namespace EoE.Information
 		[MenuItem("EoE/Combat/Physical/Ultimate/Basic")] public static void CreateBasicUltimate() => AssetCreator<BasicUltimate>("Settings", "Combat", "Weapons", "Ultimates");
 		[MenuItem("EoE/Combat/Physical/Ultimate/Attack")] public static void CreateAttackUltimate() => AssetCreator<AttackUltimate>("Settings", "Combat", "Weapons", "Ultimates");
 
+		//Logic
+		[MenuItem("EoE/Logic/Expression/Standard")] public static void CreateStandardLogicalExpression() => AssetCreator<StandardLogicalExpression>("Settings", "Logic", "Expressions");
+		[MenuItem("EoE/Logic/Expression/Advanced")] public static void CreateAdvancedLogicalExpression() => AssetCreator<AdvancedLogicalExpression>("Settings", "Logic", "Expressions");
+		[MenuItem("EoE/Logic/Condition/Comparisson")] public static void CreateComparisonCondition() => AssetCreator<ComparisonCondition>("Settings", "Logic", "Conditions", "ComparisonConditions");
+		[MenuItem("EoE/Logic/Condition/Input")] public static void CreateInputCondition() => AssetCreator<InputCondition>("Settings", "Logic", "Conditions", "InputConditions");
+		[MenuItem("EoE/Logic/Condition/PlayerState")] public static void CreatePlayerStateCondition() => AssetCreator<PlayerStateCondition>("Settings", "Logic", "Conditions", "PlayerStateConditions");
+		[MenuItem("EoE/Logic/Condition/PlayerItem")] public static void CreatePlayerItemCondition() => AssetCreator<PlayerItemCondition>("Settings", "Logic", "Conditions", "PlayerItemConditions");
+
 		//Other
 		[MenuItem("EoE/Buff")] public static void CreateBuff() => AssetCreator<Buff>("Settings", "Buffs");
 		[MenuItem("EoE/DropTable")] public static void CreateDropTable() => AssetCreator<DropTable>("Settings", "EntitieSettings", "DropTables");
 		[MenuItem("EoE/LevelingSettings")] public static void CreateLevelingSettings() => AssetCreator<LevelingSettings>("Settings", "EntitieSettings", "LevelingSettings");
 		[MenuItem("EoE/ShopInventory")] public static void CreateShopInventory() => AssetCreator<ShopInventory>("Settings", "InteractableSettings");
-		[MenuItem("EoE/ConditionObject")] public static void CreateConditionObject() => AssetCreator<ConditionObject>("Settings", "ConditionObjects");
 		[MenuItem("EoE/TutorialSettings")] public static void CreateTutorialSettings() => AssetCreator<TutorialSettings>("Settings");
 
 		//Data Managers
@@ -98,6 +106,8 @@ namespace EoE.Information
 		[MenuItem("EoE/DataManagement/Fetch")]
 		public static void Fetch()
 		{
+			return;
+#pragma warning disable
 			string tutorialSettingsGUID = AssetDatabase.FindAssets("t:TutorialSettings")[0];
 			TutorialSettings settings = (TutorialSettings)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(tutorialSettingsGUID), typeof(TutorialSettings));
 
@@ -134,7 +144,6 @@ namespace EoE.Information
 			string[] GUIDs = AssetDatabase.FindAssets("t:" + typeToClean.Name, new[] { "Assets" });
 			Debug.Log("Found: " + GUIDs.Length + " targeted objects");
 
-#pragma warning disable
 			return;
 			for (int i = 0; i < GUIDs.Length; i++)
 			{

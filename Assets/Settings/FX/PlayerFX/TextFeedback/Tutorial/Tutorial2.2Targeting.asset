@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Tutorial2.2Targeting
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 2
+  TimeOut: 1
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 0
     TimeStay: 3
     OnConditionMet: 1
-    Conditions:
-    - {fileID: 11400000, guid: 280b76991508dc34cba8214296c979e6, type: 2}
+    Condition: {fileID: 11400000, guid: 32a2e79389e602447bd6352a8073e77a, type: 2}
+    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Press

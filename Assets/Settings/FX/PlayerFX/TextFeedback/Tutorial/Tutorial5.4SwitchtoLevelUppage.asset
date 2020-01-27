@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Tutorial5.4SwitchtoLevelUppage
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0
+  TimeOut: 1
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 0
     TimeStay: 3
     OnConditionMet: 1
-    Conditions:
-    - {fileID: 11400000, guid: 6eb9d90b34ba45f4bb18dedd445b246a, type: 2}
+    Condition: {fileID: 11400000, guid: 13eeaf85fe46c8d4ead9d5c0828db17c, type: 2}
+    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Now press

@@ -19,8 +19,8 @@ MonoBehaviour:
     OnTimeout: 0
     TimeStay: 1
     OnConditionMet: 1
-    Conditions:
-    - {fileID: 11400000, guid: 2c86ee2ef72ad11498f992d2d80c4c91, type: 2}
+    Condition: {fileID: 11400000, guid: 3ac68c93b87479e41982fa5bfe64441f, type: 2}
+    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: It's dangerous out there.... you could need some supplies...

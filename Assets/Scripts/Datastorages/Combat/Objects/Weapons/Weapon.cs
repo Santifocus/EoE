@@ -1,4 +1,5 @@
 ﻿using EoE.Information;
+using EoE.Information.Logic;
 using UnityEngine;
 
 namespace EoE.Combatery
@@ -132,9 +133,9 @@ namespace EoE.Combatery
 	[System.Serializable]
 	public class WaitSetting
 	{
-		public ConditionObject WaitCondition;
 		public float MinAnimtionPoint;
 		public float MaxAnimtionPoint;
+		public LogicComponent Condition;
 	}
 	[System.Serializable]
 	public class AttackActivationEffect

@@ -748,7 +748,10 @@ MonoBehaviour:
       CreatedRemenants: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
+    ItemsToGive:
+    - Item: {fileID: 11400000, guid: 85a6ee9ea6326894bafdefc197d83d4f, type: 2}
+      ItemCount: 1
+      ForceEquip: 0
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1

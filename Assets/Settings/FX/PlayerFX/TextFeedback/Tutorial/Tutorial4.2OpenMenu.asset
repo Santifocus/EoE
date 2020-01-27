@@ -19,8 +19,8 @@ MonoBehaviour:
     OnTimeout: 0
     TimeStay: 3
     OnConditionMet: 1
-    Conditions:
-    - {fileID: 11400000, guid: 7d17a4d91bd2bef488886d92d02313f4, type: 2}
+    Condition: {fileID: 11400000, guid: 1eadb31bf77ea194e82e92a23f35e8ef, type: 2}
+    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Open your Character Menu.

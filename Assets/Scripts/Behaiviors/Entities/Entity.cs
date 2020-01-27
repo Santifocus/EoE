@@ -854,26 +854,20 @@ namespace EoE.Entities
 					}
 
 					//Check if any condition is true if so we set their associated boolean
-					for (int j = 0; j < compound.Elements[i].StopConditions.Length; i++)
+					if (compound.Elements[i].StopCondition && compound.Elements[i].StopCondition.True)
 					{
-						if (compound.Elements[i].StopConditions[j].ConditionMet())
-						{
-							//Get rid of any restrictions/FXInstances and then exit the nested loop
-							FXManager.FinishFX(ref elementBoundFX);
-							compound.Elements[i].Restrictions.ApplyRestriction(this, false);
-							goto CompoundFinished;
-						}
+						//Get rid of any restrictions/FXInstances and then exit the nested loop
+						FXManager.FinishFX(ref elementBoundFX);
+						compound.Elements[i].Restrictions.ApplyRestriction(this, false);
+						goto CompoundFinished;
 					}
+					
 
 					//Yield conditions
 					bool yielded = false;
-					for (int j = 0; j < compound.Elements[i].YieldConditions.Length; i++)
+					if(compound.Elements[i].YieldCondition && compound.Elements[i].YieldCondition.True)
 					{
-						if(compound.Elements[i].YieldConditions[j].ConditionMet())
-						{
-							yielded = true;
-							break;
-						}
+						yielded = true;
 					}
 
 					//Pause conditions
@@ -881,13 +875,9 @@ namespace EoE.Entities
 					bool paused = false;
 					if (!yielded)
 					{
-						for (int j = 0; j < compound.Elements[i].PauseConditions.Length; i++)
+						if (compound.Elements[i].PauseCondition && compound.Elements[i].PauseCondition.True)
 						{
-							if (compound.Elements[i].PauseConditions[j].ConditionMet())
-							{
-								paused = true;
-								break;
-							}
+							paused = true;
 						}
 					}
 					

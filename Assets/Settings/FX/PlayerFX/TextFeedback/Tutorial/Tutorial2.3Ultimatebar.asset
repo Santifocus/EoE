@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Tutorial2.3Ultimatebar
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 2
+  TimeOut: 1
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 0
     TimeStay: 3
     OnConditionMet: 1
-    Conditions:
-    - {fileID: 11400000, guid: d9092fa191a917148ae6762f7e6197de, type: 2}
+    Condition: {fileID: 11400000, guid: 434033128d45a644cb30bfb62d641845, type: 2}
+    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Melee attacks on your enemy charges your
