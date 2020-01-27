@@ -12,8 +12,8 @@ namespace EoE.UI
 		[SerializeField] private Image iconDisplay = default;
 		[SerializeField] private Image itemTypeDisplay = default;
 		[SerializeField] private TextMeshProUGUI stackDisplay = default;
-		[SerializeField] private Image onSelectBackground = default;
-		[SerializeField] private Image onNotSelectBackground = default;
+		[SerializeField] private GameObject onSelectBackground = default;
+		[SerializeField] private GameObject onNotSelectBackground = default;
 		[SerializeField] private Image equippedIcon = default;
 
 		[Space(10)]
@@ -70,16 +70,16 @@ namespace EoE.UI
 				SelectedInventorySlot.DeSelect();
 
 			SelectedInventorySlot = this;
-			onSelectBackground.gameObject.SetActive(true);
-			onNotSelectBackground.gameObject.SetActive(false);
+			onSelectBackground.SetActive(true);
+			onNotSelectBackground.SetActive(false);
 		}
 		public void DeSelect()
 		{
 			if (SelectedInventorySlot == this)
 				SelectedInventorySlot = null;
 
-			onSelectBackground.gameObject.SetActive(false);
-			onNotSelectBackground.gameObject.SetActive(true);
+			onSelectBackground.SetActive(false);
+			onNotSelectBackground.SetActive(true);
 		}
 	}
 }
