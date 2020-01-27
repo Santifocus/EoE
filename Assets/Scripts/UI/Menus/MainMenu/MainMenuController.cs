@@ -10,10 +10,18 @@ namespace EoE
 	public class MainMenuController : MonoBehaviour
 	{
 		[SerializeField] private ControllerMenuItem startMenuItem = default;
+		[Space(5)]
+		[SerializeField] private GameObject tutorialCanvas = default;
+		[SerializeField] private ControllerMenuItem tutorialRequestStartMenuItem = default;
 		private void Start()
 		{
 			startMenuItem.Select();
 			SettingsMenuController.ChangeStateEvent += SettingsMenuChangedState;
+		}
+		public void RequestStartGame()
+		{
+			tutorialCanvas.SetActive(true);
+			tutorialRequestStartMenuItem.Select();
 		}
 		public void StartGame()
 		{
@@ -21,6 +29,13 @@ namespace EoE
 				return;
 
 			SceneLoader.TransitionToScene(ConstantCollector.GAME_SCENE_INDEX);
+		}
+		public void StartTuorial()
+		{
+			if (SceneLoader.Transitioning)
+				return;
+
+			SceneLoader.TransitionToScene(ConstantCollector.TUTORIAL_SCENE_INDEX);
 		}
 		public void OpenSettings()
 		{

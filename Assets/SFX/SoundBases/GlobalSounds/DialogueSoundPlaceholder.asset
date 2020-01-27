@@ -17,8 +17,8 @@ MonoBehaviour:
   audioGroup: {fileID: 24300002, guid: b8b319c0096b4d34196070be7e374c0c, type: 2}
   Loop: 1
   priority: 96
-  pitch: 1.6
-  volume: 0.75
+  pitch: 1.75
+  volume: 0.6
   spatialBlend: 0
   scaleStyle: 1
   soundCategory: 0

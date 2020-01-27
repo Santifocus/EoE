@@ -19,7 +19,7 @@ MonoBehaviour:
     OnTimeout: 1
     TimeStay: 3.2
     OnConditionMet: 0
-    Conditions: []
+    Condition: {fileID: 0}
   UIPrefabObject: {fileID: 0}
   CustomChildIndex: 9999
   CanvasTarget: 1

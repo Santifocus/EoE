@@ -13,10 +13,10 @@
 		public const int ENTITIE_LAYER_MASK = 1 << ENTITIE_LAYER;
 		public const int SHIELD_LAYER_MASK = 1 << SHIELD_LAYER;
 
-		public const int MAIN_MENU_SCENE_INDEX = 0;
-		public const int GAME_SCENE_INDEX = 1;
-		public const int TUTORIAL_SCENE_INDEX = 2;
-		public const int LOAD_SCENE_INDEX = 3;
+		public const int MAIN_MENU_SCENE_INDEX = 1;
+		public const int GAME_SCENE_INDEX = 2;
+		public const int TUTORIAL_SCENE_INDEX = 3;
+		public const int LOAD_SCENE_INDEX = 4;
 
 		public const string MENU_NAV_SOUND = "MenuNavigation";
 		public const string FAILED_MENU_NAV_SOUND = "FailedMenuNavigation";
