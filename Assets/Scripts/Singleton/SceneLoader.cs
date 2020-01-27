@@ -9,6 +9,7 @@ namespace EoE
 	public class SceneLoader : MonoBehaviour
 	{
 		private const float LOAD_FINISH_PROGRESS = 0.9f;
+		private const float MAX_DELTA_STEP = 0.025f;
 		public static SceneLoader Instance { get; private set; }
 		public static bool Transitioning => Instance.transitioning;
 
@@ -65,7 +66,7 @@ namespace EoE
 			while (timer < fadeTime)
 			{
 				yield return new WaitForEndOfFrame();
-				timer += Time.unscaledDeltaTime;
+				timer += Mathf.Min(Time.unscaledDeltaTime, MAX_DELTA_STEP);
 
 				float alphaMul = timer / fadeTime;
 				for (int i = 0; i < blackPlaneGraphics.Length; i++)
@@ -103,7 +104,7 @@ namespace EoE
 			while ((timer < finishTime) || (loadOperation.progress < LOAD_FINISH_PROGRESS))
 			{
 				yield return new WaitForEndOfFrame();
-				timer += Time.unscaledDeltaTime;
+				timer += Mathf.Min(Time.unscaledDeltaTime, MAX_DELTA_STEP);
 
 				//Update alpha of the target hint
 				float alphaMul = Mathf.Clamp01(timer / hintFadeTime);
@@ -120,7 +121,7 @@ namespace EoE
 			while (timer < fadeTime)
 			{
 				yield return new WaitForEndOfFrame();
-				timer += Time.unscaledDeltaTime;
+				timer += Mathf.Min(Time.unscaledDeltaTime, MAX_DELTA_STEP);
 				float alphaMul = 1 - (timer / fadeTime);
 
 				//BlackPlane graphics

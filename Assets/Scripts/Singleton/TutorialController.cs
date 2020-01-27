@@ -65,7 +65,7 @@ namespace EoE.UI
 				//Delete the dummy
 				if(settings.Parts[i].DeleteDummyOnFinish && spawnedDummy)
 				{
-					Destroy(spawnedDummy.gameObject);
+					spawnedDummy.ChangeHealth(new ChangeInfo(null, CauseType.Magic, TargetStat.Health, 10000));
 				}
 			}
 

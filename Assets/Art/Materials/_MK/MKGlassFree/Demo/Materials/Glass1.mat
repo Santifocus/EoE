@@ -85,9 +85,9 @@ Material:
     - _MKEditorShowLightBehavior: 0
     - _MKEditorShowMainBehavior: 1
     - _MKEditorShowReflectionBehavior: 1
-    - _MKEditorShowRenderBehavior: 0
-    - _MKEditorShowRimBehavior: 0
-    - _MKEditorShowSpecularBehavior: 0
+    - _MKEditorShowRenderBehavior: 1
+    - _MKEditorShowRimBehavior: 1
+    - _MKEditorShowSpecularBehavior: 1
     - _MKEditorShowTranslucentBehavior: 0
     - _MainTint: 0.72
     - _Metallic: 0
