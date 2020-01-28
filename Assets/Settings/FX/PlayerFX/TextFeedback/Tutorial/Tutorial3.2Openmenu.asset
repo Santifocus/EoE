@@ -23,7 +23,7 @@ MonoBehaviour:
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Press
-  - textColor: {r: 0.4433962, g: 0.4433962, b: 0.4433962, a: 1}
+  - textColor: {r: 1, g: 0, b: 0, a: 1}
     text: ' Select'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: ' to open your character menu.'

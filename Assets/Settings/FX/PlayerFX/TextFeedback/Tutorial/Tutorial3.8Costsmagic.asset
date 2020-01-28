@@ -20,11 +20,10 @@ MonoBehaviour:
     TimeStay: 3
     OnConditionMet: 0
     Condition: {fileID: 0}
-    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Casting a spell costs
-  - textColor: {r: 0, g: 0.14966917, b: 1, a: 1}
+  - textColor: {r: 0, g: 0.8477473, b: 1, a: 1}
     text: ' Mana'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: . So check your amount of Mana before you want to attack enemys with magic.

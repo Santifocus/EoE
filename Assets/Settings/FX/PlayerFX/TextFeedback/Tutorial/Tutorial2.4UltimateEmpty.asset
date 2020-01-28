@@ -19,10 +19,10 @@ MonoBehaviour:
     OnTimeout: 1
     TimeStay: 3
     OnConditionMet: 0
-    Conditions: []
+    Condition: {fileID: 0}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Casting a Ultimate empties your bar totally, so use this move whisely.
+    text: Casting Ultimates will use up your Ultimate charge, so use them wisely.
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

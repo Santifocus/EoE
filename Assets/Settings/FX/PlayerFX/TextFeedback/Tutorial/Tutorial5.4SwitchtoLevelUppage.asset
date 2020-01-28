@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
-  m_Name: Tutorial5.4SwitchtoLevelupPage
+  m_Name: Tutorial5.4SwitchtoLevelUppage
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 1
@@ -23,10 +23,14 @@ MonoBehaviour:
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Now press
-  - textColor: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}
-    text: RB
+  - textColor: {r: 1, g: 0, b: 0, a: 1}
+    text: ' RB'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: to switch to Skills and Attributes.
+    text: ' to switch to the'
+  - textColor: {r: 0.9601507, g: 0, b: 1, a: 1}
+    text: ' Leveling Page'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: .
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 2

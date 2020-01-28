@@ -26,9 +26,13 @@ MonoBehaviour:
   - textColor: {r: 0.9601507, g: 0, b: 1, a: 1}
     text: ' 4 Items'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: . Switch them in game by pressing
-  - textColor: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}
-    text: ' LEFT or RIGHT'
+    text: . You can switch them in game by pressing
+  - textColor: {r: 1, g: 0, b: 0, a: 1}
+    text: ' Left'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ' or'
+  - textColor: {r: 1, g: 0, b: 0, a: 1}
+    text: ' Right'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: ' on your D-Pad.'
   dialogueIcon: {fileID: 0}

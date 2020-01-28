@@ -132,6 +132,7 @@ namespace EoE.Information
 					if (stackSize >= containedItems[i].stackSize)
 					{
 						stackSize -= containedItems[i].stackSize;
+						containedItems[i].stackSize = 0;
 						containedItems[i].OnRemove();
 						containedItems[i] = null;
 						changed = true;
@@ -149,7 +150,7 @@ namespace EoE.Information
 				}
 			}
 
-		//We make a goto jump point here in case we succesfully remove the fullstack
+		//We make a goto jump point here in case we succesfully removed the complete stack
 		FullyRemovedStack:;
 
 			if (changed)

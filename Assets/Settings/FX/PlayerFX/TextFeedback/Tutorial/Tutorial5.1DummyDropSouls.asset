@@ -26,7 +26,11 @@ MonoBehaviour:
   - textColor: {r: 0.9699626, g: 0, b: 1, a: 1}
     text: ' Souls'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: ' or sometimes items when they are defeated.'
+    text: ' and sometimes even'
+  - textColor: {r: 0.9601507, g: 0, b: 1, a: 1}
+    text: ' Items'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ' when they are defeated.'
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

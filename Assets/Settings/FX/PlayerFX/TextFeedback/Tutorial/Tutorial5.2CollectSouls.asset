@@ -23,10 +23,14 @@ MonoBehaviour:
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: If you collect enough souls you will
-  - textColor: {r: 0.9699626, g: 0, b: 1, a: 1}
+  - textColor: {r: 0.9601507, g: 0, b: 1, a: 1}
     text: ' Level Up'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: . When you level up you can improve your stats. Now collect the Souls.
+    text: . When you level up you can improve your stats. Go ahead and pick up the
+  - textColor: {r: 0.9601507, g: 0, b: 1, a: 1}
+    text: ' Souls'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ' that the dummy dropped.'
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

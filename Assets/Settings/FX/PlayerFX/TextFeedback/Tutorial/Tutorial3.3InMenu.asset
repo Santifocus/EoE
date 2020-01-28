@@ -20,14 +20,17 @@ MonoBehaviour:
     TimeStay: 2
     OnConditionMet: 1
     Condition: {fileID: 11400000, guid: b2d28ea7d9869624d8fce810407874ab, type: 2}
-    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: On this page you can see your character stats. Press
-  - textColor: {r: 0.4433962, g: 0.4433962, b: 0.4433962, a: 1}
+  - textColor: {r: 1, g: 0, b: 0, a: 1}
     text: ' LB'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: ' to switch into your inventory.'
+    text: ' to switch into your'
+  - textColor: {r: 1, g: 0, b: 0.95985556, a: 1}
+    text: ' Inventory'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: .
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 2

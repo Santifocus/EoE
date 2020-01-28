@@ -20,15 +20,14 @@ MonoBehaviour:
     TimeStay: 3
     OnConditionMet: 1
     Condition: {fileID: 11400000, guid: 434033128d45a644cb30bfb62d641845, type: 2}
-    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Melee attacks on your enemy charges your
-  - textColor: {r: 1, g: 0, b: 0.98310184, a: 1}
+  - textColor: {r: 1, g: 0, b: 0.95985556, a: 1}
     text: ' Ultimate Bar'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: . If it is fully charged, you can cast a very powerful attack. Press
-  - textColor: {r: 1, g: 0.9538098, b: 0, a: 1}
+  - textColor: {r: 1, g: 0, b: 0, a: 1}
     text: ' Y'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: ' to release your ultimate.'

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
-  m_Name: Tutorial2.7ShieldDurability
+  m_Name: Tutorial2.7Shielddurability
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
@@ -22,15 +22,16 @@ MonoBehaviour:
     Condition: {fileID: 0}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Also your Shield has a
-  - textColor: {r: 0.9699626, g: 0, b: 1, a: 1}
+    text: Furthermore your Shield has a
+  - textColor: {r: 0, g: 1, b: 0.6812067, a: 1}
     text: ' Durability'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: ' which regenerates over time. If the'
-  - textColor: {r: 1, g: 0, b: 0.99777555, a: 1}
+    text: ' that decreases when active and when it gets hit by a damage source. It
+      will regenerates over time if inactive. If the'
+  - textColor: {r: 0, g: 1, b: 0.6812067, a: 1}
     text: ' Durability'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: ' reaches zero, your shield will break. '
+    text: ' reaches zero, your shield will break.'
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

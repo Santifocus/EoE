@@ -119,7 +119,7 @@ namespace EoE.Information
 		}
 		private void TakeItems()
 		{
-			Player.Instance.Inventory.RemoveStackSize(Item, ItemCount);
+			Player.Instance.Inventory.RemoveStackSize(Item, -ItemCount);
 		}
 	}
 }
