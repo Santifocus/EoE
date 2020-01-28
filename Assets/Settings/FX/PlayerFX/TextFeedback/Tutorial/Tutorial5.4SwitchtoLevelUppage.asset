@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
-  m_Name: Tutorial5.4SwitchtoLevelUppage
+  m_Name: Tutorial5.4SwitchtoLevelupPage
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 1
@@ -20,7 +20,6 @@ MonoBehaviour:
     TimeStay: 3
     OnConditionMet: 1
     Condition: {fileID: 11400000, guid: 13eeaf85fe46c8d4ead9d5c0828db17c, type: 2}
-    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Now press

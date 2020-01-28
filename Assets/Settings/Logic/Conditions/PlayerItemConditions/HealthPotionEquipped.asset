@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c63fc77e37662744f81c7e030a4655e7, type: 3}
-  m_Name: PlayerHasPotionEquipped
+  m_Name: HealthPotionEquipped
   m_EditorClassIdentifier: 
   Inverse: 0
   TargetItem: {fileID: 11400000, guid: 85a6ee9ea6326894bafdefc197d83d4f, type: 2}

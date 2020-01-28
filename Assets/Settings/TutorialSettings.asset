@@ -36,9 +36,9 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -62,9 +62,9 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -88,9 +88,9 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -114,9 +114,9 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -140,9 +140,9 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -166,9 +166,9 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -192,9 +192,9 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -225,13 +225,13 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
-      ContainedEffectType: 2
+      ContainedEffectType: 130
       ImpulseVelocity: 5
       ImpulseVelocityFallOffTime: 0.5
       ImpulseVelocityDirection: 2
@@ -251,12 +251,12 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges:
+      - Item: {fileID: 11400000, guid: 4389e543531ad0d4c91543a950d48174, type: 2}
+        ItemCount: 1
+        ForceEquip: 1
     SpawnDummy: 1
     DeleteDummyOnFinish: 0
-    ItemsToGive:
-    - Item: {fileID: 11400000, guid: 4389e543531ad0d4c91543a950d48174, type: 2}
-      ItemCount: 1
-      ForceEquip: 1
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -280,9 +280,9 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -300,13 +300,6 @@ MonoBehaviour:
         RotationOffset: {x: 0, y: 0, z: 0}
         HasCustomScale: 0
         CustomScale: {x: 1, y: 1, z: 1}
-      - FX: {fileID: 11400000, guid: 4d418662b73406240a9352ea02400122, type: 2}
-        HasPositionOffset: 0
-        PositionOffset: {x: 0, y: 0, z: 0}
-        HasRotationOffset: 0
-        RotationOffset: {x: 0, y: 0, z: 0}
-        HasCustomScale: 0
-        CustomScale: {x: 1, y: 1, z: 1}
       AOEEffects: []
       ProjectileInfos: []
       HealsOnUser:
@@ -316,9 +309,9 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -336,15 +329,22 @@ MonoBehaviour:
         RotationOffset: {x: 0, y: 0, z: 0}
         HasCustomScale: 0
         CustomScale: {x: 1, y: 1, z: 1}
+      - FX: {fileID: 11400000, guid: 4d418662b73406240a9352ea02400122, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
       AOEEffects: []
       ProjectileInfos: []
       HealsOnUser: []
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -368,9 +368,9 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -401,9 +401,9 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -427,13 +427,13 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
-      ContainedEffectType: 2
+      ContainedEffectType: 130
       ImpulseVelocity: 5
       ImpulseVelocityFallOffTime: 0.5
       ImpulseVelocityDirection: 2
@@ -453,9 +453,12 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges:
+      - Item: {fileID: 11400000, guid: 428f279ff073bb54c81150df9f36247e, type: 2}
+        ItemCount: 1
+        ForceEquip: 0
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -479,9 +482,9 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -505,9 +508,9 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -531,9 +534,9 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -557,9 +560,9 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -571,6 +574,65 @@ MonoBehaviour:
       ImpulseDirectionBase: 1
       FXObjects:
       - FX: {fileID: 11400000, guid: 3fdd5543f4c951f4689a42ebb07da2ce, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+      PlayerItemChanges: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 2
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 509605e81e44c7b4d9c96a09cb73f36f, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      - FX: {fileID: 11400000, guid: 76bc5c2d165c42247a7e6e97eb82703f, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
+      AOEEffects: []
+      ProjectileInfos: []
+      HealsOnUser: []
+      StackingStyle: 2
+      BuffsOnUser: []
+      CreatedRemenants: []
+      PlayerItemChanges: []
+    SpawnDummy: 0
+    DeleteDummyOnFinish: 0
+  - DelayTime: 3
+    Effects:
+    - ChanceToActivate: 1
+      ContainedEffectType: 130
+      ImpulseVelocity: 5
+      ImpulseVelocityFallOffTime: 0.5
+      ImpulseVelocityDirection: 2
+      ImpulseVelocityFallbackDirection: 1
+      ImpulseDirectionBase: 1
+      FXObjects:
+      - FX: {fileID: 11400000, guid: 7cb96c0eaed05124094111d7e6762424, type: 2}
         HasPositionOffset: 0
         PositionOffset: {x: 0, y: 0, z: 0}
         HasRotationOffset: 0
@@ -590,65 +652,22 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges:
+      - Item: {fileID: 11400000, guid: 328dc4ced1e3d1f43ad1d209ac2b013e, type: 2}
+        ItemCount: 1
+        ForceEquip: 1
+      - Item: {fileID: 11400000, guid: 24bf8e4451a0cc84589f3c9af971978e, type: 2}
+        ItemCount: 1
+        ForceEquip: 1
+      - Item: {fileID: 11400000, guid: f8b0ecbc61980774a811b21215e17673, type: 2}
+        ItemCount: 1
+        ForceEquip: 1
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
-      ContainedEffectType: 2
-      ImpulseVelocity: 5
-      ImpulseVelocityFallOffTime: 0.5
-      ImpulseVelocityDirection: 2
-      ImpulseVelocityFallbackDirection: 1
-      ImpulseDirectionBase: 1
-      FXObjects:
-      - FX: {fileID: 11400000, guid: 509605e81e44c7b4d9c96a09cb73f36f, type: 2}
-        HasPositionOffset: 0
-        PositionOffset: {x: 0, y: 0, z: 0}
-        HasRotationOffset: 0
-        RotationOffset: {x: 0, y: 0, z: 0}
-        HasCustomScale: 0
-        CustomScale: {x: 1, y: 1, z: 1}
-      AOEEffects: []
-      ProjectileInfos: []
-      HealsOnUser: []
-      StackingStyle: 2
-      BuffsOnUser: []
-      CreatedRemenants: []
-    SpawnDummy: 0
-    DeleteDummyOnFinish: 0
-    ItemsToGive: []
-  - DelayTime: 3
-    Effects:
-    - ChanceToActivate: 1
-      ContainedEffectType: 2
-      ImpulseVelocity: 5
-      ImpulseVelocityFallOffTime: 0.5
-      ImpulseVelocityDirection: 2
-      ImpulseVelocityFallbackDirection: 1
-      ImpulseDirectionBase: 1
-      FXObjects:
-      - FX: {fileID: 11400000, guid: 7cb96c0eaed05124094111d7e6762424, type: 2}
-        HasPositionOffset: 0
-        PositionOffset: {x: 0, y: 0, z: 0}
-        HasRotationOffset: 0
-        RotationOffset: {x: 0, y: 0, z: 0}
-        HasCustomScale: 0
-        CustomScale: {x: 1, y: 1, z: 1}
-      AOEEffects: []
-      ProjectileInfos: []
-      HealsOnUser: []
-      StackingStyle: 2
-      BuffsOnUser: []
-      CreatedRemenants: []
-    SpawnDummy: 0
-    DeleteDummyOnFinish: 0
-    ItemsToGive: []
-  - DelayTime: 3
-    Effects:
-    - ChanceToActivate: 1
-      ContainedEffectType: 2
+      ContainedEffectType: 130
       ImpulseVelocity: 5
       ImpulseVelocityFallOffTime: 0.5
       ImpulseVelocityDirection: 2
@@ -668,9 +687,21 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges:
+      - Item: {fileID: 11400000, guid: 428f279ff073bb54c81150df9f36247e, type: 2}
+        ItemCount: -1
+        ForceEquip: 0
+      - Item: {fileID: 11400000, guid: 328dc4ced1e3d1f43ad1d209ac2b013e, type: 2}
+        ItemCount: -1
+        ForceEquip: 0
+      - Item: {fileID: 11400000, guid: 24bf8e4451a0cc84589f3c9af971978e, type: 2}
+        ItemCount: -1
+        ForceEquip: 0
+      - Item: {fileID: 11400000, guid: f8b0ecbc61980774a811b21215e17673, type: 2}
+        ItemCount: -1
+        ForceEquip: 0
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -694,9 +725,9 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -720,13 +751,13 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
-      ContainedEffectType: 2
+      ContainedEffectType: 130
       ImpulseVelocity: 5
       ImpulseVelocityFallOffTime: 0.5
       ImpulseVelocityDirection: 2
@@ -746,38 +777,12 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges:
+      - Item: {fileID: 11400000, guid: 85a6ee9ea6326894bafdefc197d83d4f, type: 2}
+        ItemCount: 10
+        ForceEquip: 0
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive:
-    - Item: {fileID: 11400000, guid: 85a6ee9ea6326894bafdefc197d83d4f, type: 2}
-      ItemCount: 3
-      ForceEquip: 0
-  - DelayTime: 3
-    Effects:
-    - ChanceToActivate: 1
-      ContainedEffectType: 2
-      ImpulseVelocity: 5
-      ImpulseVelocityFallOffTime: 0.5
-      ImpulseVelocityDirection: 2
-      ImpulseVelocityFallbackDirection: 1
-      ImpulseDirectionBase: 1
-      FXObjects:
-      - FX: {fileID: 11400000, guid: d5d474f2e0655f149bfdc3351d46db78, type: 2}
-        HasPositionOffset: 0
-        PositionOffset: {x: 0, y: 0, z: 0}
-        HasRotationOffset: 0
-        RotationOffset: {x: 0, y: 0, z: 0}
-        HasCustomScale: 0
-        CustomScale: {x: 1, y: 1, z: 1}
-      AOEEffects: []
-      ProjectileInfos: []
-      HealsOnUser: []
-      StackingStyle: 2
-      BuffsOnUser: []
-      CreatedRemenants: []
-    SpawnDummy: 0
-    DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -795,22 +800,15 @@ MonoBehaviour:
         RotationOffset: {x: 0, y: 0, z: 0}
         HasCustomScale: 0
         CustomScale: {x: 1, y: 1, z: 1}
-      - FX: {fileID: 11400000, guid: b738728c0a9c5d149a828e96f159b2be, type: 2}
-        HasPositionOffset: 0
-        PositionOffset: {x: 0, y: 0, z: 0}
-        HasRotationOffset: 0
-        RotationOffset: {x: 0, y: 0, z: 0}
-        HasCustomScale: 0
-        CustomScale: {x: 1, y: 1, z: 1}
       AOEEffects: []
       ProjectileInfos: []
       HealsOnUser: []
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -834,13 +832,13 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
-      ContainedEffectType: 2
+      ContainedEffectType: 130
       ImpulseVelocity: 5
       ImpulseVelocityFallOffTime: 0.5
       ImpulseVelocityDirection: 2
@@ -854,19 +852,35 @@ MonoBehaviour:
         RotationOffset: {x: 0, y: 0, z: 0}
         HasCustomScale: 0
         CustomScale: {x: 1, y: 1, z: 1}
+      - FX: {fileID: 11400000, guid: b738728c0a9c5d149a828e96f159b2be, type: 2}
+        HasPositionOffset: 0
+        PositionOffset: {x: 0, y: 0, z: 0}
+        HasRotationOffset: 0
+        RotationOffset: {x: 0, y: 0, z: 0}
+        HasCustomScale: 0
+        CustomScale: {x: 1, y: 1, z: 1}
       AOEEffects: []
       ProjectileInfos: []
       HealsOnUser: []
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges:
+      - Item: {fileID: 11400000, guid: 559b53f723906944b9b4184cc5331dc2, type: 2}
+        ItemCount: 10
+        ForceEquip: 1
+      - Item: {fileID: 11400000, guid: 577e912d320c9694b81aaffd76fd2162, type: 2}
+        ItemCount: 10
+        ForceEquip: 1
+      - Item: {fileID: 11400000, guid: 1ec4255c5af55d54e938534910d3ed61, type: 2}
+        ItemCount: 5
+        ForceEquip: 1
     SpawnDummy: 0
-    DeleteDummyOnFinish: 0
-    ItemsToGive: []
+    DeleteDummyOnFinish: 1
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
-      ContainedEffectType: 2
+      ContainedEffectType: 130
       ImpulseVelocity: 5
       ImpulseVelocityFallOffTime: 0.5
       ImpulseVelocityDirection: 2
@@ -886,9 +900,21 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges:
+      - Item: {fileID: 11400000, guid: 85a6ee9ea6326894bafdefc197d83d4f, type: 2}
+        ItemCount: -10
+        ForceEquip: 0
+      - Item: {fileID: 11400000, guid: 559b53f723906944b9b4184cc5331dc2, type: 2}
+        ItemCount: -10
+        ForceEquip: 0
+      - Item: {fileID: 11400000, guid: 577e912d320c9694b81aaffd76fd2162, type: 2}
+        ItemCount: -10
+        ForceEquip: 0
+      - Item: {fileID: 11400000, guid: 1ec4255c5af55d54e938534910d3ed61, type: 2}
+        ItemCount: -5
+        ForceEquip: 0
     SpawnDummy: 0
-    DeleteDummyOnFinish: 1
-    ItemsToGive: []
+    DeleteDummyOnFinish: 0
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -912,9 +938,9 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -938,9 +964,9 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -964,9 +990,9 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -990,9 +1016,9 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -1016,6 +1042,6 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     SpawnDummy: 0
     DeleteDummyOnFinish: 0
-    ItemsToGive: []

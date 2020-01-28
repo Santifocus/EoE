@@ -20,10 +20,9 @@ MonoBehaviour:
     TimeStay: 3
     OnConditionMet: 1
     Condition: {fileID: 11400000, guid: 1eadb31bf77ea194e82e92a23f35e8ef, type: 2}
-    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Open your Character Menu.
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
-  CanvasTarget: 1
+  CanvasTarget: 2

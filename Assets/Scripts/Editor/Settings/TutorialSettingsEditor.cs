@@ -12,10 +12,14 @@ namespace EoE.Information
 		{
 			TutorialSettings settings = target as TutorialSettings;
 
-			DrawArray<TutorialPart>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Parts))), ref settings.Parts, serializedObject.FindProperty(nameof(settings.Parts)), DrawTutorialPart, new GUIContent(". Part"), 0, true);
+			DrawArray<TutorialPart>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Parts))), ref settings.Parts, serializedObject.FindProperty(nameof(settings.Parts)), DrawTutorialPart, PartContentGetter, 0, true);
 		}
 		private void DrawTutorialPart(GUIContent content, TutorialPart settings, SerializedProperty property, int offSet)
 		{
+			if(settings == null)
+			{
+				return;
+			}
 			Foldout(content, property, offSet);
 			if (property.isExpanded)
 			{
@@ -25,27 +29,22 @@ namespace EoE.Information
 				LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 				BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.SpawnDummy))), ref settings.SpawnDummy, offSet + 1);
 				BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DeleteDummyOnFinish))), ref settings.DeleteDummyOnFinish, offSet + 1);
-
-				LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
-				DrawArray<ItemGiveInfo>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ItemsToGive))), ref settings.ItemsToGive, property.FindPropertyRelative(nameof(settings.ItemsToGive)), DrawStartItem, new GUIContent(". Item"), offSet + 1);
 			}
 		}
-
-		private void DrawStartItem(GUIContent content, ItemGiveInfo settings, SerializedProperty property, int offSet)
+		private GUIContent PartContentGetter(int index)
 		{
-			if (settings == null)
-			{
-				isDirty = true;
-				settings = new ItemGiveInfo();
-			}
-			Foldout(content, property, offSet);
+			TutorialSettings settings = target as TutorialSettings;
 
-			if (property.isExpanded)
+			TutorialPart part = settings.Parts[index];
+
+			if (part != null && 
+				part.Effects?.Length > 0 &&
+				part.Effects[0]?.FXObjects?.Length > 0 && 
+				part.Effects[0].FXObjects[0]?.FX)
 			{
-				ObjectField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Item))), ref settings.Item, offSet + 1);
-				IntField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ItemCount))), ref settings.ItemCount, offSet + 1);
-				BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ForceEquip))), ref settings.ForceEquip, offSet + 1);
+				return new GUIContent(ObjectNames.NicifyVariableName(part.Effects[0].FXObjects[0].FX.name));
 			}
+			return new GUIContent((index + 1) + ". Part");
 		}
 	}
 }

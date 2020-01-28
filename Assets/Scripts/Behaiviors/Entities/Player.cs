@@ -218,7 +218,7 @@ namespace EoE.Entities
 
 			for (int i = 0; i < PlayerSettings.StartItems.Length; i++)
 			{
-				PlayerSettings.StartItems[i].GiveToPlayer();
+				PlayerSettings.StartItems[i].Activate();
 			}
 		}
 		#endregion
