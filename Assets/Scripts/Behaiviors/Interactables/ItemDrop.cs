@@ -1,5 +1,6 @@
 ﻿using EoE.Information;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 namespace EoE.Entities
@@ -8,14 +9,39 @@ namespace EoE.Entities
 	{
 		private const float FAILED_PICKUP_DELAY = 0.5f;
 
-		[SerializeField] private Rigidbody body = default;
+		public Rigidbody body = default;
+		public Collider[] colls = default;
+		[SerializeField] private FXObject[] EffectsOnInteract = default;
 		[SerializeField] private TextMeshPro infoDisplayPrefab = default;
 		[SerializeField] private Vector3 infoDisplayOffset = new Vector3(0, 2, 0);
 		[SerializeField] private Color amountColor = Color.red;
 		[SerializeField] private Notification failedPickUpNotification = default;
+
 		private TextMeshPro infoDisplay;
 		private InventoryItem containedItem;
 		private float FailedPickUpDelay;
+		public void SetupItemDrop(InventoryItem containedItem, bool stopVelocity)
+		{
+			canBeInteracted = true;
+			this.containedItem = containedItem;
+
+			if (stopVelocity)
+			{
+				body.constraints = RigidbodyConstraints.FreezeRotation & RigidbodyConstraints.FreezePosition;
+			}
+			else
+			{
+				body.velocity = Random.insideUnitSphere.normalized * GameController.CurrentGameSettings.ItemDropRandomVelocityStrenght;
+			}
+
+			infoDisplay = Instantiate(infoDisplayPrefab, Storage.ParticleStorage);
+			infoDisplay.gameObject.SetActive(false);
+
+			string amountColHex = ColorUtility.ToHtmlStringRGBA(amountColor);
+			infoDisplay.text = "Pick up <color=#" + amountColHex + ">" + containedItem.stackSize + "x </color>" + containedItem.data.ItemName + " [A]";
+
+			colls = GetComponentsInChildren<Collider>();
+		}
 		protected override void Interact()
 		{
 			int preStacksize = containedItem.stackSize;
@@ -73,26 +99,6 @@ namespace EoE.Entities
 		protected override void StopMarkAsInteractable()
 		{
 			infoDisplay.gameObject.SetActive(false);
-		}
-		public void SetupItemDrop(InventoryItem containedItem, bool stopVelocity)
-		{
-			canBeInteracted = true;
-			this.containedItem = containedItem;
-
-			if (stopVelocity)
-			{
-				body.constraints = RigidbodyConstraints.FreezeRotation & RigidbodyConstraints.FreezePosition;
-			}
-			else
-			{
-				body.velocity = Random.insideUnitSphere.normalized * GameController.CurrentGameSettings.ItemDropRandomVelocityStrenght;
-			}
-
-			infoDisplay = Instantiate(infoDisplayPrefab, Storage.ParticleStorage);
-			infoDisplay.gameObject.SetActive(false);
-
-			string amountColHex = ColorUtility.ToHtmlStringRGBA(amountColor);
-			infoDisplay.text = "Pick up <color=#" + amountColHex + ">" + containedItem.stackSize + "x </color>" + containedItem.data.ItemName + " [A]";
 		}
 	}
 }

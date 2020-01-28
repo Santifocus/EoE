@@ -7,6 +7,7 @@ namespace EoE.Entities
 {
 	public class SoulDrop : Interactable
 	{
+		[SerializeField] private FXObject[] EffectsOnInteract = default;
 		[Header("References")]
 		[SerializeField] private TextMeshPro infoSign = default;
 		[SerializeField] private Gradient colorOverTime = default;

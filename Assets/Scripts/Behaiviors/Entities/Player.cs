@@ -509,10 +509,13 @@ namespace EoE.Entities
 		protected void Jump()
 		{
 			float directionOffset = Vector3.Dot(controllDirection, transform.forward);
-			float forwardMultiplier = Mathf.Lerp(PlayerSettings.JumpBackwardMultiplier, 1, (directionOffset + 1) / 2) * (directionOffset > 0 ? 1 : -1);
+			float forwardMultiplier = Mathf.Lerp(PlayerSettings.JumpBackwardMultiplier, 1, (directionOffset + 1) / 2) * (directionOffset >= 0 ? 1 : -1);
 
-			JumpVelocity = Mathf.Min(PlayerSettings.JumpPower.y * curJumpPowerMultiplier, PlayerSettings.JumpPower.y * curJumpPowerMultiplier);
-			Vector3 addedExtraForce = PlayerSettings.JumpPower.x * transform.right * curJumpPowerMultiplier + PlayerSettings.JumpPower.z * transform.forward * curJumpPowerMultiplier * (curStates.Running ? PlayerSettings.RunSpeedMultiplicator : 1) * forwardMultiplier;
+			JumpVelocity = PlayerSettings.JumpPower.y * curJumpPowerMultiplier;
+			Vector3 addedExtraForce = 
+							PlayerSettings.JumpPower.x * transform.right * curJumpPowerMultiplier + 
+							PlayerSettings.JumpPower.z * transform.forward * curJumpPowerMultiplier * (curStates.Running ? PlayerSettings.RunSpeedMultiplicator : 1) * forwardMultiplier;
+
 			impactForce += new Vector2(addedExtraForce.x, addedExtraForce.z) * curAcceleration;
 			VerticalVelocity = 0;
 
@@ -580,7 +583,7 @@ namespace EoE.Entities
 				else
 					velocityMultiplier = (velDif - GameController.CurrentGameSettings.GroundHitVelocityLossMinThreshold) / (GameController.CurrentGameSettings.GroundHitVelocityLossMaxThreshold - GameController.CurrentGameSettings.GroundHitVelocityLossMinThreshold) * GameController.CurrentGameSettings.GroundHitVelocityLoss;
 			}
-			curAcceleration *= 1 - velocityMultiplier;
+			curAcceleration = Mathf.Clamp01(curAcceleration * (1 - velocityMultiplier));
 			impactForce *= 1 - velocityMultiplier;
 
 			if (FallDamageCooldown <= 0)

@@ -1,10 +1,10 @@
-﻿using EoE.Entities;
-using EoE.Information;
+﻿using EoE.Combatery;
+using EoE.Entities;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace EoE.Combatery
+namespace EoE.Information
 {
 	[System.Flags] public enum EffectType 
 	{ 
