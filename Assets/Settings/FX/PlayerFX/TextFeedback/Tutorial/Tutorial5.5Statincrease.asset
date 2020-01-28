@@ -19,14 +19,14 @@ MonoBehaviour:
     OnTimeout: 1
     TimeStay: 3
     OnConditionMet: 0
-    Conditions: []
+    Condition: {fileID: 0}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: By leveling up you earned
   - textColor: {r: 1, g: 0, b: 0.8354292, a: 1}
-    text: 1 Attributepoint and 3 Skillpoints
+    text: ' 1 Attributepoint and 3 Skillpoints'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: .Distribute them as you wish and apply to assume.
+    text: . Distribute them as you wish and apply to assume.
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 2
