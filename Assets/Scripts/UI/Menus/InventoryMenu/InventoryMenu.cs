@@ -14,18 +14,25 @@ namespace EoE.UI
 	{
 		[SerializeField] private InventorySlot slotPrefab = default;
 		[SerializeField] private GridLayoutGroup slotGrid = default;
-		[SerializeField] private ItemAction[] itemActions = default;
+
 		[SerializeField] private DropMenu dropMenu = default;
 		[SerializeField] private ItemDescriptionDisplay itemDescriptionDisplay = default;
 		[SerializeField] private TextMeshProUGUI currencyDisplay = default;
 
+		[Space(5)]
+		[Header("Displays")]
 		[SerializeField] private Image equippedWeaponDisplay = default;
 		[SerializeField] private Image equippedArmorDisplay = default;
 		[SerializeField] private ItemEquipSlot[] equippedSpellDisplays = default;
 		[SerializeField] private ItemEquipSlot[] equippedItemDisplays = default;
 
-		[SerializeField] private string EquipText = "Equip";
-		[SerializeField] private string UnEquipText = "Unequip";
+		[Space(5)]
+		[Header("Options")]
+		[SerializeField] private ItemAction useOption = default;
+		[SerializeField] private ItemAction equipOption = default;
+		[SerializeField] private ItemAction unEquipOption = default;
+		[SerializeField] private ItemAction dropOption = default;
+		[SerializeField] private ItemAction backOption = default;
 
 		private InventorySlot[] slots;
 		private float navigationCooldown;
@@ -37,6 +44,27 @@ namespace EoE.UI
 		private bool isSetup;
 
 		public int curSlotIndex { get; private set; }
+		private ItemAction this[int index]
+		{
+			get
+			{
+				switch (index)
+				{
+					case 0:
+						return useOption;
+					case 1:
+						InventoryItem item = Player.Instance.Inventory[curSlotIndex];
+						bool isEquipped = ((item != null) && item.isEquiped);
+						return isEquipped ? unEquipOption : equipOption;
+					case 2:
+						return dropOption;
+					case 3:
+						return backOption;
+				}
+				return null;
+			}
+		}
+
 
 		private int itemActionIndex;
 		private int equipedSlotIndex;
@@ -200,29 +228,29 @@ namespace EoE.UI
 		}
 		private void UpdateActionMenu()
 		{
-			allowedActions = new List<ItemAction>(itemActions.Length);
+			allowedActions = new List<ItemAction>(4);
 			InventoryItem item = Player.Instance.Inventory[curSlotIndex];
-			for (int i = 0; i < itemActions.Length; i++)
+			bool isEquipped = ((item != null) && item.isEquiped);
+			equipOption.gameObject.SetActive(!isEquipped);
+			unEquipOption.gameObject.SetActive(isEquipped);
+
+			for (int i = 0; i < 4; i++)
 			{
 				if (item != null)
 				{
-					bool allowed = (item.data.Uses | itemActions[i].actionType) == item.data.Uses;
+					bool allowed = (item.data.Uses | this[i].actionType) == item.data.Uses;
 
-					if (itemActions[i].actionType == InUIUses.Drop && item.data.ItemFlags == ItemSpecialFlag.NonRemoveable)						allowed = false;					if ((itemActions[i].actionType == InUIUses.Use || itemActions[i].actionType == InUIUses.Equip) && item.data.ItemFlags == ItemSpecialFlag.OnlySellable)						allowed = false;
+					if (this[i].actionType == InUIUses.Drop && item.data.ItemFlags == ItemSpecialFlag.NonRemoveable)						allowed = false;					if ((this[i].actionType == InUIUses.Use || this[i].actionType == InUIUses.Equip) && item.data.ItemFlags == ItemSpecialFlag.OnlySellable)						allowed = false;
 					if (allowed)
 					{
-						allowedActions.Add(itemActions[i]);
+						allowedActions.Add(this[i]);
 					}
-					itemActions[i].SetAllowed(allowed);
+					this[i].SetAllowed(allowed);
 				}
 				else
 				{
-					itemActions[i].SetAllowed(false);
+					this[i].SetAllowed(false);
 				}
-
-				//Update equip text
-				if (itemActions[i].actionType == InUIUses.Equip)
-					itemActions[i].displayText = ((item != null) && item.isEquiped) ? UnEquipText : EquipText;
 			}
 		}
 		private void PlayFeedback(bool succesSound)
