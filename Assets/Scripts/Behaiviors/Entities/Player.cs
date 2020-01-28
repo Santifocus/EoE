@@ -99,8 +99,8 @@ namespace EoE.Entities
 
 		//Spell Items
 		public InventoryItem[] SelectableActivationCompoundItems;
-		public int selectedSpellItemIndex { get; private set; }
-		public InventoryItem EquipedSpell => SelectableActivationCompoundItems[selectedSpellItemIndex];
+		public int selectedActivationCompoundItemIndex { get; private set; }
+		public InventoryItem EquipedSpell => SelectableActivationCompoundItems[selectedActivationCompoundItemIndex];
 		#endregion
 		#region Leveling
 		public Buff LevelingPointsBuff { get; private set; }
@@ -213,7 +213,7 @@ namespace EoE.Entities
 
 			selectedItemIndex = 0;
 			SelectableItems = new InventoryItem[SELECTABLE_ITEMS_AMOUNT];
-			selectedSpellItemIndex = 0;
+			selectedActivationCompoundItemIndex = 0;
 			SelectableActivationCompoundItems = new InventoryItem[SELECTABLE_ITEMS_AMOUNT];
 
 			for (int i = 0; i < PlayerSettings.StartItems.Length; i++)
@@ -1003,7 +1003,7 @@ namespace EoE.Entities
 			}
 
 			//ActivationCompound Scrolling
-			InventoryItem selectedItem = SelectableActivationCompoundItems[selectedSpellItemIndex];
+			InventoryItem selectedItem = SelectableActivationCompoundItems[selectedActivationCompoundItemIndex];
 			ActivationCompoundItem selectedAC = selectedItem == null ? null : (selectedItem.data as ActivationCompoundItem);
 			bool cannotScrollMagic = false;
 			if (selectedAC == null)
@@ -1022,13 +1022,13 @@ namespace EoE.Entities
 				for (int i = 0; i < (SELECTABLE_ITEMS_AMOUNT - 1); i++)
 				{
 					t += selectedSpellIndexChange;
-					int valIndex = ValidatedID(t + selectedSpellItemIndex);
+					int valIndex = ValidatedID(t + selectedActivationCompoundItemIndex);
 					if (SelectableActivationCompoundItems[valIndex] != null)
 					{
 						if (EquipedSpell != null)
 							EquipedSpell.data.UnEquip(EquipedSpell, this);
 
-						selectedSpellItemIndex = valIndex;
+						selectedActivationCompoundItemIndex = valIndex;
 						EquipedSpell.data.Equip(EquipedSpell, this);
 						break;
 					}
@@ -1114,10 +1114,10 @@ namespace EoE.Entities
 			{
 				for (int i = 0; i < SELECTABLE_ITEMS_AMOUNT; i++)
 				{
-					int valIndex = ValidatedID(i + selectedSpellItemIndex);
+					int valIndex = ValidatedID(i + selectedActivationCompoundItemIndex);
 					if (SelectableActivationCompoundItems[valIndex] != null)
 					{
-						selectedSpellItemIndex = valIndex;
+						selectedActivationCompoundItemIndex = valIndex;
 						EquipedSpell.data.Equip(EquipedSpell, this);
 						break;
 					}

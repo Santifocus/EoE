@@ -136,6 +136,7 @@ namespace EoE.Combatery
 				{
 					PlayerItemChanges[i].Activate();
 				}
+				Player.Instance.Inventory.ForceUpdate();
 			}
 			return createdFXInstances;
 		}

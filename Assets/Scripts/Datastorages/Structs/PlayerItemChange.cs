@@ -73,7 +73,7 @@ namespace EoE.Information
 							Player.Instance.SelectableActivationCompoundItems[j] = targetItem;
 							Player.Instance.SelectableActivationCompoundItems[j].isEquiped = true;
 							added = true;
-							if (j == 0)
+							if (j == Player.Instance.selectedActivationCompoundItemIndex)
 							{
 								Player.Instance.SelectableActivationCompoundItems[j].data.Equip(targetItem, Player.Instance);
 							}
@@ -100,7 +100,7 @@ namespace EoE.Information
 							Player.Instance.SelectableItems[j] = targetItem;
 							Player.Instance.SelectableItems[j].isEquiped = true;
 							added = true;
-							if (j == 0)
+							if (j == Player.Instance.selectedItemIndex)
 							{
 								Player.Instance.SelectableItems[j].data.Equip(targetItem, Player.Instance);
 							}
@@ -119,7 +119,7 @@ namespace EoE.Information
 		}
 		private void TakeItems()
 		{
-			Player.Instance.Inventory.RemoveStackSize(Item, -ItemCount);
+			Player.Instance.Inventory.RemoveStackSize(Item, -ItemCount, true);
 		}
 	}
 }

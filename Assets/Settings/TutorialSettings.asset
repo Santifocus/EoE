@@ -876,7 +876,7 @@ MonoBehaviour:
         ItemCount: 5
         ForceEquip: 1
     SpawnDummy: 0
-    DeleteDummyOnFinish: 1
+    DeleteDummyOnFinish: 0
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
@@ -914,7 +914,7 @@ MonoBehaviour:
         ItemCount: -5
         ForceEquip: 0
     SpawnDummy: 0
-    DeleteDummyOnFinish: 0
+    DeleteDummyOnFinish: 1
   - DelayTime: 3
     Effects:
     - ChanceToActivate: 1
