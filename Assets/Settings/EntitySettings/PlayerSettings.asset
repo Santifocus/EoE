@@ -35,6 +35,13 @@ MonoBehaviour:
       RotationOffset: {x: 0, y: 0, z: 0}
       HasCustomScale: 0
       CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 11400000, guid: a4ef436cf45d5a347a667a137785962d, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
     AOEEffects: []
     ProjectileInfos: []
     HealsOnUser: []
