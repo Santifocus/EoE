@@ -14,8 +14,9 @@ namespace EoE.Information
 
 		public void Activate()
 		{
-			if (!Item)
+			if (!Item || !Player.Existant)
 				return;
+
 			if(ItemCount > 0)
 			{
 				GiveItems();

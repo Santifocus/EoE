@@ -163,7 +163,7 @@ namespace EoE.Information
 #pragma warning enable
 		}
 		//Context menu
-		[MenuItem("GameObject/UI/EoEButton")]
+		[MenuItem("GameObject/EoE/Button", false, 0)]
 		public static void CreateEoEButton(MenuCommand menuCommand)
 		{
 			Transform parent = Selection.activeTransform;
@@ -202,8 +202,19 @@ namespace EoE.Information
 			UnityEventTools.AddBoolPersistentListener(m.onSelectedEvent, activeSetter, true);
 			UnityEventTools.AddBoolPersistentListener(m.onDeSelectedEvent, activeSetter, false);
 
-			Undo.RegisterCreatedObjectUndo(buttonMain, "Create " + buttonMain.name);
+			Undo.RegisterCreatedObjectUndo(buttonMain, "Created " + buttonMain.name);
 			Selection.activeGameObject = buttonMain;
+		}
+		[MenuItem("GameObject/EoE/ItemGiver", false, 0)]
+		public static void CreateItemGiver(MenuCommand menuCommand)
+		{
+			Transform parent = Selection.activeTransform;
+			GameObject itemGiverMain = new GameObject("ItemGiver");
+			itemGiverMain.AddComponent<ItemGiver>();
+			GameObjectUtility.SetParentAndAlign(itemGiverMain, menuCommand.context as GameObject);
+
+			Undo.RegisterCreatedObjectUndo(itemGiverMain, "Created " + itemGiverMain.name);
+			Selection.activeGameObject = itemGiverMain;
 		}
 		//Other
 		public static T AssetCreator<T>(params string[] pathParts) where T : ScriptableObject

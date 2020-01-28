@@ -143,8 +143,8 @@ namespace EoE.Entities
 		[System.Serializable]
 		private class ItemData
 		{
-			public Item TargetItem;
-			public int StackSize;
+			public Item TargetItem = default;
+			public int StackSize = default;
 		}
 	}
 }

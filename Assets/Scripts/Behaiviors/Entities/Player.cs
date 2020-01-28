@@ -215,11 +215,6 @@ namespace EoE.Entities
 			SelectableItems = new InventoryItem[SELECTABLE_ITEMS_AMOUNT];
 			selectedActivationCompoundItemIndex = 0;
 			SelectableActivationCompoundItems = new InventoryItem[SELECTABLE_ITEMS_AMOUNT];
-
-			for (int i = 0; i < PlayerSettings.StartItems.Length; i++)
-			{
-				PlayerSettings.StartItems[i].Activate();
-			}
 		}
 		#endregion
 		#region Movement

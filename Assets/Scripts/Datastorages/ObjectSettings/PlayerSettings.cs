@@ -56,7 +56,6 @@ namespace EoE.Information
 		public float InvincibleModelFlashTime = 0.4f;
 
 		//Inventory
-		public PlayerItemChange[] StartItems = new PlayerItemChange[0];
 		public int InventorySize = 24;
 
 		//Animation

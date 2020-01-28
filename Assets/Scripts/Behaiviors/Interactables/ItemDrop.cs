@@ -1,6 +1,5 @@
 ﻿using EoE.Information;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 
 namespace EoE.Entities

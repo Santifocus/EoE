@@ -115,9 +115,6 @@ namespace EoE.Information
 		private void InventorySettingsArea()
 		{
 			PlayerSettings settings = target as PlayerSettings;
-
-			SerializedProperty startItemsArrayProperty = serializedObject.FindProperty(nameof(settings.StartItems));
-			DrawArray<PlayerItemChange>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartItems))), ref settings.StartItems, startItemsArrayProperty, DrawPlayerItemChange, new GUIContent(". Start Item"), 1);
 			IntField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.InventorySize))), ref settings.InventorySize, 1);
 		}
 		private void AnimationSettingsArea()
