@@ -20,11 +20,10 @@ MonoBehaviour:
     TimeStay: 3
     OnConditionMet: 1
     Condition: {fileID: 11400000, guid: add0f563344889341a72a920335734fd, type: 2}
-    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Use the
-  - textColor: {r: 0.5943396, g: 0.5943396, b: 0.5943396, a: 1}
+  - textColor: {r: 1, g: 0, b: 0, a: 1}
     text: ' Left Analogstick'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: ' to walk around.'

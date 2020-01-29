@@ -21,7 +21,7 @@ MonoBehaviour:
   Cost:
     Health: 0
     Mana: 0
-    Endurance: 3
+    Endurance: 2
     AdditionalConditions: []
   WeaponPrefab: {fileID: 5533782398965989895, guid: b8a1958f21cf1e34c96f3a2c98f4beeb,
     type: 3}
@@ -100,7 +100,7 @@ MonoBehaviour:
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
       WaitSettings: []
-      DamageMultiplier: 0.8
+      DamageMultiplier: 0.9
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 0.5
@@ -202,7 +202,7 @@ MonoBehaviour:
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
       WaitSettings: []
-      DamageMultiplier: 1
+      DamageMultiplier: 1.1
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
@@ -370,7 +370,7 @@ MonoBehaviour:
       DamageMultiplier: 1.5
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
-      EnduranceCostMultiplier: 1.5
+      EnduranceCostMultiplier: 1.2
       KnockbackMultiplier: 1
       CritChanceMultiplier: 0
       CollisionMask: -1
@@ -492,7 +492,7 @@ MonoBehaviour:
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
       WaitSettings: []
-      DamageMultiplier: 1.5
+      DamageMultiplier: 1.4
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 1
@@ -606,7 +606,7 @@ MonoBehaviour:
       DamageMultiplier: 4.2
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
-      EnduranceCostMultiplier: 1.5
+      EnduranceCostMultiplier: 1.2
       KnockbackMultiplier: 15
       CritChanceMultiplier: 1
       CollisionMask: -1
@@ -876,7 +876,7 @@ MonoBehaviour:
       DamageMultiplier: 1.6
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
-      EnduranceCostMultiplier: 1
+      EnduranceCostMultiplier: 1.2
       KnockbackMultiplier: 2
       CritChanceMultiplier: 0
       CollisionMask: -1

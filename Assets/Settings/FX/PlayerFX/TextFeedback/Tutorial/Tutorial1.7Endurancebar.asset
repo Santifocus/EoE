@@ -19,17 +19,17 @@ MonoBehaviour:
     OnTimeout: 1
     TimeStay: 5
     OnConditionMet: 0
-    Conditions: []
+    Condition: {fileID: 0}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Running, jumping, dodging and attacking use
-  - textColor: {r: 1, g: 0.99959075, b: 0, a: 1}
+    text: Actions such as Attack/Run/Jump/Dash use
+  - textColor: {r: 1, g: 0.9128059, b: 0, a: 1}
     text: ' Endurance'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: .
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: ' Always keep an eye on your'
-  - textColor: {r: 0.9100466, g: 0, b: 1, a: 1}
+  - textColor: {r: 1, g: 0, b: 0.95985556, a: 1}
     text: ' Endurance Bar'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: .

@@ -13,17 +13,24 @@ MonoBehaviour:
   m_Name: Tutorial4.2OpenMenu
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0
+  TimeOut: 1
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 0
     TimeStay: 3
     OnConditionMet: 1
     Condition: {fileID: 11400000, guid: 1eadb31bf77ea194e82e92a23f35e8ef, type: 2}
-    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Open your Character Menu.
+    text: Press
+  - textColor: {r: 1, g: 0, b: 0, a: 1}
+    text: ' Select'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ' to open your'
+  - textColor: {r: 0.9601507, g: 0, b: 1, a: 1}
+    text: ' Character Menu'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ' again.'
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
-  CanvasTarget: 1
+  CanvasTarget: 2

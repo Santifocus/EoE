@@ -20,11 +20,10 @@ MonoBehaviour:
     TimeStay: 3
     OnConditionMet: 1
     Condition: {fileID: 11400000, guid: 8e18d9db146db24429d91094f0a82362, type: 2}
-    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Press
-  - textColor: {r: 0.3679245, g: 0.3679245, b: 0.3679245, a: 1}
+  - textColor: {r: 1, g: 0, b: 0, a: 1}
     text: ' L3'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: ' to run.'

@@ -37,6 +37,11 @@ namespace EoE
 
 			SceneLoader.TransitionToScene(ConstantCollector.TUTORIAL_SCENE_INDEX);
 		}
+		public void CancelTutorialRequest()
+		{
+			tutorialCanvas.SetActive(false);
+			startMenuItem.OpenSelfLayer();
+		}
 		public void OpenSettings()
 		{
 			SettingsMenuController.Open();

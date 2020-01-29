@@ -17,7 +17,5 @@ namespace EoE.Information
 
 		public bool SpawnDummy = false;
 		public bool DeleteDummyOnFinish = false;
-
-		public ItemGiveInfo[] ItemsToGive = default;
 	}
 }

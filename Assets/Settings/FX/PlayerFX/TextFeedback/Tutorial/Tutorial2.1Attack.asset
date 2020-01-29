@@ -20,18 +20,17 @@ MonoBehaviour:
     TimeStay: 3
     OnConditionMet: 1
     Condition: {fileID: 11400000, guid: 04b3b482523b70f4fa5813d1c0f9659b, type: 2}
-    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Press
-  - textColor: {r: 0, g: 0.14202714, b: 1, a: 1}
+  - textColor: {r: 1, g: 0, b: 0, a: 1}
     text: ' X'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: ' to attack. By pressing'
-  - textColor: {r: 0, g: 0.13172197, b: 1, a: 1}
+  - textColor: {r: 1, g: 0, b: 0, a: 1}
     text: ' X'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: ' multiple times you can do combo attacks.'
+    text: ' multiple times you can perform combo attacks.'
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

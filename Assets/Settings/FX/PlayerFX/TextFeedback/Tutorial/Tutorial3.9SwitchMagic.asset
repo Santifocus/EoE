@@ -26,9 +26,13 @@ MonoBehaviour:
   - textColor: {r: 0.9601507, g: 0, b: 1, a: 1}
     text: ' 4 Spells'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: . Switch them in game by pressing
-  - textColor: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}
-    text: ' UP or DOWN'
+    text: . You can switch them in game by pressing
+  - textColor: {r: 1, g: 0, b: 0, a: 1}
+    text: ' Up'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ' or'
+  - textColor: {r: 1, g: 0, b: 0, a: 1}
+    text: ' Down'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: ' on your D-Pad.'
   dialogueIcon: {fileID: 0}

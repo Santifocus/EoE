@@ -1,4 +1,5 @@
 ﻿using EoE.Entities;
+using EoE.Information;
 using System.Collections.Generic;
 using UnityEngine;
 

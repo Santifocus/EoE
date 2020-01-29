@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using EoE.Information;
+using UnityEngine;
 
 namespace EoE.Combatery
 {

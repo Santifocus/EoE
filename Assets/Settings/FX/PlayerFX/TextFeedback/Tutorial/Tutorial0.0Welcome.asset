@@ -19,7 +19,7 @@ MonoBehaviour:
     OnTimeout: 1
     TimeStay: 3
     OnConditionMet: 0
-    Conditions: []
+    Condition: {fileID: 0}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Welcome to
@@ -28,7 +28,7 @@ MonoBehaviour:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: .
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: ' Before you start your Journey you need to learn how to play.'
+    text: ' Before you start your Journey you should learn the basics of the game.'
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

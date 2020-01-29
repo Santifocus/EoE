@@ -20,11 +20,10 @@ MonoBehaviour:
     TimeStay: 3
     OnConditionMet: 1
     Condition: {fileID: 11400000, guid: 988d65072aed4684c88df80cea580c2d, type: 2}
-    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Press
-  - textColor: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
+  - textColor: {r: 1, g: 0, b: 0, a: 1}
     text: ' R3'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: ' to reposition the Camera to normal.'
