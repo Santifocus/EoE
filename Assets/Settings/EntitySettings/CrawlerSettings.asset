@@ -24,7 +24,7 @@ MonoBehaviour:
   BasePhysicalDamage: 14
   BaseMagicalDamage: 0
   BaseDefense: 4
-  Health: 70
+  Health: 65
   DoHealthRegen: 0
   HealthRegen: 0
   HealthRegenCooldownAfterTakingDamage: 4

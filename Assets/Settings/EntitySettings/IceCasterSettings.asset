@@ -22,7 +22,7 @@ MonoBehaviour:
   DeathEffects: []
   BodyRemoveDelay: 2.5
   BasePhysicalDamage: 0
-  BaseMagicalDamage: 20
+  BaseMagicalDamage: 19
   BaseDefense: 3
   Health: 50
   DoHealthRegen: 0
