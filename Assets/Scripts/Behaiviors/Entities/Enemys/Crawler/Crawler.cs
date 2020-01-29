@@ -10,6 +10,7 @@ namespace EoE.Entities
 		//Inspector Variables
 		[SerializeField] private CrawlerSettings settings = default;
 		[SerializeField] private CrawlerHitbox[] crawlerHitboxes = default;
+		[SerializeField] private Animator animator = default;
 
 		//Attack
 		private bool chargingBash;
@@ -31,6 +32,10 @@ namespace EoE.Entities
 			{
 				TryForBash();
 			}
+		}
+		protected override void EntitieUpdate()
+		{
+			AnimationControl();
 		}
 		private void TryForBash()
 		{
@@ -96,12 +101,32 @@ namespace EoE.Entities
 			chargingBash = false;
 			behaviorSimpleStop = false;
 		}
+		private void AnimationControl()
+		{
+			float sqrVelocity = agent.velocity.sqrMagnitude;
+			if (sqrVelocity > 0.1f)
+			{
+				animator.SetFloat("MoveSpeed", Mathf.Sqrt(sqrVelocity) / settings.AnimationWalkSpeedDivider);
+				animator.SetBool("Moving", true);
+			}
+			else
+			{
+				animator.SetBool("Moving", false);
+			}
+		}
+		protected override void Death()
+		{
+			animator.SetTrigger("Death");
+			base.Death();
+		}
 		private void Bash()
 		{
 			StartCombat();
 			bashing = true;
 			MovementStops++;
 			TurnStops++;
+
+			animator.SetTrigger("Bash");
 			bashForce = entitieForceController.ApplyForce((transform.forward * settings.BashSpeed) * (curWalkSpeed / settings.WalkSpeed), settings.BashSpeed / settings.BashDistance, false, () => FinishedBash());
 			SetBashColliderState(true);
 			ActivateActivationEffects(settings.BashStartEffects);
@@ -112,16 +137,29 @@ namespace EoE.Entities
 			bashing = true;
 			MovementStops++;
 			Vector3 bashDirection = transform.right;
+			string animation = "BashR";
+
 			if (Utils.Chance01(0.5f))
-			{
-				bashDirection *= -1; //Go left instead
+			{ 
+				//Go left instead
+				bashDirection *= -1;
+				animation = "BashL";
 			}
-			entitieForceController.ApplyForce((bashDirection * settings.TrickBashSpeed) * (curWalkSpeed / settings.WalkSpeed), settings.TrickBashSpeed / settings.TrickBashDistance, true, () => { Bash(); MovementStops--; });
+
+			animator.SetTrigger(animation);
+			entitieForceController.ApplyForce((bashDirection * settings.TrickBashSpeed) * (curWalkSpeed / settings.WalkSpeed), settings.TrickBashSpeed / settings.TrickBashDistance, true, () =>
+			{
+				animator.SetTrigger("BashEnd");
+				MovementStops--; 
+				Bash(); 
+			}
+			);
 		}
 		private void FinishedBash()
 		{
 			bashing = false;
 			SetBashColliderState(false);
+			animator.SetTrigger("BashEnd");
 			MovementStops--;
 			TurnStops--;
 		}

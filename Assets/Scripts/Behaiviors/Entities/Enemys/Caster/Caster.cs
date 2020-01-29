@@ -9,7 +9,8 @@ namespace EoE.Entities
 		private const float LAZY_ARRIVAL_DISTANCE = 8;
 		private const float LAZY_NEXT_TO_ALLY_MUL = 5;
 		public override EnemySettings enemySettings => settings;
-		public CasterSettings settings;
+		[SerializeField] private CasterSettings settings;
+		[SerializeField] private Animator animator = default;
 
 		private bool panicModeActive;
 		private FXInstance[] panicModeBoundFX;
@@ -23,6 +24,11 @@ namespace EoE.Entities
 				DecideOnbehaiviorPattern();
 		}
 		protected override void EntitieUpdate()
+		{
+			Behaivior();
+			AnimationControl();
+		}
+		private void Behaivior()
 		{
 			if (foundAlly && !foundAlly.Alive)
 				foundAlly = null;
@@ -42,7 +48,7 @@ namespace EoE.Entities
 						DeactivatePanicMode();
 				}
 			}
-			else if((disallowNormalMode || CastingCooldown > 0) && !InActivationCompound)
+			else if ((disallowNormalMode || CastingCooldown > 0) && !InActivationCompound)
 			{
 				switch (settings.CooldownBehaivior)
 				{
@@ -67,7 +73,7 @@ namespace EoE.Entities
 
 					case CastCooldownBehaivior.GotoTarget:
 						{
-							if(overrideTargetPosition.HasValue)
+							if (overrideTargetPosition.HasValue)
 								overrideTargetPosition = null;
 						}
 						break;
@@ -109,6 +115,26 @@ namespace EoE.Entities
 						DeactivatePanicMode(true);
 				}
 			}
+		}
+		private void AnimationControl()
+		{
+			float sqrVelocity = agent.velocity.sqrMagnitude;
+			if(sqrVelocity > 0.1f)
+			{
+				animator.SetFloat("MoveSpeed", Mathf.Sqrt(sqrVelocity) / settings.AnimationWalkSpeedDivider);
+				animator.SetBool("Moving", true);
+			}
+			else
+			{
+				animator.SetBool("Moving", false);
+			}
+
+			animator.SetBool("Casting", InActivationCompound);
+		}
+		protected override void Death()
+		{
+			animator.SetTrigger("Death");
+			base.Death();
 		}
 		private void PointOfInterestIsTarget(bool state)
 		{

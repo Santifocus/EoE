@@ -129,6 +129,7 @@ namespace EoE.Information
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationWalkSpeedDivider))), ref settings.AnimationWalkSpeedDivider, 1);
 
+			/*
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			Header("Player Look Turning");
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BodyTurnHorizontalClamp))), ref settings.BodyTurnHorizontalClamp, 1);
@@ -138,6 +139,7 @@ namespace EoE.Information
 			Vector4Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.HeadLookAngleClamps))), ref settings.HeadLookAngleClamps, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.LookLerpSpeed))), ref settings.LookLerpSpeed, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.LookLerpSpringStiffness))), ref settings.LookLerpSpringStiffness, 1);
+			*/
 		}
 		private void FXSettingsArea()
 		{

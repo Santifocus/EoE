@@ -14,6 +14,9 @@ namespace EoE.Information
 		public ActivationEffect[] PanicModeEffects = new ActivationEffect[0];
 		public ActivationEffect[] PanicModeFinishedEffects = new ActivationEffect[0];
 
+		//Animation
+		public float AnimationWalkSpeedDivider = 10;
+
 		[System.Serializable]
 		public class CasterBehaiviorPattern
 		{

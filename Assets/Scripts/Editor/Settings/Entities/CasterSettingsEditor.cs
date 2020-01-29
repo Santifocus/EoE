@@ -8,7 +8,12 @@ namespace EoE.Information
 	[CustomEditor(typeof(CasterSettings), true), CanEditMultipleObjects]
 	public class CasterSettingsEditor : EnemySettingsEditor
 	{
-		protected static bool CastingAnnouncementOpen;
+		protected static bool AnimationSettingsOpen;
+		protected override void CustomInspector()
+		{
+			base.CustomInspector();
+			DrawInFoldoutHeader(new GUIContent("Animation Settings"), ref AnimationSettingsOpen, DrawAnimationSettings);
+		}
 		protected override void CombatSettings()
 		{
 			CasterSettings settings = target as CasterSettings;
@@ -60,6 +65,11 @@ namespace EoE.Information
 					isDirty = true;
 				}
 			}
+		}
+		private void DrawAnimationSettings()
+		{
+			CasterSettings settings = target as CasterSettings;
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationWalkSpeedDivider))), ref settings.AnimationWalkSpeedDivider, 1);
 		}
 	}
 }

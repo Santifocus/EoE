@@ -20,6 +20,7 @@ MonoBehaviour:
   LevelSettings: {fileID: 11400000, guid: 9ac078bc18c5ea34e923aa511403d3ee, type: 2}
   ExperienceWorth: 3
   DeathEffects: []
+  BodyRemoveDelay: 2.5
   BasePhysicalDamage: 0
   BaseMagicalDamage: 20
   BaseDefense: 3
@@ -73,6 +74,7 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
+    PlayerItemChanges: []
   PlayerTrackSpeed: 4
   SightRange: 25
   FoundPlayerSightRange: 50
@@ -89,9 +91,11 @@ MonoBehaviour:
   - TargetCompound: {fileID: 11400000, guid: d1a413eb4f2c804488f2c61892b9d9e8, type: 2}
     MinRange: 8
     MaxRange: 25
+    ChoiceRelativeChance: 1
   - TargetCompound: {fileID: 11400000, guid: 1427a68c8a1ff1747bc67c8053391444, type: 2}
     MinRange: 0
     MaxRange: 8
+    ChoiceRelativeChance: 1
   CooldownBehaivior: 2
   TargetDistance: 10
   PanicModeThreshold: 0.35
@@ -119,4 +123,6 @@ MonoBehaviour:
     BuffsOnUser:
     - {fileID: 0}
     CreatedRemenants: []
+    PlayerItemChanges: []
   PanicModeFinishedEffects: []
+  AnimationWalkSpeedDivider: 6
