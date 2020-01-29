@@ -89,7 +89,7 @@ namespace EoE.Entities
 			{
 				yield return new WaitForEndOfFrame();
 				timer += Time.deltaTime;
-				if(IsStunned)
+				if(IsStunned || !Alive)
 				{
 					goto CanceledBash;
 				}
@@ -170,6 +170,9 @@ namespace EoE.Entities
 		}
 		public void HitCollider(Collider other, Collider self)
 		{
+			if (!Alive)
+				return;
+
 			float restForce = bashForce.Force.magnitude;
 			float normalizedRestForce = restForce / settings.BashSpeed;
 			bool wasCrit = Utils.Chance01(settings.CritChance);
