@@ -29,6 +29,7 @@ namespace EoE.UI
 		private void Start()
 		{
 			Instance = this;
+			gameObject.SetActive(false);
 		}
 		public void Setup(WeaponUltimate settings)
 		{

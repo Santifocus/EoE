@@ -20,17 +20,16 @@ MonoBehaviour:
     TimeStay: 3
     OnConditionMet: 1
     Condition: {fileID: 11400000, guid: 32a2e79389e602447bd6352a8073e77a, type: 2}
-    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Press
-  - textColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  - textColor: {r: 1, g: 0, b: 0, a: 1}
     text: ' LT'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: ' to target your enemy and focus on him. If there are more than one enemy,
-      you can switch targets with'
-  - textColor: {r: 1, g: 0, b: 0.88550186, a: 1}
-    text: ' the right analogstick'
+      you can switch targets with the'
+  - textColor: {r: 1, g: 0, b: 0, a: 1}
+    text: ' Right Analogstick'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: .
   dialogueIcon: {fileID: 0}

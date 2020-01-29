@@ -86,22 +86,19 @@ namespace EoE.UI
 				}
 				else if (InputController.MenuEnter.Down)
 				{
-					bool fullyDropped = false;
-					InventoryItem targetItem = Player.Instance.Inventory[parent.curSlotIndex];
 					if (selectedPart != SelectedPart.Cancel)
 					{
+						InventoryItem targetItem = Player.Instance.Inventory[parent.curSlotIndex];
+
 						targetItem.data.CreateItemDrop(Player.Instance.actuallWorldPosition, curDropCount, true);
-						targetItem.stackSize -= curDropCount;
-						fullyDropped = targetItem.stackSize == 0;
-						Player.Instance.Inventory.ForceUpdate();
+						Player.Instance.Inventory.RemoveStackSize(targetItem.data, curDropCount);
+
+						if (targetItem.stackSize <= 0)
+						{
+							parent.MenuBack();
+						}
 					}
 					parent.HideDropMenu();
-					if (fullyDropped)
-					{
-						if(targetItem.isEquiped)
-							targetItem.data.UnEquip(targetItem, Player.Instance);
-						parent.MenuBack();
-					}
 				}
 				else if (InputController.MenuBack.Down)
 				{

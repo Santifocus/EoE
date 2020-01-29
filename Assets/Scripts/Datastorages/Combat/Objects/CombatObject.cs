@@ -13,7 +13,6 @@ namespace EoE.Combatery
 	[System.Flags] public enum MovementType { Walk = 1, Turn = 2 }
 	[System.Flags] public enum TargetMask { Self = (1 << 0), Allied = (1 << 1), Enemy = (1 << 2) }
 	[System.Flags] public enum ColliderMask { Terrain = (1 << 0), Entities = (1 << 1) }
-	[System.Flags] public enum EffectType { ImpulseVelocity = (1 << 0), FX = (1 << 1), AOE = (1 << 2), CreateProjectile = (1 << 3), HealOnCreator = (1 << 4), BuffOnCreator = (1 << 5), CreateRemenants = (1 << 6) }
 	public class CombatObject : ScriptableObject
 	{
 		public bool NoDefinedActionType = false;

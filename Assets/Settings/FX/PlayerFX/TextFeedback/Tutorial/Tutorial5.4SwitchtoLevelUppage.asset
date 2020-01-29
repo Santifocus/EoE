@@ -20,14 +20,17 @@ MonoBehaviour:
     TimeStay: 3
     OnConditionMet: 1
     Condition: {fileID: 11400000, guid: 13eeaf85fe46c8d4ead9d5c0828db17c, type: 2}
-    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Now press
-  - textColor: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}
-    text: RB
+  - textColor: {r: 1, g: 0, b: 0, a: 1}
+    text: ' RB'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: to switch to Skills and Attributes.
+    text: ' to switch to the'
+  - textColor: {r: 0.9601507, g: 0, b: 1, a: 1}
+    text: ' Leveling Page'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: .
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 2

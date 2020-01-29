@@ -17,24 +17,26 @@ MonoBehaviour:
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 0
-    TimeStay: 5
+    TimeStay: 2
     OnConditionMet: 1
     Condition: {fileID: 11400000, guid: 2233d4d8cad767f4c86a5355b703f263, type: 2}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Select the Fire Ring. Press
-  - textColor: {r: 0, g: 1, b: 0.23211956, a: 1}
+  - textColor: {r: 1, g: 0, b: 0, a: 1}
     text: ' A'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: ' and choose'
-  - textColor: {r: 1, g: 0, b: 0.8646321, a: 1}
+  - textColor: {r: 1, g: 0, b: 0.95985556, a: 1}
     text: ' Equip'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: ' to select an equip space. Press'
-  - textColor: {r: 0, g: 0.8745099, b: 0.20392159, a: 1}
+    text: ' and then choose a equip slot.'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ' Press'
+  - textColor: {r: 1, g: 0, b: 0, a: 1}
     text: ' A'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: ' again to equip the ring on the selected equip space.'
+    text: ' again to equip the ring on the selected equip slot.'
   dialogueIcon: {fileID: 21300000, guid: 526c5c20d4cdb084aa067013c19ad903, type: 3}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 2

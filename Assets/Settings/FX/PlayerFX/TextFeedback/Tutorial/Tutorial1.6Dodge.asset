@@ -20,11 +20,10 @@ MonoBehaviour:
     TimeStay: 3
     OnConditionMet: 1
     Condition: {fileID: 11400000, guid: 61cf2c799e396ac42bb871605ea24b45, type: 2}
-    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Press
-  - textColor: {r: 1, g: 0, b: 0.01999569, a: 1}
+  - textColor: {r: 1, g: 0, b: 0, a: 1}
     text: ' B'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: ' to dodge and avoid enemy attacks.'

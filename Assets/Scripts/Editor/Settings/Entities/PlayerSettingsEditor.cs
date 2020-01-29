@@ -115,26 +115,7 @@ namespace EoE.Information
 		private void InventorySettingsArea()
 		{
 			PlayerSettings settings = target as PlayerSettings;
-
-			SerializedProperty startItemsArrayProperty = serializedObject.FindProperty(nameof(settings.StartItems));
-			DrawArray<ItemGiveInfo>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartItems))), ref settings.StartItems, startItemsArrayProperty, DrawStartItem, new GUIContent(". Start Item"), 1);
 			IntField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.InventorySize))), ref settings.InventorySize, 1);
-		}
-		private void DrawStartItem(GUIContent content, ItemGiveInfo settings, SerializedProperty property, int offSet)
-		{
-			if(settings == null)
-			{
-				isDirty = true;
-				settings = new ItemGiveInfo();
-			}
-			Foldout(content, property, offSet);
-
-			if (property.isExpanded)
-			{
-				ObjectField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Item))), ref settings.Item, offSet + 1);
-				IntField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ItemCount))), ref settings.ItemCount, offSet + 1);
-				BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ForceEquip))), ref settings.ForceEquip, offSet + 1);
-			}
 		}
 		private void AnimationSettingsArea()
 		{

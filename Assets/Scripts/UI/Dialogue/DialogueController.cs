@@ -53,7 +53,7 @@ namespace EoE.UI
 				dialogueContainer.gameObject.SetActive(true);
 
 				dialogueContainer.icon = targetDialogue.BaseInfo.dialogueIcon;
-				dialogueContainer.TextDisplay.text = "";
+				dialogueContainer.CalculateBoxSize(targetDialogue.BaseInfo.parts);
 				string totalText = "";
 
 				SoundManager.SetSoundState(ConstantCollector.DIALOGUE_SOUND, true);

@@ -20,15 +20,14 @@ MonoBehaviour:
     TimeStay: 2
     OnConditionMet: 0
     Condition: {fileID: 0}
-    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: On this page you can manage all the items you collected. As you can see,
-      you have got a
+      you received a
   - textColor: {r: 0, g: 0.9500499, b: 1, a: 1}
     text: ' Fire Ring'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: .
-  dialogueIcon: {fileID: 0}
+  dialogueIcon: {fileID: 21300000, guid: 526c5c20d4cdb084aa067013c19ad903, type: 3}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 2

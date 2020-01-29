@@ -13,17 +13,24 @@ MonoBehaviour:
   m_Name: Tutorial4.3switchinventory
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0
+  TimeOut: 1
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 0
     TimeStay: 3
     OnConditionMet: 1
     Condition: {fileID: 11400000, guid: b2d28ea7d9869624d8fce810407874ab, type: 2}
-    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Now switch again to your inventory.
+    text: Press
+  - textColor: {r: 1, g: 0, b: 0, a: 1}
+    text: ' LB'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ' to switch to your Inventory'
+  - textColor: {r: 0.9601507, g: 0, b: 1, a: 1}
+    text: ' Inventory'
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: ' again.'
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 2

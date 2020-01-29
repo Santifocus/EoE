@@ -411,6 +411,50 @@ namespace EoE
 				isDirty = true;
 			return changed;
 		}
+		public static bool DrawArray<T>(GUIContent content, ref T[] curValue, SerializedProperty arrayProperty, System.Action<GUIContent, T, SerializedProperty, int> elementBinding, System.Func<int, GUIContent> contentGetter, int offSet = 0, bool asHeader = false)
+		{
+			bool changed = false;
+			if (curValue == null)
+			{
+				curValue = new T[0];
+				changed = true;
+			}
+
+			changed |= Foldout(content, arrayProperty, offSet, asHeader);
+
+			if (arrayProperty.isExpanded)
+			{
+				int newSize = curValue.Length;
+				DelayedIntField("Size", ref newSize, offSet + 1);
+
+				for (int i = 0; i < curValue.Length; i++)
+				{
+					GUIContent elementContent = contentGetter?.Invoke(i) ?? new GUIContent(". Element");
+					elementBinding?.Invoke(elementContent, curValue[i], arrayProperty.GetArrayElementAtIndex(i), offSet + 1);
+				}
+
+				if (curValue.Length != newSize)
+				{
+					changed = true;
+					T[] newArray = new T[newSize];
+					for (int i = 0; i < newSize; i++)
+					{
+						if (i < curValue.Length)
+							newArray[i] = curValue[i];
+						else
+							break;
+					}
+					curValue = newArray;
+					arrayProperty.arraySize = newSize;
+				}
+			}
+			if (asHeader)
+				EndFoldoutHeader();
+
+			if (changed)
+				isDirty = true;
+			return changed;
+		}
 		public static bool ObjectArrayField<T>(GUIContent content, ref T[] curValue, SerializedProperty property, GUIContent objectContent = null, int offSet = 0, bool asHeader = false) where T : Object
 		{
 			bool changed = false;
@@ -654,6 +698,13 @@ namespace EoE
 					ObjectArrayField<RemenantsData>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CreatedRemenants))), ref settings.CreatedRemenants, remenantsArrayProperty, new GUIContent(". Remenant"), offSet + 1);
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1), false);
 				}
+				//PlayerItemChange
+				if (settings.HasMaskFlag(EffectType.PlayerItemChange))
+				{
+					SerializedProperty itemChangeArrayProperty = property.FindPropertyRelative(nameof(settings.PlayerItemChanges));
+					DrawArray<PlayerItemChange>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.PlayerItemChanges))), ref settings.PlayerItemChanges, itemChangeArrayProperty, DrawPlayerItemChange, new GUIContent(". Item"), offSet + 1);
+					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1), false);
+				}
 			}
 		}
 		public static void DrawRestrictionData(GUIContent content, RestrictionData settings, SerializedProperty property, int offSet)
@@ -752,6 +803,61 @@ namespace EoE
 				FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MinAnimtionPoint))), ref settings.MinAnimtionPoint, 0, 1, offSet + 1);
 				FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MaxAnimtionPoint))), ref settings.MaxAnimtionPoint, settings.MinAnimtionPoint, 1, offSet + 1);
 				ObjectField<LogicComponent>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Condition))), ref settings.Condition, offSet + 1);
+			}
+		}
+		public static void DrawPlayerItemChange(GUIContent content, PlayerItemChange settings, SerializedProperty property, int offSet)
+		{
+			if (settings == null)
+			{
+				isDirty = true;
+				return;
+			}
+			Foldout(content, property, offSet);
+
+			if (property.isExpanded)
+			{
+				if (settings.ItemCount == 0)
+				{
+					EditorGUILayout.HelpBox("No change. \n ItemCount > 0 => Gives items. \n ItemCount < 0 => Takes items", MessageType.Warning);
+				}
+				else if (settings.Item != null)
+				{
+					if (settings.ItemCount > 0)
+					{
+						if (settings.ForceEquip)
+						{
+							int rest = settings.ItemCount - settings.Item.MaxStack;
+							if(rest > 0)
+							{
+								EditorGUILayout.HelpBox("Equips " + settings.Item.MaxStack + "x & gives " + rest + "x " + settings.Item.ItemName.text + "." , MessageType.Info);
+							}
+							else
+							{
+								EditorGUILayout.HelpBox("Equips " + settings.ItemCount + "x " + settings.Item.ItemName.text + ".", MessageType.Info);
+							}
+						}
+						else
+						{
+							EditorGUILayout.HelpBox("Gives " + settings.ItemCount + "x " + settings.Item.ItemName.text + ".", MessageType.Info);
+						}
+					}
+					else //settings.ItemCount < 0
+					{
+						EditorGUILayout.HelpBox("Takes " + (-settings.ItemCount) + "x " + settings.Item.ItemName.text + ".", MessageType.Info);
+					} 
+				}
+				else
+				{
+					EditorGUILayout.HelpBox("No Item to change selected.", MessageType.Warning);
+				}
+
+				ObjectField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Item))), ref settings.Item, offSet + 1);
+				IntField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ItemCount))), ref settings.ItemCount, offSet + 1);
+
+				if(settings.ItemCount > 0)
+				{
+					BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ForceEquip))), ref settings.ForceEquip, offSet + 1);
+				}
 			}
 		}
 		public static bool NullableVector3Field(string content, string valueContent, ref Vector3 curValue, ref bool hasValue, int offSet = 0) => NullableVector3Field(new GUIContent(content), new GUIContent(valueContent), ref curValue, ref hasValue, offSet);

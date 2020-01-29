@@ -20,14 +20,13 @@ MonoBehaviour:
     TimeStay: 2
     OnConditionMet: 1
     Condition: {fileID: 11400000, guid: a281cd0f00357634697358bf6d5536cf, type: 2}
-    Conditions: []
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: By pressing
-  - textColor: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 1}
+  - textColor: {r: 1, g: 0, b: 0, a: 1}
     text: ' RT'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: ' you can activate a magic shield that blocks all enemy attacks.'
+    text: ' you can activate a Shield that blocks all enemy attacks.'
   dialogueIcon: {fileID: 0}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

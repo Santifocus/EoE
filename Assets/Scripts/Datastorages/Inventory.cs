@@ -92,7 +92,6 @@ namespace EoE.Information
 					containedItems[i].stackSize = containedItems[i].data.MaxStack;
 					remainingStack -= openStack;
 				}
-
 			}
 
 			//Still something of the stack left? Try to add it to open slots
@@ -122,7 +121,7 @@ namespace EoE.Information
 
 			return targetSlots;
 		}
-		public void RemoveStackSize(Item data, int stackSize)
+		public void RemoveStackSize(Item data, int stackSize, bool suppresUpdate = false)
 		{
 			bool changed = false;
 			for (int i = Length - 1; i >= 0; i--)
@@ -132,6 +131,7 @@ namespace EoE.Information
 					if (stackSize >= containedItems[i].stackSize)
 					{
 						stackSize -= containedItems[i].stackSize;
+						containedItems[i].stackSize = 0;
 						containedItems[i].OnRemove();
 						containedItems[i] = null;
 						changed = true;
@@ -149,13 +149,13 @@ namespace EoE.Information
 				}
 			}
 
-		//We make a goto jump point here in case we succesfully remove the fullstack
+		//We make a goto jump point here in case we succesfully removed the complete stack
 		FullyRemovedStack:;
 
-			if (changed)
+			if (changed && !suppresUpdate)
 				InventoryChanged?.Invoke();
 		}
-		public void RemoveStackSize(int index, int stackSize)
+		public void RemoveStackSize(int index, int stackSize, bool suppresUpdate = false)
 		{
 			if (index < 0 || index >= Length)
 				return;
@@ -169,11 +169,11 @@ namespace EoE.Information
 					containedItems[index] = null;
 				}
 
-				if(stackSize > 0)
+				if(stackSize > 0 && !suppresUpdate)
 					InventoryChanged?.Invoke();
 			}
 		}
-		public void RemoveInventoryItem(InventoryItem item)
+		public void RemoveInventoryItem(InventoryItem item, bool suppresUpdate = false)
 		{
 			for (int i = 0; i < Length; i++)
 			{
@@ -181,12 +181,13 @@ namespace EoE.Information
 				{
 					containedItems[i].OnRemove();
 					containedItems[i] = null;
-					InventoryChanged?.Invoke();
+					if (!suppresUpdate)
+						InventoryChanged?.Invoke();
 					break;
 				}
 			}
 		}
-		public void RemoveInventoryItem(InventoryItem item, int stackSize)
+		public void RemoveInventoryItem(InventoryItem item, int stackSize, bool suppresUpdate = false)
 		{
 			for (int i = 0; i < Length; i++)
 			{
@@ -198,7 +199,8 @@ namespace EoE.Information
 						containedItems[i].OnRemove();
 						containedItems[i] = null;
 					}
-					InventoryChanged?.Invoke();
+					if (!suppresUpdate)
+						InventoryChanged?.Invoke();
 					break;
 				}
 			}
@@ -217,7 +219,7 @@ namespace EoE.Information
 
 			return false;
 		}
-		public void ClearSlot(int index)
+		public void ClearSlot(int index, bool suppresUpdate = false)
 		{
 			if (index < 0 || index >= Length)
 				return;
@@ -226,10 +228,11 @@ namespace EoE.Information
 			{
 				containedItems[index].OnRemove();
 				containedItems[index] = null;
-				InventoryChanged?.Invoke();
+				if(!suppresUpdate)
+					InventoryChanged?.Invoke();
 			}
 		}
-		public void Empty()
+		public void Empty(bool suppresUpdate = false)
 		{
 			for (int i = 0; i < Length; i++)
 			{
@@ -239,7 +242,8 @@ namespace EoE.Information
 					containedItems[i] = null;
 				}
 			}
-			InventoryChanged?.Invoke();
+			if (!suppresUpdate)
+				InventoryChanged?.Invoke();
 		}
 		public void ForceUpdate()
 		{

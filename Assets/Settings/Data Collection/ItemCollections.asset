@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ItemCollections
   m_EditorClassIdentifier: 
   Data:
+  - {fileID: 11400000, guid: d89f1d68ab035d440b3c71a190972ff1, type: 2}
   - {fileID: 11400000, guid: d79eb70788d20ba4f94a2b433fcb084f, type: 2}
   - {fileID: 11400000, guid: 3ca8bca966c11a546bbdb169f0bdedd6, type: 2}
   - {fileID: 11400000, guid: d132ac9cd36a8a040a8755c1a5405c37, type: 2}
@@ -22,9 +23,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 85a6ee9ea6326894bafdefc197d83d4f, type: 2}
   - {fileID: 11400000, guid: 559b53f723906944b9b4184cc5331dc2, type: 2}
   - {fileID: 11400000, guid: ce1ccb77422bfe84680c5c835d63f45d, type: 2}
-  - {fileID: 11400000, guid: 1065fd6007802de4a8e5ed00faf10905, type: 2}
   - {fileID: 11400000, guid: e1bfcada9c557e543945ec3581f0e8b5, type: 2}
   - {fileID: 11400000, guid: 41ee736e9094b994c853a774489f9805, type: 2}
+  - {fileID: 11400000, guid: 1065fd6007802de4a8e5ed00faf10905, type: 2}
   - {fileID: 11400000, guid: 20e8cd93f617d124d83e9a5570f04234, type: 2}
   - {fileID: 11400000, guid: 24bf8e4451a0cc84589f3c9af971978e, type: 2}
   - {fileID: 11400000, guid: 428f279ff073bb54c81150df9f36247e, type: 2}
@@ -33,5 +34,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dfff77569092e90428e801b345e3e493, type: 2}
   - {fileID: 11400000, guid: e2175b767068abe49ad244c5541e84fd, type: 2}
   - {fileID: 11400000, guid: 2252417659472824aa2c5e20738fa998, type: 2}
+  - {fileID: 11400000, guid: 2f4a0f997a77d714a9fdfd1e24a8a151, type: 2}
   - {fileID: 11400000, guid: 4389e543531ad0d4c91543a950d48174, type: 2}
   - {fileID: 11400000, guid: d2ee9fc8bc00d1a48b0e3a8bcee338f0, type: 2}

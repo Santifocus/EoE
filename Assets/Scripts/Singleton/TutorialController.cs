@@ -33,12 +33,6 @@ namespace EoE.UI
 				//Activate Effects and store fxinstances
 				FXInstance[] activeFX = Player.Instance.ActivateActivationEffects(settings.Parts[i].Effects);
 
-				//Give items to player
-				for(int j = 0; j < settings.Parts[i].ItemsToGive.Length; j++)
-				{
-					settings.Parts[i].ItemsToGive[j].GiveToPlayer();
-				}
-
 				//Create a dummy
 				if (settings.Parts[i].SpawnDummy && !spawnedDummy)
 				{

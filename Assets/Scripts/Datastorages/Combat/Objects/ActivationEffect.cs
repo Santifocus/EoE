@@ -1,11 +1,22 @@
-﻿using EoE.Entities;
-using EoE.Information;
+﻿using EoE.Combatery;
+using EoE.Entities;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace EoE.Combatery
+namespace EoE.Information
 {
+	[System.Flags] public enum EffectType 
+	{ 
+		ImpulseVelocity = (1 << 0),
+		FX = (1 << 1),
+		AOE = (1 << 2),
+		CreateProjectile = (1 << 3),
+		HealOnCreator = (1 << 4),
+		BuffOnCreator = (1 << 5),
+		CreateRemenants = (1 << 6),
+		PlayerItemChange = (1 << 7)
+	}
 	[System.Serializable]
 	public class ActivationEffect
 	{
@@ -38,6 +49,9 @@ namespace EoE.Combatery
 
 		//Remenants
 		public RemenantsData[] CreatedRemenants = new RemenantsData[0];
+
+		//PlayerItemChange
+		public PlayerItemChange[] PlayerItemChanges = new PlayerItemChange[0];
 
 		public FXInstance[] Activate(Entity activator, CombatObject baseObject, float multiplier = 1, Transform overrideTransform = null, params Entity[] ignoredEntities)
 		{
@@ -113,6 +127,16 @@ namespace EoE.Combatery
 				{
 					Remenants.CreateRemenants(baseObject, CreatedRemenants[i], activator, (overrideTransform ?? activator.transform).position, multiplier);
 				}
+			}
+
+			//Change Player Items
+			if (HasMaskFlag(EffectType.PlayerItemChange))
+			{
+				for (int i = 0; i < PlayerItemChanges.Length; i++)
+				{
+					PlayerItemChanges[i].Activate();
+				}
+				Player.Instance.Inventory.ForceUpdate();
 			}
 			return createdFXInstances;
 		}

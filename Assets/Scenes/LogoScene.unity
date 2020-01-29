@@ -313,7 +313,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 1
   field of view: 60
   orthographic: 1
   orthographic size: 5
@@ -559,7 +559,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 1
   field of view: 60
   orthographic: 1
   orthographic size: 5
@@ -611,7 +611,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1703052482}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 0de0af92c22b70341babdc0c394738be, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: 313a1d1372ba50a4588208f551a06b78, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 636818586}

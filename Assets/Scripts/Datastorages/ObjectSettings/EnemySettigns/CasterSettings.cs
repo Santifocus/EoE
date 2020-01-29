@@ -20,6 +20,7 @@ namespace EoE.Information
 			public ActivationCompound TargetCompound = default;
 			public float MinRange = default;
 			public float MaxRange = default;
+			public int ChoiceRelativeChance = 1;
 		}
 	}
 }

@@ -106,36 +106,14 @@ namespace EoE.Information
 		[MenuItem("EoE/DataManagement/Fetch Tutorial Dialogues")]
 		public static void FetchTutorialDialogues()
 		{
-#pragma warning disable
 			string tutorialSettingsGUID = AssetDatabase.FindAssets("t:TutorialSettings")[0];
 			TutorialSettings settings = (TutorialSettings)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(tutorialSettingsGUID), typeof(TutorialSettings));
-
-			string[] GUIDs = AssetDatabase.FindAssets("t:Dialogue", new[] { "Assets/Settings/FX" });
-			List<Dialogue> dialogues = new List<Dialogue>();
-			for(int i = 0; i < GUIDs.Length; i++)
-			{
-				string path = AssetDatabase.GUIDToAssetPath(GUIDs[i]);
-				Dialogue obj = (Dialogue)AssetDatabase.LoadAssetAtPath(path, typeof(Dialogue));
-				if (obj.name.Contains("Tutorial"))
-					dialogues.Add(obj);
-			}
-
-			settings.Parts = new TutorialPart[dialogues.Count];
-			for(int i = 0; i < settings.Parts.Length; i++)
-			{
-				settings.Parts[i] = new TutorialPart();
-				settings.Parts[i].Effects = new ActivationEffect[1];
-				settings.Parts[i].Effects[0] = new ActivationEffect();
-				settings.Parts[i].Effects[0].ContainedEffectType = EffectType.FX;
-				settings.Parts[i].Effects[0].FXObjects = new CustomFXObject[1];
-				settings.Parts[i].Effects[0].FXObjects[0] = new CustomFXObject();
-				settings.Parts[i].Effects[0].FXObjects[0].FX = dialogues[i];
-			}
 			EditorUtility.SetDirty(settings);
 		}
 		[MenuItem("EoE/DataManagement/Clean Object Names")]
 		public static void CleanObjectNames()
 		{
+#pragma warning disable
 			bool onlyAllowLocalNamespace = true;
 			string[] textToReplaceWithSpaces = new string[] { "_", ".", "," };
 
@@ -185,7 +163,7 @@ namespace EoE.Information
 #pragma warning enable
 		}
 		//Context menu
-		[MenuItem("GameObject/UI/EoEButton")]
+		[MenuItem("GameObject/EoE/Button", false, 0)]
 		public static void CreateEoEButton(MenuCommand menuCommand)
 		{
 			Transform parent = Selection.activeTransform;
@@ -224,8 +202,19 @@ namespace EoE.Information
 			UnityEventTools.AddBoolPersistentListener(m.onSelectedEvent, activeSetter, true);
 			UnityEventTools.AddBoolPersistentListener(m.onDeSelectedEvent, activeSetter, false);
 
-			Undo.RegisterCreatedObjectUndo(buttonMain, "Create " + buttonMain.name);
+			Undo.RegisterCreatedObjectUndo(buttonMain, "Created " + buttonMain.name);
 			Selection.activeGameObject = buttonMain;
+		}
+		[MenuItem("GameObject/EoE/ItemGiver", false, 0)]
+		public static void CreateItemGiver(MenuCommand menuCommand)
+		{
+			Transform parent = Selection.activeTransform;
+			GameObject itemGiverMain = new GameObject("ItemGiver");
+			itemGiverMain.AddComponent<ItemGiver>();
+			GameObjectUtility.SetParentAndAlign(itemGiverMain, menuCommand.context as GameObject);
+
+			Undo.RegisterCreatedObjectUndo(itemGiverMain, "Created " + itemGiverMain.name);
+			Selection.activeGameObject = itemGiverMain;
 		}
 		//Other
 		public static T AssetCreator<T>(params string[] pathParts) where T : ScriptableObject
