@@ -210,7 +210,7 @@ namespace EoE.Information
 		{
 			Transform parent = Selection.activeTransform;
 			GameObject itemGiverMain = new GameObject("ItemGiver");
-			itemGiverMain.AddComponent<ItemGiver>();
+			itemGiverMain.AddComponent<SceneLoadout>();
 			GameObjectUtility.SetParentAndAlign(itemGiverMain, menuCommand.context as GameObject);
 
 			Undo.RegisterCreatedObjectUndo(itemGiverMain, "Created " + itemGiverMain.name);

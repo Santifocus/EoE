@@ -284,7 +284,7 @@ namespace EoE.Entities
 			bool turning = curStates.Turning;
 			bool running = curStates.Running;
 
-			bool moving = curStates.Moving && moveVelocity >= (MIN_WALK_ACCELERATION / 2) && intendedAcceleration >= MIN_WALK_ACCELERATION;
+			bool moving = curStates.Moving && moveVelocity >= (MIN_WALK_ACCELERATION / 4) && intendedAcceleration >= MIN_WALK_ACCELERATION;
 			curStates.Moving = moving;
 
 			if (running && !moving)
