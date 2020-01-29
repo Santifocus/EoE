@@ -106,7 +106,6 @@ MonoBehaviour:
   InvincibleModelFlashColor: {r: 1, g: 0, b: 0, a: 0.5372549}
   InvincibleModelFlashDelay: 0.2
   InvincibleModelFlashTime: 0.1
-  StartItems: []
   InventorySize: 72
   MaxModelTilt: 7
   SideTurnSpringLerpSpeed: 10

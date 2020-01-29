@@ -2814,8 +2814,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   openCondition: {fileID: 0}
   itemsToSpawn:
-  - TargetItem: {fileID: 11400000, guid: 4389e543531ad0d4c91543a950d48174, type: 2}
-    StackSize: 15
+  - TargetItem: {fileID: 11400000, guid: d89f1d68ab035d440b3c71a190972ff1, type: 2}
+    StackSize: 2
   itemStartSpawnDelay: 1
   individualItemSpawnDelay: 0.35
   minSpawnVelocity: {x: -5, y: 8, z: 0}
