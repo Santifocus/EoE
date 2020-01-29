@@ -100,7 +100,7 @@ namespace EoE.Entities
 				yield return new WaitForFixedUpdate();
 				for (int i = 0; i < createdItemDrops.Count; i++)
 				{
-					if (!createdItemDrops[i].isActiveAndEnabled)
+					if (!createdItemDrops[i] || !createdItemDrops[i].isActiveAndEnabled)
 						continue;
 
 					if (!createdItemDrops[i] || !createdItemDrops[i].body)

@@ -2931,6 +2931,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0341f66e2af17564eb7706f21e47fed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rTransform: {fileID: 893576656819460129}
   standardTransitionTime: 0
   activePosition: {x: 0, y: 0}
   disabledPosition: {x: 0, y: 0}
@@ -4137,6 +4138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0341f66e2af17564eb7706f21e47fed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rTransform: {fileID: 893576657192495617}
   standardTransitionTime: 0
   activePosition: {x: 0, y: 0}
   disabledPosition: {x: 0, y: 0}
@@ -14057,6 +14059,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0341f66e2af17564eb7706f21e47fed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rTransform: {fileID: 3851637756768421269}
   standardTransitionTime: 0
   activePosition: {x: 0, y: 0}
   disabledPosition: {x: 0, y: 0}
@@ -18901,6 +18904,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0341f66e2af17564eb7706f21e47fed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rTransform: {fileID: 3851637757071580011}
   standardTransitionTime: 0.3
   activePosition: {x: -30, y: 0}
   disabledPosition: {x: 170, y: 0}

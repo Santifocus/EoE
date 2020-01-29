@@ -62,7 +62,7 @@ namespace EoE.Information
 			}
 			else
 			{
-				if (HealType == TargetStat.Mana)
+				if (HealType == TargetStat.Endurance)
 					(user as Player).ChangeEndurance(new ChangeInfo(user, (amount > 0) ? CauseType.Magic : CauseType.Heal, TargetStat.Endurance, amount));
 				else if (HealType == TargetStat.UltimateCharge && WeaponController.Instance)
 					WeaponController.Instance.AddUltimateCharge(-amount);
