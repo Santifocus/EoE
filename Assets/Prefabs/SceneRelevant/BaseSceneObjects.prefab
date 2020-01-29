@@ -1100,7 +1100,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 557484731960762008}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.56, z: 0}
+  m_LocalPosition: {x: 0, y: -1.435, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 957514195632350981}
@@ -10256,7 +10256,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 256cf62de3b91da499e2ca1a25f6a005, type: 2}
+  - {fileID: 2100000, guid: b3a7bd719d9c4ab41be6b65ce04873f4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -11472,8 +11472,8 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 3
-  m_Radius: 0.6
+  m_Height: 2.75
+  m_Radius: 0.4
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -27786,7 +27786,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: d1b318429221df0428ab1b1e4e874455, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e6552b6c300fe7a4e8aa4ba201685a8d, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -27810,10 +27810,10 @@ MonoBehaviour:
   levelUpDisplayTime: 2
   tookDamageDisplayTime: 1
   display: {fileID: 3851637757756985103}
-  normalState: {fileID: 21300000, guid: d1b318429221df0428ab1b1e4e874455, type: 3}
-  lowHealthState: {fileID: 21300000, guid: d1b318429221df0428ab1b1e4e874455, type: 3}
-  gotHitState: {fileID: 21300000, guid: d1b318429221df0428ab1b1e4e874455, type: 3}
-  levelUpState: {fileID: 21300000, guid: d1b318429221df0428ab1b1e4e874455, type: 3}
+  normalState: {fileID: 21300000, guid: e6552b6c300fe7a4e8aa4ba201685a8d, type: 3}
+  lowHealthState: {fileID: 21300000, guid: e6552b6c300fe7a4e8aa4ba201685a8d, type: 3}
+  gotHitState: {fileID: 21300000, guid: e6552b6c300fe7a4e8aa4ba201685a8d, type: 3}
+  levelUpState: {fileID: 21300000, guid: 5f05654fc44bdb247b37adf4c39a3d9f, type: 3}
 --- !u!1 &3851637757779374778
 GameObject:
   m_ObjectHideFlags: 0

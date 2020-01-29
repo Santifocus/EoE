@@ -16,12 +16,13 @@ MonoBehaviour:
   MassCenter: {x: 0, y: 0.5, z: 0}
   ShowEntitieLevel: 1
   EntitieElement: 2
-  PossibleDropsTable: {fileID: 11400000, guid: d3bb8e598d9ed604b8fed58e3635e765, type: 2}
+  PossibleDropsTable: {fileID: 11400000, guid: 70372509868ebf146854ccc92e7c82d3, type: 2}
   LevelSettings: {fileID: 11400000, guid: 9ac078bc18c5ea34e923aa511403d3ee, type: 2}
   ExperienceWorth: 3
   DeathEffects: []
+  BodyRemoveDelay: 2.5
   BasePhysicalDamage: 0
-  BaseMagicalDamage: 20
+  BaseMagicalDamage: 21
   BaseDefense: 3
   Health: 60
   DoHealthRegen: 0
@@ -119,3 +120,4 @@ MonoBehaviour:
     CreatedRemenants: []
     PlayerItemChanges: []
   PanicModeFinishedEffects: []
+  AnimationWalkSpeedDivider: 10

@@ -74,6 +74,7 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
+    PlayerItemChanges: []
   AttackData:
     AttackSequenceParts:
     - AnimationStartPoint: 0.5
@@ -189,6 +190,7 @@ MonoBehaviour:
           BuffsOnUser:
           - {fileID: 11400000, guid: 04c40735dbf85f54ab1effad039fed11, type: 2}
           CreatedRemenants: []
+          PlayerItemChanges: []
       - AtAnimationPoint: 0
         Effect:
           ChanceToActivate: 1
@@ -233,6 +235,7 @@ MonoBehaviour:
           BuffsOnUser:
           - {fileID: 11400000, guid: dee924a8ba33749409b1d2e235d49543, type: 2}
           CreatedRemenants: []
+          PlayerItemChanges: []
       - AtAnimationPoint: 0.8
         Effect:
           ChanceToActivate: 1
@@ -278,6 +281,7 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+          PlayerItemChanges: []
       WhileEffectsOnUser: []
       StartEffectsOnWeapon: []
       WhileEffectsOnWeapon: []

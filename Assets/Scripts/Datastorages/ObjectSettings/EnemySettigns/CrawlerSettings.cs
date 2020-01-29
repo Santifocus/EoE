@@ -23,5 +23,8 @@ namespace EoE.Information
 		public ActivationEffect[] BashStartEffects = new ActivationEffect[0];
 		public ActivationEffect[] BashHitTerrainEffects = new ActivationEffect[0];
 		public ActivationEffect[] BashHitEntitieEffects = new ActivationEffect[0];
+
+		//Animation
+		public float AnimationWalkSpeedDivider = 6;
 	}
 }

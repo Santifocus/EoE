@@ -31,7 +31,7 @@ MonoBehaviour:
   - Restrictions:
       ActionRestrictions: -1
       MovementRestrictions: 0
-    ElementDuration: 0
+    ElementDuration: 0.15
     WhileTickTime: 10
     StartEffects:
     - ChanceToActivate: 1
@@ -55,6 +55,7 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     WhileEffects: []
     AtTargetStartEffects:
     - ChanceToActivate: 1
@@ -72,7 +73,8 @@ MonoBehaviour:
       BuffsOnUser: []
       CreatedRemenants:
       - {fileID: 11400000, guid: bc6a09708afbe724bb3d806acd0db502, type: 2}
+      PlayerItemChanges: []
     AtTargetWhileEffects: []
-    PauseConditions: []
-    YieldConditions: []
-    StopConditions: []
+    PauseCondition: {fileID: 0}
+    YieldCondition: {fileID: 0}
+    StopCondition: {fileID: 0}

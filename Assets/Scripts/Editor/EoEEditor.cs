@@ -789,7 +789,7 @@ namespace EoE
 			if (changed)
 				isDirty = true;
 		}
-		public static void DrawWaitCondition(GUIContent content, WaitSetting settings, SerializedProperty selfProperty, int offSet)
+		public static void DrawWaitSettings(GUIContent content, WaitSetting settings, SerializedProperty selfProperty, int offSet)
 		{
 			if(settings == null)
 			{
@@ -800,8 +800,24 @@ namespace EoE
 
 			if (selfProperty.isExpanded)
 			{
-				FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MinAnimtionPoint))), ref settings.MinAnimtionPoint, 0, 1, offSet + 1);
-				FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MaxAnimtionPoint))), ref settings.MaxAnimtionPoint, settings.MinAnimtionPoint, 1, offSet + 1);
+
+				if (FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MinAnimationPoint))), ref settings.MinAnimationPoint, 0, 1, offSet + 1))
+				{
+					if (settings.MaxAnimationPoint < settings.MinAnimationPoint)
+					{
+						settings.MaxAnimationPoint = settings.MinAnimationPoint;
+						isDirty = true;
+					}
+				}
+				if (FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MaxAnimationPoint))), ref settings.MaxAnimationPoint, 0, 1, offSet + 1))
+				{
+					if (settings.MinAnimationPoint > settings.MaxAnimationPoint)
+					{
+						settings.MinAnimationPoint = settings.MaxAnimationPoint;
+						isDirty = true;
+					}
+				}
+
 				ObjectField<LogicComponent>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Condition))), ref settings.Condition, offSet + 1);
 			}
 		}
@@ -976,7 +992,7 @@ namespace EoE
 					//Wait Settings
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));
 					SerializedProperty waitSettingsProperty = property.FindPropertyRelative(nameof(settings.WaitSettings));
-					DrawArray<WaitSetting>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WaitSettings))), ref settings.WaitSettings, waitSettingsProperty, DrawWaitCondition, new GUIContent(". Wait Setting"), offSet + 1);
+					DrawArray<WaitSetting>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WaitSettings))), ref settings.WaitSettings, waitSettingsProperty, DrawWaitSettings, new GUIContent(". Wait Setting"), offSet + 1);
 
 					//Charging
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1));

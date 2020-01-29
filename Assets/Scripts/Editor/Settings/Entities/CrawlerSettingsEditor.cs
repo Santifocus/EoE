@@ -8,10 +8,12 @@ namespace EoE.Information
 	[CustomEditor(typeof(CrawlerSettings), true), CanEditMultipleObjects]
 	public class CrawlerSettingsEditor : EnemySettingsEditor
 	{
+		protected static bool AnimationSettingsOpen;
 		protected override void CustomInspector()
 		{
 			base.CustomInspector();
 			DrawInFoldoutHeader("Effect Settings", ref EffectSettingsOpen, EffectSettingsArea);
+			DrawInFoldoutHeader(new GUIContent("Animation Settings"), ref AnimationSettingsOpen, DrawAnimationSettings);
 		}
 		protected override void CombatSettings()
 		{
@@ -45,6 +47,12 @@ namespace EoE.Information
 				(settings.BashHitTerrainEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
 			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BashHitEntitieEffects))), ref settings.BashHitEntitieEffects, serializedObject.FindProperty(nameof
 				(settings.BashHitEntitieEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
+		}
+
+		private void DrawAnimationSettings()
+		{
+			CasterSettings settings = target as CasterSettings;
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationWalkSpeedDivider))), ref settings.AnimationWalkSpeedDivider, 1);
 		}
 	}
 }

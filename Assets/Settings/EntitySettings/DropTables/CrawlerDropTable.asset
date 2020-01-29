@@ -16,8 +16,12 @@ MonoBehaviour:
   - Drop: {fileID: 11400000, guid: 85a6ee9ea6326894bafdefc197d83d4f, type: 2}
     MinDropAmount: 1
     MaxDropAmount: 1
-    DropChance: 0.05
+    DropChance: 0.1
   - Drop: {fileID: 11400000, guid: 577e912d320c9694b81aaffd76fd2162, type: 2}
     MinDropAmount: 1
     MaxDropAmount: 1
     DropChance: 0.1
+  - Drop: {fileID: 11400000, guid: 20e8cd93f617d124d83e9a5570f04234, type: 2}
+    MinDropAmount: 1
+    MaxDropAmount: 1
+    DropChance: 0.06

@@ -19,10 +19,10 @@ MonoBehaviour:
     OnTimeout: 1
     TimeStay: 2
     OnConditionMet: 0
-    Conditions: []
+    Condition: {fileID: 0}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Take This! Meteora !
-  dialogueIcon: {fileID: 21300000, guid: 4a11622c204faf04b8af5ef625d9aec1, type: 3}
+  dialogueIcon: {fileID: 21300000, guid: b7ba1a70591e12041b51d0d91951a56e, type: 3}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

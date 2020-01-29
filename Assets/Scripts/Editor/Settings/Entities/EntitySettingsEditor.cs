@@ -40,6 +40,7 @@ namespace EoE.Information
 
 				LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 				DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DeathEffects))), ref settings.DeathEffects, serializedObject.FindProperty(nameof(settings.DeathEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
+				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BodyRemoveDelay))), ref settings.BodyRemoveDelay, 1);
 			}
 		}
 

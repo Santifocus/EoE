@@ -20,10 +20,10 @@ MonoBehaviour:
     TimeStay: 1
     OnConditionMet: 0
     Condition: {fileID: 0}
-  ParticleMainObject: {fileID: 8517015944298517574, guid: 682effc6977c3bf45934f2d2a3fceca9,
+  ParticleMainObject: {fileID: 8517015944298517574, guid: 713f665e2be9c5548beadf20c4a5bd88,
     type: 3}
   OffsetToTarget: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}
-  FollowTarget: 0
+  FollowTarget: 1
   InheritRotationOfTarget: 0
   RotationInheritLerpSpeed: 4

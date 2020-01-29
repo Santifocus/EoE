@@ -67,6 +67,7 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
+    PlayerItemChanges: []
   AttackData:
     AttackSequenceParts:
     - AnimationStartPoint: 0
@@ -120,8 +121,8 @@ MonoBehaviour:
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
       WaitSettings:
-      - MinAnimtionPoint: 0.925
-        MaxAnimtionPoint: 0.95
+      - MinAnimationPoint: 0.955
+        MaxAnimationPoint: 1
         Condition: {fileID: 11400000, guid: 05063fee59cc1ba40b98d06dcf75b926, type: 2}
       DamageMultiplier: 1
       HealthCostMultiplier: 1
@@ -157,6 +158,7 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+          PlayerItemChanges: []
       - AtAnimationPoint: 0.2
         Effect:
           ChanceToActivate: 1
@@ -180,7 +182,8 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
-      - AtAnimationPoint: 0.95
+          PlayerItemChanges: []
+      - AtAnimationPoint: 0.99
         Effect:
           ChanceToActivate: 1
           ContainedEffectType: 6
@@ -222,6 +225,7 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+          PlayerItemChanges: []
       - AtAnimationPoint: 0.1
         Effect:
           ChanceToActivate: 1
@@ -238,6 +242,7 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+          PlayerItemChanges: []
       - AtAnimationPoint: 1
         Effect:
           ChanceToActivate: 1
@@ -255,6 +260,7 @@ MonoBehaviour:
           BuffsOnUser: []
           CreatedRemenants:
           - {fileID: 11400000, guid: 152eb11e03316d44aad7e04c89ea1a83, type: 2}
+          PlayerItemChanges: []
       - AtAnimationPoint: 0
         Effect:
           ChanceToActivate: 1
@@ -272,6 +278,7 @@ MonoBehaviour:
           BuffsOnUser:
           - {fileID: 11400000, guid: d8eb7d4e7fad95d4697760e4d0ea7392, type: 2}
           CreatedRemenants: []
+          PlayerItemChanges: []
       WhileEffectsOnUser: []
       StartEffectsOnWeapon: []
       WhileEffectsOnWeapon: []

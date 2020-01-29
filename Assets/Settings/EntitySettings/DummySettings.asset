@@ -20,6 +20,7 @@ MonoBehaviour:
   LevelSettings: {fileID: 0}
   ExperienceWorth: 10
   DeathEffects: []
+  BodyRemoveDelay: 0
   BasePhysicalDamage: 0
   BaseMagicalDamage: 0
   BaseDefense: 0

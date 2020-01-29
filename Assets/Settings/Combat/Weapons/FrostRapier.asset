@@ -148,6 +148,7 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+          PlayerItemChanges: []
       WhileEffectsOnUser: []
       StartEffectsOnWeapon: []
       WhileEffectsOnWeapon: []
@@ -250,6 +251,7 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+          PlayerItemChanges: []
       WhileEffectsOnUser: []
       StartEffectsOnWeapon:
       - AtAnimationPoint: 0.5
@@ -268,6 +270,7 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+          PlayerItemChanges: []
       WhileEffectsOnWeapon: []
     - AnimationStartPoint: 0
       AnimationTarget: 4
@@ -344,14 +347,14 @@ MonoBehaviour:
             type: 2}
         FXObjects: []
         FXObjectsWithMutliplier:
-        - FX: {fileID: 11400000, guid: b7ca0c9b1adf6044a871c15b7af6ea29, type: 2}
+        - FX: {fileID: 0}
           HasPositionOffset: 0
           PositionOffset: {x: 0, y: 0, z: 0}
           HasRotationOffset: 0
           RotationOffset: {x: 0, y: 0, z: 0}
           HasCustomScale: 0
           CustomScale: {x: 1, y: 1, z: 1}
-        - FX: {fileID: 11400000, guid: a1ac14100d656c84e8006d4bc848efbd, type: 2}
+        - FX: {fileID: 0}
           HasPositionOffset: 0
           PositionOffset: {x: 0, y: 0, z: 0}
           HasRotationOffset: 0
@@ -415,6 +418,7 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+          PlayerItemChanges: []
       WhileEffectsOnUser: []
       StartEffectsOnWeapon:
       - AtAnimationPoint: 0.4
@@ -440,6 +444,7 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+          PlayerItemChanges: []
       WhileEffectsOnWeapon: []
     - AnimationStartPoint: 0
       AnimationTarget: 2
@@ -540,6 +545,7 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+          PlayerItemChanges: []
       WhileEffectsOnUser: []
       StartEffectsOnWeapon: []
       WhileEffectsOnWeapon: []
@@ -651,6 +657,7 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+          PlayerItemChanges: []
       - AtAnimationPoint: 0.825
         Effect:
           ChanceToActivate: 1
@@ -681,6 +688,7 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+          PlayerItemChanges: []
       WhileEffectsOnUser: []
       StartEffectsOnWeapon:
       - AtAnimationPoint: 0.1
@@ -706,11 +714,12 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+          PlayerItemChanges: []
       WhileEffectsOnWeapon: []
     PartsMaxDelays:
     - 0.2
     - 0.2
-    - 0.5
+    - 0.3
     - 0.2
   RunAttackSequence:
     AttackSequenceParts:
@@ -813,6 +822,7 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+          PlayerItemChanges: []
       WhileEffectsOnUser: []
       StartEffectsOnWeapon: []
       WhileEffectsOnWeapon: []
@@ -870,8 +880,8 @@ MonoBehaviour:
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
       WaitSettings:
-      - MinAnimtionPoint: 0.8
-        MaxAnimtionPoint: 0.9
+      - MinAnimationPoint: 0.955
+        MaxAnimationPoint: 1
         Condition: {fileID: 11400000, guid: 05063fee59cc1ba40b98d06dcf75b926, type: 2}
       DamageMultiplier: 1.6
       HealthCostMultiplier: 1
@@ -921,6 +931,7 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+          PlayerItemChanges: []
       WhileEffectsOnUser: []
       StartEffectsOnWeapon: []
       WhileEffectsOnWeapon: []
@@ -979,8 +990,8 @@ MonoBehaviour:
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
       WaitSettings:
-      - MinAnimtionPoint: 0.8
-        MaxAnimtionPoint: 0.9
+      - MinAnimationPoint: 0.955
+        MaxAnimationPoint: 1
         Condition: {fileID: 11400000, guid: 05063fee59cc1ba40b98d06dcf75b926, type: 2}
       DamageMultiplier: 2
       HealthCostMultiplier: 1
@@ -1030,6 +1041,7 @@ MonoBehaviour:
           StackingStyle: 2
           BuffsOnUser: []
           CreatedRemenants: []
+          PlayerItemChanges: []
       WhileEffectsOnUser: []
       StartEffectsOnWeapon: []
       WhileEffectsOnWeapon: []

@@ -20,8 +20,9 @@ MonoBehaviour:
   LevelSettings: {fileID: 11400000, guid: 9ac078bc18c5ea34e923aa511403d3ee, type: 2}
   ExperienceWorth: 3
   DeathEffects: []
+  BodyRemoveDelay: 2.5
   BasePhysicalDamage: 0
-  BaseMagicalDamage: 20
+  BaseMagicalDamage: 19
   BaseDefense: 3
   Health: 60
   DoHealthRegen: 0
@@ -123,3 +124,4 @@ MonoBehaviour:
     CreatedRemenants: []
     PlayerItemChanges: []
   PanicModeFinishedEffects: []
+  AnimationWalkSpeedDivider: 10

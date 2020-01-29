@@ -133,8 +133,8 @@ namespace EoE.Combatery
 	[System.Serializable]
 	public class WaitSetting
 	{
-		public float MinAnimtionPoint;
-		public float MaxAnimtionPoint;
+		[UnityEngine.Serialization.FormerlySerializedAs("MinAnimtionPoint")] public float MinAnimationPoint;
+		[UnityEngine.Serialization.FormerlySerializedAs("MaxAnimtionPoint")] public float MaxAnimationPoint;
 		public LogicComponent Condition;
 	}
 	[System.Serializable]

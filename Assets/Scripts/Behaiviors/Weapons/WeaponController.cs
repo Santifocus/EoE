@@ -378,7 +378,7 @@ namespace EoE.Combatery
 					//if both are true: stop the animation and wait until they are false
 					for (int i = 0; i < ActiveAttackStyle.WaitSettings.Length; i++)
 					{
-						if((ActiveAttackStyle.WaitSettings[i].MinAnimtionPoint <= curAttackAnimationPoint) && (ActiveAttackStyle.WaitSettings[i].MaxAnimtionPoint > curAttackAnimationPoint))
+						if((ActiveAttackStyle.WaitSettings[i].MinAnimationPoint <= curAttackAnimationPoint) && (ActiveAttackStyle.WaitSettings[i].MaxAnimationPoint > curAttackAnimationPoint))
 						{
 							if (ActiveAttackStyle.WaitSettings[i].Condition.True)
 							{
