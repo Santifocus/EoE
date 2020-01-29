@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0cfa02d20316eb49a2c896c4ef8f919, type: 3}
-  m_Name: CrawlerDropTable
+  m_Name: ShadowCasterDropTable
   m_EditorClassIdentifier: 
   PossibleDrops:
+  - Drop: {fileID: 11400000, guid: 559b53f723906944b9b4184cc5331dc2, type: 2}
+    MinDropAmount: 1
+    MaxDropAmount: 2
+    DropChance: 0.1
   - Drop: {fileID: 11400000, guid: 85a6ee9ea6326894bafdefc197d83d4f, type: 2}
     MinDropAmount: 1
     MaxDropAmount: 1
-    DropChance: 0.1
-  - Drop: {fileID: 11400000, guid: 577e912d320c9694b81aaffd76fd2162, type: 2}
-    MinDropAmount: 1
-    MaxDropAmount: 1
-    DropChance: 0.1
+    DropChance: 0.15
   - Drop: {fileID: 11400000, guid: 20e8cd93f617d124d83e9a5570f04234, type: 2}
     MinDropAmount: 1
     MaxDropAmount: 1
-    DropChance: 0.06
+    DropChance: 0.05

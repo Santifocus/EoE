@@ -27,6 +27,6 @@ MonoBehaviour:
     text: ' Tutorial'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: . The Tutorial will now end and the actuall game will start.
-  dialogueIcon: {fileID: 21300000, guid: 070080759fd8a224d824f824f5c5afa3, type: 3}
+  dialogueIcon: {fileID: 21300000, guid: e0789f211e1b4c640aac297982c66538, type: 3}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

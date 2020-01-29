@@ -2824,7 +2824,29 @@ MonoBehaviour:
   - {fileID: 1926619095}
   - {fileID: 247855495}
   effectsOnPlayerOnFailOpen: []
-  effectsOnPlayerOnOpen: []
+  effectsOnPlayerOnOpen:
+  - ChanceToActivate: 1
+    ContainedEffectType: 2
+    ImpulseVelocity: 0
+    ImpulseVelocityFallOffTime: 0
+    ImpulseVelocityDirection: 0
+    ImpulseVelocityFallbackDirection: 0
+    ImpulseDirectionBase: 0
+    FXObjects:
+    - FX: {fileID: 11400000, guid: 92e6aa43875ca7d418b3782b98f5f03c, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 0, y: 0, z: 0}
+    AOEEffects: []
+    ProjectileInfos: []
+    HealsOnUser: []
+    StackingStyle: 0
+    BuffsOnUser: []
+    CreatedRemenants: []
+    PlayerItemChanges: []
   animator: {fileID: 670767025}
   openAnimationTrigger: Open
 --- !u!54 &1635771179
