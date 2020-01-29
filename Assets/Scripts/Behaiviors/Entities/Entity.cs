@@ -82,7 +82,6 @@ namespace EoE.Entities
 		public ForceController entitieForceController;
 		public virtual Vector3 CurVelocity => new Vector3(impactForce.x, 0, impactForce.y) + entitieForceController.currentTotalForce;
 
-
 		//Armor
 		public InventoryItem EquipedArmor;
 		public BuffInstance ArmorBuff;
@@ -456,7 +455,13 @@ namespace EoE.Entities
 			BuildDrops();
 			if (statDisplay)
 				Destroy(statDisplay.gameObject);
+			coll.gameObject.layer = ConstantCollector.TERRAIN_COLLIDING_LAYER;
 
+			StartCoroutine(DelayedBodyRemoval());
+		}
+		private IEnumerator DelayedBodyRemoval()
+		{
+			yield return new WaitForSeconds(SelfSettings.BodyRemoveDelay);
 			gameObject.SetActive(false);
 		}
 		private void OnDestroy()

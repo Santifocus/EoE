@@ -17,6 +17,7 @@ namespace EoE.Entities
 		//Inspector Variables
 		[SerializeField] protected Rigidbody body = default;
 		public NavMeshAgent agent = default;
+		[SerializeField] protected Transform[] eyes = default;
 
 		protected Vector3 originalSpawnPosition;
 		protected NavMeshPath curPath;
@@ -80,13 +81,15 @@ namespace EoE.Entities
 		{
 			base.Update();
 			DecideOnBehaivior();
-			EnforceKnockback();
+
+			if(Alive)
+				EnforceKnockback();
 		}
 		#endregion
 		#region Behaivior
 		private void DecideOnBehaivior()
 		{
-			if (Player.Existant)
+			if (Player.Existant && Alive)
 			{
 				bool prevInRange = PlayerInAttackRange;
 				float sqrPlayerDist = (Player.Instance.actuallWorldPosition - actuallWorldPosition).sqrMagnitude;
@@ -122,6 +125,14 @@ namespace EoE.Entities
 				PlayerInAttackRange = false;
 				targetPosition = null;
 			}
+
+			if (!Alive)
+			{
+				SetAgentState(false);
+				body.velocity = Vector3.zero;
+				return;
+			}
+
 			UpdateAgentSettings();
 
 			if (PlayerInAttackRange && chasingPlayer && !IsStunned)
@@ -137,8 +148,7 @@ namespace EoE.Entities
 			if(cantMove || behaviorSimpleStop)
 			{
 				SetAgentState(false);
-				if(!IsStunned)
-					LookAtTarget();
+				LookAtTarget();
 				return;
 			}
 
@@ -188,7 +198,10 @@ namespace EoE.Entities
 					LookAroundArea();
 				}
 			}
-
+		}
+		private void LateUpdate()
+		{
+			BaseAnimationUpdate();
 		}
 		protected void RefreshDataOnPlayer(bool fromCombatTrigger)
 		{
@@ -246,6 +259,16 @@ namespace EoE.Entities
 				agent.angularSpeed = enemySettings.TurnSpeed;
 				agent.acceleration = enemySettings.MoveAcceleration;
 				agent.speed = curWalkSpeed;
+			}
+		}
+		private void BaseAnimationUpdate()
+		{
+			if (targetPosition.HasValue)
+			{
+				for (int i = 0; i < eyes.Length; i++)
+				{
+					eyes[i].transform.forward = (eyes[i].transform.position - targetPosition.Value).normalized;
+				}
 			}
 		}
 		private bool CanSeePlayer()
@@ -379,7 +402,7 @@ namespace EoE.Entities
 		}
 		protected void LookAtTarget()
 		{
-			if (IsTurnStopped || IsStunned)
+			if (IsTurnStopped || IsStunned || !Alive)
 				return;
 
 			Vector3? aimPos = pointOfInterest ?? (overrideTargetPosition ?? targetPosition);

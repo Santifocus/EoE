@@ -19,29 +19,8 @@ MonoBehaviour:
   PossibleDropsTable: {fileID: 11400000, guid: d3bb8e598d9ed604b8fed58e3635e765, type: 2}
   LevelSettings: {fileID: 11400000, guid: 9ac078bc18c5ea34e923aa511403d3ee, type: 2}
   ExperienceWorth: 3
-  DeathEffects:
-  - ChanceToActivate: 1
-    ContainedEffectType: 2
-    ImpulseVelocity: 5
-    ImpulseVelocityFallOffTime: 0.5
-    ImpulseVelocityDirection: 2
-    ImpulseVelocityFallbackDirection: 1
-    ImpulseDirectionBase: 1
-    FXObjects:
-    - FX: {fileID: 11400000, guid: eb19498e4ffd8d74c8e8c9ed3648da48, type: 2}
-      HasPositionOffset: 0
-      PositionOffset: {x: 0, y: 0, z: 0}
-      HasRotationOffset: 0
-      RotationOffset: {x: 0, y: 0, z: 0}
-      HasCustomScale: 0
-      CustomScale: {x: 1, y: 1, z: 1}
-    AOEEffects: []
-    ProjectileInfos: []
-    HealsOnUser: []
-    StackingStyle: 2
-    BuffsOnUser: []
-    CreatedRemenants: []
-    PlayerItemChanges: []
+  DeathEffects: []
+  BodyRemoveDelay: 2.5
   BasePhysicalDamage: 0
   BaseMagicalDamage: 19
   BaseDefense: 3
@@ -145,3 +124,4 @@ MonoBehaviour:
     CreatedRemenants: []
     PlayerItemChanges: []
   PanicModeFinishedEffects: []
+  AnimationWalkSpeedDivider: 10

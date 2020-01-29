@@ -19,6 +19,7 @@ namespace EoE.Information
 		public int ExperienceWorth = 10;
 
 		public ActivationEffect[] DeathEffects = new ActivationEffect[0];
+		public float BodyRemoveDelay = 2.5f;
 
 		//Basic Combat Data
 		public float BasePhysicalDamage = 10;
