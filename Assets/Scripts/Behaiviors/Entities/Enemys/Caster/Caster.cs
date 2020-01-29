@@ -185,7 +185,7 @@ namespace EoE.Entities
 		{
 			float distanceToPlayer = (Player.Instance.actuallWorldPosition - actuallWorldPosition).sqrMagnitude;
 
-			List<int> possiblePatterns = new List<int>(settings.BehaiviorPatterns.Length);
+			List<CasterSettings.CasterBehaiviorPattern> possiblePatterns = new List<CasterSettings.CasterBehaiviorPattern>(settings.BehaiviorPatterns.Length);
 
 			for(int i = 0; i < settings.BehaiviorPatterns.Length; i++)
 			{
@@ -193,13 +193,36 @@ namespace EoE.Entities
 					distanceToPlayer < (settings.BehaiviorPatterns[i].MaxRange * settings.BehaiviorPatterns[i].MaxRange) &&
 					settings.BehaiviorPatterns[i].TargetCompound.CanActivate(this, 1, 1, 1))
 				{
-					possiblePatterns.Add(i);
+					possiblePatterns.Add(settings.BehaiviorPatterns[i]);
 				}
 			}
 			if(possiblePatterns.Count > 0)
 			{
-				int targetPatternIndex = possiblePatterns[Random.Range(0, possiblePatterns.Count)];
-				ActivateCompound(settings.BehaiviorPatterns[targetPatternIndex].TargetCompound);
+				float totalChoiceAmount = 0;
+				for(int i = 0; i < possiblePatterns.Count; i++)
+				{
+					totalChoiceAmount += possiblePatterns[i].ChoiceRelativeChance;
+				}
+
+				float choiceNormalized = Random.value;
+				CasterSettings.CasterBehaiviorPattern choosenPattern = null;
+				if (totalChoiceAmount <= 0)
+				{
+					choosenPattern = possiblePatterns[0];
+				}
+				else
+				{
+					for (int i = 0; i < possiblePatterns.Count; i++)
+					{
+						choiceNormalized -= (possiblePatterns[i].ChoiceRelativeChance / totalChoiceAmount);
+						if(choiceNormalized <= 0)
+						{
+							choosenPattern = possiblePatterns[i];
+						}
+					}
+				}
+
+				ActivateCompound(choosenPattern.TargetCompound);
 			}
 		}
 	}
