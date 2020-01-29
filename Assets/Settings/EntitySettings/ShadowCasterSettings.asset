@@ -73,6 +73,7 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
+    PlayerItemChanges: []
   PlayerTrackSpeed: 4
   SightRange: 25
   FoundPlayerSightRange: 50
@@ -87,11 +88,13 @@ MonoBehaviour:
   LookAroundDelayMax: 2
   BehaiviorPatterns:
   - TargetCompound: {fileID: 11400000, guid: 021a705ecba577540b2aa377f8caa4d4, type: 2}
-    MinRange: 8
+    MinRange: 0
     MaxRange: 25
+    ChoiceRelativeChance: 1
   - TargetCompound: {fileID: 11400000, guid: 9d6020f6bd529e44c880f110a911b467, type: 2}
     MinRange: 0
     MaxRange: 8
+    ChoiceRelativeChance: 1
   CooldownBehaivior: 2
   TargetDistance: 10
   PanicModeThreshold: 0.35
@@ -118,4 +121,5 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
+    PlayerItemChanges: []
   PanicModeFinishedEffects: []
