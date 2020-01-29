@@ -5,6 +5,7 @@ namespace EoE.UI
 {
 	public class TransitionUI : MonoBehaviour
 	{
+		public RectTransform rTransform;
 		[SerializeField] private float standardTransitionTime = default;
 		[SerializeField] private Vector2 activePosition = default;
 		[SerializeField] private Vector2 disabledPosition = default;
@@ -12,7 +13,6 @@ namespace EoE.UI
 		[SerializeField] private bool ignoreTimeScale = default;
 
 		public bool trueState => inTransition ? !curState : curState;
-		public RectTransform rTransform { get; private set; }
 		private bool inTransition;
 		private bool curState;
 
@@ -22,12 +22,6 @@ namespace EoE.UI
 		private float finalTransitionTime;
 		private System.Action finishCall;
 
-		private void Start()
-		{
-			rTransform = GetComponent<RectTransform>();
-			if (rTransform == null)
-				throw new System.Exception("Transition UI cannot be used on non Rect Transforms.");
-		}
 		public void ChangeTransitionState(bool newState, System.Action finishCall = null)
 		{
 			curState = newState;
