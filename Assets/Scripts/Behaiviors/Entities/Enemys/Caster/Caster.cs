@@ -244,6 +244,7 @@ namespace EoE.Entities
 						if(choiceNormalized <= 0)
 						{
 							choosenPattern = possiblePatterns[i];
+							break;
 						}
 					}
 				}
