@@ -21,7 +21,7 @@ MonoBehaviour:
   ExperienceWorth: 3
   DeathEffects: []
   BasePhysicalDamage: 0
-  BaseMagicalDamage: 20
+  BaseMagicalDamage: 19
   BaseDefense: 3
   Health: 50
   DoHealthRegen: 0
@@ -73,6 +73,7 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
+    PlayerItemChanges: []
   PlayerTrackSpeed: 4
   SightRange: 25
   FoundPlayerSightRange: 50
@@ -89,9 +90,11 @@ MonoBehaviour:
   - TargetCompound: {fileID: 11400000, guid: d1a413eb4f2c804488f2c61892b9d9e8, type: 2}
     MinRange: 8
     MaxRange: 25
+    ChoiceRelativeChance: 1
   - TargetCompound: {fileID: 11400000, guid: 1427a68c8a1ff1747bc67c8053391444, type: 2}
     MinRange: 0
     MaxRange: 8
+    ChoiceRelativeChance: 1
   CooldownBehaivior: 2
   TargetDistance: 10
   PanicModeThreshold: 0.35
@@ -119,4 +122,5 @@ MonoBehaviour:
     BuffsOnUser:
     - {fileID: 0}
     CreatedRemenants: []
+    PlayerItemChanges: []
   PanicModeFinishedEffects: []

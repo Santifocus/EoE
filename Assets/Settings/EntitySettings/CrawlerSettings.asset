@@ -19,10 +19,11 @@ MonoBehaviour:
   PossibleDropsTable: {fileID: 11400000, guid: 6c863124784db984e93eb995e00bd42e, type: 2}
   LevelSettings: {fileID: 11400000, guid: 8872bc66ea135374daf83e0b036673d5, type: 2}
   ExperienceWorth: 1
-  BasePhysicalDamage: 14
+  DeathEffects: []
+  BasePhysicalDamage: 13
   BaseMagicalDamage: 0
   BaseDefense: 4
-  Health: 70
+  Health: 65
   DoHealthRegen: 0
   HealthRegen: 0
   HealthRegenCooldownAfterTakingDamage: 4
@@ -72,6 +73,7 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
+    PlayerItemChanges: []
   PlayerTrackSpeed: 4
   SightRange: 15
   FoundPlayerSightRange: 50
@@ -121,6 +123,7 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
+    PlayerItemChanges: []
   TrickBashChargeStartEffects:
   - ChanceToActivate: 1
     ContainedEffectType: 2
@@ -150,6 +153,7 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
+    PlayerItemChanges: []
   BashStartEffects:
   - ChanceToActivate: 1
     ContainedEffectType: 2
@@ -179,6 +183,7 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
+    PlayerItemChanges: []
   BashHitTerrainEffects:
   - ChanceToActivate: 1
     ContainedEffectType: 35
@@ -209,6 +214,7 @@ MonoBehaviour:
     BuffsOnUser:
     - {fileID: 11400000, guid: cfd21ec5a60866b4fa90b111fc6bc2b4, type: 2}
     CreatedRemenants: []
+    PlayerItemChanges: []
   BashHitEntitieEffects:
   - ChanceToActivate: 1
     ContainedEffectType: 2
@@ -238,3 +244,4 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
+    PlayerItemChanges: []

@@ -21,7 +21,7 @@ MonoBehaviour:
   ExperienceWorth: 3
   DeathEffects: []
   BasePhysicalDamage: 0
-  BaseMagicalDamage: 20
+  BaseMagicalDamage: 19
   BaseDefense: 3
   Health: 60
   DoHealthRegen: 0
