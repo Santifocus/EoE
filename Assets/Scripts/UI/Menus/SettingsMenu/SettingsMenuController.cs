@@ -23,6 +23,7 @@ namespace EoE.UI
 		[SerializeField] private SettingsSlider musicVolumeScaleSlider = default;
 		[SerializeField] private SettingsSlider soundVolumeScaleSlider = default;
 		[SerializeField] private SettingsSlider gammaSlider = default;
+		[SerializeField] private GameObject targetAsToggleToggle = default;
 		[SerializeField] private GameObject invertCameraXToggle = default;
 		[SerializeField] private GameObject invertCameraYToggle = default;
 
@@ -68,6 +69,11 @@ namespace EoE.UI
 			ActiveGamma = gammaSlider.Value;
 			RenderSettings.ambientLight = new Color(ActiveGamma, ActiveGamma, ActiveGamma, 1);
 		}
+		public void ToggleTargetAsToggle()
+		{
+			ActiveTargetAsToggle = !ActiveTargetAsToggle;
+			targetAsToggleToggle.SetActive(ActiveTargetAsToggle);
+		}
 		public void ToggleXInvert()
 		{
 			ActiveInvertCameraX = !ActiveInvertCameraX;
@@ -82,7 +88,7 @@ namespace EoE.UI
 		{
 			VolumeScaleChanged();
 			RenderSettings.ambientLight = new Color(ActiveGamma, ActiveGamma, ActiveGamma, 1);
-			SaveSettings();
+			SaveOrCreateSettings();
 		}
 		public void ResetToBase()
 		{
@@ -98,6 +104,7 @@ namespace EoE.UI
 			VolumeScaleChanged();
 
 			RenderSettings.ambientLight = new Color(ActiveGamma, ActiveGamma, ActiveGamma, 1);
+			targetAsToggleToggle.SetActive(ActiveTargetAsToggle);
 			invertCameraXToggle.SetActive(ActiveInvertCameraX);
 			invertCameraYToggle.SetActive(ActiveInvertCameraY);
 		}

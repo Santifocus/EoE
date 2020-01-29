@@ -128,7 +128,7 @@ namespace EoE.Entities
 
 			if (GameController.GameIsPaused)
 			{
-				if (TargetedEntitie)
+				if (!SettingsData.ActiveTargetAsToggle && TargetedEntitie)
 					TargetedEntitie = null;
 				return;
 			}
@@ -854,9 +854,16 @@ namespace EoE.Entities
 				switchTargetTimer -= Time.deltaTime;
 
 			targetPosition = TargetedEntitie ? (Vector3?)TargetedEntitie.actuallWorldPosition : null;
+			bool toggledTarget = SettingsData.ActiveTargetAsToggle && TargetedEntitie;
 
 			if (InputController.Aim.Down)
 			{
+				if (toggledTarget)
+				{
+					TargetedEntitie = null;
+					return;
+				}
+
 				List<(Entity, float)> possibleTargets = GetPossibleTargets();
 				TargetedEntitie = null;
 				if (possibleTargets.Count > 0)
@@ -876,7 +883,7 @@ namespace EoE.Entities
 					}
 				}
 			}
-			else if (InputController.Aim.Held && InputController.CameraMove.sqrMagnitude > 0.25f)
+			else if ((InputController.Aim.Held || toggledTarget) && InputController.CameraMove.sqrMagnitude > 0.25f)
 			{
 				if (switchTargetTimer > 0 || TargetedEntitie == null)
 					return;
@@ -920,7 +927,7 @@ namespace EoE.Entities
 					}
 				}
 			}
-			else if (InputController.Aim.Up)
+			else if (InputController.Aim.Up && !(toggledTarget))
 				TargetedEntitie = null;
 		}
 		private List<(Entity, float)> GetPossibleTargets()
