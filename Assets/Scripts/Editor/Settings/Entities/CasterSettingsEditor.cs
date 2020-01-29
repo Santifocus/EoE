@@ -46,6 +46,7 @@ namespace EoE.Information
 				ObjectField<ActivationCompound>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.TargetCompound))), ref settings.TargetCompound, offSet + 1);
 				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MinRange))), ref settings.MinRange, offSet + 1);
 				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MaxRange))), ref settings.MaxRange, offSet + 1);
+				IntField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ChoiceRelativeChance))), ref settings.ChoiceRelativeChance, offSet + 1);
 
 				if (settings.MinRange < 0)
 				{
