@@ -113,15 +113,15 @@ namespace EoE.Information
 			bool changed = false;
 			EditorGUILayout.BeginHorizontal();
 			Foldout(content, property, offSet);
-			if (settings.Item)
-			{
-				Rect rect = EditorGUILayout.GetControlRect(false, 24);
-				rect.width = 24;
-				rect.x *= 2;
-				Texture itemTexture = settings.Item.ItemIcon ? settings.Item.ItemIcon.texture : null;
-				Texture icon = itemTexture ?? EditorGUIUtility.IconContent("console.erroricon").image;
-				EditorGUI.DrawPreviewTexture(rect, icon, null, ScaleMode.ScaleToFit);
-			}
+
+			//Draw the Item icon if it is available
+			Rect rect = EditorGUILayout.GetControlRect(false, 24);
+			rect.width = 24;
+			rect.x *= 2;
+			Texture itemTexture = settings.Item ? (settings.Item.ItemIcon ? settings.Item.ItemIcon.texture : null) : null;
+			Texture icon = itemTexture ?? EditorGUIUtility.IconContent("CollabConflict").image;
+			EditorGUI.DrawPreviewTexture(rect, icon, null, ScaleMode.ScaleToFit);
+
 			if (GUILayout.Button("Up"))
 			{
 				changed = true;
@@ -167,7 +167,7 @@ namespace EoE.Information
 				return new GUIContent(targetItem.Item.ItemName.text);
 			}
 
-			return new GUIContent("Empty Slot");
+			return new GUIContent("(Empty Slot)");
 		}
 		private void MoveUpItem(ShopItem item)
 		{
