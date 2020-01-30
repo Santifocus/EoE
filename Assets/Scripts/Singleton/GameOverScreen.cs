@@ -80,7 +80,7 @@ namespace EoE.UI
 			}
 
 			float blackPlaneAlpha = (totalFadeTime / blackPlaneFadeInTime) * finalBlackAlpha;
-			blackPlane.color = new Color(0, 0, 0, Mathf.Clamp01(blackPlaneAlpha));
+			blackPlane.color = new Color(1, 1, 1, Mathf.Clamp01(blackPlaneAlpha));
 			playerOnlyDisplay.color = new Color(1, 1, 1, Mathf.Clamp01(blackPlaneAlpha));
 
 			float graphicsAlpha = (totalFadeTime - blackPlaneFadeInTime) / graphicsFadeInTime;

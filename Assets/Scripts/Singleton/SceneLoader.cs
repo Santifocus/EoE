@@ -13,7 +13,7 @@ namespace EoE
 		public static SceneLoader Instance { get; private set; }
 		public static bool Transitioning => Instance.transitioning;
 
-		[SerializeField] private GameObject blackPlane = default;
+		[SerializeField] private Graphic[] blackPlaneGraphics;
 		[SerializeField] private float fadeTime = 0.5f;
 		[SerializeField] private float minLoadSceneTime = 2;
 
@@ -23,8 +23,6 @@ namespace EoE
 
 		private bool transitioning;
 		private int targetSceneID;
-
-		private Graphic[] blackPlaneGraphics;
 		private float[] blackPlaneAlphaValues;
 
 		private void Start()
@@ -37,13 +35,12 @@ namespace EoE
 			}
 
 			//Fetch alpha values of the blackplane and its children
-			blackPlane.SetActive(false);
-			blackPlaneGraphics = blackPlane.GetComponentsInChildren<Graphic>();
 			blackPlaneAlphaValues = new float[blackPlaneGraphics.Length];
 			for (int i = 0; i < blackPlaneGraphics.Length; i++)
 			{
 				blackPlaneAlphaValues[i] = blackPlaneGraphics[i].color.a;
 				blackPlaneGraphics[i].color = new Color(blackPlaneGraphics[i].color.r, blackPlaneGraphics[i].color.g, blackPlaneGraphics[i].color.b, 0);
+				blackPlaneGraphics[i].gameObject.SetActive(false);
 			}
 		}
 		public static void TransitionToScene(int sceneID)
@@ -60,7 +57,10 @@ namespace EoE
 			AsyncOperation loadingSceneLoadOperation = SceneManager.LoadSceneAsync(ConstantCollector.LOAD_SCENE_INDEX);
 			loadingSceneLoadOperation.allowSceneActivation = false;
 
-			blackPlane.SetActive(true);
+			for(int i = 0; i < blackPlaneGraphics.Length; i++)
+			{
+				blackPlaneGraphics[i].gameObject.SetActive(true);
+			}
 			//Fade in blackout
 			float timer = 0;
 			while (timer < fadeTime)
@@ -149,7 +149,10 @@ namespace EoE
 			}
 
 			transitioning = false;
-			blackPlane.SetActive(false);
+			for (int i = 0; i < blackPlaneGraphics.Length; i++)
+			{
+				blackPlaneGraphics[i].gameObject.SetActive(false);
+			}
 			targetTipp.SetActive(false);
 		}
 	}
