@@ -29,7 +29,7 @@ MonoBehaviour:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: ' Element:'
   - textColor: {r: 0, g: 1, b: 0.63036776, a: 1}
-    text: "\_Elektro"
+    text: "\_Electro"
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: .
   SortingID: 19
@@ -43,5 +43,5 @@ MonoBehaviour:
     type: 3}
   MaxStack: 1
   ItemWorth: 350
-  ItemFlags: 2
+  ItemFlags: 1
   TargetWeapon: {fileID: 11400000, guid: bf9e49db23db1e04798af3d53e18e1f1, type: 2}

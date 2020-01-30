@@ -17,11 +17,11 @@ MonoBehaviour:
     text: Power Potion
   ItemDescription:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: 'Fully charges your '
+    text: Fully charges your
   - textColor: {r: 1, g: 0, b: 0.98310184, a: 1}
-    text: 'Ultimae Bar '
+    text: ' Ultimate Bar'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: on use.
+    text: ' on use.'
   - textColor: {r: 1, g: 0, b: 0, a: 1}
     text: ' Consumes the item'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
