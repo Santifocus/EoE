@@ -22,11 +22,11 @@ MonoBehaviour:
   DeathEffects:
   - ChanceToActivate: 1
     ContainedEffectType: 2
-    ImpulseVelocity: 5
+    ImpulseVelocity: 200
     ImpulseVelocityFallOffTime: 0.5
-    ImpulseVelocityDirection: 2
+    ImpulseVelocityDirection: 1
     ImpulseVelocityFallbackDirection: 1
-    ImpulseDirectionBase: 1
+    ImpulseDirectionBase: 8
     FXObjects:
     - FX: {fileID: 11400000, guid: 48e1095a0bf75e6489c4d5149d54f972, type: 2}
       HasPositionOffset: 0
@@ -121,7 +121,17 @@ MonoBehaviour:
   EffectsOnCombatStart:
   - {fileID: 11400000, guid: 841005440ef020843a19f9880ce3ac1f, type: 2}
   - {fileID: 11400000, guid: ddafa43da60062c40b850dfed44815bb, type: 2}
-  EffectsOnCombatStartChanceBased: []
+  EffectsOnCombatStartChanceBased:
+  - Group:
+    - Effects:
+      - {fileID: 11400000, guid: c9acc49e9cc9e4d4e9fa018c9f5ba301, type: 2}
+      GroupRelativeChance: 1
+    - Effects:
+      - {fileID: 11400000, guid: 9e7ccf391f9ccd14d8634640f7ff651b, type: 2}
+      GroupRelativeChance: 1
+    - Effects:
+      - {fileID: 0}
+      GroupRelativeChance: 1
   EffectsOnUltimateCharged:
   - {fileID: 11400000, guid: 46b89e5d282b6f140972a23a82dddb23, type: 2}
   - {fileID: 11400000, guid: eaea715fe463b3243ba6ec89567da35a, type: 2}

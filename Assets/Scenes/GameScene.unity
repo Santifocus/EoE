@@ -134,6 +134,41 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8083149687359498668, guid: 0757910cd8dd9de46a029eadd8331155,
         type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083149687359498668, guid: 0757910cd8dd9de46a029eadd8331155,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083149687359498668, guid: 0757910cd8dd9de46a029eadd8331155,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083149687359498668, guid: 0757910cd8dd9de46a029eadd8331155,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083149687359498668, guid: 0757910cd8dd9de46a029eadd8331155,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083149687359498668, guid: 0757910cd8dd9de46a029eadd8331155,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083149687359498668, guid: 0757910cd8dd9de46a029eadd8331155,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083149687359498668, guid: 0757910cd8dd9de46a029eadd8331155,
+        type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
@@ -1674,7 +1709,29 @@ MonoBehaviour:
   - {fileID: 4177287622349901610}
   - {fileID: 8430024042047814749}
   effectsOnPlayerOnFailOpen: []
-  effectsOnPlayerOnOpen: []
+  effectsOnPlayerOnOpen:
+  - ChanceToActivate: 1
+    ContainedEffectType: 2
+    ImpulseVelocity: 0
+    ImpulseVelocityFallOffTime: 0
+    ImpulseVelocityDirection: 0
+    ImpulseVelocityFallbackDirection: 0
+    ImpulseDirectionBase: 0
+    FXObjects:
+    - FX: {fileID: 11400000, guid: 92e6aa43875ca7d418b3782b98f5f03c, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 0, y: 0, z: 0}
+    AOEEffects: []
+    ProjectileInfos: []
+    HealsOnUser: []
+    StackingStyle: 0
+    BuffsOnUser: []
+    CreatedRemenants: []
+    PlayerItemChanges: []
   animator: {fileID: 7521227577658491930}
   openAnimationTrigger: Open
 --- !u!54 &1635771179
@@ -6777,6 +6834,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 3851637757419479221, guid: 21e629fb6237643449bbca1b6f13b118,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -9.300293
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 21e629fb6237643449bbca1b6f13b118, type: 3}

@@ -37,6 +37,18 @@ MonoBehaviour:
   - Item: {fileID: 0}
     InfinitePurchases: 1
     MaxPurchases: 0
+  - Item: {fileID: 0}
+    InfinitePurchases: 1
+    MaxPurchases: 0
+  - Item: {fileID: 0}
+    InfinitePurchases: 1
+    MaxPurchases: 0
+  - Item: {fileID: 0}
+    InfinitePurchases: 1
+    MaxPurchases: 0
+  - Item: {fileID: 0}
+    InfinitePurchases: 1
+    MaxPurchases: 0
   - Item: {fileID: 11400000, guid: 4389e543531ad0d4c91543a950d48174, type: 2}
     InfinitePurchases: 1
     MaxPurchases: 0
@@ -58,6 +70,21 @@ MonoBehaviour:
   - Item: {fileID: 0}
     InfinitePurchases: 1
     MaxPurchases: 0
+  - Item: {fileID: 0}
+    InfinitePurchases: 1
+    MaxPurchases: 0
+  - Item: {fileID: 0}
+    InfinitePurchases: 1
+    MaxPurchases: 0
+  - Item: {fileID: 0}
+    InfinitePurchases: 1
+    MaxPurchases: 0
+  - Item: {fileID: 0}
+    InfinitePurchases: 1
+    MaxPurchases: 0
+  - Item: {fileID: 0}
+    InfinitePurchases: 1
+    MaxPurchases: 0
   - Item: {fileID: 11400000, guid: 428f279ff073bb54c81150df9f36247e, type: 2}
     InfinitePurchases: 1
     MaxPurchases: 0
@@ -73,6 +100,9 @@ MonoBehaviour:
   - Item: {fileID: 11400000, guid: e2175b767068abe49ad244c5541e84fd, type: 2}
     InfinitePurchases: 1
     MaxPurchases: 0
+  - Item: {fileID: 0}
+    InfinitePurchases: 1
+    MaxPurchases: 0
   - Item: {fileID: 11400000, guid: dfff77569092e90428e801b345e3e493, type: 2}
     InfinitePurchases: 1
     MaxPurchases: 0
@@ -82,12 +112,21 @@ MonoBehaviour:
   - Item: {fileID: 0}
     InfinitePurchases: 1
     MaxPurchases: 0
-  - Item: {fileID: 11400000, guid: 41ee736e9094b994c853a774489f9805, type: 2}
+  - Item: {fileID: 0}
+    InfinitePurchases: 1
+    MaxPurchases: 0
+  - Item: {fileID: 0}
+    InfinitePurchases: 1
+    MaxPurchases: 0
+  - Item: {fileID: 0}
     InfinitePurchases: 1
     MaxPurchases: 0
   - Item: {fileID: 11400000, guid: 1065fd6007802de4a8e5ed00faf10905, type: 2}
     InfinitePurchases: 1
     MaxPurchases: 0
   - Item: {fileID: 11400000, guid: e1bfcada9c557e543945ec3581f0e8b5, type: 2}
+    InfinitePurchases: 1
+    MaxPurchases: 0
+  - Item: {fileID: 11400000, guid: 41ee736e9094b994c853a774489f9805, type: 2}
     InfinitePurchases: 1
     MaxPurchases: 0
