@@ -12,7 +12,7 @@ namespace EoE.Entities
 	{
 		#region Fields
 		//Constants
-		private const int VISIBLE_CHECK_RAY_COUNT = 40;
+		private const int VISIBLE_CHECK_RAY_COUNT = 25;
 		public static List<Entity> AllEntities = new List<Entity>();
 
 		//Inspector variables

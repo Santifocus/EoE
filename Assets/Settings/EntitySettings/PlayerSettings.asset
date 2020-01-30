@@ -49,6 +49,7 @@ MonoBehaviour:
     BuffsOnUser: []
     CreatedRemenants: []
     PlayerItemChanges: []
+  BodyRemoveDelay: 2.5
   BasePhysicalDamage: 2
   BaseMagicalDamage: 2
   BaseDefense: 2
@@ -120,6 +121,7 @@ MonoBehaviour:
   EffectsOnCombatStart:
   - {fileID: 11400000, guid: 841005440ef020843a19f9880ce3ac1f, type: 2}
   - {fileID: 11400000, guid: ddafa43da60062c40b850dfed44815bb, type: 2}
+  EffectsOnCombatStartChanceBased: []
   EffectsOnUltimateCharged:
   - {fileID: 11400000, guid: 46b89e5d282b6f140972a23a82dddb23, type: 2}
   - {fileID: 11400000, guid: eaea715fe463b3243ba6ec89567da35a, type: 2}

@@ -73,6 +73,7 @@ namespace EoE.Information
 
 		///FX
 		public FXObject[] EffectsOnCombatStart = default;
+		public ChanceBasedFXGroup[] EffectsOnCombatStartChanceBased = default;
 		public FXObject[] EffectsOnUltimateCharged = default;
 		public FXObject[] EffectsWhileUltimateCharged = default;
 		public FXObject[] EffectsOnLevelup = default;
@@ -95,6 +96,17 @@ namespace EoE.Information
 		public FXObject[] EffectsOnReceiveKnockback = default;
 		public float EffectsHealthThreshold = 0.3f;
 		public FXObject[] EffectsWhileHealthBelowThreshold = default;
-
+	}
+	
+	[System.Serializable]
+	public class ChanceBasedFXGroup
+	{
+		public ChanceBasedFX[] Group = new ChanceBasedFX[0];
+	}
+	[System.Serializable]
+	public class ChanceBasedFX
+	{
+		public FXObject[] Effects = new FXObject[0];
+		public int GroupRelativeChance = 1;
 	}
 }

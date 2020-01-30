@@ -100,7 +100,7 @@ MonoBehaviour:
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
       WaitSettings: []
-      DamageMultiplier: 0.9
+      DamageMultiplier: 1
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       EnduranceCostMultiplier: 0.5
@@ -479,7 +479,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       AnimationSpeedCurveTimeframe: 0.8
-      AnimationSpeedCurveMultiplier: 1.8
+      AnimationSpeedCurveMultiplier: 1.5
       NeedsCharging: 0
       ChargeSettings:
         EffectMask: 3

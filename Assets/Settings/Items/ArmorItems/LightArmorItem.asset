@@ -18,8 +18,8 @@ MonoBehaviour:
   ItemDescription:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Simple armor. Increases your
-  - textColor: {r: 0, g: 1, b: 0.13166785, a: 1}
-    text: ' Defence'
+  - textColor: {r: 0, g: 1, b: 0.39215687, a: 1}
+    text: ' Defense'
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: ' by'
   - textColor: {r: 0, g: 0.48171186, b: 1, a: 1}

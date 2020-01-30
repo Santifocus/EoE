@@ -9,7 +9,7 @@ namespace EoE.Entities
 	public class ContainerInteractable : Interactable
 	{
 		[SerializeField] private LogicComponent openCondition = default;
-		[SerializeField] private ItemData[] itemsToSpawn = default;
+		[SerializeField] private ItemChoiceArray[] spawnArrays = default;
 		[SerializeField] private float itemStartSpawnDelay = 1;
 		[SerializeField] private float individualItemSpawnDelay = 0.35f;
 		[SerializeField] private Vector3 minSpawnVelocity = new Vector3(-1, 1, 0);
@@ -59,13 +59,38 @@ namespace EoE.Entities
 				timer += Time.deltaTime;
 			}
 
-			createdItemDrops = new List<ItemDrop>(itemsToSpawn.Length);
+			createdItemDrops = new List<ItemDrop>();
 			creatingDrops = true;
 			StartCoroutine(ReenableItemCollisionOnFall());
 			//Spawn the items
-			for (int i = 0; i < itemsToSpawn.Length; i++)
+			for (int i = 0; i < spawnArrays.Length; i++)
 			{
-				ItemDrop[] droppedItems = itemsToSpawn[i].TargetItem.CreateItemDrop(transform.position, itemsToSpawn[i].StackSize, true);
+				ItemData itemsToSpawn = null;
+				float totalChanceValue = 0;
+				for(int j = 0; j < spawnArrays[i].PossibleChoices.Length; j++)
+				{
+					totalChanceValue += spawnArrays[i].PossibleChoices[j].IndividualChance;
+				}
+
+				if(totalChanceValue > 0)
+				{
+					float choiceChanceNormalized = Random.value;
+					for (int j = 0; j < spawnArrays[i].PossibleChoices.Length; j++)
+					{
+						choiceChanceNormalized -= spawnArrays[i].PossibleChoices[j].IndividualChance / totalChanceValue;
+						if(choiceChanceNormalized <= 0)
+						{
+							itemsToSpawn = spawnArrays[i].PossibleChoices[j];
+							break;
+						}
+					}
+				}
+				else
+				{
+					itemsToSpawn = spawnArrays[i].PossibleChoices[0];
+				}
+
+				ItemDrop[] droppedItems = itemsToSpawn.TargetItem.CreateItemDrop(transform.position, itemsToSpawn.StackSize, true);
 				createdItemDrops.AddRange(droppedItems);
 
 				//First disable all so we re-enable them when it is their turn to spawn
@@ -139,12 +164,17 @@ namespace EoE.Entities
 		{
 
 		}
-
+		[System.Serializable]
+		private class ItemChoiceArray
+		{
+			public ItemData[] PossibleChoices = default;
+		}
 		[System.Serializable]
 		private class ItemData
 		{
 			public Item TargetItem = default;
 			public int StackSize = default;
+			public float IndividualChance = default;
 		}
 	}
 }

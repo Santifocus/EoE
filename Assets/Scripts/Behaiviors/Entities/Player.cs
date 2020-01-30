@@ -21,8 +21,11 @@ namespace EoE.Entities
 		private const float FALLDAMAGE_COOLDOWN = 0.2f;
 		private const float IS_FALLING_THRESHOLD = -1;
 		private const float LANDED_VELOCITY_THRESHOLD = 0.15f;
-		private const float SWITCH_TARGET_COOLDOWN = 0.25f;
 		private const int SELECTABLE_ITEMS_AMOUNT = 4;
+
+		private const float SWITCH_TARGET_COOLDOWN = 0.25f;
+		private const float RE_CHECK_VISION_DELAY = 0.25f;
+		private const float LOST_VISION_MAX = 0.8f;
 
 		//Inspector variables
 		[Space(10)]
@@ -66,13 +69,15 @@ namespace EoE.Entities
 		private FXInstance[] HealthBelowThresholdBoundEffects;
 		private FXInstance[] PlayerWalkingBoundEffects;
 		private FXInstance[] PlayerRunningBoundEffects;
-		private FXInstance[] CombatBoundEffects;
+		private List<FXInstance> CombatBoundEffects;
 
 		private MusicInstance combatMusic;
 
 		//Targeting
 		public Entity TargetedEntitie { get; private set; }
 		private float switchTargetTimer;
+		private float recheckVisionLossTimer;
+		private float lostVisionOnTargetSince;
 
 		//Getter Helpers
 		public static bool Existant => Instance && Instance.Alive;
@@ -128,7 +133,7 @@ namespace EoE.Entities
 
 			if (GameController.GameIsPaused)
 			{
-				if (TargetedEntitie)
+				if (!SettingsData.ActiveTargetAsToggle && TargetedEntitie)
 					TargetedEntitie = null;
 				return;
 			}
@@ -284,7 +289,7 @@ namespace EoE.Entities
 			bool turning = curStates.Turning;
 			bool running = curStates.Running;
 
-			bool moving = curStates.Moving && moveVelocity >= (MIN_WALK_ACCELERATION / 2) && intendedAcceleration >= MIN_WALK_ACCELERATION;
+			bool moving = curStates.Moving && moveVelocity >= (MIN_WALK_ACCELERATION / 4) && intendedAcceleration >= MIN_WALK_ACCELERATION;
 			curStates.Moving = moving;
 
 			if (running && !moving)
@@ -844,6 +849,12 @@ namespace EoE.Entities
 
 			if (TargetedEntitie)
 			{
+				if (LostVisionOnTarget())
+				{
+					TargetedEntitie = null;
+					return;
+				}
+
 				Vector3 direction = (TargetedEntitie.actuallWorldPosition - actuallWorldPosition).normalized;
 				float hAngle = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg - 90;
 
@@ -854,9 +865,16 @@ namespace EoE.Entities
 				switchTargetTimer -= Time.deltaTime;
 
 			targetPosition = TargetedEntitie ? (Vector3?)TargetedEntitie.actuallWorldPosition : null;
+			bool toggledTarget = SettingsData.ActiveTargetAsToggle && TargetedEntitie;
 
 			if (InputController.Aim.Down)
 			{
+				if (toggledTarget)
+				{
+					TargetedEntitie = null;
+					return;
+				}
+
 				List<(Entity, float)> possibleTargets = GetPossibleTargets();
 				TargetedEntitie = null;
 				if (possibleTargets.Count > 0)
@@ -876,7 +894,7 @@ namespace EoE.Entities
 					}
 				}
 			}
-			else if (InputController.Aim.Held && InputController.CameraMove.sqrMagnitude > 0.25f)
+			else if ((InputController.Aim.Held || toggledTarget) && InputController.CameraMove.sqrMagnitude > 0.25f)
 			{
 				if (switchTargetTimer > 0 || TargetedEntitie == null)
 					return;
@@ -920,8 +938,31 @@ namespace EoE.Entities
 					}
 				}
 			}
-			else if (InputController.Aim.Up)
+			else if (InputController.Aim.Up && !(toggledTarget))
 				TargetedEntitie = null;
+		}
+		private bool LostVisionOnTarget()
+		{
+			recheckVisionLossTimer += Time.deltaTime;
+			if (recheckVisionLossTimer >= RE_CHECK_VISION_DELAY)
+			{
+				recheckVisionLossTimer -= RE_CHECK_VISION_DELAY;
+				if (!CheckIfCanSeeEntitie(PlayerCameraController.PlayerCamera.transform, TargetedEntitie)
+					&&
+					!CheckIfCanSeeEntitie(transform, TargetedEntitie, true))
+				{
+					lostVisionOnTargetSince += RE_CHECK_VISION_DELAY;
+					if(lostVisionOnTargetSince >= LOST_VISION_MAX)
+					{
+						return true;
+					}
+				}
+				else
+				{
+					lostVisionOnTargetSince = 0;
+				}
+			}
+			return false;
 		}
 		private List<(Entity, float)> GetPossibleTargets()
 		{
@@ -934,7 +975,7 @@ namespace EoE.Entities
 					continue;
 
 				float distance = (AllEntities[i].actuallWorldPosition - PlayerCameraController.PlayerCamera.transform.position).sqrMagnitude;
-				if (distance > maxDist)
+				if (distance > maxDist && !AllEntities[i].curStates.Fighting)
 					continue;
 
 				distance = Mathf.Sqrt(distance);
@@ -1158,8 +1199,29 @@ namespace EoE.Entities
 		}
 		public override void StartCombat()
 		{
-			if(!curStates.Fighting)
-				FXManager.ExecuteFX(playerSettings.EffectsOnCombatStart, transform, true, out CombatBoundEffects);
+			if (!curStates.Fighting)
+			{
+				for(int i = 0; i < playerSettings.EffectsOnCombatStartChanceBased.Length; i++)
+				{
+					float totalChanceValue = 0;
+					for (int j = 0; j < playerSettings.EffectsOnCombatStartChanceBased[i].Group.Length; j++)
+					{
+						totalChanceValue += playerSettings.EffectsOnCombatStartChanceBased[i].Group[j].GroupRelativeChance;
+					}
+
+					float choosenChance = Random.value;
+					for (int j = 0; j < playerSettings.EffectsOnCombatStartChanceBased[i].Group.Length; j++)
+					{
+						choosenChance -= playerSettings.EffectsOnCombatStartChanceBased[i].Group[j].GroupRelativeChance / totalChanceValue;
+						if(choosenChance <= 0)
+						{
+							FXManager.ExecuteFX(playerSettings.EffectsOnCombatStartChanceBased[i].Group[j].Effects, transform, true, ref CombatBoundEffects);
+							break;
+						}
+					}
+				}
+				FXManager.ExecuteFX(playerSettings.EffectsOnCombatStart, transform, true, ref CombatBoundEffects);
+			}
 
 			base.StartCombat();
 			if (!combatMusic.IsAdded)

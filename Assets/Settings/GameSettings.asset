@@ -187,8 +187,8 @@ MonoBehaviour:
   SecondsPerEntitieHealthRegen: 1
   ItemDropRandomVelocityStrenght: 2
   ItemSellMultiplier: 0.7
-  BaseCurrencyPerSoul: 10
-  ExtraRandomCurrencyPerSoul: 5
+  BaseCurrencyPerSoul: 15
+  ExtraRandomCurrencyPerSoul: 10
   PhysicalDamageLevelAdd: 12
   PhysicalDamageDivider: 10
   PhysicalDefenseLevelAdd: 10
