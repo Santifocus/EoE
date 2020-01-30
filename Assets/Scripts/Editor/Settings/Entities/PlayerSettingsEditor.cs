@@ -146,10 +146,12 @@ namespace EoE.Information
 			PlayerSettings settings = target as PlayerSettings;
 
 			Header("Generall");
-			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnCombatStart))), ref settings.EffectsOnCombatStart, serializedObject.FindProperty(nameof(settings.EffectsOnCombatStart)), new GUIContent(". Effect"), 1);
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnUltimateCharged))), ref settings.EffectsOnUltimateCharged, serializedObject.FindProperty(nameof(settings.EffectsOnUltimateCharged)), new GUIContent(". Effect"), 1);
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsWhileUltimateCharged))), ref settings.EffectsWhileUltimateCharged, serializedObject.FindProperty(nameof(settings.EffectsWhileUltimateCharged)), new GUIContent(". Effect"), 1);
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnLevelup))), ref settings.EffectsOnLevelup, serializedObject.FindProperty(nameof(settings.EffectsOnLevelup)), new GUIContent(". Effect"), 1);
+			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnCombatStart))), ref settings.EffectsOnCombatStart, serializedObject.FindProperty(nameof(settings.EffectsOnCombatStart)), new GUIContent(". Effect"), 1);
+
+			DrawArray<ChanceBasedFXGroup>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnCombatStartChanceBased))), ref settings.EffectsOnCombatStartChanceBased, serializedObject.FindProperty(nameof(settings.EffectsOnCombatStartChanceBased)), DrawChanceBasedFXGroup, new GUIContent(". Group"), 1);
 
 			Header("On Player Attacking");
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnCauseDamage))), ref settings.EffectsOnCauseDamage, serializedObject.FindProperty(nameof(settings.EffectsOnCauseDamage)), new GUIContent(". Effect"), 1);
@@ -180,6 +182,26 @@ namespace EoE.Information
 
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DeathEffects))), ref settings.DeathEffects, serializedObject.FindProperty(nameof(settings.DeathEffects)), DrawActivationEffect, new GUIContent(". Effect"), 1);
+		}
+		private void DrawChanceBasedFXGroup(GUIContent content, ChanceBasedFXGroup settings, SerializedProperty property, int offSet)
+		{
+			if (settings == null)
+				return;
+
+			DrawArray<ChanceBasedFX>(content, ref settings.Group, property.FindPropertyRelative(nameof(settings.Group)), DrawChanceBasedFX, new GUIContent(". Chance Based FX"), offSet + 1);
+		}
+		private void DrawChanceBasedFX(GUIContent content, ChanceBasedFX settings, SerializedProperty property, int offSet)
+		{
+			if (settings == null)
+				return;
+
+			Foldout(content, property, offSet);
+
+			if (property.isExpanded)
+			{
+				ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Effects))), ref settings.Effects, property.FindPropertyRelative(nameof(settings.Effects)), new GUIContent(". Effect"), offSet + 1);
+				IntField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.GroupRelativeChance))), ref settings.GroupRelativeChance, offSet + 1);
+			}
 		}
 	}
 }

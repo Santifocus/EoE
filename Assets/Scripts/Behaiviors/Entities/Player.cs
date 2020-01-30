@@ -69,7 +69,7 @@ namespace EoE.Entities
 		private FXInstance[] HealthBelowThresholdBoundEffects;
 		private FXInstance[] PlayerWalkingBoundEffects;
 		private FXInstance[] PlayerRunningBoundEffects;
-		private FXInstance[] CombatBoundEffects;
+		private List<FXInstance> CombatBoundEffects;
 
 		private MusicInstance combatMusic;
 
@@ -975,7 +975,7 @@ namespace EoE.Entities
 					continue;
 
 				float distance = (AllEntities[i].actuallWorldPosition - PlayerCameraController.PlayerCamera.transform.position).sqrMagnitude;
-				if (distance > maxDist)
+				if (distance > maxDist && !AllEntities[i].curStates.Fighting)
 					continue;
 
 				distance = Mathf.Sqrt(distance);
@@ -1199,8 +1199,29 @@ namespace EoE.Entities
 		}
 		public override void StartCombat()
 		{
-			if(!curStates.Fighting)
-				FXManager.ExecuteFX(playerSettings.EffectsOnCombatStart, transform, true, out CombatBoundEffects);
+			if (!curStates.Fighting)
+			{
+				for(int i = 0; i < playerSettings.EffectsOnCombatStartChanceBased.Length; i++)
+				{
+					float totalChanceValue = 0;
+					for (int j = 0; j < playerSettings.EffectsOnCombatStartChanceBased[i].Group.Length; j++)
+					{
+						totalChanceValue += playerSettings.EffectsOnCombatStartChanceBased[i].Group[j].GroupRelativeChance;
+					}
+
+					float choosenChance = Random.value;
+					for (int j = 0; j < playerSettings.EffectsOnCombatStartChanceBased[i].Group.Length; j++)
+					{
+						choosenChance -= playerSettings.EffectsOnCombatStartChanceBased[i].Group[j].GroupRelativeChance / totalChanceValue;
+						if(choosenChance <= 0)
+						{
+							FXManager.ExecuteFX(playerSettings.EffectsOnCombatStartChanceBased[i].Group[j].Effects, transform, true, ref CombatBoundEffects);
+							break;
+						}
+					}
+				}
+				FXManager.ExecuteFX(playerSettings.EffectsOnCombatStart, transform, true, ref CombatBoundEffects);
+			}
 
 			base.StartCombat();
 			if (!combatMusic.IsAdded)

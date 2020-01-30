@@ -27811,6 +27811,7 @@ MonoBehaviour:
   tookDamageDisplayTime: 1
   display: {fileID: 3851637757756985103}
   normalState: {fileID: 21300000, guid: e6552b6c300fe7a4e8aa4ba201685a8d, type: 3}
+  inCombatState: {fileID: 0}
   lowHealthState: {fileID: 21300000, guid: af2d4951c0f4a194bbacc7f1ff89ce67, type: 3}
   gotHitState: {fileID: 21300000, guid: c2fec6a8658adba46b0791fb0270490a, type: 3}
   levelUpState: {fileID: 21300000, guid: 5f05654fc44bdb247b37adf4c39a3d9f, type: 3}
