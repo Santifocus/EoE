@@ -21,8 +21,11 @@ namespace EoE.Entities
 		private const float FALLDAMAGE_COOLDOWN = 0.2f;
 		private const float IS_FALLING_THRESHOLD = -1;
 		private const float LANDED_VELOCITY_THRESHOLD = 0.15f;
-		private const float SWITCH_TARGET_COOLDOWN = 0.25f;
 		private const int SELECTABLE_ITEMS_AMOUNT = 4;
+
+		private const float SWITCH_TARGET_COOLDOWN = 0.25f;
+		private const float RE_CHECK_VISION_DELAY = 0.25f;
+		private const float LOST_VISION_MAX = 0.8f;
 
 		//Inspector variables
 		[Space(10)]
@@ -73,6 +76,8 @@ namespace EoE.Entities
 		//Targeting
 		public Entity TargetedEntitie { get; private set; }
 		private float switchTargetTimer;
+		private float recheckVisionLossTimer;
+		private float lostVisionOnTargetSince;
 
 		//Getter Helpers
 		public static bool Existant => Instance && Instance.Alive;
@@ -844,6 +849,12 @@ namespace EoE.Entities
 
 			if (TargetedEntitie)
 			{
+				if (LostVisionOnTarget())
+				{
+					TargetedEntitie = null;
+					return;
+				}
+
 				Vector3 direction = (TargetedEntitie.actuallWorldPosition - actuallWorldPosition).normalized;
 				float hAngle = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg - 90;
 
@@ -929,6 +940,29 @@ namespace EoE.Entities
 			}
 			else if (InputController.Aim.Up && !(toggledTarget))
 				TargetedEntitie = null;
+		}
+		private bool LostVisionOnTarget()
+		{
+			recheckVisionLossTimer += Time.deltaTime;
+			if (recheckVisionLossTimer >= RE_CHECK_VISION_DELAY)
+			{
+				recheckVisionLossTimer -= RE_CHECK_VISION_DELAY;
+				if (!CheckIfCanSeeEntitie(PlayerCameraController.PlayerCamera.transform, TargetedEntitie)
+					&&
+					!CheckIfCanSeeEntitie(transform, TargetedEntitie, true))
+				{
+					lostVisionOnTargetSince += RE_CHECK_VISION_DELAY;
+					if(lostVisionOnTargetSince >= LOST_VISION_MAX)
+					{
+						return true;
+					}
+				}
+				else
+				{
+					lostVisionOnTargetSince = 0;
+				}
+			}
+			return false;
 		}
 		private List<(Entity, float)> GetPossibleTargets()
 		{

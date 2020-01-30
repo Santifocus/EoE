@@ -17,6 +17,8 @@ namespace EoE.UI
 				{
 					case PortraitState.Normal:
 						return normalState;
+					case PortraitState.InCombat:
+						return lowHealthState;
 					case PortraitState.LowHealth:
 						return lowHealthState;
 					case PortraitState.TookDamage:
@@ -33,11 +35,12 @@ namespace EoE.UI
 		[SerializeField] private float tookDamageDisplayTime = 1f;
 		[SerializeField] private Image display = default;
 		[SerializeField] private Sprite normalState = default;
+		[SerializeField] private Sprite inCombatState = default;
 		[SerializeField] private Sprite lowHealthState = default;
 		[SerializeField] private Sprite gotHitState = default;
 		[SerializeField] private Sprite levelUpState = default;
 
-		private enum PortraitState { None, Normal, LowHealth, TookDamage, LeveledUp }
+		private enum PortraitState { None = 0, Normal = 1, InCombat = 2, LowHealth = 3, TookDamage = 4, LeveledUp = 5 }
 		private PortraitState mainState;
 		private PortraitState topState;
 
@@ -58,7 +61,7 @@ namespace EoE.UI
 		private void UpdateMainState()
 		{
 			bool lowHealth = (Player.Instance.curHealth / Player.Instance.curMaxHealth) < Player.PlayerSettings.EffectsHealthThreshold;
-			PortraitState mainShouldState = lowHealth ? PortraitState.LowHealth : PortraitState.Normal;
+			PortraitState mainShouldState = lowHealth ? PortraitState.LowHealth : (Player.Instance.curStates.Fighting ? PortraitState.InCombat : PortraitState.Normal);
 
 			if (mainShouldState != mainState)
 			{
