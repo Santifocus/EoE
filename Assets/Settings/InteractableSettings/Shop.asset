@@ -73,6 +73,12 @@ MonoBehaviour:
   - Item: {fileID: 11400000, guid: e2175b767068abe49ad244c5541e84fd, type: 2}
     InfinitePurchases: 1
     MaxPurchases: 0
+  - Item: {fileID: 11400000, guid: dfff77569092e90428e801b345e3e493, type: 2}
+    InfinitePurchases: 1
+    MaxPurchases: 0
+  - Item: {fileID: 11400000, guid: d2ee9fc8bc00d1a48b0e3a8bcee338f0, type: 2}
+    InfinitePurchases: 1
+    MaxPurchases: 0
   - Item: {fileID: 0}
     InfinitePurchases: 1
     MaxPurchases: 0
