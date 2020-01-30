@@ -158,6 +158,8 @@ namespace EoE
 			ShakeScreenCoroutine = null;
 			void Shake(Vector3 axisIntensity, Vector3 angleIntensity)
 			{
+				axisIntensity *= Time.timeScale;
+				angleIntensity *= Time.timeScale;
 				cameraShakeCore.localPosition = (Random.value - 0.5f) * cameraShakeCore.transform.right * axisIntensity.x +
 												(Random.value - 0.5f) * cameraShakeCore.transform.up * axisIntensity.y +
 												(Random.value - 0.5f) * cameraShakeCore.transform.forward * axisIntensity.z;

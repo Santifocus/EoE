@@ -29,7 +29,7 @@ namespace EoE.Information
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BashDistance))), ref settings.BashDistance, 1);
 
 			Header("Trick Bash", 1);
-			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ChanceForTrickBash))), ref settings.ChanceForTrickBash, 1);
+			FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ChanceForTrickBash))), ref settings.ChanceForTrickBash, 0, 1, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.TrickBashSpeed))), ref settings.TrickBashSpeed, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.TrickBashDistance))), ref settings.TrickBashDistance, 1);
 		}
@@ -51,7 +51,7 @@ namespace EoE.Information
 
 		private void DrawAnimationSettings()
 		{
-			CasterSettings settings = target as CasterSettings;
+			CrawlerSettings settings = target as CrawlerSettings;
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationWalkSpeedDivider))), ref settings.AnimationWalkSpeedDivider, 1);
 		}
 	}
