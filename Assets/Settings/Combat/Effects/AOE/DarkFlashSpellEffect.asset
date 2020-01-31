@@ -22,8 +22,8 @@ MonoBehaviour:
   DamageMultiplier: 1
   CritChanceMultiplier: 0
   KnockbackMultiplier: 10
-  KnockbackOrigin: 2
-  KnockbackDirection: 1
+  KnockbackOrigin: 1
+  KnockbackDirection: 8
   KnockbackAxisMultiplier: {x: 1, y: 1, z: 1}
   BuffStackStyle: 2
   BuffsToApply:

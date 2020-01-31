@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: DeathTimeDilation
   m_EditorClassIdentifier: 
   TimeIn: 0.5
-  TimeOut: 1.5
+  TimeOut: 1
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 1
     TimeStay: 1
     OnConditionMet: 0
     Condition: {fileID: 0}
-  Scale: 0.15
+  Scale: 0.3
   Dominance: 0
   OverwriteOtherTimeDilations: 0

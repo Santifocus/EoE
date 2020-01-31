@@ -72,6 +72,12 @@ ModelImporter:
   - first:
       74: -8748407684673723089
     second: Armature|Creeper_sidestepL_land
+  - first:
+      74: -3484760165646553906
+    second: Idle
+  - first:
+      74: -7050243336530000095
+    second: Armature|Creeper_sidestepL_start
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -100,64 +106,6 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations:
-    - serializedVersion: 16
-      name: Idle
-      takeName: Armature|Creeper_Idel
-      internalID: -6663233451549003652
-      firstFrame: 0
-      lastFrame: 49
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: BaseStance
-      takeName: Armature|Creeper_basestance
-      internalID: 6854945375409131567
-      firstFrame: 0
-      lastFrame: 1
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: CastEnd
       takeName: Armature|Creeper_cast_End
@@ -366,7 +314,7 @@ ModelImporter:
       takeName: Armature|Creeper_move
       internalID: -6713468184452269645
       firstFrame: 0
-      lastFrame: 68
+      lastFrame: 60
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -565,11 +513,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature|Creeper_sidestepL_land
-      takeName: Armature|Creeper_sidestepL_land
-      internalID: -8748407684673723089
+      name: Idle
+      takeName: Armature|Creeper_Idel
+      internalID: -3484760165646553906
       firstFrame: 0
-      lastFrame: 39
+      lastFrame: 49
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
