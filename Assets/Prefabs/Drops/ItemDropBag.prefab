@@ -4807,7 +4807,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3993090525793143804}
   m_Layer: 0
-  m_Name: Dropped
+  m_Name: ItemDropBag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4841,6 +4841,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ItemBag
+      objectReference: {fileID: 0}
+    - target: {fileID: 4224801822505238522, guid: f92fabc517837004ab917e7e750a445b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8684251187902555887, guid: f92fabc517837004ab917e7e750a445b,
         type: 3}
@@ -4917,11 +4922,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
-    - target: {fileID: 4224801822505238522, guid: f92fabc517837004ab917e7e750a445b,
+    - target: {fileID: -113181020801827196, guid: f92fabc517837004ab917e7e750a445b,
         type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: bf688cc2aa520ce468a46e0cd177b898, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f92fabc517837004ab917e7e750a445b, type: 3}
 --- !u!4 &6002115237061773746 stripped
@@ -4937,6 +4942,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3993090525793143804}
     m_Modifications:
+    - target: {fileID: 6767247745884898666, guid: 5f81d7ee648b5234dbde65ea2c49b2ae,
+        type: 3}
+      propertyPath: m_Name
+      value: ItemonGround
+      objectReference: {fileID: 0}
     - target: {fileID: 6327627282276104403, guid: 5f81d7ee648b5234dbde65ea2c49b2ae,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4991,11 +5001,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6767247745884898666, guid: 5f81d7ee648b5234dbde65ea2c49b2ae,
-        type: 3}
-      propertyPath: m_Name
-      value: ItemonGround
       objectReference: {fileID: 0}
     - target: {fileID: 6842565598057379383, guid: 5f81d7ee648b5234dbde65ea2c49b2ae,
         type: 3}
