@@ -13,7 +13,7 @@ namespace EoE
 		public static SceneLoader Instance { get; private set; }
 		public static bool Transitioning => Instance.transitioning;
 
-		[SerializeField] private Graphic[] blackPlaneGraphics;
+		[SerializeField] private Graphic[] blackPlaneGraphics = default;
 		[SerializeField] private float fadeTime = 0.5f;
 		[SerializeField] private float minLoadSceneTime = 2;
 

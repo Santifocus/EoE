@@ -1,5 +1,6 @@
 ﻿using EoE.Combatery;
 using EoE.Information.Logic;
+using EoE.Tools;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
@@ -166,7 +167,6 @@ namespace EoE.Information
 		[MenuItem("GameObject/EoE/Button", false, 0)]
 		public static void CreateEoEButton(MenuCommand menuCommand)
 		{
-			Transform parent = Selection.activeTransform;
 			GameObject buttonMain = new GameObject("ControllerButton");
 			buttonMain.AddComponent<RectTransform>().sizeDelta = new Vector2(200,50);
 			GameObjectUtility.SetParentAndAlign(buttonMain, menuCommand.context as GameObject);
@@ -208,13 +208,24 @@ namespace EoE.Information
 		[MenuItem("GameObject/EoE/ItemGiver", false, 0)]
 		public static void CreateItemGiver(MenuCommand menuCommand)
 		{
-			Transform parent = Selection.activeTransform;
 			GameObject itemGiverMain = new GameObject("ItemGiver");
 			itemGiverMain.AddComponent<SceneLoadout>();
 			GameObjectUtility.SetParentAndAlign(itemGiverMain, menuCommand.context as GameObject);
 
 			Undo.RegisterCreatedObjectUndo(itemGiverMain, "Created " + itemGiverMain.name);
 			Selection.activeGameObject = itemGiverMain;
+		}
+		[MenuItem("GameObject/EoE/Scenic Camera", false, 0)]
+		public static void CreateScenicCamera(MenuCommand menuCommand)
+		{
+			GameObject scenicCameraMain = new GameObject("Scenic Camera");
+			scenicCameraMain.AddComponent<Camera>();
+			scenicCameraMain.AddComponent<EditorCameraControl>();
+			scenicCameraMain.AddComponent<AudioListener>();
+			GameObjectUtility.SetParentAndAlign(scenicCameraMain, null);
+
+			Undo.RegisterCreatedObjectUndo(scenicCameraMain, "Created " + scenicCameraMain.name);
+			Selection.activeGameObject = scenicCameraMain;
 		}
 		//Other
 		public static T AssetCreator<T>(params string[] pathParts) where T : ScriptableObject

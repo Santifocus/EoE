@@ -487,7 +487,8 @@ namespace EoE.UI
 		}
 		private void OnDestroy()
 		{
-			Player.Instance.Inventory.InventoryChanged -= UpdateAllSlots;
+			if(Player.Instance)
+				Player.Instance.Inventory.InventoryChanged -= UpdateAllSlots;
 			EventManager.PlayerCurrencyChangedEvent -= UpdateCurrencyDisplay;
 		}
 	}

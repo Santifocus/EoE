@@ -41,8 +41,11 @@ namespace EoE.UI
 		private void OnDisable()
 		{
 			StopAllCoroutines();
-			totalPoints.color = LevelingMenuController.Instance.standardColor;
-			curStatValue.color = LevelingMenuController.Instance.standardColor;
+			if (LevelingMenuController.Instance)
+			{
+				totalPoints.color = LevelingMenuController.Instance.standardColor;
+				curStatValue.color = LevelingMenuController.Instance.standardColor;
+			}
 		}
 
 		private IEnumerator ChangedCurrent()

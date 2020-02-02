@@ -11,6 +11,9 @@ namespace EoE.Information
 		[SerializeField] private int startCurrency = 0;
 		private void Start()
 		{
+			if (!Player.Existant)
+				return;
+
 			for(int i = 0; i < itemsToGive.Length; i++)
 			{
 				itemsToGive[i].Activate();
