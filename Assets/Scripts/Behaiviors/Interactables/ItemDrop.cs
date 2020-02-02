@@ -9,14 +9,13 @@ namespace EoE.Entities
 		private const float FAILED_PICKUP_DELAY = 0.5f;
 
 		public Rigidbody body = default;
-		public Collider[] colls = default;
+		public Collider[] colls { get; private set; }
 		[SerializeField] private FXObject[] EffectsOnInteract = default;
-		[SerializeField] private TextMeshPro infoDisplayPrefab = default;
+		[SerializeField] private TextMeshPro infoDisplay = default;
 		[SerializeField] private Vector3 infoDisplayOffset = new Vector3(0, 2, 0);
 		[SerializeField] private Color amountColor = Color.red;
 		[SerializeField] private Notification failedPickUpNotification = default;
 
-		private TextMeshPro infoDisplay;
 		private InventoryItem containedItem;
 		private float FailedPickUpDelay;
 		public void SetupItemDrop(InventoryItem containedItem, bool stopVelocity)
@@ -33,9 +32,7 @@ namespace EoE.Entities
 				body.velocity = Random.insideUnitSphere.normalized * GameController.CurrentGameSettings.ItemDropRandomVelocityStrenght;
 			}
 
-			infoDisplay = Instantiate(infoDisplayPrefab, Storage.ParticleStorage);
 			infoDisplay.gameObject.SetActive(false);
-
 			string amountColHex = ColorUtility.ToHtmlStringRGBA(amountColor);
 			infoDisplay.text = "Pick up <color=#" + amountColHex + ">" + containedItem.stackSize + "x </color>" + containedItem.data.ItemName + " [A]";
 
@@ -74,7 +71,6 @@ namespace EoE.Entities
 
 			if (containedItem.stackSize == 0)
 			{
-				Destroy(infoDisplay.gameObject);
 				Destroy(gameObject);
 			}
 		}

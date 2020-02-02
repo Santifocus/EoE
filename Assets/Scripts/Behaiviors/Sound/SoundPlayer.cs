@@ -7,7 +7,15 @@ namespace EoE.Sounds
 		private Sound baseData;
 		private AudioSource source;
 		public bool Exists => source;
-		public float FadePoint { get => fadePoint; set { fadePoint = value; source.volume = baseData.volume * volumeScale * value; } }
+		public float FadePoint
+		{ 
+			get => fadePoint; 
+			set 
+			{
+				fadePoint = value; 
+				source.volume = baseData.volume * volumeScale * value; 
+			} 
+		}
 		private float fadePoint;
 		public bool FullyStopped => !isPaused && !source.isPlaying;
 		private bool isPaused;

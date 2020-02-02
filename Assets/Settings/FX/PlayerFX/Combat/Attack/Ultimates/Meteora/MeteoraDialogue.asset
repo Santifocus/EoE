@@ -9,18 +9,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e7eaa19f6624274b81d46198fa48d0a, type: 3}
-  m_Name: FrostnovaChargedScreenUI
+  m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
+  m_Name: MeteoraDialogue
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 1
-    TimeStay: 0.6
+    TimeStay: 2
     OnConditionMet: 0
-    Conditions: []
-  UIPrefabObject: {fileID: 6398801336331914143, guid: 507159bf1d8c8eb4c8a95bc2c88f289b,
-    type: 3}
-  CustomChildIndex: 9999
+    Condition: {fileID: 0}
+  parts:
+  - textColor: {r: 1, g: 1, b: 1, a: 1}
+    text: 'Take this:'
+  - textColor: {r: 1, g: 0.21557546, b: 0, a: 1}
+    text: ' Meteora!'
+  dialogueIcon: {fileID: 21300000, guid: b7ba1a70591e12041b51d0d91951a56e, type: 3}
+  pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

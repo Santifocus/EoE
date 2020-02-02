@@ -28,14 +28,14 @@ namespace EoE
 			if (SceneLoader.Transitioning)
 				return;
 
-			SceneLoader.TransitionToScene(ConstantCollector.GAME_SCENE_INDEX);
+			SceneLoader.TransitionToScene(ConstantCollector.GAME_SCENE_INDEX, true);
 		}
 		public void StartTuorial()
 		{
 			if (SceneLoader.Transitioning)
 				return;
 
-			SceneLoader.TransitionToScene(ConstantCollector.TUTORIAL_SCENE_INDEX);
+			SceneLoader.TransitionToScene(ConstantCollector.TUTORIAL_SCENE_INDEX, true);
 		}
 		public void CancelTutorialRequest()
 		{

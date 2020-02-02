@@ -57,8 +57,7 @@ namespace EoE.UI
 			if (SceneLoader.Transitioning)
 				return;
 
-			EffectManager.ResetScreenEffects();
-			SceneLoader.TransitionToScene(ConstantCollector.MAIN_MENU_SCENE_INDEX);
+			SceneLoader.TransitionToScene(ConstantCollector.MAIN_MENU_SCENE_INDEX, true);
 		}
 		private void OnDestroy()
 		{

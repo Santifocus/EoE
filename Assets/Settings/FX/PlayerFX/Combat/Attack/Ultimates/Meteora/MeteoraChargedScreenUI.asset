@@ -9,21 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
-  m_Name: FrostnovaImpact
+  m_Script: {fileID: 11500000, guid: 2e7eaa19f6624274b81d46198fa48d0a, type: 3}
+  m_Name: MeteoraChargedScreenUI
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0.2
+  TimeOut: 0
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 1
-    TimeStay: 1
+    TimeStay: 0.6
     OnConditionMet: 0
-    Conditions: []
-  ParticleMainObject: {fileID: 173051493050767843, guid: d1ec0ec126e6d0f4ba8f0243a50f7472,
+    Condition: {fileID: 0}
+  UIPrefabObject: {fileID: 6398801336331914143, guid: b11dc0c7bd6da1a408aeec05f04abe67,
     type: 3}
-  OffsetToTarget: {x: 0, y: 0, z: 0}
-  RotationOffset: {x: 0, y: 0, z: 0}
-  FollowTarget: 0
-  InheritRotationOfTarget: 0
-  RotationInheritLerpSpeed: 4
+  CustomChildIndex: 9999
+  CanvasTarget: 1

@@ -63,7 +63,7 @@ namespace EoE.UI
 				}
 			}
 
-			SceneLoader.TransitionToScene(ConstantCollector.GAME_SCENE_INDEX);
+			SceneLoader.TransitionToScene(ConstantCollector.GAME_SCENE_INDEX, true);
 		}
 	}
 }

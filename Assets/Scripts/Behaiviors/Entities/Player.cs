@@ -353,54 +353,6 @@ namespace EoE.Entities
 				}
 			}
 		}
-		/*
-		[SerializeField] private Transform head = default;
-		[SerializeField] private Transform torso = default;
-
-		private float curTosoTurn;
-		private float bodyLookSpringAcceleration;
-
-		private Vector2 curHeadTurn;
-		private float headHLookSpringAcceleration;
-		private float headVLookSpringAcceleration;
-		private void ProceduralAnimationControl()
-		{
-			return;
-			Vector3 targetLookDirection;
-			if (TargetedEntitie)
-			{
-				targetLookDirection = (TargetedEntitie.actuallWorldPosition - head.position).normalized;
-			}
-			else if(curAcceleration > MIN_WALK_ACCELERATION)
-			{
-				targetLookDirection = transform.forward;
-			}
-			else
-			{
-				targetLookDirection = PlayerCameraController.PlayerCamera.transform.forward;
-			}
-
-
-			float hAngle = -(Mathf.Atan2(targetLookDirection.z, targetLookDirection.x) * Mathf.Rad2Deg + 90);
-			float vAngle = Mathf.Asin(targetLookDirection.y) * Mathf.Rad2Deg;
-
-			float targetTorsoAngle = Mathf.Clamp(hAngle * playerSettings.BodyTurnWeight, -playerSettings.BodyTurnHorizontalClamp, playerSettings.BodyTurnHorizontalClamp);
-			curTosoTurn = Utils.SpringLerp(curTosoTurn, targetTorsoAngle, ref bodyLookSpringAcceleration, playerSettings.LookLerpSpringStiffness, Time.deltaTime * playerSettings.LookLerpSpeed);
-
-			torso.localEulerAngles = new Vector3(torso.localEulerAngles.x, curTosoTurn, torso.localEulerAngles.z);
-
-			Vector2 targetHeadAngle = new Vector2(	Mathf.Clamp(hAngle - curTosoTurn, -playerSettings.HeadLookAngleClamps.z + curTosoTurn, playerSettings.HeadLookAngleClamps.x + curTosoTurn),
-													Mathf.Clamp(vAngle, -playerSettings.HeadLookAngleClamps.w, playerSettings.HeadLookAngleClamps.y));
-
-			curHeadTurn = new Vector2(	Utils.SpringLerp(curHeadTurn.x, targetHeadAngle.x, ref headHLookSpringAcceleration, playerSettings.LookLerpSpringStiffness, Time.deltaTime * playerSettings.LookLerpSpeed),
-										Utils.SpringLerp(curHeadTurn.y, targetHeadAngle.y, ref headVLookSpringAcceleration, playerSettings.LookLerpSpringStiffness, Time.deltaTime * playerSettings.LookLerpSpeed));
-
-			float vAngleSinPart = Mathf.Sin(curHeadTurn.x * Mathf.Deg2Rad);
-			float vAngleCosPart = Mathf.Cos(curHeadTurn.x * Mathf.Deg2Rad);
-
-			head.eulerAngles = new Vector3(curHeadTurn.y * vAngleSinPart, curHeadTurn.x, curHeadTurn.y * vAngleCosPart);
-		}
-		*/
 		#region Walking
 		private void TurnControl()
 		{

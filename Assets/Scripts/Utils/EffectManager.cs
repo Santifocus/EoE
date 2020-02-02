@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace EoE
@@ -13,7 +14,7 @@ namespace EoE
 	public class EffectManager : MonoBehaviour
 	{
 		#region Fields
-		private const int DAMAGE_NUMBER_BASE_POOLSIZE = 50;
+		private const int DAMAGE_NUMBER_BASE_POOLSIZE = 25;
 		private static EffectManager Instance;
 		[SerializeField] private Material screenEffectMaterial = default;
 		[SerializeField] private Transform cameraShakeCore = default;
@@ -23,12 +24,9 @@ namespace EoE
 		#region Setups
 		private void Start()
 		{
-			if (Instance)
-				Destroy(Instance);
-
+			Instance = this;
 			BaseFixedDeltaTime = Time.fixedDeltaTime;
 			ResetScreenEffectMat();
-			Instance = this;
 			StartCoroutine(DamageNumberPoolCreation());
 		}
 		private IEnumerator DamageNumberPoolCreation()
@@ -41,18 +39,23 @@ namespace EoE
 			while(damageNumberPool.PoolSize < DAMAGE_NUMBER_BASE_POOLSIZE)
 			{ 
 				yield return new WaitForEndOfFrame();
-				damageNumberPool.PoolSize += 1;
+				damageNumberPool.PoolSize++;
 			}
 		}
-		public static void ResetScreenEffects()
+		public static void ResetFX()
 		{
-			Instance.StopAllCoroutines();
+			if (Instance)
+			{
+				Instance.ResetScreenEffectMat();
+				Instance.StopAllCoroutines();
+			}
+
 			AllScreenShakes = new List<ScreenShakeInstance>();
 			AllRumbles = new List<ControllerRumbleInstance>();
 			AllScreenColorEffects = new List<ScreenBorderColorInstance>();
 			AllBlurScreenEffects = new List<ScreenBlurInstance>();
-			AllTimeDilationsEffects = new List<TimeDilationInstance>();
 			AllTintScreenEffects = new List<ScreenTintInstance>();
+			AllTimeDilationsEffects = new List<TimeDilationInstance>();
 			AllCameraFOVWarpEffects = new List<CameraFOVWarpInstance>();
 			AllDialogues = new List<DialogueInstance>();
 			AllNotifications = new List<NotificationInstance>();
@@ -64,7 +67,6 @@ namespace EoE
 			{
 				Gamepad.current.SetMotorSpeeds(0, 0);
 			}
-			Instance.ResetScreenEffectMat();
 		}
 		private void ResetScreenEffectMat()
 		{
@@ -1154,7 +1156,7 @@ namespace EoE
 			int afterComma = Mathf.RoundToInt((roundedNumber - fullNumber) * 100);
 			string displayedNumber;
 
-			if (afterComma < Mathf.Epsilon)
+			if (afterComma == 0)
 				displayedNumber = fullNumber.ToString();
 			else
 				displayedNumber = fullNumber + ".<size=" + (newDamageNumber.display.fontSize / 1.75f) + ">" + afterComma + "</size>";

@@ -10,19 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
-  m_Name: MeteoraDialogue
+  m_Name: FrostnovaDialogue
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 1
-    TimeStay: 2
+    TimeStay: 3.5
     OnConditionMet: 0
     Condition: {fileID: 0}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Take This! Meteora !
+    text: Feel the power of ice!
+  - textColor: {r: 1, g: 0.21557546, b: 0, a: 1}
+    text: ' Frostnova!'
   dialogueIcon: {fileID: 21300000, guid: b7ba1a70591e12041b51d0d91951a56e, type: 3}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1

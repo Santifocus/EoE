@@ -104,16 +104,14 @@ namespace EoE.UI
 			if (SceneLoader.Transitioning)
 				return;
 
-			EffectManager.ResetScreenEffects();
-			SceneLoader.TransitionToScene(SceneManager.GetActiveScene().buildIndex);
+			SceneLoader.TransitionToScene(SceneManager.GetActiveScene().buildIndex, false);
 		}
 		public void OnQuit()
 		{
 			if (SceneLoader.Transitioning)
 				return;
 
-			EffectManager.ResetScreenEffects();
-			SceneLoader.TransitionToScene(ConstantCollector.MAIN_MENU_SCENE_INDEX);
+			SceneLoader.TransitionToScene(ConstantCollector.MAIN_MENU_SCENE_INDEX, true);
 		}
 		private void OnDestroy()
 		{

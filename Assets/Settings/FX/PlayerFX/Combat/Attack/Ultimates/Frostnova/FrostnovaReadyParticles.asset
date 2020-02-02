@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
-  m_Name: FrostnovaRemenant
+  m_Name: FrostnovaReadyParticles
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0.2
+  TimeOut: 0.25
   FinishConditions:
     OnParentDeath: 1
-    OnTimeout: 1
-    TimeStay: 9
+    OnTimeout: 0
+    TimeStay: 2
     OnConditionMet: 0
-    Conditions: []
-  ParticleMainObject: {fileID: 1179530592199443360, guid: 4ff664ada910b3240bba81beba5a9a50,
+    Condition: {fileID: 0}
+  ParticleMainObject: {fileID: 3527385390316951695, guid: cceaecf2b61daf14681316b0b05bb388,
     type: 3}
   OffsetToTarget: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}
   FollowTarget: 1
   InheritRotationOfTarget: 1
-  RotationInheritLerpSpeed: 4
+  RotationInheritLerpSpeed: 45

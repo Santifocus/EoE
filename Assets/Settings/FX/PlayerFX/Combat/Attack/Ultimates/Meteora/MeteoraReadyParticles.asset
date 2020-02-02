@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
-  m_Name: ThorCutProjectileImpactParticles
+  m_Name: MeteoraReadyParticles
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0
+  TimeOut: 0.25
   FinishConditions:
-    OnParentDeath: 0
-    OnTimeout: 1
-    TimeStay: 0.2
+    OnParentDeath: 1
+    OnTimeout: 0
+    TimeStay: 2
     OnConditionMet: 0
     Condition: {fileID: 0}
-  ParticleMainObject: {fileID: 6825177179695358937, guid: 125f85d62f41857429d503eea1352a04,
+  ParticleMainObject: {fileID: 6584800956893413052, guid: 4aace3ae44d5ccb4883fd0c758979c8e,
     type: 3}
-  OffsetToTarget: {x: 0, y: 0, z: 0}
+  OffsetToTarget: {x: 0, y: -0.1, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}
-  FollowTarget: 0
-  InheritRotationOfTarget: 0
-  RotationInheritLerpSpeed: 4
+  FollowTarget: 1
+  InheritRotationOfTarget: 1
+  RotationInheritLerpSpeed: 45

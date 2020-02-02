@@ -9,20 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
-  m_Name: FrostnovaDialogue
+  m_Script: {fileID: 11500000, guid: aa0729519a808d449bdb777d2d35538b, type: 3}
+  m_Name: FrostnovaImpactSFX
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 1
-    TimeStay: 3.5
+    TimeStay: 1.5
     OnConditionMet: 0
     Condition: {fileID: 0}
-  parts:
-  - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: Feel the power of ice!
-  dialogueIcon: {fileID: 21300000, guid: b7ba1a70591e12041b51d0d91951a56e, type: 3}
-  pauseTimeWhenDisplaying: 0
-  CanvasTarget: 1
+  TargetSound: {fileID: 11400000, guid: dcfd4c4cd377c36499b24273cee296cd, type: 2}
+  FollowTarget: 0
+  OffsetToTarget: {x: 0, y: 0, z: 0}

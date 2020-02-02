@@ -9,17 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa0729519a808d449bdb777d2d35538b, type: 3}
-  m_Name: FrostnovaImpactSFX
+  m_Script: {fileID: 11500000, guid: 2e7eaa19f6624274b81d46198fa48d0a, type: 3}
+  m_Name: FrostnovaChargedScreenUI
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 1
-    TimeStay: 1.5
+    TimeStay: 0.6
     OnConditionMet: 0
-    Conditions: []
-  TargetSound: {fileID: 11400000, guid: dcfd4c4cd377c36499b24273cee296cd, type: 2}
-  FollowTarget: 0
-  OffsetToTarget: {x: 0, y: 0, z: 0}
+    Condition: {fileID: 0}
+  UIPrefabObject: {fileID: 6398801336331914143, guid: 507159bf1d8c8eb4c8a95bc2c88f289b,
+    type: 3}
+  CustomChildIndex: 9999
+  CanvasTarget: 1

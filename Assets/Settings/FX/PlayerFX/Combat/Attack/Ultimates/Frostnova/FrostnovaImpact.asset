@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
-  m_Name: ThorCutReadyParticles
+  m_Name: FrostnovaImpact
   m_EditorClassIdentifier: 
   TimeIn: 0
-  TimeOut: 0.25
+  TimeOut: 0.2
   FinishConditions:
-    OnParentDeath: 1
-    OnTimeout: 0
+    OnParentDeath: 0
+    OnTimeout: 1
     TimeStay: 1
     OnConditionMet: 0
-    Conditions: []
-  ParticleMainObject: {fileID: 9195059138937969349, guid: ef25bf62f47b6d24ba2b39f8f5bd01c7,
+    Condition: {fileID: 0}
+  ParticleMainObject: {fileID: 173051493050767843, guid: d1ec0ec126e6d0f4ba8f0243a50f7472,
     type: 3}
-  OffsetToTarget: {x: 0, y: -0.12, z: 0.6}
+  OffsetToTarget: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}
-  FollowTarget: 1
-  InheritRotationOfTarget: 1
-  RotationInheritLerpSpeed: 45
+  FollowTarget: 0
+  InheritRotationOfTarget: 0
+  RotationInheritLerpSpeed: 4
