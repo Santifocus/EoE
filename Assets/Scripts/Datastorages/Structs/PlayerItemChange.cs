@@ -89,7 +89,7 @@ namespace EoE.Information
 						Player.Instance.SelectableActivationCompoundItems[0].data.Equip(targetItem, Player.Instance);
 					}
 				}
-				else
+				else if(Item is ConsumableItem)
 				{
 					bool added = false;
 

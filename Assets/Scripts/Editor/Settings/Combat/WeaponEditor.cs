@@ -8,7 +8,7 @@ using static EoE.EoEEditor.AttackSequenceDrawer;
 namespace EoE.Combatery
 {
 	[CustomEditor(typeof(Weapon), true), CanEditMultipleObjects]
-	public class WeaponEditor : ScriptableObjectEditor
+	public class WeaponEditor : ObjectEditor
 	{
 		private static bool BaseDataOpen;
 		protected override void CustomInspector()

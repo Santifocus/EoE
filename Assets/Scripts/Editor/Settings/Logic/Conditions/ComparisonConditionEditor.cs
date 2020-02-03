@@ -7,7 +7,7 @@ using static EoE.EoEEditor;
 namespace EoE.Information.Logic
 {
 	[CustomEditor(typeof(ComparisonCondition), true), CanEditMultipleObjects]
-	public class ComparisonConditionEditor : ScriptableObjectEditor
+	public class ComparisonConditionEditor : ObjectEditor
 	{
 		private static float currentTestValue = 0;
 		private bool needsToCheckComparison = true;

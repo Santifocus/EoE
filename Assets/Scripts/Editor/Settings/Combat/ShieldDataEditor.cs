@@ -6,7 +6,7 @@ using static EoE.EoEEditor;
 namespace EoE.Combatery
 {
 	[CustomEditor(typeof(ShieldData), true), CanEditMultipleObjects]
-	public class ShieldDataEditor : ScriptableObjectEditor
+	public class ShieldDataEditor : ObjectEditor
 	{
 		private static bool BaseSettingsOpen;
 		private static bool FollowSettingsOpen;

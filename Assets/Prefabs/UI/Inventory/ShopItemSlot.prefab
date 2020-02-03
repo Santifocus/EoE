@@ -110,6 +110,7 @@ MonoBehaviour:
   armorItemIcon: {fileID: 21300000, guid: 3c351b35e362c7249959d35b548c26f6, type: 3}
   spellItemIcon: {fileID: 21300000, guid: 506e8b3f4cdd89042a9da07a1fbe5db5, type: 3}
   useItemIcon: {fileID: 21300000, guid: b30e2073656a45f44b247f2e17bbd5bd, type: 3}
+  monetaryItemIcon: {fileID: 21300000, guid: 65ab5f65704d0164da0b0beb91a371af, type: 3}
 --- !u!1 &3894716833552053544
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,7 +7,7 @@ using static EoE.EoEEditor;
 namespace EoE.Information
 {
 	[CustomEditor(typeof(ShopInventory)), CanEditMultipleObjects]
-	public class ShopInventoryEditor : ScriptableObjectEditor
+	public class ShopInventoryEditor : ObjectEditor
 	{
 		private static bool OptionAreaOpen;
 		private Queue<ShopItem> queuedRemovals = new Queue<ShopItem>();

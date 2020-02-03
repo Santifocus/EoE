@@ -23,14 +23,14 @@ namespace EoE.Entities
 		[Space(3)]
 		[SerializeField] private Collider[] containerCollider = default;
 
-		[Space(5)]
-		[Header("Feedback")]
-		[SerializeField] private ActivationEffect[] effectsOnPlayerOnFailOpen = default;
-		[SerializeField] private ActivationEffect[] effectsOnPlayerOnOpen = default;
-
 		[Space(3)]
 		[SerializeField] private Animator animator = default;
 		[SerializeField] private string openAnimationTrigger = "Open";
+
+		[Space(5)]
+		[Header("Feedback")]
+		[HideInInspector] public ActivationEffect[] effectsOnPlayerOnFailOpen = default;
+		[HideInInspector] public ActivationEffect[] effectsOnPlayerOnOpen = default;
 
 		private List<ItemDrop> createdItemDrops;
 		private bool creatingDrops;

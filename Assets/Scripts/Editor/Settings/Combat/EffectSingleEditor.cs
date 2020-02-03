@@ -6,7 +6,7 @@ using static EoE.EoEEditor;
 namespace EoE.Information
 {
 	[CustomEditor(typeof(EffectSingle), true), CanEditMultipleObjects]
-	public class EffectSingleEditor : ScriptableObjectEditor
+	public class EffectSingleEditor : ObjectEditor
 	{
 		private static bool BaseSettingsOpen;
 		private static bool DamageSettingsOpen;

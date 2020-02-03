@@ -24,6 +24,7 @@ namespace EoE.UI
 		[SerializeField] private Sprite armorItemIcon = default;
 		[SerializeField] private Sprite spellItemIcon = default;
 		[SerializeField] private Sprite useItemIcon = default;
+		[SerializeField] private Sprite monetaryItemIcon = default;
 
 		public Item containedItem { get; private set; }
 		private int? containedStacksize;
@@ -87,9 +88,13 @@ namespace EoE.UI
 			{
 				itemTypeDisplay.sprite = spellItemIcon;
 			}
-			else
+			else if (containedItem is ConsumableItem)
 			{
 				itemTypeDisplay.sprite = useItemIcon;
+			}
+			else
+			{
+				itemTypeDisplay.sprite = monetaryItemIcon;
 			}
 		}
 		public void Select()

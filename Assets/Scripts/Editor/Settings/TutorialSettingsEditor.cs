@@ -6,7 +6,7 @@ using static EoE.EoEEditor;
 namespace EoE.Information
 {
 	[CustomEditor(typeof(TutorialSettings)), CanEditMultipleObjects]
-	public class TutorialSettingsEditor : ScriptableObjectEditor
+	public class TutorialSettingsEditor : ObjectEditor
 	{
 		protected override void CustomInspector()
 		{

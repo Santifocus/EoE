@@ -7,7 +7,7 @@ using static EoE.EoEEditor;
 namespace EoE.Information.Logic
 {
 	[CustomEditor(typeof(StandardLogicalExpression), true), CanEditMultipleObjects]
-	public class StandardLogicalExpressionEditor : ScriptableObjectEditor
+	public class StandardLogicalExpressionEditor : ObjectEditor
 	{
 		private static bool BaseSettingsOpen;
 		protected override void CustomInspector()

@@ -7,7 +7,7 @@ using static EoE.EoEEditor;
 namespace EoE.Information.Logic
 {
 	[CustomEditor(typeof(PlayerStateCondition), true), CanEditMultipleObjects]
-	public class PlayerStateConditionEditor : ScriptableObjectEditor
+	public class PlayerStateConditionEditor : ObjectEditor
 	{
 		protected override void CustomInspector()
 		{

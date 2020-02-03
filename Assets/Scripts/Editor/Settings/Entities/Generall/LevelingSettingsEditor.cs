@@ -5,7 +5,7 @@ using static EoE.EoEEditor;
 namespace EoE.Information
 {
 	[CustomEditor(typeof(LevelingSettings), true), CanEditMultipleObjects]
-	public class LevelingSettingsEditor : ScriptableObjectEditor
+	public class LevelingSettingsEditor : ObjectEditor
 	{
 		private static bool LevelingCurveOpen;
 		private static bool SkillPointIncrementOpen;
