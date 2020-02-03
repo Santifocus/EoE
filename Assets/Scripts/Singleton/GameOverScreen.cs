@@ -1,4 +1,5 @@
 ﻿using EoE.Controlls;
+using EoE.Entities;
 using EoE.Events;
 using EoE.Sounds;
 using System.Collections;
@@ -43,10 +44,18 @@ namespace EoE.UI
 				fadeInGraphics[i].color = new Color(fadeInGraphics[i].color.r, fadeInGraphics[i].color.g, fadeInGraphics[i].color.b, 0);
 			}
 		}
-		public void Show(Entities.Entity killer)
+		public void Show(Entity killer)
 		{
 			EventManager.PlayerDiedEvent -= Show;
-			SetupCamera();
+			if (!Player.Instance.Alive)
+			{
+				SetupCamera();
+			}
+			else
+			{
+				playerOnlyDisplay.gameObject.SetActive(false);
+				graphicsFadeInTime /= 3;
+			}
 
 			gameObject.SetActive(true);
 			blackPlane.color = Color.clear;

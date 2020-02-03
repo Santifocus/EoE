@@ -363,18 +363,10 @@ namespace EoE.Entities
 			if (changeResult.finalChangeAmount > 0)
 				healthRegenCooldown = SelfSettings.HealthRegenCooldownAfterTakingDamage;
 
-			//Below zero health means death
+			//Did this cause the health to drop below zero? Then kill this entity
 			if (curHealth <= 0)
 			{
-				if (this is Player)
-				{
-					EventManager.PlayerDiedInvoke(causedChange.attacker);
-				}
-				else
-				{
-					EventManager.EntitieDiedInvoke(this, causedChange.attacker);
-				}
-				BaseDeath();
+				BaseDeath(causedChange.attacker);
 			}
 
 			if(changeResult.finalChangeAmount != 0 && Alive)
@@ -439,12 +431,21 @@ namespace EoE.Entities
 			}
 			RecalculateBuffs();
 		}
-		private void BaseDeath()
+		public void BaseDeath(Entity killer)
 		{
 			if (!Alive)
 				return;
 
 			Alive = false;
+			if (this is Player)
+			{
+				EventManager.PlayerDiedInvoke(killer);
+			}
+			else
+			{
+				EventManager.EntitieDiedInvoke(this, killer);
+			}
+
 			AllEntities.Remove(this);
 			ActivateActivationEffects(SelfSettings.DeathEffects, 1);
 

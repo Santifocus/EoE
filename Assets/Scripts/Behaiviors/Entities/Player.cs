@@ -145,7 +145,7 @@ namespace EoE.Entities
 
 			animationControl.SetBool("InCombat", curStates.Fighting);
 			if (Input.GetKeyDown(KeyCode.K))
-				ChangeHealth(new ChangeInfo(null, CauseType.Magic, TargetStat.Health, 10000));
+				BaseDeath(null);
 		}
 		protected override void EntitieFixedUpdate()
 		{

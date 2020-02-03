@@ -1,4 +1,5 @@
 using UnityEditor;
+using UnityEngine;
 
 namespace EoE.Information
 {
@@ -7,6 +8,10 @@ namespace EoE.Information
 	{
 		public override void OnInspectorGUI()
 		{
+			if (EditorUtility.IsDirty(target))
+			{
+				EditorGUILayout.HelpBox("Unsaved Changes.", MessageType.None);
+			}
 			CustomInspector();
 			if (EoEEditor.isDirty)
 			{

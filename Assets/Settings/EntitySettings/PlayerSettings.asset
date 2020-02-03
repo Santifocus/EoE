@@ -157,7 +157,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 634714252dd985c4a9434e87dac6225a, type: 2}
   EffectsOnJump:
   - {fileID: 11400000, guid: 81bcb4243c5d7bf409682cb56f2f128e, type: 2}
-  PlayerLandingVelocityThreshold: 2
+  PlayerLandingVelocityThreshold: 8
   EffectsOnPlayerLanding:
   - {fileID: 11400000, guid: ba451c2b316cc054ba26cb958cbb7f1a, type: 2}
   - {fileID: 11400000, guid: b16188df833539c4391e686f9ab8b6a5, type: 2}

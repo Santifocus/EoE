@@ -18,7 +18,7 @@ namespace EoE.UI
 					case PortraitState.Normal:
 						return normalState;
 					case PortraitState.InCombat:
-						return lowHealthState;
+						return inCombatState;
 					case PortraitState.LowHealth:
 						return lowHealthState;
 					case PortraitState.TookDamage:
