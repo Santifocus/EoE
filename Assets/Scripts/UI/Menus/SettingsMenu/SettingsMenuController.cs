@@ -8,6 +8,7 @@ namespace EoE.UI
 {
 	public class SettingsMenuController : MonoBehaviour
 	{
+		private const float AMBIENT_LIGHT_MUL = 0.5f;
 		public static SettingsMenuController Instance { get; private set; }
 
 		public delegate void SettingsMenuSetState(bool state);
@@ -22,10 +23,13 @@ namespace EoE.UI
 		[SerializeField] private GameObject settingsCanvas = default;
 		[SerializeField] private SettingsSlider musicVolumeScaleSlider = default;
 		[SerializeField] private SettingsSlider soundVolumeScaleSlider = default;
-		[SerializeField] private SettingsSlider gammaSlider = default;
+		[SerializeField] private SettingsSlider brightSlider = default;
 		[SerializeField] private GameObject targetAsToggleToggle = default;
 		[SerializeField] private GameObject invertCameraXToggle = default;
 		[SerializeField] private GameObject invertCameraYToggle = default;
+
+		[SerializeField] private Light topAmbientLight = default;
+		[SerializeField] private Light bottomAmbientLight = default;
 
 		private void Start()
 		{
@@ -65,9 +69,9 @@ namespace EoE.UI
 		}
 		public void ChangeGamma(int dir)
 		{
-			gammaSlider.Value = ActiveGamma + dir * sliderProgressionAmount;
-			ActiveGamma = gammaSlider.Value;
-			RenderSettings.ambientLight = new Color(ActiveGamma, ActiveGamma, ActiveGamma, 1);
+			brightSlider.Value = ActiveBrightness + dir * sliderProgressionAmount;
+			ActiveBrightness = brightSlider.Value;
+			topAmbientLight.intensity = bottomAmbientLight.intensity = ActiveBrightness * AMBIENT_LIGHT_MUL;
 		}
 		public void ToggleTargetAsToggle()
 		{
@@ -87,23 +91,23 @@ namespace EoE.UI
 		public void Apply()
 		{
 			VolumeScaleChanged();
-			RenderSettings.ambientLight = new Color(ActiveGamma, ActiveGamma, ActiveGamma, 1);
+			topAmbientLight.intensity = bottomAmbientLight.intensity = ActiveBrightness * AMBIENT_LIGHT_MUL;
 			SaveOrCreateSettings();
 		}
 		public void ResetToBase()
 		{
 			ActiveMusicVolumeScale = MusicVolumeScale;
 			ActiveSoundVolumeScale = SoundVolumeScale;
-			ActiveGamma = Gamma;
+			ActiveBrightness = Brightness;
 			ActiveInvertCameraX = InvertCameraX;
 			ActiveInvertCameraY = InvertCameraY;
 
 			musicVolumeScaleSlider.SetValueNoLerp(ActiveMusicVolumeScale);
 			soundVolumeScaleSlider.SetValueNoLerp(ActiveSoundVolumeScale);
-			gammaSlider.SetValueNoLerp(ActiveGamma);
+			brightSlider.SetValueNoLerp(ActiveBrightness);
 			VolumeScaleChanged();
 
-			RenderSettings.ambientLight = new Color(ActiveGamma, ActiveGamma, ActiveGamma, 1);
+			topAmbientLight.intensity = bottomAmbientLight.intensity = ActiveBrightness * AMBIENT_LIGHT_MUL;
 			targetAsToggleToggle.SetActive(ActiveTargetAsToggle);
 			invertCameraXToggle.SetActive(ActiveInvertCameraX);
 			invertCameraYToggle.SetActive(ActiveInvertCameraY);
