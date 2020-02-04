@@ -10,7 +10,7 @@ namespace EoE.Sounds
 		private const float REMOVE_THRESHOLD = 0.01f;
 		public static MusicController Instance { get; private set; }
 
-		[SerializeField] private Sound[] MusicList = default;
+		public Sound[] MusicList = default;
 		[SerializeField] private float musicFadeInTime = 2;
 		[SerializeField] private float musicFadeOutTime = 2;
 

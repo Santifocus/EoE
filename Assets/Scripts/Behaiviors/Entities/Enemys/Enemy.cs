@@ -17,7 +17,6 @@ namespace EoE.Entities
 		//Inspector Variables
 		[SerializeField] protected Rigidbody body = default;
 		public NavMeshAgent agent = default;
-		[SerializeField] protected Transform[] eyes = default;
 
 		protected Vector3 originalSpawnPosition;
 		protected NavMeshPath curPath;
@@ -199,10 +198,6 @@ namespace EoE.Entities
 				}
 			}
 		}
-		private void LateUpdate()
-		{
-			BaseAnimationUpdate();
-		}
 		protected void RefreshDataOnPlayer(bool fromCombatTrigger)
 		{
 			if(!fromCombatTrigger)
@@ -259,16 +254,6 @@ namespace EoE.Entities
 				agent.angularSpeed = enemySettings.TurnSpeed;
 				agent.acceleration = enemySettings.MoveAcceleration;
 				agent.speed = curWalkSpeed;
-			}
-		}
-		private void BaseAnimationUpdate()
-		{
-			if (targetPosition.HasValue)
-			{
-				for (int i = 0; i < eyes.Length; i++)
-				{
-					eyes[i].transform.forward = (eyes[i].transform.position - targetPosition.Value).normalized;
-				}
 			}
 		}
 		private bool CanSeePlayer()

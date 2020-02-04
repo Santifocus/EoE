@@ -84,14 +84,15 @@ MonoBehaviour:
   MaxEnemyTargetingDistance: 50
   CameraClampsWhenTargeting: {x: -30, y: 30}
   CameraBaseFOV: 60
-  Endurance: 100
-  DoEnduranceRegen: 1
-  EnduranceRegen: 7
-  EnduranceRegenInCombatMultiplier: 0.75
-  EnduranceAfterUseCooldown: 1.5
-  EnduranceRegenAfterUseMultiplier: 0.2
-  JumpEnduranceCost: 3
-  RunEnduranceCost: 5
+  Stamina: 100
+  DoStaminaRegen: 1
+  StaminaRegen: 7
+  StaminaRegenInCombatMultiplier: 0.75
+  StaminaAfterUseCooldown: 1.5
+  StaminaRegenAfterUseMultiplier: 0.2
+  JumpStaminaCost: 3
+  RunStaminaCost: 5
+  DashStaminaCost: 8
   JumpPower: {x: 0, y: 12, z: 12}
   JumpImpulsePower: 1.5
   JumpBackwardMultiplier: 0.65
@@ -99,7 +100,6 @@ MonoBehaviour:
   DashDuration: 0.15
   DashModelExistTime: 0.35
   DashCooldown: 0.3
-  DashEnduranceCost: 8
   DashModelMaterial: {fileID: 2100000, guid: 11d51a887e999af408b3d408f575a218, type: 2}
   ShieldSettings: {fileID: 11400000, guid: 4ab47e41b78d9914db30d5fbfdad95d5, type: 2}
   InvincibleAfterHit: 1
@@ -118,6 +118,8 @@ MonoBehaviour:
   HeadLookAngleClamps: {x: 60, y: 40, z: 60, w: 30}
   LookLerpSpeed: 15
   LookLerpSpringStiffness: 0.05
+  EffectsOnPlayerSpawn:
+  - {fileID: 11400000, guid: 10355127ce9601041bd51f71df3452c9, type: 2}
   EffectsOnCombatStart:
   - {fileID: 11400000, guid: 841005440ef020843a19f9880ce3ac1f, type: 2}
   - {fileID: 11400000, guid: ddafa43da60062c40b850dfed44815bb, type: 2}
