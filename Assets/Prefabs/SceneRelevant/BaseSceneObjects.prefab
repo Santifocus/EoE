@@ -2912,7 +2912,7 @@ MonoBehaviour:
   cameraSmoothSpeed: 2
   healthDisplay: {fileID: 893576658226820385}
   manaDisplay: {fileID: 893576657200346164}
-  enduranceDisplay: {fileID: 893576656784537723}
+  staminaDisplay: {fileID: 893576656784537723}
   defenseDisplay: {fileID: 893576658119008860}
   atkDisplay: {fileID: 893576656832577485}
   mgaDisplay: {fileID: 893576656784229493}
