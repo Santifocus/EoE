@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GameOverMusic
   m_EditorClassIdentifier: 
   soundName: Game Over
-  clip: {fileID: 8300000, guid: 2c6739c5bc589de479aa0e33312597be, type: 3}
+  clip: {fileID: 8300000, guid: 77f9c9b7e7d1b844aa3a3fee14441977, type: 3}
   audioGroup: {fileID: 24300002, guid: b8b319c0096b4d34196070be7e374c0c, type: 2}
   Loop: 0
   priority: 0
