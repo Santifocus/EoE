@@ -50,7 +50,7 @@ namespace EoE.Information
 		protected override void StatSettingsArea()
 		{
 			base.StatSettingsArea();
-			EnduranceSettingsArea();
+			StaminaSettingsArea();
 		}
 		protected override void MovementSettingsArea()
 		{
@@ -62,25 +62,25 @@ namespace EoE.Information
 			Vector3Field(new GUIContent("Jump Power", "With which velocity does this Entitie jump? (X == Sideways, Y == Upward, Z == Foreward)"), ref settings.JumpPower, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.JumpImpulsePower))), ref settings.JumpImpulsePower, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.JumpBackwardMultiplier))), ref settings.JumpBackwardMultiplier, 1);
-			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.JumpEnduranceCost))), ref settings.JumpEnduranceCost, 1);
-			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.RunEnduranceCost))), ref settings.RunEnduranceCost, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.JumpStaminaCost))), ref settings.JumpStaminaCost, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.RunStaminaCost))), ref settings.RunStaminaCost, 1);
 		}
-		private void EnduranceSettingsArea()
+		private void StaminaSettingsArea()
 		{
 			PlayerSettings settings = target as PlayerSettings;
 
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
-			FloatField(new GUIContent("Endurance", "What base Endurance does the Player have?"), ref settings.Endurance, 1);
-			BoolField(new GUIContent("Do Endurance Regen", "Should the Player Regen Endurance over time?"), ref settings.DoEnduranceRegen, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Stamina))), ref settings.Stamina, 1);
+			BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DoStaminaRegen))), ref settings.DoStaminaRegen, 1);
 
-			if (settings.DoEnduranceRegen)
+			if (settings.DoStaminaRegen)
 			{
-				FloatField(new GUIContent("Endurance Regen", "How much Endurance should the Player regenerate? (Per Second)"), ref settings.EnduranceRegen, 2);
-				FloatField(new GUIContent("Endurance Regen In Combat Multiplier", "In combat regeneration will be multiplied by this amount."), ref settings.EnduranceRegenInCombatMultiplier, 2);
+				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StaminaRegen))), ref settings.StaminaRegen, 2);
+				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StaminaRegenInCombatMultiplier))), ref settings.StaminaRegenInCombatMultiplier, 2);
 				GUILayout.Space(3);
 
-				FloatField(new GUIContent("Endurance After Use Cooldown", "After the Player uses Endurance how long will there be a Regen muliplier active (See below)? (Per Second)"), ref settings.EnduranceAfterUseCooldown, 2);
-				FloatField(new GUIContent("Endurance Regen After Use Multiplier", "If the player recently used Endurance how will the Endurance regen multiplied? (Per Second)"), ref settings.EnduranceRegenAfterUseMultiplier, 2);
+				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StaminaAfterUseCooldown))), ref settings.StaminaAfterUseCooldown, 2);
+				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StaminaRegenAfterUseMultiplier))), ref settings.StaminaRegenAfterUseMultiplier, 2);
 			}
 		}
 		private void DashSettingsArea()
@@ -91,7 +91,7 @@ namespace EoE.Information
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DashDuration))), ref settings.DashDuration, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DashModelExistTime))), ref settings.DashModelExistTime, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DashCooldown))), ref settings.DashCooldown, 1);
-			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DashEnduranceCost))), ref settings.DashEnduranceCost, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DashStaminaCost))), ref settings.DashStaminaCost, 1);
 			ObjectField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DashModelMaterial))), ref settings.DashModelMaterial, 1);
 		}
 		private void ShieldingSettingsArea()
@@ -146,6 +146,8 @@ namespace EoE.Information
 			PlayerSettings settings = target as PlayerSettings;
 
 			Header("Generall");
+			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnPlayerSpawn))), ref settings.EffectsOnPlayerSpawn, serializedObject.FindProperty(nameof(settings.EffectsOnPlayerSpawn)), new GUIContent(". Effect"), 1);
+
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnUltimateCharged))), ref settings.EffectsOnUltimateCharged, serializedObject.FindProperty(nameof(settings.EffectsOnUltimateCharged)), new GUIContent(". Effect"), 1);
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsWhileUltimateCharged))), ref settings.EffectsWhileUltimateCharged, serializedObject.FindProperty(nameof(settings.EffectsWhileUltimateCharged)), new GUIContent(". Effect"), 1);
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnLevelup))), ref settings.EffectsOnLevelup, serializedObject.FindProperty(nameof(settings.EffectsOnLevelup)), new GUIContent(". Effect"), 1);

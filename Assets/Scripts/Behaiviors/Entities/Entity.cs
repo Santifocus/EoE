@@ -518,8 +518,8 @@ namespace EoE.Entities
 						}
 						else if (this is Player)
 						{
-							if (activeBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Endurance)
-								(this as Player).ChangeEndurance(new ChangeInfo(activeBuffs[i].Applier, CauseType.DOT, TargetStat.Endurance, cd * activeBuffs[i].Base.DOTs[j].BaseDamage));
+							if (activeBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Stamina)
+								(this as Player).ChangeStamina(new ChangeInfo(activeBuffs[i].Applier, CauseType.DOT, TargetStat.Stamina, cd * activeBuffs[i].Base.DOTs[j].BaseDamage));
 							else if (activeBuffs[i].Base.DOTs[j].TargetStat == TargetStat.UltimateCharge && WeaponController.Instance)
 								WeaponController.Instance.AddUltimateCharge(cd * activeBuffs[i].Base.DOTs[j].BaseDamage);
 						}
@@ -620,19 +620,19 @@ namespace EoE.Entities
 								curMana = Mathf.Min(curMaxMana, curMana);
 							break;
 						}
-					case TargetBaseStat.Endurance:
+					case TargetBaseStat.Stamina:
 						{
 							//If this is not a player we can just ignore this buff/debuff
 							Player player = this as Player;
 							if (player == null)
 								break;
 
-							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * player.curMaxEndurance : buffBase.Effects[i].Amount;
-							change = Mathf.Max(-(player.curMaxEndurance), change);
-							player.curMaxEndurance += change;
+							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * player.curMaxStamina : buffBase.Effects[i].Amount;
+							change = Mathf.Max(-(player.curMaxStamina), change);
+							player.curMaxStamina += change;
 
 							if (clampRequired)
-								player.ClampEndurance();
+								player.ClampStamina();
 							break;
 						}
 					case TargetBaseStat.PhysicalDamage:
@@ -737,16 +737,16 @@ namespace EoE.Entities
 								curMana = curMaxMana;
 							break;
 						}
-					case TargetBaseStat.Endurance:
+					case TargetBaseStat.Stamina:
 						{
 							//If this is not a player we can just ignore this buff/debuff
 							Player player = this as Player;
 							if (player == null)
 								break;
 
-							player.curMaxEndurance -= change;
+							player.curMaxStamina -= change;
 							if (clampRequired)
-								player.ClampEndurance();
+								player.ClampStamina();
 							break;
 						}
 					case TargetBaseStat.PhysicalDamage:
@@ -805,7 +805,7 @@ namespace EoE.Entities
 			if (curMana > curMaxMana)
 				curMana = curMaxMana;
 			if (this is Player)
-				(this as Player).ClampEndurance();
+				(this as Player).ClampStamina();
 		}
 		#endregion
 		#region Compound Casting

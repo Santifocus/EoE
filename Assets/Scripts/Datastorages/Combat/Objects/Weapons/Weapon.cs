@@ -97,7 +97,7 @@ namespace EoE.Combatery
 		public float DamageMultiplier = 1;
 		public float HealthCostMultiplier = 1;
 		public float ManaCostMultiplier = 1;
-		public float EnduranceCostMultiplier = 1;
+		[UnityEngine.Serialization.FormerlySerializedAs("EnduranceCostMultiplier")] public float StaminaCostMultiplier = 1;
 		public float KnockbackMultiplier = 1;
 		public float CritChanceMultiplier = 1;
 

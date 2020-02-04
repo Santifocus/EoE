@@ -39,9 +39,9 @@ MonoBehaviour:
   AllowHoldUse: 0
   UseCooldown: 0
   RemoveOnUse: 0
-  ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
+  ItemModel: {fileID: 8954555773085953504, guid: d7dab90420788ce4dba9c3fcfbe82408,
     type: 3}
   MaxStack: 1
   ItemWorth: 100
-  ItemFlags: 2
+  NonRemoveable: 1
   TargetWeapon: {fileID: 11400000, guid: 7c48fa14c1c063542adf19a1a1c072ec, type: 2}

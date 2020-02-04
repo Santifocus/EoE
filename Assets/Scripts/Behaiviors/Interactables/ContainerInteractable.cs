@@ -9,6 +9,7 @@ namespace EoE.Entities
 {
 	public class ContainerInteractable : Interactable
 	{
+		private const float FAIL_OPEN_EFFECT_COOLDOWN = 0.2f;
 		[SerializeField] private ColoredText[] infoText = default;
 		[SerializeField] private TextMeshPro infoDisplay = default;
 		[SerializeField] private Vector3 infoDisplayOffset = new Vector3(0, 2, 0);
@@ -34,21 +35,26 @@ namespace EoE.Entities
 
 		private List<ItemDrop> createdItemDrops;
 		private bool creatingDrops;
+		private float failOpenEffectCooldown;
 
 		private void Start()
 		{
 			canBeInteracted = true;
 			infoDisplay.text = ColoredText.ToString(infoText);
 			infoDisplay.gameObject.SetActive(false);
+			infoDisplay.transform.localPosition = infoDisplayOffset;
 		}
 		protected override void Interact()
 		{
 			if (!openCondition || openCondition.True)
 			{
+				Player.Instance.ActivateActivationEffects(effectsOnPlayerOnOpen);
+				animator.SetTrigger(openAnimationTrigger);
 				StartCoroutine(OpenContainer());
 			}
-			else
+			else if(failOpenEffectCooldown <= 0)
 			{
+				failOpenEffectCooldown = FAIL_OPEN_EFFECT_COOLDOWN;
 				Player.Instance.ActivateActivationEffects(effectsOnPlayerOnFailOpen);
 			}
 		}
@@ -56,9 +62,6 @@ namespace EoE.Entities
 		private IEnumerator OpenContainer()
 		{
 			canBeInteracted = false;
-			Player.Instance.ActivateActivationEffects(effectsOnPlayerOnOpen);
-			animator.SetTrigger(openAnimationTrigger);
-
 			float timer = 0;
 			while(timer < itemStartSpawnDelay)
 			{
@@ -163,10 +166,11 @@ namespace EoE.Entities
 		}
 		private void LateUpdate()
 		{
+			if (failOpenEffectCooldown > 0)
+				failOpenEffectCooldown -= Time.deltaTime;
 			if (!isTarget || !Player.Existant)
 				return;
 
-			infoDisplay.transform.position = transform.position + infoDisplayOffset;
 			Vector3 facingDir = Vector3.Lerp(Player.Instance.actuallWorldPosition, PlayerCameraController.PlayerCamera.transform.position, 0.45f);
 			Vector3 signDir = (infoDisplay.transform.position - facingDir).normalized;
 			infoDisplay.transform.forward = signDir;

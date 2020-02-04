@@ -619,7 +619,7 @@ namespace EoE
 			{
 				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Health))), ref settings.Health, offSet + 1);
 				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Mana))), ref settings.Mana, offSet + 1);
-				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Endurance))), ref settings.Endurance, offSet + 1);
+				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Stamina))), ref settings.Stamina, offSet + 1);
 
 				ObjectArrayField<LogicComponent>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AdditionalConditions))), ref settings.AdditionalConditions, property.FindPropertyRelative(nameof(settings.AdditionalConditions)), new GUIContent(". Condtion"), offSet + 1);
 			}
@@ -1010,7 +1010,7 @@ namespace EoE
 					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DamageMultiplier))), ref settings.DamageMultiplier, offSet + 1);
 					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.HealthCostMultiplier))), ref settings.HealthCostMultiplier, offSet + 1);
 					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ManaCostMultiplier))), ref settings.ManaCostMultiplier, offSet + 1);
-					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EnduranceCostMultiplier))), ref settings.EnduranceCostMultiplier, offSet + 1);
+					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StaminaCostMultiplier))), ref settings.StaminaCostMultiplier, offSet + 1);
 					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.KnockbackMultiplier))), ref settings.KnockbackMultiplier, offSet + 1);
 					FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CritChanceMultiplier))), ref settings.CritChanceMultiplier, offSet + 1);
 

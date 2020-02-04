@@ -27,7 +27,7 @@ namespace EoE.Information
 		public GameObject ItemModel;
 		public int MaxStack = 1;
 		public int ItemWorth = 10;
-		public ItemSpecialFlag ItemFlags = ItemSpecialFlag.None;
+		public bool NonRemoveable = false;
 
 		//Internal
 		public float curCooldown { get; set; }

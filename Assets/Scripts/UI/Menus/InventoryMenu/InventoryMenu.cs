@@ -240,7 +240,7 @@ namespace EoE.UI
 				{
 					bool allowed = (item.data.Uses | this[i].actionType) == item.data.Uses;
 
-					if (this[i].actionType == InUIUses.Drop && item.data.ItemFlags == ItemSpecialFlag.NonRemoveable)						allowed = false;					if ((this[i].actionType == InUIUses.Use || this[i].actionType == InUIUses.Equip) && item.data.ItemFlags == ItemSpecialFlag.OnlySellable)						allowed = false;
+					if (this[i].actionType == InUIUses.Drop && item.data.NonRemoveable)						allowed = false;
 					if (allowed)
 					{
 						allowedActions.Add(this[i]);

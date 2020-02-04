@@ -23,9 +23,9 @@ namespace EoE.Combatery
 		public float BaseKnockback = 0;
 		public float BaseCritChance = 0;
 		public ObjectCost Cost = new ObjectCost();
-		public virtual bool CanActivate(Entity target, float healthCostMultiplier, float manaCostMultiplier, float enduranceCostMultiplier)
+		public virtual bool CanActivate(Entity target, float healthCostMultiplier, float manaCostMultiplier, float staminaCostMultiplier)
 		{
-			return AllowedAction(target) && (Cost.CanAfford(target, healthCostMultiplier, manaCostMultiplier, enduranceCostMultiplier));
+			return AllowedAction(target) && (Cost.CanAfford(target, healthCostMultiplier, manaCostMultiplier, staminaCostMultiplier));
 		}
 		public bool AllowedAction(Entity target)
 		{
@@ -184,9 +184,9 @@ namespace EoE.Combatery
 	{
 		public float Health;
 		public float Mana;
-		public float Endurance;
+		[UnityEngine.Serialization.FormerlySerializedAs("Endurance")]public float Stamina;
 		public LogicComponent[] AdditionalConditions = new LogicComponent[0];
-		public bool CanAfford(Entity target, float healthCostMultiplier, float manaCostMultiplier, float enduranceCostMultiplier)
+		public bool CanAfford(Entity target, float healthCostMultiplier, float manaCostMultiplier, float staminaCostMultiplier)
 		{
 			for (int i = 0; i < AdditionalConditions.Length; i++)
 			{
@@ -195,23 +195,23 @@ namespace EoE.Combatery
 			}
 			float totalHealthCost = Health * healthCostMultiplier;
 			float totalManaCost = Mana * manaCostMultiplier;
-			float totalEnduranceCost = Endurance * enduranceCostMultiplier;
+			float totalStaminaCost = Stamina * staminaCostMultiplier;
 
-			bool asPlayerCanAffordEndurance = (target is Player) ? (target as Player).curEndurance >= totalEnduranceCost : true;
-			return (target.curHealth >= totalHealthCost) && (target.curMana >= totalManaCost) && asPlayerCanAffordEndurance;
+			bool asPlayerCanAffordStamina = (target is Player) ? (target as Player).curStamina >= totalStaminaCost : true;
+			return (target.curHealth >= totalHealthCost) && (target.curMana >= totalManaCost) && asPlayerCanAffordStamina;
 		}
-		public void PayCost(Entity target, float healthCostMultiplier, float manaCostMultiplier, float enduranceCostMultiplier)
+		public void PayCost(Entity target, float healthCostMultiplier, float manaCostMultiplier, float staminaCostMultiplier)
 		{
 			float totalHealthCost = Health * healthCostMultiplier;
 			float totalManaCost = Mana * manaCostMultiplier;
-			float totalEnduranceCost = Endurance * enduranceCostMultiplier;
+			float totalStaminaCost = Stamina * staminaCostMultiplier;
 
 			if (totalHealthCost != 0)
 				target.ChangeHealth(new ChangeInfo(null, CauseType.Magic, TargetStat.Health, totalHealthCost));
 			if (totalManaCost != 0)
 				target.ChangeMana(new ChangeInfo(null, CauseType.Magic, TargetStat.Mana, totalManaCost));
-			if ((totalEnduranceCost != 0) && (target is Player))
-				(target as Player).ChangeEndurance(new ChangeInfo(null, CauseType.Magic, TargetStat.Endurance, totalEnduranceCost));
+			if ((totalStaminaCost != 0) && (target is Player))
+				(target as Player).ChangeStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, totalStaminaCost));
 		}
 	}
 	[System.Serializable]

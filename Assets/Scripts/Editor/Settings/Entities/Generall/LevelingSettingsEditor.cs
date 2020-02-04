@@ -58,25 +58,25 @@ namespace EoE.Information
 			LevelingSettings settings = target as LevelingSettings;
 
 			FloatField(new GUIContent("Per Ten Levels Base Points", "This is the base amount of for the stat increases multiplied for every 10 levels. (0-9 = x1, 10 - 19 = x2 ...)"), ref settings.PerTenLevelsBasePoints, 1);
-			FloatField(new GUIContent("Rotation Extra Points"), ref settings.RotationExtraPoints, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.RotationExtraPoints))), ref settings.RotationExtraPoints, 1);
 		}
 
 		private void IncrementValuesArea()
 		{
 			LevelingSettings settings = target as LevelingSettings;
 
-			IntField(new GUIContent("Attribute Points Per Level", "When leveling up how many skillpoints does the player gain that he can use to improve Health/Mana/Endurance?"), ref settings.AttributePointsPerLevel, 1);
+			IntField(new GUIContent("Attribute Points Per Level", "When leveling up how many skillpoints does the player gain that he can use to improve Health/Mana/Stamina?"), ref settings.AttributePointsPerLevel, 1);
 
-			FloatField(new GUIContent("Health Per Skill Point"), ref settings.HealthPerSkillPoint, 1);
-			FloatField(new GUIContent("Mana Per Skill Point"), ref settings.ManaPerSkillPoint, 1);
-			FloatField(new GUIContent("Endurance Per Skill Point"), ref settings.EndurancePerSkillPoint, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.HealthPerSkillPoint))), ref settings.HealthPerSkillPoint, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.ManaPerSkillPoint))), ref settings.ManaPerSkillPoint, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StaminaPerSkillPoint))), ref settings.StaminaPerSkillPoint, 1);
 
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			IntField(new GUIContent("Skill Points Per Level", "When leveling up how many skillpoints does the player gain that he can use to improve his PhysicalDamage/MagicDamage/Defense?"), ref settings.SkillPointsPerLevel, 1);
 
-			FloatField(new GUIContent("Physical Damage Per Skill Point"), ref settings.PhysicalDamagePerSkillPoint, 1);
-			FloatField(new GUIContent("Magic Damage Per Skill Point"), ref settings.MagicDamagePerSkillPoint, 1);
-			FloatField(new GUIContent("Defense Per Skill Point"), ref settings.DefensePerSkillPoint, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.PhysicalDamagePerSkillPoint))), ref settings.PhysicalDamagePerSkillPoint, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.MagicDamagePerSkillPoint))), ref settings.MagicDamagePerSkillPoint, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DefensePerSkillPoint))), ref settings.DefensePerSkillPoint, 1);
 		}
 	}
 }

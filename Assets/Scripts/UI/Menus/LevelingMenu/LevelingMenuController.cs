@@ -63,7 +63,7 @@ namespace EoE.UI
 		{
 			Instance = this;
 			assignedSkillPoints = new int[3]; //ATK, MGA, DEF
-			assignedAttributePoints = new int[3]; //Health, Mana, Endurance
+			assignedAttributePoints = new int[3]; //Health, Mana, Stamina
 			base.Start();
 		}
 		protected override void ResetPage()

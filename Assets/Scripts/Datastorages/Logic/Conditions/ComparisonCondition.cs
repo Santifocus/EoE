@@ -11,7 +11,7 @@ namespace EoE.Information.Logic
 		{
 			PlayerHealth = 1,
 			PlayerMana = 2,
-			PlayerEndurance = 3,
+			PlayerStamina = 3,
 			PlayerExperience = 4,
 			PlayerLevel = 5,
 			PlayerCurrency = 6,
@@ -35,8 +35,8 @@ namespace EoE.Information.Logic
 				case ComparisonTarget.PlayerMana:
 					wasMet = Compare(Player.Instance ? Player.Instance.curMana : 0);
 					break;
-				case ComparisonTarget.PlayerEndurance:
-					wasMet = Compare(Player.Instance ? Player.Instance.curEndurance : 0);
+				case ComparisonTarget.PlayerStamina:
+					wasMet = Compare(Player.Instance ? Player.Instance.curStamina : 0);
 					break;
 				case ComparisonTarget.PlayerExperience:
 					wasMet = Compare(Player.Instance ? Player.Instance.TotalExperience : 0);

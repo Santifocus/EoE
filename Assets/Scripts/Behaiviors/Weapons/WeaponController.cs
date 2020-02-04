@@ -292,9 +292,9 @@ namespace EoE.Combatery
 				ActiveAttackStyle = targetSequence.AttackSequenceParts[curSequenceIndex];
 
 				//First check if this attack sequence is allowed if not we stop the while loop here
-				if (curBaseData.CanActivate(Player.Instance, ActiveAttackStyle.HealthCostMultiplier, ActiveAttackStyle.ManaCostMultiplier, ActiveAttackStyle.EnduranceCostMultiplier))
+				if (curBaseData.CanActivate(Player.Instance, ActiveAttackStyle.HealthCostMultiplier, ActiveAttackStyle.ManaCostMultiplier, ActiveAttackStyle.StaminaCostMultiplier))
 				{
-					curBaseData.Cost.PayCost(Player.Instance, ActiveAttackStyle.HealthCostMultiplier, ActiveAttackStyle.ManaCostMultiplier, ActiveAttackStyle.EnduranceCostMultiplier);
+					curBaseData.Cost.PayCost(Player.Instance, ActiveAttackStyle.HealthCostMultiplier, ActiveAttackStyle.ManaCostMultiplier, ActiveAttackStyle.StaminaCostMultiplier);
 				}
 				else
 				{

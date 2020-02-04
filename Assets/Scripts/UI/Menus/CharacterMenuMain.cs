@@ -26,7 +26,7 @@ namespace EoE.UI
 		[Space(10)]
 		[SerializeField] private TextMeshProUGUI healthDisplay = default;
 		[SerializeField] private TextMeshProUGUI manaDisplay = default;
-		[SerializeField] private TextMeshProUGUI enduranceDisplay = default;
+		[UnityEngine.Serialization.FormerlySerializedAs("enduranceDisplay")] [SerializeField] private TextMeshProUGUI staminaDisplay = default;
 		[SerializeField] private TextMeshProUGUI defenseDisplay = default;
 		[SerializeField] private TextMeshProUGUI atkDisplay = default;
 		[SerializeField] private TextMeshProUGUI mgaDisplay = default;
@@ -73,7 +73,7 @@ namespace EoE.UI
 		{
 			healthDisplay.text = Player.Instance.curMaxHealth.ToString();
 			manaDisplay.text = Player.Instance.curMaxMana.ToString();
-			enduranceDisplay.text = Player.Instance.curMaxEndurance.ToString();
+			staminaDisplay.text = Player.Instance.curMaxStamina.ToString();
 
 			defenseDisplay.text = Player.Instance.curDefense.ToString();
 			atkDisplay.text = Player.Instance.curPhysicalDamage.ToString();

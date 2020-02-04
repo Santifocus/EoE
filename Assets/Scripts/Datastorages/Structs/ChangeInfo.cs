@@ -122,9 +122,9 @@ namespace EoE.Information
 				{
 					finalChangeAmount = Mathf.Max(finalChangeAmount, -(receiver.curMaxMana - receiver.curMana));
 				}
-				else if (receiver is Player) //&& basis.targetStat == TargetStat.Endurance
+				else if (receiver is Player) //&& basis.targetStat == TargetStat.Stamina
 				{
-					finalChangeAmount = Mathf.Max(finalChangeAmount, -((receiver as Player).curMaxEndurance - (receiver as Player).curEndurance));
+					finalChangeAmount = Mathf.Max(finalChangeAmount, -((receiver as Player).curMaxStamina - (receiver as Player).curStamina));
 				}
 
 				//Event call for: Player receive damage OR Player caused damage

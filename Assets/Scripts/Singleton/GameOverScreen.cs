@@ -1,4 +1,5 @@
-﻿using EoE.Controlls;
+﻿using EoE.Combatery;
+using EoE.Controlls;
 using EoE.Entities;
 using EoE.Events;
 using EoE.Sounds;
@@ -47,7 +48,7 @@ namespace EoE.UI
 		public void Show(Entity killer)
 		{
 			EventManager.PlayerDiedEvent -= Show;
-			if (!Player.Instance.Alive)
+			if (!Player.Existant)
 			{
 				SetupCamera();
 			}
@@ -55,6 +56,7 @@ namespace EoE.UI
 			{
 				playerOnlyDisplay.gameObject.SetActive(false);
 				graphicsFadeInTime /= 3;
+				Player.Instance.Stuns++;
 			}
 
 			gameObject.SetActive(true);
@@ -107,6 +109,12 @@ namespace EoE.UI
 		{
 			fadingIn = false;
 			startMenuItem.Select();
+			if (Player.Existant)
+			{
+				Player.Instance.gameObject.SetActive(false);
+				if (WeaponController.Instance)
+					WeaponController.Instance.gameObject.SetActive(false);
+			}
 		}
 		public void OnRestart()
 		{

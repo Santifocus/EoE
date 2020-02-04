@@ -25,9 +25,9 @@ namespace EoE.Information
 			}
 		}
 
-		public override bool CanActivate(Entity target, float healthCostMultiplier, float manaCostMultiplier, float enduranceCostMultiplier)
+		public override bool CanActivate(Entity target, float healthCostMultiplier, float manaCostMultiplier, float staminaCostMultiplier)
 		{
-			return base.CanActivate(target, healthCostMultiplier, manaCostMultiplier, enduranceCostMultiplier) && WeaponController.Instance;
+			return base.CanActivate(target, healthCostMultiplier, manaCostMultiplier, staminaCostMultiplier) && WeaponController.Instance;
 		}
 	}
 }

@@ -20,17 +20,18 @@ namespace EoE.Information
 		public Vector2 CameraClampsWhenTargeting = new Vector2(-30, 30);
 		public float CameraBaseFOV = 60;
 
-		//Endurance Settings
-		public float Endurance = 100;
-		public bool DoEnduranceRegen = true;
-		public float EnduranceRegen = 6;
-		public float EnduranceRegenInCombatMultiplier = 0.5f;
-		public float EnduranceAfterUseCooldown = 3;
-		public float EnduranceRegenAfterUseMultiplier = 0.5f;
+		//Stamina Settings
+		[UnityEngine.Serialization.FormerlySerializedAs("Endurance")] public float Stamina = 100;
+		[UnityEngine.Serialization.FormerlySerializedAs("DoEnduranceRegen")] public bool DoStaminaRegen = true;
+		[UnityEngine.Serialization.FormerlySerializedAs("EnduranceRegen")] public float StaminaRegen = 6;
+		[UnityEngine.Serialization.FormerlySerializedAs("EnduranceRegenInCombatMultiplier")] public float StaminaRegenInCombatMultiplier = 0.5f;
+		[UnityEngine.Serialization.FormerlySerializedAs("EnduranceAfterUseCooldown")] public float StaminaAfterUseCooldown = 3;
+		[UnityEngine.Serialization.FormerlySerializedAs("EnduranceRegenAfterUseMultiplier")] public float StaminaRegenAfterUseMultiplier = 0.5f;
 
-		//Endurance Costs
-		public float JumpEnduranceCost = 4;
-		public float RunEnduranceCost = 3;
+		//Stamina Costs
+		[UnityEngine.Serialization.FormerlySerializedAs("JumpEnduranceCost")] public float JumpStaminaCost = 4;
+		[UnityEngine.Serialization.FormerlySerializedAs("RunEnduranceCost")] public float RunStaminaCost = 3;
+		[UnityEngine.Serialization.FormerlySerializedAs("DashEnduranceCost")] public float DashStaminaCost = 20;
 
 		//Jumping
 		public Vector3 JumpPower = new Vector3(0, 10, 0);
@@ -42,7 +43,6 @@ namespace EoE.Information
 		public float DashDuration = 0.2f;
 		public float DashModelExistTime = 0.4f;
 		public float DashCooldown = 0.5f;
-		public float DashEnduranceCost = 20;
 		public Material DashModelMaterial = null;
 
 		//Shielding
@@ -72,6 +72,8 @@ namespace EoE.Information
 		public float LookLerpSpringStiffness = 0.05f;
 
 		///FX
+		public FXObject[] EffectsOnPlayerSpawn = default;
+
 		public FXObject[] EffectsOnCombatStart = default;
 		public ChanceBasedFXGroup[] EffectsOnCombatStartChanceBased = default;
 		public FXObject[] EffectsOnUltimateCharged = default;

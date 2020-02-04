@@ -19,8 +19,8 @@
 						return HealthPerSkillPoint;
 					case TargetBaseStat.Mana:
 						return ManaPerSkillPoint;
-					case TargetBaseStat.Endurance:
-						return EndurancePerSkillPoint;
+					case TargetBaseStat.Stamina:
+						return StaminaPerSkillPoint;
 					case TargetBaseStat.PhysicalDamage:
 						return PhysicalDamagePerSkillPoint;
 					case TargetBaseStat.MagicalDamage:
@@ -35,7 +35,7 @@
 
 		public float HealthPerSkillPoint;
 		public float ManaPerSkillPoint;
-		public float EndurancePerSkillPoint;
+		[UnityEngine.Serialization.FormerlySerializedAs("EndurancePerSkillPoint")] public float StaminaPerSkillPoint;
 		public float PhysicalDamagePerSkillPoint;
 		public float MagicDamagePerSkillPoint;
 		public float DefensePerSkillPoint;

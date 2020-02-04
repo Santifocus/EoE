@@ -23,8 +23,8 @@ namespace EoE.UI
 						return player.curHealth;
 					case TargetStat.Mana:
 						return player.curMana;
-					case TargetStat.Endurance:
-						return player.curEndurance;
+					case TargetStat.Stamina:
+						return player.curStamina;
 					case TargetStat.UltimateCharge:
 						return (WeaponController.Instance ? WeaponController.Instance.ultimateCharge : 0);
 					default:
@@ -42,8 +42,8 @@ namespace EoE.UI
 						return player.curMaxHealth;
 					case TargetStat.Mana:
 						return player.curMaxMana;
-					case TargetStat.Endurance:
-						return player.curMaxEndurance;
+					case TargetStat.Stamina:
+						return player.curMaxStamina;
 					case TargetStat.UltimateCharge:
 						return ((WeaponController.Instance && WeaponController.Instance.weaponInfo.HasUltimate) ? WeaponController.Instance.weaponInfo.UltimateSettings.TotalRequiredCharge : 0);
 					default:

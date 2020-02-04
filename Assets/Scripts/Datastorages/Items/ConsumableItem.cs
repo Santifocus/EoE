@@ -45,10 +45,10 @@ namespace EoE.Information
 
 		public void Activate(Entity user, float multiplier = 1)
 		{
-			if (HealType == TargetStat.Endurance && !(user is Player))
+			if (HealType == TargetStat.Stamina && !(user is Player))
 				return;
 
-			float targetStatAmount = HealType == TargetStat.Health ? user.curMaxHealth : (HealType == TargetStat.Mana ? user.curMaxMana : (user as Player).curMaxEndurance);
+			float targetStatAmount = HealType == TargetStat.Health ? user.curMaxHealth : (HealType == TargetStat.Mana ? user.curMaxMana : (user as Player).curMaxStamina);
 			float amount = Percent ? (targetStatAmount * (Amount / 100)) : Amount;
 			amount *= -multiplier;
 
@@ -62,8 +62,8 @@ namespace EoE.Information
 			}
 			else
 			{
-				if (HealType == TargetStat.Endurance)
-					(user as Player).ChangeEndurance(new ChangeInfo(user, (amount > 0) ? CauseType.Magic : CauseType.Heal, TargetStat.Endurance, amount));
+				if (HealType == TargetStat.Stamina)
+					(user as Player).ChangeStamina(new ChangeInfo(user, (amount > 0) ? CauseType.Magic : CauseType.Heal, TargetStat.Stamina, amount));
 				else if (HealType == TargetStat.UltimateCharge && WeaponController.Instance)
 					WeaponController.Instance.AddUltimateCharge(-amount);
 			}

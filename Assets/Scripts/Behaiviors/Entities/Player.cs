@@ -37,10 +37,10 @@ namespace EoE.Entities
 		[SerializeField] private int combatMusicIndex = 1;
 		public PlayerBuffDisplay buffDisplay = default;
 
-		//Endurance
-		public float curEndurance { get; set; }
-		public float curMaxEndurance { get; set; }
-		private float usedEnduranceCooldown;
+		//Stamina
+		public float curStamina { get; set; }
+		public float curMaxStamina { get; set; }
+		private float usedStaminaCooldown;
 
 		//Dashing
 		public Transform modelTransform = default;
@@ -168,12 +168,13 @@ namespace EoE.Entities
 		protected override void ResetStats()
 		{
 			base.ResetStats();
-			curMaxEndurance = playerSettings.Endurance;
+			curMaxStamina = playerSettings.Stamina;
+			FXManager.ExecuteFX(playerSettings.EffectsOnPlayerSpawn, transform, true);
 		}
 		protected override void ResetStatValues()
 		{
 			base.ResetStatValues();
-			curEndurance = curMaxEndurance;
+			curStamina = curMaxStamina;
 			playerShield = Shield.CreateShield(playerSettings.ShieldSettings, this);
 		}
 		protected override void LevelSetup()
@@ -191,7 +192,7 @@ namespace EoE.Entities
 				LevelingPointsBuff.DOTs = new DOT[0];
 			}
 
-			//Health, Mana, Endurance, PhysicalDamage, MagicalDamage, Defense
+			//Health, Mana, Stamina, PhysicalDamage, MagicalDamage, Defense
 			int incremtingStats = System.Enum.GetNames(typeof(TargetBaseStat)).Length;
 			LevelingPointsBuff.Effects = new Effect[incremtingStats];
 			for (int i = 0; i < incremtingStats; i++)
@@ -386,11 +387,11 @@ namespace EoE.Entities
 			bool running = curStates.Running;
 			if (running)
 			{
-				float runCost = PlayerSettings.RunEnduranceCost * Time.deltaTime;
+				float runCost = PlayerSettings.RunStaminaCost * Time.deltaTime;
 
-				if (curEndurance >= runCost)
+				if (curStamina >= runCost)
 				{
-					ChangeEndurance(new ChangeInfo(null, CauseType.Magic, TargetStat.Endurance, runCost));
+					ChangeStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, runCost));
 				}
 				else
 				{
@@ -399,11 +400,11 @@ namespace EoE.Entities
 			}
 			else if (InputController.Run.Down)
 			{
-				float runCost = PlayerSettings.RunEnduranceCost * Time.deltaTime;
+				float runCost = PlayerSettings.RunStaminaCost * Time.deltaTime;
 
-				if (curEndurance >= runCost)
+				if (curStamina >= runCost)
 				{
-					ChangeEndurance(new ChangeInfo(null, CauseType.Magic, TargetStat.Endurance, runCost));
+					ChangeStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, runCost));
 					running = curStates.Running = true;
 				}
 			}
@@ -451,10 +452,10 @@ namespace EoE.Entities
 
 			if (!disallowJump && (jumpPressed && charController.isGrounded))
 			{
-				if (curEndurance >= PlayerSettings.JumpEnduranceCost)
+				if (curStamina >= PlayerSettings.JumpStaminaCost)
 				{
 					Jump();
-					ChangeEndurance(new ChangeInfo(null, CauseType.Magic, TargetStat.Endurance, PlayerSettings.JumpEnduranceCost));
+					ChangeStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, PlayerSettings.JumpStaminaCost));
 				}
 			}
 		}
@@ -631,10 +632,10 @@ namespace EoE.Entities
 				return;
 			}
 
-			if (InputController.Dodge.Down && !currentlyDashing && curEndurance >= PlayerSettings.DashEnduranceCost)
+			if (InputController.Dodge.Down && !currentlyDashing && curStamina >= PlayerSettings.DashStaminaCost)
 			{
 				EventManager.PlayerDashInvoke();
-				ChangeEndurance(new ChangeInfo(null, CauseType.Magic, TargetStat.Endurance, PlayerSettings.DashEnduranceCost));
+				ChangeStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, PlayerSettings.DashStaminaCost));
 				StartCoroutine(DashCoroutine());
 			}
 		}
@@ -738,34 +739,34 @@ namespace EoE.Entities
 			}
 		}
 		#endregion
-		#region Endurance Control
-		public void ChangeEndurance(ChangeInfo change)
+		#region Stamina Control
+		public void ChangeStamina(ChangeInfo change)
 		{
 			ChangeInfo.ChangeResult changeResult = new ChangeInfo.ChangeResult(change, this, false);
 
 			if (changeResult.finalChangeAmount > 0)
 			{
-				usedEnduranceCooldown = PlayerSettings.EnduranceAfterUseCooldown;
+				usedStaminaCooldown = PlayerSettings.StaminaAfterUseCooldown;
 			}
 
-			curEndurance -= changeResult.finalChangeAmount;
-			ClampEndurance();
+			curStamina -= changeResult.finalChangeAmount;
+			ClampStamina();
 		}
-		public void ClampEndurance() => curEndurance = Mathf.Clamp(curEndurance, 0, curMaxEndurance);
+		public void ClampStamina() => curStamina = Mathf.Clamp(curStamina, 0, curMaxStamina);
 		protected override void Regen()
 		{
 			base.Regen();
 
-			if (PlayerSettings.DoEnduranceRegen && curEndurance < curMaxEndurance)
+			if (PlayerSettings.DoStaminaRegen && curStamina < curMaxStamina)
 			{
-				float enduranceRegenMultiplier = curStates.Fighting ? PlayerSettings.EnduranceRegenInCombatMultiplier : 1;
-				if (usedEnduranceCooldown > 0)
+				float staminaRegenMultiplier = curStates.Fighting ? PlayerSettings.StaminaRegenInCombatMultiplier : 1;
+				if (usedStaminaCooldown > 0)
 				{
-					usedEnduranceCooldown -= Time.deltaTime;
-					enduranceRegenMultiplier *= PlayerSettings.EnduranceRegenAfterUseMultiplier;
+					usedStaminaCooldown -= Time.deltaTime;
+					staminaRegenMultiplier *= PlayerSettings.StaminaRegenAfterUseMultiplier;
 				}
-				curEndurance += PlayerSettings.EnduranceRegen * enduranceRegenMultiplier * Time.deltaTime;
-				curEndurance = Mathf.Min(curEndurance, curMaxEndurance);
+				curStamina += PlayerSettings.StaminaRegen * staminaRegenMultiplier * Time.deltaTime;
+				curStamina = Mathf.Min(curStamina, curMaxStamina);
 			}
 		}
 		#endregion
@@ -1315,9 +1316,9 @@ namespace EoE.Entities
 						value += PlayerSettings.Mana;
 						break;
 					}
-				case TargetBaseStat.Endurance:
+				case TargetBaseStat.Stamina:
 					{
-						value += PlayerSettings.Endurance;
+						value += PlayerSettings.Stamina;
 						break;
 					}
 				case TargetBaseStat.PhysicalDamage:
