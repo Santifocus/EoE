@@ -47,10 +47,12 @@ namespace EoE.UI
 		}
 		public void Show(Entity killer)
 		{
+			RenderTexture rt = new RenderTexture(Screen.width, Screen.height, 1);
 			EventManager.PlayerDiedEvent -= Show;
+
 			if (!Player.Existant)
 			{
-				SetupCamera();
+				SetupCamera(rt);
 			}
 			else
 			{
@@ -61,16 +63,16 @@ namespace EoE.UI
 
 			gameObject.SetActive(true);
 			blackPlane.color = Color.clear;
+			blackPlane.material.SetTexture("_PushedTexture", rt);
+
 			playerOnlyDisplay.color = Color.clear;
 			fadingIn = true;
 
 			gameOverMusic.WantsToPlay = true;
 			MusicController.Instance.AddMusicInstance(gameOverMusic);
 		}
-		private void SetupCamera()
+		private void SetupCamera(RenderTexture rt)
 		{
-			RenderTexture rt = new RenderTexture(Screen.width, Screen.height, 1);
-
 			playerOnlyCamera.targetTexture = rt;
 			playerOnlyDisplay.texture = rt;
 			playerOnlyCamera.gameObject.SetActive(true);

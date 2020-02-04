@@ -9,7 +9,7 @@ namespace EoE.Behaivior
 {
 	public class GameArea : MonoBehaviour
 	{
-		private const float TRIGGER_EFFECT_COOLDOWN = 10;
+		private const float TRIGGER_EFFECT_COOLDOWN = 3;
 		private static GameArea PlayerCurrentArea;
 
 		[Header("Area Settings")]
@@ -31,7 +31,6 @@ namespace EoE.Behaivior
 		public int targetMusicIndex = 0;
 
 		private bool areaActive;
-		private bool areaActiveLastCheck;
 		private float triggerEffectCooldown;
 		private bool wasEntered;
 		private bool wasExited;
@@ -44,14 +43,15 @@ namespace EoE.Behaivior
 			if (isStartArea)
 			{
 				FXManager.ExecuteFX(firstTimeEnterEffects, Player.Instance.transform, true);
-				wasEntered = true;
-				areaActiveLastCheck = true;
+				wasEntered = areaActive = true;
+				PlayerCurrentArea = this;
 				SetAreaActiveState(true);
 				CheckArea();
 			}
 		}
 		private void Update()
 		{
+			triggerEffectCooldown -= Time.deltaTime;
 			CheckArea();
 		}
 		private void CheckArea()
@@ -79,9 +79,9 @@ namespace EoE.Behaivior
 		}
 		private void SetAreaActiveState(bool state)
 		{
-			areaActive = state;
-			if (areaActiveLastCheck != state)
+			if (areaActive != state)
 			{
+				areaActive = state;
 				//Area now active
 				if (state)
 				{
@@ -119,7 +119,6 @@ namespace EoE.Behaivior
 			{
 				MusicController.Instance.AddMusicInstance(musicInstance);
 			}
-			areaActiveLastCheck = state;
 		}
 		private bool PlayerInArea()
 		{
