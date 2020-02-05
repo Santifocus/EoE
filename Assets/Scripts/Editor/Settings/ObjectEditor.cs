@@ -8,10 +8,6 @@ namespace EoE.Information
 	{
 		public override void OnInspectorGUI()
 		{
-			if (EditorUtility.IsDirty(target))
-			{
-				EditorGUILayout.HelpBox("Unsaved Changes.", MessageType.None);
-			}
 			CustomInspector();
 			if (EoEEditor.isDirty)
 			{

@@ -359,7 +359,7 @@ ModelImporter:
       name: Landing
       takeName: Armature|Hero_land
       internalID: -1073920545498690651
-      firstFrame: 0
+      firstFrame: 17
       lastFrame: 30
       wrapMode: 0
       orientationOffsetY: 0

@@ -80,6 +80,7 @@ namespace EoE.Combatery
 			ObjectField<GameObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.HitTerrainParticles))), ref settings.HitTerrainParticles, 1);
 
 			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EntitieHitEffectsOnUser))), ref settings.EntitieHitEffectsOnUser, serializedObject.FindProperty(nameof(settings.EntitieHitEffectsOnUser)), DrawCustomFXObject, new GUIContent(". Effect"), 1);
+
 			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.TerrainHitEffectsOnUser))), ref settings.TerrainHitEffectsOnUser, serializedObject.FindProperty(nameof(settings.TerrainHitEffectsOnUser)), DrawCustomFXObject, new GUIContent(". Effect"), 1);
 
 			DrawArray<CustomFXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EntitieHitEffectsOnWeapon))), ref settings.EntitieHitEffectsOnWeapon, serializedObject.FindProperty(nameof(settings.EntitieHitEffectsOnWeapon)), DrawCustomFXObject, new GUIContent(". Effect"), 1);
@@ -97,7 +98,6 @@ namespace EoE.Combatery
 		}
 		private void DrawUltimateSettings(WeaponUltimate settings, SerializedProperty property)
 		{
-
 			ObjectField<Ultimate>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Ultimate))), ref settings.Ultimate, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.TotalRequiredCharge))), ref settings.TotalRequiredCharge, 1);
 			FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.OnUseChargeRemove))), ref settings.OnUseChargeRemove, 0, 1, 1);

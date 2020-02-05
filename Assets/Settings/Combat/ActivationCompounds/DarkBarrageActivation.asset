@@ -21,7 +21,7 @@ MonoBehaviour:
   Cost:
     Health: 0
     Mana: 1.5
-    Endurance: 0
+    Stamina: 0
     AdditionalConditions: []
   CostActivationIndex: 0
   CausedCooldown: 0.2
@@ -59,6 +59,7 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     WhileEffects: []
     AtTargetStartEffects: []
     AtTargetWhileEffects: []

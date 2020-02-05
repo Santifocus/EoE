@@ -89,7 +89,7 @@ namespace EoE.Information.Logic
 		}
 		private bool InputValidation(Vector2 inputValue)
 		{
-			const float valueThreshold = 0.25f;
+			const float valueThreshold = 0.2f;
 			return (Mathf.Abs(inputValue.x) > valueThreshold) || (Mathf.Abs(inputValue.x) > valueThreshold);
 		}
 	}

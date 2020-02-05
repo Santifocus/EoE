@@ -14,15 +14,22 @@ namespace EoE.Entities
 	{
 		#region Fields
 		//Constants
+		//Walk/Turn
 		private const float MIN_WALK_ACCELERATION = 0.45f;
 		private const float NON_TURNING_THRESHOLD = 30;
 		private const float LERP_TURNING_AREA = 0.5f;
+
+		//Jump/Fall
 		private const float JUMP_COOLDOWN = 0.2f;
 		private const float FALLDAMAGE_COOLDOWN = 0.2f;
-		private const float IS_FALLING_THRESHOLD = -1;
+		private const float FALLING_VELOCITY_THRESHOLD = -1;
+		private const float FALLING_SINCE_THRESHOLD = 0.25f;
 		private const float LANDED_VELOCITY_THRESHOLD = 0.15f;
+
+		//Items
 		private const int SELECTABLE_ITEMS_AMOUNT = 4;
 
+		//Targeting
 		private const float SWITCH_TARGET_COOLDOWN = 0.25f;
 		private const float RE_CHECK_VISION_DELAY = 0.25f;
 		private const float LOST_VISION_MAX = 0.8f;
@@ -60,6 +67,7 @@ namespace EoE.Entities
 		private bool lastOnGroundState = true;
 		private float lastFallVelocity;
 		private int disallowFallingAnimFrames = 10;
+		private float fallingSince = 0;
 
 		//Feedback
 		private Vector2 curModelTilt;
@@ -298,6 +306,7 @@ namespace EoE.Entities
 
 			//Set the animation states based on the calculated values and bools
 			animationControl.SetBool("Walking", !turning && moving);
+			animationControl.SetBool("Fall", fallingSince > FALLING_SINCE_THRESHOLD);
 			animationControl.SetFloat("ZMove", curAnimationDirection.x);
 			animationControl.SetFloat("XMove", curAnimationDirection.y);
 			animationControl.SetFloat("CurWalkSpeed", normalizedMoveVelocity);
@@ -481,10 +490,17 @@ namespace EoE.Entities
 		{
 			//Find out wether the entitie is falling or not
 			bool playerWantsToFall = curStates.Falling || !InputController.Jump.Held;
-			bool falling = !charController.isGrounded && (TotalVerticalVelocity < IS_FALLING_THRESHOLD || playerWantsToFall);
+			bool falling = !charController.isGrounded && (TotalVerticalVelocity < FALLING_VELOCITY_THRESHOLD || playerWantsToFall);
 
 			//If so: we enable the falling animation and add extra velocity for a better looking fallcurve
 			curStates.Falling = falling;
+
+			if (falling)
+			{
+				fallingSince += Time.fixedDeltaTime;
+			}
+			else if (fallingSince > 0)
+				fallingSince = 0;
 
 			if (disallowFallingAnimFrames > 0)
 			{
@@ -493,7 +509,6 @@ namespace EoE.Entities
 			}
 			else
 			{
-				animationControl.SetBool("Fall", falling);
 			}
 
 			if (falling)

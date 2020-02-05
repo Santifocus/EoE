@@ -139,16 +139,14 @@ namespace EoE
 		/// <param name="target"></param>
 		/// <param name="allowPlayerOnlyEffects"></param>
 		/// <param name="multiplier"></param>
-		public static FXInstance ExecuteFX(CustomFXObject effect, Transform target, bool allowPlayerOnlyEffects, float multiplier = 1)
-		{
-			return ExecuteFX(effect.FX,
-							target,
-							allowPlayerOnlyEffects,
-							multiplier,
-							effect.HasPositionOffset ? ((Vector3?)effect.PositionOffset) : null,
-							effect.HasRotationOffset ? ((Vector3?)effect.RotationOffset) : null,
-							effect.HasCustomScale ? ((Vector3?)effect.CustomScale) : null
-							);
+		public static FXInstance ExecuteFX(CustomFXObject effect, Transform target, bool allowPlayerOnlyEffects, float multiplier = 1) {
+			return ExecuteFX(	effect.FX,
+								target,
+								allowPlayerOnlyEffects,
+								multiplier,
+								effect.HasPositionOffset ? ((Vector3?)effect.PositionOffset) : null,
+								effect.HasRotationOffset ? ((Vector3?)effect.RotationOffset) : null,
+								effect.HasCustomScale ? ((Vector3?)effect.CustomScale) : null);
 		}
 		/// <summary>
 		/// Creates and returns a FXInstance based on the given FXObject.
