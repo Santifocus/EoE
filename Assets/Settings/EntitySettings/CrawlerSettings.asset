@@ -275,4 +275,4 @@ MonoBehaviour:
     BuffsOnUser: []
     CreatedRemenants: []
     PlayerItemChanges: []
-  AnimationWalkSpeedDivider: 6
+  AnimationWalkSpeedDivider: 12

@@ -3,8 +3,6 @@ using UnityEngine;
 using EoE.Information;
 using EoE.Combatery;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using EoE.Information.Logic;
 
 namespace EoE
@@ -378,8 +376,7 @@ namespace EoE
 
 			if (arrayProperty.isExpanded)
 			{
-				if (elementContent == null)
-					elementContent = new GUIContent(". Element");
+				elementContent = elementContent ?? new GUIContent(". Element");
 
 				int newSize = curValue.Length;
 				DelayedIntField("Size", ref newSize, offSet + 1);
@@ -405,10 +402,14 @@ namespace EoE
 				}
 			}
 			if (asHeader)
+			{
 				EndFoldoutHeader();
+			}
 
 			if (changed)
+			{
 				isDirty = true;
+			}
 			return changed;
 		}
 		public static bool DrawArray<T>(GUIContent content, ref T[] curValue, SerializedProperty arrayProperty, System.Action<GUIContent, T, SerializedProperty, int> elementBinding, System.Func<int, GUIContent> contentGetter, int offSet = 0, bool asHeader = false)
@@ -449,10 +450,14 @@ namespace EoE
 				}
 			}
 			if (asHeader)
+			{
 				EndFoldoutHeader();
+			}
 
 			if (changed)
+			{
 				isDirty = true;
+			}
 			return changed;
 		}
 		public static bool ObjectArrayField<T>(GUIContent content, ref T[] curValue, SerializedProperty property, GUIContent objectContent = null, int offSet = 0, bool asHeader = false) where T : Object
@@ -470,10 +475,10 @@ namespace EoE
 				int newSize = curValue.Length;
 				DelayedIntField("Size", ref newSize, offSet + 1);
 
-				GUIContent targetContent = objectContent != null ? objectContent : new GUIContent(". Element");
+				objectContent = objectContent ?? new GUIContent(". Element");
 				for (int i = 0; i < curValue.Length; i++)
 				{
-					changed |= ObjectField(new GUIContent((i + 1) + targetContent.text, targetContent.tooltip), ref curValue[i], offSet + 1);
+					changed |= ObjectField(new GUIContent((i + 1) + objectContent.text, objectContent.tooltip), ref curValue[i], offSet + 1);
 				}
 
 				if (newSize != curValue.Length)
