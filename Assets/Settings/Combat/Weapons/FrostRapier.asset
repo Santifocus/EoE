@@ -103,7 +103,7 @@ MonoBehaviour:
       DamageMultiplier: 1
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
-      StaminaCostMultiplier: 0.5
+      StaminaCostMultiplier: 0
       KnockbackMultiplier: 1
       CritChanceMultiplier: 1
       CollisionMask: -1

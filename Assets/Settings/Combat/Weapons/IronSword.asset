@@ -21,7 +21,7 @@ MonoBehaviour:
   Cost:
     Health: 0
     Mana: 0
-    Endurance: 2
+    Stamina: 2
     AdditionalConditions: []
   WeaponPrefab: {fileID: 5533782398965989895, guid: 18284dacf122148419232919f51c45c2,
     type: 3}
@@ -103,7 +103,7 @@ MonoBehaviour:
       DamageMultiplier: 1
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
-      EnduranceCostMultiplier: 0.5
+      StaminaCostMultiplier: 0
       KnockbackMultiplier: 1
       CritChanceMultiplier: 1
       CollisionMask: -1
@@ -206,7 +206,7 @@ MonoBehaviour:
       DamageMultiplier: 1.1
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
-      EnduranceCostMultiplier: 1
+      StaminaCostMultiplier: 1
       KnockbackMultiplier: 1
       CritChanceMultiplier: 1
       CollisionMask: -1
@@ -373,7 +373,7 @@ MonoBehaviour:
       DamageMultiplier: 1.5
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
-      EnduranceCostMultiplier: 1.2
+      StaminaCostMultiplier: 1.2
       KnockbackMultiplier: 1
       CritChanceMultiplier: 0
       CollisionMask: -1
@@ -500,7 +500,7 @@ MonoBehaviour:
       DamageMultiplier: 1.4
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
-      EnduranceCostMultiplier: 1
+      StaminaCostMultiplier: 1
       KnockbackMultiplier: 2
       CritChanceMultiplier: 1
       CollisionMask: -1
@@ -612,7 +612,7 @@ MonoBehaviour:
       DamageMultiplier: 3.5
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
-      EnduranceCostMultiplier: 1.5
+      StaminaCostMultiplier: 1.5
       KnockbackMultiplier: 15
       CritChanceMultiplier: 1
       CollisionMask: -1
@@ -777,7 +777,7 @@ MonoBehaviour:
       DamageMultiplier: 0.9
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
-      EnduranceCostMultiplier: 1
+      StaminaCostMultiplier: 1
       KnockbackMultiplier: 1
       CritChanceMultiplier: 1
       CollisionMask: -1
@@ -886,7 +886,7 @@ MonoBehaviour:
       DamageMultiplier: 1.6
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
-      EnduranceCostMultiplier: 1
+      StaminaCostMultiplier: 1
       KnockbackMultiplier: 2
       CritChanceMultiplier: 0
       CollisionMask: -1
@@ -996,7 +996,7 @@ MonoBehaviour:
       DamageMultiplier: 2
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
-      EnduranceCostMultiplier: 1.2
+      StaminaCostMultiplier: 1.2
       KnockbackMultiplier: 6.5
       CritChanceMultiplier: 0
       CollisionMask: -1

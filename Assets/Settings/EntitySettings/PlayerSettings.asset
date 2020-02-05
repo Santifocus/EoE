@@ -66,7 +66,7 @@ MonoBehaviour:
   ManaRegen: 1.5
   ManaRegenInCombatMultiplier: 0.6
   WalkSpeed: 8
-  RunSpeedMultiplicator: 1.4
+  RunSpeedMultiplicator: 1.6
   TurnSpeed: 540
   InAirTurnSpeedMultiplier: 0.5
   MoveAcceleration: 6
@@ -144,6 +144,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d035199abf3ed634aba5aa2938b2cadf, type: 2}
   EffectsOnCauseDamage:
   - {fileID: 11400000, guid: 597bda602a9441346a2e721049c28c87, type: 2}
+  - {fileID: 11400000, guid: c4b1faa46fe904e4da604eb9bb7a96a4, type: 2}
   EffectsOnCauseCrit:
   - {fileID: 11400000, guid: 3c3f83d3e81eae144acbe5a6b02983d0, type: 2}
   - {fileID: 11400000, guid: e9a7041c1b96b544d9be0195facd23e7, type: 2}
