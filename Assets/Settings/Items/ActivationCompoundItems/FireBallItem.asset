@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName:
     textColor: {r: 0, g: 0.89411765, b: 1, a: 1}
-    text: Fire Ball
+    text: Fire Ring
   ItemDescription:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Casts
@@ -51,5 +51,5 @@ MonoBehaviour:
     type: 3}
   MaxStack: 1
   ItemWorth: 200
-  ItemFlags: 1
+  NonRemoveable: 0
   TargetCompound: {fileID: 11400000, guid: 03e9950b808aee74cb0a4fd53098ef73, type: 2}

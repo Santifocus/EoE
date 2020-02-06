@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName:
     textColor: {r: 0, g: 0.89411765, b: 1, a: 1}
-    text: Dark Barrage
+    text: Shadow Ring
   ItemDescription:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Shoots
@@ -43,5 +43,5 @@ MonoBehaviour:
     type: 3}
   MaxStack: 1
   ItemWorth: 200
-  ItemFlags: 1
+  NonRemoveable: 0
   TargetCompound: {fileID: 11400000, guid: 3c35069285173c14cbae3b02687b536b, type: 2}

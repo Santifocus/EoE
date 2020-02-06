@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName:
     textColor: {r: 0, g: 0.89411765, b: 1, a: 1}
-    text: Thunderbolt
+    text: Thunder Ring
   ItemDescription:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: Summons a
@@ -51,5 +51,5 @@ MonoBehaviour:
     type: 3}
   MaxStack: 1
   ItemWorth: 300
-  ItemFlags: 1
+  NonRemoveable: 0
   TargetCompound: {fileID: 11400000, guid: 5a5cd477662cf8045a5d23a2ef246215, type: 2}
