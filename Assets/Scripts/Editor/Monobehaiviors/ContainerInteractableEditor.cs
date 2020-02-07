@@ -14,7 +14,6 @@ namespace EoE.Information
 		{
 			DrawDefaultInspector();
 			ContainerInteractable settings = target as ContainerInteractable;
-			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.effectsOnPlayerOnFailOpen))), ref settings.effectsOnPlayerOnFailOpen, serializedObject.FindProperty(nameof(settings.effectsOnPlayerOnFailOpen)), DrawActivationEffect, new GUIContent(". Effect"));
 			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.effectsOnPlayerOnOpen))), ref settings.effectsOnPlayerOnOpen, serializedObject.FindProperty(nameof(settings.effectsOnPlayerOnOpen)), DrawActivationEffect, new GUIContent(". Effect"));
 		}
 	}

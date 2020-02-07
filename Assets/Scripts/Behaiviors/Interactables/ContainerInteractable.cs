@@ -1,5 +1,4 @@
 ﻿using EoE.Information;
-using EoE.Information.Logic;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,12 +8,14 @@ namespace EoE.Entities
 {
 	public class ContainerInteractable : Interactable
 	{
-		private const float FAIL_OPEN_EFFECT_COOLDOWN = 0.2f;
+		[Space(5)]
+		[Header("Interact Display")]
 		[SerializeField] private ColoredText[] infoText = default;
 		[SerializeField] private TextMeshPro infoDisplay = default;
 		[SerializeField] private Vector3 infoDisplayOffset = new Vector3(0, 2, 0);
 
-		[SerializeField] private LogicComponent openCondition = default;
+		[Space(5)]
+		[Header("Item Spawning")]
 		[SerializeField] private ItemChoiceArray[] spawnArrays = default;
 		[SerializeField] private float itemStartSpawnDelay = 1;
 		[SerializeField] private float individualItemSpawnDelay = 0.35f;
@@ -24,18 +25,14 @@ namespace EoE.Entities
 		[Space(3)]
 		[SerializeField] private Collider[] containerCollider = default;
 
-		[Space(3)]
+		[Space(5)]
+		[Header("Feedback")]
+		[HideInInspector] public ActivationEffect[] effectsOnPlayerOnOpen = default;
 		[SerializeField] private Animator animator = default;
 		[SerializeField] private string openAnimationTrigger = "Open";
 
-		[Space(5)]
-		[Header("Feedback")]
-		[HideInInspector] public ActivationEffect[] effectsOnPlayerOnFailOpen = default;
-		[HideInInspector] public ActivationEffect[] effectsOnPlayerOnOpen = default;
-
 		private List<ItemDrop> createdItemDrops;
 		private bool creatingDrops;
-		private float failOpenEffectCooldown;
 
 		private void Start()
 		{
@@ -46,17 +43,9 @@ namespace EoE.Entities
 		}
 		protected override void Interact()
 		{
-			if (!openCondition || openCondition.True)
-			{
-				Player.Instance.ActivateActivationEffects(effectsOnPlayerOnOpen);
-				animator.SetTrigger(openAnimationTrigger);
-				StartCoroutine(OpenContainer());
-			}
-			else if(failOpenEffectCooldown <= 0)
-			{
-				failOpenEffectCooldown = FAIL_OPEN_EFFECT_COOLDOWN;
-				Player.Instance.ActivateActivationEffects(effectsOnPlayerOnFailOpen);
-			}
+			Player.Instance.ActivateActivationEffects(effectsOnPlayerOnOpen);
+			animator.SetTrigger(openAnimationTrigger);
+			StartCoroutine(OpenContainer());
 		}
 
 		private IEnumerator OpenContainer()
@@ -166,8 +155,6 @@ namespace EoE.Entities
 		}
 		private void LateUpdate()
 		{
-			if (failOpenEffectCooldown > 0)
-				failOpenEffectCooldown -= Time.deltaTime;
 			if (!isTarget || !Player.Existant)
 				return;
 
