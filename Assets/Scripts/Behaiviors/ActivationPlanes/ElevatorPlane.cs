@@ -9,8 +9,8 @@ namespace EoE.Behaivior
 	{
 		private enum ReturnWhen { Never, ReachedTarget, SecondContact }
 		private enum MoveIntent { None, ToTarget, Back }
-		[SerializeField] private Vector3 positionChange = default;
-		[SerializeField] private float changeTime = 1;
+		[SerializeField] private Vector3 positionChange = new Vector3(0,2,0);
+		[SerializeField] private float changeTime = 4;
 		[SerializeField] private ReturnWhen returnWhen = ReturnWhen.Never;
 
 		private Vector3 worldBasePos;
@@ -29,15 +29,18 @@ namespace EoE.Behaivior
 			if (moving)
 				return;
 
-			moving = true;
-			curMoveIntent = (reachedTarget && (returnWhen == ReturnWhen.SecondContact)) ? MoveIntent.Back : MoveIntent.ToTarget;
+			if (returnWhen != ReturnWhen.Never)
+			{
+				moving = true;
+				curMoveIntent = (reachedTarget && (returnWhen == ReturnWhen.SecondContact)) ? MoveIntent.Back : MoveIntent.ToTarget;
+			}
 		}
 
-		private void Update()
+		private void LateUpdate()
 		{
 			if (moving)
 			{
-				moveTime += Time.deltaTime;
+				moveTime += Time.fixedDeltaTime;
 				if(moveTime >= changeTime)
 				{
 					moveTime = 0;

@@ -13,7 +13,7 @@ namespace EoE.Entities
 		{
 			currentForces = new List<SingleForce>();
 		}
-		public void Update()
+		public void FixedUpdate()
 		{
 			currentTotalForce = Vector3.zero;
 			for (int i = 0; i < currentForces.Count; i++)

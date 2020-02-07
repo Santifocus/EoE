@@ -46,7 +46,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "HeavyAttack",
+                    "name": "Special",
                     "type": "Button",
                     "id": "8784c058-5deb-4b39-ae00-bf4aa6c9731e",
                     "expectedControlType": "",
@@ -78,7 +78,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Block",
+                    "name": "Shield",
                     "type": "Button",
                     "id": "fdac22e1-d615-4a09-8a63-836ce3e19d36",
                     "expectedControlType": "",
@@ -94,7 +94,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "MagicCast",
+                    "name": "Cast",
                     "type": "Button",
                     "id": "e8dd7e70-0b0e-40f5-99bc-83374ae0d9b5",
                     "expectedControlType": "",
@@ -102,7 +102,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "MagicScrollUp",
+                    "name": "CastsScrollUp",
                     "type": "Button",
                     "id": "044f7c5e-9158-4d68-95a5-e667b97ffec4",
                     "expectedControlType": "",
@@ -110,7 +110,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "MagicScrollDown",
+                    "name": "CastsScrollDown",
                     "type": "Button",
                     "id": "af06ea1e-14b9-41bf-aeef-358803166a13",
                     "expectedControlType": "",
@@ -197,7 +197,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "HeavyAttack",
+                    "action": "Special",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -241,7 +241,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Block",
+                    "action": "Shield",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -263,7 +263,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "MagicCast",
+                    "action": "Cast",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -274,7 +274,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "MagicScrollUp",
+                    "action": "CastsScrollUp",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -285,7 +285,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "MagicScrollDown",
+                    "action": "CastsScrollDown",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

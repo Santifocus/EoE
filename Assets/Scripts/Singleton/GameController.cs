@@ -55,6 +55,7 @@ namespace EoE
 		{
 			Instance = this;
 			ActivePauses = 0;
+			SetPauseGamestate(false);
 		}
 		private static void SetPauseGamestate(bool state)
 		{
@@ -140,6 +141,8 @@ namespace EoE
 		}
 		private void OnDestroy()
 		{
+			ActivePauses = 0;
+			SetPauseGamestate(false);
 			StopAllCoroutines();
 		}
 	}
