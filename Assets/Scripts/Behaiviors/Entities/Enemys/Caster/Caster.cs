@@ -9,7 +9,7 @@ namespace EoE.Entities
 		private const float LAZY_ARRIVAL_DISTANCE = 8;
 		private const float LAZY_NEXT_TO_ALLY_MUL = 5;
 		public override EnemySettings enemySettings => settings;
-		[SerializeField] private CasterSettings settings;
+		[SerializeField] private CasterSettings settings = default;
 		[SerializeField] private Animator animator = default;
 
 		private bool panicModeActive;

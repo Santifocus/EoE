@@ -110,7 +110,7 @@ namespace EoE.Entities
 		{
 			if (!Alive)
 				return;
-			entitieForceController.Update();
+			entitieForceController.FixedUpdate();
 
 			//Lerp knockback to zero based on the entities deceleration stat
 			if (SelfSettings.NoMoveDeceleration > 0)

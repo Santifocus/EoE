@@ -61,7 +61,7 @@ namespace EoE.Controlls
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""HeavyAttack"",
+                    ""name"": ""Special"",
                     ""type"": ""Button"",
                     ""id"": ""8784c058-5deb-4b39-ae00-bf4aa6c9731e"",
                     ""expectedControlType"": """",
@@ -93,7 +93,7 @@ namespace EoE.Controlls
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Block"",
+                    ""name"": ""Shield"",
                     ""type"": ""Button"",
                     ""id"": ""fdac22e1-d615-4a09-8a63-836ce3e19d36"",
                     ""expectedControlType"": """",
@@ -109,7 +109,7 @@ namespace EoE.Controlls
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""MagicCast"",
+                    ""name"": ""Cast"",
                     ""type"": ""Button"",
                     ""id"": ""e8dd7e70-0b0e-40f5-99bc-83374ae0d9b5"",
                     ""expectedControlType"": """",
@@ -117,7 +117,7 @@ namespace EoE.Controlls
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""MagicScrollUp"",
+                    ""name"": ""CastsScrollUp"",
                     ""type"": ""Button"",
                     ""id"": ""044f7c5e-9158-4d68-95a5-e667b97ffec4"",
                     ""expectedControlType"": """",
@@ -125,7 +125,7 @@ namespace EoE.Controlls
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""MagicScrollDown"",
+                    ""name"": ""CastsScrollDown"",
                     ""type"": ""Button"",
                     ""id"": ""af06ea1e-14b9-41bf-aeef-358803166a13"",
                     ""expectedControlType"": """",
@@ -212,7 +212,7 @@ namespace EoE.Controlls
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""HeavyAttack"",
+                    ""action"": ""Special"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -256,7 +256,7 @@ namespace EoE.Controlls
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Block"",
+                    ""action"": ""Shield"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -278,7 +278,7 @@ namespace EoE.Controlls
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MagicCast"",
+                    ""action"": ""Cast"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -289,7 +289,7 @@ namespace EoE.Controlls
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MagicScrollUp"",
+                    ""action"": ""CastsScrollUp"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -300,7 +300,7 @@ namespace EoE.Controlls
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MagicScrollDown"",
+                    ""action"": ""CastsScrollDown"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -580,15 +580,15 @@ namespace EoE.Controlls
             m_GameInput_Jump = m_GameInput.FindAction("Jump", throwIfNotFound: true);
             m_GameInput_Dodge = m_GameInput.FindAction("Dodge", throwIfNotFound: true);
             m_GameInput_NormalAttack = m_GameInput.FindAction("NormalAttack", throwIfNotFound: true);
-            m_GameInput_HeavyAttack = m_GameInput.FindAction("HeavyAttack", throwIfNotFound: true);
+            m_GameInput_Special = m_GameInput.FindAction("Special", throwIfNotFound: true);
             m_GameInput_Run = m_GameInput.FindAction("Run", throwIfNotFound: true);
             m_GameInput_ResetCamera = m_GameInput.FindAction("ResetCamera", throwIfNotFound: true);
             m_GameInput_Aim = m_GameInput.FindAction("Aim", throwIfNotFound: true);
-            m_GameInput_Block = m_GameInput.FindAction("Block", throwIfNotFound: true);
+            m_GameInput_Shield = m_GameInput.FindAction("Shield", throwIfNotFound: true);
             m_GameInput_UseItem = m_GameInput.FindAction("UseItem", throwIfNotFound: true);
-            m_GameInput_MagicCast = m_GameInput.FindAction("MagicCast", throwIfNotFound: true);
-            m_GameInput_MagicScrollUp = m_GameInput.FindAction("MagicScrollUp", throwIfNotFound: true);
-            m_GameInput_MagicScrollDown = m_GameInput.FindAction("MagicScrollDown", throwIfNotFound: true);
+            m_GameInput_Cast = m_GameInput.FindAction("Cast", throwIfNotFound: true);
+            m_GameInput_CastsScrollUp = m_GameInput.FindAction("CastsScrollUp", throwIfNotFound: true);
+            m_GameInput_CastsScrollDown = m_GameInput.FindAction("CastsScrollDown", throwIfNotFound: true);
             m_GameInput_ItemScrollUp = m_GameInput.FindAction("ItemScrollUp", throwIfNotFound: true);
             m_GameInput_ItemScrollDown = m_GameInput.FindAction("ItemScrollDown", throwIfNotFound: true);
             // MenuInput
@@ -657,15 +657,15 @@ namespace EoE.Controlls
         private readonly InputAction m_GameInput_Jump;
         private readonly InputAction m_GameInput_Dodge;
         private readonly InputAction m_GameInput_NormalAttack;
-        private readonly InputAction m_GameInput_HeavyAttack;
+        private readonly InputAction m_GameInput_Special;
         private readonly InputAction m_GameInput_Run;
         private readonly InputAction m_GameInput_ResetCamera;
         private readonly InputAction m_GameInput_Aim;
-        private readonly InputAction m_GameInput_Block;
+        private readonly InputAction m_GameInput_Shield;
         private readonly InputAction m_GameInput_UseItem;
-        private readonly InputAction m_GameInput_MagicCast;
-        private readonly InputAction m_GameInput_MagicScrollUp;
-        private readonly InputAction m_GameInput_MagicScrollDown;
+        private readonly InputAction m_GameInput_Cast;
+        private readonly InputAction m_GameInput_CastsScrollUp;
+        private readonly InputAction m_GameInput_CastsScrollDown;
         private readonly InputAction m_GameInput_ItemScrollUp;
         private readonly InputAction m_GameInput_ItemScrollDown;
         public struct GameInputActions
@@ -677,15 +677,15 @@ namespace EoE.Controlls
             public InputAction @Jump => m_Wrapper.m_GameInput_Jump;
             public InputAction @Dodge => m_Wrapper.m_GameInput_Dodge;
             public InputAction @NormalAttack => m_Wrapper.m_GameInput_NormalAttack;
-            public InputAction Special => m_Wrapper.m_GameInput_HeavyAttack;
+            public InputAction @Special => m_Wrapper.m_GameInput_Special;
             public InputAction @Run => m_Wrapper.m_GameInput_Run;
             public InputAction @ResetCamera => m_Wrapper.m_GameInput_ResetCamera;
             public InputAction @Aim => m_Wrapper.m_GameInput_Aim;
-            public InputAction Shield => m_Wrapper.m_GameInput_Block;
+            public InputAction @Shield => m_Wrapper.m_GameInput_Shield;
             public InputAction @UseItem => m_Wrapper.m_GameInput_UseItem;
-            public InputAction Cast => m_Wrapper.m_GameInput_MagicCast;
-            public InputAction CastsScrollUp => m_Wrapper.m_GameInput_MagicScrollUp;
-            public InputAction CastsScrollDown => m_Wrapper.m_GameInput_MagicScrollDown;
+            public InputAction @Cast => m_Wrapper.m_GameInput_Cast;
+            public InputAction @CastsScrollUp => m_Wrapper.m_GameInput_CastsScrollUp;
+            public InputAction @CastsScrollDown => m_Wrapper.m_GameInput_CastsScrollDown;
             public InputAction @ItemScrollUp => m_Wrapper.m_GameInput_ItemScrollUp;
             public InputAction @ItemScrollDown => m_Wrapper.m_GameInput_ItemScrollDown;
             public InputActionMap Get() { return m_Wrapper.m_GameInput; }
@@ -712,9 +712,9 @@ namespace EoE.Controlls
                     NormalAttack.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnNormalAttack;
                     NormalAttack.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnNormalAttack;
                     NormalAttack.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnNormalAttack;
-                    Special.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnHeavyAttack;
-                    Special.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnHeavyAttack;
-                    Special.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnHeavyAttack;
+                    Special.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnSpecial;
+                    Special.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnSpecial;
+                    Special.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnSpecial;
                     Run.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnRun;
                     Run.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnRun;
                     Run.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnRun;
@@ -724,21 +724,21 @@ namespace EoE.Controlls
                     Aim.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnAim;
                     Aim.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnAim;
                     Aim.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnAim;
-                    Shield.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnBlock;
-                    Shield.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnBlock;
-                    Shield.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnBlock;
+                    Shield.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnShield;
+                    Shield.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnShield;
+                    Shield.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnShield;
                     UseItem.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnUseItem;
                     UseItem.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnUseItem;
                     UseItem.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnUseItem;
-                    Cast.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicCast;
-                    Cast.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicCast;
-                    Cast.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicCast;
-                    CastsScrollUp.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicScrollUp;
-                    CastsScrollUp.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicScrollUp;
-                    CastsScrollUp.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicScrollUp;
-                    CastsScrollDown.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicScrollDown;
-                    CastsScrollDown.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicScrollDown;
-                    CastsScrollDown.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnMagicScrollDown;
+                    Cast.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnCast;
+                    Cast.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnCast;
+                    Cast.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnCast;
+                    CastsScrollUp.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnCastsScrollUp;
+                    CastsScrollUp.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnCastsScrollUp;
+                    CastsScrollUp.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnCastsScrollUp;
+                    CastsScrollDown.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnCastsScrollDown;
+                    CastsScrollDown.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnCastsScrollDown;
+                    CastsScrollDown.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnCastsScrollDown;
                     ItemScrollUp.started -= m_Wrapper.m_GameInputActionsCallbackInterface.OnItemScrollUp;
                     ItemScrollUp.performed -= m_Wrapper.m_GameInputActionsCallbackInterface.OnItemScrollUp;
                     ItemScrollUp.canceled -= m_Wrapper.m_GameInputActionsCallbackInterface.OnItemScrollUp;
@@ -764,9 +764,9 @@ namespace EoE.Controlls
                     NormalAttack.started += instance.OnNormalAttack;
                     NormalAttack.performed += instance.OnNormalAttack;
                     NormalAttack.canceled += instance.OnNormalAttack;
-                    Special.started += instance.OnHeavyAttack;
-                    Special.performed += instance.OnHeavyAttack;
-                    Special.canceled += instance.OnHeavyAttack;
+                    Special.started += instance.OnSpecial;
+                    Special.performed += instance.OnSpecial;
+                    Special.canceled += instance.OnSpecial;
                     Run.started += instance.OnRun;
                     Run.performed += instance.OnRun;
                     Run.canceled += instance.OnRun;
@@ -776,21 +776,21 @@ namespace EoE.Controlls
                     Aim.started += instance.OnAim;
                     Aim.performed += instance.OnAim;
                     Aim.canceled += instance.OnAim;
-                    Shield.started += instance.OnBlock;
-                    Shield.performed += instance.OnBlock;
-                    Shield.canceled += instance.OnBlock;
+                    Shield.started += instance.OnShield;
+                    Shield.performed += instance.OnShield;
+                    Shield.canceled += instance.OnShield;
                     UseItem.started += instance.OnUseItem;
                     UseItem.performed += instance.OnUseItem;
                     UseItem.canceled += instance.OnUseItem;
-                    Cast.started += instance.OnMagicCast;
-                    Cast.performed += instance.OnMagicCast;
-                    Cast.canceled += instance.OnMagicCast;
-                    CastsScrollUp.started += instance.OnMagicScrollUp;
-                    CastsScrollUp.performed += instance.OnMagicScrollUp;
-                    CastsScrollUp.canceled += instance.OnMagicScrollUp;
-                    CastsScrollDown.started += instance.OnMagicScrollDown;
-                    CastsScrollDown.performed += instance.OnMagicScrollDown;
-                    CastsScrollDown.canceled += instance.OnMagicScrollDown;
+                    Cast.started += instance.OnCast;
+                    Cast.performed += instance.OnCast;
+                    Cast.canceled += instance.OnCast;
+                    CastsScrollUp.started += instance.OnCastsScrollUp;
+                    CastsScrollUp.performed += instance.OnCastsScrollUp;
+                    CastsScrollUp.canceled += instance.OnCastsScrollUp;
+                    CastsScrollDown.started += instance.OnCastsScrollDown;
+                    CastsScrollDown.performed += instance.OnCastsScrollDown;
+                    CastsScrollDown.canceled += instance.OnCastsScrollDown;
                     ItemScrollUp.started += instance.OnItemScrollUp;
                     ItemScrollUp.performed += instance.OnItemScrollUp;
                     ItemScrollUp.canceled += instance.OnItemScrollUp;
@@ -913,15 +913,15 @@ namespace EoE.Controlls
             void OnJump(InputAction.CallbackContext context);
             void OnDodge(InputAction.CallbackContext context);
             void OnNormalAttack(InputAction.CallbackContext context);
-            void OnHeavyAttack(InputAction.CallbackContext context);
+            void OnSpecial(InputAction.CallbackContext context);
             void OnRun(InputAction.CallbackContext context);
             void OnResetCamera(InputAction.CallbackContext context);
             void OnAim(InputAction.CallbackContext context);
-            void OnBlock(InputAction.CallbackContext context);
+            void OnShield(InputAction.CallbackContext context);
             void OnUseItem(InputAction.CallbackContext context);
-            void OnMagicCast(InputAction.CallbackContext context);
-            void OnMagicScrollUp(InputAction.CallbackContext context);
-            void OnMagicScrollDown(InputAction.CallbackContext context);
+            void OnCast(InputAction.CallbackContext context);
+            void OnCastsScrollUp(InputAction.CallbackContext context);
+            void OnCastsScrollDown(InputAction.CallbackContext context);
             void OnItemScrollUp(InputAction.CallbackContext context);
             void OnItemScrollDown(InputAction.CallbackContext context);
         }
