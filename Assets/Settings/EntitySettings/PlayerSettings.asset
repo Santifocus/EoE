@@ -65,13 +65,14 @@ MonoBehaviour:
   DoManaRegen: 1
   ManaRegen: 1.5
   ManaRegenInCombatMultiplier: 0.6
-  WalkSpeed: 8
-  RunSpeedMultiplicator: 1.6
-  TurnSpeed: 540
-  InAirTurnSpeedMultiplier: 0.5
-  MoveAcceleration: 6
-  NoMoveDeceleration: 3
+  WalkSpeed: 9
+  RunSpeedMultiplicator: 1.55
+  TurnSpeed: 470
+  InAirTurnSpeedMultiplier: 0.4
+  MoveAcceleration: 2
+  NoMoveDeceleration: 2.5
   InAirAccelerationMultiplier: 0.3
+  WhileTurningAccelerationMultiplier: 0.8
   CameraToPlayerDistance: 7
   CameraYLerpSpeed: 15
   CameraYLerpSringStiffness: 0.7
@@ -93,7 +94,7 @@ MonoBehaviour:
   JumpStaminaCost: 3
   RunStaminaCost: 5
   DashStaminaCost: 8
-  JumpPower: {x: 0, y: 12, z: 12}
+  JumpPower: {x: 0, y: 12, z: 6}
   JumpImpulsePower: 1.5
   JumpBackwardMultiplier: 0.65
   DashPower: 5
@@ -160,7 +161,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 634714252dd985c4a9434e87dac6225a, type: 2}
   EffectsOnJump:
   - {fileID: 11400000, guid: 81bcb4243c5d7bf409682cb56f2f128e, type: 2}
-  PlayerLandingVelocityThreshold: 8
+  PlayerLandingVelocityThreshold: 15
   EffectsOnPlayerLanding:
   - {fileID: 11400000, guid: ba451c2b316cc054ba26cb958cbb7f1a, type: 2}
   - {fileID: 11400000, guid: b16188df833539c4391e686f9ab8b6a5, type: 2}

@@ -52,5 +52,6 @@ namespace EoE.Information
 		public float MoveAcceleration = 0.5f;
 		public float NoMoveDeceleration = 0.25f;
 		public float InAirAccelerationMultiplier = 0.3f;
+		public float WhileTurningAccelerationMultiplier = 0.35f;
 	}
 }
