@@ -57,8 +57,11 @@ namespace EoE
 				FXManager.ExecuteFX(playerSettings.EffectsOnEnemyKilled, Player.Instance.transform, true);
 			}
 		}
-		private void PlayerCausedDamage(Entity receiver, bool wasCrit)
+		private void PlayerCausedDamage(Entity receiver, ChangeInfo changeInfo, bool wasCrit)
 		{
+			if (changeInfo.cause != CauseType.Physical)
+				return;
+
 			FXManager.ExecuteFX(playerSettings.EffectsOnCauseDamage, Player.Instance.transform, true);
 
 			if (wasCrit)

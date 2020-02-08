@@ -72,7 +72,7 @@ MonoBehaviour:
   MoveAcceleration: 2
   NoMoveDeceleration: 2.5
   InAirAccelerationMultiplier: 0.3
-  WhileTurningAccelerationMultiplier: 0.35
+  WhileTurningAccelerationMultiplier: 0.9
   CameraToPlayerDistance: 7
   CameraYLerpSpeed: 15
   CameraYLerpSringStiffness: 0.7
@@ -121,7 +121,6 @@ MonoBehaviour:
   LookLerpSpringStiffness: 0.05
   EffectsOnPlayerSpawn:
   - {fileID: 11400000, guid: 10355127ce9601041bd51f71df3452c9, type: 2}
-  - {fileID: 11400000, guid: 183b5b3fd2418534387eedb56e684cff, type: 2}
   EffectsOnCombatStart:
   - {fileID: 11400000, guid: 841005440ef020843a19f9880ce3ac1f, type: 2}
   - {fileID: 11400000, guid: ddafa43da60062c40b850dfed44815bb, type: 2}
@@ -144,6 +143,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 982aab948223d7044bfae67dc43bb77c, type: 2}
   - {fileID: 11400000, guid: 2a1f29303ceefa04d9d5508f74094d05, type: 2}
   - {fileID: 11400000, guid: d035199abf3ed634aba5aa2938b2cadf, type: 2}
+  EffectsOnStaminaMissing:
+  - {fileID: 11400000, guid: 844e43e30828f2942a1506846a4661c9, type: 2}
   EffectsOnCauseDamage:
   - {fileID: 11400000, guid: 597bda602a9441346a2e721049c28c87, type: 2}
   - {fileID: 11400000, guid: c4b1faa46fe904e4da604eb9bb7a96a4, type: 2}

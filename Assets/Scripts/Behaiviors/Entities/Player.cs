@@ -421,11 +421,7 @@ namespace EoE.Entities
 			{
 				float runCost = PlayerSettings.RunStaminaCost * Time.deltaTime;
 
-				if (CurStamina >= runCost)
-				{
-					ChangeStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, runCost));
-				}
-				else
+				if(!TryAffordStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, runCost)))
 				{
 					running = curStates.Running = false;
 				}
@@ -434,9 +430,8 @@ namespace EoE.Entities
 			{
 				float runCost = PlayerSettings.RunStaminaCost * Time.deltaTime;
 
-				if (CurStamina >= runCost)
+				if (TryAffordStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, runCost)))
 				{
-					ChangeStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, runCost));
 					running = curStates.Running = true;
 				}
 			}
@@ -493,10 +488,9 @@ namespace EoE.Entities
 
 			if (!disallowJump && (jumpPressed && charController.isGrounded))
 			{
-				if (CurStamina >= PlayerSettings.JumpStaminaCost)
+				if (TryAffordStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, PlayerSettings.JumpStaminaCost)))
 				{
 					Jump();
-					ChangeStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, PlayerSettings.JumpStaminaCost));
 				}
 			}
 		}
@@ -702,10 +696,11 @@ namespace EoE.Entities
 				return;
 			}
 
-			if (InputController.Dodge.Down && !currentlyDashing && CurStamina >= PlayerSettings.DashStaminaCost)
+			if (InputController.Dodge.Down &&
+				!currentlyDashing &&
+				TryAffordStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, PlayerSettings.DashStaminaCost)))
 			{
 				EventManager.PlayerDashInvoke();
-				ChangeStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, PlayerSettings.DashStaminaCost));
 				StartCoroutine(DashCoroutine());
 			}
 		}
@@ -810,16 +805,33 @@ namespace EoE.Entities
 		}
 		#endregion
 		#region Stamina Control
+		public bool TryAffordStamina(ChangeInfo change)
+		{
+			ChangeInfo.ChangeResult changeResult = new ChangeInfo.ChangeResult(change, this, false);
+			if (CurStamina >= changeResult.finalChangeAmount)
+			{
+				ChangeStamina(changeResult);
+				return true;
+			}
+			else
+			{
+				FXManager.ExecuteFX(playerSettings.EffectsOnStaminaMissing, transform, true);
+				return false;
+			}
+		}
 		public void ChangeStamina(ChangeInfo change)
 		{
 			ChangeInfo.ChangeResult changeResult = new ChangeInfo.ChangeResult(change, this, false);
-
-			if (changeResult.finalChangeAmount > 0)
+			ChangeStamina(changeResult);
+		}
+		public void ChangeStamina(ChangeInfo.ChangeResult change)
+		{
+			if (change.finalChangeAmount > 0)
 			{
 				usedStaminaCooldown = PlayerSettings.StaminaAfterUseCooldown;
 			}
 
-			CurStamina -= changeResult.finalChangeAmount;
+			CurStamina -= change.finalChangeAmount;
 			ClampStamina();
 		}
 		public void ClampStamina() => CurStamina = Mathf.Clamp(CurStamina, 0, CurMaxStamina);

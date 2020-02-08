@@ -1,4 +1,5 @@
 ﻿using EoE.Entities;
+using EoE.Information;
 
 namespace EoE.Events
 {
@@ -29,11 +30,11 @@ namespace EoE.Events
 		}
 
 		//Player Caused Damage
-		public delegate void PlayerCausedDamage(Entity receiver, bool wasCrit);
+		public delegate void PlayerCausedDamage(Entity receiver, ChangeInfo changeInfo, bool wasCrit);
 		public static PlayerCausedDamage PlayerCausedDamageEvent;
-		public static void PlayerCausedDamageInvoke(Entity receiver, bool wasCrit)
+		public static void PlayerCausedDamageInvoke(Entity receiver, ChangeInfo changeInfo, bool wasCrit)
 		{
-			PlayerCausedDamageEvent?.Invoke(receiver, wasCrit);
+			PlayerCausedDamageEvent?.Invoke(receiver, changeInfo, wasCrit);
 		}
 
 		//Player Experience changed
