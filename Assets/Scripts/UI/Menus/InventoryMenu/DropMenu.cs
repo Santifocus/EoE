@@ -24,7 +24,7 @@ namespace EoE.UI
 		private InventoryMenu parent;
 		private SelectedPart selectedPart;
 		private int curDropCount;
-		private int allowedMax => Player.Instance.Inventory[parent.curSlotIndex].stackSize;
+		private int allowedMax => Player.Instance.Inventory[parent.CurSlotIndex].stackSize;
 		private float navigationCooldown;
 
 		public void Setup(InventoryMenu parent)
@@ -88,7 +88,7 @@ namespace EoE.UI
 				{
 					if (selectedPart != SelectedPart.Cancel)
 					{
-						InventoryItem targetItem = Player.Instance.Inventory[parent.curSlotIndex];
+						InventoryItem targetItem = Player.Instance.Inventory[parent.CurSlotIndex];
 
 						targetItem.data.CreateItemDrop(Player.Instance.actuallWorldPosition, curDropCount, true);
 						Player.Instance.Inventory.RemoveStackSize(targetItem.data, curDropCount);

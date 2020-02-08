@@ -73,7 +73,7 @@ namespace EoE.UI
 		{
 			healthDisplay.text = Player.Instance.curMaxHealth.ToString();
 			manaDisplay.text = Player.Instance.curMaxMana.ToString();
-			staminaDisplay.text = Player.Instance.curMaxStamina.ToString();
+			staminaDisplay.text = Player.Instance.CurMaxStamina.ToString();
 
 			defenseDisplay.text = Player.Instance.curDefense.ToString();
 			atkDisplay.text = Player.Instance.curPhysicalDamage.ToString();

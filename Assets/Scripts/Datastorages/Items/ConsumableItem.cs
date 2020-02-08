@@ -48,7 +48,7 @@ namespace EoE.Information
 			if (HealType == TargetStat.Stamina && !(user is Player))
 				return;
 
-			float targetStatAmount = HealType == TargetStat.Health ? user.curMaxHealth : (HealType == TargetStat.Mana ? user.curMaxMana : (user as Player).curMaxStamina);
+			float targetStatAmount = HealType == TargetStat.Health ? user.curMaxHealth : (HealType == TargetStat.Mana ? user.curMaxMana : (user as Player).CurMaxStamina);
 			float amount = Percent ? (targetStatAmount * (Amount / 100)) : Amount;
 			amount *= -multiplier;
 

@@ -25,7 +25,7 @@ namespace EoE.Entities
 		private const float FALLING_SINCE_THRESHOLD = 0.25f;
 
 		//Items
-		private const int SELECTABLE_ITEMS_AMOUNT = 4;
+		public const int SELECTABLE_ITEMS_AMOUNT = 4;
 
 		//Targeting
 		private const float SWITCH_TARGET_COOLDOWN = 0.25f;
@@ -43,8 +43,8 @@ namespace EoE.Entities
 		public PlayerBuffDisplay buffDisplay = default;
 
 		//Stamina
-		public float curStamina { get; set; }
-		public float curMaxStamina { get; set; }
+		public float CurStamina { get; set; }
+		public float CurMaxStamina { get; set; }
 		private float usedStaminaCooldown;
 
 		//Dashing
@@ -59,7 +59,7 @@ namespace EoE.Entities
 		private float jumpCooldown;
 		private Vector3 moveDirection;
 		private Vector3 controllDirection;
-		public Vector3 curMoveVelocity => (TargetedEntitie ? controllDirection : moveDirection) * curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
+		public Vector3 CurMoveVelocity => (TargetedEntitie ? controllDirection : moveDirection) * curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
 		private float intendedAcceleration;
 		private float curAcceleration;
 		private bool lastOnGroundState = true;
@@ -67,7 +67,7 @@ namespace EoE.Entities
 		private float fallingSince = 0;
 		private Vector3 deltaMove;
 		private Vector3 deltaHorizontalMove;
-		private Vector3 totalDeltaMove => deltaMove + deltaHorizontalMove;
+		private Vector3 TotalDeltaMove => deltaMove + deltaHorizontalMove;
 
 		//Feedback
 		private Vector2 curModelTilt;
@@ -107,13 +107,13 @@ namespace EoE.Entities
 
 		//Use Items
 		public InventoryItem[] SelectableItems;
-		public int selectedItemIndex { get; private set; }
-		public InventoryItem EquipedItem => SelectableItems[selectedItemIndex];
+		public int SelectedItemIndex { get; private set; }
+		public InventoryItem EquipedItem => SelectableItems[SelectedItemIndex];
 
-		//Spell Items
+		//ActivationCompound Items
 		public InventoryItem[] SelectableActivationCompoundItems;
-		public int selectedActivationCompoundItemIndex { get; private set; }
-		public InventoryItem EquipedSpell => SelectableActivationCompoundItems[selectedActivationCompoundItemIndex];
+		public int SelectedActivationCompoundItemIndex { get; private set; }
+		public InventoryItem EquipedSpell => SelectableActivationCompoundItems[SelectedActivationCompoundItemIndex];
 		#endregion
 		#region Leveling
 		public Buff LevelingPointsBuff { get; private set; }
@@ -177,13 +177,13 @@ namespace EoE.Entities
 		protected override void ResetStats()
 		{
 			base.ResetStats();
-			curMaxStamina = playerSettings.Stamina;
+			CurMaxStamina = playerSettings.Stamina;
 			FXManager.ExecuteFX(playerSettings.EffectsOnPlayerSpawn, transform, true);
 		}
 		protected override void ResetStatValues()
 		{
 			base.ResetStatValues();
-			curStamina = curMaxStamina;
+			CurStamina = CurMaxStamina;
 			playerShield = Shield.CreateShield(playerSettings.ShieldSettings, this);
 		}
 		protected override void LevelSetup()
@@ -226,9 +226,9 @@ namespace EoE.Entities
 			EquipedWeapon = null;
 			EquipedArmor = null;
 
-			selectedItemIndex = 0;
+			SelectedItemIndex = 0;
 			SelectableItems = new InventoryItem[SELECTABLE_ITEMS_AMOUNT];
-			selectedActivationCompoundItemIndex = 0;
+			SelectedActivationCompoundItemIndex = 0;
 			SelectableActivationCompoundItems = new InventoryItem[SELECTABLE_ITEMS_AMOUNT];
 		}
 		#endregion
@@ -401,7 +401,7 @@ namespace EoE.Entities
 			{
 				float runCost = PlayerSettings.RunStaminaCost * Time.deltaTime;
 
-				if (curStamina >= runCost)
+				if (CurStamina >= runCost)
 				{
 					ChangeStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, runCost));
 				}
@@ -414,7 +414,7 @@ namespace EoE.Entities
 			{
 				float runCost = PlayerSettings.RunStaminaCost * Time.deltaTime;
 
-				if (curStamina >= runCost)
+				if (CurStamina >= runCost)
 				{
 					ChangeStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, runCost));
 					running = curStates.Running = true;
@@ -473,7 +473,7 @@ namespace EoE.Entities
 
 			if (!disallowJump && (jumpPressed && charController.isGrounded))
 			{
-				if (curStamina >= PlayerSettings.JumpStaminaCost)
+				if (CurStamina >= PlayerSettings.JumpStaminaCost)
 				{
 					Jump();
 					ChangeStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, PlayerSettings.JumpStaminaCost));
@@ -532,7 +532,7 @@ namespace EoE.Entities
 				if (newOnGroundState)
 				{
 					jumpCooldown = JUMP_COOLDOWN;
-					Landed(deltaVertical, totalDeltaMove.magnitude + Mathf.Max(deltaVertical));
+					Landed(deltaVertical, TotalDeltaMove.magnitude + Mathf.Max(deltaVertical));
 				}
 			}
 			lastFallVelocity = CurVelocity.y;
@@ -608,7 +608,7 @@ namespace EoE.Entities
 		{
 			//Apply move velocity and find out how far we moved
 			Vector3 prePos = transform.position;
-			charController.Move(curMoveVelocity * Time.fixedDeltaTime);
+			charController.Move(CurMoveVelocity * Time.fixedDeltaTime);
 			Vector3 newPos = transform.position;
 			deltaMove = (newPos - prePos) / Time.fixedDeltaTime;
 
@@ -660,7 +660,7 @@ namespace EoE.Entities
 				return;
 			}
 
-			if (InputController.Dodge.Down && !currentlyDashing && curStamina >= PlayerSettings.DashStaminaCost)
+			if (InputController.Dodge.Down && !currentlyDashing && CurStamina >= PlayerSettings.DashStaminaCost)
 			{
 				EventManager.PlayerDashInvoke();
 				ChangeStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, PlayerSettings.DashStaminaCost));
@@ -777,15 +777,15 @@ namespace EoE.Entities
 				usedStaminaCooldown = PlayerSettings.StaminaAfterUseCooldown;
 			}
 
-			curStamina -= changeResult.finalChangeAmount;
+			CurStamina -= changeResult.finalChangeAmount;
 			ClampStamina();
 		}
-		public void ClampStamina() => curStamina = Mathf.Clamp(curStamina, 0, curMaxStamina);
+		public void ClampStamina() => CurStamina = Mathf.Clamp(CurStamina, 0, CurMaxStamina);
 		protected override void Regen()
 		{
 			base.Regen();
 
-			if (PlayerSettings.DoStaminaRegen && curStamina < curMaxStamina)
+			if (PlayerSettings.DoStaminaRegen && CurStamina < CurMaxStamina)
 			{
 				float staminaRegenMultiplier = curStates.Fighting ? PlayerSettings.StaminaRegenInCombatMultiplier : 1;
 				if (usedStaminaCooldown > 0)
@@ -793,8 +793,8 @@ namespace EoE.Entities
 					usedStaminaCooldown -= Time.deltaTime;
 					staminaRegenMultiplier *= PlayerSettings.StaminaRegenAfterUseMultiplier;
 				}
-				curStamina += PlayerSettings.StaminaRegen * staminaRegenMultiplier * Time.deltaTime;
-				curStamina = Mathf.Min(curStamina, curMaxStamina);
+				CurStamina += PlayerSettings.StaminaRegen * staminaRegenMultiplier * Time.deltaTime;
+				CurStamina = Mathf.Min(CurStamina, CurMaxStamina);
 			}
 		}
 		#endregion
@@ -988,7 +988,7 @@ namespace EoE.Entities
 		private void ItemControl()
 		{
 			UpdateItemCooldowns();
-			ScrollItemControll();
+			ScrollItemControl();
 			ItemUseControl();
 		}
 		private void UpdateItemCooldowns()
@@ -999,7 +999,7 @@ namespace EoE.Entities
 					GameController.ItemCollection.Data[i].curCooldown -= Time.deltaTime;
 			}
 		}
-		private void ScrollItemControll()
+		private void ScrollItemControl()
 		{
 			//Consumable Scrolling
 			int selectedItemIndexChange = InputController.ItemScrollUp.Down ? 1 : (InputController.ItemScrollDown.Down ? -1 : 0);
@@ -1009,13 +1009,13 @@ namespace EoE.Entities
 				for (int i = 0; i < (SELECTABLE_ITEMS_AMOUNT - 1); i++)
 				{
 					t += selectedItemIndexChange;
-					int valIndex = ValidatedID(t + selectedItemIndex);
+					int valIndex = ValidatedID(t + SelectedItemIndex);
 					if (SelectableItems[valIndex] != null)
 					{
 						if (EquipedItem != null)
 							EquipedItem.data.UnEquip(EquipedItem, this);
 
-						selectedItemIndex = valIndex;
+						SelectedItemIndex = valIndex;
 						EquipedItem.data.Equip(EquipedItem, this);
 						break;
 					}
@@ -1023,7 +1023,7 @@ namespace EoE.Entities
 			}
 
 			//ActivationCompound Scrolling
-			InventoryItem selectedItem = SelectableActivationCompoundItems[selectedActivationCompoundItemIndex];
+			InventoryItem selectedItem = SelectableActivationCompoundItems[SelectedActivationCompoundItemIndex];
 			ActivationCompoundItem selectedAC = selectedItem == null ? null : (selectedItem.data as ActivationCompoundItem);
 			bool cannotScrollMagic = false;
 			if (selectedAC == null)
@@ -1042,13 +1042,13 @@ namespace EoE.Entities
 				for (int i = 0; i < (SELECTABLE_ITEMS_AMOUNT - 1); i++)
 				{
 					t += selectedSpellIndexChange;
-					int valIndex = ValidatedID(t + selectedActivationCompoundItemIndex);
+					int valIndex = ValidatedID(t + SelectedActivationCompoundItemIndex);
 					if (SelectableActivationCompoundItems[valIndex] != null)
 					{
 						if (EquipedSpell != null)
 							EquipedSpell.data.UnEquip(EquipedSpell, this);
 
-						selectedActivationCompoundItemIndex = valIndex;
+						SelectedActivationCompoundItemIndex = valIndex;
 						EquipedSpell.data.Equip(EquipedSpell, this);
 						break;
 					}
@@ -1085,7 +1085,7 @@ namespace EoE.Entities
 					EquipedItem.data.Use(EquipedItem, this, Inventory);
 			}
 		}
-		private void UpdateEquipedItems()
+		public void UpdateEquipedItems()
 		{
 			if (EquipedWeapon != null && EquipedWeapon.stackSize <= 0)
 				EquipedWeapon = null;
@@ -1093,19 +1093,39 @@ namespace EoE.Entities
 				EquipedArmor = null;
 
 			bool selectablesChanged = false;
+			bool atLeastOneEquippedItem = false;
+			bool atLeastOneEquippedACItem = false;
 			for (int i = 0; i < SELECTABLE_ITEMS_AMOUNT; i++)
 			{
-				if (SelectableItems[i] != null && SelectableItems[i].stackSize <= 0)
+				if (SelectableItems[i] != null)
 				{
-					selectablesChanged = true;
-					SelectableItems[i] = null;
+					if (SelectableItems[i].stackSize <= 0)
+					{
+						selectablesChanged = true;
+						SelectableItems[i] = null;
+					}
+					else
+					{
+						atLeastOneEquippedItem |= true;
+					}
 				}
-				if (SelectableActivationCompoundItems[i] != null && SelectableActivationCompoundItems[i].stackSize <= 0)
+				if (SelectableActivationCompoundItems[i] != null)
 				{
-					selectablesChanged = true;
-					SelectableActivationCompoundItems[i] = null;
+					if (SelectableActivationCompoundItems[i].stackSize <= 0)
+					{
+						selectablesChanged = true;
+						SelectableActivationCompoundItems[i] = null;
+					}
+					else
+					{
+						atLeastOneEquippedACItem |= true;
+					}
 				}
 			}
+
+			selectablesChanged |= (SelectableItems[SelectedItemIndex] == null) && atLeastOneEquippedItem;
+			selectablesChanged |= (SelectableActivationCompoundItems[SelectedActivationCompoundItemIndex] == null) && atLeastOneEquippedACItem;
+
 			if (selectablesChanged)
 				SelectectableItemsChanged();
 		}
@@ -1120,10 +1140,10 @@ namespace EoE.Entities
 			{
 				for (int i = 0; i < SELECTABLE_ITEMS_AMOUNT; i++)
 				{
-					int valIndex = ValidatedID(i + selectedItemIndex);
+					int valIndex = ValidatedID(i + SelectedItemIndex);
 					if (SelectableItems[valIndex] != null)
 					{
-						selectedItemIndex = valIndex;
+						SelectedItemIndex = valIndex;
 						EquipedItem.data.Equip(EquipedItem, this);
 						break;
 					}
@@ -1134,10 +1154,10 @@ namespace EoE.Entities
 			{
 				for (int i = 0; i < SELECTABLE_ITEMS_AMOUNT; i++)
 				{
-					int valIndex = ValidatedID(i + selectedActivationCompoundItemIndex);
+					int valIndex = ValidatedID(i + SelectedActivationCompoundItemIndex);
 					if (SelectableActivationCompoundItems[valIndex] != null)
 					{
-						selectedActivationCompoundItemIndex = valIndex;
+						SelectedActivationCompoundItemIndex = valIndex;
 						EquipedSpell.data.Equip(EquipedSpell, this);
 						break;
 					}

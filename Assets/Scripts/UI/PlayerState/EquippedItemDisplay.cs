@@ -19,7 +19,7 @@ namespace EoE.UI
 		[SerializeField] private ItemDisplayCombo[] targetDisplays = new ItemDisplayCombo[DISPLAYED_ITEMS];
 		private (InventoryItem, float, int)[] targets = new (InventoryItem, float, int)[DISPLAYED_ITEMS];
 
-		private int curSelectIndex => (targetType == TargetItemType.ActivationCompound) ? Player.Instance.selectedActivationCompoundItemIndex : Player.Instance.selectedItemIndex;
+		private int curSelectIndex => (targetType == TargetItemType.ActivationCompound) ? Player.Instance.SelectedActivationCompoundItemIndex : Player.Instance.SelectedItemIndex;
 		private int lastSelectIndex;
 		private float flashTimer;
 		private float flashMaxFlashAlpha;
@@ -57,7 +57,7 @@ namespace EoE.UI
 		}
 		private void UpdateDisplay(int index)
 		{
-			int curIndex = (targetType == TargetItemType.ActivationCompound) ? Player.Instance.selectedActivationCompoundItemIndex : Player.Instance.selectedItemIndex;
+			int curIndex = (targetType == TargetItemType.ActivationCompound) ? Player.Instance.SelectedActivationCompoundItemIndex : Player.Instance.SelectedItemIndex;
 			int targetIndex = ValidateID(curIndex + index - 1);
 			InventoryItem target = (targetType == TargetItemType.ActivationCompound) ? Player.Instance.SelectableActivationCompoundItems[targetIndex] : Player.Instance.SelectableItems[targetIndex];
 
