@@ -16,8 +16,8 @@ MonoBehaviour:
   TimeOut: 0.25
   FinishConditions:
     OnParentDeath: 0
-    OnTimeout: 0
-    TimeStay: 1
+    OnTimeout: 1
+    TimeStay: 0.1
     OnConditionMet: 0
     Condition: {fileID: 0}
   ParticleMainObject: {fileID: 6681463433636106040, guid: 0693380ae3e343a45ad79334dffb453e,
