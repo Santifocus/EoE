@@ -197,7 +197,7 @@ namespace EoE.Combatery
 			float totalManaCost = Mana * manaCostMultiplier;
 			float totalStaminaCost = Stamina * staminaCostMultiplier;
 
-			bool asPlayerCanAffordStamina = (target is Player) ? (target as Player).curStamina >= totalStaminaCost : true;
+			bool asPlayerCanAffordStamina = (target is Player) ? (target as Player).CurStamina >= totalStaminaCost : true;
 			return (target.curHealth >= totalHealthCost) && (target.curMana >= totalManaCost) && asPlayerCanAffordStamina;
 		}
 		public void PayCost(Entity target, float healthCostMultiplier, float manaCostMultiplier, float staminaCostMultiplier)

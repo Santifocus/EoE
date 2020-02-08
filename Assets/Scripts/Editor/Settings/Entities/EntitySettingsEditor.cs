@@ -97,6 +97,7 @@ namespace EoE.Information
 			FloatField(new GUIContent("Move Acceleration", "How fast can this Entitie get to its maximum speed? (Approximatly in Seconds)"), ref settings.MoveAcceleration, 1);
 			FloatField(new GUIContent("No Move Deceleration", "How fast does this Entitie Decelerate? (In Seconds)"), ref settings.NoMoveDeceleration, 1);
 			FloatField(new GUIContent("In Air Acceleration Multiplier", "When in air, by what amount should (A/De)-cceleration be multiplied by?"), ref settings.InAirAccelerationMultiplier, 1);
+			FloatField(new GUIContent("While Turning Acceleration Multiplier", "When turning, by what amount should (A/De)-cceleration be multiplied by?"), ref settings.WhileTurningAccelerationMultiplier, 1);
 		}
 	}
 }

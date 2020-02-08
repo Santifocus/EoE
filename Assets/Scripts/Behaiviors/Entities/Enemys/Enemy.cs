@@ -58,6 +58,9 @@ namespace EoE.Entities
 			base.FullEntitieReset();
 			SetupNavMeshAgent();
 
+			curRotation = intendedRotation = Random.value * 360;
+			transform.eulerAngles = new Vector3(transform.eulerAngles.x, curRotation, transform.eulerAngles.z);
+
 			originalSpawnPosition = actuallWorldPosition;
 			normalCosSightCone = Mathf.Cos(Mathf.Min(360, enemySettings.SightAngle) * Mathf.Deg2Rad);
 			foundPlayerCosSightCone = Mathf.Cos(Mathf.Min(360, enemySettings.FoundPlayerSightAngle) * Mathf.Deg2Rad);

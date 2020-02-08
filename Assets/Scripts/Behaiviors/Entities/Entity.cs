@@ -627,9 +627,9 @@ namespace EoE.Entities
 							if (player == null)
 								break;
 
-							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * player.curMaxStamina : buffBase.Effects[i].Amount;
-							change = Mathf.Max(-(player.curMaxStamina), change);
-							player.curMaxStamina += change;
+							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * player.CurMaxStamina : buffBase.Effects[i].Amount;
+							change = Mathf.Max(-(player.CurMaxStamina), change);
+							player.CurMaxStamina += change;
 
 							if (clampRequired)
 								player.ClampStamina();
@@ -744,7 +744,7 @@ namespace EoE.Entities
 							if (player == null)
 								break;
 
-							player.curMaxStamina -= change;
+							player.CurMaxStamina -= change;
 							if (clampRequired)
 								player.ClampStamina();
 							break;

@@ -36,7 +36,7 @@ namespace EoE.Information.Logic
 					wasMet = Compare(Player.Instance ? Player.Instance.curMana : 0);
 					break;
 				case ComparisonTarget.PlayerStamina:
-					wasMet = Compare(Player.Instance ? Player.Instance.curStamina : 0);
+					wasMet = Compare(Player.Instance ? Player.Instance.CurStamina : 0);
 					break;
 				case ComparisonTarget.PlayerExperience:
 					wasMet = Compare(Player.Instance ? Player.Instance.TotalExperience : 0);

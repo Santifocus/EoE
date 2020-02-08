@@ -1633,7 +1633,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 893576656167749922}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GameUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13261,7 +13261,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3851637756736315095}
   - component: {fileID: 3851637756736315094}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: CharacterMenuDirectionalLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}

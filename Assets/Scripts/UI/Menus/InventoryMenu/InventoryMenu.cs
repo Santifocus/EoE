@@ -43,7 +43,7 @@ namespace EoE.UI
 		private bool dropMenuOpen;
 		private bool isSetup;
 
-		public int curSlotIndex { get; private set; }
+		public int CurSlotIndex { get; private set; }
 		private ItemAction this[int index]
 		{
 			get
@@ -53,7 +53,7 @@ namespace EoE.UI
 					case 0:
 						return useOption;
 					case 1:
-						InventoryItem item = Player.Instance.Inventory[curSlotIndex];
+						InventoryItem item = Player.Instance.Inventory[CurSlotIndex];
 						bool isEquipped = ((item != null) && item.isEquiped);
 						return isEquipped ? unEquipOption : equipOption;
 					case 2:
@@ -75,7 +75,7 @@ namespace EoE.UI
 			if (!isSetup)
 				Setup();
 
-			curSlotIndex = 0;
+			CurSlotIndex = 0;
 			SelectSlot(false);
 			actionMenuOpen = dropMenuOpen = equipSlotsOpen = false;
 
@@ -119,7 +119,7 @@ namespace EoE.UI
 			if (dropMenuOpen)
 				return;
 
-			if (InputController.MenuEnter.Down && Player.Instance.Inventory[curSlotIndex] != null)
+			if (InputController.MenuEnter.Down && Player.Instance.Inventory[CurSlotIndex] != null)
 				MenuEnter();
 			if (InputController.MenuBack.Down)
 				MenuBack();
@@ -130,7 +130,7 @@ namespace EoE.UI
 				return;
 			}
 
-			int preSlotIndex = curSlotIndex;
+			int preSlotIndex = CurSlotIndex;
 			int preActionIndex = itemActionIndex;
 			int preEquipIndex = equipedSlotIndex;
 
@@ -139,7 +139,7 @@ namespace EoE.UI
 				if (!actionMenuOpen)
 				{
 					if (!equipSlotsOpen)
-						curSlotIndex++;
+						CurSlotIndex++;
 					else
 						equipedSlotIndex++;
 				}
@@ -149,7 +149,7 @@ namespace EoE.UI
 				if (!actionMenuOpen)
 				{
 					if (!equipSlotsOpen)
-						curSlotIndex--;
+						CurSlotIndex--;
 					else
 						equipedSlotIndex--;
 				}
@@ -159,7 +159,7 @@ namespace EoE.UI
 				if (!equipSlotsOpen)
 				{
 					if (!actionMenuOpen)
-						curSlotIndex += SlotsPerRow();
+						CurSlotIndex += SlotsPerRow();
 					else
 						itemActionIndex++;
 				}
@@ -169,22 +169,22 @@ namespace EoE.UI
 				if (!equipSlotsOpen)
 				{
 					if (!actionMenuOpen)
-						curSlotIndex -= SlotsPerRow();
+						CurSlotIndex -= SlotsPerRow();
 					else
 						itemActionIndex--;
 				}
 			}
 
-			if (preSlotIndex != curSlotIndex)
+			if (preSlotIndex != CurSlotIndex)
 			{
-				if (curSlotIndex < 0)
-					curSlotIndex += slots.Length;
-				else if (curSlotIndex >= slots.Length)
-					curSlotIndex -= slots.Length;
+				if (CurSlotIndex < 0)
+					CurSlotIndex += slots.Length;
+				else if (CurSlotIndex >= slots.Length)
+					CurSlotIndex -= slots.Length;
 
 				//Check again in case we scrolled down on a one-line inventory (eg.: Size:6, Index: 4 -> 10 -> 4)
 
-				if (preSlotIndex != curSlotIndex)
+				if (preSlotIndex != CurSlotIndex)
 				{
 					SelectSlot(true);
 				}
@@ -222,14 +222,14 @@ namespace EoE.UI
 			if (feedBack)
 				PlayFeedback(true);
 			navigationCooldown = NAV_COOLDOWN;
-			slots[curSlotIndex].Select();
+			slots[CurSlotIndex].Select();
 			UpdateActionMenu();
-			itemDescriptionDisplay.SetItem(Player.Instance.Inventory[curSlotIndex] == null ? null : Player.Instance.Inventory[curSlotIndex].data);
+			itemDescriptionDisplay.SetItem(Player.Instance.Inventory[CurSlotIndex]?.data);
 		}
 		private void UpdateActionMenu()
 		{
-			allowedActions = new List<ItemAction>(4);
-			InventoryItem item = Player.Instance.Inventory[curSlotIndex];
+			allowedActions = new List<ItemAction>(Player.SELECTABLE_ITEMS_AMOUNT);
+			InventoryItem item = Player.Instance.Inventory[CurSlotIndex];
 			bool isEquipped = ((item != null) && item.isEquiped);
 			equipOption.gameObject.SetActive(!isEquipped);
 			unEquipOption.gameObject.SetActive(isEquipped);
@@ -275,7 +275,7 @@ namespace EoE.UI
 					return;
 				}
 
-				InventoryItem item = Player.Instance.Inventory[curSlotIndex];
+				InventoryItem item = Player.Instance.Inventory[CurSlotIndex];
 				if (item == null)
 					return;
 
@@ -326,7 +326,7 @@ namespace EoE.UI
 							equipSlotsOpen = actionMenuOpen = false;
 							SelectSlot(true);
 						}
-						else //(target is (SpellItem / ConsumableItem / any other not mentioned type))
+						else //(target is (ActivationCompoundItem / ConsumableItem / any other not mentioned type))
 						{
 							if (unequip)
 							{
@@ -338,6 +338,7 @@ namespace EoE.UI
 										targetArray[i].isEquiped = false;
 										targetArray[i].data.UnEquip(targetArray[i], Player.Instance);
 										targetArray[i] = null;
+										Player.Instance.UpdateEquipedItems();
 										equipSlotsOpen = actionMenuOpen = false;
 										SelectSlot(true);
 										break;
@@ -364,7 +365,7 @@ namespace EoE.UI
 				}
 
 				//If from any of the action the stacksize was changed to 0 (which means null after inventory update) then we want to close the action menu
-				if (Player.Instance.Inventory[curSlotIndex] == null)
+				if (Player.Instance.Inventory[CurSlotIndex] == null)
 					MenuBack();
 			}
 			else if (equipSlotsOpen)
@@ -375,7 +376,7 @@ namespace EoE.UI
 					targetArray[equipedSlotIndex].isEquiped = false;
 					targetArray[equipedSlotIndex].data.UnEquip(targetArray[equipedSlotIndex], Player.Instance);
 				}
-				InventoryItem item = Player.Instance.Inventory[curSlotIndex];
+				InventoryItem item = Player.Instance.Inventory[CurSlotIndex];
 				targetArray[equipedSlotIndex] = item;
 				targetArray[equipedSlotIndex].isEquiped = true;
 

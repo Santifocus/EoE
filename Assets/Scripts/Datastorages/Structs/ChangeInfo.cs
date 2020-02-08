@@ -124,7 +124,7 @@ namespace EoE.Information
 				}
 				else if (receiver is Player) //&& basis.targetStat == TargetStat.Stamina
 				{
-					finalChangeAmount = Mathf.Max(finalChangeAmount, -((receiver as Player).curMaxStamina - (receiver as Player).curStamina));
+					finalChangeAmount = Mathf.Max(finalChangeAmount, -((receiver as Player).CurMaxStamina - (receiver as Player).CurStamina));
 				}
 
 				//Event call for: Player receive damage OR Player caused damage
@@ -133,7 +133,7 @@ namespace EoE.Information
 					//We dont want to send FX if the Player caused himself damage
 					if (basis.attacker is Player && !(receiver is Player))
 					{
-						EventManager.PlayerCausedDamageInvoke(receiver, basis.wasCritical);
+						EventManager.PlayerCausedDamageInvoke(receiver, basis, basis.wasCritical);
 					}
 
 					if (receiver is Player && (finalChangeAmount > 0 || causedKnockback.HasValue) && !receiver.IsInvincible)

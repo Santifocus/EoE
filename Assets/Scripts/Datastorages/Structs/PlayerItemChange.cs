@@ -74,7 +74,7 @@ namespace EoE.Information
 							Player.Instance.SelectableActivationCompoundItems[j] = targetItem;
 							Player.Instance.SelectableActivationCompoundItems[j].isEquiped = true;
 							added = true;
-							if (j == Player.Instance.selectedActivationCompoundItemIndex)
+							if (j == Player.Instance.SelectedActivationCompoundItemIndex)
 							{
 								Player.Instance.SelectableActivationCompoundItems[j].data.Equip(targetItem, Player.Instance);
 							}
@@ -101,7 +101,7 @@ namespace EoE.Information
 							Player.Instance.SelectableItems[j] = targetItem;
 							Player.Instance.SelectableItems[j].isEquiped = true;
 							added = true;
-							if (j == Player.Instance.selectedItemIndex)
+							if (j == Player.Instance.SelectedItemIndex)
 							{
 								Player.Instance.SelectableItems[j].data.Equip(targetItem, Player.Instance);
 							}

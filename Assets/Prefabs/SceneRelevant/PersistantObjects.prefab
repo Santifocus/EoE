@@ -6663,7 +6663,7 @@ GameObject:
   - component: {fileID: 2385590022611613308}
   - component: {fileID: 2385590022611613298}
   - component: {fileID: 2385590022611613309}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8692,7 +8692,7 @@ GameObject:
   - component: {fileID: 6780542829387661437}
   - component: {fileID: 7451900073087431374}
   - component: {fileID: 7063492084082138677}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}

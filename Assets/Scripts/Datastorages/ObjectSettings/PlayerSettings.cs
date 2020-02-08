@@ -80,6 +80,9 @@ namespace EoE.Information
 		public FXObject[] EffectsWhileUltimateCharged = default;
 		public FXObject[] EffectsOnLevelup = default;
 
+		//Action Based
+		public FXObject[] EffectsOnStaminaMissing = default;
+
 		//On Player do attack
 		public FXObject[] EffectsOnCauseDamage = default;
 		public FXObject[] EffectsOnCauseCrit = default;
@@ -88,6 +91,7 @@ namespace EoE.Information
 		//Player Movement
 		public FXObject[] EffectsWhileWalk = default;
 		public FXObject[] EffectsWhileRun = default;
+		public FXObject[] EffectsWhileDecelerating = default;
 		public FXObject[] EffectsOnJump = default;
 		public float PlayerLandingVelocityThreshold = 5f;
 		public FXObject[] EffectsOnPlayerLanding = default;

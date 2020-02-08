@@ -16,23 +16,23 @@ namespace EoE.Entities
 		//Constants
 		//Walk/Turn
 		private const float MIN_WALK_ACCELERATION = 0.45f;
-		private const float NON_TURNING_THRESHOLD = 30;
-		private const float LERP_TURNING_AREA = 0.5f;
+		private const float NON_TURNING_THRESHOLD = 0.85f;
 
 		//Jump/Fall
 		private const float JUMP_COOLDOWN = 0.2f;
 		private const float FALLDAMAGE_COOLDOWN = 0.2f;
 		private const float FALLING_VELOCITY_THRESHOLD = -1;
 		private const float FALLING_SINCE_THRESHOLD = 0.25f;
-		private const float LANDED_VELOCITY_THRESHOLD = 0.15f;
 
 		//Items
-		private const int SELECTABLE_ITEMS_AMOUNT = 4;
+		public const int SELECTABLE_ITEMS_AMOUNT = 4;
 
 		//Targeting
 		private const float SWITCH_TARGET_COOLDOWN = 0.25f;
 		private const float RE_CHECK_VISION_DELAY = 0.25f;
 		private const float LOST_VISION_MAX = 0.8f;
+
+		private enum AccelerationState { Standing, Accelerating, FullSpeed, Decelerating }
 
 		//Inspector variables
 		[Space(10)]
@@ -45,8 +45,8 @@ namespace EoE.Entities
 		public PlayerBuffDisplay buffDisplay = default;
 
 		//Stamina
-		public float curStamina { get; set; }
-		public float curMaxStamina { get; set; }
+		public float CurStamina { get; set; }
+		public float CurMaxStamina { get; set; }
 		private float usedStaminaCooldown;
 
 		//Dashing
@@ -59,15 +59,18 @@ namespace EoE.Entities
 
 		//Velocity
 		private float jumpCooldown;
-		public Vector3 curMoveVelocity => controllDirection * curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
+		private Vector3 moveDirection;
 		private Vector3 controllDirection;
-		private Vector3 lastMove;
+		public Vector3 CurMoveVelocity => (TargetedEntitie ? controllDirection : moveDirection) * curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
 		private float intendedAcceleration;
 		private float curAcceleration;
 		private bool lastOnGroundState = true;
 		private float lastFallVelocity;
-		private int disallowFallingAnimFrames = 10;
 		private float fallingSince = 0;
+		private Vector3 deltaMove;
+		private Vector3 deltaHorizontalMove;
+		private Vector3 TotalDeltaMove => deltaMove + deltaHorizontalMove;
+		private AccelerationState currentAccelerationState = AccelerationState.Standing;
 
 		//Feedback
 		private Vector2 curModelTilt;
@@ -77,6 +80,7 @@ namespace EoE.Entities
 		private FXInstance[] HealthBelowThresholdBoundEffects;
 		private FXInstance[] PlayerWalkingBoundEffects;
 		private FXInstance[] PlayerRunningBoundEffects;
+		private FXInstance[] PlayerDecelerationBoundEffects;
 		private List<FXInstance> CombatBoundEffects;
 
 		private MusicInstance combatMusic;
@@ -107,13 +111,13 @@ namespace EoE.Entities
 
 		//Use Items
 		public InventoryItem[] SelectableItems;
-		public int selectedItemIndex { get; private set; }
-		public InventoryItem EquipedItem => SelectableItems[selectedItemIndex];
+		public int SelectedItemIndex { get; private set; }
+		public InventoryItem EquipedItem => SelectableItems[SelectedItemIndex];
 
-		//Spell Items
+		//ActivationCompound Items
 		public InventoryItem[] SelectableActivationCompoundItems;
-		public int selectedActivationCompoundItemIndex { get; private set; }
-		public InventoryItem EquipedSpell => SelectableActivationCompoundItems[selectedActivationCompoundItemIndex];
+		public int SelectedActivationCompoundItemIndex { get; private set; }
+		public InventoryItem EquipedSpell => SelectableActivationCompoundItems[SelectedActivationCompoundItemIndex];
 		#endregion
 		#region Leveling
 		public Buff LevelingPointsBuff { get; private set; }
@@ -158,9 +162,10 @@ namespace EoE.Entities
 		protected override void EntitieFixedUpdate()
 		{
 			CheckForLanding();
-			ApplyForces();
 			CheckForFalling();
 			UpdateAcceleration();
+
+			ApplyForces();
 
 			if (IsStunned || IsTurnStopped)
 			{
@@ -176,13 +181,13 @@ namespace EoE.Entities
 		protected override void ResetStats()
 		{
 			base.ResetStats();
-			curMaxStamina = playerSettings.Stamina;
+			CurMaxStamina = playerSettings.Stamina;
 			FXManager.ExecuteFX(playerSettings.EffectsOnPlayerSpawn, transform, true);
 		}
 		protected override void ResetStatValues()
 		{
 			base.ResetStatValues();
-			curStamina = curMaxStamina;
+			CurStamina = CurMaxStamina;
 			playerShield = Shield.CreateShield(playerSettings.ShieldSettings, this);
 		}
 		protected override void LevelSetup()
@@ -225,9 +230,9 @@ namespace EoE.Entities
 			EquipedWeapon = null;
 			EquipedArmor = null;
 
-			selectedItemIndex = 0;
+			SelectedItemIndex = 0;
 			SelectableItems = new InventoryItem[SELECTABLE_ITEMS_AMOUNT];
-			selectedActivationCompoundItemIndex = 0;
+			SelectedActivationCompoundItemIndex = 0;
 			SelectableActivationCompoundItems = new InventoryItem[SELECTABLE_ITEMS_AMOUNT];
 		}
 		#endregion
@@ -268,21 +273,31 @@ namespace EoE.Entities
 		private void PlayerFeedbackControl()
 		{
 			//Model tilt
-			Vector2 forward = new Vector2(transform.forward.x, transform.forward.z);
-			Vector2 right = new Vector2(transform.right.x, transform.right.z);
+			Vector3 tForward = transform.forward;
+			Vector3 tRight = transform.right;
+			Vector2 forward = new Vector2(tForward.x, tForward.z);
+			Vector2 right = new Vector2(tRight.x, tRight.z);
 
-			float moveVelocity = new Vector2(lastMove.x, lastMove.z).magnitude;
+			float moveVelocity = new Vector2(deltaMove.x, deltaMove.z).magnitude;
 			float normalizedMoveVelocity = moveVelocity / playerSettings.AnimationWalkSpeedDivider;
 
-			Vector2 velocityDirection = (moveVelocity > 0) ? (new Vector2(lastMove.x, lastMove.z) / moveVelocity) : (new Vector2(transform.forward.x, transform.forward.z));
+			Vector2 velocityDirection = (moveVelocity > 0) ? (new Vector2(deltaMove.x, deltaMove.z) / moveVelocity) : (new Vector2(transform.forward.x, transform.forward.z));
 
 			float targetTiltAngle = normalizedMoveVelocity * PlayerSettings.MaxModelTilt;
 			Vector2 targetTilt = velocityDirection * targetTiltAngle;
 			targetTilt = targetTilt.x * right * -1 + targetTilt.y * forward;
 
-			curModelTilt = new Vector2(Utils.SpringLerp(curModelTilt.x, targetTilt.x, ref curSpringLerpAcceleration.x, PlayerSettings.SideTurnLerpSpringStiffness, PlayerSettings.SideTurnSpringLerpSpeed * Time.deltaTime),
-										Utils.SpringLerp(curModelTilt.y, targetTilt.y, ref curSpringLerpAcceleration.y, PlayerSettings.SideTurnLerpSpringStiffness, PlayerSettings.SideTurnSpringLerpSpeed * Time.deltaTime)
-										);
+			curModelTilt = new Vector2(Utils.SpringLerp(curModelTilt.x, 
+														targetTilt.x, 
+														ref curSpringLerpAcceleration.x, 
+														PlayerSettings.SideTurnLerpSpringStiffness, 
+														PlayerSettings.SideTurnSpringLerpSpeed * Time.deltaTime),
+										Utils.SpringLerp(curModelTilt.y, 
+														targetTilt.y, 
+														ref curSpringLerpAcceleration.y, 
+														PlayerSettings.SideTurnLerpSpringStiffness, 
+														PlayerSettings.SideTurnSpringLerpSpeed * Time.deltaTime));
+
 			modelTransform.localEulerAngles = new Vector3(curModelTilt.y, 0, curModelTilt.x);
 
 			//Move direction
@@ -295,25 +310,23 @@ namespace EoE.Entities
 		}
 		private void UpdateAnimationStates(float moveVelocity, float normalizedMoveVelocity)
 		{
-			bool turning = curStates.Turning;
+			bool moving = curStates.Moving && (moveVelocity >= (MIN_WALK_ACCELERATION / 4)) && (intendedAcceleration >= MIN_WALK_ACCELERATION);
+			curStates.Moving = moving;
 			bool running = curStates.Running;
 
-			bool moving = curStates.Moving && moveVelocity >= (MIN_WALK_ACCELERATION / 4) && intendedAcceleration >= MIN_WALK_ACCELERATION;
-			curStates.Moving = moving;
-
 			if (running && !moving)
-				curStates.Running = false;
+				curStates.Running = running = false;
 
 			//Set the animation states based on the calculated values and bools
-			animationControl.SetBool("Walking", !turning && moving);
+			animationControl.SetBool("Walking", moving || (curAcceleration > 0));
 			animationControl.SetBool("Fall", fallingSince > FALLING_SINCE_THRESHOLD);
 			animationControl.SetFloat("ZMove", curAnimationDirection.x);
 			animationControl.SetFloat("XMove", curAnimationDirection.y);
 			animationControl.SetFloat("CurWalkSpeed", normalizedMoveVelocity);
 
-			PlayerStateFXControl(moving, running, turning);
+			PlayerStateFXControl(moving, running);
 		}
-		private void PlayerStateFXControl(bool moving, bool running, bool turning)
+		private void PlayerStateFXControl(bool moving, bool running)
 		{
 			//Health critical effects
 			bool curBelowHealthThreshold = HealthBelowThresholdBoundEffects != null;
@@ -333,7 +346,7 @@ namespace EoE.Entities
 
 			//Walk effects
 			bool curWalkingEffectsOn = PlayerWalkingBoundEffects != null;
-			bool newWalkingEffectsOn = (!turning && !running && moving) && (charController.isGrounded);
+			bool newWalkingEffectsOn = (!running && moving) && (charController.isGrounded);
 			if (curWalkingEffectsOn != newWalkingEffectsOn)
 			{
 				//Player started walking or stopped running and kept walking
@@ -362,17 +375,28 @@ namespace EoE.Entities
 					FXManager.FinishFX(ref PlayerRunningBoundEffects);
 				}
 			}
+
+			//Deceleration effects
+			bool curDecelerationEffectsOn = PlayerDecelerationBoundEffects != null;
+			bool newDecelerationEffectsOn = (currentAccelerationState == AccelerationState.Decelerating) && (charController.isGrounded);
+			if (curDecelerationEffectsOn != newDecelerationEffectsOn)
+			{
+				//Player is decelerating
+				if (newDecelerationEffectsOn)
+				{
+					FXManager.ExecuteFX(PlayerSettings.EffectsWhileDecelerating, transform, true, out PlayerDecelerationBoundEffects);
+				}
+				else //Player was decelerating but is not anymore
+				{
+					FXManager.FinishFX(ref PlayerDecelerationBoundEffects);
+				}
+			}
 		}
 		#region Walking
 		private void TurnControl()
 		{
-			float turnAmount = Time.fixedDeltaTime * SelfSettings.TurnSpeed * (charController.isGrounded ? 1 : SelfSettings.InAirTurnSpeedMultiplier);
-			float normalizedDif = Mathf.Abs(Mathf.DeltaAngle(curRotation, intendedRotation)) / NON_TURNING_THRESHOLD;
-			turnAmount *= Mathf.Min(normalizedDif * LERP_TURNING_AREA, 1);
-			curRotation = Mathf.MoveTowardsAngle(curRotation, intendedRotation, turnAmount);
-
-			curStates.Turning = normalizedDif > 1;
-
+			float curTurnSpeed = SelfSettings.TurnSpeed * (charController.isGrounded ? 1 : SelfSettings.InAirTurnSpeedMultiplier);
+			curRotation = Mathf.LerpAngle(curRotation, intendedRotation, Time.fixedDeltaTime * (curTurnSpeed / 90)) % 360;
 			transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,
 														curRotation,
 														transform.localEulerAngles.z);
@@ -388,7 +412,6 @@ namespace EoE.Entities
 			//Is the player not trying to move? Then stop here
 			if (!moving)
 			{
-				controllDirection = Vector3.zero;
 				return;
 			}
 
@@ -398,11 +421,7 @@ namespace EoE.Entities
 			{
 				float runCost = PlayerSettings.RunStaminaCost * Time.deltaTime;
 
-				if (curStamina >= runCost)
-				{
-					ChangeStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, runCost));
-				}
-				else
+				if(!TryAffordStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, runCost)))
 				{
 					running = curStates.Running = false;
 				}
@@ -411,14 +430,16 @@ namespace EoE.Entities
 			{
 				float runCost = PlayerSettings.RunStaminaCost * Time.deltaTime;
 
-				if (curStamina >= runCost)
+				if (TryAffordStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, runCost)))
 				{
-					ChangeStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, runCost));
 					running = curStates.Running = true;
 				}
 			}
+
 			//Check how fast the player wants to accelerate based on how far the movestick is moved
-			float intendedControl = Mathf.Min(1, inputDirection.magnitude);
+			float inputMagnitude = inputDirection.magnitude;
+			inputDirection /= inputMagnitude;
+			float intendedControl = Mathf.Min(1, inputMagnitude);
 			intendedAcceleration = intendedControl * (running ? PlayerSettings.RunSpeedMultiplicator : 1);
 
 			//Make the movement relative to the camera
@@ -430,7 +451,13 @@ namespace EoE.Entities
 			camRight.y = 0;
 			camRight = camRight.normalized;
 
+			//Find out if the player should be turning by using the dot product of the actuall forward and the input direction
+			Vector3 playerForward = transform.forward;
 			controllDirection = inputDirection.y * camForward + inputDirection.x * camRight;
+
+			curStates.Turning = !TargetedEntitie && (Vector3.Dot(playerForward, controllDirection) < NON_TURNING_THRESHOLD);
+
+			moveDirection = curStates.Turning ? playerForward : controllDirection;
 
 			if ((!TargetedEntitie) && (intendedControl > MIN_WALK_ACCELERATION * 0.95f))
 				intendedRotation = -(Mathf.Atan2(controllDirection.z, controllDirection.x) * Mathf.Rad2Deg - 90);
@@ -461,10 +488,9 @@ namespace EoE.Entities
 
 			if (!disallowJump && (jumpPressed && charController.isGrounded))
 			{
-				if (curStamina >= PlayerSettings.JumpStaminaCost)
+				if (TryAffordStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, PlayerSettings.JumpStaminaCost)))
 				{
 					Jump();
-					ChangeStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, PlayerSettings.JumpStaminaCost));
 				}
 			}
 		}
@@ -502,15 +528,6 @@ namespace EoE.Entities
 			else if (fallingSince > 0)
 				fallingSince = 0;
 
-			if (disallowFallingAnimFrames > 0)
-			{
-				disallowFallingAnimFrames--;
-				animationControl.SetBool("Fall", false);
-			}
-			else
-			{
-			}
-
 			if (falling)
 			{
 				GravityControl(GameController.CurrentGameSettings.WhenFallingExtraGravity);
@@ -519,7 +536,7 @@ namespace EoE.Entities
 		private void CheckForLanding()
 		{
 			bool newOnGroundState = charController.isGrounded;
-			float velDif = CurVelocity.y - lastFallVelocity;
+			float deltaVertical = CurVelocity.y - lastFallVelocity;
 			//Check if the grounded state changed
 			if ((newOnGroundState != lastOnGroundState))
 			{
@@ -529,35 +546,31 @@ namespace EoE.Entities
 				if (newOnGroundState)
 				{
 					jumpCooldown = JUMP_COOLDOWN;
-					if(velDif > LANDED_VELOCITY_THRESHOLD)
-						Landed(velDif);
+					Landed(deltaVertical, TotalDeltaMove.magnitude + Mathf.Max(deltaVertical));
 				}
 			}
 			lastFallVelocity = CurVelocity.y;
 		}
-		private void Landed(float velDif)
+		private void Landed(float deltaVertical, float totalImpactForce)
 		{
 			//Create FX
-			if (velDif > PlayerSettings.PlayerLandingVelocityThreshold)
-			{
-				FXManager.ExecuteFX(PlayerSettings.EffectsOnPlayerLanding, transform, true);
-			}
+			FXManager.ExecuteFX(PlayerSettings.EffectsOnPlayerLanding, transform, true, deltaVertical / PlayerSettings.PlayerLandingVelocityThreshold);
 
 			float velocityMultiplier = 0;
-			if (velDif > GameController.CurrentGameSettings.GroundHitVelocityLossMinThreshold)
+			if (totalImpactForce > GameController.CurrentGameSettings.GroundHitVelocityLossMinThreshold)
 			{
-				if (velDif >= GameController.CurrentGameSettings.GroundHitVelocityLossMaxThreshold)
+				if (totalImpactForce >= GameController.CurrentGameSettings.GroundHitVelocityLossMaxThreshold)
 					velocityMultiplier = GameController.CurrentGameSettings.GroundHitVelocityLoss;
 				else
-					velocityMultiplier = (velDif - GameController.CurrentGameSettings.GroundHitVelocityLossMinThreshold) / (GameController.CurrentGameSettings.GroundHitVelocityLossMaxThreshold - GameController.CurrentGameSettings.GroundHitVelocityLossMinThreshold) * GameController.CurrentGameSettings.GroundHitVelocityLoss;
+					velocityMultiplier = (totalImpactForce - GameController.CurrentGameSettings.GroundHitVelocityLossMinThreshold) / (GameController.CurrentGameSettings.GroundHitVelocityLossMaxThreshold - GameController.CurrentGameSettings.GroundHitVelocityLossMinThreshold) * GameController.CurrentGameSettings.GroundHitVelocityLoss;
 			}
-			curAcceleration = Mathf.Clamp01(curAcceleration * (1 - velocityMultiplier));
-			impactForce *= 1 - velocityMultiplier;
+			curAcceleration *= Mathf.Clamp01(1 - velocityMultiplier);
+			impactForce *= Mathf.Clamp01(1 - velocityMultiplier);
 
 			if (FallDamageCooldown <= 0)
 			{
 				//Check if there is any fall damage to give
-				float damageAmount = GameController.CurrentGameSettings.FallDamageCurve.Evaluate(velDif);
+				float damageAmount = GameController.CurrentGameSettings.FallDamageCurve.Evaluate(deltaVertical);
 
 				if (damageAmount > 0)
 					ChangeHealth(new ChangeInfo(null, CauseType.Physical, TargetStat.Health, damageAmount));
@@ -569,24 +582,56 @@ namespace EoE.Entities
 		private void UpdateAcceleration()
 		{
 			float clampedIntent = Mathf.Clamp01(intendedAcceleration);
-			if (curStates.Moving && !curStates.Turning && intendedAcceleration >= MIN_WALK_ACCELERATION)
+			if (curStates.Moving && intendedAcceleration >= MIN_WALK_ACCELERATION)
 			{
 				if (curAcceleration < clampedIntent)
 				{
-					if (SelfSettings.MoveAcceleration > clampedIntent)
-						curAcceleration = Mathf.Min(clampedIntent, curAcceleration + intendedAcceleration * Time.fixedDeltaTime * SelfSettings.MoveAcceleration / SelfSettings.EntitieMass * (charController.isGrounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
-					else
+					float accelerationChange = intendedAcceleration * Time.fixedDeltaTime * SelfSettings.MoveAcceleration;
+					accelerationChange *= charController.isGrounded ? 1 : SelfSettings.InAirAccelerationMultiplier;
+					accelerationChange *= curStates.Turning ? SelfSettings.WhileTurningAccelerationMultiplier : 1;
+
+					float newAcceleration = curAcceleration + accelerationChange / SelfSettings.EntitieMass;
+					if(newAcceleration >= clampedIntent)
+					{
 						curAcceleration = clampedIntent;
+						currentAccelerationState = AccelerationState.FullSpeed;
+					}
+					else
+					{
+						curAcceleration = newAcceleration;
+						currentAccelerationState = AccelerationState.Accelerating;
+					}
+				}
+				else
+				{
+					currentAccelerationState = AccelerationState.FullSpeed;
+					curAcceleration = clampedIntent;
 				}
 			}
 			else //decelerate
 			{
 				if (curAcceleration > 0)
 				{
-					if (SelfSettings.NoMoveDeceleration > 0)
-						curAcceleration = Mathf.Max(0, curAcceleration - Time.fixedDeltaTime * SelfSettings.NoMoveDeceleration / SelfSettings.EntitieMass * (charController.isGrounded ? 1 : SelfSettings.InAirAccelerationMultiplier));
-					else
+					float accelerationChange = Time.fixedDeltaTime * SelfSettings.NoMoveDeceleration;
+					accelerationChange *= charController.isGrounded ? 1 : SelfSettings.InAirAccelerationMultiplier;
+					accelerationChange *= curStates.Turning ? SelfSettings.WhileTurningAccelerationMultiplier : 1;
+
+					float newAcceleration = curAcceleration - accelerationChange / SelfSettings.EntitieMass;
+					if (newAcceleration <= 0)
+					{
 						curAcceleration = 0;
+						currentAccelerationState = AccelerationState.Standing;
+					}
+					else
+					{
+						curAcceleration = newAcceleration;
+						currentAccelerationState = AccelerationState.Decelerating;
+					}
+				}
+				else
+				{
+					currentAccelerationState = AccelerationState.Standing;
+					curAcceleration = 0;
 				}
 			}
 		}
@@ -599,12 +644,16 @@ namespace EoE.Entities
 		{
 			//Apply move velocity and find out how far we moved
 			Vector3 prePos = transform.position;
-			charController.Move(curMoveVelocity * Time.fixedDeltaTime);
+			charController.Move(CurMoveVelocity * Time.fixedDeltaTime);
 			Vector3 newPos = transform.position;
-			lastMove = (newPos - prePos) / Time.fixedDeltaTime;
+			deltaMove = (newPos - prePos) / Time.fixedDeltaTime;
 
-			//Apply Curvelocity
+			//Apply CurVelocity
+			prePos = transform.position;
 			charController.Move(CurVelocity * Time.fixedDeltaTime);
+			newPos = transform.position;
+			Vector3 deltaHorizontalVerticalMove = (newPos - prePos) / Time.fixedDeltaTime;
+			deltaHorizontalMove = new Vector3(deltaHorizontalVerticalMove.x, 0, deltaHorizontalVerticalMove.z);
 
 			animationControl.SetBool("OnGround", charController.isGrounded);
 			GravityControl();
@@ -612,7 +661,7 @@ namespace EoE.Entities
 		private void GravityControl(float scale = 1)
 		{
 			float lowerFallThreshold = Physics.gravity.y / 2;
-			float force = scale * Physics.gravity.y * Time.fixedDeltaTime;
+			float force = scale * Physics.gravity.y * Time.deltaTime;
 
 			if (!charController.isGrounded || TotalVerticalVelocity > 0)
 			{
@@ -647,10 +696,11 @@ namespace EoE.Entities
 				return;
 			}
 
-			if (InputController.Dodge.Down && !currentlyDashing && curStamina >= PlayerSettings.DashStaminaCost)
+			if (InputController.Dodge.Down &&
+				!currentlyDashing &&
+				TryAffordStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, PlayerSettings.DashStaminaCost)))
 			{
 				EventManager.PlayerDashInvoke();
-				ChangeStamina(new ChangeInfo(null, CauseType.Magic, TargetStat.Stamina, PlayerSettings.DashStaminaCost));
 				StartCoroutine(DashCoroutine());
 			}
 		}
@@ -755,24 +805,41 @@ namespace EoE.Entities
 		}
 		#endregion
 		#region Stamina Control
+		public bool TryAffordStamina(ChangeInfo change)
+		{
+			ChangeInfo.ChangeResult changeResult = new ChangeInfo.ChangeResult(change, this, false);
+			if (CurStamina >= changeResult.finalChangeAmount)
+			{
+				ChangeStamina(changeResult);
+				return true;
+			}
+			else
+			{
+				FXManager.ExecuteFX(playerSettings.EffectsOnStaminaMissing, transform, true);
+				return false;
+			}
+		}
 		public void ChangeStamina(ChangeInfo change)
 		{
 			ChangeInfo.ChangeResult changeResult = new ChangeInfo.ChangeResult(change, this, false);
-
-			if (changeResult.finalChangeAmount > 0)
+			ChangeStamina(changeResult);
+		}
+		public void ChangeStamina(ChangeInfo.ChangeResult change)
+		{
+			if (change.finalChangeAmount > 0)
 			{
 				usedStaminaCooldown = PlayerSettings.StaminaAfterUseCooldown;
 			}
 
-			curStamina -= changeResult.finalChangeAmount;
+			CurStamina -= change.finalChangeAmount;
 			ClampStamina();
 		}
-		public void ClampStamina() => curStamina = Mathf.Clamp(curStamina, 0, curMaxStamina);
+		public void ClampStamina() => CurStamina = Mathf.Clamp(CurStamina, 0, CurMaxStamina);
 		protected override void Regen()
 		{
 			base.Regen();
 
-			if (PlayerSettings.DoStaminaRegen && curStamina < curMaxStamina)
+			if (PlayerSettings.DoStaminaRegen && CurStamina < CurMaxStamina)
 			{
 				float staminaRegenMultiplier = curStates.Fighting ? PlayerSettings.StaminaRegenInCombatMultiplier : 1;
 				if (usedStaminaCooldown > 0)
@@ -780,8 +847,8 @@ namespace EoE.Entities
 					usedStaminaCooldown -= Time.deltaTime;
 					staminaRegenMultiplier *= PlayerSettings.StaminaRegenAfterUseMultiplier;
 				}
-				curStamina += PlayerSettings.StaminaRegen * staminaRegenMultiplier * Time.deltaTime;
-				curStamina = Mathf.Min(curStamina, curMaxStamina);
+				CurStamina += PlayerSettings.StaminaRegen * staminaRegenMultiplier * Time.deltaTime;
+				CurStamina = Mathf.Min(CurStamina, CurMaxStamina);
 			}
 		}
 		#endregion
@@ -975,7 +1042,7 @@ namespace EoE.Entities
 		private void ItemControl()
 		{
 			UpdateItemCooldowns();
-			ScrollItemControll();
+			ScrollItemControl();
 			ItemUseControl();
 		}
 		private void UpdateItemCooldowns()
@@ -986,7 +1053,7 @@ namespace EoE.Entities
 					GameController.ItemCollection.Data[i].curCooldown -= Time.deltaTime;
 			}
 		}
-		private void ScrollItemControll()
+		private void ScrollItemControl()
 		{
 			//Consumable Scrolling
 			int selectedItemIndexChange = InputController.ItemScrollUp.Down ? 1 : (InputController.ItemScrollDown.Down ? -1 : 0);
@@ -996,13 +1063,13 @@ namespace EoE.Entities
 				for (int i = 0; i < (SELECTABLE_ITEMS_AMOUNT - 1); i++)
 				{
 					t += selectedItemIndexChange;
-					int valIndex = ValidatedID(t + selectedItemIndex);
+					int valIndex = ValidatedID(t + SelectedItemIndex);
 					if (SelectableItems[valIndex] != null)
 					{
 						if (EquipedItem != null)
 							EquipedItem.data.UnEquip(EquipedItem, this);
 
-						selectedItemIndex = valIndex;
+						SelectedItemIndex = valIndex;
 						EquipedItem.data.Equip(EquipedItem, this);
 						break;
 					}
@@ -1010,7 +1077,7 @@ namespace EoE.Entities
 			}
 
 			//ActivationCompound Scrolling
-			InventoryItem selectedItem = SelectableActivationCompoundItems[selectedActivationCompoundItemIndex];
+			InventoryItem selectedItem = SelectableActivationCompoundItems[SelectedActivationCompoundItemIndex];
 			ActivationCompoundItem selectedAC = selectedItem == null ? null : (selectedItem.data as ActivationCompoundItem);
 			bool cannotScrollMagic = false;
 			if (selectedAC == null)
@@ -1029,13 +1096,13 @@ namespace EoE.Entities
 				for (int i = 0; i < (SELECTABLE_ITEMS_AMOUNT - 1); i++)
 				{
 					t += selectedSpellIndexChange;
-					int valIndex = ValidatedID(t + selectedActivationCompoundItemIndex);
+					int valIndex = ValidatedID(t + SelectedActivationCompoundItemIndex);
 					if (SelectableActivationCompoundItems[valIndex] != null)
 					{
 						if (EquipedSpell != null)
 							EquipedSpell.data.UnEquip(EquipedSpell, this);
 
-						selectedActivationCompoundItemIndex = valIndex;
+						SelectedActivationCompoundItemIndex = valIndex;
 						EquipedSpell.data.Equip(EquipedSpell, this);
 						break;
 					}
@@ -1072,7 +1139,7 @@ namespace EoE.Entities
 					EquipedItem.data.Use(EquipedItem, this, Inventory);
 			}
 		}
-		private void UpdateEquipedItems()
+		public void UpdateEquipedItems()
 		{
 			if (EquipedWeapon != null && EquipedWeapon.stackSize <= 0)
 				EquipedWeapon = null;
@@ -1080,19 +1147,39 @@ namespace EoE.Entities
 				EquipedArmor = null;
 
 			bool selectablesChanged = false;
+			bool atLeastOneEquippedItem = false;
+			bool atLeastOneEquippedACItem = false;
 			for (int i = 0; i < SELECTABLE_ITEMS_AMOUNT; i++)
 			{
-				if (SelectableItems[i] != null && SelectableItems[i].stackSize <= 0)
+				if (SelectableItems[i] != null)
 				{
-					selectablesChanged = true;
-					SelectableItems[i] = null;
+					if (SelectableItems[i].stackSize <= 0)
+					{
+						selectablesChanged = true;
+						SelectableItems[i] = null;
+					}
+					else
+					{
+						atLeastOneEquippedItem |= true;
+					}
 				}
-				if (SelectableActivationCompoundItems[i] != null && SelectableActivationCompoundItems[i].stackSize <= 0)
+				if (SelectableActivationCompoundItems[i] != null)
 				{
-					selectablesChanged = true;
-					SelectableActivationCompoundItems[i] = null;
+					if (SelectableActivationCompoundItems[i].stackSize <= 0)
+					{
+						selectablesChanged = true;
+						SelectableActivationCompoundItems[i] = null;
+					}
+					else
+					{
+						atLeastOneEquippedACItem |= true;
+					}
 				}
 			}
+
+			selectablesChanged |= (SelectableItems[SelectedItemIndex] == null) && atLeastOneEquippedItem;
+			selectablesChanged |= (SelectableActivationCompoundItems[SelectedActivationCompoundItemIndex] == null) && atLeastOneEquippedACItem;
+
 			if (selectablesChanged)
 				SelectectableItemsChanged();
 		}
@@ -1107,10 +1194,10 @@ namespace EoE.Entities
 			{
 				for (int i = 0; i < SELECTABLE_ITEMS_AMOUNT; i++)
 				{
-					int valIndex = ValidatedID(i + selectedItemIndex);
+					int valIndex = ValidatedID(i + SelectedItemIndex);
 					if (SelectableItems[valIndex] != null)
 					{
-						selectedItemIndex = valIndex;
+						SelectedItemIndex = valIndex;
 						EquipedItem.data.Equip(EquipedItem, this);
 						break;
 					}
@@ -1121,10 +1208,10 @@ namespace EoE.Entities
 			{
 				for (int i = 0; i < SELECTABLE_ITEMS_AMOUNT; i++)
 				{
-					int valIndex = ValidatedID(i + selectedActivationCompoundItemIndex);
+					int valIndex = ValidatedID(i + SelectedActivationCompoundItemIndex);
 					if (SelectableActivationCompoundItems[valIndex] != null)
 					{
-						selectedActivationCompoundItemIndex = valIndex;
+						SelectedActivationCompoundItemIndex = valIndex;
 						EquipedSpell.data.Equip(EquipedSpell, this);
 						break;
 					}
@@ -1208,6 +1295,7 @@ namespace EoE.Entities
 			FXManager.FinishFX(ref HealthBelowThresholdBoundEffects);
 			FXManager.FinishFX(ref PlayerWalkingBoundEffects);
 			FXManager.FinishFX(ref PlayerRunningBoundEffects);
+			FXManager.FinishFX(ref PlayerDecelerationBoundEffects);
 			FXManager.FinishFX(ref CombatBoundEffects);
 		}
 		#region IFrames
@@ -1394,8 +1482,11 @@ namespace EoE.Entities
 			if (!Application.isPlaying)
 				return;
 
-			Gizmos.color = Color.green;
+			Gizmos.color = (Color.white + Color.gray) / 2;
 			Gizmos.DrawLine(transform.position, transform.position + controllDirection * 2);
+
+			Gizmos.color = Color.green;
+			Gizmos.DrawLine(transform.position, transform.position + moveDirection * 2);
 
 			Gizmos.color = Color.cyan;
 			Gizmos.DrawLine(modelTransform.position, modelTransform.position + modelTransform.up * 2.5f);

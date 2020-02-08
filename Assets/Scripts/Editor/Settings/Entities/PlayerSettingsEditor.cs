@@ -128,18 +128,6 @@ namespace EoE.Information
 
 			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AnimationWalkSpeedDivider))), ref settings.AnimationWalkSpeedDivider, 1);
-
-			/*
-			LineBreak(new Color(0.25f, 0.25f, 0.25f, 1));
-			Header("Player Look Turning");
-			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BodyTurnHorizontalClamp))), ref settings.BodyTurnHorizontalClamp, 1);
-			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.BodyTurnWeight))), ref settings.BodyTurnWeight, 1);
-
-			GUILayout.Space(4);
-			Vector4Field(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.HeadLookAngleClamps))), ref settings.HeadLookAngleClamps, 1);
-			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.LookLerpSpeed))), ref settings.LookLerpSpeed, 1);
-			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.LookLerpSpringStiffness))), ref settings.LookLerpSpringStiffness, 1);
-			*/
 		}
 		private void FXSettingsArea()
 		{
@@ -148,12 +136,15 @@ namespace EoE.Information
 			Header("Generall");
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnPlayerSpawn))), ref settings.EffectsOnPlayerSpawn, serializedObject.FindProperty(nameof(settings.EffectsOnPlayerSpawn)), new GUIContent(". Effect"), 1);
 
+			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnCombatStart))), ref settings.EffectsOnCombatStart, serializedObject.FindProperty(nameof(settings.EffectsOnCombatStart)), new GUIContent(". Effect"), 1);
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnUltimateCharged))), ref settings.EffectsOnUltimateCharged, serializedObject.FindProperty(nameof(settings.EffectsOnUltimateCharged)), new GUIContent(". Effect"), 1);
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsWhileUltimateCharged))), ref settings.EffectsWhileUltimateCharged, serializedObject.FindProperty(nameof(settings.EffectsWhileUltimateCharged)), new GUIContent(". Effect"), 1);
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnLevelup))), ref settings.EffectsOnLevelup, serializedObject.FindProperty(nameof(settings.EffectsOnLevelup)), new GUIContent(". Effect"), 1);
-			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnCombatStart))), ref settings.EffectsOnCombatStart, serializedObject.FindProperty(nameof(settings.EffectsOnCombatStart)), new GUIContent(". Effect"), 1);
 
 			DrawArray<ChanceBasedFXGroup>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnCombatStartChanceBased))), ref settings.EffectsOnCombatStartChanceBased, serializedObject.FindProperty(nameof(settings.EffectsOnCombatStartChanceBased)), DrawChanceBasedFXGroup, new GUIContent(". Group"), 1);
+
+			Header("Action Based");
+			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnStaminaMissing))), ref settings.EffectsOnStaminaMissing, serializedObject.FindProperty(nameof(settings.EffectsOnStaminaMissing)), new GUIContent(". Effect"), 1);
 
 			Header("On Player Attacking");
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnCauseDamage))), ref settings.EffectsOnCauseDamage, serializedObject.FindProperty(nameof(settings.EffectsOnCauseDamage)), new GUIContent(". Effect"), 1);
@@ -163,6 +154,7 @@ namespace EoE.Information
 			Header("On Player Movement");
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsWhileWalk))), ref settings.EffectsWhileWalk, serializedObject.FindProperty(nameof(settings.EffectsWhileWalk)), new GUIContent(". Effect"), 1);
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsWhileRun))), ref settings.EffectsWhileRun, serializedObject.FindProperty(nameof(settings.EffectsWhileRun)), new GUIContent(". Effect"), 1);
+			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsWhileDecelerating))), ref settings.EffectsWhileDecelerating, serializedObject.FindProperty(nameof(settings.EffectsWhileDecelerating)), new GUIContent(". Effect"), 1);
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnJump))), ref settings.EffectsOnJump, serializedObject.FindProperty(nameof(settings.EffectsOnJump)), new GUIContent(". Effect"), 1);
 			Foldout(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnPlayerLanding))), ref OnLandingEffectsOpen, 1);
 			if (OnLandingEffectsOpen)

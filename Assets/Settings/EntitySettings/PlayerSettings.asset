@@ -65,13 +65,14 @@ MonoBehaviour:
   DoManaRegen: 1
   ManaRegen: 1.5
   ManaRegenInCombatMultiplier: 0.6
-  WalkSpeed: 8
-  RunSpeedMultiplicator: 1.6
-  TurnSpeed: 540
-  InAirTurnSpeedMultiplier: 0.5
-  MoveAcceleration: 6
-  NoMoveDeceleration: 3
+  WalkSpeed: 9
+  RunSpeedMultiplicator: 1.55
+  TurnSpeed: 800
+  InAirTurnSpeedMultiplier: 0.4
+  MoveAcceleration: 2
+  NoMoveDeceleration: 2.5
   InAirAccelerationMultiplier: 0.3
+  WhileTurningAccelerationMultiplier: 0.9
   CameraToPlayerDistance: 7
   CameraYLerpSpeed: 15
   CameraYLerpSringStiffness: 0.7
@@ -93,7 +94,7 @@ MonoBehaviour:
   JumpStaminaCost: 3
   RunStaminaCost: 5
   DashStaminaCost: 8
-  JumpPower: {x: 0, y: 12, z: 12}
+  JumpPower: {x: 0, y: 12, z: 6}
   JumpImpulsePower: 1.5
   JumpBackwardMultiplier: 0.65
   DashPower: 5
@@ -142,6 +143,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 982aab948223d7044bfae67dc43bb77c, type: 2}
   - {fileID: 11400000, guid: 2a1f29303ceefa04d9d5508f74094d05, type: 2}
   - {fileID: 11400000, guid: d035199abf3ed634aba5aa2938b2cadf, type: 2}
+  EffectsOnStaminaMissing:
+  - {fileID: 11400000, guid: 844e43e30828f2942a1506846a4661c9, type: 2}
   EffectsOnCauseDamage:
   - {fileID: 11400000, guid: 597bda602a9441346a2e721049c28c87, type: 2}
   - {fileID: 11400000, guid: c4b1faa46fe904e4da604eb9bb7a96a4, type: 2}
@@ -158,9 +161,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 760364c3cb2adab46a51192839a050f3, type: 2}
   - {fileID: 11400000, guid: 0b517f1942c86fb4c81dd0b2013c1fc0, type: 2}
   - {fileID: 11400000, guid: 634714252dd985c4a9434e87dac6225a, type: 2}
+  EffectsWhileDecelerating:
+  - {fileID: 11400000, guid: 14b174552b3d5564599c64956e8be5e7, type: 2}
   EffectsOnJump:
   - {fileID: 11400000, guid: 81bcb4243c5d7bf409682cb56f2f128e, type: 2}
-  PlayerLandingVelocityThreshold: 8
+  PlayerLandingVelocityThreshold: 15
   EffectsOnPlayerLanding:
   - {fileID: 11400000, guid: ba451c2b316cc054ba26cb958cbb7f1a, type: 2}
   - {fileID: 11400000, guid: b16188df833539c4391e686f9ab8b6a5, type: 2}
