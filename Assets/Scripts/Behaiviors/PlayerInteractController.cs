@@ -35,10 +35,6 @@ namespace EoE.Entities
 			curFrameTarget = null;
 			currInteractTarget = null;
 		}
-		private void OnCollisionStay(Collision collision)
-		{
-
-		}
 		private void OnTriggerStay(Collider other)
 		{
 			if (!framesLowestDistance.HasValue)

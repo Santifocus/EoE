@@ -31,7 +31,7 @@ namespace EoE.Entities
 		public bool TryInteract()
 		{
 			if (!canBeInteracted)
-				return false;
+				return false; //Not interactable => return false as if we did not try to interact with it
 
 			if(interactCondition && !interactCondition.True)
 			{
@@ -40,11 +40,11 @@ namespace EoE.Entities
 					failInteractEffectCooldown = FAIL_INTERACT_EFFECT_COOLDOWN;
 					FXManager.ExecuteFX(failedInteractEffects, Player.Instance.transform, true);
 				}
-				return false;
+				return true; //We did try to interact but the condition failed so we still return true
 			}
 
 			Interact();
-			return true;
+			return true; //Was able to itneract and the condition was true => let the invoker know it was successfull
 		}
 		private void Update()
 		{
