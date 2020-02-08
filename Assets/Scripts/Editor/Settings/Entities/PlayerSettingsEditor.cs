@@ -16,6 +16,7 @@ namespace EoE.Information
 		private static bool AnimationSettingsOpen;
 
 		//VFXEffectArrays
+		private static bool OnDecelerateEffectsOpen;
 		private static bool OnLandingEffectsOpen;
 		private static bool OnHealthCriticalEffectsOpen;
 
@@ -154,8 +155,18 @@ namespace EoE.Information
 			Header("On Player Movement");
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsWhileWalk))), ref settings.EffectsWhileWalk, serializedObject.FindProperty(nameof(settings.EffectsWhileWalk)), new GUIContent(". Effect"), 1);
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsWhileRun))), ref settings.EffectsWhileRun, serializedObject.FindProperty(nameof(settings.EffectsWhileRun)), new GUIContent(". Effect"), 1);
-			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsWhileDecelerating))), ref settings.EffectsWhileDecelerating, serializedObject.FindProperty(nameof(settings.EffectsWhileDecelerating)), new GUIContent(". Effect"), 1);
+
+			//DecelerationEffects
+			Foldout(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsWhileDecelerating))), ref OnDecelerateEffectsOpen, 1);
+			if (OnDecelerateEffectsOpen)
+			{
+				FloatSliderField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.AccelerationThreshold))), ref settings.AccelerationThreshold, 0, 1, 2);
+				ObjectArrayField<FXObject>(new GUIContent("Effects"), ref settings.EffectsWhileDecelerating, serializedObject.FindProperty(nameof(settings.EffectsWhileDecelerating)), new GUIContent(". Effect"), 2);
+			}
+
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnJump))), ref settings.EffectsOnJump, serializedObject.FindProperty(nameof(settings.EffectsOnJump)), new GUIContent(". Effect"), 1);
+
+			//Land Effects
 			Foldout(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnPlayerLanding))), ref OnLandingEffectsOpen, 1);
 			if (OnLandingEffectsOpen)
 			{
@@ -167,6 +178,8 @@ namespace EoE.Information
 			Header("On Player Receiving Damage");
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnReceiveDamage))), ref settings.EffectsOnReceiveDamage, serializedObject.FindProperty(nameof(settings.EffectsOnReceiveDamage)), new GUIContent(". Effect"), 1);
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnReceiveKnockback))), ref settings.EffectsOnReceiveKnockback, serializedObject.FindProperty(nameof(settings.EffectsOnReceiveKnockback)), new GUIContent(". Effect"), 1);
+
+			//Health below threshold Effects
 			Foldout(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsWhileHealthBelowThreshold))), ref OnHealthCriticalEffectsOpen, 1);
 			if (OnHealthCriticalEffectsOpen)
 			{

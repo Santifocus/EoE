@@ -378,17 +378,26 @@ namespace EoE.Entities
 
 			//Deceleration effects
 			bool curDecelerationEffectsOn = PlayerDecelerationBoundEffects != null;
-			bool newDecelerationEffectsOn = (currentAccelerationState == AccelerationState.Decelerating) && (charController.isGrounded);
+			bool newDecelerationEffectsOn = (currentAccelerationState == AccelerationState.Decelerating) && 
+											(charController.isGrounded) && 
+											(curDecelerationEffectsOn || curAcceleration > playerSettings.AccelerationThreshold);
 			if (curDecelerationEffectsOn != newDecelerationEffectsOn)
 			{
 				//Player is decelerating
 				if (newDecelerationEffectsOn)
 				{
-					FXManager.ExecuteFX(PlayerSettings.EffectsWhileDecelerating, transform, true, out PlayerDecelerationBoundEffects);
+					FXManager.ExecuteFX(PlayerSettings.EffectsWhileDecelerating, transform, true, out PlayerDecelerationBoundEffects, curAcceleration);
 				}
 				else //Player was decelerating but is not anymore
 				{
 					FXManager.FinishFX(ref PlayerDecelerationBoundEffects);
+				}
+			}
+			else if (curDecelerationEffectsOn)
+			{
+				for(int i = 0; i < PlayerDecelerationBoundEffects.Length; i++)
+				{
+					PlayerDecelerationBoundEffects[i].baseMultiplier = curAcceleration;
 				}
 			}
 		}

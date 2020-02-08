@@ -91,6 +91,7 @@ namespace EoE.Information
 		//Player Movement
 		public FXObject[] EffectsWhileWalk = default;
 		public FXObject[] EffectsWhileRun = default;
+		public float AccelerationThreshold = 0.5f;
 		public FXObject[] EffectsWhileDecelerating = default;
 		public FXObject[] EffectsOnJump = default;
 		public float PlayerLandingVelocityThreshold = 5f;
