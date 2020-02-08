@@ -173,7 +173,7 @@ namespace EoE
 		{
 			public override FXType Type => FXType.Player;
 			public override FXObject BaseInfo => ScreenShakeInfo;
-			private ScreenShake ScreenShakeInfo;
+			private readonly ScreenShake ScreenShakeInfo;
 
 			public ScreenShakeInstance(ScreenShake ScreenShakeInfo)
 			{
@@ -259,7 +259,7 @@ namespace EoE
 		{
 			public override FXType Type => FXType.Player;
 			public override FXObject BaseInfo => ControllerRumbleInfo;
-			private ControllerRumble ControllerRumbleInfo;
+			private readonly ControllerRumble ControllerRumbleInfo;
 
 			public ControllerRumbleInstance(ControllerRumble ControllerRumbleInfo)
 			{
@@ -333,7 +333,7 @@ namespace EoE
 		{
 			public override FXType Type => FXType.Player;
 			public override FXObject BaseInfo => ScreenBorderColorInfo;
-			private ScreenBorderColor ScreenBorderColorInfo;
+			private readonly ScreenBorderColor ScreenBorderColorInfo;
 			public Color BorderColor => ScreenBorderColorInfo.Color;
 			public ScreenBorderColorInstance(ScreenBorderColor ScreenBorderColorInfo)
 			{
@@ -410,7 +410,7 @@ namespace EoE
 		{
 			public override FXType Type => FXType.Player;
 			public override FXObject BaseInfo => ScreenBlurInfo;
-			private ScreenBlur ScreenBlurInfo;
+			private readonly ScreenBlur ScreenBlurInfo;
 			public ScreenBlurInstance(ScreenBlur ScreenBlurInfo)
 			{
 				this.ScreenBlurInfo = ScreenBlurInfo;
@@ -485,7 +485,7 @@ namespace EoE
 		{
 			public override FXType Type => FXType.Player;
 			public override FXObject BaseInfo => ScreenTintInfo;
-			private ScreenTint ScreenTintInfo;
+			private readonly ScreenTint ScreenTintInfo;
 			public uint DominanceIndex => ScreenTintInfo.Dominance;
 
 			public ScreenTintInstance(ScreenTint ScreenTintInfo)
@@ -564,9 +564,9 @@ namespace EoE
 		{
 			public override FXType Type => FXType.Player;
 			public override FXObject BaseInfo => TimeDilationInfo;
-			private TimeDilation TimeDilationInfo;
+			private readonly TimeDilation TimeDilationInfo;
 			public uint DominanceIndex => TimeDilationInfo.Dominance;
-			private float scaleDif => TimeDilationInfo.Scale - 1;
+			private float ScaleDiffference => TimeDilationInfo.Scale - 1;
 
 			public TimeDilationInstance(TimeDilation TimeDilationInfo)
 			{
@@ -574,7 +574,7 @@ namespace EoE
 			}
 			public float GetTimeScale()
 			{
-				return 1 + GetCurMultiplier() * scaleDif;
+				return 1 + GetCurMultiplier() * ScaleDiffference;
 			}
 		}
 		#endregion
@@ -649,16 +649,16 @@ namespace EoE
 		{
 			public override FXType Type => FXType.Player;
 			public override FXObject BaseInfo => CameraFOVWarpInfo;
-			private CameraFOVWarp CameraFOVWarpInfo;
+			private readonly CameraFOVWarp CameraFOVWarpInfo;
 			public int DominanceIndex => CameraFOVWarpInfo.Dominance;
-			private float dif => CameraFOVWarpInfo.TargetFOV - Player.PlayerSettings.CameraBaseFOV;
+			private float FOVDifference => CameraFOVWarpInfo.TargetFOV - Player.PlayerSettings.CameraBaseFOV;
 			public CameraFOVWarpInstance(CameraFOVWarp CameraFOVWarpInfo)
 			{
 				this.CameraFOVWarpInfo = CameraFOVWarpInfo;
 			}
 			public float GetFOV()
 			{
-				return Player.PlayerSettings.CameraBaseFOV + GetCurMultiplier() * dif;
+				return Player.PlayerSettings.CameraBaseFOV + GetCurMultiplier() * FOVDifference;
 			}
 		}
 		#endregion
@@ -703,8 +703,8 @@ namespace EoE
 			public override FXType Type => FXType.Player;
 
 			public override FXObject BaseInfo => DialogueInfo;
-			private Dialogue DialogueInfo;
-			private QueuedDialogue queuedDialogue;
+			private readonly Dialogue DialogueInfo;
+			private readonly QueuedDialogue queuedDialogue;
 			private bool wantsToBeRemoved;
 			public DialogueInstance(Dialogue DialogueInfo)
 			{
@@ -776,8 +776,8 @@ namespace EoE
 			public override FXType Type => FXType.Player;
 
 			public override FXObject BaseInfo => NotificationInfo;
-			private Notification NotificationInfo;
-			private NotificationDisplay notifcationObject;
+			private readonly Notification NotificationInfo;
+			private readonly NotificationDisplay notifcationObject;
 			public NotificationInstance(Notification NotificationInfo)
 			{
 				this.NotificationInfo = NotificationInfo;
@@ -837,10 +837,10 @@ namespace EoE
 			public override FXType Type => FXType.Player;
 
 			public override FXObject BaseInfo => CustomUIInfo;
-			public CustomUI CustomUIInfo;
-			private GameObject mainObject;
-			private Graphic[] containedGraphics;
-			private float[] containedBaseAlphas;
+			public readonly CustomUI CustomUIInfo;
+			private readonly GameObject mainObject;
+			private readonly Graphic[] containedGraphics;
+			private readonly float[] containedBaseAlphas;
 			private float curMultiplier = -1;
 			public CustomUIInstance(CustomUI CustomUIInfo, Transform parent)
 			{
@@ -924,8 +924,8 @@ namespace EoE
 		{
 			public override FXType Type => FXType.World;
 			public override FXObject BaseInfo => SoundEffectInfo;
-			private SoundEffect SoundEffectInfo;
-			private SoundPlayer soundPlayer;
+			private readonly SoundEffect SoundEffectInfo;
+			private readonly SoundPlayer soundPlayer;
 
 			private Vector3 positionOffset;
 
@@ -969,15 +969,7 @@ namespace EoE
 				mainObject.transform.eulerAngles += info.RotationOffset;
 			}
 
-			ParticleSystem[] containedSystems = mainObject.GetComponentsInChildren<ParticleSystem>();
-			for (int i = 0; i < containedSystems.Length; i++)
-			{
-				if (containedSystems[i].isPlaying)
-					containedSystems[i].Stop();
-				containedSystems[i].Play();
-			}
-
-			ParticleEffectInstance newParticleFX = new ParticleEffectInstance(info, mainObject, containedSystems, customOffset, customRotation);
+			ParticleEffectInstance newParticleFX = new ParticleEffectInstance(info, mainObject, customOffset, customRotation);
 			newParticleFX.BaseSetup(multiplier, parent);
 			AllParticleFXs.Add(newParticleFX);
 
@@ -1013,27 +1005,34 @@ namespace EoE
 		{
 			public override FXType Type => FXType.World;
 			public override FXObject BaseInfo => ParticleEffectInfo;
-			public ParticleEffect ParticleEffectInfo;
+			public readonly ParticleEffect ParticleEffectInfo;
 
-			private Transform particleTransform;
+			private readonly Transform particleTransform;
 
-			private ParticleSystem[] containedSystems;
-			private float[] emissionBasis;
+			private readonly ParticleSystem[] containedSystems;
+			private readonly float[] emissionBasis;
+
 			private float curMultiplier = -1;
-
 			private Vector3 positionOffset;
 			private Vector3 rotationOffset;
 
-			public ParticleEffectInstance(ParticleEffect ParticleEffectInfo, Transform particleTransform, ParticleSystem[] containedSystems, Vector3? positionOffset, Vector3? rotationOffset)
+			public ParticleEffectInstance(ParticleEffect ParticleEffectInfo, Transform particleTransform, Vector3? positionOffset, Vector3? rotationOffset)
 			{
 				this.ParticleEffectInfo = ParticleEffectInfo;
 				this.particleTransform = particleTransform;
 
-				this.containedSystems = containedSystems;
-				emissionBasis = new float[containedSystems.Length];
-
 				this.positionOffset = positionOffset ?? ParticleEffectInfo.OffsetToTarget;
 				this.rotationOffset = rotationOffset ?? ParticleEffectInfo.RotationOffset;
+
+				//Record the base states of the particle systems
+				containedSystems = particleTransform.GetComponentsInChildren<ParticleSystem>();
+				for (int i = 0; i < containedSystems.Length; i++)
+				{
+					if (containedSystems[i].isPlaying)
+						containedSystems[i].Stop();
+					containedSystems[i].Play();
+				}
+				emissionBasis = new float[containedSystems.Length];
 
 				for (int i = 0; i < containedSystems.Length; i++)
 				{
@@ -1061,7 +1060,7 @@ namespace EoE
 				if (newMultiplier != curMultiplier)
 				{
 					curMultiplier = newMultiplier;
-					if (currentState == FXState.End && Mathf.RoundToInt(newMultiplier * 100) == 0)
+					if (CurrentFXState == FXState.End && Mathf.RoundToInt(newMultiplier * 100) == 0)
 					{
 						for (int i = 0; i < containedSystems.Length; i++)
 						{
@@ -1185,7 +1184,7 @@ namespace EoE
 
 		protected Transform parent;
 
-		protected FXState currentState { get; private set; }
+		protected FXState CurrentFXState { get; private set; }
 		protected bool allowBaseUpdate = true;
 		private float passedTime;
 		private float stateMultiplier;
@@ -1206,7 +1205,7 @@ namespace EoE
 		}
 		protected bool CheckForFinishCondition()
 		{
-			if (currentState != FXState.End)
+			if (CurrentFXState != FXState.End)
 			{
 				if (BaseInfo.FinishConditions.OnParentDeath && (!parent || !parent.gameObject.activeSelf))
 					return true;
@@ -1217,19 +1216,19 @@ namespace EoE
 		}
 		private void UpdateCurrentState()
 		{
-			if (currentState == FXState.Start && passedTime > BaseInfo.TimeIn)
+			if (CurrentFXState == FXState.Start && passedTime > BaseInfo.TimeIn)
 			{
 				passedTime -= BaseInfo.TimeIn;
-				currentState = FXState.Stay;
+				CurrentFXState = FXState.Stay;
 			}
 
-			if (currentState == FXState.Stay && BaseInfo.FinishConditions.OnTimeout && passedTime > BaseInfo.FinishConditions.TimeStay)
+			if (CurrentFXState == FXState.Stay && BaseInfo.FinishConditions.OnTimeout && passedTime > BaseInfo.FinishConditions.TimeStay)
 			{
 				passedTime -= BaseInfo.FinishConditions.TimeStay;
-				currentState = FXState.End;
+				CurrentFXState = FXState.End;
 			}
 
-			if (currentState == FXState.End && !ShouldBeRemoved)
+			if (CurrentFXState == FXState.End && !ShouldBeRemoved)
 			{
 				if (passedTime > BaseInfo.TimeOut)
 				{
@@ -1240,14 +1239,14 @@ namespace EoE
 		}
 		private void UpdateMultiplier()
 		{
-			if (currentState == FXState.Start)
+			if (CurrentFXState == FXState.Start)
 			{
 				if (BaseInfo.TimeIn > 0)
 					stateMultiplier = passedTime / BaseInfo.TimeIn;
 				else
 					stateMultiplier = 1;
 			}
-			else if (currentState == FXState.Stay)
+			else if (CurrentFXState == FXState.Stay)
 			{
 				stateMultiplier = 1;
 			}
@@ -1262,7 +1261,7 @@ namespace EoE
 		}
 		public void BaseSetup(float baseMultiplier, Transform parent)
 		{
-			currentState = FXState.Start;
+			CurrentFXState = FXState.Start;
 			this.baseMultiplier = baseMultiplier;
 			this.parent = parent;
 		}
@@ -1272,10 +1271,10 @@ namespace EoE
 		}
 		public virtual void FinishFX()
 		{
-			if (currentState != FXState.End)
+			if (CurrentFXState != FXState.End)
 			{
 				passedTime = 0;
-				currentState = FXState.End;
+				CurrentFXState = FXState.End;
 			}
 		}
 		public virtual bool AllowedToRemove() => true;

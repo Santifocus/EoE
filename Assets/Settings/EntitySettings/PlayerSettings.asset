@@ -121,6 +121,7 @@ MonoBehaviour:
   LookLerpSpringStiffness: 0.05
   EffectsOnPlayerSpawn:
   - {fileID: 11400000, guid: 10355127ce9601041bd51f71df3452c9, type: 2}
+  - {fileID: 11400000, guid: 183b5b3fd2418534387eedb56e684cff, type: 2}
   EffectsOnCombatStart:
   - {fileID: 11400000, guid: 841005440ef020843a19f9880ce3ac1f, type: 2}
   - {fileID: 11400000, guid: ddafa43da60062c40b850dfed44815bb, type: 2}
