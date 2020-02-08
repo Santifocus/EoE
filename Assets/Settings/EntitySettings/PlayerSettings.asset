@@ -144,7 +144,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2a1f29303ceefa04d9d5508f74094d05, type: 2}
   - {fileID: 11400000, guid: d035199abf3ed634aba5aa2938b2cadf, type: 2}
   EffectsOnStaminaMissing:
-  - {fileID: 11400000, guid: 844e43e30828f2942a1506846a4661c9, type: 2}
+  - {fileID: 11400000, guid: 6a7ddc7ea87b4534e91c8d19f221d5e9, type: 2}
+  - {fileID: 11400000, guid: 73bdd1be24431624989298b2c6d07951, type: 2}
+  - {fileID: 11400000, guid: 52f63d15dd93dc94ab1279326bfb4351, type: 2}
   EffectsOnCauseDamage:
   - {fileID: 11400000, guid: 597bda602a9441346a2e721049c28c87, type: 2}
   - {fileID: 11400000, guid: c4b1faa46fe904e4da604eb9bb7a96a4, type: 2}
@@ -163,6 +165,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 634714252dd985c4a9434e87dac6225a, type: 2}
   EffectsWhileDecelerating:
   - {fileID: 11400000, guid: 14b174552b3d5564599c64956e8be5e7, type: 2}
+  - {fileID: 11400000, guid: 9cf25b44d0aba594586ebf1ba6076d64, type: 2}
   EffectsOnJump:
   - {fileID: 11400000, guid: 81bcb4243c5d7bf409682cb56f2f128e, type: 2}
   PlayerLandingVelocityThreshold: 15
