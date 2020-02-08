@@ -67,12 +67,12 @@ MonoBehaviour:
   ManaRegenInCombatMultiplier: 0.6
   WalkSpeed: 9
   RunSpeedMultiplicator: 1.55
-  TurnSpeed: 470
+  TurnSpeed: 800
   InAirTurnSpeedMultiplier: 0.4
   MoveAcceleration: 2
   NoMoveDeceleration: 2.5
   InAirAccelerationMultiplier: 0.3
-  WhileTurningAccelerationMultiplier: 0.8
+  WhileTurningAccelerationMultiplier: 0.35
   CameraToPlayerDistance: 7
   CameraYLerpSpeed: 15
   CameraYLerpSringStiffness: 0.7
