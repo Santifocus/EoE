@@ -32,6 +32,8 @@ namespace EoE.Entities
 		private const float RE_CHECK_VISION_DELAY = 0.25f;
 		private const float LOST_VISION_MAX = 0.8f;
 
+		private enum AccelerationState { Standing, Accelerating, FullSpeed, Decelerating }
+
 		//Inspector variables
 		[Space(10)]
 		public CharacterController charController = default;
@@ -68,6 +70,7 @@ namespace EoE.Entities
 		private Vector3 deltaMove;
 		private Vector3 deltaHorizontalMove;
 		private Vector3 TotalDeltaMove => deltaMove + deltaHorizontalMove;
+		private AccelerationState currentAccelerationState = AccelerationState.Standing;
 
 		//Feedback
 		private Vector2 curModelTilt;
@@ -77,6 +80,7 @@ namespace EoE.Entities
 		private FXInstance[] HealthBelowThresholdBoundEffects;
 		private FXInstance[] PlayerWalkingBoundEffects;
 		private FXInstance[] PlayerRunningBoundEffects;
+		private FXInstance[] PlayerDecelerationBoundEffects;
 		private List<FXInstance> CombatBoundEffects;
 
 		private MusicInstance combatMusic;
@@ -371,6 +375,22 @@ namespace EoE.Entities
 					FXManager.FinishFX(ref PlayerRunningBoundEffects);
 				}
 			}
+
+			//Deceleration effects
+			bool curDecelerationEffectsOn = PlayerDecelerationBoundEffects != null;
+			bool newDecelerationEffectsOn = (currentAccelerationState == AccelerationState.Decelerating) && (charController.isGrounded);
+			if (curDecelerationEffectsOn != newDecelerationEffectsOn)
+			{
+				//Player is decelerating
+				if (newDecelerationEffectsOn)
+				{
+					FXManager.ExecuteFX(PlayerSettings.EffectsWhileDecelerating, transform, true, out PlayerDecelerationBoundEffects);
+				}
+				else //Player was decelerating but is not anymore
+				{
+					FXManager.FinishFX(ref PlayerDecelerationBoundEffects);
+				}
+			}
 		}
 		#region Walking
 		private void TurnControl()
@@ -440,7 +460,7 @@ namespace EoE.Entities
 			Vector3 playerForward = transform.forward;
 			controllDirection = inputDirection.y * camForward + inputDirection.x * camRight;
 
-			curStates.Turning = Vector3.Dot(playerForward, controllDirection) < NON_TURNING_THRESHOLD;
+			curStates.Turning = !TargetedEntitie && (Vector3.Dot(playerForward, controllDirection) < NON_TURNING_THRESHOLD);
 
 			moveDirection = curStates.Turning ? playerForward : controllDirection;
 
@@ -576,10 +596,21 @@ namespace EoE.Entities
 					accelerationChange *= charController.isGrounded ? 1 : SelfSettings.InAirAccelerationMultiplier;
 					accelerationChange *= curStates.Turning ? SelfSettings.WhileTurningAccelerationMultiplier : 1;
 
-					curAcceleration = Mathf.Min(clampedIntent, curAcceleration + accelerationChange / SelfSettings.EntitieMass);
+					float newAcceleration = curAcceleration + accelerationChange / SelfSettings.EntitieMass;
+					if(newAcceleration >= clampedIntent)
+					{
+						curAcceleration = clampedIntent;
+						currentAccelerationState = AccelerationState.FullSpeed;
+					}
+					else
+					{
+						curAcceleration = newAcceleration;
+						currentAccelerationState = AccelerationState.Accelerating;
+					}
 				}
 				else
 				{
+					currentAccelerationState = AccelerationState.FullSpeed;
 					curAcceleration = clampedIntent;
 				}
 			}
@@ -591,10 +622,21 @@ namespace EoE.Entities
 					accelerationChange *= charController.isGrounded ? 1 : SelfSettings.InAirAccelerationMultiplier;
 					accelerationChange *= curStates.Turning ? SelfSettings.WhileTurningAccelerationMultiplier : 1;
 
-					curAcceleration = Mathf.Max(0, curAcceleration - accelerationChange / SelfSettings.EntitieMass);
+					float newAcceleration = curAcceleration - accelerationChange / SelfSettings.EntitieMass;
+					if (newAcceleration <= 0)
+					{
+						curAcceleration = 0;
+						currentAccelerationState = AccelerationState.Standing;
+					}
+					else
+					{
+						curAcceleration = newAcceleration;
+						currentAccelerationState = AccelerationState.Decelerating;
+					}
 				}
 				else
 				{
+					currentAccelerationState = AccelerationState.Standing;
 					curAcceleration = 0;
 				}
 			}
@@ -1241,6 +1283,7 @@ namespace EoE.Entities
 			FXManager.FinishFX(ref HealthBelowThresholdBoundEffects);
 			FXManager.FinishFX(ref PlayerWalkingBoundEffects);
 			FXManager.FinishFX(ref PlayerRunningBoundEffects);
+			FXManager.FinishFX(ref PlayerDecelerationBoundEffects);
 			FXManager.FinishFX(ref CombatBoundEffects);
 		}
 		#region IFrames
@@ -1427,10 +1470,10 @@ namespace EoE.Entities
 			if (!Application.isPlaying)
 				return;
 
-			Gizmos.color = Color.green;
+			Gizmos.color = (Color.white + Color.gray) / 2;
 			Gizmos.DrawLine(transform.position, transform.position + controllDirection * 2);
 
-			Gizmos.color = new Color(0, 0.7f, 0, 1);
+			Gizmos.color = Color.green;
 			Gizmos.DrawLine(transform.position, transform.position + moveDirection * 2);
 
 			Gizmos.color = Color.cyan;

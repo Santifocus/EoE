@@ -151,6 +151,7 @@ namespace EoE.Information
 			Header("On Player Movement");
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsWhileWalk))), ref settings.EffectsWhileWalk, serializedObject.FindProperty(nameof(settings.EffectsWhileWalk)), new GUIContent(". Effect"), 1);
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsWhileRun))), ref settings.EffectsWhileRun, serializedObject.FindProperty(nameof(settings.EffectsWhileRun)), new GUIContent(". Effect"), 1);
+			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsWhileDecelerating))), ref settings.EffectsWhileDecelerating, serializedObject.FindProperty(nameof(settings.EffectsWhileDecelerating)), new GUIContent(". Effect"), 1);
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnJump))), ref settings.EffectsOnJump, serializedObject.FindProperty(nameof(settings.EffectsOnJump)), new GUIContent(". Effect"), 1);
 			Foldout(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnPlayerLanding))), ref OnLandingEffectsOpen, 1);
 			if (OnLandingEffectsOpen)
