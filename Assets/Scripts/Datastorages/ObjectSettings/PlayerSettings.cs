@@ -81,6 +81,7 @@ namespace EoE.Information
 		public FXObject[] EffectsOnLevelup = default;
 
 		//Action Based
+		public float EffectsOnStaminaMissingCooldown = 0.5f;
 		public FXObject[] EffectsOnStaminaMissing = default;
 
 		//On Player do attack

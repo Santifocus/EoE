@@ -83,6 +83,8 @@ namespace EoE.Entities
 		private FXInstance[] PlayerDecelerationBoundEffects;
 		private List<FXInstance> CombatBoundEffects;
 
+		private float staminaEmptyEffectsCooldown;
+
 		private MusicInstance combatMusic;
 
 		//Targeting
@@ -824,7 +826,11 @@ namespace EoE.Entities
 			}
 			else
 			{
-				FXManager.ExecuteFX(playerSettings.EffectsOnStaminaMissing, transform, true);
+				if(staminaEmptyEffectsCooldown <= 0)
+				{
+					staminaEmptyEffectsCooldown = playerSettings.EffectsOnStaminaMissingCooldown;
+					FXManager.ExecuteFX(playerSettings.EffectsOnStaminaMissing, transform, true);
+				}
 				return false;
 			}
 		}
@@ -847,6 +853,8 @@ namespace EoE.Entities
 		protected override void Regen()
 		{
 			base.Regen();
+			if (staminaEmptyEffectsCooldown > 0) 
+				staminaEmptyEffectsCooldown -= Time.deltaTime;
 
 			if (PlayerSettings.DoStaminaRegen && CurStamina < CurMaxStamina)
 			{

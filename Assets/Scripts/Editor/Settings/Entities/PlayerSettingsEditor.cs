@@ -16,6 +16,7 @@ namespace EoE.Information
 		private static bool AnimationSettingsOpen;
 
 		//VFXEffectArrays
+		private static bool OnStaminaEmptyEffectsOpen;
 		private static bool OnDecelerateEffectsOpen;
 		private static bool OnLandingEffectsOpen;
 		private static bool OnHealthCriticalEffectsOpen;
@@ -145,7 +146,13 @@ namespace EoE.Information
 			DrawArray<ChanceBasedFXGroup>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnCombatStartChanceBased))), ref settings.EffectsOnCombatStartChanceBased, serializedObject.FindProperty(nameof(settings.EffectsOnCombatStartChanceBased)), DrawChanceBasedFXGroup, new GUIContent(". Group"), 1);
 
 			Header("Action Based");
-			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnStaminaMissing))), ref settings.EffectsOnStaminaMissing, serializedObject.FindProperty(nameof(settings.EffectsOnStaminaMissing)), new GUIContent(". Effect"), 1);
+			//DecelerationEffects
+			Foldout(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnStaminaMissing))), ref OnStaminaEmptyEffectsOpen, 1);
+			if (OnStaminaEmptyEffectsOpen)
+			{
+				FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnStaminaMissingCooldown))), ref settings.EffectsOnStaminaMissingCooldown, 2);
+				ObjectArrayField<FXObject>(new GUIContent("Effects"), ref settings.EffectsOnStaminaMissing, serializedObject.FindProperty(nameof(settings.EffectsOnStaminaMissing)), new GUIContent(". Effect"), 2);
+			}
 
 			Header("On Player Attacking");
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnCauseDamage))), ref settings.EffectsOnCauseDamage, serializedObject.FindProperty(nameof(settings.EffectsOnCauseDamage)), new GUIContent(". Effect"), 1);
