@@ -15,16 +15,16 @@ MonoBehaviour:
   NoDefinedActionType: 0
   ActionType: 1
   BasePhysicalDamage: 0
-  BaseMagicalDamage: 6
+  BaseMagicalDamage: 4
   BaseKnockback: 1
   BaseCritChance: 0
   Cost:
     Health: 0
-    Mana: 1.5
+    Mana: 2
     Stamina: 0
     AdditionalConditions: []
   CostActivationIndex: 0
-  CausedCooldown: 0.2
+  CausedCooldown: 0.35
   CancelFromStun: 1
   CancelIfCostActivationIsImpossible: 1
   Elements:

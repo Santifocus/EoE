@@ -189,10 +189,10 @@ MonoBehaviour:
   ItemSellMultiplier: 0.7
   BaseCurrencyPerSoul: 15
   ExtraRandomCurrencyPerSoul: 10
-  PhysicalDamageLevelAdd: 12
-  PhysicalDamageDivider: 10
-  PhysicalDefenseLevelAdd: 10
-  PhysicalDefenseLevelDivider: 11
+  PhysicalDamageLevelAdd: 10
+  PhysicalDamageDivider: 9
+  PhysicalDefenseLevelAdd: 7
+  PhysicalDefenseLevelDivider: 14
   MagicDamageLevelAdd: 3
   MagicDamageDivider: 6
   EffectivenessMatrix:
@@ -231,7 +231,7 @@ MonoBehaviour:
   - Row:
     - 1
     - 1
-    - 2
+    - 1
     - 1
     - 0.5
     - 1
@@ -250,5 +250,5 @@ MonoBehaviour:
     - 1
     - 1
     - 1
-    - 0.5
+    - 0.25
     - 0.5
