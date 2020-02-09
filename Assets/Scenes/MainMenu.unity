@@ -10467,6 +10467,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startMenuItem: {fileID: 1570227520}
+  introAnimation: {fileID: 32900000, guid: 52de5ae259b610f4da37a58368ecaacb, type: 3}
   tutorialCanvas: {fileID: 733146019}
   tutorialRequestStartMenuItem: {fileID: 1069912952}
   creditsController: {fileID: 2117791780}
