@@ -21,7 +21,7 @@ MonoBehaviour:
   Cost:
     Health: 0
     Mana: 0
-    Endurance: 0
+    Stamina: 0
     AdditionalConditions: []
   UltimateIcon: {fileID: 21300000, guid: 518175f4993c7c94b8ad8a4ba3db1338, type: 3}
   ActivationEffects:
@@ -127,7 +127,7 @@ MonoBehaviour:
       DamageMultiplier: 1
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
-      EnduranceCostMultiplier: 1
+      StaminaCostMultiplier: 1
       KnockbackMultiplier: 3
       CritChanceMultiplier: 1
       CollisionMask: -1

@@ -1,15 +1,16 @@
-﻿using EoE.Combatery;
-using EoE.Information.Logic;
-using EoE.Tools;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using TMPro;
 using UnityEditor;
 using UnityEditor.Events;
 using UnityEngine;
 using UnityEngine.Events;
+using EoE.Combatery;
+using EoE.Information;
+using EoE.Information.Logic;
+using EoE.Tools;
 
-namespace EoE.Information
+namespace EoE
 {
 	public static class MenuItemStorage
 	{
@@ -89,34 +90,6 @@ namespace EoE.Information
 				ItemCollector itemCollector = (ItemCollector)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(itemCollectorGUID[0]), typeof(ItemCollector));
 				itemCollector.CollectData();
 				EditorUtility.SetDirty(itemCollector);
-			}
-		}
-		[MenuItem("EoE/DataManagement/Consistant Item Names")]
-		public static void ConsistantItemNames()
-		{
-			string[] itemGUIDs = AssetDatabase.FindAssets("t:Item");
-			for (int i = 0; i < itemGUIDs.Length; i++)
-			{
-				string path = AssetDatabase.GUIDToAssetPath(itemGUIDs[i]);
-				Item tItem = (Item)AssetDatabase.LoadAssetAtPath(path, typeof(Item));
-				string newName = tItem.ItemName.text.Replace(" ", "").Replace("_", "") + "Item";
-				AssetDatabase.RenameAsset(path, newName);
-				EditorUtility.SetDirty(tItem);
-			}
-		}
-		[MenuItem("EoE/DataManagement/RE")]
-		public static void F()
-		{
-			Collider[] colls = Object.FindObjectsOfType<Collider>();
-			for(int i = 0; i < colls.Length; i++)
-			{
-				if(colls[i].gameObject.layer == ConstantCollector.TERRAIN_LAYER)
-					if (colls[i].isTrigger)
-					{
-						Selection.activeGameObject = colls[i].gameObject;
-						break;
-					}
-
 			}
 		}
 		[MenuItem("EoE/DataManagement/Clean Object Names")]
@@ -235,7 +208,7 @@ namespace EoE.Information
 			Undo.RegisterCreatedObjectUndo(scenicCameraMain, "Created " + scenicCameraMain.name);
 			Selection.activeGameObject = scenicCameraMain;
 		}
-		//Other
+		//Asset Creator
 		public static T AssetCreator<T>(params string[] pathParts) where T : ScriptableObject
 		{
 			T asset = ScriptableObject.CreateInstance<T>();

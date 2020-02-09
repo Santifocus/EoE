@@ -11,13 +11,19 @@ namespace EoE.UI
 		[SerializeField] private ControllerMenuItem startMenuItem = default;
 		[SerializeField] private UnityEngine.Video.VideoClip introAnimation = default;
 		[Space(5)]
+		[SerializeField] private int mainMenuMusicIndex = default;
 		[SerializeField] private GameObject tutorialCanvas = default;
 		[SerializeField] private ControllerMenuItem tutorialRequestStartMenuItem = default;
 		[SerializeField] private CreditsController creditsController = default;
+
+		private MusicInstance mainMenuMusicInstance;
 		private void Start()
 		{
 			startMenuItem.Select();
 			SettingsMenuController.ChangeStateEvent += SettingsMenuChangedState;
+			mainMenuMusicInstance = new MusicInstance(1, 2, mainMenuMusicIndex);
+			mainMenuMusicInstance.WantsToPlay = true;
+			MusicController.Instance.AddMusicInstance(mainMenuMusicInstance);
 		}
 		public void RequestStartGame()
 		{
