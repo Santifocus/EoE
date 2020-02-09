@@ -12,8 +12,8 @@ namespace EoE.Entities
 		[SerializeField] private TextMeshPro infoDisplay = default;
 		[SerializeField] private Vector3 infoDisplayOffset = new Vector3(0, 2, 0);
 
-		[SerializeField] private int targetSceneIndex = 1;
-		[SerializeField] private bool doLoadingScreen = false;
+		[SerializeField] protected int targetSceneIndex = 1;
+		[SerializeField] protected bool doLoadingScreen = false;
 		private void Start()
 		{
 			canBeInteracted = true;

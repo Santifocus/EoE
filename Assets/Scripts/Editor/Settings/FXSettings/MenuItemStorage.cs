@@ -104,12 +104,20 @@ namespace EoE.Information
 				EditorUtility.SetDirty(tItem);
 			}
 		}
-		[MenuItem("EoE/DataManagement/Fetch Tutorial Dialogues")]
-		public static void FetchTutorialDialogues()
+		[MenuItem("EoE/DataManagement/RE")]
+		public static void F()
 		{
-			string tutorialSettingsGUID = AssetDatabase.FindAssets("t:TutorialSettings")[0];
-			TutorialSettings settings = (TutorialSettings)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(tutorialSettingsGUID), typeof(TutorialSettings));
-			EditorUtility.SetDirty(settings);
+			Collider[] colls = Object.FindObjectsOfType<Collider>();
+			for(int i = 0; i < colls.Length; i++)
+			{
+				if(colls[i].gameObject.layer == ConstantCollector.TERRAIN_LAYER)
+					if (colls[i].isTrigger)
+					{
+						Selection.activeGameObject = colls[i].gameObject;
+						break;
+					}
+
+			}
 		}
 		[MenuItem("EoE/DataManagement/Clean Object Names")]
 		public static void CleanObjectNames()

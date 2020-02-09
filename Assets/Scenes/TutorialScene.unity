@@ -805,7 +805,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2063185208
 Transform:
   m_ObjectHideFlags: 0
@@ -836,6 +836,7 @@ MonoBehaviour:
   dummySpawnPos: {x: 0, y: 0.5, z: 0}
   dummyPrefab: {fileID: 7959281860002866470, guid: 9bced7e91fae172478b34d3f152093ae,
     type: 3}
+  introAnimation: {fileID: 0}
 --- !u!1 &2068100693
 GameObject:
   m_ObjectHideFlags: 0

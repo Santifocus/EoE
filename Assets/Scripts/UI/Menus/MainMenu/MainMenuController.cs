@@ -9,6 +9,7 @@ namespace EoE.UI
 	public class MainMenuController : MonoBehaviour
 	{
 		[SerializeField] private ControllerMenuItem startMenuItem = default;
+		[SerializeField] private UnityEngine.Video.VideoClip introAnimation = default;
 		[Space(5)]
 		[SerializeField] private GameObject tutorialCanvas = default;
 		[SerializeField] private ControllerMenuItem tutorialRequestStartMenuItem = default;
@@ -28,7 +29,7 @@ namespace EoE.UI
 			if (SceneLoader.Transitioning)
 				return;
 
-			SceneLoader.TransitionToScene(ConstantCollector.GAME_SCENE_INDEX, true);
+			AnimationSceneController.RequestAnimation(introAnimation, ConstantCollector.GAME_SCENE_INDEX, false, true);
 		}
 		public void StartTuorial()
 		{

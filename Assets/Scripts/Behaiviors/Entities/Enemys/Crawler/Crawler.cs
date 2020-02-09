@@ -7,6 +7,7 @@ namespace EoE.Entities
 {
 	public class Crawler : Enemy
 	{
+		private const float BASH_END_VELOCITY_THRESHOLD = 2f;
 		//Inspector Variables
 		[SerializeField] private CrawlerSettings settings = default;
 		[SerializeField] private CrawlerHitbox[] crawlerHitboxes = default;
@@ -128,6 +129,8 @@ namespace EoE.Entities
 
 			animator.SetTrigger("Bash");
 			bashForce = entitieForceController.ApplyForce((transform.forward * settings.BashSpeed) * (curWalkSpeed / settings.WalkSpeed), settings.BashSpeed / settings.BashDistance, false, () => FinishedBash());
+
+			GameController.BeginDelayedCall(() => animator.SetTrigger("BashEnd"), 0, TimeType.ScaledDeltaTime, () => bashForce == null || bashForce.Force.sqrMagnitude < BASH_END_VELOCITY_THRESHOLD);
 			SetBashColliderState(true);
 			ActivateActivationEffects(settings.BashStartEffects);
 		}
@@ -159,7 +162,6 @@ namespace EoE.Entities
 		{
 			bashing = false;
 			SetBashColliderState(false);
-			animator.SetTrigger("BashEnd");
 			MovementStops--;
 			TurnStops--;
 		}
@@ -174,9 +176,9 @@ namespace EoE.Entities
 				return;
 
 			float restForce = bashForce.Force.magnitude;
-			float normalizedRestForce = restForce / settings.BashSpeed;
+			float normalizedRemainingForce = restForce / settings.BashSpeed;
 			bool wasCrit = Utils.Chance01(settings.CritChance);
-			float resultingDamage = normalizedRestForce * settings.BasePhysicalDamage;
+			float resultingDamage = normalizedRemainingForce * settings.BasePhysicalDamage;
 
 			bool shouldRemoveForces = true;
 			switch (other.gameObject.layer)
@@ -188,7 +190,7 @@ namespace EoE.Entities
 						{
 							hitEntity.ChangeHealth(new ChangeInfo(this, CauseType.Physical, settings.EntitieElement, TargetStat.Health, other.ClosestPoint(self.bounds.center), bashForce.Force / restForce, resultingDamage, wasCrit, restForce * settings.ForceTranslationMultiplier));
 
-							ActivateActivationEffects(settings.BashHitEntitieEffects, normalizedRestForce);
+							ActivateActivationEffects(settings.BashHitEntitieEffects, normalizedRemainingForce);
 						}
 						else
 						{
@@ -207,12 +209,12 @@ namespace EoE.Entities
 						{
 							shouldRemoveForces = false;
 						}
-						ActivateActivationEffects(settings.BashHitTerrainEffects, normalizedRestForce);
+						ActivateActivationEffects(settings.BashHitTerrainEffects, normalizedRemainingForce);
 					}
 					break;
 				case ConstantCollector.TERRAIN_LAYER:
 					{
-						ActivateActivationEffects(settings.BashHitTerrainEffects, normalizedRestForce);
+						ActivateActivationEffects(settings.BashHitTerrainEffects, normalizedRemainingForce);
 					}
 					break;
 			}
@@ -220,6 +222,7 @@ namespace EoE.Entities
 			if (shouldRemoveForces)
 			{
 				entitieForceController.ForceRemoveForce(bashForce);
+				bashForce = null;
 				body.velocity = CurVelocity;
 			}
 		}

@@ -11,6 +11,7 @@ namespace EoE.UI
 		[SerializeField] private TutorialSettings settings = default;
 		[SerializeField] private Vector3 dummySpawnPos = default;
 		[SerializeField] private Dummy dummyPrefab = default;
+		[SerializeField] private UnityEngine.Video.VideoClip introAnimation = default;
 
 		private Dummy spawnedDummy;
 
@@ -63,7 +64,7 @@ namespace EoE.UI
 				}
 			}
 
-			SceneLoader.TransitionToScene(ConstantCollector.GAME_SCENE_INDEX, true);
+			AnimationSceneController.RequestAnimation(introAnimation, ConstantCollector.GAME_SCENE_INDEX, false, true);
 		}
 	}
 }
