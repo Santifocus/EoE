@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: PlayerLevelSettings
   m_EditorClassIdentifier: 
   curve:
-    a: 2
-    b: 8
-    c: 10
+    a: 3
+    b: 9
+    c: 6
   AttributePointsPerLevel: 1
   SkillPointsPerLevel: 3
   PerTenLevelsBasePoints: 1
   RotationExtraPoints: 1
   HealthPerSkillPoint: 10
   ManaPerSkillPoint: 10
-  EndurancePerSkillPoint: 20
+  StaminaPerSkillPoint: 20
   PhysicalDamagePerSkillPoint: 1
   MagicDamagePerSkillPoint: 1
   DefensePerSkillPoint: 1

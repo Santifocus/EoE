@@ -20,9 +20,9 @@ MonoBehaviour:
   SkillPointsPerLevel: 3
   PerTenLevelsBasePoints: 1
   RotationExtraPoints: 1
-  HealthPerSkillPoint: 15
+  HealthPerSkillPoint: 20
   ManaPerSkillPoint: 20
-  EndurancePerSkillPoint: 20
+  StaminaPerSkillPoint: 20
   PhysicalDamagePerSkillPoint: 1
   MagicDamagePerSkillPoint: 1
   DefensePerSkillPoint: 1

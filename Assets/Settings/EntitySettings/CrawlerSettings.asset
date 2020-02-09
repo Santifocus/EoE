@@ -18,7 +18,7 @@ MonoBehaviour:
   EntitieElement: 4
   PossibleDropsTable: {fileID: 11400000, guid: 6c863124784db984e93eb995e00bd42e, type: 2}
   LevelSettings: {fileID: 11400000, guid: 8872bc66ea135374daf83e0b036673d5, type: 2}
-  ExperienceWorth: 1
+  ExperienceWorth: 2
   DeathEffects:
   - ChanceToActivate: 1
     ContainedEffectType: 2
@@ -71,6 +71,7 @@ MonoBehaviour:
   MoveAcceleration: 40
   NoMoveDeceleration: 15
   InAirAccelerationMultiplier: 0.3
+  WhileTurningAccelerationMultiplier: 0.35
   AttackRange: 5
   AttackKnockBack: 3
   CritChance: 0
