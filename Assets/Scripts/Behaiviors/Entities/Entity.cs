@@ -21,21 +21,21 @@ namespace EoE.Entities
 
 		//Stats
 		public int EntitieLevel { get; protected set; }
-		public float curMaxHealth { get; protected set; }
-		public float curHealth { get; protected set; }
-		public float curMaxMana { get; protected set; }
-		public float curMana { get; protected set; }
-		public float curPhysicalDamage { get; protected set; }
-		public float curMagicalDamage { get; protected set; }
-		public float curDefense { get; protected set; }
-		public float curWalkSpeed { get; protected set; }
-		public float curJumpPowerMultiplier { get; protected set; }
-		public float curTrueDamageDamageMultiplier { get; protected set; }
+		public float CurMaxHealth { get; protected set; }
+		public float CurHealth { get; protected set; }
+		public float CurMaxMana { get; protected set; }
+		public float CurMana { get; protected set; }
+		public float CurPhysicalDamage { get; protected set; }
+		public float CurMagicalDamage { get; protected set; }
+		public float CurDefense { get; protected set; }
+		public float CurWalkSpeed { get; protected set; }
+		public float CurJumpPowerMultiplier { get; protected set; }
+		public float CurTrueDamageDamageMultiplier { get; protected set; }
 
 		//Entitie states
 		public bool Alive { get; protected set; }
 
-		public List<BuffInstance> activeBuffs { get; protected set; }
+		public List<BuffInstance> ActiveBuffs { get; protected set; }
 		public EntityState curStates;
 		private float healthRegenCooldown;
 		private float healthRegenDelay;
@@ -77,8 +77,8 @@ namespace EoE.Entities
 		public abstract EntitySettings SelfSettings { get; }
 		protected ColliderType selfColliderType;
 		public Vector3 actuallWorldPosition => SelfSettings.MassCenter + transform.position;
-		public float lowestPos => coll.bounds.center.y - coll.bounds.extents.y;
-		public float highestPos => coll.bounds.center.y + coll.bounds.extents.y;
+		public float LowestBoundingPos => coll.bounds.center.y - coll.bounds.extents.y;
+		public float HighestBoundingPos => coll.bounds.center.y + coll.bounds.extents.y;
 		public ForceController entitieForceController;
 		public virtual Vector3 CurVelocity => new Vector3(impactForce.x, 0, impactForce.y) + entitieForceController.currentTotalForce;
 
@@ -149,23 +149,23 @@ namespace EoE.Entities
 		}
 		protected virtual void ResetStats()
 		{
-			curMaxHealth = SelfSettings.Health;
-			curMaxMana = SelfSettings.Mana;
-			curPhysicalDamage = SelfSettings.BasePhysicalDamage;
-			curMagicalDamage = SelfSettings.BaseMagicalDamage;
-			curDefense = SelfSettings.BaseDefense;
-			curWalkSpeed = SelfSettings.WalkSpeed;
-			curJumpPowerMultiplier = 1;
-			curTrueDamageDamageMultiplier = 1;
+			CurMaxHealth = SelfSettings.Health;
+			CurMaxMana = SelfSettings.Mana;
+			CurPhysicalDamage = SelfSettings.BasePhysicalDamage;
+			CurMagicalDamage = SelfSettings.BaseMagicalDamage;
+			CurDefense = SelfSettings.BaseDefense;
+			CurWalkSpeed = SelfSettings.WalkSpeed;
+			CurJumpPowerMultiplier = 1;
+			CurTrueDamageDamageMultiplier = 1;
 		}
 		protected virtual void ResetStatValues()
 		{
-			curHealth = curMaxHealth;
-			curMana = curMaxMana;
+			CurHealth = CurMaxHealth;
+			CurMana = CurMaxMana;
 		}
 		private void BuffSetup()
 		{
-			activeBuffs = new List<BuffInstance>();
+			ActiveBuffs = new List<BuffInstance>();
 			LevelSetup();
 		}
 		protected virtual void LevelSetup()
@@ -287,14 +287,14 @@ namespace EoE.Entities
 			{
 				healthRegenDelay += GameController.CurrentGameSettings.SecondsPerEntitieHealthRegen;
 				bool regendHealth = false;
-				if (SelfSettings.DoHealthRegen && healthRegenCooldown <= 0 && curHealth < curMaxHealth)
+				if (SelfSettings.DoHealthRegen && healthRegenCooldown <= 0 && CurHealth < CurMaxHealth)
 				{
 					float regenAmount = SelfSettings.HealthRegen * GameController.CurrentGameSettings.SecondsPerEntitieHealthRegen * (inCombat ? SelfSettings.HealthRegenInCombatMultiplier : 1);
 					if (regenAmount > 0)
 					{
 						ChangeInfo basis = new ChangeInfo(this, CauseType.Heal, TargetStat.Health, -regenAmount);
 						ChangeInfo.ChangeResult regenResult = new ChangeInfo.ChangeResult(basis, this, true, true);
-						curHealth = Mathf.Min(curHealth - regenResult.finalChangeAmount, curMaxHealth);
+						CurHealth = Mathf.Min(CurHealth - regenResult.finalChangeAmount, CurMaxHealth);
 
 						regendHealth = regenResult.finalChangeAmount < 0;
 					}
@@ -302,10 +302,10 @@ namespace EoE.Entities
 				ControlRegenParticles(regendHealth);
 			}
 			//Mana Regen
-			if (SelfSettings.DoManaRegen && curMana < curMaxMana)
+			if (SelfSettings.DoManaRegen && CurMana < CurMaxMana)
 			{
 				float regenAmount = SelfSettings.ManaRegen * Time.deltaTime * (inCombat ? SelfSettings.ManaRegenInCombatMultiplier : 1);
-				curMana = Mathf.Min(curMana + regenAmount, curMaxMana);
+				CurMana = Mathf.Min(CurMana + regenAmount, CurMaxMana);
 			}
 		}
 		private void ControlRegenParticles(bool regendHealth)
@@ -351,8 +351,8 @@ namespace EoE.Entities
 				return;
 
 			//Cause the health change and clamp max
-			curHealth -= changeResult.finalChangeAmount;
-			curHealth = Mathf.Min(curMaxHealth, curHealth);
+			CurHealth -= changeResult.finalChangeAmount;
+			CurHealth = Mathf.Min(CurMaxHealth, CurHealth);
 
 			//Apply knockback
 			if (changeResult.causedKnockback.HasValue)
@@ -364,7 +364,7 @@ namespace EoE.Entities
 				healthRegenCooldown = SelfSettings.HealthRegenCooldownAfterTakingDamage;
 
 			//Did this cause the health to drop below zero? Then kill this entity
-			if (curHealth <= 0)
+			if (CurHealth <= 0)
 			{
 				BaseDeath(causedChange.attacker);
 			}
@@ -380,8 +380,8 @@ namespace EoE.Entities
 		public void ChangeMana(ChangeInfo change)
 		{
 			ChangeInfo.ChangeResult changeResult = new ChangeInfo.ChangeResult(change, this, true);
-			curMana -= changeResult.finalChangeAmount;
-			curMana = Mathf.Min(curMaxMana, curMana);
+			CurMana -= changeResult.finalChangeAmount;
+			CurMana = Mathf.Min(CurMaxMana, CurMana);
 		}
 		protected virtual void UpdateStatDisplay()
 		{
@@ -393,11 +393,11 @@ namespace EoE.Entities
 			bool intendedState = inCombat;
 			if (inCombat)
 			{
-				float curHealthNormalized = curHealth / curMaxHealth;
+				float curHealthNormalized = CurHealth / CurMaxHealth;
 				if (statDisplay.HealthValue != curHealthNormalized)
 					statDisplay.HealthValue = curHealthNormalized;
 
-				Vector3 pos = PlayerCameraController.PlayerCamera.WorldToScreenPoint(new Vector3(coll.bounds.center.x, highestPos, coll.bounds.center.z));
+				Vector3 pos = PlayerCameraController.PlayerCamera.WorldToScreenPoint(new Vector3(coll.bounds.center.x, HighestBoundingPos, coll.bounds.center.z));
 				if (pos.z > 0)
 					statDisplay.Position = pos + new Vector3(0, statDisplay.Height);
 				else
@@ -497,31 +497,31 @@ namespace EoE.Entities
 		private void BuffUpdate()
 		{
 			bool requiresRecalculate = false;
-			for (int i = 0; i < activeBuffs.Count; i++)
+			for (int i = 0; i < ActiveBuffs.Count; i++)
 			{
-				bool shouldBeRemoved = activeBuffs[i].Update();
+				bool shouldBeRemoved = ActiveBuffs[i].Update();
 
-				for (int j = 0; j < activeBuffs[i].DOTCooldowns.Length; j++)
+				for (int j = 0; j < ActiveBuffs[i].DOTCooldowns.Length; j++)
 				{
-					if (activeBuffs[i].DOTCooldowns[j] <= 0)
+					if (ActiveBuffs[i].DOTCooldowns[j] <= 0)
 					{
-						float cd = activeBuffs[i].Base.DOTs[j].DelayPerActivation;
-						activeBuffs[i].DOTCooldowns[j] += cd;
+						float cd = ActiveBuffs[i].Base.DOTs[j].DelayPerActivation;
+						ActiveBuffs[i].DOTCooldowns[j] += cd;
 
-						if (activeBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Health)
+						if (ActiveBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Health)
 						{
-							ChangeHealth(new ChangeInfo(activeBuffs[i].Applier, CauseType.DOT, activeBuffs[i].Base.DOTs[j].Element, TargetStat.Health, actuallWorldPosition, Vector3.up, cd * activeBuffs[i].Base.DOTs[j].BaseDamage, false));
+							ChangeHealth(new ChangeInfo(ActiveBuffs[i].Applier, CauseType.DOT, ActiveBuffs[i].Base.DOTs[j].Element, TargetStat.Health, actuallWorldPosition, Vector3.up, cd * ActiveBuffs[i].Base.DOTs[j].BaseDamage, false));
 						}
-						else if (activeBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Mana)
+						else if (ActiveBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Mana)
 						{
-							ChangeMana(new ChangeInfo(activeBuffs[i].Applier, CauseType.DOT, TargetStat.Mana, cd * activeBuffs[i].Base.DOTs[j].BaseDamage));
+							ChangeMana(new ChangeInfo(ActiveBuffs[i].Applier, CauseType.DOT, TargetStat.Mana, cd * ActiveBuffs[i].Base.DOTs[j].BaseDamage));
 						}
 						else if (this is Player)
 						{
-							if (activeBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Stamina)
-								(this as Player).ChangeStamina(new ChangeInfo(activeBuffs[i].Applier, CauseType.DOT, TargetStat.Stamina, cd * activeBuffs[i].Base.DOTs[j].BaseDamage));
-							else if (activeBuffs[i].Base.DOTs[j].TargetStat == TargetStat.UltimateCharge && WeaponController.Instance)
-								WeaponController.Instance.AddUltimateCharge(cd * activeBuffs[i].Base.DOTs[j].BaseDamage);
+							if (ActiveBuffs[i].Base.DOTs[j].TargetStat == TargetStat.Stamina)
+								(this as Player).ChangeStamina(new ChangeInfo(ActiveBuffs[i].Applier, CauseType.DOT, TargetStat.Stamina, cd * ActiveBuffs[i].Base.DOTs[j].BaseDamage));
+							else if (ActiveBuffs[i].Base.DOTs[j].TargetStat == TargetStat.UltimateCharge && WeaponController.Instance)
+								WeaponController.Instance.AddUltimateCharge(cd * ActiveBuffs[i].Base.DOTs[j].BaseDamage);
 						}
 					}
 				}
@@ -538,9 +538,9 @@ namespace EoE.Entities
 		}
 		public int? HasBuffActive(Buff buff, Entity applier)
 		{
-			for (int i = 0; i < activeBuffs.Count; i++)
+			for (int i = 0; i < ActiveBuffs.Count; i++)
 			{
-				if (activeBuffs[i].Applier == applier && activeBuffs[i].Base == buff)
+				if (ActiveBuffs[i].Applier == applier && ActiveBuffs[i].Base == buff)
 				{
 					return i;
 				}
@@ -549,12 +549,12 @@ namespace EoE.Entities
 		}
 		public (bool, BuffInstance) TryReapplyBuff(Buff buff, Entity applier)
 		{
-			for (int i = 0; i < activeBuffs.Count; i++)
+			for (int i = 0; i < ActiveBuffs.Count; i++)
 			{
-				if (activeBuffs[i].Applier == applier && activeBuffs[i].Base == buff)
+				if (ActiveBuffs[i].Applier == applier && ActiveBuffs[i].Base == buff)
 				{
-					activeBuffs[i].Reset();
-					return (true, activeBuffs[i]);
+					ActiveBuffs[i].Reset();
+					return (true, ActiveBuffs[i]);
 				}
 			}
 
@@ -577,7 +577,7 @@ namespace EoE.Entities
 			else
 				statDisplay.AddBuffIcon(newBuff);
 
-			activeBuffs.Add(newBuff);
+			ActiveBuffs.Add(newBuff);
 
 			return newBuff;
 		}
@@ -604,20 +604,20 @@ namespace EoE.Entities
 				{
 					case TargetBaseStat.Health:
 						{
-							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curMaxHealth : buffBase.Effects[i].Amount;
-							change = Mathf.Max(-(curMaxHealth - 1), change);
-							curMaxHealth += change;
+							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * CurMaxHealth : buffBase.Effects[i].Amount;
+							change = Mathf.Max(-(CurMaxHealth - 1), change);
+							CurMaxHealth += change;
 							if (clampRequired)
-								curHealth = Mathf.Min(curMaxHealth, curHealth);
+								CurHealth = Mathf.Min(CurMaxHealth, CurHealth);
 							break;
 						}
 					case TargetBaseStat.Mana:
 						{
-							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curMaxMana : buffBase.Effects[i].Amount;
-							change = Mathf.Max(-(curMaxMana), change);
-							curMaxMana += change;
+							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * CurMaxMana : buffBase.Effects[i].Amount;
+							change = Mathf.Max(-(CurMaxMana), change);
+							CurMaxMana += change;
 							if (clampRequired)
-								curMana = Mathf.Min(curMaxMana, curMana);
+								CurMana = Mathf.Min(CurMaxMana, CurMana);
 							break;
 						}
 					case TargetBaseStat.Stamina:
@@ -637,43 +637,43 @@ namespace EoE.Entities
 						}
 					case TargetBaseStat.PhysicalDamage:
 						{
-							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curPhysicalDamage : buffBase.Effects[i].Amount;
-							change = Mathf.Max(-curPhysicalDamage, change);
-							curPhysicalDamage += change;
+							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * CurPhysicalDamage : buffBase.Effects[i].Amount;
+							change = Mathf.Max(-CurPhysicalDamage, change);
+							CurPhysicalDamage += change;
 							break;
 						}
 					case TargetBaseStat.MagicalDamage:
 						{
-							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curMagicalDamage : buffBase.Effects[i].Amount;
-							change = Mathf.Max(-curMagicalDamage, change);
-							curMagicalDamage += change;
+							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * CurMagicalDamage : buffBase.Effects[i].Amount;
+							change = Mathf.Max(-CurMagicalDamage, change);
+							CurMagicalDamage += change;
 							break;
 						}
 					case TargetBaseStat.Defense:
 						{
-							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curDefense : buffBase.Effects[i].Amount;
-							curDefense += change;
+							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * CurDefense : buffBase.Effects[i].Amount;
+							CurDefense += change;
 							break;
 						}
 					case TargetBaseStat.MoveSpeed:
 						{
-							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curWalkSpeed : buffBase.Effects[i].Amount;
-							change = Mathf.Max(-curWalkSpeed, change);
-							curWalkSpeed += change;
+							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * CurWalkSpeed : buffBase.Effects[i].Amount;
+							change = Mathf.Max(-CurWalkSpeed, change);
+							CurWalkSpeed += change;
 							break;
 						}
 					case TargetBaseStat.JumpHeightMultiplier:
 						{
-							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curJumpPowerMultiplier : buffBase.Effects[i].Amount;
-							change = Mathf.Max(-curJumpPowerMultiplier, change);
-							curJumpPowerMultiplier += change;
+							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * CurJumpPowerMultiplier : buffBase.Effects[i].Amount;
+							change = Mathf.Max(-CurJumpPowerMultiplier, change);
+							CurJumpPowerMultiplier += change;
 							break;
 						}
 					case TargetBaseStat.TrueDamageMultiplier:
 						{
-							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * curTrueDamageDamageMultiplier : buffBase.Effects[i].Amount;
-							change = Mathf.Max(-curTrueDamageDamageMultiplier, change);
-							curTrueDamageDamageMultiplier += change;
+							change = buffBase.Effects[i].Percent ? (buffBase.Effects[i].Amount / 100) * CurTrueDamageDamageMultiplier : buffBase.Effects[i].Amount;
+							change = Mathf.Max(-CurTrueDamageDamageMultiplier, change);
+							CurTrueDamageDamageMultiplier += change;
 							break;
 						}
 				}
@@ -683,7 +683,7 @@ namespace EoE.Entities
 		}
 		public void RemoveBuff(int index)
 		{
-			BuffInstance targetBuff = activeBuffs[index];
+			BuffInstance targetBuff = ActiveBuffs[index];
 			RemoveBuffEffect(targetBuff);
 			targetBuff.OnRemove();
 
@@ -698,14 +698,14 @@ namespace EoE.Entities
 			else
 				statDisplay.RemoveBuffIcon(targetBuff);
 
-			activeBuffs.RemoveAt(index);
+			ActiveBuffs.RemoveAt(index);
 			RecalculateBuffs();
 		}
 		public bool RemoveBuff(BuffInstance buffInstance)
 		{
-			for (int i = 0; i < activeBuffs.Count; i++)
+			for (int i = 0; i < ActiveBuffs.Count; i++)
 			{
-				if (activeBuffs[i] == buffInstance)
+				if (ActiveBuffs[i] == buffInstance)
 				{
 					RemoveBuff(i);
 					return true;
@@ -725,16 +725,16 @@ namespace EoE.Entities
 				{
 					case TargetBaseStat.Health:
 						{
-							curMaxHealth -= change;
-							if (clampRequired && curHealth > curMaxHealth)
-								curHealth = curMaxHealth;
+							CurMaxHealth -= change;
+							if (clampRequired && CurHealth > CurMaxHealth)
+								CurHealth = CurMaxHealth;
 							break;
 						}
 					case TargetBaseStat.Mana:
 						{
-							curMaxMana -= change;
-							if (clampRequired && curMana > curMaxMana)
-								curMana = curMaxMana;
+							CurMaxMana -= change;
+							if (clampRequired && CurMana > CurMaxMana)
+								CurMana = CurMaxMana;
 							break;
 						}
 					case TargetBaseStat.Stamina:
@@ -751,32 +751,32 @@ namespace EoE.Entities
 						}
 					case TargetBaseStat.PhysicalDamage:
 						{
-							curPhysicalDamage -= change;
+							CurPhysicalDamage -= change;
 							break;
 						}
 					case TargetBaseStat.MagicalDamage:
 						{
-							curMagicalDamage -= change;
+							CurMagicalDamage -= change;
 							break;
 						}
 					case TargetBaseStat.Defense:
 						{
-							curDefense -= change;
+							CurDefense -= change;
 							break;
 						}
 					case TargetBaseStat.MoveSpeed:
 						{
-							curWalkSpeed -= change;
+							CurWalkSpeed -= change;
 							break;
 						}
 					case TargetBaseStat.JumpHeightMultiplier:
 						{
-							curJumpPowerMultiplier -= change;
+							CurJumpPowerMultiplier -= change;
 							break;
 						}
 					case TargetBaseStat.TrueDamageMultiplier:
 						{
-							curTrueDamageDamageMultiplier -= change;
+							CurTrueDamageDamageMultiplier -= change;
 							break;
 						}
 				}
@@ -790,20 +790,20 @@ namespace EoE.Entities
 			//Now re-add them, so the values can be recalculated
 			//First add flat values and then percent
 			//Flat
-			for (int i = 0; i < activeBuffs.Count; i++)
+			for (int i = 0; i < ActiveBuffs.Count; i++)
 			{
-				AddBuffEffect(activeBuffs[i], CalculateValue.Flat, false);
+				AddBuffEffect(ActiveBuffs[i], CalculateValue.Flat, false);
 			}
 			//Percent
-			for (int i = 0; i < activeBuffs.Count; i++)
+			for (int i = 0; i < ActiveBuffs.Count; i++)
 			{
-				AddBuffEffect(activeBuffs[i], CalculateValue.Percent, false);
+				AddBuffEffect(ActiveBuffs[i], CalculateValue.Percent, false);
 			}
 
-			if (curHealth > curMaxHealth)
-				curHealth = curMaxHealth;
-			if (curMana > curMaxMana)
-				curMana = curMaxMana;
+			if (CurHealth > CurMaxHealth)
+				CurHealth = CurMaxHealth;
+			if (CurMana > CurMaxMana)
+				CurMana = CurMaxMana;
 			if (this is Player)
 				(this as Player).ClampStamina();
 		}

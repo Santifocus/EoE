@@ -20,9 +20,9 @@ namespace EoE.UI
 				switch (targetStat)
 				{
 					case TargetStat.Health:
-						return player.curHealth;
+						return player.CurHealth;
 					case TargetStat.Mana:
-						return player.curMana;
+						return player.CurMana;
 					case TargetStat.Stamina:
 						return player.CurStamina;
 					case TargetStat.UltimateCharge:
@@ -39,9 +39,9 @@ namespace EoE.UI
 				switch (targetStat)
 				{
 					case TargetStat.Health:
-						return player.curMaxHealth;
+						return player.CurMaxHealth;
 					case TargetStat.Mana:
-						return player.curMaxMana;
+						return player.CurMaxMana;
 					case TargetStat.Stamina:
 						return player.CurMaxStamina;
 					case TargetStat.UltimateCharge:

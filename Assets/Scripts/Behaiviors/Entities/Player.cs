@@ -61,7 +61,7 @@ namespace EoE.Entities
 		private float jumpCooldown;
 		private Vector3 moveDirection;
 		private Vector3 controllDirection;
-		public Vector3 CurMoveVelocity => (TargetedEntitie ? controllDirection : moveDirection) * curWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
+		public Vector3 CurMoveVelocity => (TargetedEntitie ? controllDirection : moveDirection) * CurWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
 		private float intendedAcceleration;
 		private float curAcceleration;
 		private bool lastOnGroundState = true;
@@ -332,7 +332,7 @@ namespace EoE.Entities
 		{
 			//Health critical effects
 			bool curBelowHealthThreshold = HealthBelowThresholdBoundEffects != null;
-			bool newBelowHealthThresholdState = (curHealth / curMaxHealth) < PlayerSettings.EffectsHealthThreshold;
+			bool newBelowHealthThresholdState = (CurHealth / CurMaxHealth) < PlayerSettings.EffectsHealthThreshold;
 			if (newBelowHealthThresholdState != curBelowHealthThreshold)
 			{
 				//Health fell below threshold
@@ -510,10 +510,10 @@ namespace EoE.Entities
 			float directionOffset = Vector3.Dot(controllDirection, transform.forward);
 			float forwardMultiplier = Mathf.Lerp(PlayerSettings.JumpBackwardMultiplier, 1, (directionOffset + 1) / 2) * (directionOffset >= 0 ? 1 : -1);
 
-			JumpVelocity = PlayerSettings.JumpPower.y * curJumpPowerMultiplier;
+			JumpVelocity = PlayerSettings.JumpPower.y * CurJumpPowerMultiplier;
 			Vector3 addedExtraForce = 
-							PlayerSettings.JumpPower.x * transform.right * curJumpPowerMultiplier + 
-							PlayerSettings.JumpPower.z * transform.forward * curJumpPowerMultiplier * (curStates.Running ? PlayerSettings.RunSpeedMultiplicator : 1) * forwardMultiplier;
+							PlayerSettings.JumpPower.x * transform.right * CurJumpPowerMultiplier + 
+							PlayerSettings.JumpPower.z * transform.forward * CurJumpPowerMultiplier * (curStates.Running ? PlayerSettings.RunSpeedMultiplicator : 1) * forwardMultiplier;
 
 			impactForce += new Vector2(addedExtraForce.x, addedExtraForce.z) * curAcceleration;
 			VerticalVelocity = 0;
@@ -728,7 +728,7 @@ namespace EoE.Entities
 			//FX
 			FXManager.ExecuteFX(PlayerSettings.EffectsOnPlayerDash, transform, true, out FXInstance[] dashEffects);
 
-			Vector3 newForce = new Vector3(Mathf.Sin(targetAngle * Mathf.Deg2Rad), 0, Mathf.Cos(targetAngle * Mathf.Deg2Rad)) * PlayerSettings.DashPower * curWalkSpeed;
+			Vector3 newForce = new Vector3(Mathf.Sin(targetAngle * Mathf.Deg2Rad), 0, Mathf.Cos(targetAngle * Mathf.Deg2Rad)) * PlayerSettings.DashPower * CurWalkSpeed;
 
 			entitieForceController.ApplyForce(newForce, 1 / PlayerSettings.DashDuration);
 

@@ -106,7 +106,7 @@ namespace EoE.Entities
 
 			if (!completedPanicMode)
 			{
-				bool panicMode = settings.PanicModeThreshold >= (curHealth / curMaxHealth);
+				bool panicMode = settings.PanicModeThreshold >= (CurHealth / CurMaxHealth);
 				if (panicModeActive != panicMode)
 				{
 					if (panicMode)

@@ -57,7 +57,7 @@ namespace EoE.Information
 				bool changeOnHealth = basis.targetStat == TargetStat.Health;
 				float attackerExtraDamage = 0;
 				if (changeOnHealth && basis.attacker)
-					attackerExtraDamage = (basis.cause == CauseType.Physical) ? basis.attacker.curPhysicalDamage : ((basis.cause == CauseType.Magic) ? basis.attacker.curMagicalDamage : 0);
+					attackerExtraDamage = (basis.cause == CauseType.Physical) ? basis.attacker.CurPhysicalDamage : ((basis.cause == CauseType.Magic) ? basis.attacker.CurMagicalDamage : 0);
 
 				finalChangeAmount = basis.baseDamageAmount + attackerExtraDamage;
 
@@ -71,7 +71,7 @@ namespace EoE.Information
 					if (basis.cause == CauseType.Physical)
 					{
 						finalChangeAmount = (((basis.attacker ? basis.attacker.EntitieLevel : 0) + GameController.CurrentGameSettings.PhysicalDamageLevelAdd) * basis.baseDamageAmount) / GameController.CurrentGameSettings.PhysicalDamageDivider;
-						float defenseAmount = ((receiver.EntitieLevel + GameController.CurrentGameSettings.PhysicalDefenseLevelAdd) * receiver.curDefense) / GameController.CurrentGameSettings.PhysicalDefenseLevelDivider;
+						float defenseAmount = ((receiver.EntitieLevel + GameController.CurrentGameSettings.PhysicalDefenseLevelAdd) * receiver.CurDefense) / GameController.CurrentGameSettings.PhysicalDefenseLevelDivider;
 						finalChangeAmount -= defenseAmount;
 					}
 					else if (basis.cause == CauseType.Magic)
@@ -115,12 +115,12 @@ namespace EoE.Information
 				if (changeOnHealth)
 				{
 					//Change true damage based on the entities true damage multiplier
-					finalChangeAmount *= receiver.curTrueDamageDamageMultiplier;
-					finalChangeAmount = Mathf.Max(finalChangeAmount, -(receiver.curMaxHealth - receiver.curHealth));
+					finalChangeAmount *= receiver.CurTrueDamageDamageMultiplier;
+					finalChangeAmount = Mathf.Max(finalChangeAmount, -(receiver.CurMaxHealth - receiver.CurHealth));
 				}
 				else if (basis.targetStat == TargetStat.Mana)
 				{
-					finalChangeAmount = Mathf.Max(finalChangeAmount, -(receiver.curMaxMana - receiver.curMana));
+					finalChangeAmount = Mathf.Max(finalChangeAmount, -(receiver.CurMaxMana - receiver.CurMana));
 				}
 				else if (receiver is Player) //&& basis.targetStat == TargetStat.Stamina
 				{
@@ -176,7 +176,7 @@ namespace EoE.Information
 								break;
 						}
 					}
-					float sizeMultiplier = finalChangeAmount < 0 ? 1 : (Mathf.Clamp((finalChangeAmount / receiver.curMaxHealth) * 8, 0.75f, 4));
+					float sizeMultiplier = finalChangeAmount < 0 ? 1 : (Mathf.Clamp((finalChangeAmount / receiver.CurMaxHealth) * 8, 0.75f, 4));
 
 					EffectManager.CreateDamageNumber(	basis.impactPosition ?? receiver.actuallWorldPosition,
 													colors,

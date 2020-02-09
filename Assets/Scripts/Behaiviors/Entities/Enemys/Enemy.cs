@@ -250,13 +250,13 @@ namespace EoE.Entities
 			{
 				agent.angularSpeed = enemySettings.TurnSpeed * GameController.CurrentGameSettings.IdleMovementUrgency;
 				agent.acceleration = enemySettings.MoveAcceleration * GameController.CurrentGameSettings.IdleMovementUrgency;
-				agent.speed = curWalkSpeed * GameController.CurrentGameSettings.IdleMovementUrgency;
+				agent.speed = CurWalkSpeed * GameController.CurrentGameSettings.IdleMovementUrgency;
 			}
 			else
 			{
 				agent.angularSpeed = enemySettings.TurnSpeed;
 				agent.acceleration = enemySettings.MoveAcceleration;
-				agent.speed = curWalkSpeed;
+				agent.speed = CurWalkSpeed;
 			}
 		}
 		private bool CanSeePlayer()

@@ -128,7 +128,7 @@ namespace EoE.Entities
 			TurnStops++;
 
 			animator.SetTrigger("Bash");
-			bashForce = entitieForceController.ApplyForce((transform.forward * settings.BashSpeed) * (curWalkSpeed / settings.WalkSpeed), settings.BashSpeed / settings.BashDistance, false, () => FinishedBash());
+			bashForce = entitieForceController.ApplyForce((transform.forward * settings.BashSpeed) * (CurWalkSpeed / settings.WalkSpeed), settings.BashSpeed / settings.BashDistance, false, () => FinishedBash());
 
 			GameController.BeginDelayedCall(() => animator.SetTrigger("BashEnd"), 0, TimeType.ScaledDeltaTime, () => bashForce == null || bashForce.Force.sqrMagnitude < BASH_END_VELOCITY_THRESHOLD);
 			SetBashColliderState(true);
@@ -150,7 +150,7 @@ namespace EoE.Entities
 			}
 
 			animator.SetTrigger(animation);
-			entitieForceController.ApplyForce((bashDirection * settings.TrickBashSpeed) * (curWalkSpeed / settings.WalkSpeed), settings.TrickBashSpeed / settings.TrickBashDistance, true, () =>
+			entitieForceController.ApplyForce((bashDirection * settings.TrickBashSpeed) * (CurWalkSpeed / settings.WalkSpeed), settings.TrickBashSpeed / settings.TrickBashDistance, true, () =>
 			{
 				animator.SetTrigger("BashEnd");
 				MovementStops--; 

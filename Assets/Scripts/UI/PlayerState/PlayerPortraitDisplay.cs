@@ -60,7 +60,7 @@ namespace EoE.UI
 		}
 		private void UpdateMainState()
 		{
-			bool lowHealth = (Player.Instance.curHealth / Player.Instance.curMaxHealth) < Player.PlayerSettings.EffectsHealthThreshold;
+			bool lowHealth = (Player.Instance.CurHealth / Player.Instance.CurMaxHealth) < Player.PlayerSettings.EffectsHealthThreshold;
 			PortraitState mainShouldState = lowHealth ? PortraitState.LowHealth : (Player.Instance.curStates.Fighting ? PortraitState.InCombat : PortraitState.Normal);
 
 			if (mainShouldState != mainState)

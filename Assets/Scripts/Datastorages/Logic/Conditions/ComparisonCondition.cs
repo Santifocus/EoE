@@ -30,10 +30,10 @@ namespace EoE.Information.Logic
 			switch (comparisonTarget)
 			{
 				case ComparisonTarget.PlayerHealth:
-					wasMet = Compare(Player.Instance ? Player.Instance.curHealth : 0);
+					wasMet = Compare(Player.Instance ? Player.Instance.CurHealth : 0);
 					break;
 				case ComparisonTarget.PlayerMana:
-					wasMet = Compare(Player.Instance ? Player.Instance.curMana : 0);
+					wasMet = Compare(Player.Instance ? Player.Instance.CurMana : 0);
 					break;
 				case ComparisonTarget.PlayerStamina:
 					wasMet = Compare(Player.Instance ? Player.Instance.CurStamina : 0);

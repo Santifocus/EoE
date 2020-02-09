@@ -71,13 +71,13 @@ namespace EoE.UI
 
 		private void UpdateStatDisplay()
 		{
-			healthDisplay.text = Player.Instance.curMaxHealth.ToString();
-			manaDisplay.text = Player.Instance.curMaxMana.ToString();
+			healthDisplay.text = Player.Instance.CurMaxHealth.ToString();
+			manaDisplay.text = Player.Instance.CurMaxMana.ToString();
 			staminaDisplay.text = Player.Instance.CurMaxStamina.ToString();
 
-			defenseDisplay.text = Player.Instance.curDefense.ToString();
-			atkDisplay.text = Player.Instance.curPhysicalDamage.ToString();
-			mgaDisplay.text = Player.Instance.curMagicalDamage.ToString();
+			defenseDisplay.text = Player.Instance.CurDefense.ToString();
+			atkDisplay.text = Player.Instance.CurPhysicalDamage.ToString();
+			mgaDisplay.text = Player.Instance.CurMagicalDamage.ToString();
 
 			skillpointDisplay.text = Player.Instance.AvailableSkillPoints + " | " + Player.Instance.AvailableAtributePoints;
 			experienceDisplay.text = Player.Instance.TotalExperience + " / " + Player.Instance.RequiredExperienceForLevel;
