@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using EoE.UI;
 using EoE.Sounds;
 
-namespace EoE
+namespace EoE.UI
 {
 	public class MainMenuController : MonoBehaviour
 	{
@@ -13,6 +12,7 @@ namespace EoE
 		[Space(5)]
 		[SerializeField] private GameObject tutorialCanvas = default;
 		[SerializeField] private ControllerMenuItem tutorialRequestStartMenuItem = default;
+		[SerializeField] private CreditsController creditsController = default;
 		private void Start()
 		{
 			startMenuItem.Select();
@@ -53,7 +53,11 @@ namespace EoE
 		}
 		public void OpenCredits()
 		{
-
+			creditsController.OpenCredits();
+		}
+		public void CreditsClosed()
+		{
+			startMenuItem.OpenSelfLayer();
 		}
 		public void CloseGame()
 		{

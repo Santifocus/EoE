@@ -37,19 +37,8 @@ namespace EoE
 				possibleHints[i].SetActive(false);
 			}
 
-			sceneTransitionGraphicsAlphaValues = FetchAlphaValues(sceneTransitionGraphics, false);
-			loadingSceneGraphicAlphaValues = FetchAlphaValues(loadingSceneGraphics, false);
-		}
-		private float[] FetchAlphaValues(Graphic[] graphics, bool setState)
-		{
-			float[] alphaValues = new float[graphics.Length];
-			for (int i = 0; i < graphics.Length; i++)
-			{
-				alphaValues[i] = graphics[i].color.a;
-				graphics[i].color = new Color(graphics[i].color.r, graphics[i].color.g, graphics[i].color.b, 0);
-				graphics[i].gameObject.SetActive(setState);
-			}
-			return alphaValues;
+			sceneTransitionGraphicsAlphaValues = Utils.FetchAlphaValues(sceneTransitionGraphics, false);
+			loadingSceneGraphicAlphaValues = Utils.FetchAlphaValues(loadingSceneGraphics, false);
 		}
 		public static void TransitionToScene(int sceneID, bool loadScreen)
 		{
@@ -166,7 +155,7 @@ namespace EoE
 			GameObject targetTipp = possibleHints[Random.Range(0, possibleHints.Length)];
 
 			Graphic[] hintGraphics = targetTipp.GetComponentsInChildren<Graphic>();
-			float[] hintGraphicsAlphaValues = FetchAlphaValues(hintGraphics, true);
+			float[] hintGraphicsAlphaValues = Utils.FetchAlphaValues(hintGraphics, true);
 			targetTipp.SetActive(true);
 
 			while ((timer < finishTime) || (loadOperation.progress < LOAD_FINISH_PROGRESS))

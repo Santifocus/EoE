@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace EoE
 {
@@ -30,6 +31,18 @@ namespace EoE
 		{
 			acceleration = Mathf.Lerp(acceleration, (targetValue - curValue) * springStiffness, lerpStep);
 			return curValue + acceleration * lerpStep;
+		}
+		public static float[] FetchAlphaValues(Graphic[] graphics, bool? setState = null)
+		{
+			float[] alphaValues = new float[graphics.Length];
+			for (int i = 0; i < graphics.Length; i++)
+			{
+				alphaValues[i] = graphics[i].color.a;
+				graphics[i].color = new Color(graphics[i].color.r, graphics[i].color.g, graphics[i].color.b, 0);
+				if(setState.HasValue)
+					graphics[i].gameObject.SetActive(setState.Value);
+			}
+			return alphaValues;
 		}
 	}
 }
