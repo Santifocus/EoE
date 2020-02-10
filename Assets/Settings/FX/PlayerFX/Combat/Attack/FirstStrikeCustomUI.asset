@@ -9,20 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9000bb61baf78a418d71648c3764651, type: 3}
-  m_Name: Firststrike
+  m_Script: {fileID: 11500000, guid: 2e7eaa19f6624274b81d46198fa48d0a, type: 3}
+  m_Name: FirstStrikeCustomUI
   m_EditorClassIdentifier: 
-  TimeIn: 0
-  TimeOut: 0.2
+  TimeIn: 0.1
+  TimeOut: 0.3
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 1
-    TimeStay: 2
+    TimeStay: 0.5
     OnConditionMet: 0
     Condition: {fileID: 0}
-  parts:
-  - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: First Strike!
-  dialogueIcon: {fileID: 0}
-  pauseTimeWhenDisplaying: 0
+  UIPrefabObject: {fileID: 8258305658155295602, guid: 99c1824585644614e8b0bf7417724208,
+    type: 3}
+  CustomChildIndex: 9999
   CanvasTarget: 1
