@@ -29,7 +29,7 @@ MonoBehaviour:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
     text: .
   SortingID: 6
-  ItemIcon: {fileID: 21300000, guid: 590d7efbe697eb34a999ab4b8757d8c7, type: 3}
+  ItemIcon: {fileID: 21300000, guid: 45fcd36bb281ace4d95948a5e31ba4b2, type: 3}
   FXEffectsOnUse:
   - {fileID: 11400000, guid: 2b8f1e86bead3e14ab027d9072f9fd35, type: 2}
   - {fileID: 11400000, guid: 3154eaf86a359724a9b1df91fbcf6f0e, type: 2}
