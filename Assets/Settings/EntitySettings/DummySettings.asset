@@ -42,3 +42,4 @@ MonoBehaviour:
   MoveAcceleration: 0
   NoMoveDeceleration: 0
   InAirAccelerationMultiplier: 0
+  WhileTurningAccelerationMultiplier: 0.35

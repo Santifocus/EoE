@@ -370,7 +370,7 @@ MonoBehaviour:
           CustomScale: {x: 1, y: 1, z: 1}
         BuffOnUserWhileCharging: []
       WaitSettings: []
-      DamageMultiplier: 1.5
+      DamageMultiplier: 1.4
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       StaminaCostMultiplier: 1.2
@@ -609,7 +609,7 @@ MonoBehaviour:
         FXObjectsWithMutliplier: []
         BuffOnUserWhileCharging: []
       WaitSettings: []
-      DamageMultiplier: 4.2
+      DamageMultiplier: 3
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       StaminaCostMultiplier: 1.2
@@ -883,7 +883,7 @@ MonoBehaviour:
       - MinAnimationPoint: 0.955
         MaxAnimationPoint: 1
         Condition: {fileID: 11400000, guid: 05063fee59cc1ba40b98d06dcf75b926, type: 2}
-      DamageMultiplier: 1.6
+      DamageMultiplier: 1.3
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       StaminaCostMultiplier: 1.2
@@ -993,7 +993,7 @@ MonoBehaviour:
       - MinAnimationPoint: 0.955
         MaxAnimationPoint: 1
         Condition: {fileID: 11400000, guid: 05063fee59cc1ba40b98d06dcf75b926, type: 2}
-      DamageMultiplier: 2
+      DamageMultiplier: 1.8
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
       StaminaCostMultiplier: 1.4
@@ -1050,7 +1050,7 @@ MonoBehaviour:
   ComboEffects: {fileID: 11400000, guid: 4e7be449530b2d44fb6413e980a881e2, type: 2}
   UltimateSettings:
     Ultimate: {fileID: 11400000, guid: 870e27f2e49f188479010fa86ff71b7f, type: 2}
-    TotalRequiredCharge: 30
+    TotalRequiredCharge: 32
     OnUseChargeRemove: 1
     OnUltimateChargedEffects:
     - FX: {fileID: 11400000, guid: 95843647cdc223c48b316e85ad8cd98e, type: 2}
