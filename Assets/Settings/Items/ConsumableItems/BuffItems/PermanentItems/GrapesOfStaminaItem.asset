@@ -42,8 +42,8 @@ MonoBehaviour:
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 1
-  ItemWorth: 1000
-  ItemFlags: 1
+  ItemWorth: 500
+  NonRemoveable: 0
   HealEffects: []
   BuffsToApply:
   - {fileID: 11400000, guid: 1f67880d271b56d41912eb2821573c4e, type: 2}

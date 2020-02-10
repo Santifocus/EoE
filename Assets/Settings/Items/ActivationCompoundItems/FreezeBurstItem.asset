@@ -46,6 +46,6 @@ MonoBehaviour:
   ItemModel: {fileID: 8954555773085953504, guid: ce23586b440532449a883c6d355a01be,
     type: 3}
   MaxStack: 1
-  ItemWorth: 200
+  ItemWorth: 220
   NonRemoveable: 0
   TargetCompound: {fileID: 11400000, guid: de13bb3817aa3884daaa19aca1777a79, type: 2}

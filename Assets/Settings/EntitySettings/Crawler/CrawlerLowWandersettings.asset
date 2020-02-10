@@ -16,7 +16,7 @@ MonoBehaviour:
   MassCenter: {x: 0, y: 0.5, z: 0}
   ShowEntitieLevel: 1
   EntitieElement: 4
-  PossibleDropsTable: {fileID: 11400000, guid: 6c863124784db984e93eb995e00bd42e, type: 2}
+  PossibleDropsTable: {fileID: 11400000, guid: f6466496cfe28014d80d044c4b919481, type: 2}
   LevelSettings: {fileID: 11400000, guid: 8872bc66ea135374daf83e0b036673d5, type: 2}
   ExperienceWorth: 2
   DeathEffects:
@@ -112,7 +112,7 @@ MonoBehaviour:
   FoundPlayerSightAngle: 120
   ChaseInterest: 5
   InvestigationTime: 8
-  WanderingFactor: 4
+  WanderingFactor: 8
   WanderingDelayMin: 1
   WanderingDelayMax: 5
   LookAroundDelayMin: 0.5

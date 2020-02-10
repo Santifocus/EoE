@@ -49,5 +49,5 @@ MonoBehaviour:
     type: 3}
   MaxStack: 1
   ItemWorth: 400
-  ItemFlags: 1
+  NonRemoveable: 0
   buffToApply: {fileID: 11400000, guid: a27cb54fb6a890c4fb62f2273585252d, type: 2}

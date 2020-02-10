@@ -112,7 +112,7 @@ MonoBehaviour:
   FoundPlayerSightAngle: 120
   ChaseInterest: 6
   InvestigationTime: 10
-  WanderingFactor: 6
+  WanderingFactor: 10
   WanderingDelayMin: 1
   WanderingDelayMax: 5
   LookAroundDelayMin: 0.5
