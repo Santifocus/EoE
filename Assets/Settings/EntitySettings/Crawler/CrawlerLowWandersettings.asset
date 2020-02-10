@@ -1,0 +1,279 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 755848a702646184fb08cb410f96fe66, type: 3}
+  m_Name: CrawlerLowWandersettings
+  m_EditorClassIdentifier: 
+  EntitieMass: 1
+  MassCenter: {x: 0, y: 0.5, z: 0}
+  ShowEntitieLevel: 1
+  EntitieElement: 4
+  PossibleDropsTable: {fileID: 11400000, guid: 6c863124784db984e93eb995e00bd42e, type: 2}
+  LevelSettings: {fileID: 11400000, guid: 8872bc66ea135374daf83e0b036673d5, type: 2}
+  ExperienceWorth: 2
+  DeathEffects:
+  - ChanceToActivate: 1
+    ContainedEffectType: 2
+    ImpulseVelocity: 5
+    ImpulseVelocityFallOffTime: 0.5
+    ImpulseVelocityDirection: 2
+    ImpulseVelocityFallbackDirection: 1
+    ImpulseDirectionBase: 1
+    FXObjects:
+    - FX: {fileID: 11400000, guid: eb19498e4ffd8d74c8e8c9ed3648da48, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 11400000, guid: 7985002853fd970479776616b8988617, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    AOEEffects: []
+    ProjectileInfos: []
+    HealsOnUser: []
+    StackingStyle: 2
+    BuffsOnUser: []
+    CreatedRemenants: []
+    PlayerItemChanges: []
+  BodyRemoveDelay: 2.5
+  BasePhysicalDamage: 12
+  BaseMagicalDamage: 0
+  BaseDefense: 3
+  Health: 65
+  DoHealthRegen: 0
+  HealthRegen: 0
+  HealthRegenCooldownAfterTakingDamage: 4
+  HealthRegenInCombatMultiplier: 0.5
+  HealthRegenParticles: {fileID: 0}
+  HealthRegenParticlesOffset: {x: 0, y: 0, z: 0}
+  Mana: 50
+  DoManaRegen: 0
+  ManaRegen: 0
+  ManaRegenInCombatMultiplier: 0.5
+  WalkSpeed: 15
+  RunSpeedMultiplicator: 1.5
+  TurnSpeed: 550
+  InAirTurnSpeedMultiplier: 0.25
+  MoveAcceleration: 40
+  NoMoveDeceleration: 15
+  InAirAccelerationMultiplier: 0.3
+  WhileTurningAccelerationMultiplier: 0.35
+  AttackRange: 5
+  AttackKnockBack: 3
+  CritChance: 0
+  OnCombatTriggerEffect:
+  - ChanceToActivate: 1
+    ContainedEffectType: 2
+    ImpulseVelocity: 5
+    ImpulseVelocityFallOffTime: 0.5
+    ImpulseVelocityDirection: 2
+    ImpulseVelocityFallbackDirection: 1
+    ImpulseDirectionBase: 1
+    FXObjects:
+    - FX: {fileID: 11400000, guid: 6c00bfe6adf003d4dbc95a2ceb7249b6, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 11400000, guid: d51e8180c4c3ee145840b6ab88dea1fc, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    AOEEffects: []
+    ProjectileInfos: []
+    HealsOnUser: []
+    StackingStyle: 2
+    BuffsOnUser: []
+    CreatedRemenants: []
+    PlayerItemChanges: []
+  PlayerTrackSpeed: 4
+  SightRange: 15
+  FoundPlayerSightRange: 50
+  SightAngle: 60
+  FoundPlayerSightAngle: 120
+  ChaseInterest: 5
+  InvestigationTime: 8
+  WanderingFactor: 4
+  WanderingDelayMin: 1
+  WanderingDelayMax: 5
+  LookAroundDelayMin: 0.5
+  LookAroundDelayMax: 2
+  ForceTranslationMultiplier: 1.5
+  BashChargeSpeed: 0.75
+  BashSpeed: 35
+  BashDistance: 12
+  ChanceForTrickBash: 0.4
+  TrickBashSpeed: 20
+  TrickBashDistance: 8
+  DirectHitEntitieEffect: {fileID: 0}
+  BashChargeStartEffects:
+  - ChanceToActivate: 1
+    ContainedEffectType: 2
+    ImpulseVelocity: 5
+    ImpulseVelocityFallOffTime: 0.5
+    ImpulseVelocityDirection: 2
+    ImpulseVelocityFallbackDirection: 1
+    ImpulseDirectionBase: 1
+    FXObjects:
+    - FX: {fileID: 11400000, guid: dd68d9db5e90b2f449f0f973e984a2a8, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 11400000, guid: 867882950b2e6be4084d45bd5c865251, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    AOEEffects: []
+    ProjectileInfos: []
+    HealsOnUser: []
+    StackingStyle: 2
+    BuffsOnUser: []
+    CreatedRemenants: []
+    PlayerItemChanges: []
+  TrickBashChargeStartEffects:
+  - ChanceToActivate: 1
+    ContainedEffectType: 2
+    ImpulseVelocity: 5
+    ImpulseVelocityFallOffTime: 0.5
+    ImpulseVelocityDirection: 2
+    ImpulseVelocityFallbackDirection: 1
+    ImpulseDirectionBase: 1
+    FXObjects:
+    - FX: {fileID: 11400000, guid: c0b93920b94afbe489d5e3043c9b3e8e, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 11400000, guid: 484c54ebf899ece4b9d8826c68ce4f57, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    AOEEffects: []
+    ProjectileInfos: []
+    HealsOnUser: []
+    StackingStyle: 2
+    BuffsOnUser: []
+    CreatedRemenants: []
+    PlayerItemChanges: []
+  BashStartEffects:
+  - ChanceToActivate: 1
+    ContainedEffectType: 2
+    ImpulseVelocity: 5
+    ImpulseVelocityFallOffTime: 0.5
+    ImpulseVelocityDirection: 2
+    ImpulseVelocityFallbackDirection: 1
+    ImpulseDirectionBase: 1
+    FXObjects:
+    - FX: {fileID: 11400000, guid: ebd015c77faf82845a18fb2dc0284701, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 11400000, guid: 16c048efcd73fc94fb2bd95baaa20137, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    AOEEffects: []
+    ProjectileInfos: []
+    HealsOnUser: []
+    StackingStyle: 2
+    BuffsOnUser: []
+    CreatedRemenants: []
+    PlayerItemChanges: []
+  BashHitTerrainEffects:
+  - ChanceToActivate: 1
+    ContainedEffectType: 35
+    ImpulseVelocity: 10
+    ImpulseVelocityFallOffTime: 0.75
+    ImpulseVelocityDirection: 1
+    ImpulseVelocityFallbackDirection: 1
+    ImpulseDirectionBase: 8
+    FXObjects:
+    - FX: {fileID: 11400000, guid: 86f5776015fd98f44b7783b9cea66b8c, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 11400000, guid: 7f086857a8f4bf441bd5a18e6fc5e9ae, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    AOEEffects: []
+    ProjectileInfos: []
+    HealsOnUser: []
+    StackingStyle: 2
+    BuffsOnUser:
+    - {fileID: 11400000, guid: cfd21ec5a60866b4fa90b111fc6bc2b4, type: 2}
+    CreatedRemenants: []
+    PlayerItemChanges: []
+  BashHitEntitieEffects:
+  - ChanceToActivate: 1
+    ContainedEffectType: 2
+    ImpulseVelocity: 5
+    ImpulseVelocityFallOffTime: 0.5
+    ImpulseVelocityDirection: 2
+    ImpulseVelocityFallbackDirection: 1
+    ImpulseDirectionBase: 1
+    FXObjects:
+    - FX: {fileID: 11400000, guid: 11d197454f792bb46bd8ff20fbfd1506, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    - FX: {fileID: 11400000, guid: a8684062f1ba0b741bc25ad5f2012464, type: 2}
+      HasPositionOffset: 0
+      PositionOffset: {x: 0, y: 0, z: 0}
+      HasRotationOffset: 0
+      RotationOffset: {x: 0, y: 0, z: 0}
+      HasCustomScale: 0
+      CustomScale: {x: 1, y: 1, z: 1}
+    AOEEffects: []
+    ProjectileInfos: []
+    HealsOnUser: []
+    StackingStyle: 2
+    BuffsOnUser: []
+    CreatedRemenants: []
+    PlayerItemChanges: []
+  AnimationWalkSpeedDivider: 12

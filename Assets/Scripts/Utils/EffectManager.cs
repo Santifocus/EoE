@@ -1,12 +1,12 @@
-﻿using EoE.Entities;
-using EoE.Information;
-using EoE.Sounds;
-using EoE.UI;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using EoE.Entities;
+using EoE.Information;
+using EoE.Sounds;
+using EoE.UI;
 
 namespace EoE
 {
@@ -705,6 +705,7 @@ namespace EoE
 			public override FXObject BaseInfo => DialogueInfo;
 			private readonly Dialogue DialogueInfo;
 			private readonly QueuedDialogue queuedDialogue;
+
 			private bool wantsToBeRemoved;
 			public DialogueInstance(Dialogue DialogueInfo)
 			{
@@ -837,10 +838,12 @@ namespace EoE
 			public override FXType Type => FXType.Player;
 
 			public override FXObject BaseInfo => CustomUIInfo;
-			public readonly CustomUI CustomUIInfo;
+			private readonly CustomUI CustomUIInfo;
+
 			private readonly GameObject mainObject;
 			private readonly Graphic[] containedGraphics;
 			private readonly float[] containedBaseAlphas;
+
 			private float curMultiplier = -1;
 			public CustomUIInstance(CustomUI CustomUIInfo, Transform parent)
 			{
@@ -1005,7 +1008,7 @@ namespace EoE
 		{
 			public override FXType Type => FXType.World;
 			public override FXObject BaseInfo => ParticleEffectInfo;
-			public readonly ParticleEffect ParticleEffectInfo;
+			private readonly ParticleEffect ParticleEffectInfo;
 
 			private readonly Transform particleTransform;
 

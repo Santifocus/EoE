@@ -402,25 +402,6 @@ namespace EoE.Entities
 
 			transform.localEulerAngles = new Vector3(0, Mathf.MoveTowardsAngle(transform.localEulerAngles.y, rotation, Time.deltaTime * enemySettings.TurnSpeed), 0);
 		}
-		private void OnDrawGizmos()
-		{
-			if (!Application.isPlaying)
-				return;
-
-			if (GameController.CurrentGameSettings.IsDebugEnabled)
-			{
-				if (targetPosition.HasValue)
-				{
-					Gizmos.color = Color.red;
-					Gizmos.DrawLine(actuallWorldPosition, targetPosition.Value);
-				}
-				if (overrideTargetPosition.HasValue)
-				{
-					Gizmos.color = Color.yellow;
-					Gizmos.DrawLine(actuallWorldPosition, overrideTargetPosition.Value);
-				}
-			}
-		}
 		public override void StartCombat()
 		{
 			if (!curStates.Fighting)
@@ -429,6 +410,44 @@ namespace EoE.Entities
 			}
 			RefreshDataOnPlayer(true);
 			base.StartCombat();
+		}
+		private void OnDrawGizmos()
+		{
+			if (enemySettings)
+			{
+				Gizmos.color = (Color.gray + Color.red) / 2;
+				if (Application.isPlaying)
+				{
+					Gizmos.DrawWireSphere(originalSpawnPosition, enemySettings.WanderingFactor);
+					Gizmos.DrawLine(transform.position, originalSpawnPosition);
+				}
+				else
+				{
+					Gizmos.DrawWireSphere(transform.position, enemySettings.WanderingFactor);
+				}
+
+				Gizmos.color = (Color.gray + Color.blue) / 2;
+				Vector3 rightAngleForward = new Vector3(Mathf.Sin((transform.eulerAngles.y + enemySettings.SightAngle) * Mathf.Deg2Rad), 0, Mathf.Cos((transform.eulerAngles.y + enemySettings.SightAngle) * Mathf.Deg2Rad));
+				Vector3 leftAngleForward = new Vector3(Mathf.Sin((transform.eulerAngles.y - enemySettings.SightAngle) * Mathf.Deg2Rad), 0, Mathf.Cos((transform.eulerAngles.y - enemySettings.SightAngle) * Mathf.Deg2Rad));
+				Gizmos.DrawLine(transform.position, transform.position + rightAngleForward * enemySettings.SightRange);
+				Gizmos.DrawLine(transform.position, transform.position + leftAngleForward * enemySettings.SightRange);
+			}
+			if(Application.isPlaying)
+			{
+				if (GameController.CurrentGameSettings.IsDebugEnabled)
+				{
+					if (targetPosition.HasValue)
+					{
+						Gizmos.color = Color.red;
+						Gizmos.DrawLine(actuallWorldPosition, targetPosition.Value);
+					}
+					if (overrideTargetPosition.HasValue)
+					{
+						Gizmos.color = Color.yellow;
+						Gizmos.DrawLine(actuallWorldPosition, overrideTargetPosition.Value);
+					}
+				}
+			}
 		}
 		#endregion
 	}
