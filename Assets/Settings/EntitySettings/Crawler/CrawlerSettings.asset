@@ -119,11 +119,11 @@ MonoBehaviour:
   LookAroundDelayMax: 2
   ForceTranslationMultiplier: 1.5
   BashChargeSpeed: 0.75
-  BashSpeed: 35
-  BashDistance: 12
+  BashSpeed: 60
+  BashDistance: 20
   ChanceForTrickBash: 0.4
-  TrickBashSpeed: 20
-  TrickBashDistance: 8
+  TrickBashSpeed: 30
+  TrickBashDistance: 13
   DirectHitEntitieEffect: {fileID: 0}
   BashChargeStartEffects:
   - ChanceToActivate: 1

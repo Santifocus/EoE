@@ -71,7 +71,7 @@ MonoBehaviour:
   InAirTurnSpeedMultiplier: 0.4
   MoveAcceleration: 2
   NoMoveDeceleration: 2.5
-  InAirAccelerationMultiplier: 0.3
+  InAirAccelerationMultiplier: 0.6
   WhileTurningAccelerationMultiplier: 0.9
   FirstStrikeDamageMultiplier: 2
   CameraToPlayerDistance: 7
