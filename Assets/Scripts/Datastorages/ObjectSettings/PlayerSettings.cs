@@ -6,6 +6,9 @@ namespace EoE.Information
 {
 	public class PlayerSettings : EntitySettings
 	{
+		//Combat
+		public float FirstStrikeDamageMultiplier = 2;
+
 		//Camera Settings
 		public float CameraToPlayerDistance = 7;
 		public float CameraYLerpSpeed = 5;
@@ -86,6 +89,7 @@ namespace EoE.Information
 
 		//On Player do attack
 		public FXObject[] EffectsOnCauseDamage = default;
+		public FXObject[] EffectsOnFirstStrike = default;
 		public FXObject[] EffectsOnCauseCrit = default;
 		public FXObject[] EffectsOnEnemyKilled = default;
 

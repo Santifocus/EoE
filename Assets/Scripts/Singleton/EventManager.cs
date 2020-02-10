@@ -37,6 +37,14 @@ namespace EoE.Events
 			PlayerCausedDamageEvent?.Invoke(receiver, changeInfo, wasCrit);
 		}
 
+		//Player First Strike
+		public delegate void PlayerFirstStrike(Entity receiver);
+		public static PlayerFirstStrike PlayerFirstStrikeEvent;
+		public static void PlayerFirstStrikeInvoke(Entity receiver)
+		{
+			PlayerFirstStrikeEvent?.Invoke(receiver);
+		}
+
 		//Player Experience changed
 		public delegate void PlayerExperienceChanged();
 		public static PlayerExperienceChanged PlayerExperienceChangedEvent;

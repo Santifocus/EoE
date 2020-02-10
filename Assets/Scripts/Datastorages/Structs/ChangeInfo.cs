@@ -55,28 +55,28 @@ namespace EoE.Information
 			public ChangeResult(ChangeInfo basis, Entity receiver, bool createDamageNumber, bool fromRegen = false)
 			{
 				bool changeOnHealth = basis.targetStat == TargetStat.Health;
-				float attackerExtraDamage = 0;
-				if (changeOnHealth && basis.attacker)
-					attackerExtraDamage = (basis.cause == CauseType.Physical) ? basis.attacker.CurPhysicalDamage : ((basis.cause == CauseType.Magic) ? basis.attacker.CurMagicalDamage : 0);
-
-				finalChangeAmount = basis.baseDamageAmount + attackerExtraDamage;
+				finalChangeAmount = basis.baseDamageAmount;
 
 				//First we check if the receiver is invincible, if that is the case & the final damage is more then zero (Not a heal) then we set it to zero
 				if (receiver.IsInvincible && changeOnHealth && (finalChangeAmount > 0))
 					finalChangeAmount = 0;
 
 				//Calculate the damage that we want to cause based on formulas set in the GameSettings
-				if (changeOnHealth && receiver != basis.attacker && finalChangeAmount > 0)
+				if (changeOnHealth && (receiver != basis.attacker) && finalChangeAmount > 0)
 				{
 					if (basis.cause == CauseType.Physical)
 					{
-						finalChangeAmount = (((basis.attacker ? basis.attacker.EntitieLevel : 0) + GameController.CurrentGameSettings.PhysicalDamageLevelAdd) * basis.baseDamageAmount) / GameController.CurrentGameSettings.PhysicalDamageDivider;
+						float baseDamage = basis.baseDamageAmount + basis.attacker.CurPhysicalDamage;
+						finalChangeAmount = (((basis.attacker ? basis.attacker.EntitieLevel : 0) + GameController.CurrentGameSettings.PhysicalDamageLevelAdd) * baseDamage) / GameController.CurrentGameSettings.PhysicalDamageDivider;
+
+						//Defense of receiver
 						float defenseAmount = ((receiver.EntitieLevel + GameController.CurrentGameSettings.PhysicalDefenseLevelAdd) * receiver.CurDefense) / GameController.CurrentGameSettings.PhysicalDefenseLevelDivider;
 						finalChangeAmount -= defenseAmount;
 					}
 					else if (basis.cause == CauseType.Magic)
 					{
-						finalChangeAmount = (((basis.attacker ? basis.attacker.EntitieLevel : 0) + GameController.CurrentGameSettings.MagicDamageLevelAdd) * basis.baseDamageAmount) / GameController.CurrentGameSettings.MagicDamageDivider;
+						float baseDamage = basis.baseDamageAmount + basis.attacker.CurMagicalDamage;
+						finalChangeAmount = (((basis.attacker ? basis.attacker.EntitieLevel : 0) + GameController.CurrentGameSettings.MagicDamageLevelAdd) * baseDamage) / GameController.CurrentGameSettings.MagicDamageDivider;
 					}
 
 					//If the chages caused the final damage change from positive to negative we want to set it to the set minimum damage
@@ -134,6 +134,15 @@ namespace EoE.Information
 					if (basis.attacker is Player && !(receiver is Player))
 					{
 						EventManager.PlayerCausedDamageInvoke(receiver, basis, basis.wasCritical);
+						//First strike check
+						if (receiver is Enemy && basis.cause == CauseType.Physical)
+						{
+							if (!receiver.curStates.Fighting)
+							{
+								finalChangeAmount *= Player.PlayerSettings.FirstStrikeDamageMultiplier;
+								EventManager.PlayerFirstStrikeEvent(receiver);
+							}
+						}
 					}
 
 					if (receiver is Player && (finalChangeAmount > 0 || causedKnockback.HasValue) && !receiver.IsInvincible)

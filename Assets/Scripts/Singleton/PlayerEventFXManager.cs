@@ -1,7 +1,6 @@
 ﻿using EoE.Entities;
 using EoE.Events;
 using EoE.Information;
-using EoE.UI;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,6 +16,7 @@ namespace EoE
 			Instance = this;
 			EventManager.PlayerTookDamageEvent += PlayerTookDamage;
 			EventManager.PlayerCausedDamageEvent += PlayerCausedDamage;
+			EventManager.PlayerFirstStrikeEvent += PlayerFirstStrike;
 			EventManager.PlayerLevelupEvent += PlayerLevelUp;
 			EventManager.EntitieDiedEvent += EnemyKilled;
 			EventManager.PlayerDiedEvent += PlayerDied;
@@ -25,6 +25,7 @@ namespace EoE
 		{
 			EventManager.PlayerTookDamageEvent -= PlayerTookDamage;
 			EventManager.PlayerCausedDamageEvent -= PlayerCausedDamage;
+			EventManager.PlayerFirstStrikeEvent -= PlayerFirstStrike;
 			EventManager.PlayerLevelupEvent -= PlayerLevelUp;
 			EventManager.EntitieDiedEvent -= EnemyKilled;
 			EventManager.PlayerDiedEvent -= PlayerDied;
@@ -68,6 +69,10 @@ namespace EoE
 			{
 				FXManager.ExecuteFX(playerSettings.EffectsOnCauseCrit, Player.Instance.transform, true);
 			}
+		}
+		private void PlayerFirstStrike(Entity receiver)
+		{
+			FXManager.ExecuteFX(playerSettings.EffectsOnFirstStrike, Player.Instance.transform, true);
 		}
 	}
 }

@@ -338,12 +338,12 @@ namespace EoE.Entities
 			if (!Alive)
 				return;
 
+			ChangeInfo.ChangeResult changeResult = new ChangeInfo.ChangeResult(causedChange, this, true);
 			if (causedChange.attacker != null && causedChange.attacker != this)
 			{
 				StartCombat();
 				causedChange.attacker.StartCombat();
 			}
-			ChangeInfo.ChangeResult changeResult = new ChangeInfo.ChangeResult(causedChange, this, true);
 
 			//If this Entitie is invincible and the change causes damage and/or knockback then we stop here
 

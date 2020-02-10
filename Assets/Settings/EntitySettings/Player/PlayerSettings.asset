@@ -73,6 +73,7 @@ MonoBehaviour:
   NoMoveDeceleration: 2.5
   InAirAccelerationMultiplier: 0.3
   WhileTurningAccelerationMultiplier: 0.9
+  FirstStrikeDamageMultiplier: 2
   CameraToPlayerDistance: 7
   CameraYLerpSpeed: 15
   CameraYLerpSringStiffness: 0.7
@@ -151,6 +152,7 @@ MonoBehaviour:
   EffectsOnCauseDamage:
   - {fileID: 11400000, guid: 597bda602a9441346a2e721049c28c87, type: 2}
   - {fileID: 11400000, guid: c4b1faa46fe904e4da604eb9bb7a96a4, type: 2}
+  EffectsOnFirstStrike: []
   EffectsOnCauseCrit:
   - {fileID: 11400000, guid: 3c3f83d3e81eae144acbe5a6b02983d0, type: 2}
   - {fileID: 11400000, guid: e9a7041c1b96b544d9be0195facd23e7, type: 2}

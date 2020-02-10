@@ -32,7 +32,12 @@ namespace EoE.Information
 			DrawInFoldoutHeader(new GUIContent("Animation Settings"), ref AnimationSettingsOpen, AnimationSettingsArea);
 			DrawInFoldoutHeader(new GUIContent("FX Settings"), ref EffectSettingsOpen, FXSettingsArea);
 		}
-
+		protected override void CombatSettings()
+		{
+			base.CombatSettings();
+			PlayerSettings settings = target as PlayerSettings;
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.FirstStrikeDamageMultiplier))), ref settings.FirstStrikeDamageMultiplier, 1);
+		}
 		private void CameraSettingsArea()
 		{
 			PlayerSettings settings = target as PlayerSettings;
@@ -156,6 +161,7 @@ namespace EoE.Information
 
 			Header("On Player Attacking");
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnCauseDamage))), ref settings.EffectsOnCauseDamage, serializedObject.FindProperty(nameof(settings.EffectsOnCauseDamage)), new GUIContent(". Effect"), 1);
+			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnFirstStrike))), ref settings.EffectsOnFirstStrike, serializedObject.FindProperty(nameof(settings.EffectsOnFirstStrike)), new GUIContent(". Effect"), 1);
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnCauseCrit))), ref settings.EffectsOnCauseCrit, serializedObject.FindProperty(nameof(settings.EffectsOnCauseCrit)), new GUIContent(". Effect"), 1);
 			ObjectArrayField<FXObject>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EffectsOnEnemyKilled))), ref settings.EffectsOnEnemyKilled, serializedObject.FindProperty(nameof(settings.EffectsOnEnemyKilled)), new GUIContent(". Effect"), 1);
 

@@ -1,5 +1,4 @@
-﻿using EoE.Events;
-using EoE.Information;
+﻿using EoE.Information;
 using UnityEngine;
 using UnityEngine.AI;
 

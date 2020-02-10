@@ -16,13 +16,14 @@ namespace EoE.Entities
 		//Constants
 		//Walk/Turn
 		private const float MIN_WALK_ACCELERATION = 0.45f;
-		private const float NON_TURNING_THRESHOLD = 0.85f;
+		private const float NON_TURNING_THRESHOLD = 0.95f;
 
 		//Jump/Fall
 		private const float JUMP_COOLDOWN = 0.2f;
 		private const float FALLDAMAGE_COOLDOWN = 0.2f;
 		private const float FALLING_VELOCITY_THRESHOLD = -1;
-		private const float FALLING_SINCE_THRESHOLD = 0.25f;
+		private const float NOT_GROUNDED_TIME_THRESHOLD = 0.05f;
+		private const float FALLING_TIME_THRESHOLD = 0.25f;
 
 		//Items
 		public const int SELECTABLE_ITEMS_AMOUNT = 4;
@@ -59,14 +60,14 @@ namespace EoE.Entities
 
 		//Velocity
 		private float jumpCooldown;
-		private Vector3 moveDirection;
 		private Vector3 controllDirection;
-		public Vector3 CurMoveVelocity => (TargetedEntitie ? controllDirection : moveDirection) * CurWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
+		public Vector3 CurMoveVelocity => (TargetedEntitie ? controllDirection : transform.forward) * CurWalkSpeed * (curStates.Running ? SelfSettings.RunSpeedMultiplicator : 1) * curAcceleration;
 		private float intendedAcceleration;
 		private float curAcceleration;
 		private bool lastOnGroundState = true;
 		private float lastFallVelocity;
 		private float fallingSince = 0;
+		private float inAirSince = 0;
 		private Vector3 deltaMove;
 		private Vector3 deltaHorizontalMove;
 		private Vector3 TotalDeltaMove => deltaMove + deltaHorizontalMove;
@@ -321,14 +322,14 @@ namespace EoE.Entities
 
 			//Set the animation states based on the calculated values and bools
 			animationControl.SetBool("Walking", moving || (curAcceleration > 0));
-			animationControl.SetBool("Fall", fallingSince > FALLING_SINCE_THRESHOLD);
+			animationControl.SetBool("Fall", fallingSince > FALLING_TIME_THRESHOLD);
 			animationControl.SetFloat("ZMove", curAnimationDirection.x);
 			animationControl.SetFloat("XMove", curAnimationDirection.y);
 			animationControl.SetFloat("CurWalkSpeed", normalizedMoveVelocity);
 
-			PlayerStateFXControl(moving, running);
+			PlayerStateFXControl(moving, running, inAirSince > NOT_GROUNDED_TIME_THRESHOLD);
 		}
-		private void PlayerStateFXControl(bool moving, bool running)
+		private void PlayerStateFXControl(bool moving, bool running, bool inAir)
 		{
 			//Health critical effects
 			bool curBelowHealthThreshold = HealthBelowThresholdBoundEffects != null;
@@ -348,7 +349,7 @@ namespace EoE.Entities
 
 			//Walk effects
 			bool curWalkingEffectsOn = PlayerWalkingBoundEffects != null;
-			bool newWalkingEffectsOn = (!running && moving) && (charController.isGrounded);
+			bool newWalkingEffectsOn = (!running && moving) && (!inAir);
 			if (curWalkingEffectsOn != newWalkingEffectsOn)
 			{
 				//Player started walking or stopped running and kept walking
@@ -364,7 +365,7 @@ namespace EoE.Entities
 
 			//Run effects
 			bool curRunningEffectsOn = PlayerRunningBoundEffects != null;
-			bool newRunningEffectsOn = (running) && (charController.isGrounded);
+			bool newRunningEffectsOn = (running) && (!inAir);
 			if (curRunningEffectsOn != newRunningEffectsOn)
 			{
 				//Player started running
@@ -381,7 +382,7 @@ namespace EoE.Entities
 			//Deceleration effects
 			bool curDecelerationEffectsOn = PlayerDecelerationBoundEffects != null;
 			bool newDecelerationEffectsOn = (currentAccelerationState == AccelerationState.Decelerating) && 
-											(charController.isGrounded) && 
+											(!inAir) && 
 											(curDecelerationEffectsOn || curAcceleration > playerSettings.AccelerationThreshold);
 			if (curDecelerationEffectsOn != newDecelerationEffectsOn)
 			{
@@ -465,10 +466,7 @@ namespace EoE.Entities
 			//Find out if the player should be turning by using the dot product of the actuall forward and the input direction
 			Vector3 playerForward = transform.forward;
 			controllDirection = inputDirection.y * camForward + inputDirection.x * camRight;
-
 			curStates.Turning = !TargetedEntitie && (Vector3.Dot(playerForward, controllDirection) < NON_TURNING_THRESHOLD);
-
-			moveDirection = curStates.Turning ? playerForward : controllDirection;
 
 			if ((!TargetedEntitie) && (intendedControl > MIN_WALK_ACCELERATION * 0.95f))
 				intendedRotation = -(Mathf.Atan2(controllDirection.z, controllDirection.x) * Mathf.Rad2Deg - 90);
@@ -525,24 +523,33 @@ namespace EoE.Entities
 		}
 		private void CheckForFalling()
 		{
-			//Find out wether the entitie is falling or not
-			bool playerWantsToFall = curStates.Falling || !InputController.Jump.Held;
-			bool falling = !charController.isGrounded && (TotalVerticalVelocity < FALLING_VELOCITY_THRESHOLD || playerWantsToFall);
-
-			//If so: we enable the falling animation and add extra velocity for a better looking fallcurve
-			curStates.Falling = falling;
-
-			if (falling)
+			if (!charController.isGrounded)
 			{
-				fallingSince += Time.fixedDeltaTime;
-			}
-			else if (fallingSince > 0)
-				fallingSince = 0;
+				inAirSince += Time.fixedDeltaTime;
+				//Find out wether the entitie is falling or not
+				bool playerWantsToFall = curStates.Falling || !InputController.Jump.Held;
+				bool falling = TotalVerticalVelocity < FALLING_VELOCITY_THRESHOLD || playerWantsToFall;
 
-			if (falling)
-			{
-				GravityControl(GameController.CurrentGameSettings.WhenFallingExtraGravity);
+				//If so: we add time to the falling since value and add extra velocity for a better looking fallcurve
+				curStates.Falling = falling;
+				if (falling)
+				{
+					fallingSince += Time.fixedDeltaTime;
+					GravityControl(GameController.CurrentGameSettings.WhenFallingExtraGravity);
+				}
+				else if (fallingSince > 0)
+					fallingSince = 0;
 			}
+			else
+			{
+				if (inAirSince > 0)
+					inAirSince = 0;
+				if (fallingSince > 0)
+					fallingSince = 0;
+				if (curStates.Falling)
+					curStates.Falling = false;
+			}
+
 		}
 		private void CheckForLanding()
 		{
@@ -1503,7 +1510,7 @@ namespace EoE.Entities
 			Gizmos.DrawLine(transform.position, transform.position + controllDirection * 2);
 
 			Gizmos.color = Color.green;
-			Gizmos.DrawLine(transform.position, transform.position + moveDirection * 2);
+			Gizmos.DrawLine(transform.position, transform.position + transform.forward * 2);
 
 			Gizmos.color = Color.cyan;
 			Gizmos.DrawLine(modelTransform.position, modelTransform.position + modelTransform.up * 2.5f);

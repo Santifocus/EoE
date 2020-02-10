@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AffectedTargets: 4
   DamageElement: 8
-  CauseType: 0
+  CauseType: 1
   BaseEffectRadius: 5
   ZeroOutDistance: 18
   HasMaximumHits: 0

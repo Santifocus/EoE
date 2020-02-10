@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa0729519a808d449bdb777d2d35538b, type: 3}
   m_Name: PlayerWalkSFX
   m_EditorClassIdentifier: 
-  TimeIn: 0
+  TimeIn: 0.25
   TimeOut: 0
   FinishConditions:
     OnParentDeath: 1
     OnTimeout: 0
     TimeStay: 1
     OnConditionMet: 0
-    Conditions: []
+    Condition: {fileID: 0}
   TargetSound: {fileID: 11400000, guid: c00faae72a709e5499ac8bcd7c737983, type: 2}
   FollowTarget: 1
   OffsetToTarget: {x: 0, y: 0, z: 0}
