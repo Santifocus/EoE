@@ -412,6 +412,25 @@ namespace EoE.Entities
 		}
 		private void OnDrawGizmos()
 		{
+			if(Application.isPlaying)
+			{
+				if (GameController.CurrentGameSettings.IsDebugEnabled)
+				{
+					if (targetPosition.HasValue)
+					{
+						Gizmos.color = Color.red;
+						Gizmos.DrawLine(actuallWorldPosition, targetPosition.Value);
+					}
+					if (overrideTargetPosition.HasValue)
+					{
+						Gizmos.color = Color.yellow;
+						Gizmos.DrawLine(actuallWorldPosition, overrideTargetPosition.Value);
+					}
+				}
+			}
+		}
+		private void OnDrawGizmosSelected()
+		{
 			if (enemySettings)
 			{
 				Gizmos.color = (Color.gray + Color.red) / 2;
@@ -431,22 +450,7 @@ namespace EoE.Entities
 				Gizmos.DrawLine(transform.position, transform.position + rightAngleForward * enemySettings.SightRange);
 				Gizmos.DrawLine(transform.position, transform.position + leftAngleForward * enemySettings.SightRange);
 			}
-			if(Application.isPlaying)
-			{
-				if (GameController.CurrentGameSettings.IsDebugEnabled)
-				{
-					if (targetPosition.HasValue)
-					{
-						Gizmos.color = Color.red;
-						Gizmos.DrawLine(actuallWorldPosition, targetPosition.Value);
-					}
-					if (overrideTargetPosition.HasValue)
-					{
-						Gizmos.color = Color.yellow;
-						Gizmos.DrawLine(actuallWorldPosition, overrideTargetPosition.Value);
-					}
-				}
-			}
+			
 		}
 		#endregion
 	}
