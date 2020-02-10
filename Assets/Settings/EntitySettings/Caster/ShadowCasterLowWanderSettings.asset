@@ -52,8 +52,8 @@ MonoBehaviour:
   BodyRemoveDelay: 2.5
   BasePhysicalDamage: 0
   BaseMagicalDamage: 14
-  BaseDefense: 3
-  Health: 65
+  BaseDefense: 5
+  Health: 80
   DoHealthRegen: 0
   HealthRegen: 0
   HealthRegenCooldownAfterTakingDamage: 4

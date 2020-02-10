@@ -50,7 +50,7 @@ MonoBehaviour:
     CreatedRemenants: []
     PlayerItemChanges: []
   BodyRemoveDelay: 2.5
-  BasePhysicalDamage: 12
+  BasePhysicalDamage: 7
   BaseMagicalDamage: 0
   BaseDefense: 3
   Health: 65
