@@ -62,7 +62,7 @@ namespace EoE.Information
 					finalChangeAmount = 0;
 
 				//Calculate the damage that we want to cause based on formulas set in the GameSettings
-				if (changeOnHealth && (receiver != basis.attacker) && finalChangeAmount > 0)
+				if (changeOnHealth && basis.attacker && (receiver != basis.attacker) && finalChangeAmount > 0)
 				{
 					if (basis.cause == CauseType.Physical)
 					{

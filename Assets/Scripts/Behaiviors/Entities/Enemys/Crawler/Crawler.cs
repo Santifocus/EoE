@@ -7,7 +7,7 @@ namespace EoE.Entities
 {
 	public class Crawler : Enemy
 	{
-		private const float BASH_END_VELOCITY_THRESHOLD = 2f;
+		private const float BASH_END_SQR_VELOCITY_THRESHOLD = 200f;
 		//Inspector Variables
 		[SerializeField] private CrawlerSettings settings = default;
 		[SerializeField] private CrawlerHitbox[] crawlerHitboxes = default;
@@ -17,6 +17,7 @@ namespace EoE.Entities
 		private bool chargingBash;
 		private bool bashing;
 		private ForceController.SingleForce bashForce;
+		private bool bashAnimationEnded;
 
 		//Getter helper
 		public override EnemySettings enemySettings => settings;
@@ -127,10 +128,11 @@ namespace EoE.Entities
 			MovementStops++;
 			TurnStops++;
 
+			bashAnimationEnded = false;
 			animator.SetTrigger("Bash");
 			bashForce = entitieForceController.ApplyForce((transform.forward * settings.BashSpeed) * (CurWalkSpeed / settings.WalkSpeed), settings.BashSpeed / settings.BashDistance, false, () => FinishedBash());
 
-			GameController.BeginDelayedCall(() => animator.SetTrigger("BashEnd"), 0, TimeType.ScaledDeltaTime, () => bashForce == null || bashForce.Force.sqrMagnitude < BASH_END_VELOCITY_THRESHOLD);
+			GameController.BeginDelayedCall(EndBashAnimation, 0, TimeType.ScaledDeltaTime, () => (bashForce == null || bashForce.Force.sqrMagnitude < BASH_END_SQR_VELOCITY_THRESHOLD));
 			SetBashColliderState(true);
 			ActivateActivationEffects(settings.BashStartEffects);
 		}
@@ -155,15 +157,25 @@ namespace EoE.Entities
 				animator.SetTrigger("BashEnd");
 				MovementStops--; 
 				Bash(); 
-			}
-			);
+			});
 		}
 		private void FinishedBash()
 		{
 			bashing = false;
-			SetBashColliderState(false);
 			MovementStops--;
 			TurnStops--;
+
+			if (!bashAnimationEnded)
+				EndBashAnimation();
+		}
+		private void EndBashAnimation()
+		{
+			if (bashAnimationEnded)
+				return;
+
+			bashAnimationEnded = true;
+			animator.SetTrigger("BashEnd");
+			SetBashColliderState(false);
 		}
 		private void SetBashColliderState(bool state)
 		{
@@ -172,7 +184,7 @@ namespace EoE.Entities
 		}
 		public void HitCollider(Collider other, Collider self)
 		{
-			if (!Alive)
+			if (!Alive || bashAnimationEnded)
 				return;
 
 			float restForce = bashForce.Force.magnitude;
