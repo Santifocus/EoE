@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Walk
   m_EditorClassIdentifier: 
   soundName: Walk
-  clip: {fileID: 8300000, guid: 80147b8a1ed5df949bb934a2442ca053, type: 3}
+  clip: {fileID: 8300000, guid: 997c6f3409fcfa84884878dbdcac106c, type: 3}
   audioGroup: {fileID: 24300002, guid: b8b319c0096b4d34196070be7e374c0c, type: 2}
   Loop: 1
   priority: 128

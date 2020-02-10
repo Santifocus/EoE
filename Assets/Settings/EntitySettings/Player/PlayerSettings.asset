@@ -152,7 +152,8 @@ MonoBehaviour:
   EffectsOnCauseDamage:
   - {fileID: 11400000, guid: 597bda602a9441346a2e721049c28c87, type: 2}
   - {fileID: 11400000, guid: c4b1faa46fe904e4da604eb9bb7a96a4, type: 2}
-  EffectsOnFirstStrike: []
+  EffectsOnFirstStrike:
+  - {fileID: 11400000, guid: 6c94d06c702c15846b702264757ea291, type: 2}
   EffectsOnCauseCrit:
   - {fileID: 11400000, guid: 3c3f83d3e81eae144acbe5a6b02983d0, type: 2}
   - {fileID: 11400000, guid: e9a7041c1b96b544d9be0195facd23e7, type: 2}
