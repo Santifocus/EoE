@@ -20,7 +20,7 @@ MonoBehaviour:
   BaseCritChance: 0
   Cost:
     Health: 0
-    Mana: 2
+    Mana: 4
     Stamina: 0
     AdditionalConditions: []
   CostActivationIndex: 0

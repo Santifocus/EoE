@@ -61,7 +61,7 @@ MonoBehaviour:
   HealthRegenParticles: {fileID: 3894390344941758739, guid: 4fc32336d51ae934c9aa8f2a0a80d546,
     type: 3}
   HealthRegenParticlesOffset: {x: 0, y: 0, z: 0}
-  Mana: 30
+  Mana: 5000
   DoManaRegen: 1
   ManaRegen: 1.5
   ManaRegenInCombatMultiplier: 0.6

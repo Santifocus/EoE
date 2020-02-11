@@ -15,7 +15,7 @@ MonoBehaviour:
   NoDefinedActionType: 0
   ActionType: 1
   BasePhysicalDamage: 0
-  BaseMagicalDamage: 10
+  BaseMagicalDamage: 22
   BaseKnockback: 10
   BaseCritChance: 0
   Cost:

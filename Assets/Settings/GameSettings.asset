@@ -193,8 +193,8 @@ MonoBehaviour:
   PhysicalDamageDivider: 12
   PhysicalDefenseLevelAdd: 8
   PhysicalDefenseLevelDivider: 13
-  MagicDamageLevelAdd: 3
-  MagicDamageDivider: 6
+  MagicDamageLevelAdd: 2
+  MagicDamageDivider: 7
   EffectivenessMatrix:
   - Row:
     - 1
