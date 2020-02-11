@@ -21,7 +21,7 @@ MonoBehaviour:
   Cost:
     Health: 0
     Mana: 10
-    Endurance: 0
+    Stamina: 0
     AdditionalConditions: []
   CostActivationIndex: 0
   CausedCooldown: 6
@@ -51,7 +51,8 @@ MonoBehaviour:
       BuffsOnUser: []
       CreatedRemenants:
       - {fileID: 11400000, guid: 0c5aa56ae8cca0a438e950b4ab216fcc, type: 2}
+      PlayerItemChanges: []
     AtTargetWhileEffects: []
-    PauseConditions: []
-    YieldConditions: []
-    StopConditions: []
+    PauseCondition: {fileID: 0}
+    YieldCondition: {fileID: 0}
+    StopCondition: {fileID: 0}
