@@ -1,6 +1,6 @@
 ﻿using EoE.Combatery;
 using EoE.Controlls;
-using EoE.Entities;
+using EoE.Behaviour.Entities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

@@ -5,7 +5,7 @@ using static EoE.EoEEditor;
 
 namespace EoE.Combatery
 {
-	[CustomEditor(typeof(RemenantsData), true), CanEditMultipleObjects]
+	[CustomEditor(typeof(RemnantsData), true), CanEditMultipleObjects]
 	public class RemenantsDataEditor : ObjectEditor
 	{
 		private static bool BaseSettingsOpen;
@@ -13,7 +13,7 @@ namespace EoE.Combatery
 		{
 			DrawInFoldoutHeader(new GUIContent("Base Data"), ref BaseSettingsOpen, DrawBaseSettings);
 
-			RemenantsData settings = target as RemenantsData;
+			RemnantsData settings = target as RemnantsData;
 
 			SerializedProperty startEffectsProperty = serializedObject.FindProperty(nameof(settings.StartEffects));
 			DrawArray<ActivationEffect>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.StartEffects))), ref settings.StartEffects, startEffectsProperty, DrawActivationEffect, new GUIContent(". Effect"), 0, true);
@@ -26,7 +26,7 @@ namespace EoE.Combatery
 		}
 		private void DrawBaseSettings()
 		{
-			RemenantsData settings = target as RemenantsData;
+			RemnantsData settings = target as RemnantsData;
 			BoolField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.TryGroundRemenants))), ref settings.TryGroundRemenants, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.Duration))), ref settings.Duration, 1);
 			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.WhileTickTime))), ref settings.WhileTickTime, 1);

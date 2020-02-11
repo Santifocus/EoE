@@ -1,5 +1,5 @@
 ﻿using EoE.Combatery;
-using EoE.Entities;
+using EoE.Behaviour.Entities;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -47,8 +47,8 @@ namespace EoE.Information
 		public BuffStackingStyle StackingStyle = BuffStackingStyle.Reapply;
 		public Buff[] BuffsOnUser = new Buff[0];
 
-		//Remenants
-		public RemenantsData[] CreatedRemenants = new RemenantsData[0];
+		//Remnants
+		public RemnantsData[] CreatedRemenants = new RemnantsData[0];
 
 		//PlayerItemChange
 		public PlayerItemChange[] PlayerItemChanges = new PlayerItemChange[0];
@@ -189,7 +189,7 @@ namespace EoE.Information
 																activator,
 																spawnOffset
 																);
-			Projectile.CreateProjectile(baseObject, data, activator, direction, activator.actuallWorldPosition + spawnOffset, multiplier);
+			Projectile.CreateProjectile(baseObject, data, activator, direction, activator.ActuallWorldPosition + spawnOffset, multiplier);
 		}
 		private void CreateProjectile(Entity activator, Transform originTransform, CombatObject baseObject, ProjectileData data, float multiplier)
 		{

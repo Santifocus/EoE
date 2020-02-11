@@ -45,7 +45,7 @@ namespace EoE
 		[MenuItem("EoE/Combat/ShieldData")] public static void CreateShieldData() => AssetCreator<ShieldData>("Settings", "Combat");
 		[MenuItem("EoE/Combat/Effect/EffectSingle")] public static void CreateEffectSingle() => AssetCreator<EffectSingle>("Settings", "Combat");
 		[MenuItem("EoE/Combat/Effect/EffectAOE")] public static void CreateEffectAOE() => AssetCreator<EffectAOE>("Settings", "Combat");
-		[MenuItem("EoE/Combat/Effect/RemenantsData")] public static void CreateRemenantsData() => AssetCreator<RemenantsData>("Settings", "Combat");
+		[MenuItem("EoE/Combat/Effect/RemenantsData")] public static void CreateRemenantsData() => AssetCreator<RemnantsData>("Settings", "Combat");
 		[MenuItem("EoE/Combat/Physical/ComboSet")] public static void CreateComboSet() => AssetCreator<ComboSet>("Settings", "Combat", "Weapons", "ComboSets");
 		[MenuItem("EoE/Combat/Physical/Ultimate/Basic")] public static void CreateBasicUltimate() => AssetCreator<BasicUltimate>("Settings", "Combat", "Weapons", "Ultimates");
 		[MenuItem("EoE/Combat/Physical/Ultimate/Attack")] public static void CreateAttackUltimate() => AssetCreator<AttackUltimate>("Settings", "Combat", "Weapons", "Ultimates");

@@ -1,4 +1,5 @@
-﻿using EoE.Entities;
+﻿using EoE.Behaviour;
+using EoE.Behaviour.Entities;
 using EoE.UI;
 using UnityEngine;
 

@@ -1,5 +1,5 @@
 ﻿using EoE.Combatery;
-using EoE.Entities;
+using EoE.Behaviour.Entities;
 
 namespace EoE.Information
 {

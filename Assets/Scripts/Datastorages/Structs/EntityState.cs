@@ -1,4 +1,4 @@
-﻿namespace EoE.Entities
+﻿namespace EoE.Behaviour.Entities
 {
 	public struct EntityState
 	{

@@ -63,6 +63,7 @@ namespace EoE.Information
 		public int ExtraRandomCurrencyPerSoul = 5;
 
 		//Damage Calculation
+		public float DifficultyImpact = 1;
 		public float PhysicalDamageLevelAdd = 12;
 		public float PhysicalDamageDivider = 10;
 

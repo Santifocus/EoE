@@ -1,4 +1,4 @@
-﻿using EoE.Entities;
+﻿using EoE.Behaviour.Entities;
 using EoE.Events;
 using UnityEngine;
 
@@ -64,19 +64,21 @@ namespace EoE.Information
 				//Calculate the damage that we want to cause based on formulas set in the GameSettings
 				if (changeOnHealth && basis.attacker && (receiver != basis.attacker) && finalChangeAmount > 0)
 				{
-					if (basis.cause == CauseType.Physical)
+					float attackLevelChange = (basis.attacker is Enemy) ? GameController.DifficultyImpact : 0;
+					float defenseLevelChange = (receiver is Enemy) ? GameController.DifficultyImpact : 0;
+					if (basis.cause == CauseType.Physical )
 					{
 						float baseDamage = basis.baseDamageAmount + basis.attacker.CurPhysicalDamage;
-						finalChangeAmount = (((basis.attacker ? basis.attacker.EntitieLevel : 0) + GameController.CurrentGameSettings.PhysicalDamageLevelAdd) * baseDamage) / GameController.CurrentGameSettings.PhysicalDamageDivider;
+						finalChangeAmount = (((basis.attacker ? basis.attacker.EntitieLevel : 0) + attackLevelChange + GameController.CurrentGameSettings.PhysicalDamageLevelAdd) * baseDamage) / GameController.CurrentGameSettings.PhysicalDamageDivider;
 
 						//Defense of receiver
-						float defenseAmount = ((receiver.EntitieLevel + GameController.CurrentGameSettings.PhysicalDefenseLevelAdd) * receiver.CurDefense) / GameController.CurrentGameSettings.PhysicalDefenseLevelDivider;
+						float defenseAmount = ((receiver.EntitieLevel + defenseLevelChange + GameController.CurrentGameSettings.PhysicalDefenseLevelAdd) * receiver.CurDefense) / GameController.CurrentGameSettings.PhysicalDefenseLevelDivider;
 						finalChangeAmount -= defenseAmount;
 					}
 					else if (basis.cause == CauseType.Magic)
 					{
 						float baseDamage = basis.baseDamageAmount + basis.attacker.CurMagicalDamage;
-						finalChangeAmount = (((basis.attacker ? basis.attacker.EntitieLevel : 0) + GameController.CurrentGameSettings.MagicDamageLevelAdd) * baseDamage) / GameController.CurrentGameSettings.MagicDamageDivider;
+						finalChangeAmount = (((basis.attacker ? basis.attacker.EntitieLevel : 0) + attackLevelChange + GameController.CurrentGameSettings.MagicDamageLevelAdd) * baseDamage) / GameController.CurrentGameSettings.MagicDamageDivider;
 					}
 
 					//If the chages caused the final damage change from positive to negative we want to set it to the set minimum damage
@@ -187,7 +189,7 @@ namespace EoE.Information
 					}
 					float sizeMultiplier = finalChangeAmount < 0 ? 1 : (Mathf.Clamp((finalChangeAmount / receiver.CurMaxHealth) * 8, 0.75f, 4));
 
-					EffectManager.CreateDamageNumber(	basis.impactPosition ?? receiver.actuallWorldPosition,
+					EffectManager.CreateDamageNumber(	basis.impactPosition ?? receiver.ActuallWorldPosition,
 													colors,
 													forceDirection * GameController.CurrentGameSettings.DamageNumberFlySpeed * sizeMultiplier,
 													Mathf.Abs(finalChangeAmount),

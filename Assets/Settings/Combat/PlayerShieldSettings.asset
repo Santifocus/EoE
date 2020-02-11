@@ -16,7 +16,7 @@ MonoBehaviour:
   FirstActivationCost:
     Health: 0
     Mana: 5
-    Endurance: 0
+    Stamina: 0
     AdditionalConditions: []
   EffectOnUserOnShieldBreak: {fileID: 11400000, guid: eadfd855a332c49408281caac48a3346,
     type: 2}
@@ -61,6 +61,7 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
   - MinShieldLevel: 0.51
     MaxShieldLevel: 0.75
     Effects:
@@ -92,6 +93,7 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
   - MinShieldLevel: 0.26
     MaxShieldLevel: 0.5
     Effects:
@@ -123,6 +125,7 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
   - MinShieldLevel: 0.01
     MaxShieldLevel: 0.25
     Effects:
@@ -154,6 +157,7 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
   ShieldFailedStartEffects:
   - ChanceToActivate: 1
     ContainedEffectType: 2
@@ -183,6 +187,7 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
+    PlayerItemChanges: []
   ShieldStartEffects: []
   ShieldHitEffects:
   - ChanceToActivate: 1
@@ -213,6 +218,7 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
+    PlayerItemChanges: []
   ShieldDisableEffects: []
   ShieldBreakEffects:
   - ChanceToActivate: 1
@@ -250,3 +256,4 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
+    PlayerItemChanges: []

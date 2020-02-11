@@ -1,4 +1,4 @@
-﻿using EoE.Entities;
+﻿using EoE.Behaviour.Entities;
 using EoE.Information;
 using System.Collections.Generic;
 using UnityEngine;
@@ -85,7 +85,7 @@ namespace EoE.Combatery
 				if (isIgnored)
 					continue;
 
-				if ((Entity.AllEntities[i].actuallWorldPosition - origin.position).sqrMagnitude < outerSphereDist)
+				if ((Entity.AllEntities[i].ActuallWorldPosition - origin.position).sqrMagnitude < outerSphereDist)
 				{
 					//Check if this entitie should be a targetable entitie
 					if (CombatObject.IsAllowedEntitie(Entity.AllEntities[i], effectCauser, AffectedTargets))
@@ -104,7 +104,7 @@ namespace EoE.Combatery
 					continue;
 				}
 
-				Vector3 dif = Entity.AllEntities[i].actuallWorldPosition - origin.position;
+				Vector3 dif = Entity.AllEntities[i].ActuallWorldPosition - origin.position;
 				float sqrDist = dif.sqrMagnitude;
 
 				//Generally onbly allow to keep going if the distance is smaller then the other sphere distance
@@ -192,7 +192,7 @@ namespace EoE.Combatery
 												effectCause,
 												effectElement,
 												TargetStat.Health,
-												eligibleTargets[i].Target.actuallWorldPosition,
+												eligibleTargets[i].Target.ActuallWorldPosition,
 												new Vector3(eligibleTargets[i].ApplyDirection.x * KnockbackAxisMultiplier.x, 
 															eligibleTargets[i].ApplyDirection.y * KnockbackAxisMultiplier.y, 
 															eligibleTargets[i].ApplyDirection.z * KnockbackAxisMultiplier.z),

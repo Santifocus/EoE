@@ -48,6 +48,7 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
+    PlayerItemChanges: []
   WhileEffects: []
   WhileTickTime: 20
   TerrainHitboxSize: 0.5
@@ -85,6 +86,7 @@ MonoBehaviour:
     BuffsOnUser: []
     CreatedRemenants:
     - {fileID: 11400000, guid: 4ad4bce98be0e3344a377d577d19060e, type: 2}
+    PlayerItemChanges: []
   Bounces: 0
   DestroyOnEntiteBounce: 0
   CollisionEffectsOnBounce: 0

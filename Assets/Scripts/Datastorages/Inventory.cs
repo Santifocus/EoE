@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using EoE.Behaviour.Entities;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace EoE.Information
@@ -296,7 +297,7 @@ namespace EoE.Information
 		{
 			StopBoundEffects();
 			if (isEquiped)
-				data.UnEquip(this, Entities.Player.Instance);
+				data.UnEquip(this, Player.Instance);
 		}
 		public void StopBoundEffects()
 		{

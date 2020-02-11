@@ -1,4 +1,4 @@
-﻿using EoE.Entities;
+﻿using EoE.Behaviour.Entities;
 using EoE.Information;
 using EoE.Information.Logic;
 using System.Collections;
@@ -143,7 +143,7 @@ namespace EoE.Combatery
 			{
 				if (originEntitie.targetPosition.HasValue)
 				{
-					calculatedDirection = (originEntitie.targetPosition.Value - (originEntitie.actuallWorldPosition + originOffset)).normalized;
+					calculatedDirection = (originEntitie.targetPosition.Value - (originEntitie.ActuallWorldPosition + originOffset)).normalized;
 				}
 				else
 				{

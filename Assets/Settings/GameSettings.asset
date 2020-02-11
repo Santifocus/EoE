@@ -189,6 +189,7 @@ MonoBehaviour:
   ItemSellMultiplier: 0.7
   BaseCurrencyPerSoul: 15
   ExtraRandomCurrencyPerSoul: 10
+  DifficultyImpact: 0
   PhysicalDamageLevelAdd: 10
   PhysicalDamageDivider: 12
   PhysicalDefenseLevelAdd: 8

@@ -1,15 +1,16 @@
-﻿using EoE.Combatery;
-using EoE.Entities;
-using EoE.Information;
-using EoE.UI;
-using System;
+﻿using System;
 using System.Collections;
 using UnityEngine;
+using EoE.Behaviour;
+using EoE.Combatery;
+using EoE.Information;
+using EoE.UI;
 
 namespace EoE
 {
 	public enum OnDelayConditionNotMet { ContinueTimerAndInvokeWhenMet, StopTimerTillMet, ResetTimer, Cancel }
 	public enum TimeType { ScaledDeltaTime, FixedDeltaTime, Realtime }
+	public enum GameDifficulty { Easy, Normal, Hard }
 	public class GameController : MonoBehaviour
 	{
 		public static GameController Instance { get; private set; }
@@ -30,6 +31,23 @@ namespace EoE
 				bool newPauseState = activePauses > 0;
 				if (newPauseState != GameIsPaused)
 					SetPauseGamestate(newPauseState);
+			}
+		}
+		public static GameDifficulty SetGameDifficulty = GameDifficulty.Hard;
+		public static float DifficultyImpact
+		{
+			get
+			{
+				switch (SetGameDifficulty)
+				{
+					default:
+					case GameDifficulty.Normal:
+						return 0;
+					case GameDifficulty.Easy:
+						return -CurrentGameSettings.DifficultyImpact;
+					case GameDifficulty.Hard:
+						return CurrentGameSettings.DifficultyImpact;
+				}
 			}
 		}
 

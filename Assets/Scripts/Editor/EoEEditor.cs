@@ -700,7 +700,7 @@ namespace EoE
 				if (settings.HasMaskFlag(EffectType.CreateRemenants))
 				{
 					SerializedProperty remenantsArrayProperty = property.FindPropertyRelative(nameof(settings.CreatedRemenants));
-					ObjectArrayField<RemenantsData>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CreatedRemenants))), ref settings.CreatedRemenants, remenantsArrayProperty, new GUIContent(". Remenant"), offSet + 1);
+					ObjectArrayField<RemnantsData>(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.CreatedRemenants))), ref settings.CreatedRemenants, remenantsArrayProperty, new GUIContent(". Remenant"), offSet + 1);
 					LineBreak(new Color(0.25f, 0.25f, 0.65f, 1), false);
 				}
 				//PlayerItemChange

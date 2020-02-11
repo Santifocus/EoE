@@ -1,4 +1,4 @@
-﻿using EoE.Entities;
+﻿using EoE.Behaviour.Entities;
 using EoE.Information;
 using System.Collections;
 using TMPro;

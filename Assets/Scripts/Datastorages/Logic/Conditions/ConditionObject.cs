@@ -1,5 +1,5 @@
 ﻿using EoE.Controlls;
-using EoE.Entities;
+using EoE.Behaviour.Entities;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

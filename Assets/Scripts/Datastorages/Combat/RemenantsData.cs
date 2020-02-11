@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace EoE.Combatery
 {
-	public class RemenantsData : ScriptableObject
+	public class RemnantsData : ScriptableObject
 	{
 		public bool TryGroundRemenants = true;
 		public float Duration = 5;

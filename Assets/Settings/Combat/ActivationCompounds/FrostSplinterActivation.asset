@@ -21,7 +21,7 @@ MonoBehaviour:
   Cost:
     Health: 0
     Mana: 10
-    Endurance: 0
+    Stamina: 0
     AdditionalConditions: []
   CostActivationIndex: 0
   CausedCooldown: 2.5

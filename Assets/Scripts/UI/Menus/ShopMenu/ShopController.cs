@@ -1,4 +1,4 @@
-﻿using EoE.Entities;
+﻿using EoE.Behaviour.Entities;
 using EoE.Events;
 using EoE.Information;
 using EoE.Controlls;

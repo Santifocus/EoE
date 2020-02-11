@@ -1,5 +1,5 @@
 ﻿using EoE.Combatery;
-using EoE.Entities;
+using EoE.Behaviour.Entities;
 using EoE.Information;
 using TMPro;
 using UnityEngine;

@@ -1,5 +1,5 @@
 ﻿using EoE.Controlls;
-using EoE.Entities;
+using EoE.Behaviour.Entities;
 using EoE.Information;
 using TMPro;
 using UnityEngine;
@@ -90,7 +90,7 @@ namespace EoE.UI
 					{
 						InventoryItem targetItem = Player.Instance.Inventory[parent.CurSlotIndex];
 
-						targetItem.data.CreateItemDrop(Player.Instance.actuallWorldPosition, curDropCount, true);
+						targetItem.data.CreateItemDrop(Player.Instance.ActuallWorldPosition, curDropCount, true);
 						Player.Instance.Inventory.RemoveStackSize(targetItem.data, curDropCount);
 
 						if (targetItem.stackSize <= 0)

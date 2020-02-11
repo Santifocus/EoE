@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using EoE.Entities;
+using EoE.Behaviour.Entities;
 using EoE.Information;
 using EoE.Sounds;
 using EoE.UI;
