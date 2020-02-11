@@ -15,7 +15,7 @@ MonoBehaviour:
   NoDefinedActionType: 0
   ActionType: 1
   BasePhysicalDamage: 0
-  BaseMagicalDamage: 12
+  BaseMagicalDamage: 8
   BaseKnockback: 1
   BaseCritChance: 0
   Cost:
@@ -24,7 +24,7 @@ MonoBehaviour:
     Stamina: 0
     AdditionalConditions: []
   CostActivationIndex: 0
-  CausedCooldown: 4
+  CausedCooldown: 5
   CancelFromStun: 1
   CancelIfCostActivationIsImpossible: 1
   Elements:

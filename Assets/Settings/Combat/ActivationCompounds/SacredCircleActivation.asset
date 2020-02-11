@@ -15,13 +15,13 @@ MonoBehaviour:
   NoDefinedActionType: 0
   ActionType: 1
   BasePhysicalDamage: 0
-  BaseMagicalDamage: 25
+  BaseMagicalDamage: 10
   BaseKnockback: 10
   BaseCritChance: 0
   Cost:
     Health: 0
     Mana: 15
-    Endurance: 0
+    Stamina: 0
     AdditionalConditions: []
   CostActivationIndex: 0
   CausedCooldown: 5
@@ -63,9 +63,10 @@ MonoBehaviour:
       StackingStyle: 2
       BuffsOnUser: []
       CreatedRemenants: []
+      PlayerItemChanges: []
     WhileEffects: []
     AtTargetStartEffects: []
     AtTargetWhileEffects: []
-    PauseConditions: []
-    YieldConditions: []
-    StopConditions: []
+    PauseCondition: {fileID: 0}
+    YieldCondition: {fileID: 0}
+    StopCondition: {fileID: 0}
