@@ -141,8 +141,8 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: Lv. 1
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: bcafb9c49af160242b0ea177dc1214f9, type: 2}
-  m_sharedMaterial: {fileID: -4431225682268040855, guid: bcafb9c49af160242b0ea177dc1214f9,
+  m_fontAsset: {fileID: 11400000, guid: ce8bd8bef90b8644380516708dd26992, type: 2}
+  m_sharedMaterial: {fileID: -3595779047730234256, guid: ce8bd8bef90b8644380516708dd26992,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -425,7 +425,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5330782, g: 1, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.18458831, b: 0, a: 1}
   m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -559,7 +559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6792453, g: 0.13584907, b: 0, a: 1}
+  m_Color: {r: 0.4056604, g: 0.09160073, b: 0, a: 1}
   m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:

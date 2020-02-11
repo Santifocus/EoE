@@ -66,8 +66,8 @@ MonoBehaviour:
     PlayerItemChanges: []
   BodyRemoveDelay: 2.5
   BasePhysicalDamage: 0
-  BaseMagicalDamage: 19
-  BaseDefense: 6
+  BaseMagicalDamage: 8
+  BaseDefense: 7
   Health: 65
   DoHealthRegen: 0
   HealthRegen: 0

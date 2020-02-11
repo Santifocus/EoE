@@ -22,7 +22,7 @@ MonoBehaviour:
     Condition: {fileID: 0}
   parts:
   - textColor: {r: 1, g: 1, b: 1, a: 1}
-    text: I have to clear the area before I leave.
+    text: I have to clear the area before I can do that.
   dialogueIcon: {fileID: 21300000, guid: b7ba1a70591e12041b51d0d91951a56e, type: 3}
   pauseTimeWhenDisplaying: 0
   CanvasTarget: 1
