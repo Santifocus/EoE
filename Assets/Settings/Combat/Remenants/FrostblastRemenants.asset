@@ -37,6 +37,7 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
+    PlayerItemChanges: []
   WhileEffects:
   - ChanceToActivate: 1
     ContainedEffectType: 4
@@ -53,4 +54,5 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
+    PlayerItemChanges: []
   OnEndEffects: []
