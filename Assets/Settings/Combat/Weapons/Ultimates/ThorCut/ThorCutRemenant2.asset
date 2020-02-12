@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TryGroundRemenants: 1
   Duration: 1
-  WhileTickTime: 0.1
+  WhileTickTime: 20
   StartEffects: []
   WhileEffects: []
   OnEndEffects:
@@ -47,3 +47,4 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
+    PlayerItemChanges: []

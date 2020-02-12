@@ -17,6 +17,7 @@ MonoBehaviour:
   Direction: 32
   Duration: 0.1
   FlightSpeed: 0
+  GravityEffect: 0
   CreateOffsetToCaster: {x: 0, y: 0, z: 10}
   StartEffects:
   - ChanceToActivate: 1
@@ -47,6 +48,7 @@ MonoBehaviour:
     StackingStyle: 2
     BuffsOnUser: []
     CreatedRemenants: []
+    PlayerItemChanges: []
   WhileEffects: []
   WhileTickTime: 0.1
   TerrainHitboxSize: 0.5
@@ -91,6 +93,7 @@ MonoBehaviour:
     BuffsOnUser: []
     CreatedRemenants:
     - {fileID: 11400000, guid: f1388ba0bc4e1444a9b3c2301c1104f2, type: 2}
+    PlayerItemChanges: []
   Bounces: 0
   DestroyOnEntiteBounce: 0
   CollisionEffectsOnBounce: 1

@@ -8636,7 +8636,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    maxLights: 5
+    maxLights: 1
   TrailModule:
     enabled: 1
     mode: 0
@@ -13397,7 +13397,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    maxLights: 5
+    maxLights: 2
   TrailModule:
     enabled: 1
     mode: 0
@@ -18158,7 +18158,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    maxLights: 5
+    maxLights: 2
   TrailModule:
     enabled: 1
     mode: 0
