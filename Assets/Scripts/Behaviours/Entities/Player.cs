@@ -22,7 +22,7 @@ namespace EoE.Behaviour.Entities
 		private const float JUMP_COOLDOWN = 0.2f;
 		private const float FALLDAMAGE_COOLDOWN = 0.2f;
 		private const float FALLING_VELOCITY_THRESHOLD = -1;
-		private const float NOT_GROUNDED_TIME_THRESHOLD = 0.05f;
+		private const float NOT_GROUNDED_TIME_THRESHOLD = 0.15f;
 		private const float FALLING_TIME_THRESHOLD = 0.25f;
 
 		//Items
@@ -313,7 +313,8 @@ namespace EoE.Behaviour.Entities
 		}
 		private void UpdateAnimationStates(float moveVelocity, float normalizedMoveVelocity)
 		{
-			bool moving = curStates.Moving && (moveVelocity >= (MIN_WALK_ACCELERATION / 4)) && (intendedAcceleration >= MIN_WALK_ACCELERATION);
+			bool inAir = inAirSince > NOT_GROUNDED_TIME_THRESHOLD;
+			bool moving = curStates.Moving && (moveVelocity >= (MIN_WALK_ACCELERATION / 4) || !inAir) && (intendedAcceleration >= MIN_WALK_ACCELERATION);
 			curStates.Moving = moving;
 			bool running = curStates.Running;
 
@@ -327,7 +328,7 @@ namespace EoE.Behaviour.Entities
 			animationControl.SetFloat("XMove", curAnimationDirection.y);
 			animationControl.SetFloat("CurWalkSpeed", normalizedMoveVelocity);
 
-			PlayerStateFXControl(moving, running, inAirSince > NOT_GROUNDED_TIME_THRESHOLD);
+			PlayerStateFXControl(moving, running, inAir);
 		}
 		private void PlayerStateFXControl(bool moving, bool running, bool inAir)
 		{
