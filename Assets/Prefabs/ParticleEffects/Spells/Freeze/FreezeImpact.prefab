@@ -8572,7 +8572,7 @@ ParticleSystem:
       properties: 0
       emitProbability: 1
   LightsModule:
-    enabled: 1
+    enabled: 0
     ratio: 1
     light: {fileID: 7432093771095525203, guid: 65a0fb6ff66b7d64d925842f2284d6ae, type: 3}
     randomDistribution: 1
@@ -24512,7 +24512,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 80
+    maxNumParticles: 20
     size3D: 1
     rotation3D: 1
     gravityModifier:
@@ -24777,7 +24777,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 110
+      scalar: 20
       minScalar: 10
       maxCurve:
         serializedVersion: 2
