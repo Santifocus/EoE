@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f6d4205812b5584418e18937cd4db88f, type: 3}
-  m_Name: Entitiehitscreenshake
+  m_Name: EntitieHitScreenshake
   m_EditorClassIdentifier: 
   TimeIn: 0
   TimeOut: 0.1
   FinishConditions:
     OnParentDeath: 0
     OnTimeout: 1
-    TimeStay: 0.3
+    TimeStay: 0.2
     OnConditionMet: 0
     Condition: {fileID: 0}
   AxisIntensity: 0.2

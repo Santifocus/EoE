@@ -21,7 +21,7 @@ MonoBehaviour:
   Cost:
     Health: 0
     Mana: 0
-    Endurance: 0
+    Stamina: 0
     AdditionalConditions: []
   UltimateIcon: {fileID: 21300000, guid: 90e92c3d5e058a74da4ac18b249e0de3, type: 3}
   ActivationEffects:
@@ -68,6 +68,7 @@ MonoBehaviour:
     BuffsOnUser:
     - {fileID: 11400000, guid: b62d1893094847845a6a883ffc575992, type: 2}
     CreatedRemenants: []
+    PlayerItemChanges: []
   AttackData:
     AttackSequenceParts:
     - AnimationStartPoint: 0
@@ -124,7 +125,7 @@ MonoBehaviour:
       DamageMultiplier: 1
       HealthCostMultiplier: 1
       ManaCostMultiplier: 1
-      EnduranceCostMultiplier: 1
+      StaminaCostMultiplier: 1
       KnockbackMultiplier: 1
       CritChanceMultiplier: 1
       CollisionMask: -1
@@ -163,6 +164,7 @@ MonoBehaviour:
           BuffsOnUser:
           - {fileID: 11400000, guid: 04c40735dbf85f54ab1effad039fed11, type: 2}
           CreatedRemenants: []
+          PlayerItemChanges: []
       - AtAnimationPoint: 0.95
         Effect:
           ChanceToActivate: 1
@@ -195,6 +197,7 @@ MonoBehaviour:
           BuffsOnUser: []
           CreatedRemenants:
           - {fileID: 11400000, guid: b1c5de0789443554abba1f6fd9cddc02, type: 2}
+          PlayerItemChanges: []
       WhileEffectsOnUser: []
       StartEffectsOnWeapon: []
       WhileEffectsOnWeapon: []
