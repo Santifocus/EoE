@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a64dc9aaa39638f41b2e1c0408faf846, type: 3}
   m_Name: EnemydeathFlames
   m_EditorClassIdentifier: 
-  TimeIn: 2
-  TimeOut: 0
+  TimeIn: 1.5
+  TimeOut: 0.1
   FinishConditions:
-    OnParentDeath: 1
-    OnTimeout: 0
-    TimeStay: 1
+    OnParentDeath: 0
+    OnTimeout: 1
+    TimeStay: 1.1
     OnConditionMet: 0
     Condition: {fileID: 0}
   ParticleMainObject: {fileID: 8898843886906588985, guid: b30fd08435893cb4c8030384f9115310,
