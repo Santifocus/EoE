@@ -1186,6 +1186,7 @@ namespace EoE
 		public float baseMultiplier;
 
 		protected Transform parent;
+		private Entity parentAsEntity;
 
 		protected FXState CurrentFXState { get; private set; }
 		protected bool allowBaseUpdate = true;
@@ -1210,7 +1211,7 @@ namespace EoE
 		{
 			if (CurrentFXState != FXState.End)
 			{
-				if (BaseInfo.FinishConditions.OnParentDeath && (!parent || !parent.gameObject.activeSelf))
+				if (BaseInfo.FinishConditions.OnParentDeath && (!parent || !parent.gameObject.activeSelf || (parentAsEntity && !parentAsEntity.Alive)))
 					return true;
 				else if (BaseInfo.FinishConditions.OnConditionMet && BaseInfo.FinishConditions.ConditionMet())
 					return true;
@@ -1267,6 +1268,7 @@ namespace EoE
 			CurrentFXState = FXState.Start;
 			this.baseMultiplier = baseMultiplier;
 			this.parent = parent;
+			parentAsEntity = parent.GetComponent<Entity>();
 		}
 		protected float GetCurMultiplier()
 		{

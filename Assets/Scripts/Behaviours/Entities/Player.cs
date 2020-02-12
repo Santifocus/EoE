@@ -134,6 +134,7 @@ namespace EoE.Behaviour.Entities
 		protected override void Start()
 		{
 			Instance = this;
+			FXManager.ExecuteFX(playerSettings.EffectsOnPlayerSpawn, transform, true);
 			base.Start();
 		}
 		protected override void EntitieStart()
@@ -185,7 +186,6 @@ namespace EoE.Behaviour.Entities
 		{
 			base.ResetStats();
 			CurMaxStamina = playerSettings.Stamina;
-			FXManager.ExecuteFX(playerSettings.EffectsOnPlayerSpawn, transform, true);
 		}
 		protected override void ResetStatValues()
 		{

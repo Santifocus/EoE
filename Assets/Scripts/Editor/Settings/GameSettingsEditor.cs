@@ -112,7 +112,8 @@ namespace EoE.Information
 		{
 			GameSettings settings = target as GameSettings;
 
-			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.DifficultyImpact))), ref settings.DifficultyImpact, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.EasyDifficultyImpact))), ref settings.EasyDifficultyImpact, 1);
+			FloatField(new GUIContent(ObjectNames.NicifyVariableName(nameof(settings.HardDifficultyImpact))), ref settings.HardDifficultyImpact, 1);
 			//Damage Calculation Values
 			Foldout(new GUIContent("Damage Calculation Base Values"), ref DamageCalculationValuesOpen, 1);
 			if (DamageCalculationValuesOpen)

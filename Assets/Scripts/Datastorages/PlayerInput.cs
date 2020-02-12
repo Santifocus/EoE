@@ -515,6 +515,17 @@ namespace EoE.Controlls
                 },
                 {
                     ""name"": """",
+                    ""id"": ""f04cd5be-de35-4025-82bd-71bed1b69521"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Enter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""25a2e37f-48ef-449d-a0fc-dde275dfcd83"",
                     ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",

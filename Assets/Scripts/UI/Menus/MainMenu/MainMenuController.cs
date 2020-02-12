@@ -11,6 +11,8 @@ namespace EoE.UI
 		[SerializeField] private UnityEngine.Video.VideoClip introAnimation = default;
 		[Space(5)]
 		[SerializeField] private int mainMenuMusicIndex = default;
+		[SerializeField] private GameObject difficultyCanvas = default;
+		[SerializeField] private ControllerMenuItem difficultyRequestStartMenuItem = default;
 		[SerializeField] private GameObject tutorialCanvas = default;
 		[SerializeField] private ControllerMenuItem tutorialRequestStartMenuItem = default;
 		[SerializeField] private CreditsController creditsController = default;
@@ -26,8 +28,8 @@ namespace EoE.UI
 		}
 		public void RequestStartGame()
 		{
-			tutorialCanvas.SetActive(true);
-			tutorialRequestStartMenuItem.Select();
+			difficultyCanvas.SetActive(true);
+			difficultyRequestStartMenuItem.Select();
 		}
 		public void StartGame()
 		{
@@ -43,8 +45,9 @@ namespace EoE.UI
 
 			SceneLoader.TransitionToScene(ConstantCollector.TUTORIAL_SCENE_INDEX, true);
 		}
-		public void CancelTutorialRequest()
+		public void CancelStartRequest()
 		{
+			difficultyCanvas.SetActive(false);
 			tutorialCanvas.SetActive(false);
 			startMenuItem.OpenSelfLayer();
 		}
@@ -64,6 +67,14 @@ namespace EoE.UI
 		public void CreditsClosed()
 		{
 			startMenuItem.OpenSelfLayer();
+		}
+		public void SetDifficulty(int difficulty)
+		{
+			GameController.SetGameDifficulty = (GameDifficulty)difficulty;
+
+			difficultyCanvas.SetActive(false);
+			tutorialCanvas.SetActive(true);
+			tutorialRequestStartMenuItem.Select();
 		}
 		public void CloseGame()
 		{

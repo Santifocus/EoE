@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5697798747036332351}
   - component: {fileID: 248558584381487107}
   m_Layer: 0
-  m_Name: Drops
+  m_Name: Panicmode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,7 +51,7 @@ ParticleSystem:
   playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
-  useRigidbodyForVelocity: 1
+  useRigidbodyForVelocity: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
