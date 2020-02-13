@@ -160,8 +160,6 @@ namespace EoE.Behaviour.Entities
 			ShieldControl();
 
 			animationControl.SetBool("InCombat", curStates.Fighting);
-			if (Input.GetKeyDown(KeyCode.K))
-				BaseDeath(null);
 		}
 		protected override void EntitieFixedUpdate()
 		{

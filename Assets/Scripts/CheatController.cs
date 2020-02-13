@@ -13,6 +13,7 @@ namespace EoE.Other
 		private static readonly KeyCode LevelUpKey = KeyCode.L;
 		private static readonly KeyCode MoneyIncreaseKey = KeyCode.M;
 		private static readonly KeyCode PeacefullModeKey = KeyCode.P;
+		private static readonly KeyCode SuicideKey = KeyCode.K;
 
 		private static readonly int MoneyIncreaseAmount = 100;
 
@@ -59,6 +60,7 @@ namespace EoE.Other
 				Player.Instance.ChangeCurrency(MoneyIncreaseAmount);
 				FXManager.ExecuteFX(moneyIncreaseNotificication, Player.Instance.transform, true);
 			}
+
 			if (Input.GetKeyDown(PeacefullModeKey))
 			{
 				peacefullModeActive = !peacefullModeActive;
@@ -69,6 +71,11 @@ namespace EoE.Other
 						Entity.AllEntities[i].StatDisplay.gameObject.SetActive(!peacefullModeActive);
 				}
 				FXManager.ExecuteFX(peacefullModeNotification, Player.Instance.transform, true);
+			}
+
+			if (Input.GetKeyDown(SuicideKey))
+			{
+				Player.Instance.BaseDeath(null);
 			}
 		}
 	}
