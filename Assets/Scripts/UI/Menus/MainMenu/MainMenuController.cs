@@ -36,7 +36,7 @@ namespace EoE.UI
 			if (SceneLoader.Transitioning)
 				return;
 
-			AnimationSceneController.RequestAnimation(introAnimation, ConstantCollector.GAME_SCENE_INDEX, false, true);
+			AnimationSceneController.RequestAnimation(introAnimation, ConstantCollector.GAME_SCENE_INDEX, true, false, true);
 		}
 		public void StartTuorial()
 		{

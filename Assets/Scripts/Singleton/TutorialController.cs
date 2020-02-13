@@ -64,7 +64,7 @@ namespace EoE.UI
 				}
 			}
 
-			AnimationSceneController.RequestAnimation(introAnimation, ConstantCollector.GAME_SCENE_INDEX, false, true);
+			AnimationSceneController.RequestAnimation(introAnimation, ConstantCollector.GAME_SCENE_INDEX, true, false, true);
 		}
 	}
 }

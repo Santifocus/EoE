@@ -87,7 +87,7 @@ namespace EoE.Behaviour.Entities
 		public BuffInstance ArmorBuff;
 
 		//Other
-		private EntityStatDisplay statDisplay;
+		public EntityStatDisplay StatDisplay { get; private set; }
 		public Buff LevelingBaseBuff { get; protected set; }
 		#endregion
 		#region Basic Monobehaivior
@@ -133,8 +133,8 @@ namespace EoE.Behaviour.Entities
 
 			if (!(this is Player))
 			{
-				statDisplay = Instantiate(GameController.CurrentGameSettings.EntitieStatDisplayPrefab, GameController.Instance.enemyHealthBarStorage);
-				statDisplay.Setup(SelfSettings.ShowEntitieLevel ? (int?)(StartLevel + 1) : null);
+				StatDisplay = Instantiate(GameController.CurrentGameSettings.EntitieStatDisplayPrefab, GameController.Instance.enemyHealthBarStorage);
+				StatDisplay.Setup(SelfSettings.ShowEntitieLevel ? (int?)(StartLevel + 1) : null);
 			}
 
 			ResetStats();
@@ -394,19 +394,19 @@ namespace EoE.Behaviour.Entities
 			if (inCombat)
 			{
 				float curHealthNormalized = CurHealth / CurMaxHealth;
-				if (statDisplay.HealthValue != curHealthNormalized)
-					statDisplay.HealthValue = curHealthNormalized;
+				if (StatDisplay.HealthValue != curHealthNormalized)
+					StatDisplay.HealthValue = curHealthNormalized;
 
 				Vector3 pos = PlayerCameraController.PlayerCamera.WorldToScreenPoint(new Vector3(coll.bounds.center.x, HighestBoundingPos, coll.bounds.center.z));
 				if (pos.z > 0)
-					statDisplay.Position = pos + new Vector3(0, statDisplay.Height);
+					StatDisplay.Position = pos + new Vector3(0, StatDisplay.Height);
 				else
 					intendedState = false;
 			}
 
 			//If we are in a fight => show the display, otherwise hide it
-			if (statDisplay.gameObject.activeInHierarchy != intendedState)
-				statDisplay.gameObject.SetActive(intendedState);
+			if (StatDisplay.gameObject.activeInHierarchy != intendedState)
+				StatDisplay.gameObject.SetActive(intendedState);
 		}
 		public virtual void StartCombat()
 		{
@@ -454,8 +454,8 @@ namespace EoE.Behaviour.Entities
 		protected virtual void Death()
 		{
 			BuildDrops();
-			if (statDisplay)
-				Destroy(statDisplay.gameObject);
+			if (StatDisplay)
+				Destroy(StatDisplay.gameObject);
 			coll.gameObject.layer = ConstantCollector.TERRAIN_COLLIDING_LAYER;
 
 			StartCoroutine(DelayedBodyRemoval());
@@ -575,7 +575,7 @@ namespace EoE.Behaviour.Entities
 			if (this is Player)
 				Player.Instance.buffDisplay.AddBuffIcon(newBuff);
 			else
-				statDisplay.AddBuffIcon(newBuff);
+				StatDisplay.AddBuffIcon(newBuff);
 
 			ActiveBuffs.Add(newBuff);
 
@@ -696,7 +696,7 @@ namespace EoE.Behaviour.Entities
 			if (this is Player)
 				Player.Instance.buffDisplay.RemoveBuffIcon(targetBuff);
 			else
-				statDisplay.RemoveBuffIcon(targetBuff);
+				StatDisplay.RemoveBuffIcon(targetBuff);
 
 			ActiveBuffs.RemoveAt(index);
 			RecalculateBuffs();

@@ -1261,7 +1261,7 @@ namespace EoE.Behaviour.Entities
 				return;
 			if (InputController.Shield.Down)
 				playerShield.SetShieldState(true);
-			else if(InputController.Shield.Up)
+			else if(!InputController.Shield.Held)
 				playerShield.SetShieldState(false);
 		}
 		#endregion

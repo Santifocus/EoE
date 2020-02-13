@@ -9,10 +9,11 @@ namespace EoE.Behaviour
 	public class AnimationRequester : SceneChangeInteractable
 	{
 		[SerializeField] private bool doLoadingScreenOut = false;
+		[SerializeField] private bool allowSkip = true;
 		[SerializeField] private VideoClip targetAnimation = default;
 		protected override void Interact()
 		{
-			AnimationSceneController.RequestAnimation(targetAnimation, targetSceneIndex, doLoadingScreen, doLoadingScreenOut);
+			AnimationSceneController.RequestAnimation(targetAnimation, targetSceneIndex, allowSkip, doLoadingScreen, doLoadingScreenOut);
 		}
 	}
 }

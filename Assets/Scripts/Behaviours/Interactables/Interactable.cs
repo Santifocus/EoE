@@ -10,12 +10,12 @@ namespace EoE.Behaviour
 {
 	public abstract class Interactable : MonoBehaviour
 	{
-		private const float FAIL_INTERACT_EFFECT_COOLDOWN = 0.2f;
 		public static Interactable MarkedInteractable;
 		protected bool isTarget { get; private set; }
 		public bool IsInteractable => canBeInteracted;
 		[SerializeField] protected LogicComponent interactCondition = default;
 		[SerializeField] protected FXObject[] failedInteractEffects = default;
+		[SerializeField] protected float failedInteractEffectCooldown = 1;
 
 		protected bool canBeInteracted;
 		private float failInteractEffectCooldown;
@@ -41,7 +41,7 @@ namespace EoE.Behaviour
 			{
 				if(failInteractEffectCooldown <= 0)
 				{
-					failInteractEffectCooldown = FAIL_INTERACT_EFFECT_COOLDOWN;
+					failInteractEffectCooldown = failedInteractEffectCooldown;
 					FXManager.ExecuteFX(failedInteractEffects, Player.Instance.transform, true);
 				}
 				return true; //We did try to interact but the condition failed so we still return true

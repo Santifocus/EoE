@@ -690,11 +690,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 316a751089c2832489c39e49d8522a8e,
         type: 2}
-    - target: {fileID: 3194758928428608331, guid: 21e629fb6237643449bbca1b6f13b118,
-        type: 3}
-      propertyPath: combatMusicIndex
-      value: 4
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 21e629fb6237643449bbca1b6f13b118, type: 3}
 --- !u!1 &1725787813

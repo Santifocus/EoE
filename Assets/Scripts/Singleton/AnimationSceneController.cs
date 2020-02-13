@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using EoE.Controlls;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,6 +13,7 @@ namespace EoE.UI
 		private static bool IsCustomRequest = false;
 		private static VideoClip RequestedAnimation = null;
 		private static int RequestedSceneIndex = ConstantCollector.MAIN_MENU_SCENE_INDEX;
+		private static bool AllowSkip = false;
 		private static bool ShouldDoLoadingScreen = false;
 
 		[SerializeField] private VideoPlayer animationPlayer = default;
@@ -21,20 +23,23 @@ namespace EoE.UI
 		[SerializeField] private Camera rendererCamera = default;
 		[SerializeField] private AudioListener audioListener = default;
 		[SerializeField] private RawImage renderImage = default;
+		[SerializeField] private GameObject skipDisplay = default;
 
 		private const int WAIT_FRAMES = 5;
 		private void Start()
 		{
 			animationPlayer.clip = RequestedAnimation != null ? RequestedAnimation : defaultAnimation;
+			skipDisplay.SetActive(AllowSkip);
 			animationPlayer.Play();
 			SetupCamera();
 
 			StartCoroutine(DelayedEndTest());
 		}
-		public static void RequestAnimation(VideoClip requestedAnimation, int requestedSceneIndex, bool shouldDoLoadingScreenIn, bool shouldDoLoadingScreenOut)
+		public static void RequestAnimation(VideoClip requestedAnimation, int requestedSceneIndex, bool allowSkip, bool shouldDoLoadingScreenIn, bool shouldDoLoadingScreenOut)
 		{
 			IsCustomRequest = true;
 			RequestedAnimation = requestedAnimation;
+			AllowSkip = allowSkip;
 			RequestedSceneIndex = requestedSceneIndex;
 			ShouldDoLoadingScreen = shouldDoLoadingScreenOut;
 			SceneLoader.TransitionToScene(ConstantCollector.ANIMATION_SCENE_INDEX, shouldDoLoadingScreenIn);
@@ -53,18 +58,27 @@ namespace EoE.UI
 			{
 				yield return new WaitForEndOfFrame();
 			}
+			bool isFinishing = false;
 			while (true)
 			{
 				yield return new WaitForEndOfFrame();
-				if (!animationPlayer.isPlaying)
+				if (!isFinishing && (!animationPlayer.isPlaying || (InputController.Pause.Down && AllowSkip)))
 				{
-					audioListener.enabled = false;
-					if(IsCustomRequest)
-						SceneLoader.TransitionToScene(RequestedSceneIndex, ShouldDoLoadingScreen);
-					else
-						SceneManager.LoadScene(RequestedSceneIndex, LoadSceneMode.Additive);
+					isFinishing = true;
+				}
 
-					break;
+				if(isFinishing)
+				{
+					if (!SceneLoader.Transitioning)
+					{
+						audioListener.enabled = false;
+						if (IsCustomRequest)
+							SceneLoader.TransitionToScene(RequestedSceneIndex, ShouldDoLoadingScreen);
+						else
+							SceneManager.LoadScene(RequestedSceneIndex, LoadSceneMode.Additive);
+
+						break;
+					}
 				}
 			}
 			float timer = 0;
@@ -78,6 +92,7 @@ namespace EoE.UI
 
 			RequestedAnimation = null;
 			RequestedSceneIndex = ConstantCollector.MAIN_MENU_SCENE_INDEX;
+			AllowSkip = false;
 			if(!IsCustomRequest)
 				SceneManager.UnloadSceneAsync(ConstantCollector.ANIMATION_SCENE_INDEX);
 			IsCustomRequest = false;
